@@ -2,6 +2,7 @@ import React from "react";
 import { Container, Progress } from "reactstrap";
 import "../bootstrap.css";
 import ProgrammingYears from "./ProgrammingYears";
+import { AnimatedSkillBar } from "./Skills";
 
 function Homepage() {
   return (
@@ -29,13 +30,13 @@ function Homepage() {
         </div>
       </header>
 
-      <section className="bs-docs-section">
+      <section>
+        <div className="page-header">
+          <h1>Skills</h1>
+        </div>
         <div className="row">
-          <div className="col-lg-11">
-            <div className="page-header">
-              <h1>Skills</h1>
-            </div>
-            <Progress value={90} />
+          <div className="col-lg-6">
+            <AnimatedSkillBar value={90} />
           </div>
         </div>
       </section>
