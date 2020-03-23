@@ -2,7 +2,7 @@ import React from "react";
 import { Container, Progress } from "reactstrap";
 import "../bootstrap.css";
 import ProgrammingYears from "./ProgrammingYears";
-import { AnimatedSkillBar } from "./Skills";
+import { SkillsSection, AnimatedSkillBar } from "./Skills";
 
 function Homepage() {
   return (
@@ -18,7 +18,8 @@ function Homepage() {
             </p>
             <article>
               <p>
-                Hey! I'm Astrid, and I've been programming for <ProgrammingYears/> years. I'm 
+                Hey! I'm Astrid, and I've been programming
+                for <ProgrammingYears /> years. I'm
               </p>
             </article>
           </div>
@@ -30,21 +31,11 @@ function Homepage() {
         </div>
       </header>
 
-      <section>
-        <div className="page-header">
-          <h1>Skills</h1>
-        </div>
-        <div className="row">
-          <div className="col-lg-6">
-            <AnimatedSkillBar value={90} />
-          </div>
-        </div>
-      </section>
-
+      <SkillsSection />
       <footer id="footer">
         <div className="row">
           <div className="col-lg-12">
-            <p>Made with 🧙‍♀️ by Astrid Augusta Yu.</p>
+            <p>Made with ☕ and 🧙‍♀️ by Astrid Augusta Yu.</p>
             <p>
               Based on
               <a href="https://getbootstrap.com/" rel="nofollow">
@@ -63,7 +54,7 @@ function Homepage() {
           </div>
         </div>
       </footer>
- </Container>
+    </Container>
   );
 }
 

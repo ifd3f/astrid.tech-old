@@ -40,6 +40,7 @@
     ]
   },
   "devDependencies": {
-    "gh-pages": "^2.2.0"
+    "gh-pages": "^2.2.0",
+    "json-loader": "^0.5.7"
   }
 }
