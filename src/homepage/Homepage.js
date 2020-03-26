@@ -1,11 +1,11 @@
 import React from "react";
 import { Container, Progress } from "reactstrap";
 import "../bootstrap.css";
-import ProgrammingYears from "./ProgrammingYears";
+import { ProgrammingYears, HardwareYears } from "./YearsSince";
 import { SkillsSection, AnimatedSkillBar } from "./Skills";
 
 function Homepage() {
-  return (
+  return <>
     <Container>
       <header className="page-header" id="banner">
         <div className="row">
@@ -18,8 +18,9 @@ function Homepage() {
             </p>
             <article>
               <p>
-                Hey! I'm Astrid, and I've been programming
-                for <ProgrammingYears /> years. I'm
+                Hey, I'm Astrid! I've been programming
+                for <ProgrammingYears /> years and I've worked with hardware for <HardwareYears /> years. 
+                I'm 
               </p>
             </article>
           </div>
@@ -32,7 +33,9 @@ function Homepage() {
       </header>
 
       <SkillsSection />
-      <footer id="footer">
+    </Container>
+    <footer style={{ background: "#202030" }}>
+      <Container>
         <div className="row">
           <div className="col-lg-12">
             <p>Made with ☕ and 🧙‍♀️ by Astrid Augusta Yu.</p>
@@ -53,9 +56,9 @@ function Homepage() {
             </p>
           </div>
         </div>
-      </footer>
-    </Container>
-  );
+      </Container>
+    </footer>
+  </>;
 }
 
 export default Homepage;

@@ -98,26 +98,26 @@ function SkillsSection() {
                 <h2>Skills</h2>
             </div>
             <Row>
-                <Col>
+                <Col lg="6">
                     <CategoryCard skills={skillsData.languages}>
                         Languages
-                    </CategoryCard>
-                    <CategoryCard skills={skillsData.data}>
-                        Data Science
-                    </CategoryCard>
-                    <CategoryCard skills={skillsData.games}>
-                        Game Engines
-                    </CategoryCard>
-                </Col>
-                <Col>
-                    <CategoryCard skills={skillsData.ee}>
-                        Electrical Engineering
                     </CategoryCard>
                     <CategoryCard skills={skillsData.frontend}>
                         Frontend
                     </CategoryCard>
                     <CategoryCard skills={skillsData.backend}>
                         Backend
+                    </CategoryCard>
+                </Col>
+                <Col lg="6">
+                    <CategoryCard skills={skillsData.ee}>
+                        Electrical Engineering
+                    </CategoryCard>
+                    <CategoryCard skills={skillsData.data}>
+                        Data Science
+                    </CategoryCard>
+                    <CategoryCard skills={skillsData.games}>
+                        Game Engines
                     </CategoryCard>
                 </Col>
             </Row>
