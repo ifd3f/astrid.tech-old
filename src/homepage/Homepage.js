@@ -1,10 +1,9 @@
 import React from "react";
-import { Tooltip, Row, Container, Jumbotron, Col } from "reactstrap";
+import { Media, Row, Container, Jumbotron, Col } from "reactstrap";
 import "../bootstrap.css";
 import { ProgrammingYears, HardwareYears } from "./YearsSince";
 import { SkillsSection } from "./Skills";
 import imgMyFace from "../assets/my-face.jpg"
-import imgPcbWhite from "../assets/icon-pcb-white.png"
 import { GiCircuitry } from "react-icons/gi"
 import { BsCodeSlash } from "react-icons/bs"
 
@@ -12,25 +11,38 @@ function Homepage() {
   return (
     <Container fluid>
       <Jumbotron fluid>
+        <Col className="text-center">
+          <p className="lead">My name is</p>
+          <h1 className="display-1">ASTRID</h1>
+          <p className="lead">and I'm a</p>
+          <h1 className="display-1">HACKER</h1>
+        </Col>
         <Row>
-          <Col className="text-right" md={5}>
-            <p className="lead">My name is</p>
-            <h1 className="display-1">ASTRID<br/>YU</h1>
+          <Col className="text-center" md={6}>
+            <div className="d-inline-flex">
+              <Col md="auto">
+                <BsCodeSlash style={{fontSize: 100, height: "100%"}}/>
+              </Col>
+              <Col md="auto" className="text-left">
+                <p>I've worked with</p>
+                <h2>SOFTWARE</h2>
+                <p>for <strong><ProgrammingYears/> years</strong></p>
+              </Col>
+            </div>
           </Col>
-          <Col md={2}>
-            <img className="img-fluid" src={imgMyFace} />
+          <Col className="text-center" md={6}>
+            <div className="d-inline-flex">
+              <Col md="auto">
+                <GiCircuitry style={{fontSize: 100, borderColor: "#FFFFFF", borderStyle: "solid"}}/>
+              </Col>
+              <Col md="auto" className="text-left">
+                <p>as well as</p>
+                <h2>HARDWARE</h2>
+                <p>for <strong><HardwareYears/> years.</strong></p>
+              </Col>
+            </div>
           </Col>
-          <Col className="text-left" md={5}>
-            <p className="lead">I write</p>
-            <h2 className="display-4">
-              SOFTWARE <BsCodeSlash id="HeaderCodeIcon" />
-            </h2>
-            <p className="lead">and design</p>
-            <h2 className="display-4">
-              CIRCUITS <GiCircuitry/>
-            </h2>
-          </Col>
-        </Row>  
+        </Row>
       </Jumbotron>
 
       <Container>
