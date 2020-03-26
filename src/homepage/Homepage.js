@@ -1,16 +1,41 @@
 import React from "react";
-import { Container, Progress } from "reactstrap";
+import { Tooltip, Row, Container, Jumbotron, Col } from "reactstrap";
 import "../bootstrap.css";
 import { ProgrammingYears, HardwareYears } from "./YearsSince";
-import { SkillsSection, AnimatedSkillBar } from "./Skills";
+import { SkillsSection } from "./Skills";
+import imgMyFace from "../assets/my-face.jpg"
+import imgPcbWhite from "../assets/icon-pcb-white.png"
+import { GiCircuitry } from "react-icons/gi"
+import { BsCodeSlash } from "react-icons/bs"
 
 function Homepage() {
-  return <>
-    <Container>
-      <header className="page-header" id="banner">
+  return (
+    <Container fluid>
+      <Jumbotron fluid>
+        <Row>
+          <Col className="text-right" md={5}>
+            <p className="lead">My name is</p>
+            <h1 className="display-1">ASTRID<br/>YU</h1>
+          </Col>
+          <Col md={2}>
+            <img className="img-fluid" src={imgMyFace} />
+          </Col>
+          <Col className="text-left" md={5}>
+            <p className="lead">I write</p>
+            <h2 className="display-4">
+              SOFTWARE <BsCodeSlash id="HeaderCodeIcon" />
+            </h2>
+            <p className="lead">and design</p>
+            <h2 className="display-4">
+              CIRCUITS <GiCircuitry/>
+            </h2>
+          </Col>
+        </Row>  
+      </Jumbotron>
+
+      <Container>
         <div className="row">
           <div className="col-lg-8 col-md-7 col-sm-6">
-            <h1>Astrid Augusta Yu</h1>
             <p className="lead">
               Computer Engineering Student at Cal Poly
               <br />
@@ -20,22 +45,17 @@ function Homepage() {
               <p>
                 Hey, I'm Astrid! I've been programming
                 for <ProgrammingYears /> years and I've worked with hardware for <HardwareYears /> years. 
-                I'm 
+              </p>
+              <p>
+
               </p>
             </article>
           </div>
-          <div className="col-lg-4 col-md-5 col-sm-6">
-            <div className="sponsor">
-              <img className="img-fluid" src="/assets/avatar-2020-03-11.jpg" />
-            </div>
-          </div>
         </div>
-      </header>
 
-      <SkillsSection />
-    </Container>
-    <footer style={{ background: "#202030" }}>
-      <Container>
+        <SkillsSection />
+      </Container>
+      <footer style={{ background: "#202030" }}>
         <div className="row">
           <div className="col-lg-12">
             <p>Made with ☕ and 🧙‍♀️ by Astrid Augusta Yu.</p>
@@ -56,9 +76,9 @@ function Homepage() {
             </p>
           </div>
         </div>
-      </Container>
-    </footer>
-  </>;
+      </footer>
+  </Container>
+  );
 }
 
 export default Homepage;
