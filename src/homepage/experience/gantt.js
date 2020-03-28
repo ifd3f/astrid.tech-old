@@ -6,6 +6,9 @@ import FlatQueue from "flatqueue";
  * @return {Array<Array<Array<number>>>} A list of layers, which is a list of intervals. Not guaranteed to be sorted.
  */
 function buildGantt(intervals) {
+    if (intervals.length == 0) {
+        return [];
+    }
     const first = intervals[0];
     const queue = new FlatQueue();  // Priority queue of intervals, sorted by interval end ascending.
     queue.push(-first[1], [first]);  // Order ascending
