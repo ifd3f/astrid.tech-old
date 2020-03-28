@@ -4,8 +4,6 @@ import { GiCircuitry } from "react-icons/gi";
 import { Col, Jumbotron, Row } from "reactstrap";
 import { HardwareYears, ProgrammingYears } from "./YearsSince";
 
-
-
 export function HeadingSection() {
   return (
     <Jumbotron fluid>

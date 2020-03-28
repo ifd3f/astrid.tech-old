@@ -7,6 +7,7 @@
   "settings": {
     "editor.formatOnSave": true,
     "javascript.format.enable": false,
+    "editor.defaultFormatter": "esbenp.prettier-vscode",
     "source.fixAll.eslint": true,
     "source.fixAll.stylelint": true,
     "source.organizeImports": true
