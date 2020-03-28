@@ -15,6 +15,7 @@
     "react-in-viewport": "^1.0.0-alpha.11",
     "react-router-dom": "^5.1.2",
     "react-scripts": "3.4.1",
+    "react-waypoint": "^9.0.2",
     "reactstrap": "^8.4.1"
   },
   "scripts": {

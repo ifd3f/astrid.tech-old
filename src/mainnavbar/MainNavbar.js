@@ -1,5 +1,4 @@
 import React, { useState } from "react";
-import "../bootstrap.css";
 import {
   Collapse,
   Navbar,
