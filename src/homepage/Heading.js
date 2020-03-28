@@ -1,10 +1,10 @@
 import React from "react";
-
-import { Row, Jumbotron, Col } from "reactstrap";
-import { GiCircuitry } from "react-icons/gi";
 import { BsCodeSlash } from "react-icons/bs";
-
+import { GiCircuitry } from "react-icons/gi";
+import { Col, Jumbotron, Row } from "reactstrap";
 import { HardwareYears, ProgrammingYears } from "./YearsSince";
+
+
 
 export function HeadingSection() {
   return (

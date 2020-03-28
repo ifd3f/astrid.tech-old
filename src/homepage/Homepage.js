@@ -1,9 +1,9 @@
 import React from "react";
 import { Container } from "reactstrap";
-import { SkillsSection } from "./Skills";
-import { HeadingSection } from "./Heading";
 import { ExperienceSection } from "./Experience";
 import { FooterSection } from "./Footer";
+import { HeadingSection } from "./Heading";
+import { SkillsSection } from "./Skills";
 
 function Homepage() {
   return (

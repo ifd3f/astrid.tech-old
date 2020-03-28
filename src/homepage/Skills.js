@@ -1,16 +1,6 @@
-import React, { useState } from "react";
+import React from "react";
 import handleViewport from "react-in-viewport";
-import {
-  Progress,
-  CardHeader,
-  Container,
-  Row,
-  Col,
-  Card,
-  CardTitle,
-  CardBody,
-  CardColumns,
-} from "reactstrap";
+import { Card, CardBody, CardHeader, Col, Container, Progress, Row } from "reactstrap";
 import skillsData from "./skillsData.json";
 
 const NO_ANIM = 0;
@@ -124,3 +114,4 @@ function SkillsSection() {
 }
 
 export { AnimatedSkillBar, SkillsSection };
+

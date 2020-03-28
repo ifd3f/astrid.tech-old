@@ -1,7 +1,5 @@
 import React from "react";
-import { Container, Media, Badge } from "reactstrap";
-import { SkillsSection } from "./Skills";
-import { Heading } from "./Heading";
+import { Badge, Media } from "reactstrap";
 import { imgIronPanthers } from "../assets";
 
 function IronPanthersInfoCard() {

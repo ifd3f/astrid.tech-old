@@ -1,9 +1,8 @@
 import React from "react";
-import logo from "./logo.svg";
-import { BrowserRouter, Switch, Route } from "react-router-dom";
+import { BrowserRouter, Route, Switch } from "react-router-dom";
 import "./App.css";
-import MainNavbar from "./mainnavbar/MainNavbar";
 import Homepage from "./homepage/Homepage";
+import MainNavbar from "./mainnavbar/MainNavbar";
 
 function App() {
   return (

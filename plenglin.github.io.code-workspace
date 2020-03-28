@@ -8,6 +8,7 @@
     "editor.formatOnSave": true,
     "javascript.format.enable": false,
     "source.fixAll.eslint": true,
-    "source.fixAll.stylelint": true
+    "source.fixAll.stylelint": true,
+    "source.organizeImports": true
   }
 }
