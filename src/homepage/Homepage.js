@@ -2,12 +2,15 @@ import React from "react";
 import { Container } from "reactstrap";
 import "../bootstrap.css";
 import { SkillsSection } from "./Skills";
-import { Heading } from "./Heading";
+import { HeadingSection } from "./Heading";
+import { ExperienceSection } from "./Experience";
 
 function Homepage() {
   return (
     <Container fluid>
-      <Heading/>
+      <HeadingSection/>
+
+      <ExperienceSection/>
 
       <Container>
         <div className="row">

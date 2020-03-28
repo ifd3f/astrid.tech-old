@@ -6,7 +6,7 @@ import { BsCodeSlash } from "react-icons/bs"
 
 import { HardwareYears, ProgrammingYears } from "./YearsSince";
 
-export function Heading() {
+export function HeadingSection() {
     return (
       <Jumbotron fluid>
         <Col className="text-center">
