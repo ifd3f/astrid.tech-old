@@ -8,13 +8,13 @@ import { FooterSection } from "./Footer";
 function Homepage() {
   return (
     <Container fluid>
-      <HeadingSection/>
+      <HeadingSection />
       <Container>
-        <ExperienceSection/>
-        <SkillsSection/>
+        <ExperienceSection />
+        <SkillsSection />
       </Container>
-      <FooterSection/>
-  </Container>
+      <FooterSection />
+    </Container>
   );
 }
 
