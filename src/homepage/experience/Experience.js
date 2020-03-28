@@ -1,16 +1,16 @@
 import React from "react";
 import {
   Badge,
-  Media,
   Card,
   CardHeader,
   CardBody,
   Row,
   CardText,
   CardImg,
+  Col,
 } from "reactstrap";
 import { imgIronPanthersWide } from "../../assets";
-import { Gantt } from "./gantt";
+import { Timeline, TimelineInterval, TimelineLayer } from "./timeline";
 
 function IronPanthersInfoCard() {
   return (
@@ -64,8 +64,21 @@ export function ExperienceSection() {
   return (
     <section>
       <h2>Work experience</h2>
-      <Gantt/>
+      <Row>
+        <Col xs={2}>
+        <Timeline>
+          <TimelineLayer style={{width: 50}}>
+          <TimelineInterval start={0} end={3}>
+            </TimelineInterval>
+           <TimelineInterval start={5} end={8}>
+             </TimelineInterval> 
+          </TimelineLayer>
+        </Timeline>
+        </Col>
+        <Col>
         <IronPanthersInfoCard />
+        </Col>
+      </Row>
     </section>
   );
 }
