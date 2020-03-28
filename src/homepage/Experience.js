@@ -19,7 +19,7 @@ function IronPanthersInfoCard() {
                             <Badge pill color="primary">
                                 <a href="https://www.thebluealliance.com/team/5026">FRC #5026</a>
                             </Badge>
-                            <Badge pill color="primary">
+                            <Badge pill color="warning">
                                 <a href="https://theorangealliance.org/teams/7316">FTC #7316</a>
                             </Badge>
                             <Badge pill color="success">

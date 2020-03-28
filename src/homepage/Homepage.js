@@ -3,6 +3,7 @@ import { Container } from "reactstrap";
 import { SkillsSection } from "./Skills";
 import { HeadingSection } from "./Heading";
 import { ExperienceSection } from "./Experience";
+import { FooterSection } from "./Footer";
 
 function Homepage() {
   return (
@@ -10,16 +11,9 @@ function Homepage() {
       <HeadingSection/>
       <Container>
         <ExperienceSection/>
-        <SkillsSection />
+        <SkillsSection/>
       </Container>
-      
-      <footer style={{ background: "#202030" }}>
-        <div className="row">
-          <div className="col-lg-12">
-            <p>Made with <span role="img">☕ </span> and <span role="img">🧙‍♀️ </span> by Astrid Augusta Yu.</p>
-          </div>
-        </div>
-      </footer>
+      <FooterSection/>
   </Container>
   );
 }

@@ -22,7 +22,7 @@ function MainNavbar() {
 
   return (
     <div>
-      <Navbar expand="md">
+      <Navbar fixed expand="md">
         <NavbarBrand to="/" activeClassName="active" tag={RRNavLink}>
           Astrid
         </NavbarBrand>
