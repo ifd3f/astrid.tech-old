@@ -7,15 +7,20 @@ import {
   CardBody,
   Row,
   CardText,
+  CardImg,
 } from "reactstrap";
-import { imgIronPanthers } from "../assets";
+import { imgIronPanthersWide } from "../../assets";
+import { Gantt } from "./gantt";
 
 function IronPanthersInfoCard() {
   return (
-    <Card>
-      <CardHeader>Iron Panthers Robotics Team</CardHeader>
+    <Card style={{maxWidth: 500}}>
+      <CardHeader>
+        <h4>Iron Panthers Robotics Team</h4>
+      </CardHeader>
+      <CardImg src={imgIronPanthersWide} alt="Iron Panthers"/>
       <CardBody>
-        <Row>
+        <CardText>
           <Badge
             pill
             color="primary"
@@ -37,7 +42,7 @@ function IronPanthersInfoCard() {
           >
             FRC world champions in 2019!
           </Badge>
-        </Row>
+        </CardText>
         <CardText>
           <p>
             On the FIRST Robotics Competition main team, I worked to build a
@@ -59,9 +64,8 @@ export function ExperienceSection() {
   return (
     <section>
       <h2>Work experience</h2>
-      <Media>
+      <Gantt/>
         <IronPanthersInfoCard />
-      </Media>
     </section>
   );
 }
