@@ -65,7 +65,9 @@ export function TimelineLayer({ children, width = 30 }) {
             start, end, value: child
         };
     });
+    intervals.sort((a, b) => a.start - b.start);
     const gantt = buildGantt(intervals);
+    gantt.sort((a, b) => a[0].start - b[0].start)
 
     const layers = gantt.map((layer, i) => (
         <Col key={i}>
@@ -80,18 +82,4 @@ export function TimelineLayer({ children, width = 30 }) {
             {layers}
         </Row>
     )
-}
-
-const TimelineContext = createContext({ offsetFactor: 10 });
-
-export function Timeline({ children }) {
-
-    return (
-        <TimelineContext.Provider>
-            <Row>
-                {children}
-            </Row>
-        </TimelineContext.Provider>
-    );
-    
 }
