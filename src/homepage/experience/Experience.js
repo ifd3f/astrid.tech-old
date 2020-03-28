@@ -66,14 +66,14 @@ export function ExperienceSection() {
       <h2>Work experience</h2>
       <Row>
         <Col xs={2}>
-        <Timeline>
-          <TimelineLayer style={{width: 50}}>
+        <TimelineLayer>
           <TimelineInterval start={0} end={3}>
-            </TimelineInterval>
-           <TimelineInterval start={5} end={8}>
-             </TimelineInterval> 
-          </TimelineLayer>
-        </Timeline>
+          </TimelineInterval>
+          <TimelineInterval start={5} end={8}>
+          </TimelineInterval> 
+          <TimelineInterval start={2} end={6}>
+          </TimelineInterval> 
+        </TimelineLayer>
         </Col>
         <Col>
         <IronPanthersInfoCard />

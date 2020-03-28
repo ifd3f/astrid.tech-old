@@ -51,13 +51,13 @@ export function TimelineInterval({ offsetFactor = 10, start, end, children }) {
     const height = offsetFactor * (end - start);
 
     return (
-        <Col style={{ width: "100%", marginTop: offsetFactor * start, height }}>
+        <div style={{ position: "absolute", width: "100%", height: height, marginTop: offsetFactor * start }}>
             {children}
-        </Col>
+        </div>
     )
 }
 
-export function TimelineLayer({ children, style }) {
+export function TimelineLayer({ children, width = 30 }) {
    
     const intervals = children.map(child => {
         const { start, end } = child.props;
@@ -68,19 +68,17 @@ export function TimelineLayer({ children, style }) {
     const gantt = buildGantt(intervals);
 
     const layers = gantt.map((layer, i) => (
-        <div key={i}>
+        <Col key={i}>
             {
                 layer.map(x => x.value)
             }
-        </div>
+        </Col>
     ));
 
     return (
-        <Col>
-            <Row style={style}>
-                {layers}
-            </Row>
-        </Col>
+        <Row>
+            {layers}
+        </Row>
     )
 }
 
