@@ -100,23 +100,25 @@ const AnimatedSkillBar = handleViewport(AnimatedSkillBarBlock, {
 function SkillsSection() {
   return (
     <section>
-      <div className="page-header">
-        <h2>Skills</h2>
-      </div>
-      <Row>
-        <Col lg="6">
-          <CategoryCard skills={skillsData.languages}>Languages</CategoryCard>
-          <CategoryCard skills={skillsData.frontend}>Frontend</CategoryCard>
-          <CategoryCard skills={skillsData.backend}>Backend</CategoryCard>
-        </Col>
-        <Col lg="6">
-          <CategoryCard skills={skillsData.ee}>
-            Electrical Engineering
-          </CategoryCard>
-          <CategoryCard skills={skillsData.data}>Data Science</CategoryCard>
-          <CategoryCard skills={skillsData.games}>Game Engines</CategoryCard>
-        </Col>
-      </Row>
+      <Container>
+        <div className="section-header">
+          <h2>Skills</h2>
+        </div>
+        <Row>
+          <Col lg="6">
+            <CategoryCard skills={skillsData.languages}>Languages</CategoryCard>
+            <CategoryCard skills={skillsData.frontend}>Frontend</CategoryCard>
+            <CategoryCard skills={skillsData.backend}>Backend</CategoryCard>
+          </Col>
+          <Col lg="6">
+            <CategoryCard skills={skillsData.ee}>
+              Electrical Engineering
+            </CategoryCard>
+            <CategoryCard skills={skillsData.data}>Data Science</CategoryCard>
+            <CategoryCard skills={skillsData.games}>Game Engines</CategoryCard>
+          </Col>
+        </Row>
+      </Container>
     </section>
   );
 }

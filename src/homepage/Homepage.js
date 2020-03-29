@@ -9,10 +9,8 @@ function Homepage() {
   return (
     <Container fluid>
       <HeadingSection />
-      <Container>
-        <ExperienceSection />
-        <SkillsSection />
-      </Container>
+      <ExperienceSection />
+      <SkillsSection />
       <FooterSection />
     </Container>
   );
