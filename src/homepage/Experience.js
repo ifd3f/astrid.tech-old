@@ -1,6 +1,14 @@
 import React from "react";
-import { Badge, Card, CardBody, CardHeader, CardImg, CardText, Container } from "reactstrap";
-import { imgIronPanthersWide } from "../../assets";
+import {
+  Badge,
+  Card,
+  CardBody,
+  CardHeader,
+  CardImg,
+  CardText,
+  Container,
+} from "reactstrap";
+import { imgIronPanthersWide } from "../assets";
 
 function IronPanthersInfoCard() {
   return (
@@ -53,7 +61,7 @@ export function ExperienceSection() {
     <section>
       <Container>
         <h2 className="section-header">Work Experience</h2>
-        <IronPanthersInfoCard/>
+        <IronPanthersInfoCard />
       </Container>
     </section>
   );

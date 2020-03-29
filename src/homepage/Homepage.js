@@ -1,6 +1,6 @@
 import React from "react";
 import { Container } from "reactstrap";
-import { ExperienceSection } from "./experience/Experience";
+import { ExperienceSection } from "./Experience";
 import { FooterSection } from "./Footer";
 import { HeadingSection } from "./Heading";
 import { SkillsSection } from "./Skills";

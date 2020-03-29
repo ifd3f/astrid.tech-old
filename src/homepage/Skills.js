@@ -9,7 +9,7 @@ import {
   Progress,
   Row,
 } from "reactstrap";
-import skillsData from "./skillsData.json";
+import skillsData from "./skills-data.json";
 
 const NO_ANIM = 0;
 const ANIMATING = 1;
