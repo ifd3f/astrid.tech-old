@@ -22,6 +22,7 @@
     "react-responsive-carousel": "^3.1.51",
     "react-router-dom": "^5.1.2",
     "react-scripts": "3.4.1",
+    "react-slick": "^0.25.2",
     "react-waypoint": "^9.0.2",
     "reactstrap": "^8.4.1"
   },
