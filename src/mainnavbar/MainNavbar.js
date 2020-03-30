@@ -48,7 +48,6 @@ function MainNavbar() {
               <NavLink href="https://github.com/Plenglin"> GitHub </NavLink>
             </NavItem>
           </Nav>
-          <NavbarText>Simple Text</NavbarText>
         </Collapse>
       </Navbar>
     </div>

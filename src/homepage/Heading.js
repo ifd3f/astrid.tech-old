@@ -14,7 +14,7 @@ export function HeadingSection() {
         <h1 className="display-1">HACKER</h1>
       </Col>
       <Row>
-        <Col className="text-center" md={6}>
+        <Col className="text-center" lg={6}>
           <div className="d-inline-flex">
             <Col md="auto">
               <BsCodeSlash style={{ fontSize: 100, height: "100%" }} />
@@ -31,7 +31,7 @@ export function HeadingSection() {
             </Col>
           </div>
         </Col>
-        <Col className="text-center" md={6}>
+        <Col className="text-center" lg={6}>
           <div className="d-inline-flex">
             <Col md="auto">
               <GiCircuitry
