@@ -11,17 +11,19 @@ import {
 } from "reactstrap";
 import skillsData from "./skills-data.json";
 
-const NO_ANIM = 0;
-const ANIMATING = 1;
-const ANIM_COMPLETE = 2;
-
 const FINDER_STRING_PATTERN = /(?:(lang|github):(.+)|url:(.+):(.+))/;
 
 class URLProjectFinder {
-  constructor(resourceLocation) {}
+  constructor(resourceLocation) {
+    this.resourceLocation = resourceLocation;
+  }
 }
 
-class LangProjectFinder {}
+class LangProjectFinder {
+  constructor(language) {
+    this.language = language;
+  }
+}
 
 function createProjectFinder(resource) {
   const match = resource.match(FINDER_STRING_PATTERN);
@@ -41,7 +43,7 @@ class SkillData {
 class AnimatedSkillBarBlock extends React.Component {
   constructor(props) {
     super(props);
-    const { value, alpha, inViewport, animPeriod } = this.props;
+    const { value } = this.props;
     this.state = {
       displayed: 0,
       value: value,
@@ -50,7 +52,7 @@ class AnimatedSkillBarBlock extends React.Component {
 
   render() {
     const { value, displayed } = this.state;
-    if (this.props.inViewport && value != displayed) {
+    if (this.props.inViewport && value !== displayed) {
       this.setState({ displayed: value });
     }
     return <Progress value={displayed} />;

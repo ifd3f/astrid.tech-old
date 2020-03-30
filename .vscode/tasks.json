@@ -20,6 +20,14 @@
           "endsPattern": "Compiled .*"
         }
       }
+    },
+    {
+      "type": "npm",
+      "script": "build",
+      "problemMatcher": [
+        "$eslint-stylish"
+      ],
+      "group": "build"
     }
   ]
 }
