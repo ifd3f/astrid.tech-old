@@ -4,7 +4,7 @@ import { GiCircuitry } from "react-icons/gi";
 import { Col, Jumbotron, Row } from "reactstrap";
 import { HardwareYears, ProgrammingYears } from "./YearsSince";
 
-export function HeadingSection() {
+function HeadingSection() {
   return (
     <Jumbotron fluid>
       <Col className="text-center">
@@ -58,3 +58,5 @@ export function HeadingSection() {
     </Jumbotron>
   );
 }
+
+export default HeadingSection;

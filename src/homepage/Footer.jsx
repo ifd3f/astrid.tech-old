@@ -16,7 +16,7 @@ function Witch() {
   );
 }
 
-export function FooterSection() {
+function FooterSection() {
   return (
     <footer style={{ background: "#202030" }}>
       <div className="row">
@@ -29,3 +29,5 @@ export function FooterSection() {
     </footer>
   );
 }
+
+export default FooterSection;
