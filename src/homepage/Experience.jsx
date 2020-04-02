@@ -1,5 +1,14 @@
 import React from "react";
-import { Badge, Card, CardBody, CardHeader, CardImg, CardLink, CardText, Container } from "reactstrap";
+import {
+  Badge,
+  Card,
+  CardBody,
+  CardHeader,
+  CardImg,
+  CardLink,
+  CardText,
+  Container,
+} from "reactstrap";
 import { imgIronPanthersWide } from "../assets";
 
 function WorkExperienceCard({ children }) {
@@ -72,9 +81,7 @@ function FabTimeInfoCard() {
       <CardHeader>
         <h4>Software Intern at FabTime Inc.</h4>
       </CardHeader>
-      <CardBody>
-
-      </CardBody>
+      <CardBody></CardBody>
     </WorkExperienceCard>
   );
 }
@@ -97,7 +104,7 @@ export function ExperienceSection() {
     <section>
       <Container>
         <h2 className="section-header">Work Experience</h2>
-        <FabTimeInfoCard/>
+        <FabTimeInfoCard />
         <GoodRippleInfoCard />
         <IronPanthersInfoCard />
       </Container>
