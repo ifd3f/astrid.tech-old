@@ -81,6 +81,14 @@ export default [
         name: "Control Systems",
         id: "control-systems",
       },
+      {
+        name: "Graphic Design",
+        id: "graphic",
+      },
+      {
+        name: "3D Printing",
+        id: "3d-printing",
+      },
     ],
   },
   {
@@ -185,6 +193,7 @@ export default [
         name: "TensorFlow",
         level: 30,
         implied: ["py"],
+        id: "tensorflow",
       },
       {
         name: "OpenCV",
