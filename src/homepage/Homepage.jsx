@@ -4,6 +4,7 @@ import { ExperienceSection } from "./Experience";
 import FooterSection from "./Footer";
 import HeadingSection from "./Heading";
 import { SkillsSection } from "./Skills";
+import ProjectsSection from "./Projects";
 
 function Homepage() {
   return (
@@ -11,6 +12,7 @@ function Homepage() {
       <HeadingSection />
       <ExperienceSection />
       <SkillsSection />
+      <ProjectsSection />
       <FooterSection />
     </Container>
   );

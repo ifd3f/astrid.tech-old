@@ -39,7 +39,7 @@ const SKILLS = skillsRaw
     map.set(skill.id, skill);
     return map;
   }, new Map());
-console.log(SKILLS);
+
 const projects = projectsRaw
   .map(
     ({
@@ -47,6 +47,7 @@ const projects = projectsRaw
       desc,
       date,
       id,
+      status,
       skills,
       url = null,
       img,
@@ -55,6 +56,7 @@ const projects = projectsRaw
     }) => ({
       id,
       title,
+      status,
       desc,
       date,
       skills: skills.map((sid) => {
