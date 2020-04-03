@@ -4,7 +4,7 @@ const projects = [
   {
     title: "Personal Website",
     id: "personal-website",
-    desc: "This website",
+    desc: "A website that links to itself",
     date: new Date(2020, 3),
     url: "https://plenglin.github.io",
     status: "wip",
