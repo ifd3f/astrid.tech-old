@@ -4,7 +4,6 @@ import imgIronPanthersWide from "./iron-panthers-wide.png";
 import imgIronPanthers from "./iron-panthers.png";
 import imgMicroVu from "./micro-vu.png";
 import imgMyFace from "./my-face.jpg";
-
 export {
   imgFabTime,
   imgGoodRipple,

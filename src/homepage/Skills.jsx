@@ -9,34 +9,13 @@ import {
   Progress,
   Row,
 } from "reactstrap";
-import skillsData from "./skills-data.json";
-
-const FINDER_STRING_PATTERN = /(?:(lang|github):(.+)|url:(.+):(.+))/;
-
-class URLProjectFinder {
-  constructor(resourceLocation) {
-    this.resourceLocation = resourceLocation;
-  }
-}
-
-class LangProjectFinder {
-  constructor(language) {
-    this.language = language;
-  }
-}
-
-function createProjectFinder(resource) {
-  const match = resource.match(FINDER_STRING_PATTERN);
-  if (!match) {
-    throw new Error(`Finder ${resource} does not match pattern`);
-  }
-}
+import "../db";
 
 class SkillData {
   constructor(data) {
     this.name = data.name;
     this.skill = data.skill;
-    this.projects = data.projects.map(createProjectFinder);
+    this.projects = data.projects.map();
   }
 }
 
@@ -84,6 +63,7 @@ function CategoryCard(props) {
       <CardBody>
         <Container>
           {skills
+            .filter((x) => "skill" in x)
             .map((x) => new SkillData(x))
             .sort((a, b) => b.skill - a.skill)
             .map((x) => (
@@ -107,18 +87,7 @@ function SkillsSection() {
           <h2>Skills</h2>
         </div>
         <Row>
-          <Col lg="6">
-            <CategoryCard skills={skillsData.languages}>Languages</CategoryCard>
-            <CategoryCard skills={skillsData.frontend}>Frontend</CategoryCard>
-            <CategoryCard skills={skillsData.backend}>Backend</CategoryCard>
-          </Col>
-          <Col lg="6">
-            <CategoryCard skills={skillsData.ee}>
-              Electrical Engineering
-            </CategoryCard>
-            <CategoryCard skills={skillsData.data}>Data Science</CategoryCard>
-            <CategoryCard skills={skillsData.games}>Game Engines</CategoryCard>
-          </Col>
+          <Col lg="6"></Col>
         </Row>
       </Container>
     </section>
