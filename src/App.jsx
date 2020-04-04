@@ -11,11 +11,13 @@ function App() {
   return (
     <BrowserRouter>
       <MainNavbar />
-      <Switch>
-        <Route path="/">
-          <Homepage />
-        </Route>
-      </Switch>
+      <div style={{ paddingTop: 70 }}>
+        <Switch>
+          <Route path="/">
+            <Homepage />
+          </Route>
+        </Switch>
+      </div>
     </BrowserRouter>
   );
 }
