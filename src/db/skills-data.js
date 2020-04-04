@@ -158,6 +158,12 @@ export default [
     ],
   },
   {
+    id: "db",
+    name: "Database",
+    color: "#525569",
+    children: [{ name: "SQL Server", id: "sql-server" }],
+  },
+  {
     id: "game",
     name: "Game Dev",
     color: "#57d608",

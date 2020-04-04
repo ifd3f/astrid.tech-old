@@ -1,6 +1,7 @@
 import projectsRaw from "./projects";
 import experiencesRaw from "./experience";
 import skillsRaw from "./skills-data";
+import { SkillsSection } from "../homepage/Skills";
 
 const categories = skillsRaw
   .map(({ id, name, color, children }) => ({
@@ -16,14 +17,17 @@ const categories = skillsRaw
 
 const SKILLS = skillsRaw
   .flatMap(({ id, children }) => children.map((x) => ({ ...x, category: id })))
-  .map(({ id, name, implied = [], impliedShown = [], category }) => ({
-    id,
-    name,
-    category,
-    implied: implied.concat([category]),
-    impliedShown,
-    projects: [],
-  }))
+  .map((skill) => {
+    if (skill.implied === undefined) {
+      skill.implied = [];
+    }
+    skill.implied.push(skill.category);
+    if (skill.impliedShown === undefined) {
+      skill.impliedShown = [];
+    }
+    skill.projects = [];
+    return skill;
+  })
   // The categories themselves are skills.
   .concat(
     Array.from(categories.values()).map((category) => ({
@@ -90,6 +94,7 @@ const projects = projectsRaw
   }, new Map());
 
 for (let [, skill] of SKILLS) {
+  skill.category = categories.get(skill.category);
   skill.implied = skill.implied
     .map((id2) => ({
       shown: false,

@@ -20,7 +20,7 @@ function ArticleHeader({ experience, children }) {
       <div className={style.durationTitleWrapper}>
         <p className={style.durationTitle}>{timeDisplay}</p>
       </div>
-      <p className={style.tagline}>{children}</p>
+      {children ? <p className={style.tagline}>{children}</p> : ""}
       <SkillsList skills={skills} />
     </header>
   );
@@ -33,12 +33,10 @@ function SkillsList({ skills }) {
         {resolveSkills(skills)
           .filter((skill) => skill.shown)
           .map(({ skill }) => {
-            const {
-              name,
-              category: { color },
-            } = skill;
+            const { name, category } = skill;
+            console.log(category.color);
             return (
-              <Badge color={color} key={skill.id}>
+              <Badge key={skill.id} style={{ backgroundColor: category.color }}>
                 {name}
               </Badge>
             );
@@ -92,24 +90,9 @@ function IronPanthersArticle() {
 
 function FabTimeArticle() {
   return (
-    <Media>
-      <Media body>
-        <Media heading>Software Intern at FabTime Inc.</Media>
-        <img className="img-fluid" src={imgFabTime} />
-        <div className="d-flex">
-          <div className="ml-auto">
-            <CardLink
-              pill
-              color="info"
-              target="_blank"
-              href="https://ironpanthers.com"
-            >
-              Website
-            </CardLink>
-          </div>
-        </div>
-      </Media>
-    </Media>
+    <article>
+      <ArticleHeader experience={experiences.get("fabtime")}></ArticleHeader>
+    </article>
   );
 }
 
@@ -122,8 +105,11 @@ export function ExperienceSection() {
     <section>
       <Container>
         <h2 className="section-header">Work Experience</h2>
+        <hr />
         <FabTimeArticle />
+        <hr />
         <GoodRippleArticle />
+        <hr />
         <IronPanthersArticle />
       </Container>
     </section>
