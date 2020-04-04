@@ -8,13 +8,15 @@ import ProjectsSection from "./Projects";
 
 function Homepage() {
   return (
-    <Container fluid>
+    <>
       <HeadingSection />
-      <ExperienceSection />
-      <SkillsSection />
-      <ProjectsSection />
-      <FooterSection />
-    </Container>
+      <Container fluid>
+        <ExperienceSection />
+        <SkillsSection />
+        <ProjectsSection />
+        <FooterSection />
+      </Container>
+    </>
   );
 }
 

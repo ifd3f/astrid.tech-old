@@ -3,13 +3,35 @@ import { BsCodeSlash } from "react-icons/bs";
 import { GiCircuitry } from "react-icons/gi";
 import { Col, Jumbotron, Row } from "reactstrap";
 import { HardwareYears, ProgrammingYears } from "./YearsSince";
-import { imgCoding } from "../assets";
+import { imgCoding, imgHardware } from "../assets";
 
 import style from "./heading.module.css";
 
-function IconInfoDisplay({ icon, children }) {
+function Headline() {
   return (
-    <div className={style.subDisplayOuter}>
+    <div className={style.headlineOuter}>
+      <div className={style.headline}>
+        <div>
+          <p className="lead">My name is</p>
+          <h1 className="display-1">ASTRID</h1>
+          <p className="lead">and I'm a</p>
+          <h1 className="display-1">HACKER</h1>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+function IconInfoDisplay({ icon, imageSrc, children }) {
+  return (
+    <div
+      className={style.subDisplayOuter}
+      style={{
+        background: `linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url(${imageSrc})`,
+        backgroundSize: "cover",
+        backgroundPosition: "center",
+      }}
+    >
       <div className={style.subDisplay}>
         <div style={{ fontSize: 100, height: "100%" }}>{icon}</div>
         <div>{children}</div>
@@ -20,19 +42,10 @@ function IconInfoDisplay({ icon, children }) {
 
 function HeadingSection() {
   return (
-    <div className={style.homepageTop}>
-      <div className={style.headlineOuter}>
-        <div className={style.headline}>
-          <div>
-            <p className="lead">My name is</p>
-            <h1 className="display-1">ASTRID</h1>
-            <p className="lead">and I'm a</p>
-            <h1 className="display-1">HACKER</h1>
-          </div>
-        </div>
-      </div>
+    <header className={style.homepageTop}>
+      <Headline />
       <div className={style.subRow}>
-        <IconInfoDisplay icon={<BsCodeSlash />}>
+        <IconInfoDisplay icon={<BsCodeSlash />} imageSrc={imgCoding}>
           <p>I've worked with</p>
           <h2>SOFTWARE</h2>
           <p>
@@ -42,7 +55,7 @@ function HeadingSection() {
             </strong>
           </p>
         </IconInfoDisplay>
-        <IconInfoDisplay icon={<GiCircuitry />}>
+        <IconInfoDisplay icon={<GiCircuitry />} imageSrc={imgHardware}>
           <p>as well as</p>
           <h2>HARDWARE</h2>
           <p>
@@ -53,7 +66,7 @@ function HeadingSection() {
           </p>
         </IconInfoDisplay>
       </div>
-    </div>
+    </header>
   );
 }
 

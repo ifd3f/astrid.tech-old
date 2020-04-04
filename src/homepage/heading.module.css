@@ -28,6 +28,7 @@
 
 .subDisplay {
   display: inline-flex;
+  padding-top: 20px;
   margin-left: auto;
   margin-right: auto;
 }
@@ -41,5 +42,9 @@
   }
   .subDisplayOuter {
     width: 100%;
+    height: 200px;
+  }
+  .subDisplay {
+    padding-top: 30px;
   }
 }
