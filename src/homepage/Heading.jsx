@@ -9,7 +9,7 @@ import style from "./heading.module.css";
 
 function IconInfoDisplay({ icon, children }) {
   return (
-    <div className={style.subDisplayWrapper}>
+    <div className={style.subDisplayOuter}>
       <div className={style.subDisplay}>
         <div style={{ fontSize: 100, height: "100%" }}>{icon}</div>
         <div>{children}</div>

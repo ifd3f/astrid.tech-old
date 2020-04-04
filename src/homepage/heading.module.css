@@ -8,7 +8,9 @@
 }
 
 .headline {
-  margin: auto;
+  margin-left: auto;
+  margin-right: auto;
+  padding-top: 70px;
   text-align: center;
 }
 
@@ -16,7 +18,7 @@
   display: inline;
 }
 
-.subDisplayWrapper {
+.subDisplayOuter {
   width: 50%;
   height: 180px;
   padding: 0;
@@ -31,11 +33,13 @@
 }
 
 @media only screen and (max-width: 880px) {
-  .subDisplayWrapper {
-    width: 100%;
-  }
-
   .headlineOuter {
     height: 400px;
+  }
+  .headline {
+    padding-top: 40px;
+  }
+  .subDisplayOuter {
+    width: 100%;
   }
 }
