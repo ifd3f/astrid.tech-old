@@ -1,0 +1,15 @@
+.positionTitle {
+  display: inline-block;
+}
+
+.durationTitleWrapper {
+  float: right;
+}
+.durationTitle {
+  display: inline-block;
+}
+
+.tagline {
+  font-size: 14pt;
+  line-height: 0pt;
+}

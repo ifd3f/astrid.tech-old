@@ -1,5 +1,5 @@
 import projectsRaw from "./projects";
-
+import experiencesRaw from "./experience";
 import skillsRaw from "./skills-data";
 
 const categories = skillsRaw
@@ -37,6 +37,16 @@ const SKILLS = skillsRaw
   )
   .reduce((map, skill) => {
     map.set(skill.id, skill);
+    return map;
+  }, new Map());
+
+const EXPERIENCES = experiencesRaw
+  .map((experience) => {
+    experience.skills = experience.skills.map((s) => SKILLS.get(s));
+    return experience;
+  })
+  .reduce((map, experience) => {
+    map.set(experience.id, experience);
     return map;
   }, new Map());
 
@@ -104,4 +114,33 @@ for (let [, project] of projects) {
   }
 }
 
-export { categories, SKILLS as skills, projects };
+function resolveSkills(skills) {
+  const visited = new Map();
+  const output = [];
+  const stack = skills.map((s) => ({ shown: true, skill: s })).reverse();
+  while (stack.length > 0) {
+    const { shown, skill } = stack.pop();
+
+    // Skip this one if we have visited it and we aren't turning on the shown state.
+    if (visited.has(skill) && skill.shown && !visited.get(shown)) {
+      continue;
+    }
+
+    output.push({ shown, skill });
+    visited.set(skill, shown);
+    if (shown) {
+      for (const implied of skill.implied) {
+        stack.push(implied);
+      }
+    }
+  }
+  return output;
+}
+
+export {
+  resolveSkills,
+  EXPERIENCES as experiences,
+  categories,
+  SKILLS as skills,
+  projects,
+};
