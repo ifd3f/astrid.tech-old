@@ -1,3 +1,5 @@
+import imgCoding from "./computer-coding.jpg";
+import imgHardware from "./electronics.jpg";
 import imgFabTime from "./fabtime.png";
 import imgGoodRipple from "./goodripple.png";
 import imgIronPanthersWide from "./iron-panthers-wide.png";
@@ -9,6 +11,8 @@ import imgSegwayBot from "./segwaybot.png";
 import imgCollisionZone from "./collision-zone.gif";
 
 export {
+  imgCoding,
+  imgHardware,
   imgFabTime,
   imgGoodRipple,
   imgMicroVu,

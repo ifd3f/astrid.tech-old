@@ -1,0 +1,41 @@
+.homepageTop {
+  width: 100%;
+}
+
+.headlineOuter {
+  width: 100%;
+  height: 500px;
+}
+
+.headline {
+  margin: auto;
+  text-align: center;
+}
+
+.subRow {
+  display: inline;
+}
+
+.subDisplayWrapper {
+  width: 50%;
+  height: 180px;
+  padding: 0;
+  margin: 0;
+  display: inline-flex;
+}
+
+.subDisplay {
+  display: inline-flex;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+@media only screen and (max-width: 880px) {
+  .subDisplayWrapper {
+    width: 100%;
+  }
+
+  .headlineOuter {
+    height: 400px;
+  }
+}
