@@ -1,8 +1,8 @@
 import React from "react";
-import { Badge, Col, Button, CardLink, Container, Media } from "reactstrap";
-import { imgFabTime } from "../assets";
-import style from "./experience.module.css";
-import { experiences, resolveSkills } from "../db";
+import { Badge, Container } from "reactstrap";
+import { experiences } from "../db";
+import { SkillsList } from "../util";
+import style from "./experience.module.scss";
 
 function ArticleHeader({ experience, children }) {
   const {
@@ -14,35 +14,17 @@ function ArticleHeader({ experience, children }) {
   } = experience;
   return (
     <header>
-      <h4 className={style.positionTitle}>
-        {title} {preposition} <a href={website}>{company}</a>
-      </h4>
-      <div className={style.durationTitleWrapper}>
-        <p className={style.durationTitle}>{timeDisplay}</p>
+      <div className={style.mainHeader}>
+        <h4 className={style.positionTitle}>
+          {title} {preposition} <a href={website}>{company}</a>
+        </h4>
+        <div className={style.durationTitleWrapper}>
+          <p className={style.durationTitle}>{timeDisplay}</p>
+        </div>
       </div>
-      {children ? <p className={style.tagline}>{children}</p> : ""}
+      {children ? <div className={style.tagline}>{children}</div> : ""}
       <SkillsList skills={skills} />
     </header>
-  );
-}
-
-function SkillsList({ skills }) {
-  return (
-    <div>
-      <p>
-        {resolveSkills(skills)
-          .filter((skill) => skill.shown)
-          .map(({ skill }) => {
-            const { name, category } = skill;
-            console.log(category.color);
-            return (
-              <Badge key={skill.id} style={{ backgroundColor: category.color }}>
-                {name}
-              </Badge>
-            );
-          })}
-      </p>
-    </div>
   );
 }
 
@@ -50,27 +32,30 @@ function IronPanthersArticle() {
   return (
     <article>
       <ArticleHeader experience={experiences.get("iron-panthers")}>
-        <Badge
-          pill={true}
-          color="success"
-          href="https://www.thebluealliance.com/event/2019cmptx"
-        >
-          2019 World Champions!
-        </Badge>
-        <Badge
-          pill={true}
-          color="primary"
-          href="https://www.thebluealliance.com/team/5026"
-        >
-          FRC #5026
-        </Badge>
-        <Badge
-          pill={true}
-          color="warning"
-          href="https://theorangealliance.org/teams/7316"
-        >
-          FTC #7316
-        </Badge>
+        <div style={{ display: "inline" }}>
+          <p style={{ display: "inline-block", marginRight: 5 }}>
+            <a href="https://www.thebluealliance.com/event/2019cmptx">
+              World Championship-Winning
+            </a>{" "}
+            Robotics Team
+          </p>
+          <div style={{ display: "inline-block" }}>
+            <Badge
+              pill={true}
+              color="primary"
+              href="https://www.thebluealliance.com/team/5026"
+            >
+              FRC #5026
+            </Badge>{" "}
+            <Badge
+              pill={true}
+              color="warning"
+              href="https://theorangealliance.org/teams/7316"
+            >
+              FTC #7316
+            </Badge>
+          </div>
+        </div>
       </ArticleHeader>
       <p>
         On the FIRST Robotics Competition main team, I worked to build a vision

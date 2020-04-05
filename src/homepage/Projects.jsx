@@ -11,9 +11,10 @@ import {
   CardColumns,
 } from "reactstrap";
 import { projects } from "../db";
+import { SkillsList } from "../util";
 
 function ProjectCard({ project }) {
-  const { img, title, desc, url, source } = project;
+  const { img, title, desc, url, skills, source } = project;
   return (
     <Card>
       <CardHeader>
@@ -22,6 +23,7 @@ function ProjectCard({ project }) {
       </CardHeader>
       {img ? <CardImg src={img} /> : ""}
       <CardBody>
+        <SkillsList skills={skills} />
         {url ? <CardLink href={url}>{url}</CardLink> : ""}
         {source ? <CardLink href={source}>Source Code</CardLink> : ""}
       </CardBody>
