@@ -1,3 +1,6 @@
+@use '../bootstrap.scss' as bootstrap;
+@use "sass:map";
+
 .positionTitle {
   display: inline-block;
 }
@@ -19,21 +22,11 @@
   margin-bottom: 7px;
 }
 
-.mainHeader {
-  display: inline;
-}
-
-@media only screen and (max-width: 768px) {
+@media only screen and (max-width: map.get(bootstrap.$grid-breakpoints, "md")) {
   .durationTitleWrapper {
     float: none;
   }
   .durationTitle {
     font-size: 12pt;
-  }
-}
-
-@media only screen and (max-width: 880px) {
-  .mainHeader {
-    display: block;
   }
 }

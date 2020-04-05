@@ -3,7 +3,7 @@ import React from "react";
 import "react-responsive-carousel/lib/styles/carousel.min.css";
 import { BrowserRouter, Route, Switch } from "react-router-dom";
 import "./App.css";
-import "./bootstrap.css";
+import "./bootstrap.scss";
 import Homepage from "./homepage/Homepage";
 import MainNavbar from "./mainnavbar/MainNavbar";
 
