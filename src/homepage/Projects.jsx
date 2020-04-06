@@ -35,7 +35,7 @@ function ProjectsSection() {
   return (
     <section>
       <Container>
-        <h2>Projects</h2>
+        <h2>In my free time, I like creating projects to learn new things</h2>
         <CardColumns>
           {Array.from(projects.values()).map((p) => (
             <ProjectCard key={p.id} project={p} />

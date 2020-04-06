@@ -33,8 +33,10 @@ function IronPanthersArticle() {
     <article>
       <ArticleHeader experience={experiences.get("iron-panthers")}>
         <div style={{ display: "inline" }}>
-          <p style={{ display: "inline-block", marginRight: 5 }}>
-            <a href="https://www.thebluealliance.com/event/2019cmptx">
+          <p
+            style={{ display: "inline-block", marginBottom: 5, marginRight: 5 }}
+          >
+            <a href="https://theburlingameb.org/1990/news/iron-panthers-win-world-championships/">
               World Championship-Winning
             </a>{" "}
             Robotics Team
@@ -76,7 +78,9 @@ function IronPanthersArticle() {
 function FabTimeArticle() {
   return (
     <article>
-      <ArticleHeader experience={experiences.get("fabtime")}></ArticleHeader>
+      <ArticleHeader experience={experiences.get("fabtime")}>
+        Charting software for semiconductor fabricators
+      </ArticleHeader>
     </article>
   );
 }
@@ -87,16 +91,16 @@ function GoodRippleArticle() {
 
 export function ExperienceSection() {
   return (
-    <section>
-      <Container>
-        <h2 className="section-header">Work Experience</h2>
-        <hr />
-        <FabTimeArticle />
-        <hr />
-        <GoodRippleArticle />
-        <hr />
-        <IronPanthersArticle />
-      </Container>
-    </section>
+    <Container className={style.workExperience} tag="section">
+      <h2 className="section-header">
+        I've written lots of code for organizations like yours
+      </h2>
+      <hr />
+      <FabTimeArticle />
+      <hr />
+      <GoodRippleArticle />
+      <hr />
+      <IronPanthersArticle />
+    </Container>
   );
 }

@@ -14,12 +14,17 @@
   font-size: 14pt;
   padding-top: 5pt;
   color: #efefef;
+  margin-bottom: 4px;
 }
 
 .tagline {
   font-size: 15pt;
-  line-height: 0pt;
-  margin-bottom: 7px;
+  line-height: 15pt;
+  margin-bottom: 10px;
+}
+
+.workExperience hr {
+  border-top-color: #303030;
 }
 
 @media only screen and (max-width: map.get(bootstrap.$grid-breakpoints, "md")) {
@@ -28,5 +33,6 @@
   }
   .durationTitle {
     font-size: 12pt;
+    padding-top: 0px;
   }
 }
