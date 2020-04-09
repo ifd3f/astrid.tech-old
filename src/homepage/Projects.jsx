@@ -61,7 +61,7 @@ function StatusBadge({ status }) {
           </Badge>
           <UncontrolledTooltip placement="top" target={badgeId}>
             This project was left abandoned because I decided it was no longer
-            viable longer viable or possible to finish.
+            viable or possible to finish.
           </UncontrolledTooltip>
         </>
       );
@@ -107,9 +107,7 @@ function ProjectsSection() {
   return (
     <section>
       <Container>
-        <h2>
-          In my free time, I like creating projects and learning new things
-        </h2>
+        <h2>Projects</h2>
         <CardColumns>
           {Array.from(projects.values()).map((p) => (
             <ProjectCard key={p.id} project={p} />

@@ -84,7 +84,7 @@ function SkillsSection() {
     <section>
       <Container>
         <div className="section-header">
-          <h2>I can do whatever your company needs</h2>
+          <h2>Skills</h2>
         </div>
         <Row>
           <Col lg="6"></Col>

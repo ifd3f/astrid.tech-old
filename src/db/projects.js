@@ -3,6 +3,7 @@ import {
   imgHairNet,
   imgCollisionZone,
   imgTanksberry,
+  imgHasCAS,
 } from "../assets";
 
 class Project {
@@ -73,7 +74,7 @@ const projects = [
   {
     title: "Mini Segway Bot",
     id: "segway-bot",
-    status: "partial",
+    status: "complete",
     desc: "A robot that balances on two wheels",
     date: [new Date(2019, 1), new Date(2019, 3)],
     skills: [
@@ -101,11 +102,12 @@ const projects = [
   {
     title: "HasCAS",
     id: "hascas",
-    status: "partial",
+    status: "wip",
     desc: "Haskell Computer Algebra System",
     date: [new Date(2020, 1)],
     skills: ["hs", "ast"],
     source: "https://github.com/Plenglin/HasCAS",
+    img: imgHasCAS,
   },
   {
     id: "quest-of-con",

@@ -92,7 +92,7 @@ function GoodRippleArticle() {
 export function ExperienceSection() {
   return (
     <Container className={style.workExperience} tag="section">
-      <h2 className="section-header">I have extensive work experience</h2>
+      <h2 className="section-header">Work Experience</h2>
       <hr />
       <FabTimeArticle />
       <hr />
