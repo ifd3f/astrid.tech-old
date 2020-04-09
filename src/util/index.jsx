@@ -5,6 +5,7 @@ import { resolveSkills } from "../db";
 
 import style from "./util.module.css";
 import { Link } from "react-router-dom";
+import { Interval, MultiInterval } from "./interval";
 
 var id = 0;
 export function getUniqueId() {
@@ -49,4 +50,4 @@ function SkillsList({ skills }) {
   );
 }
 
-export { SkillsList };
+export { SkillsList, Interval, MultiInterval };

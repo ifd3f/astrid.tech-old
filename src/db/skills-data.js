@@ -1,3 +1,11 @@
+class Skill {
+  constructor({ id, level = null, name }) {
+    this.id = id;
+    this.level = level;
+    this.name = name;
+  }
+}
+
 export default [
   {
     id: "language",

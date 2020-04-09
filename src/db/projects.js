@@ -5,6 +5,30 @@ import {
   imgTanksberry,
 } from "../assets";
 
+class Project {
+  constructor({
+    id,
+    title,
+    descShort,
+    date,
+    url = null,
+    status,
+    skills,
+    source = null,
+    img = null,
+  }) {
+    this.id = id;
+    this.title = title;
+    this.desc = descShort;
+    this.date = date;
+    this.url = url;
+    this.status = status;
+    this.skills = skills;
+    this.source = source;
+    this.img = img;
+  }
+}
+
 const projects = [
   {
     title: "Personal Website",
@@ -13,7 +37,16 @@ const projects = [
     date: [new Date(2020, 3)],
     url: "https://plenglin.github.io",
     status: "wip",
-    skills: ["react", "js", "css", "bootstrap", "sass", "html", "graphic"],
+    skills: [
+      "react",
+      "ts",
+      "js",
+      "css",
+      "bootstrap",
+      "sass",
+      "html",
+      "graphic",
+    ],
     source: "https://github.com/Plenglin/plenglin.github.io",
     img: null,
   },
