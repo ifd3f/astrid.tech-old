@@ -61,13 +61,44 @@ export default [
     ],
   },
   {
+    id: "concepts",
+    name: "Concepts",
+    color: "#ff0066",
+    children: [
+      {
+        name: "Optics",
+        id: "optics",
+      },
+      {
+        name: "Abstract Syntax Trees",
+        id: "ast",
+      },
+      {
+        name: "Control Systems",
+        id: "control-systems",
+      },
+      {
+        name: "k-d Trees",
+        id: "kd-tree",
+      },
+    ],
+  },
+  {
     id: "misc-skills",
     name: "Miscellaneous",
     color: "#e0c91f",
     children: [
       {
+        name: "Augmented Reality",
+        id: "ar",
+      },
+      {
         name: "Pure Functional Programming",
         id: "pure-fp",
+      },
+      {
+        name: "UX Design",
+        id: "ux-design",
       },
       {
         name: "Robotics",
@@ -78,16 +109,20 @@ export default [
         id: "websockets",
       },
       {
-        name: "Control Systems",
-        id: "control-systems",
-      },
-      {
         name: "Graphic Design",
         id: "graphic",
       },
       {
         name: "3D Printing",
         id: "3d-printing",
+      },
+      {
+        name: "Resin Casting",
+        id: "resin-casting",
+      },
+      {
+        name: "Mechanical Engineering",
+        id: "me",
       },
     ],
   },
@@ -100,6 +135,10 @@ export default [
         name: "CSS",
         level: 70,
         id: "css",
+      },
+      {
+        name: "Sass",
+        id: "sass",
       },
       {
         name: "HTML",
@@ -161,7 +200,11 @@ export default [
     id: "db",
     name: "Database",
     color: "#525569",
-    children: [{ name: "SQL Server", id: "sql-server" }],
+    children: [
+      { name: "SQL Server", id: "sql-server" },
+      { name: "PostgreSQL", id: "postgres" },
+      { name: "MySQL", id: "mysql" },
+    ],
   },
   {
     id: "game",
@@ -177,6 +220,10 @@ export default [
         name: "Unity",
         level: 70,
         id: "unity",
+      },
+      {
+        name: "Terrain Generation",
+        id: "terrain-gen",
       },
     ],
   },
@@ -230,6 +277,14 @@ export default [
         id: "microcontroller",
       },
       {
+        name: "Internet of Things",
+        id: "iot",
+      },
+      {
+        name: "Wearables",
+        id: "wearable",
+      },
+      {
         name: "FPGAs",
         id: "fpga",
       },
@@ -240,12 +295,24 @@ export default [
         id: "ino",
       },
       {
+        name: "Raspberry Pi",
+        id: "raspberry-pi",
+      },
+      {
         name: "PCB Design",
         id: "pcb",
       },
       {
         name: "Circuit Design",
         id: "circuit",
+      },
+      {
+        name: "Sensor Fusion",
+        id: "sensor-fusion",
+      },
+      {
+        name: "Stepper Motors",
+        id: "stepper",
       },
     ],
   },

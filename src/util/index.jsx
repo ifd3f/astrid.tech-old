@@ -28,8 +28,8 @@ function SkillBadge({ skill }) {
       >
         {name}
       </Badge>
-      <UncontrolledTooltip placement="top" target={badgeId}>
-        Click for more stuff using this
+      <UncontrolledTooltip placement="bottom" target={badgeId}>
+        Click for more stuff with this
       </UncontrolledTooltip>
     </>
   );

@@ -9,6 +9,7 @@ import imgMyFace from "./my-face.jpg";
 import imgHairNet from "./hairnet.png";
 import imgSegwayBot from "./segwaybot.png";
 import imgCollisionZone from "./collision-zone.gif";
+import imgTanksberry from "./tanksberry-pi.jpg";
 
 export {
   imgCoding,
@@ -22,4 +23,5 @@ export {
   imgHairNet,
   imgCollisionZone,
   imgSegwayBot,
+  imgTanksberry,
 };
