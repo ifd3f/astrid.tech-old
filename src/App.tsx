@@ -15,7 +15,7 @@ function App() {
   return (
     <BrowserRouter>
       <MainNavbar />
-      <div style={{ paddingTop: 70 }}>
+      <div>
         <Switch>
           <Route path="/" exact>
             <Homepage />

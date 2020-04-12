@@ -17,15 +17,17 @@ import { SkillsList, getUniqueId } from "../util";
 
 function StatusBadge({ status }) {
   const [badgeId] = useState(`badge-${getUniqueId()}`);
-  var title, tooltip;
+  var title, tooltip, color;
   switch (status) {
     case "wip":
       title = "WIP";
       tooltip = "I am currently working on this.";
+      color = "info";
       break;
     case "complete":
       title = "Complete";
       tooltip = "This project is complete!";
+      color = "success";
       break;
     case null:
       return "";
@@ -34,7 +36,7 @@ function StatusBadge({ status }) {
   }
   return (
     <>
-      <Badge id={badgeId} color="success">
+      <Badge id={badgeId} color={color}>
         {title}
       </Badge>
       <UncontrolledTooltip placement="top" target={badgeId}>

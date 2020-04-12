@@ -3,7 +3,7 @@ import { Container } from "reactstrap";
 
 export default function WorksPage() {
   return (
-    <Container fluid>
+    <Container fluid tag="main">
       <h1>My Works</h1>
     </Container>
   );
