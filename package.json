@@ -43,11 +43,14 @@
     "react-emoji-render": "^1.2.2",
     "react-icons": "^3.9.0",
     "react-in-viewport": "^1.0.0-alpha.11",
+    "react-markdown": "^4.3.1",
+    "react-mathjax": "^1.0.1",
     "react-responsive-carousel": "^3.1.51",
     "react-router-dom": "^5.1.2",
     "react-slick": "^0.25.2",
     "react-waypoint": "^9.0.2",
     "reactstrap": "^8.4.1",
+    "remark-math": "^2.0.1",
     "sass": "^1.26.3",
     "sass-loader": "npm:dart-sass-loader",
     "typescript": "^3.8.3"
@@ -69,6 +72,7 @@
     "gh-pages": "^2.2.0",
     "json-loader": "^0.5.7",
     "prettier": "^2.0.2",
+    "raw-loader": "^4.0.0",
     "react-scripts": "3.4.1",
     "react-snap": "^1.23.0"
   }
