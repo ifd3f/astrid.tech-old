@@ -20,8 +20,20 @@ const experience = [
     company: "FabTime",
     website: "https://fabtime.com",
     time: [new Date(2019, 11), new Date(2020, 6)],
-    timeDisplay: "Winter 2019 to Spring 2020",
+    timeDisplay: "Fall 2019 to Spring 2020",
     skills: ["asp-classic", "asp-net-core", "js", "jquery", "sql-server"],
+  },
+  {
+    id: "goodripple",
+    position: {
+      title: "Software Intern",
+      preposition: "at",
+    },
+    company: "GoodRipple",
+    website: "https://goodripple.com",
+    time: [new Date(2018, 6), new Date(2018, 7)],
+    timeDisplay: "Summer 2018",
+    skills: ["nodejs"],
   },
 ];
 

@@ -17,57 +17,31 @@ import { SkillsList, getUniqueId } from "../util";
 
 function StatusBadge({ status }) {
   const [badgeId] = useState(`badge-${getUniqueId()}`);
+  var title, tooltip;
   switch (status) {
     case "wip":
-      return (
-        <>
-          <Badge id={badgeId} color="primary">
-            WIP
-          </Badge>
-          <UncontrolledTooltip placement="top" target={badgeId}>
-            I am actively working on this right now.
-          </UncontrolledTooltip>
-        </>
-      );
-    case "partial":
-      return (
-        <>
-          <Badge id={badgeId} color="warning">
-            Partial
-          </Badge>
-          <UncontrolledTooltip placement="top" target={badgeId}>
-            I am not working on this, but it is partially complete. There may be
-            working results you can see in action.
-          </UncontrolledTooltip>
-        </>
-      );
+      title = "WIP";
+      tooltip = "I am currently working on this.";
+      break;
     case "complete":
-      return (
-        <>
-          <Badge id={badgeId} color="success">
-            Complete
-          </Badge>
-          <UncontrolledTooltip placement="top" target={badgeId}>
-            This project is in a viable state. I may release updates to it every
-            now and then.
-          </UncontrolledTooltip>
-        </>
-      );
-    case "canceled":
-      return (
-        <>
-          <Badge id={badgeId} color="danger">
-            Canceled
-          </Badge>
-          <UncontrolledTooltip placement="top" target={badgeId}>
-            This project was left abandoned because I decided it was no longer
-            viable or possible to finish.
-          </UncontrolledTooltip>
-        </>
-      );
+      title = "Complete";
+      tooltip = "This project is complete!";
+      break;
+    case null:
+      return "";
     default:
       throw new Error(`No status ID defined for "${status}"`);
   }
+  return (
+    <>
+      <Badge id={badgeId} color="success">
+        {title}
+      </Badge>
+      <UncontrolledTooltip placement="top" target={badgeId}>
+        {tooltip}
+      </UncontrolledTooltip>
+    </>
+  );
 }
 
 function ProjectCard({ project }) {

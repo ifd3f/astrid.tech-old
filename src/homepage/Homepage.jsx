@@ -5,12 +5,14 @@ import FooterSection from "./Footer";
 import HeadingSection from "./Heading";
 import { SkillsSection } from "./Skills";
 import ProjectsSection from "./Projects";
+import ElevatorSection from "./elevator";
 
 function Homepage() {
   return (
     <>
       <HeadingSection />
       <Container fluid>
+        <ElevatorSection />
         <ExperienceSection />
         <SkillsSection />
         <ProjectsSection />

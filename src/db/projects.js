@@ -56,7 +56,7 @@ const projects = [
     id: "hair-net",
     desc: "A neural network that detects a person's face and hair",
     date: [new Date(2019, 5), new Date(2019, 8)],
-    status: "partial",
+    status: "complete",
     skills: ["tensorflow", "image-processing", "py", "data", "anaconda"],
     source: "https://github.com/Plenglin/hair-net",
     img: imgHairNet,
@@ -112,7 +112,7 @@ const projects = [
   {
     id: "quest-of-con",
     title: "Quest of Con",
-    status: "partial",
+    status: null,
     desc: "Turn-based sci-fi strategy",
     date: [new Date(2017, 9), new Date(2018, 2)],
     skills: ["libgdx", "kt", "terrain-gen", "ux-design"],
@@ -121,7 +121,7 @@ const projects = [
   {
     id: "space-admiral",
     title: "Space Admiral",
-    status: "partial",
+    status: null,
     desc: "Real-Time Space Opera Strategy",
     date: [new Date(2019, 1), new Date(2019, 5)],
     skills: ["libgdx", "java", "kd-tree"],
@@ -130,7 +130,7 @@ const projects = [
   {
     id: "goggle-epoxy",
     title: "Goggle Epoxy",
-    status: "canceled",
+    status: null,
     desc: "Google Glass, but cheaper and engineered worse",
     date: [new Date(2018, 6), new Date(2018, 8)],
     skills: [
