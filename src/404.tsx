@@ -28,7 +28,7 @@ export default function Page404() {
           <Link to="/blog">My blog</Link> where you can see the words in my head
         </li>
         <li>
-          <Link to="/things">A directory of things I've done</Link>
+          <Link to="/works">A directory of my work</Link>
         </li>
       </ul>
     </Container>

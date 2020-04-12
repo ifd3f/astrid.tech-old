@@ -13,43 +13,44 @@ import {
   NavLink,
   UncontrolledDropdown,
 } from "reactstrap";
+import { GiHamburger } from "react-icons/gi";
+import { BsArrowUp, BsArrowsCollapse } from "react-icons/bs";
 
 function MainNavbar() {
   const [isOpen, setIsOpen] = useState(false);
   const toggleIsOpen = () => setIsOpen(!isOpen);
 
   return (
-    <div>
-      <Navbar fixed="top" expand="md">
-        <NavbarBrand to="/" activeClassName="active" tag={RRNavLink}>
-          Astrid
-        </NavbarBrand>
-        <NavbarToggler onClick={toggleIsOpen} />
-        <Collapse isOpen={isOpen} navbar>
-          <Nav className="mr-auto" navbar>
-            <NavItem>
-              <NavLink to="/about" activeClassName="active" tag={RRNavLink}>
-                About
-              </NavLink>
-            </NavItem>
-            <UncontrolledDropdown nav inNavbar>
-              <DropdownToggle nav caret>
-                Projects
-              </DropdownToggle>
-              <DropdownMenu right>
-                <DropdownItem>Option 1</DropdownItem>
-                <DropdownItem>Option 2</DropdownItem>
-                <DropdownItem divider />
-                <DropdownItem>Reset</DropdownItem>
-              </DropdownMenu>
-            </UncontrolledDropdown>
-            <NavItem>
-              <NavLink href="https://github.com/Plenglin"> GitHub </NavLink>
-            </NavItem>
-          </Nav>
-        </Collapse>
-      </Navbar>
-    </div>
+    <Navbar fixed="top" expand="md">
+      <NavbarBrand to="/" activeClassName="active" tag={RRNavLink}>
+        Astrid
+      </NavbarBrand>
+      <NavbarToggler onClick={toggleIsOpen}>
+        {isOpen ? <BsArrowsCollapse /> : <GiHamburger />}
+      </NavbarToggler>
+      <Collapse isOpen={isOpen} navbar>
+        <Nav className="mr-auto" navbar>
+          <NavItem>
+            <NavLink to="/about" activeClassName="active" tag={RRNavLink}>
+              About
+            </NavLink>
+          </NavItem>
+          <NavItem>
+            <NavLink to="/blog" activeClassName="active" tag={RRNavLink}>
+              Blog
+            </NavLink>
+          </NavItem>
+          <NavItem>
+            <NavLink to="/works" activeClassName="active" tag={RRNavLink}>
+              My Work
+            </NavLink>
+          </NavItem>
+          <NavItem>
+            <NavLink href="https://github.com/Plenglin"> GitHub </NavLink>
+          </NavItem>
+        </Nav>
+      </Collapse>
+    </Navbar>
   );
 }
 

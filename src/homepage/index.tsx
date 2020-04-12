@@ -7,11 +7,11 @@ import { SkillsSection } from "./Skills";
 import ProjectsSection from "./Projects";
 import ElevatorSection from "./elevator";
 
-function Homepage() {
+export default function Homepage() {
   return (
     <>
       <HeadingSection />
-      <Container fluid>
+      <Container fluid tag="main">
         <ElevatorSection />
         <ExperienceSection />
         <SkillsSection />
@@ -21,5 +21,3 @@ function Homepage() {
     </>
   );
 }
-
-export default Homepage;

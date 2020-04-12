@@ -4,9 +4,10 @@ import "react-responsive-carousel/lib/styles/carousel.min.css";
 import { BrowserRouter, Route, Switch, Redirect } from "react-router-dom";
 import "./App.css";
 import "./bootstrap.scss";
-import Homepage from "./homepage/Homepage";
+import Homepage from "./homepage";
 import MainNavbar from "./mainnavbar/MainNavbar";
 import Page404 from "./404";
+import Blog from "./blog";
 
 function App() {
   return (
@@ -16,6 +17,9 @@ function App() {
         <Switch>
           <Route path="/" exact>
             <Homepage />
+          </Route>
+          <Route path="/blog">
+            <Blog />
           </Route>
           <Route path="/404" exact>
             <Page404 />
