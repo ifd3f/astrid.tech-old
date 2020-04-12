@@ -1,7 +1,6 @@
 import React from "react";
 import { Container } from "reactstrap";
 import { ExperienceSection } from "./Experience";
-import FooterSection from "./Footer";
 import HeadingSection from "./Heading";
 import { SkillsSection } from "./Skills";
 import ProjectsSection from "./Projects";
@@ -16,7 +15,6 @@ export default function Homepage() {
         <ExperienceSection />
         <SkillsSection />
         <ProjectsSection />
-        <FooterSection />
       </Container>
     </>
   );

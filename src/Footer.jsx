@@ -1,4 +1,5 @@
 import React from "react";
+import { Container } from "reactstrap";
 
 function Tea() {
   return (
@@ -38,15 +39,17 @@ function CreativeCommons() {
 
 function FooterSection() {
   return (
-    <footer style={{ background: "#202030" }}>
-      <div className="row">
-        <div className="col-lg-12">
-          <p>
-            Created by Astrid Augusta Yu with <Tea /> and <Witch />
-          </p>
-          <CreativeCommons />
-        </div>
-      </div>
+    <footer>
+      <Container>
+        <p>
+          Created by Astrid Augusta Yu with <Tea /> and <Witch />{" "}
+        </p>
+        <p>
+          See the source on{" "}
+          <a href="https://github.com/Plenglin/plenglin.github.io">GitHub</a>
+        </p>
+        <CreativeCommons />
+      </Container>
     </footer>
   );
 }

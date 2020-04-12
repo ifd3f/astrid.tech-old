@@ -31,11 +31,6 @@ function MainNavbar() {
       <Collapse isOpen={isOpen} navbar>
         <Nav className="mr-auto" navbar>
           <NavItem>
-            <NavLink to="/about" activeClassName="active" tag={RRNavLink}>
-              About
-            </NavLink>
-          </NavItem>
-          <NavItem>
             <NavLink to="/blog" activeClassName="active" tag={RRNavLink}>
               Blog
             </NavLink>
@@ -46,7 +41,7 @@ function MainNavbar() {
             </NavLink>
           </NavItem>
           <NavItem>
-            <NavLink href="https://github.com/Plenglin"> GitHub </NavLink>
+            <NavLink href="https://github.com/Plenglin">GitHub</NavLink>
           </NavItem>
         </Nav>
       </Collapse>

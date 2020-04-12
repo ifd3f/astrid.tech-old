@@ -4,7 +4,9 @@ import { Container } from "reactstrap";
 export default function Blog() {
   return (
     <>
-      <Container></Container>
+      <Container>
+        <h1>Blog</h1>
+      </Container>
     </>
   );
 }

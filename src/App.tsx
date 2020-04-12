@@ -8,6 +8,8 @@ import Homepage from "./homepage";
 import MainNavbar from "./mainnavbar/MainNavbar";
 import Page404 from "./404";
 import Blog from "./blog";
+import FooterSection from "./Footer";
+import WorksPage from "./works";
 
 function App() {
   return (
@@ -21,6 +23,9 @@ function App() {
           <Route path="/blog">
             <Blog />
           </Route>
+          <Route path="/works">
+            <WorksPage />
+          </Route>
           <Route path="/404" exact>
             <Page404 />
           </Route>
@@ -29,6 +34,7 @@ function App() {
           </Route>
         </Switch>
       </div>
+      <FooterSection />
     </BrowserRouter>
   );
 }
