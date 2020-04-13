@@ -13,6 +13,10 @@ export default [
     color: "#f7b40c",
     children: [
       {
+        name: "TeX",
+        id: "tex",
+      },
+      {
         name: "Java",
         level: 80,
         id: "java",

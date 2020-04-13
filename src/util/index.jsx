@@ -13,7 +13,7 @@ export function getUniqueId() {
   return id++;
 }
 
-function SkillBadge({ skill }) {
+export function SkillBadge({ skill, link = null }) {
   const { name, category } = skill;
   const [badgeId] = useState(`badge-${getUniqueId()}`);
   return (
@@ -26,13 +26,10 @@ function SkillBadge({ skill }) {
           marginLeft: 2,
         }}
         tag={Link}
-        to={`/skill/${skill.id}`}
+        to={link}
       >
         {name}
       </Badge>
-      <UncontrolledTooltip placement="bottom" target={badgeId}>
-        Click for more stuff with this
-      </UncontrolledTooltip>
     </>
   );
 }
