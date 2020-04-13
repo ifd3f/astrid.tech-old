@@ -101,6 +101,10 @@ export default [
     color: "#e0c91f",
     children: [
       {
+        name: "Chatbots",
+        id: "chatbot",
+      },
+      {
         name: "Augmented Reality",
         id: "ar",
       },

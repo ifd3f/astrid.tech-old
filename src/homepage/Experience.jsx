@@ -37,7 +37,17 @@ function IronPanthersArticle() {
             style={{ display: "inline-block", marginBottom: 5, marginRight: 5 }}
           >
             <a href="https://theburlingameb.org/1990/news/iron-panthers-win-world-championships/">
-              World Championship-Winning
+              World
+            </a>{" "}
+            <a href="https://en.wikipedia.org/wiki/Burlingame_High_School_(California)#Robotics">
+              Champion
+            </a>
+            <a href="https://www.businesswire.com/news/home/20190420005006/en/Youth-Robotics-Teams-Inspire-Record-Crowds-FIRST%C2%AE">
+              ship
+            </a>
+            -
+            <a href="https://www.smdailyjournal.com/news/local/burlingame-high-school-claims-robotics-crown/article_8a3bb226-6895-11e9-9d1a-9b53ee5976f3.html">
+              Winning
             </a>{" "}
             Robotics Team
           </p>
@@ -59,18 +69,22 @@ function IronPanthersArticle() {
           </div>
         </div>
       </ArticleHeader>
-      <p>
-        On the FIRST Robotics Competition main team, I worked to build a vision
-        processing system using a Nvidia Jetson as a co-processor to aid the
-        driver in aligning the robot. This was achieved through a combination of
-        OpenCV and a neural network.
-      </p>
-      <p>
-        On the FIRST Tech Challenge subteam, I designed code to score points
-        during the autonomous operation period. I created a versatile
-        command-based system based on FRC's system to make the auto code more
-        organized and logical, eliminating issues.
-      </p>
+      <h6>FRC:</h6>
+      <ul>
+        <li>
+          Built game element detection system running on a Nvidia Jetson using
+          OpenCV and neural network. Used to assist driver in robot alignment.
+        </li>
+        <li>Researched advanced motion and path planning algorithms.</li>
+      </ul>
+      <h6>FTC:</h6>
+      <ul>
+        <li>Architected autonomous operation period.</li>
+        <li>
+          Designed a system to allow for chaining commands, making the
+          autonomous behavior more predictable.
+        </li>
+      </ul>
     </article>
   );
 }
@@ -81,12 +95,33 @@ function FabTimeArticle() {
       <ArticleHeader experience={experiences.get("fabtime")}>
         Charting software for semiconductor fabricators
       </ArticleHeader>
+      <ul>
+        <li>
+          Designed features to improve user experience and streamline fab cycles
+        </li>
+        <li>Implemented main site newsletter archive system</li>
+        <li>Researched ways to migrate code to ASP.NET Core</li>
+        <li>
+          Pinpointed and eliminated bugs in various languages, including C,
+          VBScript, JS, and SQL
+        </li>
+      </ul>
     </article>
   );
 }
 
 function GoodRippleArticle() {
-  return "";
+  return (
+    <article>
+      <ArticleHeader experience={experiences.get("goodripple")}></ArticleHeader>
+      <ul>
+        <li>
+          Integrated with the Slack API to add new features to the chatbot
+        </li>
+        <li>Managed the MySQL database</li>
+      </ul>
+    </article>
+  );
 }
 
 export function ExperienceSection() {
@@ -96,9 +131,9 @@ export function ExperienceSection() {
       <hr />
       <FabTimeArticle />
       <hr />
-      <GoodRippleArticle />
-      <hr />
       <IronPanthersArticle />
+      <hr />
+      <GoodRippleArticle />
     </Container>
   );
 }

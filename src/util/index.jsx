@@ -26,7 +26,7 @@ export function SkillBadge({ skill, link = null }) {
           marginLeft: 2,
         }}
         tag={Link}
-        to={link}
+        to={link ? link : undefined}
       >
         {name}
       </Badge>

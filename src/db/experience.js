@@ -3,7 +3,7 @@ const experience = [
     id: "iron-panthers",
     position: {
       title: "Programmer",
-      preposition: "at",
+      preposition: "on",
     },
     company: "Iron Panthers",
     website: "https://ironpanthers.com",
@@ -21,7 +21,15 @@ const experience = [
     website: "https://fabtime.com",
     time: [new Date(2019, 11), new Date(2020, 6)],
     timeDisplay: "Fall 2019 to Spring 2020",
-    skills: ["asp-classic", "asp-net-core", "js", "jquery", "sql-server"],
+    skills: [
+      "asp-classic",
+      "asp-net-core",
+      "c",
+      "vbs",
+      "js",
+      "jquery",
+      "sql-server",
+    ],
   },
   {
     id: "goodripple",
@@ -33,7 +41,7 @@ const experience = [
     website: "https://goodripple.com",
     time: [new Date(2018, 6), new Date(2018, 7)],
     timeDisplay: "Summer 2018",
-    skills: ["nodejs"],
+    skills: ["nodejs", "mysql", "chatbot"],
   },
 ];
 

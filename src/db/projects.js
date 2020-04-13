@@ -131,13 +131,15 @@ const projects = [
     id: "goggle-epoxy",
     title: "Goggle Epoxy",
     status: null,
-    desc: "Google Glass, but cheaper and engineered worse",
+    desc:
+      "Google Glass, but cheaper, and engineered worse, and unfortunately, non-functional",
     date: [new Date(2018, 6), new Date(2018, 8)],
     skills: [
       "sensor-fusion",
       "java",
       "raspberry-pi",
       "ar",
+      "me",
       "3d-printing",
       "ux-design",
       "iot",
