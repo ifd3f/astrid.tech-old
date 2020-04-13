@@ -3,6 +3,10 @@ import React, { useState } from "react";
 import ReactMarkdown from "react-markdown";
 import MathJax from "react-mathjax";
 import RemarkMathPlugin from "remark-math";
+import Lowlight from "react-lowlight";
+import js from "highlight.js/lib/languages/javascript";
+
+Lowlight.registerLanguage("js", js);
 
 export function MarkdownRenderAsync({ location, children = null }) {
   const [active, setActive] = useState(false);
@@ -33,6 +37,7 @@ export function MarkdownRender(props) {
       ...props.renderers,
       math: (props) => <MathJax.Node formula={props.value} />,
       inlineMath: (props) => <MathJax.Node inline formula={props.value} />,
+      Code: Lowlight,
     },
   };
   return (
