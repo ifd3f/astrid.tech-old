@@ -1,6 +1,4 @@
-@use '../bootstrap.scss' as bootstrap;
 @use "sass:map";
-@use './style.module.scss';
 
 .positionTitle {
   display: inline-block;
@@ -28,7 +26,7 @@
   border-top-color: #303030;
 }
 
-@media only screen and (max-width: map.get(bootstrap.$grid-breakpoints, "md")) {
+@media only screen and (max-width: 48em) {
   .durationTitleWrapper {
     float: none;
   }
