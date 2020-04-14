@@ -1,20 +1,19 @@
 import React, { useState } from "react";
 import {
-  Container,
-  CardHeader,
-  CardBody,
+  Badge,
   Card,
-  CardSubtitle,
+  CardBody,
+  CardColumns,
   CardImg,
   CardLink,
-  CardDeck,
-  CardColumns,
-  Badge,
+  CardSubtitle,
+  Container,
   UncontrolledTooltip,
 } from "reactstrap";
 import { projects } from "../db";
-import { SkillsList, getUniqueId } from "../util";
+import { getUniqueId, SkillsList, LoadOnView } from "../util";
 import style from "./style.module.scss";
+import { LazyImg } from "../util/index";
 
 function StatusBadge({ status }) {
   const [badgeId] = useState(`badge-${getUniqueId()}`);
@@ -67,7 +66,9 @@ function ProjectCard({ project }) {
   return img ? (
     <Card>
       <CardBody>{headerSection}</CardBody>
-      <CardImg src={img} />
+      <LoadOnView>
+        <CardImg src={img} />
+      </LoadOnView>
       <CardBody>{bodySection}</CardBody>
     </Card>
   ) : (

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, Suspense } from "react";
 import { Badge, UncontrolledTooltip, Tooltip } from "reactstrap";
 
 import { resolveSkills } from "../db";
@@ -7,6 +7,7 @@ import style from "./util.module.css";
 import { Link } from "react-router-dom";
 import { Interval, MultiInterval } from "./interval";
 import { MarkdownRender, MarkdownRenderAsync } from "./markdown";
+import { handleViewport } from "react-in-viewport";
 
 var id = 0;
 export function getUniqueId() {
@@ -34,7 +35,7 @@ export function SkillBadge({ skill, link = null }) {
   );
 }
 
-function SkillsList({ skills }) {
+export function SkillsList({ skills }) {
   return (
     <div>
       <p className={style.skillsList}>
@@ -48,10 +49,15 @@ function SkillsList({ skills }) {
   );
 }
 
-export {
-  SkillsList,
-  Interval,
-  MultiInterval,
-  MarkdownRender,
-  MarkdownRenderAsync,
-};
+export function LoadOnViewBlock({ inViewport, forwardedRef, children }) {
+  const [shown, setShown] = useState(inViewport);
+  console.log(inViewport);
+  if (!shown && inViewport) {
+    setShown(true);
+  }
+  return <div ref={forwardedRef}>{shown ? children : null}</div>;
+}
+
+export const LoadOnView = handleViewport(LoadOnViewBlock);
+
+export { Interval, MultiInterval, MarkdownRender, MarkdownRenderAsync };
