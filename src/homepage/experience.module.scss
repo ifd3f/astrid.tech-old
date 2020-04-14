@@ -1,5 +1,6 @@
 @use '../bootstrap.scss' as bootstrap;
 @use "sass:map";
+@use './style.module.scss';
 
 .positionTitle {
   display: inline-block;

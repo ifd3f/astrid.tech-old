@@ -8,14 +8,12 @@ import ElevatorSection from "./elevator";
 
 export default function Homepage() {
   return (
-    <>
+    <main>
       <HeadingSection />
-      <Container fluid tag="main">
-        <ElevatorSection />
-        <ExperienceSection />
-        <SkillsSection />
-        <ProjectsSection />
-      </Container>
-    </>
+      <ElevatorSection />
+      <ExperienceSection />
+      <SkillsSection />
+      <ProjectsSection />
+    </main>
   );
 }

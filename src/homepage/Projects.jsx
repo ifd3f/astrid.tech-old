@@ -14,6 +14,7 @@ import {
 } from "reactstrap";
 import { projects } from "../db";
 import { SkillsList, getUniqueId } from "../util";
+import style from "./style.module.scss";
 
 function StatusBadge({ status }) {
   const [badgeId] = useState(`badge-${getUniqueId()}`);
@@ -82,8 +83,10 @@ function ProjectCard({ project }) {
 function ProjectsSection() {
   return (
     <section>
-      <Container>
+      <div className={style.sectionHeading}>
         <h2>Projects</h2>
+      </div>
+      <Container fluid>
         <CardColumns>
           {Array.from(projects.values()).map((p) => (
             <ProjectCard key={p.id} project={p} />

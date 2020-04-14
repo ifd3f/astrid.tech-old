@@ -118,7 +118,7 @@ function GoodRippleArticle() {
         <li>
           Integrated with the Slack API to add new features to the chatbot
         </li>
-        <li>Managed the MySQL database</li>
+        <li>Interfaced with the MySQL database</li>
       </ul>
     </article>
   );
@@ -127,7 +127,7 @@ function GoodRippleArticle() {
 export function ExperienceSection() {
   return (
     <Container className={style.workExperience} tag="section">
-      <h2 className="section-header">Work Experience</h2>
+      <h2 className={style.sectionHeading}>Work Experience</h2>
       <hr />
       <FabTimeArticle />
       <hr />

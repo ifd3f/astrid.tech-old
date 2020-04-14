@@ -10,6 +10,7 @@ import {
   Row,
 } from "reactstrap";
 import "../db";
+import style from "./style.module.scss";
 
 class SkillData {
   constructor(data) {
@@ -83,7 +84,7 @@ function SkillsSection() {
   return (
     <section>
       <Container>
-        <div className="section-header">
+        <div className={style.sectionHeading}>
           <h2>Skills</h2>
         </div>
         <Row>
