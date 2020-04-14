@@ -51,7 +51,6 @@ export function SkillsList({ skills }) {
 
 export function LoadOnViewBlock({ inViewport, forwardedRef, children }) {
   const [shown, setShown] = useState(inViewport);
-  console.log(inViewport);
   if (!shown && inViewport) {
     setShown(true);
   }
