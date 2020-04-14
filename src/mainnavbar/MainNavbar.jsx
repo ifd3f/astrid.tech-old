@@ -36,8 +36,8 @@ function MainNavbar() {
             </NavLink>
           </NavItem>
           <NavItem>
-            <NavLink to="/works" activeClassName="active" tag={RRNavLink}>
-              My Work
+            <NavLink to="/portfolio" activeClassName="active" tag={RRNavLink}>
+              Portfolio
             </NavLink>
           </NavItem>
           <NavItem>

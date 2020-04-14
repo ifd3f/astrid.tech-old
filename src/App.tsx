@@ -7,9 +7,9 @@ import "./bootstrap.scss";
 import Homepage from "./homepage";
 import MainNavbar from "./mainnavbar/MainNavbar";
 import Page404 from "./404";
-import Blog from "./blog";
-import FooterSection from "./Footer";
-import WorksPage from "./works";
+import BlogPage from "./blog";
+import MainFooter from "./footer";
+import PortfolioPage from "./portfolio";
 
 function App() {
   return (
@@ -21,10 +21,10 @@ function App() {
             <Homepage />
           </Route>
           <Route path="/blog">
-            <Blog />
+            <BlogPage />
           </Route>
           <Route path="/works">
-            <WorksPage />
+            <PortfolioPage />
           </Route>
           <Route path="/404" exact>
             <Page404 />
@@ -34,7 +34,7 @@ function App() {
           </Route>
         </Switch>
       </div>
-      <FooterSection />
+      <MainFooter />
     </BrowserRouter>
   );
 }

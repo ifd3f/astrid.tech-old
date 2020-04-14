@@ -1,10 +1,10 @@
 import * as React from "react";
 import { Container } from "reactstrap";
 
-export default function WorksPage() {
+export default function PortfolioPage() {
   return (
     <Container fluid tag="main">
-      <h1>My Works</h1>
+      <h1>Portfolio</h1>
     </Container>
   );
 }
