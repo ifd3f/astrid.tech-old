@@ -1,10 +1,14 @@
 import React from "react";
 import { Container, Button } from "reactstrap";
 import { Link } from "react-router-dom";
+import { Helmet } from "react-helmet";
 
 export default function Page404() {
   return (
     <Container>
+      <Helmet>
+        <title>Astrid Yu - 404!</title>
+      </Helmet>
       <h2>404 - There's nothing here!</h2>
       <p>
         Your link seems to be broken, but your code certainly wouldn't be if I

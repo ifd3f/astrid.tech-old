@@ -1,0 +1,126 @@
+.homepageTop {
+  width: 100%;
+}
+
+.headline {
+  padding-top: 0px;
+}
+
+.headlineOuter {
+  width: 100%;
+  padding-top: 30px;
+  height: 320px;
+}
+
+.headlineInner {
+  margin-left: auto;
+  margin-right: auto;
+  text-align: center;
+}
+
+.headlinePrimary {
+  font-size: 50pt;
+}
+
+.subRow {
+  display: inline;
+}
+
+.subDisplayOuter {
+  width: 100%;
+  height: 150px;
+  margin: 0;
+  display: inline-flex;
+}
+
+.wareIconOuter {
+  font-size: 70pt;
+  margin-top: -30px;
+  text-align: center;
+  margin-bottom: 0px;
+  height: 100%;
+  margin-right: 10px;
+}
+
+.wareIcon {
+  color: white;
+}
+
+.hardwareIcon {
+  border: 3px white solid;
+  border-radius: 5px;
+}
+
+.subDisplay {
+  padding-top: 25px;
+  display: inline-flex;
+  margin-left: auto;
+  margin-right: auto;
+}
+
+.warePrimary {
+  font-size: 24pt;
+  margin-bottom: 5pt;
+}
+
+.wareSecondary {
+  color: white;
+  line-height: 14pt;
+  margin-bottom: 5pt;
+  font-size: 12pt;
+  text-align: center;
+}
+
+@media only screen and (min-width: 576px) {
+  .headlineOuter {
+    height: 400px;
+    padding-top: 40px;
+  }
+  .headlinePrimary {
+    font-size: 70pt;
+  }
+}
+
+@media only screen and (min-width: 768px) {
+  .wareSecondary {
+    font-size: 14pt;
+  }
+  .headlineOuter {
+    height: 450px;
+  }
+  .headlinePrimary {
+    font-size: 80pt;
+  }
+  .wareType {
+    font-size: 30pt;
+  }
+  .subDisplayOuter {
+    width: 50%;
+    height: 180px;
+  }
+  .subDisplay {
+    padding-top: 40px;
+  }
+  .warePrimary {
+    font-size: 28pt;
+  }
+}
+
+@media only screen and (min-width: 992px) {
+  .warePrimary {
+    font-size: 40pt;
+  }
+  .wareIcon {
+    font-size: 90pt;
+  }
+  .wareIconOuter {
+    padding-top: 10px;
+  }
+  .subDisplay {
+    padding-top: 25px;
+  }
+  .subDisplayOuter {
+    height: 200px;
+    padding-top: 20px;
+  }
+}

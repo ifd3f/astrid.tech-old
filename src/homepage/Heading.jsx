@@ -5,17 +5,17 @@ import { Col, Jumbotron, Row } from "reactstrap";
 import { HardwareYears, ProgrammingYears } from "./YearsSince";
 import { imgCoding, imgHardware } from "../assets";
 
-import style from "./heading.module.css";
+import style from "./heading.module.scss";
 
 function Headline() {
   return (
     <div className={style.headlineOuter}>
-      <div className={style.headline}>
+      <div className={style.headlineInner}>
         <div>
           <p className="lead">My name is</p>
-          <h1 className="display-1">ASTRID</h1>
+          <h1 className={style.headlinePrimary}>ASTRID</h1>
           <p className="lead">and I'm a</p>
-          <h1 className="display-1">HACKER</h1>
+          <h1 className={style.headlinePrimary}>HACKER</h1>
         </div>
       </div>
     </div>
@@ -33,8 +33,8 @@ function IconInfoDisplay({ icon, imageSrc, children }) {
       }}
     >
       <div className={style.subDisplay}>
-        <div style={{ fontSize: 100, height: "100%" }}>{icon}</div>
-        <div>{children}</div>
+        <div className={style.wareIconOuter}>{icon}</div>
+        <div className={style.wareTextOuter}>{children}</div>
       </div>
     </div>
   );
@@ -45,23 +45,33 @@ function HeadingSection() {
     <header className={style.homepageTop}>
       <Headline />
       <div className={style.subRow}>
-        <IconInfoDisplay icon={<BsCodeSlash />} imageSrc={imgCoding}>
-          <p>I've worked with</p>
-          <h2>SOFTWARE</h2>
-          <p>
+        <IconInfoDisplay
+          icon={<BsCodeSlash className={style.wareIcon} />}
+          imageSrc={imgCoding}
+        >
+          <p className={style.wareSecondary}>I've worked with</p>
+          <h2 className={style.warePrimary}>SOFTWARE</h2>
+          <p className={style.wareSecondary}>
             for{" "}
             <strong>
               <ProgrammingYears /> years
             </strong>
           </p>
         </IconInfoDisplay>
-        <IconInfoDisplay icon={<GiCircuitry />} imageSrc={imgHardware}>
-          <p>as well as</p>
-          <h2>HARDWARE</h2>
-          <p>
+        <IconInfoDisplay
+          icon={
+            <GiCircuitry
+              className={`${style.wareIcon} ${style.hardwareIcon}`}
+            />
+          }
+          imageSrc={imgHardware}
+        >
+          <p className={style.wareSecondary}>as well as</p>
+          <h2 className={style.warePrimary}>HARDWARE</h2>
+          <p className={style.wareSecondary}>
             for{" "}
             <strong>
-              <HardwareYears /> years.
+              <HardwareYears /> years
             </strong>
           </p>
         </IconInfoDisplay>
