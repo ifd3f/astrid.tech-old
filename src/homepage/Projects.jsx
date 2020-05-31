@@ -11,9 +11,8 @@ import {
   UncontrolledTooltip,
 } from "reactstrap";
 import { projects } from "../db";
-import { getUniqueId, SkillsList, LoadOnView } from "../util";
+import { getUniqueId, LoadOnView, SkillsList } from "../util";
 import style from "./style.module.scss";
-import { LazyImg } from "../util/index";
 
 function StatusBadge({ status }) {
   const [badgeId] = useState(`badge-${getUniqueId()}`);
@@ -85,9 +84,9 @@ function ProjectsSection() {
   return (
     <section>
       <div className={style.sectionHeading}>
-        <h2>Projects</h2>
+        <h2>Featured Projects</h2>
       </div>
-      <Container fluid>
+      <Container fluid className="projectShowcase">
         <CardColumns>
           {Array.from(projects.values()).map((p) => (
             <ProjectCard key={p.id} project={p} />

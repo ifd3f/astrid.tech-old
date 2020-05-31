@@ -2,7 +2,7 @@ import React from "react";
 import { Badge, Container } from "reactstrap";
 import { experiences } from "../db";
 import { SkillsList } from "../util";
-import style from "./experience.module.scss";
+import style from "./style.module.scss";
 
 function ArticleHeader({ experience, children }) {
   const {
@@ -126,7 +126,7 @@ function GoodRippleArticle() {
 
 export function ExperienceSection() {
   return (
-    <Container className={style.workExperience} tag="section">
+    <Container className={style.experienceSection} tag="section">
       <h2 className={style.sectionHeading}>Work Experience</h2>
       <hr />
       <FabTimeArticle />
