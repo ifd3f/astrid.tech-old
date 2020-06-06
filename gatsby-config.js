@@ -1,14 +1,22 @@
 module.exports = {
   siteMetadata: {
-    title: `Gatsby Starter Blog`,
+    title: `astrid.tech`,
     author: {
-      name: `Kyle Mathews`,
-      summary: `who lives and works in San Francisco building useful things.`,
+      name: `Astrid Yu`,
+      summary: `who likes to engineer awesome things`,
+      pronouns: {
+        subj: `she`,
+        obj: `her`,
+        pos: `hers`,
+        posAdj: `her`,
+        reflex: `herself`,
+      },
     },
-    description: `A starter blog demonstrating what Gatsby can do.`,
-    siteUrl: `https://gatsby-starter-blog-demo.netlify.app/`,
+    description: `Astrid Yu's blog and portfolio`,
+    siteUrl: `https://astrid.tech/`,
     social: {
-      twitter: `kylemathews`,
+      twitter: `none`,
+      github: `Plenglin`,
     },
   },
   plugins: [
