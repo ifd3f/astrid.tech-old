@@ -2,7 +2,7 @@
   "compilerOptions": {
     "jsx": "react",
     "module": "esnext",
-    "target": "es5",
+    "target": "esnext",
     "lib": ["dom", "dom.iterable", "esnext"],
     "allowJs": true,
     "esModuleInterop": true,
@@ -13,8 +13,6 @@
     "resolveJsonModule": true,
     "isolatedModules": true,
     "noImplicitAny": true,
-    "noUnusedLocals": true,
-    "noUnusedParameters": true,
     "removeComments": false,
     "preserveConstEnums": true,
     "sourceMap": true,
@@ -24,6 +22,7 @@
     "paths": {
       "components/*": ["src/components/*"],
       "containers/*": ["src/containers/*"],
+      "assets/*": ["assets/*"],
       "types/*": ["types/*"]
     }
   },

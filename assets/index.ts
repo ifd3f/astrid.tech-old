@@ -1,4 +1,4 @@
-import imgCoding from "./computer-coding.jpg";
+import imgCoding from "computer-coding.jpg";
 import imgHardware from "./electronics.jpg";
 import imgFabTime from "./fabtime.png";
 import imgGoodRipple from "./goodripple.png";
@@ -10,7 +10,7 @@ import imgHairNet from "./hairnet.png";
 import imgHasCAS from "./hascas-wip.png";
 import imgSegwayBot from "./segwaybot.png";
 import imgCollisionZone from "./collision-zone.gif";
-import imgTanksberry from "./tanksberry-pi.jpg";
+import imgTanksberry from "assets/tanksberry-pi.jpg";
 
 export {
   imgCoding,
