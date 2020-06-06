@@ -27,5 +27,11 @@
       "types/*": ["types/*"]
     }
   },
-  "exclude": ["artifacts/**/*", "dist/**/*", "public/**/*", "node_modules"]
+  "exclude": [
+    "artifacts/**/*",
+    "dist/**/*",
+    "public/**/*",
+    "node_modules",
+    "src/old/**/*"
+  ]
 }
