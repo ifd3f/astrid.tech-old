@@ -57,7 +57,7 @@ export const pageQuery = graphql`
   }
 `
 
-const BlogIndex = ({ data, location }: PageProps<Data>) => {
+const ProjectsIndex = ({ data, location }: PageProps<Data>) => {
   const siteTitle = data.site.siteMetadata.title
   const posts = data.allMarkdownRemark.edges
 
@@ -95,4 +95,4 @@ const BlogIndex = ({ data, location }: PageProps<Data>) => {
   )
 }
 
-export default BlogIndex
+export default ProjectsIndex

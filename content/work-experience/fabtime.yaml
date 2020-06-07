@@ -1,0 +1,20 @@
+type: work-experience
+organization: FabTime
+position: Software Intern
+location: San Luis Obispo, CA, USA
+website: https://fabtime.com
+startDate: 2019-11-27
+endDate: 2020-06-11
+highlights:
+  - Designed features to improve user experience and streamline fab cycles
+  - Implemented main site newsletter archive system
+  - Researched ways to migrate code to ASP.NET Core
+  - Pinpointed and eliminated bugs in various languages, including C, VBScript, JS, and SQL
+skills:
+  - asp-classic
+  - asp-net-core
+  - c
+  - visual-basic-script
+  - javascript
+  - jquery
+  - sql-server

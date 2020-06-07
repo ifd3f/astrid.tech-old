@@ -37,10 +37,18 @@ module.exports = {
     {
       resolve: `gatsby-source-filesystem`,
       options: {
+        path: `${__dirname}/content/work-experience`,
+        name: `work-experience`,
+      },
+    },
+    {
+      resolve: `gatsby-source-filesystem`,
+      options: {
         path: `${__dirname}/content/assets`,
         name: `assets`,
       },
     },
+    `gatsby-transformer-yaml`,
     {
       resolve: `gatsby-transformer-remark`,
       options: {

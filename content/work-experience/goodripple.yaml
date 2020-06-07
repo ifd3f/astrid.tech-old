@@ -1,0 +1,17 @@
+type: work-experience
+organization: GoodRipple
+position: Software Intern
+location: Palo Alto, CA, USA
+website: https://goodripple.com
+summary: Slack extension for improving company culture
+startDate: 2018-06-10
+endDate: 2018-07-20
+highlights:
+  - Integrated with the Slack API to add new features to the chatbot
+  - Interfaced with the MySQL database
+skills:
+  - node-js
+  - mysql
+  - slack-api
+  - chatbot
+  - botkit

@@ -1,0 +1,19 @@
+type: work-experience
+organization: Iron Panthers
+position: Programmer
+location: Burlingame, CA, USA
+website: https://ironpanthers.com
+summary: World Championship-Winning Robotics Team
+startDate: 2020-08-01
+endDate: 2019-05-01
+highlights:
+  - Built game element detection system running on a Nvidia Jetson using OpenCV and neural network. Used to assist driver in robot alignment.
+  - Researched advanced motion and path planning algorithms.
+  - Designed autonomous operation code.
+  - Designed a command queueing system for FTC.
+skills:
+  - java
+  - robotics
+  - control-systems
+  - opencv
+  - arduino
