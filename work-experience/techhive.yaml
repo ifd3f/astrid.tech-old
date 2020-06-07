@@ -1,0 +1,18 @@
+type: work-experience
+organization: Lawrence Hall of Science
+position: TechHive Intern
+location: Berkeley, CA, USA
+website: https://www.lawrencehallofscience.org
+startDate: 2017-09-24
+endDate: 2017-12-10
+highlights:
+  - Built game element detection system running on a Nvidia Jetson using OpenCV and neural network. Used to assist driver in robot alignment.
+  - Researched advanced motion and path planning algorithms.
+  - Designed autonomous operation code.
+  - Designed a command queueing system for FTC.
+skills:
+  - java
+  - robotics
+  - control-systems
+  - opencv
+  - arduino
