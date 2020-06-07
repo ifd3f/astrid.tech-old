@@ -37,7 +37,7 @@ export const pageQuery = graphql`
       }
     }
     allMarkdownRemark(
-      filter: { frontmatter: { type: { eq: "project" } } }
+      filter: { frontmatter: { type: { eq: "blog" } } }
       sort: { fields: [frontmatter___date], order: DESC }
     ) {
       edges {
@@ -75,7 +75,7 @@ const BlogIndex = ({ data, location }: PageProps<Data>) => {
                   marginBottom: rhythm(1 / 4),
                 }}
               >
-                <Link style={{ boxShadow: `none` }} to={node.fields.slug}>
+                <Link style={{ boxShadow: `none` }} to={"/" + node.fields.slug}>
                   {title}
                 </Link>
               </h3>

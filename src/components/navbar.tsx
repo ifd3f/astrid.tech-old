@@ -1,16 +1,35 @@
 import { Link } from "gatsby"
-import React, { FC, useState } from "react"
+import React, { FC, useState, ReactNode } from "react"
 import { BsArrowsCollapse } from "react-icons/bs"
 import { GiHamburger } from "react-icons/gi"
 import {
   Collapse,
-  Nav,
   Navbar,
   NavbarBrand,
   NavbarToggler,
-  NavItem,
-  NavLink,
+  NavLinkProps,
 } from "reactstrap"
+
+type NavLinkProps = {
+  to: string
+  children: ReactNode
+}
+
+const NavLink: FC<NavLinkProps> = ({ to, children }) => {
+  return (
+    <Link
+      className="nav-link"
+      to={to}
+      style={{
+        textDecorationLine: "none",
+        textDecoration: "none",
+        color: "#FFFFFF",
+      }}
+    >
+      {children}
+    </Link>
+  )
+}
 
 const MainNavbar: FC = () => {
   const [isOpen, setIsOpen] = useState(false)
@@ -18,16 +37,15 @@ const MainNavbar: FC = () => {
 
   return (
     <Navbar fixed="top" expand="md">
-      <NavbarBrand href="/" activeClassName="active">
+      <NavbarBrand tag={Link} to="/" activeClassName="active">
         Astrid
       </NavbarBrand>
       <NavbarToggler onClick={toggleIsOpen}>
         {isOpen ? <BsArrowsCollapse /> : <GiHamburger />}
       </NavbarToggler>
       <Collapse isOpen={isOpen} navbar>
-        <Nav className="mr-auto" navbar>
-          <NavLink href="/blog">fd</NavLink>
-        </Nav>
+        <NavLink to="/portfolio">Portfolio</NavLink>
+        <NavLink to="/blog">Blog</NavLink>
       </Collapse>
     </Navbar>
   )

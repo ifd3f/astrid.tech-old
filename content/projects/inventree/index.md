@@ -4,7 +4,7 @@ type: project
 title: inventree
 status: wip
 desc: An inventory tracker to keep track of my pile of crap
-date: 2020-01
+startDate: "2020-01-01"
 end: null
 skills:
   - react

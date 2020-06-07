@@ -4,7 +4,7 @@ type: project
 title: astrid.tech
 status: wip
 desc: My personal website
-date: 2020-03-01
+startDate: "2020-03-01"
 end: null
 skills:
   - react

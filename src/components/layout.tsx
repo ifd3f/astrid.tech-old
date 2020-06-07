@@ -5,6 +5,7 @@ import { WindowLocation, NavigateFn } from "@reach/router"
 import { rhythm, scale } from "../utils/typography"
 import MainNavbar from "./navbar"
 import "../scss/main.scss"
+import FooterSection from "./footer"
 
 interface LayoutProps {
   title: string
@@ -20,11 +21,7 @@ const Layout: FC<LayoutProps> = ({ title, children }) => {
     >
       <MainNavbar />
       <main>{children}</main>
-      <footer>
-        © {new Date().getFullYear()}, Built with
-        {` `}
-        <a href="https://www.gatsbyjs.org">Gatsby</a>
-      </footer>
+      <FooterSection />
     </div>
   )
 }
