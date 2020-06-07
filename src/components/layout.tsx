@@ -3,6 +3,9 @@ import { Link } from "gatsby"
 import { WindowLocation, NavigateFn } from "@reach/router"
 
 import { rhythm, scale } from "../utils/typography"
+import MainNavbar from "./navbar"
+//import "../scss/main.scss"
+import "bootstrap/dist/css/bootstrap.min.css"
 
 interface LayoutProps {
   title: string
@@ -10,34 +13,13 @@ interface LayoutProps {
 }
 
 const Layout: FC<LayoutProps> = ({ title, children }) => {
-  let header = (
-    <h3
-      style={{
-        fontFamily: `Montserrat, sans-serif`,
-        marginTop: 0,
-      }}
-    >
-      <Link
-        style={{
-          boxShadow: `none`,
-          color: `inherit`,
-        }}
-        to={`/`}
-      >
-        {title}
-      </Link>
-    </h3>
-  )
   return (
     <div
       style={{
-        marginLeft: `auto`,
-        marginRight: `auto`,
-        maxWidth: rhythm(24),
-        padding: `${rhythm(1.5)} ${rhythm(3 / 4)}`,
+        paddingTop: 70,
       }}
     >
-      <header>{header}</header>
+      <MainNavbar />
       <main>{children}</main>
       <footer>
         © {new Date().getFullYear()}, Built with

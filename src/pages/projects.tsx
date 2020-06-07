@@ -57,7 +57,7 @@ export const pageQuery = graphql`
   }
 `
 
-const ProjectsIndex = ({ data, location }: PageProps<Data>) => {
+const ProjectsIndex = ({ data }: PageProps<Data>) => {
   const siteTitle = data.site.siteMetadata.title
   const posts = data.allMarkdownRemark.edges
 

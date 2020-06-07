@@ -1,7 +1,7 @@
+import { Link } from "gatsby"
 import React, { FC, useState } from "react"
 import { BsArrowsCollapse } from "react-icons/bs"
 import { GiHamburger } from "react-icons/gi"
-import { NavLink as RRNavLink } from "react-router-dom"
 import {
   Collapse,
   Nav,
@@ -18,7 +18,7 @@ const MainNavbar: FC = () => {
 
   return (
     <Navbar fixed="top" expand="md">
-      <NavbarBrand to="/" activeClassName="active" tag={RRNavLink}>
+      <NavbarBrand href="/" activeClassName="active">
         Astrid
       </NavbarBrand>
       <NavbarToggler onClick={toggleIsOpen}>
@@ -26,19 +26,7 @@ const MainNavbar: FC = () => {
       </NavbarToggler>
       <Collapse isOpen={isOpen} navbar>
         <Nav className="mr-auto" navbar>
-          <NavItem>
-            <NavLink to="/blog" activeClassName="active" tag={RRNavLink}>
-              Blog
-            </NavLink>
-          </NavItem>
-          <NavItem>
-            <NavLink to="/projects" activeClassName="active" tag={RRNavLink}>
-              Projects
-            </NavLink>
-          </NavItem>
-          <NavItem>
-            <NavLink href="https://github.com/Plenglin">GitHub</NavLink>
-          </NavItem>
+          <NavLink href="/blog">fd</NavLink>
         </Nav>
       </Collapse>
     </Navbar>

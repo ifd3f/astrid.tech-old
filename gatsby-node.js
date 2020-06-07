@@ -4,7 +4,7 @@ const { createFilePath } = require(`gatsby-source-filesystem`)
 const createBlogPosts = async ({ graphql, actions }) => {
   const { createPage } = actions
 
-  const BlogPostTemplate = path.resolve(`./src/templates/blog-post.js`)
+  const BlogPostTemplate = path.resolve(`./src/templates/blog-post.tsx`)
   const result = await graphql(`
     {
       allMarkdownRemark(
@@ -48,10 +48,11 @@ const createBlogPosts = async ({ graphql, actions }) => {
     })
   })
 }
+
 const createProjects = async ({ graphql, actions }) => {
   const { createPage } = actions
 
-  const ProjectDetail = path.resolve(`./src/templates/project-detail.js`)
+  const ProjectDetail = path.resolve(`./src/templates/project-detail.tsx`)
   const result = await graphql(`
     {
       allMarkdownRemark(
