@@ -15,6 +15,8 @@ skills:
   - 3d-printing
   - html
   - bootstrap-css
-img: imgTanksberry
+img: ./tanksberry-pi.jpg
 source: https://github.com/Plenglin/tanksberry-pi
 ---
+
+Jesus Christ, I don't know what the hell I was thinking with this one.
