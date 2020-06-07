@@ -1,13 +1,11 @@
-import React from "react"
+import { graphql, useStaticQuery } from "gatsby"
+import React, { FC, ReactNode } from "react"
 import { BsCodeSlash } from "react-icons/bs"
 import { GiCircuitry } from "react-icons/gi"
-import { Col, Jumbotron, Row } from "reactstrap"
-import { HardwareYears, ProgrammingYears } from "./YearsSince"
-import { imgCoding, imgHardware } from "../assets"
 import style from "./heading.module.scss"
-import { Image } from "gatsby-image"
+import { HardwareYears, ProgrammingYears } from "./YearsSince"
 
-function Headline() {
+const Headline = () => {
   return (
     <div className={style.headlineOuter}>
       <div className={style.headlineInner}>
@@ -22,7 +20,17 @@ function Headline() {
   )
 }
 
-function IconInfoDisplay({ icon, imageSrc, children }) {
+interface IconInfoDisplayProps {
+  imageSrc: string
+  icon: ReactNode
+  children: ReactNode
+}
+
+const IconInfoDisplay: FC<IconInfoDisplayProps> = ({
+  icon,
+  imageSrc,
+  children,
+}) => {
   return (
     <div
       className={style.subDisplayOuter}
@@ -40,14 +48,28 @@ function IconInfoDisplay({ icon, imageSrc, children }) {
   )
 }
 
-function HeadingSection() {
+const HeadingSection = () => {
+  const data = useStaticQuery(graphql`
+    query HeadingBgQuery {
+      coding: file(absolutePath: { regex: "/computer-coding.jpg/" }) {
+        publicURL
+      }
+      electronics: file(absolutePath: { regex: "/electronics.jpg/" }) {
+        publicURL
+      }
+    }
+  `)
+
+  const coding: string = data.coding.publicURL
+  const electronics: string = data.electronics.publicURL
+
   return (
     <header className={style.homepageTop}>
       <Headline />
       <div className={style.subRow}>
         <IconInfoDisplay
           icon={<BsCodeSlash className={style.wareIcon} />}
-          imageSrc={imgCoding}
+          imageSrc={coding}
         >
           <p className={style.wareSecondary}>I've worked with</p>
           <h2 className={style.warePrimary}>SOFTWARE</h2>
@@ -64,7 +86,7 @@ function HeadingSection() {
               className={`${style.wareIcon} ${style.hardwareIcon}`}
             />
           }
-          imageSrc={imgHardware}
+          imageSrc={electronics}
         >
           <p className={style.wareSecondary}>as well as</p>
           <h2 className={style.warePrimary}>HARDWARE</h2>

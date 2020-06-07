@@ -4,8 +4,7 @@ import { WindowLocation, NavigateFn } from "@reach/router"
 
 import { rhythm, scale } from "../utils/typography"
 import MainNavbar from "./navbar"
-//import "../scss/main.scss"
-import "bootstrap/dist/css/bootstrap.min.css"
+import "../scss/main.scss"
 
 interface LayoutProps {
   title: string
