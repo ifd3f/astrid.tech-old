@@ -15,4 +15,5 @@ tags:
   - motion-sensing
 url: null
 source: [https://github.com/Plenglin/segwaybot]
+thumbnail: ./thumbnail.png
 ---

@@ -18,6 +18,7 @@ tags:
   - node.js
 url: https://collision.zone
 source: []
+thumbnail: ./thumbnail.gif
 ---
 
 The initial prototype was created during [HSHacks III](https://github.com/Plenglin/HSHacks-III) back in 2017 under the name of "High Octane Elastic Snowploughs."
