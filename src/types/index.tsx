@@ -3,8 +3,8 @@ export interface WorkExperience {
   position: string
   location: string
   website: string
-  startDate: Date
-  endDate?: Date
+  startDate: string
+  endDate?: string
   highlights: string[]
   skills: string[]
   summary?: string

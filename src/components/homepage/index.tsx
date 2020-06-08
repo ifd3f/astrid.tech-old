@@ -1,12 +1,12 @@
-import ElevatorSection from "./elevator"
-import ExperienceSection from "./Experience"
+//import ElevatorSection from "./elevator"
+import ExperienceSection from "./ExperienceSection"
 import HeadingSection from "./Heading"
-import ProjectsSection from "./Projects"
-import SkillsSection from "./Skills"
+//import ProjectsSection from "./Projects"
+//import SkillsSection from "./Skills"
 export {
-  ProjectsSection,
-  ElevatorSection,
+  //ProjectsSection,
+  //  ElevatorSection,
   HeadingSection,
   ExperienceSection,
-  SkillsSection,
+  //SkillsSection,
 }
