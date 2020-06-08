@@ -5,7 +5,7 @@ title: Inventree
 status: wip
 desc: An inventory tracker to keep track of my pile of crap
 startDate: "2020-01-01"
-end: null
+endDate: null
 tags:
   - react-js
   - javascript
@@ -15,14 +15,15 @@ tags:
   - bootstrap-css
   - django
   - python
-img: imgTanksberry
 url: null
-source: https://github.com/Plenglin/inventree
+source: [https://github.com/Plenglin/Inventree]
 ---
 
 Short for "Inventory Tree."
 
-I have a messy room with too many disorganized things in random places. This program will (hopefully) allow me, and maybe you if you want, to organize things at least a bit better.
+I have a messy room with too many disorganized things in random places. This program will (hopefully) allow me to keep track of things better with the power of QR codes.
+
+[An attempt was made back in 2018](https://github.com/Plenglin/inv5026) to implement something similar, but it failed due to my lack of experience.
 
 # Technology Stack
 

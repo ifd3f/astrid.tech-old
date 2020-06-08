@@ -3,21 +3,22 @@ type: project
 
 title: astrid.tech
 status: wip
-desc: My personal website
-startDate: "2020-03-01"
-end: null
+desc: This very website
+startDate: 2020-03-01
+endDate: null
 tags:
-  - /skills/react-js
-  - /skills/javascript
-  - /skills/typescript
-  - /skills/gatsby-js
-  - /skills/html
-  - /skills/css
-  - /skills/bootstrap-css
+  - react-js
+  - javascript
+  - typescript
+  - gatsby-js
+  - html
+  - css
+  - bootstrap-css
   - website
-img: null
 url: https://astrid.tech
-source: https://github.com/Plenglin/astrid.tech
+source:
+  - https://github.com/Plenglin/astrid.tech
+  - https://github.com/Plenglin/plenglin.github.io.old
 ---
 
 This is my website. There are many like it, but this one is mine.
