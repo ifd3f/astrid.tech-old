@@ -4,6 +4,7 @@ const uuid = require("uuid")
 const { createFilePath } = require(`gatsby-source-filesystem`)
 const rimraf = require("rimraf")
 const mkdirp = require("mkdirp")
+const md5 = require("js-md5")
 
 const createBlogPosts = async ({ graphql, actions }) => {
   const { createPage } = actions
@@ -124,11 +125,11 @@ exports.onCreateNode = ({ node, actions, getNode }) => {
         const absThumbnailPath = path.resolve(
           markdownPath.dir + "/" + thumbnailLoc
         )
+        const pathHash = md5(absThumbnailPath)
+
         const parsedThumbnailPath = path.parse(absThumbnailPath)
 
-        thumbnailPublicPath = `/generated/projects/${uuid.v4()}-${
-          parsedThumbnailPath.name
-        }${parsedThumbnailPath.ext}`
+        thumbnailPublicPath = `/generated/projects/${pathHash}-${parsedThumbnailPath.name}${parsedThumbnailPath.ext}`
 
         const copiedPath = path.resolve(
           `${__dirname}/static/${thumbnailPublicPath}`
