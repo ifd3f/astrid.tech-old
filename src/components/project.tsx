@@ -11,7 +11,7 @@ import {
   Container,
   UncontrolledTooltip,
 } from "reactstrap"
-import { getUniqueId, LoadOnView, TagsList } from "./util"
+import { getUniqueId, LoadOnView, TagList } from "./util"
 
 type StatusBadgeProps = {
   status: string
@@ -67,6 +67,7 @@ export const ProjectCard: FC<ProjectCardProps> = ({ project }) => {
   )
   const bodySection = (
     <>
+      <TagList tags={project.tags} />
       {project.url ? <CardLink href={project.url}>{project.url}</CardLink> : ""}
       {project.source.map(url => (
         <CardLink href={url}>Source Code</CardLink>

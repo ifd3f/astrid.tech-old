@@ -1,6 +1,6 @@
 import React, { useState, FC, ReactNode } from "react"
 import { handleViewport } from "react-in-viewport"
-import { Link } from "react-router-dom"
+import { Link } from "gatsby"
 import { Badge } from "reactstrap"
 import style from "./util.module.css"
 
