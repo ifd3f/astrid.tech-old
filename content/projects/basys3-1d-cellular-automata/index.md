@@ -3,7 +3,7 @@ type: project
 
 title: Cellular Automata
 status: complete
-desc: A 1D cellular automata implemented on a Basys 3 board for CPE 133 final
+description: A 1D cellular automata implemented on a Basys 3 board for CPE 133 final
 startDate: 2020-02-20
 endDate: 2020-03-05
 tags:

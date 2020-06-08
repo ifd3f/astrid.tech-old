@@ -3,7 +3,7 @@ type: project
 
 title: astrid.tech
 status: wip
-desc: This very website
+description: This very website
 startDate: 2020-03-01
 endDate: null
 tags:

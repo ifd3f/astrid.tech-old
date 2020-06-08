@@ -6,19 +6,19 @@ export interface WorkExperience {
   startDate: string
   endDate?: string
   highlights: string[]
-  skills: string[]
+  tags: string[]
   summary?: string
 }
 
 export interface Project {
   title: string
-  status: null | "wip" | "complete"
-  desc: string
+  status: null | "wip" | "complete" | "scrapped"
+  description: string
   startDate: Date
   endDate: Date | null
-  skills: string[]
+  tags: string[]
   url: string
-  source: string
+  source: string[]
 }
 
 export interface BlogPost {

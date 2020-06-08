@@ -3,6 +3,8 @@ import React from "react"
 import Layout from "../components/layout"
 import SEO from "../components/seo"
 import { rhythm } from "../utils/typography"
+import { Project } from "../types"
+import { ProjectCard } from "../components/project"
 
 type Data = {
   site: {
@@ -14,11 +16,7 @@ type Data = {
     edges: {
       node: {
         excerpt: string
-        frontmatter: {
-          title: string
-          date: string
-          description: string
-        }
+        frontmatter: Project
         fields: {
           slug: string
         }
@@ -28,7 +26,7 @@ type Data = {
 }
 
 export const pageQuery = graphql`
-  query {
+  {
     site {
       siteMetadata {
         title
@@ -40,14 +38,18 @@ export const pageQuery = graphql`
     ) {
       edges {
         node {
-          excerpt
           fields {
             slug
           }
           frontmatter {
-            date(formatString: "MMMM DD, YYYY")
+            startDate(formatString: "YYYY-MM")
+            endDate(formatString: "YYYY-MM")
             title
             description
+            status
+            tags
+            url
+            source
           }
         }
       }
@@ -65,6 +67,7 @@ const ProjectsIndex = ({ data }: PageProps<Data>) => {
         const title = node.frontmatter.title || node.fields.slug
         return (
           <article key={node.fields.slug}>
+            <ProjectCard project={node.frontmatter}></ProjectCard>
             <header>
               <h3
                 style={{
