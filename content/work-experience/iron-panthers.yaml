@@ -5,8 +5,8 @@ position: Programmer
 location: Burlingame, CA, USA
 website: https://ironpanthers.com
 summary: World Championship-Winning Robotics Team
-startDate: 2020-08-01
-endDate: 2019-05-01
+startDate: 2014-09-01
+endDate: 2019-05-30
 highlights:
   - Built game element detection system running on a Nvidia Jetson using OpenCV and neural network. Used to assist driver in robot alignment.
   - Researched advanced motion and path planning algorithms.
