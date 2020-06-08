@@ -12,7 +12,7 @@ highlights:
   - Researched advanced motion and path planning algorithms.
   - Designed autonomous operation code.
   - Designed a command queueing system for FTC.
-skills:
+tags:
   - java
   - robotics
   - control-systems

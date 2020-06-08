@@ -11,7 +11,7 @@ highlights:
   - Implemented main site newsletter archive system
   - Researched ways to migrate code to ASP.NET Core
   - Pinpointed and eliminated bugs in various languages, including C, VBScript, JS, and SQL
-skills:
+tags:
   - asp-classic
   - asp-net-core
   - c

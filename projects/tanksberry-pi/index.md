@@ -7,16 +7,16 @@ desc: A tank with a fully-3D printed self-loading BB gun
 startDate: "2017-05-01"
 startDate: "2017-07-01"
 tags:
-  - python
-  - circuit-design
+  - /skills/python
+  - /skills/circuit-design
   - mechanical-engineering
   - electrical-engineering
   - stepper-motors
-  - 3d-printing
-  - html
-  - bootstrap-css
+  - /skills/3d-printing
+  - /skills/html
+  - /skills/bootstrap-css
   - websockets
-  - javascript
+  - /skills/javascript
 img: ./tanksberry-pi.jpg
 source: https://github.com/Plenglin/tanksberry-pi
 ---

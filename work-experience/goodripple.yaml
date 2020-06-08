@@ -10,7 +10,7 @@ endDate: 2018-07-20
 highlights:
   - Integrated with the Slack API to add new features to the chatbot
   - Interfaced with the MySQL database
-skills:
+tags:
   - node-js
   - mysql
   - slack-api
