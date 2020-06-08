@@ -58,12 +58,11 @@ export const pageQuery = graphql`
 `
 
 const BlogIndex = ({ data, location }: PageProps<Data>) => {
-  const siteTitle = data.site.siteMetadata.title
   const posts = data.allMarkdownRemark.edges
 
   return (
-    <Layout title={siteTitle}>
-      <SEO title="All posts" />
+    <Layout>
+      <SEO title="Blog" />
       <Bio />
       {posts.map(({ node }) => {
         const title = node.frontmatter.title || node.fields.slug

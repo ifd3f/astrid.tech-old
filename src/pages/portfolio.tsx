@@ -1,7 +1,5 @@
+import { graphql, Link, PageProps } from "gatsby"
 import React from "react"
-import { PageProps, Link, graphql } from "gatsby"
-
-import Bio from "../components/bio"
 import Layout from "../components/layout"
 import SEO from "../components/seo"
 import { rhythm } from "../utils/typography"
@@ -58,13 +56,11 @@ export const pageQuery = graphql`
 `
 
 const ProjectsIndex = ({ data }: PageProps<Data>) => {
-  const siteTitle = data.site.siteMetadata.title
   const posts = data.allMarkdownRemark.edges
 
   return (
-    <Layout title={siteTitle}>
-      <SEO title="All posts" />
-      <Bio />
+    <Layout>
+      <SEO title="Portfolio" />
       {posts.map(({ node }) => {
         const title = node.frontmatter.title || node.fields.slug
         return (

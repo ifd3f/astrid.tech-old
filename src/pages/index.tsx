@@ -1,12 +1,12 @@
 import React from "react"
+import { ExperienceSection, HeadingSection } from "../components/homepage"
 import Layout from "../components/layout"
-import MainNavbar from "../components/navbar"
-import { Container, Button } from "reactstrap"
-import { HeadingSection, ExperienceSection } from "../components/homepage"
+import SEO from "../components/seo"
 
 const Homepage = () => {
   return (
-    <Layout title="Astrid Yu">
+    <Layout>
+      <SEO title="Astrid Yu" />
       <HeadingSection />
       <ExperienceSection />
     </Layout>

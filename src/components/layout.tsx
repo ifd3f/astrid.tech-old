@@ -1,24 +1,21 @@
-import React, { ReactNode, FC } from "react"
-import { Link } from "gatsby"
-import { WindowLocation, NavigateFn } from "@reach/router"
-
-import { rhythm, scale } from "../utils/typography"
-import MainNavbar from "./navbar"
+import React, { FC, ReactNode } from "react"
 import "../scss/main.scss"
 import FooterSection from "./footer"
+import MainNavbar from "./navbar"
 
 interface LayoutProps {
-  title: string
   children: ReactNode
 }
 
-const Layout: FC<LayoutProps> = ({ title, children }) => {
+const Layout: FC<LayoutProps> = ({ children }) => {
   return (
-    <div className="root-wrapper">
-      <MainNavbar />
-      <main>{children}</main>
-      <FooterSection />
-    </div>
+    <>
+      <div className="root-wrapper">
+        <MainNavbar />
+        <main>{children}</main>
+        <FooterSection />
+      </div>
+    </>
   )
 }
 
