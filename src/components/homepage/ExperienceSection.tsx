@@ -161,7 +161,7 @@ export const ExperienceSection = () => {
             location
             organization
             position
-            skills
+            tags
             summary
             type
             website

@@ -7,10 +7,10 @@ desc: My personal website
 startDate: "2020-03-01"
 end: null
 tags:
-  - haskell
-  - abstract-syntax-tree
+  - /skills/haskell
+  - abstract-syntax-trees
   - theoretical
-  - math
+  - /skills/math
 img: null
 source: https://github.com/Plenglin/HasCAS
 ---

@@ -7,19 +7,20 @@ desc: My personal website
 startDate: "2020-03-01"
 end: null
 tags:
-  - react-js
-  - javascript
-  - typescript
-  - gatsby-js
-  - html
-  - css
-  - bootstrap-css
+  - /skills/react-js
+  - /skills/javascript
+  - /skills/typescript
+  - /skills/gatsby-js
+  - /skills/html
+  - /skills/css
+  - /skills/bootstrap-css
+  - website
 img: null
 url: https://astrid.tech
 source: https://github.com/Plenglin/astrid.tech
 ---
 
-This is my website. There are many others like it, but this is mine.
+This is my website. There are many like it, but this one is mine.
 
 # Technology Stack
 
