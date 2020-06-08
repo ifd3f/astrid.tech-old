@@ -20,6 +20,7 @@ type Data = {
         frontmatter: Project
         fields: {
           slug: string
+          thumbnailPublicPath: string | null
         }
       }
     }[]
@@ -41,6 +42,7 @@ export const pageQuery = graphql`
         node {
           fields {
             slug
+            thumbnailPublicPath
           }
           frontmatter {
             startDate(formatString: "YYYY-MM")
@@ -59,16 +61,22 @@ export const pageQuery = graphql`
 `
 
 const ProjectsIndex = ({ data }: PageProps<Data>) => {
-  const posts = data.allMarkdownRemark.edges
+  const projects = data.allMarkdownRemark.edges.map(edge => {
+    const frontmatter = edge.node.frontmatter
+    if (edge.node.fields.thumbnailPublicPath) {
+      frontmatter.thumbnailURL = edge.node.fields.thumbnailPublicPath
+    }
+    return frontmatter
+  })
 
   return (
     <Layout>
       <SEO title="Portfolio" />
       <Container fluid>
         <CardColumns>
-          {posts.map(({ node }) => {
-            return <ProjectCard project={node.frontmatter}></ProjectCard>
-          })}
+          {projects.map(project => (
+            <ProjectCard project={project} />
+          ))}
         </CardColumns>
       </Container>
     </Layout>

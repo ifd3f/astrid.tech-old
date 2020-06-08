@@ -18,6 +18,7 @@ tags:
   - cr-servo
 url: null
 source: [https://github.com/Plenglin/KiwiBot]
+thumbnail: null
 ---
 
 This project was scrapped because it turns out that CR servos do not offer very precise movement.

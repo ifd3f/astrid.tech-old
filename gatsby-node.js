@@ -1,5 +1,9 @@
 const path = require(`path`)
+const fs = require("fs")
+const uuid = require("uuid")
 const { createFilePath } = require(`gatsby-source-filesystem`)
+const rimraf = require("rimraf")
+const mkdirp = require("mkdirp")
 
 const createBlogPosts = async ({ graphql, actions }) => {
   const { createPage } = actions
@@ -91,6 +95,10 @@ const createProjects = async ({ graphql, actions }) => {
   })
 }
 
+exports.onPreBootstrap = () => {
+  rimraf.sync(path.resolve(`${__dirname}/static/generated`))
+}
+
 exports.createPages = async ({ graphql, actions }) => {
   createBlogPosts({ graphql, actions })
   createProjects({ graphql, actions })
@@ -108,12 +116,36 @@ exports.onCreateNode = ({ node, actions, getNode }) => {
       value: "/" + type + filePath,
     })
 
+    let thumbnailPublicPath = null
     if (type == "project") {
-      const thumbnailPath = path.resolve(
-        path.parse(node.fileAbsolutePath).dir,
-        node.frontmatter.thumbnail
-      )
-      console.log(thumbnailPath)
+      const thumbnailLoc = node.frontmatter.thumbnail
+      if (thumbnailLoc) {
+        const markdownPath = path.parse(node.fileAbsolutePath)
+        const absThumbnailPath = path.resolve(
+          markdownPath.dir + "/" + thumbnailLoc
+        )
+        const parsedThumbnailPath = path.parse(absThumbnailPath)
+
+        thumbnailPublicPath = `/generated/projects/${uuid.v4()}-${
+          parsedThumbnailPath.name
+        }${parsedThumbnailPath.ext}`
+
+        const copiedPath = path.resolve(
+          `${__dirname}/static/${thumbnailPublicPath}`
+        )
+
+        mkdirp.sync(path.parse(copiedPath).dir)
+        fs.copyFileSync(absThumbnailPath, copiedPath)
+      }
     }
+    createNodeField({
+      name: "thumbnailPublicPath",
+      node,
+      value: thumbnailPublicPath,
+    })
   }
+}
+
+exports.postBuild = (pages, callback) => {
+  callback()
 }

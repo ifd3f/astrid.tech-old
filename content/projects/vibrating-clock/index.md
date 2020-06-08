@@ -11,4 +11,5 @@ tags:
   - android
 url: null
 source: [https://github.com/Plenglin/VibratingClock]
+thumbnail: null
 ---

@@ -15,4 +15,5 @@ tags:
   - socket-io
 url: null
 source: [https://github.com/Plenglin/Inventree]
+thumbnail: null
 ---

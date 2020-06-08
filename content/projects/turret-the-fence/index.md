@@ -13,4 +13,5 @@ tags:
   - ux-design
 url: null
 source: [https://github.com/Plenglin/Turret-The-Fence]
+thumbnail: null
 ---

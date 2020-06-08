@@ -19,6 +19,7 @@ export interface Project {
   tags: string[]
   url: string
   source: string[]
+  thumbnailURL?: string
 }
 
 export interface BlogPost {

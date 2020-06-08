@@ -13,4 +13,5 @@ tags:
   - kd-tree
 url: null
 source: [https://github.com/Plenglin/Space-Admiral]
+thumbnail: null
 ---

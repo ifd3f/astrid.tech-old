@@ -51,6 +51,8 @@ const StatusBadge: FC<StatusBadgeProps> = ({ status }) => {
   )
 }
 
+const ProjectCardImg = () => {}
+
 type ProjectCardProps = {
   project: Project
 }
@@ -74,11 +76,11 @@ export const ProjectCard: FC<ProjectCardProps> = ({ project }) => {
       ))}
     </>
   )
-  return false ? (
+  return project.thumbnailURL ? (
     <Card>
       <CardBody>{headerSection}</CardBody>
       <LoadOnView>
-        <CardImg src={"img"} />
+        <CardImg src={project.thumbnailURL} />
       </LoadOnView>
       <CardBody>{bodySection}</CardBody>
     </Card>
