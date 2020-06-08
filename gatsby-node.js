@@ -100,13 +100,20 @@ exports.onCreateNode = ({ node, actions, getNode }) => {
   const { createNodeField } = actions
 
   if (node.internal.type === `MarkdownRemark`) {
-    const path = createFilePath({ node, getNode })
+    const filePath = createFilePath({ node, getNode })
     const type = node.frontmatter.type
-    console.log(path)
     createNodeField({
       name: `slug`,
       node,
-      value: "/" + type + path,
+      value: "/" + type + filePath,
     })
+
+    if (type == "project") {
+      const thumbnailPath = path.resolve(
+        path.parse(node.fileAbsolutePath).dir,
+        node.frontmatter.thumbnail
+      )
+      console.log(thumbnailPath)
+    }
   }
 }

@@ -5,6 +5,7 @@ import SEO from "../components/seo"
 import { rhythm } from "../utils/typography"
 import { Project } from "../types"
 import { ProjectCard } from "../components/project"
+import { CardColumns, Container } from "reactstrap"
 
 type Data = {
   site: {
@@ -63,33 +64,13 @@ const ProjectsIndex = ({ data }: PageProps<Data>) => {
   return (
     <Layout>
       <SEO title="Portfolio" />
-      {posts.map(({ node }) => {
-        const title = node.frontmatter.title || node.fields.slug
-        return (
-          <article key={node.fields.slug}>
-            <ProjectCard project={node.frontmatter}></ProjectCard>
-            <header>
-              <h3
-                style={{
-                  marginBottom: rhythm(1 / 4),
-                }}
-              >
-                <Link style={{ boxShadow: `none` }} to={node.fields.slug}>
-                  {title}
-                </Link>
-              </h3>
-              <small>{node.frontmatter.date}</small>
-            </header>
-            <section>
-              <p
-                dangerouslySetInnerHTML={{
-                  __html: node.frontmatter.description || node.excerpt,
-                }}
-              />
-            </section>
-          </article>
-        )
-      })}
+      <Container fluid>
+        <CardColumns>
+          {posts.map(({ node }) => {
+            return <ProjectCard project={node.frontmatter}></ProjectCard>
+          })}
+        </CardColumns>
+      </Container>
     </Layout>
   )
 }

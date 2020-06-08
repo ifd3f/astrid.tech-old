@@ -14,4 +14,5 @@ tags:
   - anaconda
 url: null
 source: [https://github.com/Plenglin/hairnet]
+thumbnail: ./thumbnail.png
 ---

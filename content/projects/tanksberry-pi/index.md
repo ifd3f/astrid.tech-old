@@ -18,6 +18,7 @@ tags:
   - websockets
   - javascript
 source: [https://github.com/Plenglin/tanksberry-pi]
+thumbnail: ./thumbnail.jpg
 ---
 
 Jesus Christ, I don't know what the hell I was thinking with this one.
