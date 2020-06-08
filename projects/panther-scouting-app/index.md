@@ -15,4 +15,5 @@ tags:
   - cross-platform
 url: null
 source: [https://github.com/Plenglin/Scouting-App-old]
+thumbnail: null
 ---

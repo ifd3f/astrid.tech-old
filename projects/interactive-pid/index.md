@@ -13,6 +13,7 @@ tags:
   - website
 url: https://plenglin.github.io/Interactive-PID/
 source: [https://github.com/Plenglin/Interactive-PID]
+thumbnail: null
 ---
 
 The initial prototype was created during [HSHacks III](https://github.com/Plenglin/HSHacks-III) back in 2017 under the name of "High Octane Elastic Snowploughs."

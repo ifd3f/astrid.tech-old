@@ -19,6 +19,7 @@ url: https://astrid.tech
 source:
   - https://github.com/Plenglin/astrid.tech
   - https://github.com/Plenglin/plenglin.github.io.old
+thumbnail: null
 ---
 
 This is my website. There are many like it, but this one is mine.

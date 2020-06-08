@@ -15,4 +15,5 @@ tags:
   - game-design
 url: null
 source: [https://github.com/Plenglin/Quest-Of-Con]
+thumbnail: null
 ---

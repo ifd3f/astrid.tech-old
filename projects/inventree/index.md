@@ -17,6 +17,7 @@ tags:
   - python
 url: null
 source: [https://github.com/Plenglin/Inventree]
+thumbnail: null
 ---
 
 Short for "Inventory Tree."
