@@ -6,8 +6,8 @@ status: wip
 desc: My personal website
 startDate: "2020-03-01"
 end: null
-skills:
-  - react
+tags:
+  - react-js
   - javascript
   - typescript
   - gatsby-js

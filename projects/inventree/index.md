@@ -1,13 +1,13 @@
 ---
 type: project
 
-title: inventree
+title: Inventree
 status: wip
 desc: An inventory tracker to keep track of my pile of crap
 startDate: "2020-01-01"
 end: null
-skills:
-  - react
+tags:
+  - react-js
   - javascript
   - typescript
   - html
@@ -19,6 +19,8 @@ img: imgTanksberry
 url: null
 source: https://github.com/Plenglin/inventree
 ---
+
+Short for "Inventory Tree."
 
 I have a messy room with too many disorganized things in random places. This program will (hopefully) allow me, and maybe you if you want, to organize things at least a bit better.
 
