@@ -3,7 +3,7 @@ type: project
 
 title: Interactive PID Simulator
 status: complete
-desc: Simulate a PID controller using sliders
+description: Simulate a PID controller using sliders
 startDate: 2018-01-03
 endDate: 2018-01-15
 tags:

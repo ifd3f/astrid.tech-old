@@ -3,7 +3,7 @@ type: project
 
 title: Vibrating Clock
 status: complete
-desc: Makes your phone vibrate every x, y, or z minutes to tell you the time.
+description: Makes your phone vibrate every x, y, or z minutes to tell you the time.
 startDate: 2016-08-23
 endDate: 2016-08-27
 tags:
