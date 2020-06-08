@@ -19,7 +19,6 @@ export interface Project {
   skills: string[]
   url: string
   source: string
-  img: string | null
 }
 
 export interface BlogPost {
