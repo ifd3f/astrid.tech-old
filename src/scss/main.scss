@@ -1,16 +1,5 @@
-body {
-  margin: 0;
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", "Roboto", "Oxygen",
-    "Ubuntu", "Cantarell", "Fira Sans", "Droid Sans", "Helvetica Neue",
-    sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-}
-
-code {
-  font-family: source-code-pro, Menlo, Monaco, Consolas, "Courier New",
-    monospace;
-}
+@import "colors.scss";
+@import "fonts.scss";
 
 @import "~bootswatch/dist/cyborg/variables";
 @import "~bootstrap/scss/bootstrap";
@@ -20,10 +9,28 @@ $footer-height: 150px;
 
 .navbar-toggler {
   border-color: #999999;
-  color: #999999;
+  color: $pink;
 }
 
-#root {
+.nav-link {
+  box-shadow: none;
+  color: $pink;
+}
+
+.nav-link:hover {
+  color: red;
+}
+
+.navbar-brand {
+  box-shadow: none;
+  color: lightblue;
+}
+
+.navbar {
+  background-color: #502050;
+}
+
+.root-wrapper {
   min-height: 100%;
   padding-top: 70px;
   position: relative;

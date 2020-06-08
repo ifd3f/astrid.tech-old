@@ -3,7 +3,38 @@ import React, { FC, ReactNode } from "react"
 import { BsCodeSlash } from "react-icons/bs"
 import { GiCircuitry } from "react-icons/gi"
 import style from "./heading.module.scss"
-import { HardwareYears, ProgrammingYears } from "./YearsSince"
+
+const APPX_BEGAN_PROGRAMMING = new Date("2013-02-01")
+const APPX_BEGAN_HARDWARE = new Date("2015-12-15")
+
+type YearsSinceProps = {
+  date: Date
+}
+
+const YearsSince: FC<YearsSinceProps> = ({ date }) => {
+  const rawYears = (Date.now() - date.getTime()) / (1000 * 24 * 3600 * 365)
+  if (rawYears % 1.0 < 0.5) {
+    return (
+      <>
+        OVER <strong>{Math.floor(rawYears)}</strong>
+      </>
+    )
+  } else {
+    return (
+      <>
+        AROUND <strong>{Math.ceil(rawYears)}</strong>
+      </>
+    )
+  }
+}
+
+const ProgrammingYears = () => {
+  return <YearsSince date={APPX_BEGAN_PROGRAMMING} />
+}
+
+const HardwareYears = () => {
+  return <YearsSince date={APPX_BEGAN_HARDWARE} />
+}
 
 const Headline = () => {
   return (
@@ -71,13 +102,11 @@ const HeadingSection = () => {
           icon={<BsCodeSlash className={style.wareIcon} />}
           imageSrc={coding}
         >
-          <p className={style.wareSecondary}>I've worked with</p>
-          <h2 className={style.warePrimary}>SOFTWARE</h2>
+          <p className={style.warePrimary}>
+            <ProgrammingYears /> YEARS
+          </p>
           <p className={style.wareSecondary}>
-            for{" "}
-            <strong>
-              <ProgrammingYears /> years
-            </strong>
+            writing <strong>SOFTWARE</strong>
           </p>
         </IconInfoDisplay>
         <IconInfoDisplay
@@ -88,51 +117,16 @@ const HeadingSection = () => {
           }
           imageSrc={electronics}
         >
-          <p className={style.wareSecondary}>as well as</p>
-          <h2 className={style.warePrimary}>HARDWARE</h2>
+          <p className={style.warePrimary}>
+            <HardwareYears /> YEARS
+          </p>
           <p className={style.wareSecondary}>
-            for{" "}
-            <strong>
-              <HardwareYears /> years
-            </strong>
+            hacking <strong>HARDWARE</strong>
           </p>
         </IconInfoDisplay>
       </div>
     </header>
   )
 }
-
-/*
- <Col className="text-center">
-          <p className="lead">My name is</p>
-          <h1 className="display-1">ASTRID</h1>
-          <p className="lead">and I'm a</p>
-          <h1 className="display-1">HACKER</h1>
-        </Col>
-        <Row>
-          <Col className="text-center" md={6}>
-            <div className="d-inline-flex">
-              <Col md="auto">
-                <BsCodeSlash style={{fontSize: 100, height: "100%"}}/>
-              </Col>
-              <Col md="auto" className="text-left">
-                <p>I've worked with</p>
-                <h2>SOFTWARE</h2>
-                <p>for <strong><ProgrammingYears/> years</strong></p>
-              </Col>
-            </div>
-          </Col>
-          <Col className="text-center" md={6}>
-            <div className="d-inline-flex">
-              <Col md="auto">
-                <GiCircuitry style={{fontSize: 100, borderColor: "#FFFFFF", borderStyle: "solid"}}/>
-              </Col>
-              <Col md="auto" className="text-left">
-                <p>as well as</p>
-                <h2>HARDWARE</h2>
-                <p>for <strong><HardwareYears/> years.</strong></p>
-              </Col>
-            </div>
-          </Col>*/
 
 export default HeadingSection

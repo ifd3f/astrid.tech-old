@@ -17,15 +17,7 @@ type NavLinkProps = {
 
 const NavLink: FC<NavLinkProps> = ({ to, children }) => {
   return (
-    <Link
-      className="nav-link"
-      to={to}
-      style={{
-        textDecorationLine: "none",
-        textDecoration: "none",
-        color: "#FFFFFF",
-      }}
-    >
+    <Link className="nav-link" to={to}>
       {children}
     </Link>
   )

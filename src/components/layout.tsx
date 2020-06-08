@@ -14,11 +14,7 @@ interface LayoutProps {
 
 const Layout: FC<LayoutProps> = ({ title, children }) => {
   return (
-    <div
-      style={{
-        paddingTop: 70,
-      }}
-    >
+    <div className="root-wrapper">
       <MainNavbar />
       <main>{children}</main>
       <FooterSection />
