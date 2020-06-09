@@ -58,7 +58,7 @@ const createBlogPosts = async ({ graphql, actions }) => {
 }
 
 const createProjects = async ({ graphql, actions }) => {
-  const { createPage } = actions
+  const { createPage, createNode } = actions
 
   const ProjectDetail = path.resolve(`./src/templates/project-detail.tsx`)
   const result = await graphql(`
@@ -75,6 +75,7 @@ const createProjects = async ({ graphql, actions }) => {
             }
             frontmatter {
               title
+              tags
             }
           }
         }
@@ -88,12 +89,23 @@ const createProjects = async ({ graphql, actions }) => {
 
   const projects = result.data.allMarkdownRemark.edges
 
-  projects.forEach(project => {
+  projects.forEach(edge => {
+    const project = edge.node
+
+    const tagNode = buildTagNode({
+      name: project.frontmatter.title,
+      slug: project.fields.slug,
+      color: "#e81272",
+      textColor: "#e0c23e",
+    })
+
+    createNode(tagNode)
+
     createPage({
-      path: project.node.fields.slug,
+      path: project.fields.slug,
       component: ProjectDetail,
       context: {
-        slug: project.node.fields.slug,
+        slug: project.fields.slug,
       },
     })
   })
@@ -113,6 +125,32 @@ const SLUG_OVERRIDE = {
 const getTagSlug = name => {
   const lower = name.toLowerCase()
   return SLUG_OVERRIDE[lower] || lower.replace(" ", "-")
+}
+
+const buildTagNode = ({ name, slug, color, textColor }) => {
+  const node = {
+    parent: `__SOURCE__`,
+    internal: {
+      type: `Tag`,
+    },
+    children: [],
+
+    id: uuid.v4(),
+    name,
+    slug,
+    color,
+    textColor,
+  }
+
+  // Get content digest of node. (Required field)
+  const contentDigest = crypto
+    .createHash(`md5`)
+    .update(JSON.stringify(node))
+    .digest(`hex`)
+  // add it to userNode
+  node.internal.contentDigest = contentDigest
+
+  return node
 }
 
 exports.sourceNodes = async ({ actions }) => {
@@ -142,29 +180,12 @@ exports.sourceNodes = async ({ actions }) => {
     const textColor =
       r * 0.299 + g * 0.587 + b * 0.114 > 186 ? "#000000" : "#ffffff"
 
-    const node = {
-      // Required fields
-      parent: `__SOURCE__`,
-      internal: {
-        type: `Tag`,
-      },
-      children: [],
-
-      id: uuid.v4(),
-      color: lang.color,
-      textColor: textColor,
+    const node = buildTagNode({
       name: key,
-      slug: getTagSlug(key),
-    }
-
-    // Get content digest of node. (Required field)
-    const contentDigest = crypto
-      .createHash(`md5`)
-      .update(JSON.stringify(node))
-      .digest(`hex`)
-    // add it to userNode
-    node.internal.contentDigest = contentDigest
-
+      slug: "/tags/" + getTagSlug(key),
+      color: lang.color,
+      textColor,
+    })
     // Create node with the gatsby createNode() API
     createNode(node)
   }
@@ -217,6 +238,6 @@ exports.onCreateNode = ({ node, actions, getNode }) => {
   }
 }
 
-exports.postBuild = (pages, callback) => {
+exports.onPostBuild = (pages, callback) => {
   callback()
 }
