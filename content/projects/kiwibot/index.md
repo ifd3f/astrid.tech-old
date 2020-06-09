@@ -9,7 +9,7 @@ endDate: 2020-10-24
 tags:
   - kotlin
   - java
-  - c++
+  - cpp
   - android
   - bluetooth
   - hc-06

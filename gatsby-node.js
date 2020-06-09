@@ -103,6 +103,18 @@ exports.onPreBootstrap = () => {
   rimraf.sync(path.resolve(`${__dirname}/static/generated`))
 }
 
+const SLUG_OVERRIDE = {
+  "c++": "cpp",
+  "c#": "csharp",
+  "f#": "fsharp",
+  "objective-c++": "objective-cpp",
+}
+
+const getTagSlug = name => {
+  const lower = name.toLowerCase()
+  return SLUG_OVERRIDE[lower] || lower.replace(" ", "-")
+}
+
 exports.sourceNodes = async ({ actions }) => {
   const { createNode } = actions
 
@@ -142,7 +154,7 @@ exports.sourceNodes = async ({ actions }) => {
       color: lang.color,
       textColor: textColor,
       name: key,
-      slug: key.toLowerCase().replace(" ", "-"),
+      slug: getTagSlug(key),
     }
 
     // Get content digest of node. (Required field)
