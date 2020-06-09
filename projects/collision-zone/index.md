@@ -14,7 +14,7 @@ tags:
   - bootstrap-css
   - website
   - websockets
-  - c++
+  - cpp
   - node.js
 url: https://collision.zone
 source: []
