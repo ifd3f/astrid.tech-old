@@ -29,3 +29,10 @@ export interface BlogPost {
   tags: string[]
   content: string
 }
+
+export interface Tag {
+  name: string
+  color: string
+  textColor: string
+  slug: string
+}

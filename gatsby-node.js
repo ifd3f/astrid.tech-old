@@ -1,10 +1,13 @@
+const axios = require("axios")
 const path = require(`path`)
 const fs = require("fs")
 const uuid = require("uuid")
 const { createFilePath } = require(`gatsby-source-filesystem`)
+const crypto = require("crypto")
 const rimraf = require("rimraf")
 const mkdirp = require("mkdirp")
 const md5 = require("js-md5")
+const yaml = require("js-yaml")
 
 const createBlogPosts = async ({ graphql, actions }) => {
   const { createPage } = actions
@@ -98,6 +101,61 @@ const createProjects = async ({ graphql, actions }) => {
 
 exports.onPreBootstrap = () => {
   rimraf.sync(path.resolve(`${__dirname}/static/generated`))
+}
+
+exports.sourceNodes = async ({ actions }) => {
+  const { createNode } = actions
+
+  const res = await axios.get(
+    "https://raw.githubusercontent.com/github/linguist/master/lib/linguist/languages.yml"
+  )
+
+  const langs = yaml.load(res.data)
+  for (let key in langs) {
+    if (!langs.hasOwnProperty(key)) {
+      continue
+    }
+
+    const lang = langs[key]
+    if (!lang.color) {
+      continue
+    }
+
+    // Get RGB components
+    const [, r, g, b] = lang.color
+      .match(/#([0-9a-f]{2})([0-9a-f]{2})([0-9a-f]{2})/i)
+      .map(x => new Number("0x" + x))
+
+    // Taken from https://stackoverflow.com/a/3943023/12947037
+    const textColor =
+      r * 0.299 + g * 0.587 + b * 0.114 > 186 ? "#000000" : "#ffffff"
+
+    const node = {
+      // Required fields
+      parent: `__SOURCE__`,
+      internal: {
+        type: `Tag`,
+      },
+      children: [],
+
+      id: uuid.v4(),
+      color: lang.color,
+      textColor: textColor,
+      name: key,
+      slug: key.toLowerCase().replace(" ", "-"),
+    }
+
+    // Get content digest of node. (Required field)
+    const contentDigest = crypto
+      .createHash(`md5`)
+      .update(JSON.stringify(node))
+      .digest(`hex`)
+    // add it to userNode
+    node.internal.contentDigest = contentDigest
+
+    // Create node with the gatsby createNode() API
+    createNode(node)
+  }
 }
 
 exports.createPages = async ({ graphql, actions }) => {
