@@ -68,48 +68,6 @@ const buildTagNode = ({ name, slug, color, textColor }) => {
   return node
 }
 
-const createBlogPosts = async ({ graphql, actions }) => {
-  const { createPage } = actions
-
-  const BlogPostTemplate = path.resolve(`./src/templates/blog-post.tsx`)
-  const result = await graphql(`
-    {
-      allBlogPost(sort: { fields: date, order: DESC }) {
-        edges {
-          node {
-            title
-            id
-            slug
-          }
-        }
-      }
-    }
-  `)
-
-  if (result.errors) {
-    throw result.errors
-  }
-
-  // Create blog posts pages.
-  const posts = result.data.allBlogPost.edges
-  posts.forEach((edge, index) => {
-    const post = edge.node
-
-    const previous = index === posts.length - 1 ? null : posts[index + 1].node
-    const next = index === 0 ? null : posts[index - 1].node
-
-    createPage({
-      path: post.slug,
-      component: BlogPostTemplate,
-      context: {
-        id: post.id,
-        previous,
-        next,
-      },
-    })
-  })
-}
-
 exports.onPreBootstrap = () => {
   rimraf.sync(path.resolve(`${__dirname}/static/generated`))
 }
@@ -224,6 +182,7 @@ const createProjectNode = (actions, markdownNode) => {
     source: markdownNode.frontmatter.source,
     thumbnailPublicPath: thumbnailPublicPath,
 
+    markdown___NODE: markdownNode.id,
     tags: createLinkedTagList(markdownNode.frontmatter.tags),
   }
   setContentDigest(projectNode)
@@ -259,26 +218,79 @@ const createMarkdownBlogPostNode = (actions, markdownNode) => {
   createParentChildLink({ parent: markdownNode, child: postNode })
 }
 
-const createProjectPages = async () => {
-  const ProjectDetail = path.resolve(`./src/templates/project-detail.tsx`)
+const createBlogPosts = async ({ graphql, actions }) => {
+  const { createPage } = actions
+
+  const BlogPostTemplate = path.resolve(`./src/templates/blog-post.tsx`)
+  const result = await graphql(`
+    {
+      allBlogPost(sort: { fields: date, order: DESC }) {
+        edges {
+          node {
+            title
+            id
+            slug
+          }
+        }
+      }
+    }
+  `)
+
+  if (result.errors) {
+    throw result.errors
+  }
+
+  // Create blog posts pages.
+  const posts = result.data.allBlogPost.edges
+  posts.forEach((edge, index) => {
+    const post = edge.node
+
+    const previous = index === posts.length - 1 ? null : posts[index + 1].node
+    const next = index === 0 ? null : posts[index - 1].node
+
+    createPage({
+      path: post.slug,
+      component: BlogPostTemplate,
+      context: {
+        id: post.id,
+        previous,
+        next,
+      },
+    })
+  })
 }
 
-const createWorkPages = async (tagTable, { graphql, actions }) => {
-  const { createNodeField } = actions
-  // const result = await graphql(`
-  //   {
-  //     allWorkExperience {
-  //       edges {
-  //         node {
-  //           tags
-  //         }
-  //       }
-  //     }
-  //   }
-  // `)
-  // if (result.errors) {
-  //   throw result.errors
-  // }
+const createProjectPages = async ({ graphql, actions }) => {
+  const { createPage } = actions
+  const ProjectDetailTemplate = path.resolve(
+    `./src/templates/project-detail.tsx`
+  )
+  const result = await graphql(`
+    {
+      allProject(sort: { fields: endDate, order: DESC }) {
+        edges {
+          node {
+            title
+            id
+            slug
+          }
+        }
+      }
+    }
+  `)
+  if (result.errors) {
+    throw result.errors
+  }
+
+  result.data.allProject.edges.forEach(({ node: project }) => {
+    createPage({
+      path: project.slug,
+      component: ProjectDetailTemplate,
+      context: {
+        id: project.id,
+      },
+    })
+  })
 }
 
 const fillDefaultTags = (actions, tags) => {
@@ -359,7 +371,7 @@ exports.createPages = async ({ graphql, actions }) => {
   })
 
   createBlogPosts({ graphql, actions })
-  //createWorkPages(tagTable, { graphql, actions })
+  createProjectPages({ graphql, actions })
 }
 
 exports.onCreateNode = ({ node, actions, getNode }) => {

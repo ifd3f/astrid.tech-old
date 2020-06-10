@@ -20,6 +20,7 @@ export interface Project {
   slug: string
   url: string
   source: string[]
+  markdown?: MarkdownData
   thumbnailPublicPath?: string
 }
 
