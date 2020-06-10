@@ -251,7 +251,11 @@ const createMarkdownBlogPostNode = (actions, markdownNode) => {
     title: markdownNode.frontmatter.title,
     date: markdownNode.frontmatter.date,
     description: markdownNode.frontmatter.description,
-    content: markdownNode.html,
+
+    contentType: "markdown",
+    markdown___NODE: markdownNode.id,
+    mdx___NODE: null,
+    jupyter___NODE: null,
 
     tags: createLinkedTagList(markdownNode.frontmatter.tags),
   }

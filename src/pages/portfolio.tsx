@@ -62,11 +62,13 @@ const ProjectsIndex = ({ data }: PageProps<Data>) => {
     <Layout>
       <SEO title="Portfolio" />
       <Container fluid>
-        <CardColumns className="wide-card-columns">
-          {projects.map(project => (
-            <ProjectCard project={project} />
-          ))}
-        </CardColumns>
+        <div className="wide-card-columns">
+          <CardColumns>
+            {projects.map(project => (
+              <ProjectCard project={project} />
+            ))}
+          </CardColumns>
+        </div>
       </Container>
     </Layout>
   )
