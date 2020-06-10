@@ -54,7 +54,7 @@ footer {
   background: #202030;
 }
 
-.projectShowcase {
+.wide-card-columns {
   @media (min-width: 34em) {
     .card-columns {
       -webkit-column-count: 2;

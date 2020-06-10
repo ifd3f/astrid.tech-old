@@ -5,51 +5,33 @@ import Bio from "../components/bio"
 import Layout from "../components/layout"
 import SEO from "../components/seo"
 import { rhythm } from "../utils/typography"
+import { BlogPost } from "../types/index"
 
 type Data = {
-  site: {
-    siteMetadata: {
-      title: string
-    }
-  }
-  allMarkdownRemark: {
-    edges: {
-      node: {
-        excerpt: string
-        frontmatter: {
-          title: string
-          date: string
-          description: string
-        }
-        fields: {
-          slug: string
-        }
+  allBlogPost: {
+    edges: [
+      {
+        node: BlogPost
       }
-    }[]
+    ]
   }
 }
 
 export const pageQuery = graphql`
   query {
-    site {
-      siteMetadata {
-        title
-      }
-    }
-    allMarkdownRemark(
-      filter: { frontmatter: { type: { eq: "blog" } } }
-      sort: { fields: [frontmatter___date], order: DESC }
-    ) {
+    allBlogPost {
       edges {
         node {
-          excerpt
-          fields {
-            slug
-          }
-          frontmatter {
-            date(formatString: "MMMM DD, YYYY")
-            title
-            description
+          title
+          date
+          description
+          tags {
+            tag {
+              slug
+              name
+              color
+              textColor
+            }
           }
         }
       }
@@ -57,8 +39,8 @@ export const pageQuery = graphql`
   }
 `
 
-const BlogIndex = ({ data, location }: PageProps<Data>) => {
-  const posts = data.allMarkdownRemark.edges
+const BlogIndex = ({ data }: PageProps<Data>) => {
+  const posts = data.allBlogPost.edges
 
   return (
     <Layout>
