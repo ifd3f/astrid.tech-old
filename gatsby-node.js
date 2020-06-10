@@ -151,73 +151,41 @@ const sourceLangTagNodes = async ({ actions }) => {
   return tagTable
 }
 
-const sourceWorkExperienceNodes = async ({ graphql, actions }) => {
-  const { createNode } = actions
-  const rawQueryResult = await graphql(`
-    {
-      allWorkExperienceYaml {
-        edges {
-          node {
-            parent {
-              ... on File {
-                name
-              }
-            }
-            organization
-            position
-            location
-            startDate
-            endDate
+const createWorkExperienceNode = async (createNode, rawNode) => {
+  const newNode = {
+    parent: `__SOURCE__`,
+    internal: {
+      type: `WorkExperience`,
+    },
+    id: uuid.v4(),
+    children: [],
 
-            summary
-            website
+    slug: "/work/" + rawNode.slug,
+    organization: rawNode.organization,
+    position: rawNode.position,
+    location: rawNode.location,
+    startDate: rawNode.startDate,
+    endDate: rawNode.endDate,
 
-            highlights
-            tags
-          }
-        }
-      }
-    }
-  `)
+    summary: rawNode.summary,
+    website: rawNode.website,
 
-  rawQueryResult.edges.forEach(edge => {
-    const rawNode = edge.node
+    highlights: rawNode.highlights,
 
-    const node = {
-      parent: `__SOURCE__`,
-      internal: {
-        type: `WorkExperience`,
-      },
-      id: uuid.v4(),
-      children: [],
+    yaml___NODE: rawNode.id,
+    tags: rawNode.tags,
+  }
+  setContentDigest(newNode)
+  createNode(newNode)
 
-      slug: "/experience/" + rawNode.parent.name,
-      organization: rawNode.organization,
-      position: rawNode.position,
-      location: rawNode.location,
-      startDate: rawNode.startDate,
-      endDate: rawNode.endDate,
-
-      summary: rawNode.summary,
-      website: rawNode.website,
-
-      highlights: rawNode.highlights,
-      ["tags__NODE"]: rawNode.tags,
-    }
-
-    setContentDigest(node)
-
-    createNode(
-      buildTagNode({
-        name: `${node.position} at ${node.organization}`,
-        slug: node.slug,
-        color: "#169bf4",
-        textColor: "#16f4de",
-      })
-    )
-
-    createNode(node)
-  })
+  createNode(
+    buildTagNode({
+      name: `${newNode.position} at ${newNode.organization}`,
+      slug: newNode.slug,
+      color: "#169bf4",
+      textColor: "#16f4de",
+    })
+  )
 }
 
 const createProjectNode = (createNode, markdownNode) => {
@@ -258,7 +226,7 @@ const createProjectNode = (createNode, markdownNode) => {
     url: markdownNode.frontmatter.url,
     source: markdownNode.frontmatter.source,
     thumbnailPublicPath: thumbnailPublicPath,
-    ["markdown__NODE"]: markdownNode.markdownId,
+    markdown___NODE: markdownNode.id,
   }
   setContentDigest(projectNode)
   createNode(projectNode)
@@ -277,10 +245,8 @@ const createProjectPages = async () => {
   const ProjectDetail = path.resolve(`./src/templates/project-detail.tsx`)
 }
 
-exports.sourceNodes = async ({ graphql, actions }) => {
-  //const tagTable = sourceLangTagNodes({ graphql, actions })
-  //sourceWorkExperienceNodes({ tagTable, graphql, actions })
-  //sourceProjectNodes({ tagTable, graphql, actions })
+exports.sourceNodes = async ({ actions }) => {
+  sourceLangTagNodes({ actions })
 }
 
 exports.createPages = async ({ graphql, actions }) => {
@@ -291,17 +257,25 @@ exports.createPages = async ({ graphql, actions }) => {
 exports.onCreateNode = ({ node, actions, getNode }) => {
   const { createNodeField, createNode } = actions
 
-  if (node.internal.type === `MarkdownRemark`) {
-    const filePath = createFilePath({ node, getNode })
-    const type = node.frontmatter.type
-    createNodeField({
-      name: `slug`,
-      node,
-      value: "/" + type + filePath,
-    })
+  switch (node.internal.type) {
+    case `MarkdownRemark`: {
+      const filePath = createFilePath({ node, getNode })
+      const type = node.frontmatter.type
+      createNodeField({
+        name: `slug`,
+        node,
+        value: "/" + type + filePath,
+      })
 
-    if (type == "project") {
-      createProjectNode(createNode, node)
+      if (type == "project") {
+        createProjectNode(createNode, node)
+      }
+      break
+    }
+
+    case "WorkExperienceYaml": {
+      createWorkExperienceNode(createNode, node)
+      break
     }
   }
 }
