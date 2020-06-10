@@ -220,93 +220,67 @@ const sourceWorkExperienceNodes = async ({ graphql, actions }) => {
   })
 }
 
-const sourceProjectNodes = async ({ graphql, actions }) => {
-  const { createNode } = actions
+const createProjectNode = (createNode, markdownNode) => {
+  const thumbnailLoc = markdownNode.frontmatter.thumbnail
+  let thumbnailPublicPath = null
+  if (thumbnailLoc) {
+    const markdownPath = path.parse(markdownNode.fileAbsolutePath)
+    const absThumbnailPath = path.resolve(markdownPath.dir + "/" + thumbnailLoc)
+    const pathHash = md5(absThumbnailPath)
 
-  const rawMarkdownQuery = await graphql(`
-    {
-      allMarkdownRemark(
-        filter: { frontmatter: { type: { eq: "project" } } }
-        sort: { fields: [frontmatter___date], order: DESC }
-        limit: 1000
-      ) {
-        edges {
-          node {
-            markdownId: id
-            fields {
-              slug
-            }
-            frontmatter {
-              title
-              tags
-              status
-              description
-              startDate
-              endDate
-              url
-              source
-              thumbnail
-            }
-          }
-        }
-      }
-    }
-  `)
+    const parsedThumbnailPath = path.parse(absThumbnailPath)
 
-  rawMarkdownQuery.data.allMarkdownRemark.edges.forEach(edge => {
-    const project = edge.node
+    thumbnailPublicPath = `/generated/projects/${pathHash}-${parsedThumbnailPath.name}${parsedThumbnailPath.ext}`
 
-    const projectNode = {
-      parent: `__SOURCE__`,
-      internal: {
-        type: `WorkExperience`,
-      },
-      id: uuid.v4(),
-      children: [],
+    const copiedPath = path.resolve(
+      `${__dirname}/static/${thumbnailPublicPath}`
+    )
 
-      slug: project.fields.slug,
-      title: project.frontmatter.title,
-      tags: project.frontmatter.tags,
-      status: project.frontmatter.status,
-      description: project.frontmatter.description,
-      startDate: project.frontmatter.startDate,
-      endDate: project.frontmatter.endDate,
-      url: project.frontmatter.url,
-      source: project.frontmatter.source,
-      thumbnail: project.frontmatter.thumbnail,
-      ["markdown__NODE"]: project.markdownId,
-    }
+    mkdirp.sync(path.parse(copiedPath).dir)
+    fs.copyFileSync(absThumbnailPath, copiedPath)
+  }
 
-    setContentDigest(projectNode)
-    createNode(projectNode)
+  const projectNode = {
+    parent: `__SOURCE__`,
+    internal: {
+      type: `Project`,
+    },
+    id: uuid.v4(),
+    children: [],
 
-    const tagNode = buildTagNode({
-      name: project.frontmatter.title,
-      slug: project.fields.slug,
+    slug: markdownNode.fields.slug,
+    title: markdownNode.frontmatter.title,
+    tags: markdownNode.frontmatter.tags,
+    status: markdownNode.frontmatter.status,
+    description: markdownNode.frontmatter.description,
+    startDate: markdownNode.frontmatter.startDate,
+    endDate: markdownNode.frontmatter.endDate,
+    url: markdownNode.frontmatter.url,
+    source: markdownNode.frontmatter.source,
+    thumbnailPublicPath: thumbnailPublicPath,
+    ["markdown__NODE"]: markdownNode.markdownId,
+  }
+  setContentDigest(projectNode)
+  createNode(projectNode)
+
+  createNode(
+    buildTagNode({
+      name: markdownNode.frontmatter.title,
+      slug: markdownNode.fields.slug,
       color: "#e81272",
       textColor: "#e0c23e",
     })
-
-    createNode(tagNode)
-  })
+  )
 }
 
 const createProjectPages = async () => {
   const ProjectDetail = path.resolve(`./src/templates/project-detail.tsx`)
-
-  createPage({
-    path: project.fields.slug,
-    component: ProjectDetail,
-    context: {
-      slug: project.fields.slug,
-    },
-  })
 }
 
 exports.sourceNodes = async ({ graphql, actions }) => {
-  const tagTable = sourceLangTagNodes({ graphql, actions })
-  sourceWorkExperienceNodes({ tagTable, graphql, actions })
-  sourceProjectNodes({ tagTable, graphql, actions })
+  //const tagTable = sourceLangTagNodes({ graphql, actions })
+  //sourceWorkExperienceNodes({ tagTable, graphql, actions })
+  //sourceProjectNodes({ tagTable, graphql, actions })
 }
 
 exports.createPages = async ({ graphql, actions }) => {
@@ -315,7 +289,7 @@ exports.createPages = async ({ graphql, actions }) => {
 }
 
 exports.onCreateNode = ({ node, actions, getNode }) => {
-  const { createNodeField } = actions
+  const { createNodeField, createNode } = actions
 
   if (node.internal.type === `MarkdownRemark`) {
     const filePath = createFilePath({ node, getNode })
@@ -326,32 +300,8 @@ exports.onCreateNode = ({ node, actions, getNode }) => {
       value: "/" + type + filePath,
     })
 
-    let thumbnailPublicPath = null
     if (type == "project") {
-      const thumbnailLoc = node.frontmatter.thumbnail
-      if (thumbnailLoc) {
-        const markdownPath = path.parse(node.fileAbsolutePath)
-        const absThumbnailPath = path.resolve(
-          markdownPath.dir + "/" + thumbnailLoc
-        )
-        const pathHash = md5(absThumbnailPath)
-
-        const parsedThumbnailPath = path.parse(absThumbnailPath)
-
-        thumbnailPublicPath = `/generated/projects/${pathHash}-${parsedThumbnailPath.name}${parsedThumbnailPath.ext}`
-
-        const copiedPath = path.resolve(
-          `${__dirname}/static/${thumbnailPublicPath}`
-        )
-
-        mkdirp.sync(path.parse(copiedPath).dir)
-        fs.copyFileSync(absThumbnailPath, copiedPath)
-      }
+      createProjectNode(createNode, node)
     }
-    createNodeField({
-      name: "thumbnailPublicPath",
-      node,
-      value: thumbnailPublicPath,
-    })
   }
 }
