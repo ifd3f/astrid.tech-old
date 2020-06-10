@@ -74,19 +74,12 @@ const createBlogPosts = async ({ graphql, actions }) => {
   const BlogPostTemplate = path.resolve(`./src/templates/blog-post.tsx`)
   const result = await graphql(`
     {
-      allMarkdownRemark(
-        filter: { frontmatter: { type: { eq: "blog" } } }
-        sort: { fields: [frontmatter___date], order: DESC }
-        limit: 1000
-      ) {
+      allBlogPost(sort: { fields: date, order: DESC }) {
         edges {
           node {
-            fields {
-              slug
-            }
-            frontmatter {
-              title
-            }
+            title
+            id
+            slug
           }
         }
       }
@@ -98,17 +91,18 @@ const createBlogPosts = async ({ graphql, actions }) => {
   }
 
   // Create blog posts pages.
-  const posts = result.data.allMarkdownRemark.edges
+  const posts = result.data.allBlogPost.edges
+  posts.forEach((edge, index) => {
+    const post = edge.node
 
-  posts.forEach((post, index) => {
     const previous = index === posts.length - 1 ? null : posts[index + 1].node
     const next = index === 0 ? null : posts[index - 1].node
 
     createPage({
-      path: post.node.fields.slug,
+      path: post.slug,
       component: BlogPostTemplate,
       context: {
-        slug: post.node.fields.slug,
+        id: post.id,
         previous,
         next,
       },
@@ -364,7 +358,7 @@ exports.createPages = async ({ graphql, actions }) => {
     })
   })
 
-  //createBlogPosts({ graphql, actions })
+  createBlogPosts({ graphql, actions })
   //createWorkPages(tagTable, { graphql, actions })
 }
 

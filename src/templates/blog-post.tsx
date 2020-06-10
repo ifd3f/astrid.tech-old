@@ -1,43 +1,68 @@
-import React from "react"
-import { Link, graphql } from "gatsby"
+import React, { FC } from "react"
+import { Link, graphql, PageProps } from "gatsby"
 
 import Bio from "../components/bio"
 import Layout from "../components/layout"
 import SEO from "../components/seo"
 import { rhythm, scale } from "../utils/typography"
+import { PostMainHeader, PostSEO, PostContent } from "../components/blog"
+import { BlogPost } from "../types/index"
 
-const BlogPostTemplate = ({ data, pageContext, location }) => {
-  const post = data.markdownRemark
-  const siteTitle = data.site.siteMetadata.title
+export const pageQuery = graphql`
+  query BlogPostBySlug($id: String!) {
+    allBlogPost(filter: { id: { eq: $id } }) {
+      edges {
+        node {
+          title
+          date
+          slug
+          description
+          contentType
+          markdown {
+            html
+          }
+          tags {
+            tag {
+              slug
+              name
+              color
+              textColor
+            }
+          }
+        }
+      }
+    }
+  }
+`
+
+type Data = {
+  allBlogPost: {
+    edges: [
+      {
+        node: BlogPost
+      }
+    ]
+  }
+}
+
+type Context = {
+  previous: BlogPost
+  next: BlogPost
+}
+
+const BlogPostTemplate: FC<PageProps<Data, Context>> = ({
+  data,
+  pageContext,
+}) => {
+  const post = data.allBlogPost.edges[0].node
   const { previous, next } = pageContext
 
   return (
-    <Layout title={siteTitle}>
-      <SEO
-        title={post.frontmatter.title}
-        description={post.frontmatter.description || post.excerpt}
-      />
+    <Layout>
+      <PostSEO post={post} />
       <article>
-        <header>
-          <h1
-            style={{
-              marginTop: rhythm(1),
-              marginBottom: 0,
-            }}
-          >
-            {post.frontmatter.title}
-          </h1>
-          <p
-            style={{
-              ...scale(-1 / 5),
-              display: `block`,
-              marginBottom: rhythm(1),
-            }}
-          >
-            {post.frontmatter.date}
-          </p>
-        </header>
-        <section dangerouslySetInnerHTML={{ __html: post.html }} />
+        <PostMainHeader post={post} />
+        <PostContent post={post} />
         <hr
           style={{
             marginBottom: rhythm(1),
@@ -60,15 +85,15 @@ const BlogPostTemplate = ({ data, pageContext, location }) => {
         >
           <li>
             {previous && (
-              <Link to={previous.fields.slug} rel="prev">
-                ← {previous.frontmatter.title}
+              <Link to={previous.slug!} rel="prev">
+                ← {previous.title}
               </Link>
             )}
           </li>
           <li>
             {next && (
-              <Link to={next.fields.slug} rel="next">
-                {next.frontmatter.title} →
+              <Link to={next.slug!} rel="next">
+                {next.title} →
               </Link>
             )}
           </li>
@@ -79,23 +104,3 @@ const BlogPostTemplate = ({ data, pageContext, location }) => {
 }
 
 export default BlogPostTemplate
-
-export const pageQuery = graphql`
-  query BlogPostBySlug($slug: String!) {
-    site {
-      siteMetadata {
-        title
-      }
-    }
-    markdownRemark(fields: { slug: { eq: $slug } }) {
-      id
-      excerpt(pruneLength: 160)
-      html
-      frontmatter {
-        title
-        date(formatString: "MMMM DD, YYYY")
-        description
-      }
-    }
-  }
-`

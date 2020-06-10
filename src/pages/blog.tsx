@@ -44,14 +44,12 @@ export const pageQuery = graphql`
 `
 
 const BlogIndex = ({ data }: PageProps<Data>) => {
-  const posts = data.allBlogPost.edges
-
   return (
     <Layout>
       <SEO title="Blog" />
       <Bio />
-      {posts.map(({ node }) => (
-        <PostBrief data={node} />
+      {data.allBlogPost.edges.map(({ node }) => (
+        <PostBrief post={node} />
       ))}
     </Layout>
   )
