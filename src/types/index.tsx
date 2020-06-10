@@ -27,7 +27,29 @@ export interface BlogPost {
   date: Date
   description: string
   tags: TagWrapper[]
-  content: string
+
+  contentType: "markdown" | "mdx" | "jupyter"
+}
+
+export type MarkdownData = {
+  html?: string
+  exerpt?: string
+  timeToRead?: number
+  wordCount?: {
+    paragraphs?: number
+    sentences?: number
+    word?: number
+  }
+}
+
+export interface MarkdownBlogPost {
+  title: string
+  date: Date
+  description: string
+  tags: TagWrapper[]
+
+  contentType: "markdown" | "mdx" | "jupyter"
+  markdown: MarkdownData
 }
 
 export interface TagWrapper {
