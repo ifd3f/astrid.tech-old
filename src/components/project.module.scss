@@ -1,0 +1,13 @@
+.projectCard {
+  -moz-transition: all 0.2s ease-in;
+  -o-transition: all 0.2s ease-in;
+  -webkit-transition: all 0.2s ease-in;
+  transition: all 0.2s ease-in;
+
+  background-color: #505050;
+  cursor: pointer;
+}
+
+.projectCard:hover {
+  background-color: #404040;
+}

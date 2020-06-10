@@ -3,7 +3,6 @@ import React, { FC, ReactNode, useState } from "react"
 import { handleViewport } from "react-in-viewport"
 import { Badge } from "reactstrap"
 import { Tag } from "../types/index"
-import style from "./util.module.css"
 
 var id = 0
 export function getUniqueId() {
@@ -42,7 +41,11 @@ type TagListProps = {
 export const TagList: FC<TagListProps> = ({ tags }) => {
   return (
     <div>
-      <p className={style.skillsList}>
+      <p
+        style={{
+          fontSize: "12pt",
+        }}
+      >
         {tags.map(tag => {
           return <TagBadge tag={tag} />
         })}

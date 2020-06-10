@@ -1,11 +1,10 @@
-import { graphql, Link, PageProps } from "gatsby"
+import { graphql, PageProps } from "gatsby"
 import React from "react"
-import Layout from "../components/layout"
-import SEO from "../components/seo"
-import { rhythm } from "../utils/typography"
-import { Project } from "../types"
-import { ProjectCard } from "../components/project"
 import { CardColumns, Container } from "reactstrap"
+import Layout from "../components/layout"
+import { ProjectCard } from "../components/project"
+import SEO from "../components/seo"
+import { Project } from "../types"
 
 type Data = {
   site: {

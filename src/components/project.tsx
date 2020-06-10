@@ -1,4 +1,4 @@
-import { Link } from "gatsby"
+import { Link, navigate } from "gatsby"
 import React, { FC, useState } from "react"
 import {
   Badge,
@@ -10,6 +10,7 @@ import {
   UncontrolledTooltip,
 } from "reactstrap"
 import { Project } from "../types"
+import styles from "./project.module.scss"
 import { getUniqueId, LoadOnView, TagList } from "./util"
 
 type StatusBadgeProps = {
@@ -74,8 +75,12 @@ export const ProjectCard: FC<ProjectCardProps> = ({ project }) => {
       ))}
     </>
   )
-  const card = project.thumbnailPublicPath ? (
-    <Card>
+  const onClickCard = () => {
+    navigate(project.slug)
+  }
+
+  return project.thumbnailPublicPath ? (
+    <Card onClick={onClickCard} className={styles.projectCard}>
       <CardBody>{headerSection}</CardBody>
       <LoadOnView>
         <CardImg src={project.thumbnailPublicPath} />
@@ -83,13 +88,11 @@ export const ProjectCard: FC<ProjectCardProps> = ({ project }) => {
       <CardBody>{bodySection}</CardBody>
     </Card>
   ) : (
-    <Card>
+    <Card onClick={onClickCard} className={styles.projectCard}>
       <CardBody>
         {headerSection}
         {bodySection}
       </CardBody>
     </Card>
   )
-
-  return <Link to={project.slug}>{card}</Link>
 }
