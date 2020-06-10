@@ -1,6 +1,7 @@
 import React, { FC, ReactNode } from "react"
 import { BlogPost, MarkdownBlogPost } from "../types"
 import { Link } from "gatsby"
+import { TagList } from "./util"
 
 type MarkdownPostProps = {
   data: MarkdownBlogPost
@@ -50,8 +51,9 @@ export const PostBrief: FC<AbstractPostProps> = ({ data }) => {
         <h3>
           <Link to={data.slug!}>{data.title}</Link>
         </h3>
-        <small>{data.date}</small>
+        <small>{new Date(data.date!).toString()}</small>
         <p>{data.description}</p>
+        <TagList tags={data.tags!.map(x => x.tag!)} />
       </header>
       {body}
     </article>

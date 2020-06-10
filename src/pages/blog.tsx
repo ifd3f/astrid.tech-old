@@ -1,12 +1,10 @@
+import { graphql, PageProps } from "gatsby"
 import React from "react"
-import { PageProps, Link, graphql } from "gatsby"
-
 import Bio from "../components/bio"
+import { PostBrief } from "../components/blog"
 import Layout from "../components/layout"
 import SEO from "../components/seo"
-import { rhythm } from "../utils/typography"
 import { BlogPost } from "../types/index"
-import { PostBrief } from "../components/blog"
 
 type Data = {
   allBlogPost: {
@@ -20,7 +18,7 @@ type Data = {
 
 export const pageQuery = graphql`
   query {
-    allBlogPost {
+    allBlogPost(sort: { fields: date, order: DESC }) {
       edges {
         node {
           title
