@@ -1,16 +1,15 @@
-import { Project } from "../types"
-import React, { useState, FC } from "react"
+import { Link } from "gatsby"
+import React, { FC, useState } from "react"
 import {
   Badge,
   Card,
   CardBody,
-  CardColumns,
   CardImg,
   CardLink,
   CardSubtitle,
-  Container,
   UncontrolledTooltip,
 } from "reactstrap"
+import { Project } from "../types"
 import { getUniqueId, LoadOnView, TagList } from "./util"
 
 type StatusBadgeProps = {
@@ -58,7 +57,6 @@ type ProjectCardProps = {
 }
 
 export const ProjectCard: FC<ProjectCardProps> = ({ project }) => {
-  console.log(project)
   const headerSection = (
     <>
       <h5>
@@ -76,7 +74,7 @@ export const ProjectCard: FC<ProjectCardProps> = ({ project }) => {
       ))}
     </>
   )
-  return project.thumbnailPublicPath ? (
+  const card = project.thumbnailPublicPath ? (
     <Card>
       <CardBody>{headerSection}</CardBody>
       <LoadOnView>
@@ -92,4 +90,6 @@ export const ProjectCard: FC<ProjectCardProps> = ({ project }) => {
       </CardBody>
     </Card>
   )
+
+  return <Link to={project.slug}>{card}</Link>
 }

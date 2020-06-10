@@ -17,6 +17,7 @@ export interface Project {
   startDate: Date
   endDate: Date | null
   tags: TagWrapper[]
+  slug: string
   url: string
   source: string[]
   thumbnailPublicPath?: string
