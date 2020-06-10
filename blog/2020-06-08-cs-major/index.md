@@ -10,7 +10,7 @@ tags:
   - computer-science
   - computer-engineering
   - electrical-engineering
-  - projects/quest-of-con
+  - /projects/quest-of-con
   - fpgas
 ---
 
