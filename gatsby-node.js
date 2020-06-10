@@ -25,6 +25,12 @@ const getTagId = slug => {
   return md5(`astrid.tech-tag-${slug}`)
 }
 
+const createLinkedTagList = slugs =>
+  slugs.map(slug => ({
+    slug: slug,
+    tag___NODE: getTagId(slug),
+  }))
+
 const setContentDigest = node => {
   // Get content digest of node. (Required field)
   const contentDigest = crypto
@@ -177,10 +183,7 @@ const createWorkExperienceNode = async (actions, yamlNode) => {
 
     highlights: yamlNode.highlights,
 
-    tags: yamlNode.tags.map(slug => ({
-      slug: slug,
-      tag___NODE: getTagId(slug),
-    })),
+    tags: createLinkedTagList(yamlNode.tags),
   }
   setContentDigest(workNode)
   createNode(workNode)
@@ -235,10 +238,7 @@ const createProjectNode = (actions, markdownNode) => {
     source: markdownNode.frontmatter.source,
     thumbnailPublicPath: thumbnailPublicPath,
 
-    tags: markdownNode.frontmatter.tags.map(slug => ({
-      slug: slug,
-      tag___NODE: getTagId(slug),
-    })),
+    tags: createLinkedTagList(markdownNode.frontmatter.tags),
   }
   setContentDigest(projectNode)
   createNode(projectNode)
