@@ -1,6 +1,5 @@
 import { graphql, PageProps } from "gatsby"
 import React from "react"
-import Bio from "../components/bio"
 import { PostBrief } from "../components/blog"
 import Layout from "../components/layout"
 import SEO from "../components/seo"
@@ -47,7 +46,6 @@ const BlogIndex = ({ data }: PageProps<Data>) => {
   return (
     <Layout>
       <SEO title="Blog" />
-      <Bio />
       {data.allBlogPost.edges.map(({ node }) => (
         <PostBrief post={node} />
       ))}

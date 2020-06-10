@@ -1,12 +1,9 @@
+import { graphql, Link, PageProps } from "gatsby"
 import React, { FC } from "react"
-import { Link, graphql, PageProps } from "gatsby"
-
-import Bio from "../components/bio"
+import { PostContent, PostMainHeader, PostSEO } from "../components/blog"
 import Layout from "../components/layout"
-import SEO from "../components/seo"
-import { rhythm, scale } from "../utils/typography"
-import { PostMainHeader, PostSEO, PostContent } from "../components/blog"
 import { BlogPost } from "../types/index"
+import { rhythm } from "../utils/typography"
 
 export const pageQuery = graphql`
   query BlogPostBySlug($id: String!) {
@@ -68,9 +65,6 @@ const BlogPostTemplate: FC<PageProps<Data, Context>> = ({
             marginBottom: rhythm(1),
           }}
         />
-        <footer>
-          <Bio />
-        </footer>
       </article>
 
       <nav>
