@@ -12,6 +12,7 @@ tags:
   - electrical-engineering
   - /projects/quest-of-con
   - fpgas
+  - verilog
 ---
 
 I feel like if computers didn't exist, I would have been a mathematician. But there's plenty of opportunities to embed fancy math inside a piece of code, and code can actually _do_ something, which is why I like programming and thus computers.
