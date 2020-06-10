@@ -187,7 +187,7 @@ const createWorkExperienceNode = async (actions, yamlNode) => {
   createParentChildLink({ parent: yamlNode, child: workNode })
 
   const tagNode = buildTagNode({
-    name: `${workNode.position} at ${workNode.organization}`,
+    name: `${workNode.organization}`,
     slug: workNode.slug,
     color: "#169bf4",
     textColor: "#16f4de",
@@ -235,7 +235,7 @@ const createProjectNode = (actions, markdownNode) => {
     source: markdownNode.frontmatter.source,
     thumbnailPublicPath: thumbnailPublicPath,
 
-    tags: markdownNode.tags.map(slug => ({
+    tags: markdownNode.frontmatter.tags.map(slug => ({
       slug: slug,
       tag___NODE: getTagId(slug),
     })),
@@ -276,11 +276,69 @@ const createWorkPages = async (tagTable, { graphql, actions }) => {
   // }
 }
 
+const fillDefaultTags = (actions, tags) => {
+  const { createNode } = actions
+  tags.forEach(({ slug, tag: linkedNode }) => {
+    if (linkedNode) {
+      return
+    }
+
+    createNode(
+      buildTagNode({
+        name: slug,
+        slug: slug,
+        color: "#313549",
+        textColor: "#ffffff",
+      })
+    )
+  })
+}
+
 exports.sourceNodes = async ({ actions }) => {
   await sourceLangTagNodes({ actions })
 }
 
 exports.createPages = async ({ graphql, actions }) => {
+  const result = await graphql(`
+    {
+      allWorkExperience {
+        edges {
+          node {
+            tags {
+              slug
+              tag {
+                id
+              }
+            }
+          }
+        }
+      }
+      allProject {
+        edges {
+          node {
+            tags {
+              tag {
+                id
+              }
+              slug
+            }
+          }
+        }
+      }
+    }
+  `)
+  if (result.errors) {
+    throw result.errors
+  }
+
+  result.data.allWorkExperience.edges.forEach(edge => {
+    fillDefaultTags(actions, edge.node.tags)
+  })
+
+  result.data.allProject.edges.forEach(edge => {
+    fillDefaultTags(actions, edge.node.tags)
+  })
+
   //createBlogPosts({ graphql, actions })
   //createWorkPages(tagTable, { graphql, actions })
 }
