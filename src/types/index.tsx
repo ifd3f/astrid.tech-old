@@ -6,7 +6,7 @@ export interface WorkExperience {
   startDate: string
   endDate?: string
   highlights: string[]
-  tags: string[]
+  tags: TagWrapper[]
   summary?: string
 }
 
@@ -16,18 +16,23 @@ export interface Project {
   description: string
   startDate: Date
   endDate: Date | null
-  tags: string[]
+  tags: TagWrapper[]
   url: string
   source: string[]
-  thumbnailURL?: string
+  thumbnailPublicPath?: string
 }
 
 export interface BlogPost {
   title: string
   date: Date
   description: string
-  tags: string[]
+  tags: TagWrapper[]
   content: string
+}
+
+export interface TagWrapper {
+  slug?: string
+  tag?: Tag
 }
 
 export interface Tag {

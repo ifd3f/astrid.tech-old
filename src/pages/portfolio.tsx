@@ -13,17 +13,12 @@ type Data = {
       title: string
     }
   }
-  allMarkdownRemark: {
-    edges: {
-      node: {
-        excerpt: string
-        frontmatter: Project
-        fields: {
-          slug: string
-          thumbnailPublicPath: string | null
-        }
+  allProject: {
+    edges: [
+      {
+        node: Project
       }
-    }[]
+    ]
   }
 }
 
@@ -34,26 +29,26 @@ export const pageQuery = graphql`
         title
       }
     }
-    allMarkdownRemark(
-      filter: { frontmatter: { type: { eq: "project" } } }
-      sort: { fields: [frontmatter___startDate], order: DESC }
-    ) {
+    allProject(sort: { fields: [startDate], order: DESC }) {
       edges {
         node {
-          fields {
-            slug
-            thumbnailPublicPath
+          slug
+          thumbnailPublicPath
+          startDate(formatString: "YYYY-MM")
+          endDate(formatString: "YYYY-MM")
+          title
+          description
+          status
+          tags {
+            tag {
+              name
+              color
+              textColor
+              slug
+            }
           }
-          frontmatter {
-            startDate(formatString: "YYYY-MM")
-            endDate(formatString: "YYYY-MM")
-            title
-            description
-            status
-            tags
-            url
-            source
-          }
+          url
+          source
         }
       }
     }
@@ -61,13 +56,7 @@ export const pageQuery = graphql`
 `
 
 const ProjectsIndex = ({ data }: PageProps<Data>) => {
-  const projects = data.allMarkdownRemark.edges.map(edge => {
-    const frontmatter = edge.node.frontmatter
-    if (edge.node.fields.thumbnailPublicPath) {
-      frontmatter.thumbnailURL = edge.node.fields.thumbnailPublicPath
-    }
-    return frontmatter
-  })
+  const projects = data.allProject.edges.map(edge => edge.node)
 
   return (
     <Layout>

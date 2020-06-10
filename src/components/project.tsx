@@ -69,18 +69,18 @@ export const ProjectCard: FC<ProjectCardProps> = ({ project }) => {
   )
   const bodySection = (
     <>
-      <TagList tags={project.tags} />
+      <TagList tags={project.tags.map(t => t.tag!!)} />
       {project.url ? <CardLink href={project.url}>{project.url}</CardLink> : ""}
       {project.source.map(url => (
         <CardLink href={url}>Source Code</CardLink>
       ))}
     </>
   )
-  return project.thumbnailURL ? (
+  return project.thumbnailPublicPath ? (
     <Card>
       <CardBody>{headerSection}</CardBody>
       <LoadOnView>
-        <CardImg src={project.thumbnailURL} />
+        <CardImg src={project.thumbnailPublicPath} />
       </LoadOnView>
       <CardBody>{bodySection}</CardBody>
     </Card>

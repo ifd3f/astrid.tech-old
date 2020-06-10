@@ -1,7 +1,8 @@
-import React, { useState, FC, ReactNode } from "react"
-import { handleViewport } from "react-in-viewport"
 import { Link } from "gatsby"
+import React, { FC, ReactNode, useState } from "react"
+import { handleViewport } from "react-in-viewport"
 import { Badge } from "reactstrap"
+import { Tag } from "../types/index"
 import style from "./util.module.css"
 
 var id = 0
@@ -10,32 +11,32 @@ export function getUniqueId() {
 }
 
 type TagBadgeProps = {
-  skill: string
-  link?: string
+  tag: Tag
 }
 
-export const TagBadge: FC<TagBadgeProps> = ({ skill, link }) => {
+export const TagBadge: FC<TagBadgeProps> = ({ tag }) => {
   const [badgeId] = useState(`tag-badge-${getUniqueId()}`)
   return (
     <>
       <Badge
         id={badgeId}
         style={{
-          backgroundColor: "#aaaaaa",
+          backgroundColor: tag.color,
+          color: tag.textColor,
           marginRight: 2,
           marginLeft: 2,
         }}
         tag={Link}
-        to={link}
+        to={"/tag/" + tag.slug}
       >
-        {skill}
+        {tag.name}
       </Badge>
     </>
   )
 }
 
 type TagListProps = {
-  tags: string[]
+  tags: Tag[]
 }
 
 export const TagList: FC<TagListProps> = ({ tags }) => {
@@ -43,7 +44,7 @@ export const TagList: FC<TagListProps> = ({ tags }) => {
     <div>
       <p className={style.skillsList}>
         {tags.map(tag => {
-          return <TagBadge key={tag} skill={tag} />
+          return <TagBadge tag={tag} />
         })}
       </p>
     </div>
