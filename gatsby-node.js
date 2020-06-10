@@ -165,7 +165,7 @@ const sourceLangTagNodes = async ({ actions }) => {
 const createWorkExperienceNode = async (actions, yamlNode) => {
   const { createNode, createParentChildLink } = actions
   const workNode = {
-    parent: `__SOURCE__`,
+    parent: yamlNode.id,
     internal: {
       type: `WorkExperience`,
     },
@@ -213,7 +213,7 @@ const createProjectNode = (actions, markdownNode) => {
   }
 
   const projectNode = {
-    parent: `__SOURCE__`,
+    parent: markdownNode.id,
     internal: {
       type: `Project`,
     },
@@ -240,7 +240,7 @@ const createProjectNode = (actions, markdownNode) => {
 const createMarkdownBlogPostNode = (actions, markdownNode) => {
   const { createNode, createParentChildLink } = actions
   const postNode = {
-    parent: `__SOURCE__`,
+    parent: markdownNode.id,
     internal: {
       type: `BlogPost`,
     },
