@@ -21,6 +21,10 @@ const getTagSlug = name => {
   return SLUG_OVERRIDE[lower] || lower.replace(" ", "-")
 }
 
+const getTagId = slug => {
+  return md5(`astrid.tech-tag-${slug}`)
+}
+
 const setContentDigest = node => {
   // Get content digest of node. (Required field)
   const contentDigest = crypto
@@ -39,7 +43,7 @@ const buildTagNode = ({ name, slug, color, textColor }) => {
     },
     children: [],
 
-    id: uuid.v4(),
+    id: getTagId(slug),
     name,
     slug,
     color,
@@ -151,8 +155,9 @@ const sourceLangTagNodes = async ({ actions }) => {
   return tagTable
 }
 
-const createWorkExperienceNode = async (createNode, rawNode) => {
-  const newNode = {
+const createWorkExperienceNode = async (actions, yamlNode) => {
+  const { createNode, createParentChildLink } = actions
+  const workNode = {
     parent: `__SOURCE__`,
     internal: {
       type: `WorkExperience`,
@@ -160,35 +165,39 @@ const createWorkExperienceNode = async (createNode, rawNode) => {
     id: uuid.v4(),
     children: [],
 
-    slug: "/work/" + rawNode.slug,
-    organization: rawNode.organization,
-    position: rawNode.position,
-    location: rawNode.location,
-    startDate: rawNode.startDate,
-    endDate: rawNode.endDate,
+    slug: "/work/" + yamlNode.slug,
+    organization: yamlNode.organization,
+    position: yamlNode.position,
+    location: yamlNode.location,
+    startDate: yamlNode.startDate,
+    endDate: yamlNode.endDate,
 
-    summary: rawNode.summary,
-    website: rawNode.website,
+    summary: yamlNode.summary,
+    website: yamlNode.website,
 
-    highlights: rawNode.highlights,
+    highlights: yamlNode.highlights,
 
-    yaml___NODE: rawNode.id,
-    tags: rawNode.tags,
+    tags: yamlNode.tags.map(slug => ({
+      slug: slug,
+      tag___NODE: getTagId(slug),
+    })),
   }
-  setContentDigest(newNode)
-  createNode(newNode)
+  setContentDigest(workNode)
+  createNode(workNode)
+  createParentChildLink({ parent: yamlNode, child: workNode })
 
-  createNode(
-    buildTagNode({
-      name: `${newNode.position} at ${newNode.organization}`,
-      slug: newNode.slug,
-      color: "#169bf4",
-      textColor: "#16f4de",
-    })
-  )
+  const tagNode = buildTagNode({
+    name: `${workNode.position} at ${workNode.organization}`,
+    slug: workNode.slug,
+    color: "#169bf4",
+    textColor: "#16f4de",
+  })
+  createNode(tagNode)
+  createParentChildLink({ parent: workNode, child: tagNode })
 }
 
-const createProjectNode = (createNode, markdownNode) => {
+const createProjectNode = (actions, markdownNode) => {
+  const { createNode, createParentChildLink } = actions
   const thumbnailLoc = markdownNode.frontmatter.thumbnail
   let thumbnailPublicPath = null
   if (thumbnailLoc) {
@@ -218,7 +227,6 @@ const createProjectNode = (createNode, markdownNode) => {
 
     slug: markdownNode.fields.slug,
     title: markdownNode.frontmatter.title,
-    tags: markdownNode.frontmatter.tags,
     status: markdownNode.frontmatter.status,
     description: markdownNode.frontmatter.description,
     startDate: markdownNode.frontmatter.startDate,
@@ -226,36 +234,59 @@ const createProjectNode = (createNode, markdownNode) => {
     url: markdownNode.frontmatter.url,
     source: markdownNode.frontmatter.source,
     thumbnailPublicPath: thumbnailPublicPath,
-    markdown___NODE: markdownNode.id,
+
+    tags: markdownNode.tags.map(slug => ({
+      slug: slug,
+      tag___NODE: getTagId(slug),
+    })),
   }
   setContentDigest(projectNode)
   createNode(projectNode)
+  createParentChildLink({ parent: markdownNode, child: projectNode })
 
-  createNode(
-    buildTagNode({
-      name: markdownNode.frontmatter.title,
-      slug: markdownNode.fields.slug,
-      color: "#e81272",
-      textColor: "#e0c23e",
-    })
-  )
+  const tagNode = buildTagNode({
+    name: projectNode.title,
+    slug: projectNode.slug,
+    color: "#e81272",
+    textColor: "#e0c23e",
+  })
+  createNode(tagNode)
+  createParentChildLink({ parent: projectNode, child: tagNode })
 }
 
 const createProjectPages = async () => {
   const ProjectDetail = path.resolve(`./src/templates/project-detail.tsx`)
 }
 
+const createWorkPages = async (tagTable, { graphql, actions }) => {
+  const { createNodeField } = actions
+  // const result = await graphql(`
+  //   {
+  //     allWorkExperience {
+  //       edges {
+  //         node {
+  //           tags
+  //         }
+  //       }
+  //     }
+  //   }
+  // `)
+  // if (result.errors) {
+  //   throw result.errors
+  // }
+}
+
 exports.sourceNodes = async ({ actions }) => {
-  sourceLangTagNodes({ actions })
+  await sourceLangTagNodes({ actions })
 }
 
 exports.createPages = async ({ graphql, actions }) => {
   //createBlogPosts({ graphql, actions })
-  createProjectPages({ graphql, actions })
+  //createWorkPages(tagTable, { graphql, actions })
 }
 
 exports.onCreateNode = ({ node, actions, getNode }) => {
-  const { createNodeField, createNode } = actions
+  const { createNodeField } = actions
 
   switch (node.internal.type) {
     case `MarkdownRemark`: {
@@ -268,13 +299,13 @@ exports.onCreateNode = ({ node, actions, getNode }) => {
       })
 
       if (type == "project") {
-        createProjectNode(createNode, node)
+        createProjectNode(actions, node)
       }
       break
     }
 
     case "WorkExperienceYaml": {
-      createWorkExperienceNode(createNode, node)
+      createWorkExperienceNode(actions, node)
       break
     }
   }
