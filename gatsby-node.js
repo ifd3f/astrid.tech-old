@@ -190,15 +190,6 @@ const createWorkExperienceNode = async (actions, yamlNode) => {
   setContentDigest(workNode)
   createNode(workNode)
   createParentChildLink({ parent: yamlNode, child: workNode })
-
-  const tagNode = buildTagNode({
-    name: `${workNode.organization}`,
-    slug: workNode.slug,
-    color: "#169bf4",
-    textColor: "#16f4de",
-  })
-  createNode(tagNode)
-  createParentChildLink({ parent: workNode, child: tagNode })
 }
 
 const createProjectNode = (actions, markdownNode) => {
@@ -245,15 +236,6 @@ const createProjectNode = (actions, markdownNode) => {
   setContentDigest(projectNode)
   createNode(projectNode)
   createParentChildLink({ parent: markdownNode, child: projectNode })
-
-  const tagNode = buildTagNode({
-    name: projectNode.title,
-    slug: projectNode.slug,
-    color: "#e81272",
-    textColor: "#e0c23e",
-  })
-  createNode(tagNode)
-  createParentChildLink({ parent: projectNode, child: tagNode })
 }
 
 const createMarkdownBlogPostNode = (actions, markdownNode) => {
@@ -351,9 +333,7 @@ exports.createPages = async ({ graphql, actions }) => {
           }
         }
       }
-    }
-  `)
-  /*      allBlogPost {
+      allBlogPost {
         edges {
           node {
             tags {
@@ -365,7 +345,8 @@ exports.createPages = async ({ graphql, actions }) => {
           }
         }
       }
-*/
+    }
+  `)
   if (result.errors) {
     throw result.errors
   }
@@ -383,7 +364,7 @@ exports.createPages = async ({ graphql, actions }) => {
 }
 
 exports.onCreateNode = ({ node, actions, getNode }) => {
-  const { createNodeField } = actions
+  const { createNode, createParentChildLink, createNodeField } = actions
 
   switch (node.internal.type) {
     case `MarkdownRemark`: {
@@ -400,7 +381,7 @@ exports.onCreateNode = ({ node, actions, getNode }) => {
           createProjectNode(actions, node)
           break
         case "blog":
-          //createMarkdownBlogPostNode(actions, node)
+          createMarkdownBlogPostNode(actions, node)
           break
       }
       break
@@ -409,6 +390,17 @@ exports.onCreateNode = ({ node, actions, getNode }) => {
     case "WorkExperienceYaml": {
       createWorkExperienceNode(actions, node)
       break
+    }
+
+    case "Project": {
+      const tagNode = buildTagNode({
+        name: node.title,
+        slug: node.slug,
+        color: "#e81272",
+        textColor: "#e0c23e",
+      })
+      createNode(tagNode)
+      createParentChildLink({ parent: node, child: tagNode })
     }
   }
 }
