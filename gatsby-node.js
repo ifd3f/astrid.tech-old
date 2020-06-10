@@ -22,7 +22,9 @@ const getTagSlug = name => {
 }
 
 const getTagId = slug => {
-  return md5(`astrid.tech-tag-${slug}`)
+  const preprocessed = `astrid.tech-tag-${slug}`
+  return preprocessed
+  //return md5(preprocessed)
 }
 
 const createLinkedTagList = slugs =>
@@ -254,6 +256,30 @@ const createProjectNode = (actions, markdownNode) => {
   createParentChildLink({ parent: projectNode, child: tagNode })
 }
 
+const createMarkdownBlogPostNode = (actions, markdownNode) => {
+  const { createNode, createParentChildLink } = actions
+  const postNode = {
+    parent: `__SOURCE__`,
+    internal: {
+      type: `BlogPost`,
+    },
+    id: uuid.v4(),
+    children: [],
+
+    slug: markdownNode.fields.slug,
+    title: markdownNode.frontmatter.title,
+    date: markdownNode.frontmatter.date,
+    description: markdownNode.frontmatter.description,
+    content: markdownNode.html,
+
+    tags: createLinkedTagList(markdownNode.frontmatter.tags),
+  }
+
+  setContentDigest(postNode)
+  createNode(postNode)
+  createParentChildLink({ parent: markdownNode, child: postNode })
+}
+
 const createProjectPages = async () => {
   const ProjectDetail = path.resolve(`./src/templates/project-detail.tsx`)
 }
@@ -327,15 +353,28 @@ exports.createPages = async ({ graphql, actions }) => {
       }
     }
   `)
+  /*      allBlogPost {
+        edges {
+          node {
+            tags {
+              tag {
+                id
+              }
+              slug
+            }
+          }
+        }
+      }
+*/
   if (result.errors) {
     throw result.errors
   }
 
-  result.data.allWorkExperience.edges.forEach(edge => {
-    fillDefaultTags(actions, edge.node.tags)
-  })
-
-  result.data.allProject.edges.forEach(edge => {
+  ;[
+    result.data.allWorkExperience,
+    result.data.allProject,
+    result.data.allBlogPost,
+  ].forEach(edge => {
     fillDefaultTags(actions, edge.node.tags)
   })
 
@@ -356,8 +395,13 @@ exports.onCreateNode = ({ node, actions, getNode }) => {
         value: "/" + type + filePath,
       })
 
-      if (type == "project") {
-        createProjectNode(actions, node)
+      switch (type) {
+        case "project":
+          createProjectNode(actions, node)
+          break
+        case "blog":
+          //createMarkdownBlogPostNode(actions, node)
+          break
       }
       break
     }
