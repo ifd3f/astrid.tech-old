@@ -23,8 +23,7 @@ const getTagSlug = name => {
 
 const getTagId = slug => {
   const preprocessed = `astrid.tech-tag-${slug}`
-  return preprocessed
-  //return md5(preprocessed)
+  return md5(preprocessed)
 }
 
 const createLinkedTagList = slugs =>
@@ -352,11 +351,13 @@ exports.createPages = async ({ graphql, actions }) => {
   }
 
   ;[
-    result.data.allWorkExperience,
-    result.data.allProject,
-    result.data.allBlogPost,
-  ].forEach(edge => {
-    fillDefaultTags(actions, edge.node.tags)
+    result.data.allWorkExperience.edges,
+    result.data.allProject.edges,
+    result.data.allBlogPost.edges,
+  ].forEach(edges => {
+    edges.forEach(edge => {
+      fillDefaultTags(actions, edge.node.tags)
+    })
   })
 
   //createBlogPosts({ graphql, actions })
