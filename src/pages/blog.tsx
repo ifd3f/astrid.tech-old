@@ -6,6 +6,7 @@ import Layout from "../components/layout"
 import SEO from "../components/seo"
 import { rhythm } from "../utils/typography"
 import { BlogPost } from "../types/index"
+import { PostBrief } from "../components/blog"
 
 type Data = {
   allBlogPost: {
@@ -24,7 +25,12 @@ export const pageQuery = graphql`
         node {
           title
           date
+          slug
           description
+          contentType
+          markdown {
+            excerpt
+          }
           tags {
             tag {
               slug
@@ -46,32 +52,9 @@ const BlogIndex = ({ data }: PageProps<Data>) => {
     <Layout>
       <SEO title="Blog" />
       <Bio />
-      {posts.map(({ node }) => {
-        const title = node.frontmatter.title || node.fields.slug
-        return (
-          <article key={node.fields.slug}>
-            <header>
-              <h3
-                style={{
-                  marginBottom: rhythm(1 / 4),
-                }}
-              >
-                <Link style={{ boxShadow: `none` }} to={node.fields.slug}>
-                  {title}
-                </Link>
-              </h3>
-              <small>{node.frontmatter.date}</small>
-            </header>
-            <section>
-              <p
-                dangerouslySetInnerHTML={{
-                  __html: node.frontmatter.description || node.excerpt,
-                }}
-              />
-            </section>
-          </article>
-        )
-      })}
+      {posts.map(({ node }) => (
+        <PostBrief data={node} />
+      ))}
     </Layout>
   )
 }

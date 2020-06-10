@@ -23,17 +23,18 @@ export interface Project {
 }
 
 export interface BlogPost {
-  title: string
-  date: Date
-  description: string
-  tags: TagWrapper[]
+  title?: string
+  date?: Date
+  description?: string
+  tags?: TagWrapper[]
+  slug?: string
 
-  contentType: "markdown" | "mdx" | "jupyter"
+  contentType?: "markdown" | "mdx" | "jupyter"
 }
 
 export type MarkdownData = {
   html?: string
-  exerpt?: string
+  excerpt?: string
   timeToRead?: number
   wordCount?: {
     paragraphs?: number
@@ -42,14 +43,9 @@ export type MarkdownData = {
   }
 }
 
-export interface MarkdownBlogPost {
-  title: string
-  date: Date
-  description: string
-  tags: TagWrapper[]
-
-  contentType: "markdown" | "mdx" | "jupyter"
-  markdown: MarkdownData
+export interface MarkdownBlogPost extends BlogPost {
+  contentType?: "markdown"
+  markdown?: MarkdownData
 }
 
 export interface TagWrapper {
