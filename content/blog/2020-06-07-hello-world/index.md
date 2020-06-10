@@ -5,8 +5,8 @@ title: Hello World! Personal Website Redesign
 date: "2020-06-07T10:23:00-0700"
 description: "Imagine blogging about redesigning a website on the website that you're redesigning before it's even complete. Imagine how dumb and pointlessly meta that would be."
 tags:
-  - projects/astrid-tech
-  - projects/inventree
+  - /projects/astrid-tech
+  - /projects/inventree
 ---
 
 Now that I think of it, this actually isn't too bad of an idea. By the time I finish this website, I will have a blog with actual content!
