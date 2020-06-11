@@ -4,7 +4,7 @@ type: project
 title: Inventree
 status: wip
 description: An inventory tracker to keep track of my pile of crap
-startDate: "2020-01-01"
+startDate: 2020-01-01
 endDate: null
 tags:
   - react-js
