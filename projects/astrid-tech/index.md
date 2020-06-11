@@ -13,6 +13,7 @@ tags:
   - gatsby-js
   - html
   - css
+  - sass
   - bootstrap-css
   - website
 url: https://astrid.tech

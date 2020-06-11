@@ -12,6 +12,7 @@ tags:
   - typescript
   - html
   - css
+  - sass
   - bootstrap-css
   - django
   - python
