@@ -28,7 +28,7 @@ export const pageQuery = graphql`
         title
       }
     }
-    allProject(sort: { fields: [startDate], order: DESC }) {
+    allProject(sort: { fields: [endDate], order: DESC }) {
       edges {
         node {
           slug
