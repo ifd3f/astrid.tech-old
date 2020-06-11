@@ -55,9 +55,17 @@ const ProjectCardImg = () => {}
 
 type ProjectCardProps = {
   project: Project
+  hovered?: boolean
+  onMouseEnter?: (project: Project) => void
+  onMouseLeave?: (project: Project) => void
 }
 
-export const ProjectCard: FC<ProjectCardProps> = ({ project }) => {
+export const ProjectCard: FC<ProjectCardProps> = ({
+  project,
+  hovered = false,
+  onMouseEnter: _onEnter,
+  onMouseLeave: _onLeave,
+}) => {
   const headerSection = (
     <>
       <h5>
@@ -81,14 +89,22 @@ export const ProjectCard: FC<ProjectCardProps> = ({ project }) => {
     }
   }
 
+  const onEnter = () => {
+    _onEnter && _onEnter(project)
+  }
+
+  const onExit = () => {
+    _onLeave && _onLeave(project)
+  }
+
   const card = project.thumbnailPublicPath ? (
-    <Card onClick={onClickCard} className={styles.projectCard}>
+    <Card className={styles.projectCard}>
       <CardBody>{headerSection}</CardBody>
       <CardImg src={project.thumbnailPublicPath} />
       <CardBody>{bodySection}</CardBody>
     </Card>
   ) : (
-    <Card onClick={onClickCard} className={styles.projectCard}>
+    <Card className={styles.projectCard}>
       <CardBody>
         {headerSection}
         {bodySection}
@@ -96,5 +112,16 @@ export const ProjectCard: FC<ProjectCardProps> = ({ project }) => {
     </Card>
   )
 
-  return <div>{card}</div>
+  const className = hovered ? styles.hovered : ""
+
+  return (
+    <div
+      className={className}
+      onClick={onClickCard}
+      onMouseEnter={onEnter}
+      onMouseLeave={onExit}
+    >
+      {card}
+    </div>
+  )
 }

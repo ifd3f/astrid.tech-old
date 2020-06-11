@@ -14,8 +14,8 @@ export interface Project {
   title: string
   status: null | "wip" | "complete" | "scrapped"
   description: string
-  startDate: Date
-  endDate: Date | null
+  startDate: string
+  endDate: string | null
   tags: TagWrapper[]
   slug: string
   url: string

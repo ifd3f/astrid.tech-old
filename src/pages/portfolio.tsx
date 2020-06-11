@@ -1,11 +1,12 @@
 import { graphql, PageProps } from "gatsby"
-import React from "react"
+import React, { useState } from "react"
 import { CardColumns, Container, Row, Col } from "reactstrap"
 import Layout from "../components/layout"
 import { ProjectCard } from "../components/project"
 import SEO from "../components/seo"
 import { Project } from "../types"
 import Masonry from "react-masonry-component"
+import { Timeline, IntervalNode } from "../components/timeline"
 type Data = {
   site: {
     siteMetadata: {
@@ -54,8 +55,15 @@ export const pageQuery = graphql`
   }
 `
 
+function getMonths(dateString: string | null): number {
+  const date = dateString ? new Date(dateString) : new Date()
+  return date.getFullYear() * 12 + date.getMonth()
+}
+
 const ProjectsIndex = ({ data }: PageProps<Data>) => {
   const projects = data.allProject.edges.map(edge => edge.node)
+
+  const [hoveredProject, setHoveredProject] = useState<number | null>(null)
 
   const cards = projects.map(project => (
     <Col xs={3}>
@@ -63,12 +71,55 @@ const ProjectsIndex = ({ data }: PageProps<Data>) => {
     </Col>
   ))
 
+  const intervals: IntervalNode[] = projects.map(proj => ({
+    start: -getMonths(proj.startDate),
+    end: -getMonths(proj.endDate),
+    content: ({ width, height }) => (
+      <div
+        style={{
+          width: width,
+          height: height,
+          backgroundColor: "red",
+        }}
+      >
+        {proj.slug}
+      </div>
+    ),
+  }))
+
+  const [timelineColRef, setTimelineColRef] = useState<HTMLElement | null>(null)
+
+  const timelineCol = (
+    <div
+      style={{
+        height: "90%",
+        width: 200,
+        position: "fixed",
+        top: 70,
+        right: 0,
+      }}
+    >
+      <div style={{ width: "100%", height: "100%" }} ref={setTimelineColRef}>
+        <Timeline
+          intervals={intervals}
+          width={timelineColRef?.clientWidth ?? 100}
+          height={timelineColRef?.clientHeight ?? 100}
+        />
+      </div>
+    </div>
+  )
+
   return (
     <Layout>
       <SEO title="Portfolio" />
       <Container fluid>
-        <Masonry>{cards}</Masonry>
+        <Row>
+          <Col lg={9}>
+            <Masonry>{cards}</Masonry>
+          </Col>
+        </Row>
       </Container>
+      {timelineCol}
     </Layout>
   )
 }
