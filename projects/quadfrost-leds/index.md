@@ -17,5 +17,5 @@ url: null
 source:
   - https://github.com/Plenglin/QuadFrost-Arduino
   - https://github.com/Plenglin/QuadFrost-Octoprint
-thumbnail: null
+thumbnail: ./3dp-colors.webp
 ---
