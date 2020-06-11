@@ -134,7 +134,7 @@ const ProjectsIndex = ({ data }: PageProps<Data>) => {
   }))
 
   const cards = projects.map(project => (
-    <Col xs={3}>
+    <Col xs={12} sm={6} xl={4}>
       <ProjectCard
         project={project}
         hovered={project.slug == hoveredProject}
@@ -171,12 +171,12 @@ const ProjectsIndex = ({ data }: PageProps<Data>) => {
       <SEO title="Portfolio" />
       <Container fluid>
         <Row>
-          <Col lg={9}>
+          <Col lg={2}></Col>
+          <Col lg={10}>
             <Masonry>{cards}</Masonry>
           </Col>
         </Row>
       </Container>
-      {timelineCol}
     </Layout>
   )
 }
