@@ -4,6 +4,9 @@ import { FC } from "react"
 import Layout from "../components/layout"
 import React from "react"
 import SEO from "../components/seo"
+import { Container } from "reactstrap"
+import { TagList } from "../components/util"
+import { StatusBadge } from "../components/project"
 
 export const pageQuery = graphql`
   query GetProject($id: String!) {
@@ -53,14 +56,28 @@ type Context = {
 const ProjectDetailTemplate: FC<PageProps<Data, Context>> = ({ data }) => {
   const project = data.allProject.edges[0].node
 
+  const date = project.endDate
+    ? `${project.startDate} to ${project.endDate}`
+    : project.startDate
+
   return (
     <Layout>
       <SEO title={project.title!} />
-      <article>
-        <header>
-          <h1>{project.title!}</h1>
-        </header>
-      </article>
+      <Container>
+        <article>
+          <header>
+            <h1>
+              {project.title!} <StatusBadge status={project.status} />
+            </h1>
+            <p>{date}</p>
+            <p>{project.description}</p>
+            <TagList tags={project.tags.map(x => x.tag!)} />
+          </header>
+          <section
+            dangerouslySetInnerHTML={{ __html: project.markdown!!.html!! }}
+          />
+        </article>
+      </Container>
     </Layout>
   )
 }

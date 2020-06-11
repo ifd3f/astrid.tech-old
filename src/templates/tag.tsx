@@ -4,6 +4,7 @@ import Layout from "../components/layout"
 import { Tag } from "../types/index"
 import { TagBadge } from "../components/util"
 import SEO from "../components/seo"
+import { Container } from "reactstrap"
 
 export const pageQuery = graphql`
   query GetTag($id: String!) {
@@ -40,11 +41,13 @@ const TagDetailTemplate: FC<PageProps<Data, Context>> = ({ data }) => {
   return (
     <Layout>
       <SEO title={tag.name!} />
-      <header>
-        <h1>
-          <TagBadge tag={tag} />
-        </h1>
-      </header>
+      <Container>
+        <header>
+          <h1>
+            <TagBadge tag={tag} />
+          </h1>
+        </header>
+      </Container>
     </Layout>
   )
 }

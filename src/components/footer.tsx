@@ -24,7 +24,7 @@ const FooterSection = () => {
       <Container>
         <p>
           Created by Astrid Augusta Yu with <Tea /> and <Witch /> . See the{" "}
-          <Link to="/projects/astrid.tech">Colophon</Link> or try to figure out
+          <Link to="/project/astrid-tech">colophon</Link> or try to figure out
           the spaghetti code yourself on{" "}
           <a href="https://github.com/Plenglin/astrid.tech">GitHub</a>
         </p>

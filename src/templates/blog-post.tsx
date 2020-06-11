@@ -4,6 +4,7 @@ import { PostContent, PostMainHeader, PostSEO } from "../components/blog"
 import Layout from "../components/layout"
 import { BlogPost } from "../types/index"
 import { rhythm } from "../utils/typography"
+import { Container } from "reactstrap"
 
 export const pageQuery = graphql`
   query BlogPostBySlug($id: String!) {
@@ -57,42 +58,45 @@ const BlogPostTemplate: FC<PageProps<Data, Context>> = ({
   return (
     <Layout>
       <PostSEO post={post} />
-      <article>
-        <PostMainHeader post={post} />
-        <PostContent post={post} />
-        <hr
-          style={{
-            marginBottom: rhythm(1),
-          }}
-        />
-      </article>
 
-      <nav>
-        <ul
-          style={{
-            display: `flex`,
-            flexWrap: `wrap`,
-            justifyContent: `space-between`,
-            listStyle: `none`,
-            padding: 0,
-          }}
-        >
-          <li>
-            {previous && (
-              <Link to={previous.slug!} rel="prev">
-                ← {previous.title}
-              </Link>
-            )}
-          </li>
-          <li>
-            {next && (
-              <Link to={next.slug!} rel="next">
-                {next.title} →
-              </Link>
-            )}
-          </li>
-        </ul>
-      </nav>
+      <Container>
+        <article>
+          <PostMainHeader post={post} />
+          <PostContent post={post} />
+          <hr
+            style={{
+              marginBottom: rhythm(1),
+            }}
+          />
+        </article>
+
+        <nav>
+          <ul
+            style={{
+              display: `flex`,
+              flexWrap: `wrap`,
+              justifyContent: `space-between`,
+              listStyle: `none`,
+              padding: 0,
+            }}
+          >
+            <li>
+              {previous && (
+                <Link to={previous.slug!} rel="prev">
+                  ← {previous.title}
+                </Link>
+              )}
+            </li>
+            <li>
+              {next && (
+                <Link to={next.slug!} rel="next">
+                  {next.title} →
+                </Link>
+              )}
+            </li>
+          </ul>
+        </nav>
+      </Container>
     </Layout>
   )
 }

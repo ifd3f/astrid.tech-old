@@ -1,4 +1,4 @@
-import { Link, navigate } from "gatsby"
+import { navigate } from "gatsby"
 import React, { FC, useState } from "react"
 import {
   Badge,
@@ -14,10 +14,10 @@ import styles from "./project.module.scss"
 import { getUniqueId, LoadOnView, TagList } from "./util"
 
 type StatusBadgeProps = {
-  status: string
+  status: null | "wip" | "complete" | "scrapped"
 }
 
-const StatusBadge: FC<StatusBadgeProps> = ({ status }) => {
+export const StatusBadge: FC<StatusBadgeProps> = ({ status }) => {
   const [badgeId] = useState(`status-badge-${getUniqueId()}`)
   let title: string, tooltip: string, color: string
   switch (status) {
@@ -34,7 +34,7 @@ const StatusBadge: FC<StatusBadgeProps> = ({ status }) => {
     case "scrapped":
       title = "Scrapped"
       tooltip = "I decided it wasn't worth pursuing anymore."
-      color = "error"
+      color = "danger"
       break
     default:
       return null
@@ -61,7 +61,7 @@ export const ProjectCard: FC<ProjectCardProps> = ({ project }) => {
   const headerSection = (
     <>
       <h5>
-        {project.title} <StatusBadge status={status} />
+        {project.title} <StatusBadge status={project.status} />
       </h5>
       <CardSubtitle>{project.description}</CardSubtitle>
     </>

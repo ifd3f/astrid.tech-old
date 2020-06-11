@@ -3,7 +3,7 @@ type: project
 
 title: Space Admiral
 status: null
-description: A Space Opera Real-Time Strategy
+description: A Space Opera Real-Time Strategy prototype
 startDate: 2019-01-01
 endDate: 2019-03-30
 tags:
