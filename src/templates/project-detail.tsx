@@ -3,6 +3,7 @@ import { PageProps, graphql } from "gatsby"
 import { FC } from "react"
 import Layout from "../components/layout"
 import React from "react"
+import SEO from "../components/seo"
 
 export const pageQuery = graphql`
   query GetProject($id: String!) {
@@ -54,6 +55,7 @@ const ProjectDetailTemplate: FC<PageProps<Data, Context>> = ({ data }) => {
 
   return (
     <Layout>
+      <SEO title={project.title!} />
       <article>
         <header>
           <h1>{project.title!}</h1>

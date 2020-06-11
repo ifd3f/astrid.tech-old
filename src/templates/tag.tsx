@@ -2,6 +2,8 @@ import { graphql, PageProps } from "gatsby"
 import React, { FC } from "react"
 import Layout from "../components/layout"
 import { Tag } from "../types/index"
+import { TagBadge } from "../components/util"
+import SEO from "../components/seo"
 
 export const pageQuery = graphql`
   query GetTag($id: String!) {
@@ -37,11 +39,12 @@ const TagDetailTemplate: FC<PageProps<Data, Context>> = ({ data }) => {
 
   return (
     <Layout>
-      <article>
-        <header>
-          <h1>{tag.name!}</h1>
-        </header>
-      </article>
+      <SEO title={tag.name!} />
+      <header>
+        <h1>
+          <TagBadge tag={tag} />
+        </h1>
+      </header>
     </Layout>
   )
 }

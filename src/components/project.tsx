@@ -75,11 +75,13 @@ export const ProjectCard: FC<ProjectCardProps> = ({ project }) => {
       ))}
     </>
   )
-  const onClickCard = () => {
-    navigate(project.slug)
+  const onClickCard = (ev: React.MouseEvent<HTMLElement>) => {
+    if (ev.target.tagName != "A") {
+      navigate(project.slug, { replace: false })
+    }
   }
 
-  return project.thumbnailPublicPath ? (
+  const card = project.thumbnailPublicPath ? (
     <Card onClick={onClickCard} className={styles.projectCard}>
       <CardBody>{headerSection}</CardBody>
       <LoadOnView>
@@ -95,4 +97,6 @@ export const ProjectCard: FC<ProjectCardProps> = ({ project }) => {
       </CardBody>
     </Card>
   )
+
+  return <div>{card}</div>
 }
