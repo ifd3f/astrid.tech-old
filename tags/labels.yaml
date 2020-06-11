@@ -1,0 +1,130 @@
+- color: "#31b8f7"
+  tags:
+    - slug: frontend
+      name: Frontend
+    - slug: react-js
+      name: React
+    - slug: jquery
+      name: jQuery
+    - slug: bootstrap-css
+      name: Bootstrap
+    - slug: gatsby-js
+      name: Gatsby.js
+
+- color: "#4a7aad"
+  tags:
+    - slug: backend
+      name: Backend
+    - slug: django
+      name: Django
+    - slug: asp-classic
+      name: ASP Classic
+    - slug: asp-net-core
+      name: ASP.NET Core
+    - slug: socket-io
+      name: Socket.IO
+
+- color: "#e631f7"
+  tags:
+    - slug: data-science
+      name: Data Science
+    - slug: image-processing
+      name: Image Processing
+    - slug: anaconda
+      name: Anaconda
+    - slug: tensorflow
+      name: TensorFlow
+    - slug: opencv
+      name: OpenCV
+    - slug: pandas
+      name: Pandas
+    - slug: numpy
+      name: NumPy
+
+- color: "#525569"
+  tags:
+    - slug: database
+      name: Database
+    - slug: sql-server
+      name: SQL Server
+    - slug: postgres
+      name: PostgreSQL
+    - slug: mysql
+      name: MySQL
+
+- color: "#ff0066"
+  tags:
+    - slug: pure-fp
+      name: Pure Functional Programming
+    - slug: abstract-syntax-trees
+      name: Abstract Syntax Trees
+    - slug: kd-tree
+      name: k-d Trees
+    - slug: control-systems
+      name: Control Systems
+    - slug: math
+      name: Math
+    - slug: metamathematics
+      name: Metamathematics
+
+- color: "#e0c91f"
+  tags:
+    - slug: chatbots
+      name: Chatbots
+    - slug: augmented-reality
+      name: Augmented Reality
+    - slug: ux-design
+      name: UX Design
+    - slug: robotics
+      name: Robotics
+    - slug: websockets
+      name: Websockets
+    - slug: 3d-printing
+      name: 3D Printing
+    - slug: resin-casting
+      name: Resin Casting
+    - slug: mechanical-engineering
+      name: Mechanical Engineering
+
+- color: "#05befc"
+  tags:
+    - slug: electrical-engineering
+      name: Electrical Engineering
+    - slug: microcontrollers
+      name: Microcontrollers
+    - slug: internet-of-things
+      name: Internet of Things
+    - slug: circuit-design
+      name: Circuit Design
+    - slug: sensor-fusion
+      name: Sensor Fusion
+
+- color: "#3DDC84"
+  tags:
+    - slug: android
+      name: Android
+
+- color: "#62AEB2"
+  tags:
+    - slug: arduino
+      name: Arduino
+
+- color: "#3B5998"
+  tags:
+    - slug: bluetooth
+      name: Bluetooth
+
+- color: "#C51A4A"
+  tags:
+    - slug: raspberry-pi
+      name: Raspberry Pi
+
+- color: "#3C873A"
+  tags:
+    - slug: node-js
+      name: Node.js
+
+- color: "#222c37"
+  tags:
+    - slug: unity
+      name: Unity
