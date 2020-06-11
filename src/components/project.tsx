@@ -97,14 +97,17 @@ export const ProjectCard: FC<ProjectCardProps> = ({
     _onLeave && _onLeave(project)
   }
 
+  const className =
+    (hovered ? styles.hoveredProjectCard : "") + " " + styles.projectCard
+
   const card = project.thumbnailPublicPath ? (
-    <Card className={styles.projectCard}>
+    <Card className={className}>
       <CardBody>{headerSection}</CardBody>
       <CardImg src={project.thumbnailPublicPath} />
       <CardBody>{bodySection}</CardBody>
     </Card>
   ) : (
-    <Card className={styles.projectCard}>
+    <Card className={className}>
       <CardBody>
         {headerSection}
         {bodySection}
@@ -112,15 +115,8 @@ export const ProjectCard: FC<ProjectCardProps> = ({
     </Card>
   )
 
-  const className = hovered ? styles.hovered : ""
-
   return (
-    <div
-      className={className}
-      onClick={onClickCard}
-      onMouseEnter={onEnter}
-      onMouseLeave={onExit}
-    >
+    <div onClick={onClickCard} onMouseEnter={onEnter} onMouseLeave={onExit}>
       {card}
     </div>
   )

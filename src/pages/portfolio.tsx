@@ -1,5 +1,5 @@
 import { graphql, PageProps } from "gatsby"
-import React, { useState } from "react"
+import React, { useState, FC } from "react"
 import { CardColumns, Container, Row, Col } from "reactstrap"
 import Layout from "../components/layout"
 import { ProjectCard } from "../components/project"
@@ -60,16 +60,58 @@ function getMonths(dateString: string | null): number {
   return date.getFullYear() * 12 + date.getMonth()
 }
 
+type PortfolioTimelineBlockProps = {
+  hover: boolean
+  project: Project
+  onEnter?: (project: Project) => void
+  onLeave?: (project: Project) => void
+}
+
+const PortfolioTimelineBlock: FC<PortfolioTimelineBlockProps> = ({
+  hover,
+  project,
+  onEnter: _onEnter,
+  onLeave: _onLeave,
+}) => {
+  const color = hover ? "#444444" : "#555555"
+
+  const onEnter = () => _onEnter && _onEnter(project)
+  const onLeave = () => _onLeave && _onLeave(project)
+
+  return (
+    <div
+      style={{
+        width: "100%",
+        height: "100%",
+        backgroundColor: color,
+      }}
+      onMouseEnter={onEnter}
+      onMouseLeave={onLeave}
+    >
+      {" "}
+    </div>
+  )
+}
+
 const ProjectsIndex = ({ data }: PageProps<Data>) => {
   const projects = data.allProject.edges.map(edge => edge.node)
 
-  const [hoveredProject, setHoveredProject] = useState<number | null>(null)
+  const [hoveredProject, setHoveredProject] = useState<string | null>(null)
 
-  const cards = projects.map(project => (
-    <Col xs={3}>
-      <ProjectCard project={project} />
-    </Col>
-  ))
+  const hoverStateMap = new Map<
+    string,
+    { get: () => boolean; set: (state: boolean) => void }
+  >()
+
+  const onEnter = (project: Project) => {
+    setHoveredProject(project.slug)
+  }
+
+  const onLeave = (project: Project) => {
+    if (hoveredProject == project.slug) {
+      setHoveredProject(null)
+    }
+  }
 
   const intervals: IntervalNode[] = projects.map(proj => ({
     start: -getMonths(proj.startDate),
@@ -79,13 +121,28 @@ const ProjectsIndex = ({ data }: PageProps<Data>) => {
         style={{
           width: width,
           height: height,
-          backgroundColor: "red",
         }}
       >
-        {proj.slug}
+        <PortfolioTimelineBlock
+          hover={hoveredProject == proj.slug}
+          project={proj}
+          onEnter={onEnter}
+          onLeave={onLeave}
+        />
       </div>
     ),
   }))
+
+  const cards = projects.map(project => (
+    <Col xs={3}>
+      <ProjectCard
+        project={project}
+        hovered={project.slug == hoveredProject}
+        onMouseEnter={onEnter}
+        onMouseLeave={onLeave}
+      />
+    </Col>
+  ))
 
   const [timelineColRef, setTimelineColRef] = useState<HTMLElement | null>(null)
 
