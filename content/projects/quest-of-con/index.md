@@ -3,7 +3,7 @@ type: project
 
 title: Quest of Con
 status: complete
-description: Sci-Fi turn-based strategy (with TCP-based multiplayer!)
+description: Sci-Fi turn-based strategy prototype, with TCP-based multiplayer!
 startDate: 2017-09-01
 endDate: 2018-02-28
 tags:

@@ -2,7 +2,7 @@
 type: project
 
 title: Unity Plane
-status: complete
+status: scrapped
 description: An attempt at making accurate aerodynamics in Unity.
 startDate: 2018-05-15
 endDate: 2018-05-30
