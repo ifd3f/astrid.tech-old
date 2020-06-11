@@ -293,6 +293,36 @@ const createProjectPages = async ({ graphql, actions }) => {
   })
 }
 
+const createTagPages = async ({ graphql, actions }) => {
+  const { createPage } = actions
+  const TagTemplate = path.resolve(`./src/templates/tag.tsx`)
+  const result = await graphql(`
+    {
+      allTag {
+        edges {
+          node {
+            id
+            slug
+          }
+        }
+      }
+    }
+  `)
+  if (result.errors) {
+    throw result.errors
+  }
+
+  result.data.allTag.edges.forEach(({ node: tag }) => {
+    createPage({
+      path: "/tag/" + tag.slug,
+      component: TagTemplate,
+      context: {
+        id: tag.id,
+      },
+    })
+  })
+}
+
 const fillDefaultTags = (actions, tags) => {
   const { createNode } = actions
   tags.forEach(({ slug, tag: linkedNode }) => {
@@ -372,6 +402,7 @@ exports.createPages = async ({ graphql, actions }) => {
 
   createBlogPosts({ graphql, actions })
   createProjectPages({ graphql, actions })
+  createTagPages({ graphql, actions })
 }
 
 exports.onCreateNode = ({ node, actions, getNode }) => {
