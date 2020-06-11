@@ -42,9 +42,15 @@ const setContentDigest = node => {
   node.internal.contentDigest = contentDigest
 }
 
-const buildTagNode = ({ name, slug, color, textColor }) => {
+const buildTagNode = ({
+  name,
+  slug,
+  color,
+  textColor,
+  parent = "__SOURCE__",
+}) => {
   const node = {
-    parent: `__SOURCE__`,
+    parent,
     internal: {
       type: `Tag`,
     },
@@ -66,6 +72,14 @@ exports.onPreBootstrap = () => {
   rimraf.sync(path.resolve(`${__dirname}/static/generated`))
 }
 
+const getTextColor = backgroundColor => {
+  const [, r, g, b] = backgroundColor
+    .match(/#([0-9a-f]{2})([0-9a-f]{2})([0-9a-f]{2})/i)
+    .map(x => new Number("0x" + x))
+
+  return r * 0.299 + g * 0.587 + b * 0.114 > 186 ? "#000000" : "#ffffff"
+}
+
 const sourceLangTagNodes = async ({ actions }) => {
   const { createNode } = actions
 
@@ -84,15 +98,7 @@ const sourceLangTagNodes = async ({ actions }) => {
     if (!lang.color) {
       continue
     }
-
-    // Get RGB components
-    const [, r, g, b] = lang.color
-      .match(/#([0-9a-f]{2})([0-9a-f]{2})([0-9a-f]{2})/i)
-      .map(x => new Number("0x" + x))
-
-    // Taken from https://stackoverflow.com/a/3943023/12947037
-    const textColor =
-      r * 0.299 + g * 0.587 + b * 0.114 > 186 ? "#000000" : "#ffffff"
+    const textColor = getTextColor(lang.color)
 
     const node = buildTagNode({
       name: key,
@@ -106,6 +112,22 @@ const sourceLangTagNodes = async ({ actions }) => {
   }
 
   return tagTable
+}
+
+const createTagLabels = async (actions, yamlNode) => {
+  const { createNode, createParentChildLink } = actions
+
+  yamlNode.tags.forEach(({ name, slug }) => {
+    const tagNode = buildTagNode({
+      parent: yamlNode.id,
+      name: name,
+      slug: slug,
+      color: yamlNode.color,
+      textColor: getTextColor(yamlNode.color),
+    })
+    createNode(tagNode)
+    createParentChildLink({ parent: yamlNode, child: tagNode })
+  })
 }
 
 const createWorkExperienceNode = async (actions, yamlNode) => {
@@ -427,6 +449,16 @@ exports.onCreateNode = ({ node, actions, getNode }) => {
 
     case "WorkExperienceYaml": {
       createWorkExperienceNode(actions, node)
+      break
+    }
+
+    case "SkillsYaml": {
+      //console.log(node)
+      break
+    }
+
+    case "LabelsYaml": {
+      createTagLabels(actions, node)
       break
     }
 

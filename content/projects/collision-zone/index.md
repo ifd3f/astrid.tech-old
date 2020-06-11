@@ -15,7 +15,7 @@ tags:
   - website
   - websockets
   - cpp
-  - node.js
+  - node-js
 url: https://collision.zone
 source: []
 thumbnail: ./thumbnail.gif
