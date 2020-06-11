@@ -418,9 +418,11 @@ exports.createPages = async ({ graphql, actions }) => {
     })
   })
 
-  createBlogPosts({ graphql, actions })
-  createProjectPages({ graphql, actions })
-  createTagPages({ graphql, actions })
+  await Promise.all([
+    createBlogPosts({ graphql, actions }),
+    createProjectPages({ graphql, actions }),
+    createTagPages({ graphql, actions }),
+  ])
 }
 
 exports.onCreateNode = ({ node, actions, getNode }) => {
