@@ -4,8 +4,8 @@ type: project
 title: KiwiBot
 status: scrapped
 description: A fully 3D-printed kiwi drive robot
-startDate: 2020-10-06
-endDate: 2020-10-24
+startDate: 2017-10-06
+endDate: 2017-10-24
 tags:
   - kotlin
   - java

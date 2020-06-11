@@ -2,7 +2,7 @@
 type: project
 
 title: Collaborative Drawing
-status: wip
+status: null
 description: Baby's first websockets
 startDate: 2016-08-29
 endDate: 2016-08-29
