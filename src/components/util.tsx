@@ -15,6 +15,9 @@ type TagBadgeProps = {
 
 export const TagBadge: FC<TagBadgeProps> = ({ tag }) => {
   const [badgeId] = useState(`tag-badge-${getUniqueId()}`)
+
+  const linkTo = tag.slug[0] == "/" ? tag.slug : "/tag/" + tag.slug
+
   return (
     <>
       <Badge
@@ -26,7 +29,7 @@ export const TagBadge: FC<TagBadgeProps> = ({ tag }) => {
           marginLeft: 2,
         }}
         tag={Link}
-        to={"/tag/" + tag.slug}
+        to={linkTo}
       >
         {tag.name}
       </Badge>

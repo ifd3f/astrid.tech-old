@@ -306,15 +306,17 @@ const createTagPages = async ({ graphql, actions }) => {
     throw result.errors
   }
 
-  result.data.allTag.edges.forEach(({ node: tag }) => {
-    createPage({
-      path: "/tag/" + tag.slug,
-      component: TagTemplate,
-      context: {
-        id: tag.id,
-      },
+  result.data.allTag.edges
+    .filter(({ node: { slug } }) => slug[0] != "/")
+    .forEach(({ node: tag }) => {
+      createPage({
+        path: "/tag/" + tag.slug,
+        component: TagTemplate,
+        context: {
+          id: tag.id,
+        },
+      })
     })
-  })
 }
 
 const fillDefaultTags = (actions, tags) => {
