@@ -84,9 +84,7 @@ export const ProjectCard: FC<ProjectCardProps> = ({ project }) => {
   const card = project.thumbnailPublicPath ? (
     <Card onClick={onClickCard} className={styles.projectCard}>
       <CardBody>{headerSection}</CardBody>
-      <LoadOnView>
-        <CardImg src={project.thumbnailPublicPath} />
-      </LoadOnView>
+      <CardImg src={project.thumbnailPublicPath} />
       <CardBody>{bodySection}</CardBody>
     </Card>
   ) : (

@@ -1,11 +1,11 @@
 import { graphql, PageProps } from "gatsby"
 import React from "react"
-import { CardColumns, Container } from "reactstrap"
+import { CardColumns, Container, Row, Col } from "reactstrap"
 import Layout from "../components/layout"
 import { ProjectCard } from "../components/project"
 import SEO from "../components/seo"
 import { Project } from "../types"
-
+import Masonry from "react-masonry-component"
 type Data = {
   site: {
     siteMetadata: {
@@ -57,17 +57,17 @@ export const pageQuery = graphql`
 const ProjectsIndex = ({ data }: PageProps<Data>) => {
   const projects = data.allProject.edges.map(edge => edge.node)
 
+  const cards = projects.map(project => (
+    <Col xs={3}>
+      <ProjectCard project={project} />
+    </Col>
+  ))
+
   return (
     <Layout>
       <SEO title="Portfolio" />
       <Container fluid>
-        <div className="wide-card-columns">
-          <CardColumns>
-            {projects.map(project => (
-              <ProjectCard project={project} />
-            ))}
-          </CardColumns>
-        </div>
+        <Masonry>{cards}</Masonry>
       </Container>
     </Layout>
   )
