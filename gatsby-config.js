@@ -58,6 +58,13 @@ module.exports = {
         name: `assets`,
       },
     },
+    {
+      resolve: `gatsby-source-filesystem`,
+      options: {
+        path: `${__dirname}/content/misc`,
+        name: `misc-data`,
+      },
+    },
     `gatsby-transformer-yaml`,
     {
       resolve: `gatsby-transformer-remark`,
