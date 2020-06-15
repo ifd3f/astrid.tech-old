@@ -1,0 +1,22 @@
+- slug: cal-poly
+  degree: BSc Computer Science
+  classes:
+    - name: Computer Architecture and Assembly Language
+      number: CPE 233
+      desc: Created a microcontroller on a Artix-7 FPGA.
+      tags:
+        - fpgas
+        - verilog
+    - name: Data Structures
+      number: CSC 202
+      tags:
+        - python
+    - name: Linear Analysis
+      number: MATH 244
+      tags:
+        - math
+    - name: Discrete Structures
+      number: CSC 348
+      tags:
+        - math
+        - computer-science
