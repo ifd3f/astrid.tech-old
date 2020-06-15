@@ -48,8 +48,8 @@ const BlogIndex = ({ data }: PageProps<Data>) => {
     <Layout>
       <SEO title="Blog" />
       <Container>
-        {data.allBlogPost.edges.map(({ node }) => (
-          <PostBrief post={node} />
+        {data.allBlogPost.edges.map(({ node: post }) => (
+          <PostBrief post={post} />
         ))}
       </Container>
     </Layout>

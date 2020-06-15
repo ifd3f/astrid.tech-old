@@ -335,7 +335,7 @@ const createTagPages = async ({ graphql, actions }) => {
         path: "/tag/" + tag.slug,
         component: TagTemplate,
         context: {
-          id: tag.id,
+          slug: tag.slug,
         },
       })
     })
