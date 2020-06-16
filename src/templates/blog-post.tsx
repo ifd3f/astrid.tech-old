@@ -3,7 +3,6 @@ import React, { FC } from "react"
 import { PostContent, PostMainHeader, PostSEO } from "../components/blog"
 import Layout from "../components/layout"
 import { BlogPost } from "../types/index"
-import { rhythm } from "../utils/typography"
 import { Container } from "reactstrap"
 
 export const pageQuery = graphql`
@@ -63,11 +62,6 @@ const BlogPostTemplate: FC<PageProps<Data, Context>> = ({
         <article>
           <PostMainHeader post={post} />
           <PostContent post={post} />
-          <hr
-            style={{
-              marginBottom: rhythm(1),
-            }}
-          />
         </article>
 
         <nav>

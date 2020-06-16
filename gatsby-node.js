@@ -469,7 +469,7 @@ exports.onCreateNode = ({ node, actions, getNode }) => {
     }
 
     case "SkillsYaml": {
-      console.log(node)
+      //console.log(node)
       break
     }
 

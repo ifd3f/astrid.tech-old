@@ -15,8 +15,10 @@ export function getTagSlug(name: string): string {
 }
 
 export function getTagId(slug: string): string {
-  const preprocessed = `astrid.tech-tag-${slug}`
-  return crypto.createHash("md5").update(preprocessed).digest("hex")
+  return crypto
+    .createHash("md5")
+    .update(`astrid.tech-tag-${slug}`)
+    .digest("hex")
 }
 
 type PreContentDigestNode = {

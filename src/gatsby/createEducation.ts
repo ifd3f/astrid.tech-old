@@ -34,6 +34,7 @@ export function createCourseTagNode(actions: Actions, courseNode: any) {
     color: "#18b21b",
     textColor: "#ffffff",
   })
+  console.log(tagNode.children)
   createNode(tagNode)
   createParentChildLink(courseNode, tagNode as any)
 
