@@ -1,25 +1,34 @@
 - slug: cal-poly
   name: California Polytechnic State University
   degree: BSc Computer Science
+  startDate: 2019-09-14
+  endDate: 2023-06-11
   courses:
     - name: Computer Architecture and Assembly Language
       number: CPE 233
       desc: Created a microcontroller on a Artix-7 FPGA.
+      quarter: Spring 2020
       tags:
         - fpgas
         - verilog
+        - computer-engineering
     - name: Data Structures
       number: CSC 202
       desc: null
+      quarter: Fall 2019
       tags:
         - python
+        - computer-science
     - name: Linear Analysis
       number: MATH 244
       desc: null
+      quarter: Fall 2019
       tags:
         - math
+        - linear-algebra
     - name: Discrete Structures
       number: CSC 348
+      quarter: Fall 2019
       desc: null
       tags:
         - math
