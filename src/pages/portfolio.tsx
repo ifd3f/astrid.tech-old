@@ -8,6 +8,7 @@ import SEO from "../components/seo"
 import { TagBadge } from "../components/util"
 import { Project } from "../types"
 import { Tag } from "../types/index"
+
 type Data = {
   site: {
     siteMetadata: {

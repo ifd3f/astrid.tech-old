@@ -1,4 +1,5 @@
 export interface WorkExperience {
+import { TagList } from '../components/util';
   organization: string
   position: string
   location: string
@@ -60,4 +61,19 @@ export interface Tag {
   color: string
   textColor: string
   slug: string
+}
+
+export interface Course {
+  name: string 
+  number: string
+  slug: string 
+  desc: string | null
+  tags: TagWrapper[]
+}
+
+export interface Education {
+  name: string
+  degree: string | null
+  slug: string
+  courses: Course[]
 }

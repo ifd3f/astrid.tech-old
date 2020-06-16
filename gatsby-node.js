@@ -1,3 +1,13 @@
+"use strict"
+
+require("source-map-support").install()
+require("ts-node").register({
+  compilerOptions: {
+    module: "commonjs",
+    target: "es2017",
+  },
+})
+
 const axios = require("axios")
 const path = require(`path`)
 const fs = require("fs")
@@ -8,6 +18,8 @@ const rimraf = require("rimraf")
 const mkdirp = require("mkdirp")
 const md5 = require("js-md5")
 const yaml = require("js-yaml")
+
+const ce = require("./src/gatsby/createEducation.ts")
 
 const SLUG_OVERRIDE = {
   "c++": "cpp",
@@ -461,6 +473,17 @@ exports.onCreateNode = ({ node, actions, getNode }) => {
 
     case "LabelsYaml": {
       createTagLabels(actions, node)
+      break
+    }
+
+    case "EducationYaml": {
+      console.log(ce)
+      ce.createEducationNode(actions, node)
+      break
+    }
+
+    case "Course": {
+      //createCourseTagNode(actions, node)
       break
     }
 
