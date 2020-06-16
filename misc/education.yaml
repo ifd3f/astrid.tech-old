@@ -1,6 +1,7 @@
 - slug: cal-poly
+  name: California Polytechnic State University
   degree: BSc Computer Science
-  classes:
+  courses:
     - name: Computer Architecture and Assembly Language
       number: CPE 233
       desc: Created a microcontroller on a Artix-7 FPGA.
@@ -9,14 +10,17 @@
         - verilog
     - name: Data Structures
       number: CSC 202
+      desc: null
       tags:
         - python
     - name: Linear Analysis
       number: MATH 244
+      desc: null
       tags:
         - math
     - name: Discrete Structures
       number: CSC 348
+      desc: null
       tags:
         - math
         - computer-science
