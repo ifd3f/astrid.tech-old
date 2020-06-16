@@ -19,7 +19,7 @@ const mkdirp = require("mkdirp")
 const md5 = require("js-md5")
 const yaml = require("js-yaml")
 
-const ce = require("./src/gatsby/createEducation.ts")
+const ce = require("./src/gatsby/index.ts")
 
 const SLUG_OVERRIDE = {
   "c++": "cpp",

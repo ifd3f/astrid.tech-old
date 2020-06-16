@@ -51,16 +51,18 @@ function createCourseNode(
   yamlNode: any
 ) {
   const { createNode } = actions
+  console.log(yamlNode)
 
   const slug =
     parentSlug + yamlNode.number.replace(" ", "-").toLowerCase() + "/"
 
-  const classNode = withContentDigest({
+  const courseNode = withContentDigest({
     parent: parentId,
     internal: {
       type: "Course",
     },
     id: v4(),
+    children: [],
 
     name: yamlNode.name,
     slug: slug,
@@ -69,20 +71,19 @@ function createCourseNode(
     tags___NODE: yamlNode.tags.map(getTagId),
   })
 
-  createNode(classNode)
+  createNode(courseNode)
 
-  return classNode
+  return courseNode
 }
 
 export function createEducationNode(actions: Actions, yamlNode: any) {
-  const { createNode, createParentChildLink } = actions
+  const { createNode } = actions
 
-  const id = v4()
   const slug = "/education/" + yamlNode.slug + "/"
 
-  // const classNodes = yamlNode.classes.map((raw: any) =>
-  //   createClassNode(actions, slug, id, raw)
-  // )
+  const courseNodes = yamlNode.courses.map((raw: any) =>
+    createCourseNode(actions, slug, yamlNode.id, raw)
+  )
 
   const educationNode = withContentDigest({
     parent: yamlNode.id,
@@ -90,16 +91,14 @@ export function createEducationNode(actions: Actions, yamlNode: any) {
       type: "Education",
     },
     children: [],
-    id,
+    id: v4(),
 
     name: yamlNode.name,
     degree: yamlNode.degree,
     slug: slug,
-    //courses___NODE: classNodes.map((classNode: any) => classNode.id),
+    courses___NODE: courseNodes.map((classNode: any) => classNode.id),
   })
-  console.log(educationNode)
   createNode(educationNode)
-  createParentChildLink(yamlNode, educationNode as any)
 
   return educationNode
 }

@@ -1,1 +1,1 @@
-export { createEducationNode, createClassTagNode } from "./createEducation"
+export { createEducationNode, createCourseTagNode } from "./createEducation"
