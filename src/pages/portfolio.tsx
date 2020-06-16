@@ -32,23 +32,7 @@ export const pageQuery = graphql`
     allProject(sort: { fields: [endDate], order: DESC }) {
       edges {
         node {
-          slug
-          thumbnailPublicPath
-          startDate(formatString: "YYYY-MM")
-          endDate(formatString: "YYYY-MM")
-          title
-          description
-          status
-          tags {
-            tag {
-              name
-              color
-              textColor
-              slug
-            }
-          }
-          url
-          source
+          ...ProjectCard
         }
       }
     }

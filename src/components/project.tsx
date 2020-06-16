@@ -1,4 +1,4 @@
-import { navigate } from "gatsby"
+import { navigate, graphql } from "gatsby"
 import React, { FC, useState, useEffect } from "react"
 import {
   Badge,
@@ -66,6 +66,24 @@ type ProjectCardProps = {
   onMouseLeave?: (project: Project) => void
 }
 
+export const projectCardFragment = graphql`
+  fragment ProjectCard on Project {
+    slug
+    thumbnailPublicPath
+    startDate(formatString: "YYYY-MM")
+    endDate(formatString: "YYYY-MM")
+    title
+    description
+    status
+    tags {
+      tag {
+        ...TagBadge
+      }
+    }
+    url
+    source
+  }
+`
 export const ProjectCard: FC<ProjectCardProps> = ({
   project,
   hovered = false,

@@ -1,4 +1,4 @@
-import { Link } from "gatsby"
+import { Link, graphql } from "gatsby"
 import React, { FC, ReactNode, useState, useEffect } from "react"
 import { handleViewport } from "react-in-viewport"
 import { Badge } from "reactstrap"
@@ -12,6 +12,15 @@ export function getUniqueId() {
 type TagBadgeProps = {
   tag: Tag
 }
+
+export const tagBadgeFragment = graphql`
+  fragment TagBadge on Tag {
+    name
+    color
+    textColor
+    slug
+  }
+`
 
 export const TagBadge: FC<TagBadgeProps> = ({ tag }) => {
   const linkTo = tag.slug[0] == "/" ? tag.slug : "/tag/" + tag.slug
