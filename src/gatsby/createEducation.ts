@@ -25,21 +25,17 @@ type YamlEducationNode = NodeInput & {
 
 type EducationNodeArg = NodeInput & {}
 
-export function createCourseTagNode(
-  actions: Actions,
-  slug: string,
-  classNode: any
-) {
+export function createCourseTagNode(actions: Actions, courseNode: any) {
   const { createNode, createParentChildLink } = actions
   const tagNode = buildTagNode({
-    parent: classNode.id,
-    name: classNode.name,
-    slug,
+    parent: courseNode.id,
+    name: courseNode.number,
+    slug: courseNode.slug,
     color: "#18b21b",
     textColor: "#ffffff",
   })
   createNode(tagNode)
-  createParentChildLink(classNode, tagNode as any)
+  createParentChildLink(courseNode, tagNode as any)
 
   return tagNode
 }
@@ -51,7 +47,6 @@ function createCourseNode(
   yamlNode: any
 ) {
   const { createNode } = actions
-  console.log(yamlNode)
 
   const slug =
     parentSlug + yamlNode.number.replace(" ", "-").toLowerCase() + "/"

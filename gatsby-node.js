@@ -451,12 +451,14 @@ exports.onCreateNode = ({ node, actions, getNode }) => {
       })
 
       switch (type) {
-        case "project":
+        case "project": {
           createProjectNode(actions, node)
           break
-        case "blog":
+        }
+        case "blog": {
           createMarkdownBlogPostNode(actions, node)
           break
+        }
       }
       break
     }
@@ -467,7 +469,7 @@ exports.onCreateNode = ({ node, actions, getNode }) => {
     }
 
     case "SkillsYaml": {
-      //console.log(node)
+      console.log(node)
       break
     }
 
@@ -477,13 +479,12 @@ exports.onCreateNode = ({ node, actions, getNode }) => {
     }
 
     case "EducationYaml": {
-      console.log(ce)
       ce.createEducationNode(actions, node)
       break
     }
 
     case "Course": {
-      //createCourseTagNode(actions, node)
+      ce.createCourseTagNode(actions, node)
       break
     }
 
