@@ -490,6 +490,7 @@ exports.onCreateNode = ({ node, actions, getNode }) => {
 
     case "Project": {
       const tagNode = buildTagNode({
+        parent: node.id,
         name: node.title,
         slug: node.slug,
         color: "#e81272",
