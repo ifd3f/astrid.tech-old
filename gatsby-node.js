@@ -414,6 +414,18 @@ exports.createPages = async ({ graphql, actions }) => {
           }
         }
       }
+      allCourse {
+        edges {
+          node {
+            tags {
+              tag {
+                id
+              }
+              slug
+            }
+          }
+        }
+      }
     }
   `)
   if (result.errors) {
@@ -424,6 +436,7 @@ exports.createPages = async ({ graphql, actions }) => {
     result.data.allWorkExperience.edges,
     result.data.allProject.edges,
     result.data.allBlogPost.edges,
+    result.data.allCourse.edges,
   ].forEach(edges => {
     edges.forEach(edge => {
       fillDefaultTags(actions, edge.node.tags)
@@ -498,6 +511,7 @@ exports.onCreateNode = ({ node, actions, getNode }) => {
       })
       createNode(tagNode)
       createParentChildLink({ parent: node, child: tagNode })
+      break
     }
   }
 }

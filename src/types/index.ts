@@ -67,6 +67,7 @@ export interface Course {
   name: string 
   number: string
   slug: string 
+  date: string
   desc: string | null
   tags: TagWrapper[]
 }
@@ -74,6 +75,8 @@ export interface Course {
 export interface Education {
   name: string
   degree: string | null
+  startDate: string;
+  endDate: string;
   slug: string
   courses: Course[]
 }

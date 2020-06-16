@@ -1,6 +1,11 @@
 import { Actions, NodeInput } from "gatsby"
 import { v4 } from "uuid"
-import { buildTagNode, getTagId, withContentDigest } from "./util"
+import {
+  buildTagNode,
+  getTagId,
+  withContentDigest,
+  createLinkedTagList,
+} from "./util"
 
 type YamlClassNode = {
   name: string
@@ -63,8 +68,9 @@ function createCourseNode(
     name: yamlNode.name,
     slug: slug,
     number: yamlNode.number,
+    date: yamlNode.date,
     desc: yamlNode.desc ? yamlNode.desc : null,
-    tags___NODE: yamlNode.tags.map(getTagId),
+    tags: createLinkedTagList(yamlNode.tags),
   })
 
   createNode(courseNode)
@@ -92,6 +98,8 @@ export function createEducationNode(actions: Actions, yamlNode: any) {
     name: yamlNode.name,
     degree: yamlNode.degree,
     slug: slug,
+    startDate: yamlNode.startDate,
+    endDate: yamlNode.endDate,
     courses___NODE: courseNodes.map((classNode: any) => classNode.id),
   })
   createNode(educationNode)

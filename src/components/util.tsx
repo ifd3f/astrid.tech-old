@@ -2,7 +2,7 @@ import { Link } from "gatsby"
 import React, { FC, ReactNode, useState, useEffect } from "react"
 import { handleViewport } from "react-in-viewport"
 import { Badge } from "reactstrap"
-import { Tag } from "../types/index"
+import { Tag, TagWrapper } from "../types/index"
 
 var id = 0
 export function getUniqueId() {

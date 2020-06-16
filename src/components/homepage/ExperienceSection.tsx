@@ -138,9 +138,7 @@ export const ExperienceSection = () => {
       <h2 className={style.sectionHeading}>Work Experience</h2>
       <Article experience={microvu} />
       <Article experience={fabtime} />
-      <Article experience={ironPanthers}>
-        <IronPanthersTagline />
-      </Article>
+      <Article experience={ironPanthers} tagline={<IronPanthersTagline />} />
     </Container>
   )
 }
