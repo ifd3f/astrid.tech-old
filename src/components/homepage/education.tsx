@@ -47,7 +47,7 @@ type EducationQueryData = {
   }
 }
 
-export const EducationSection = () => {
+const EducationSection = () => {
   const result: EducationQueryData = useStaticQuery(graphql`
     query GetEducationHeader {
       allEducation(filter: { slug: { eq: "/education/cal-poly/" } }) {
@@ -88,3 +88,5 @@ export const EducationSection = () => {
     </Container>
   )
 }
+
+export default EducationSection
