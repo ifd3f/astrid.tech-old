@@ -1,5 +1,5 @@
 import { navigate } from "gatsby"
-import React, { FC, useState } from "react"
+import React, { FC, useState, useEffect } from "react"
 import {
   Badge,
   Card,
@@ -18,7 +18,11 @@ type StatusBadgeProps = {
 }
 
 export const StatusBadge: FC<StatusBadgeProps> = ({ status }) => {
-  const [badgeId] = useState(`status-badge-${getUniqueId()}`)
+  const [badgeId, setBadgeId] = useState<string | null>(null)
+  useEffect(() => {
+    setBadgeId(`status-badge-${getUniqueId()}`)
+  }, [])
+
   let title: string, tooltip: string, color: string
   switch (status) {
     case "wip":
@@ -44,9 +48,11 @@ export const StatusBadge: FC<StatusBadgeProps> = ({ status }) => {
       <Badge id={badgeId} color={color}>
         {title}
       </Badge>
-      <UncontrolledTooltip placement="top" target={badgeId}>
-        {tooltip}
-      </UncontrolledTooltip>
+      {badgeId ? (
+        <UncontrolledTooltip placement="top" target={badgeId}>
+          {tooltip}
+        </UncontrolledTooltip>
+      ) : null}
     </>
   )
 }

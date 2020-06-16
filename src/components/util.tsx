@@ -1,5 +1,5 @@
 import { Link } from "gatsby"
-import React, { FC, ReactNode, useState } from "react"
+import React, { FC, ReactNode, useState, useEffect } from "react"
 import { handleViewport } from "react-in-viewport"
 import { Badge } from "reactstrap"
 import { Tag } from "../types/index"
@@ -14,14 +14,11 @@ type TagBadgeProps = {
 }
 
 export const TagBadge: FC<TagBadgeProps> = ({ tag }) => {
-  const [badgeId] = useState(`tag-badge-${getUniqueId()}`)
-
   const linkTo = tag.slug[0] == "/" ? tag.slug : "/tag/" + tag.slug
 
   return (
     <>
       <Badge
-        id={badgeId}
         style={{
           backgroundColor: tag.color,
           color: tag.textColor,
