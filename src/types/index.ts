@@ -1,13 +1,12 @@
 export interface WorkExperience {
-import { TagList } from '../components/util';
   organization: string
   position: string
   location: string
   website: string
-  startDate: string
-  endDate?: string
+  startDate: Date
+  endDate?: Date
   highlights: string[]
-  tags: TagWrapper[]
+  skills: string[]
   summary?: string
 }
 
@@ -64,9 +63,9 @@ export interface Tag {
 }
 
 export interface Course {
-  name: string 
+  name: string
   number: string
-  slug: string 
+  slug: string
   date: string
   desc: string | null
   tags: TagWrapper[]
@@ -75,8 +74,8 @@ export interface Course {
 export interface Education {
   name: string
   degree: string | null
-  startDate: string;
-  endDate: string;
+  startDate: string
+  endDate: string
   slug: string
   courses: Course[]
 }
