@@ -99,7 +99,7 @@
     "clean": "gatsby clean",
     "test": "echo \"Write tests! -> https://gatsby.dev/unit-testing\" && exit 1",
     "predeploy": "gatsby build",
-    "deploy": "gh-pages -r \"git@github.com:Plenglin/plenglin.github.io.git\" -b master -d public -f"
+    "deploy": "gh-pages -r \"git@github.com:Plenglin/plenglin.github.io.git\" -b master -d public"
   },
   "eslintConfig": {
     "extends": "react-app"
