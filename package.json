@@ -1,6 +1,6 @@
 {
   "name": "astrid.tech",
-  "homepage": "https://github.com/gatsbyjs/gatsby-starter-blog#readme",
+  "homepage": "https://astrid.tech",
   "private": true,
   "description": "Personal Website of Astrid Yu",
   "version": "0.1.0",
@@ -97,7 +97,9 @@
     "start": "npm run develop",
     "serve": "gatsby serve",
     "clean": "gatsby clean",
-    "test": "echo \"Write tests! -> https://gatsby.dev/unit-testing\" && exit 1"
+    "test": "echo \"Write tests! -> https://gatsby.dev/unit-testing\" && exit 1",
+    "predeploy": "gatsby build",
+    "deploy": "gh-pages -r \"git@github.com:Plenglin/plenglin.github.io.git\" -b master -d public -f"
   },
   "eslintConfig": {
     "extends": "react-app"
