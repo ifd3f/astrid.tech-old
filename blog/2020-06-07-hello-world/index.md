@@ -23,10 +23,10 @@ And **the bolded text** is the reason I'm making this website. When I work on a 
 
 Additionally, I may occasionally publish some notes here for theoretical projects as well. I'll eventually set up Jupyter Notebooks to make it easier for me to do that.
 
-Every project I work on will have its own page as sort of a general summary of what it is and why you should think it's cool, as well. All my new projects that aren't secret enough for hiding will be put on there. Also, I will slowly, over time, make pages for my old projects as I rediscover them.
+Every project I work on will have its own page as sort of a general summary of what it is and why you should think it's cool, as well. All my new projects that aren't secret enough for hiding will be put on there. If I need to hide stuff, I will still put it on there, but redact as many things as I need for it. Also, I will slowly, over time, make pages for my old projects as I rediscover them.
 
 ## Wait, what\'s this about a redesign?
 
-I'm glad you probably didn't ask! This is not the first iteration of my website. Back in March, when I was first learning React, I was absolute dogsh\*t at it! I realized how bad my code was after taking a break due to schoolwork and putting in a bit of work into a different React project, [Inventree](/projects/inventree).
+I'm glad you probably didn't ask! This is not the first iteration of my website. Back in March, when I was first learning React, I was pretty bad at it! I realized how bad my code was after taking a break due to schoolwork and putting in a bit of work into a different React project, [Inventree](/projects/inventree).
 
-Additionally, I realized that I couldn't do everything I wanted with just `create-react-app`, my website needed to be statically generated so that I don't, y'know, render markdown on the client side because that was what I was doing. So, I thought, "I'm redesigning this thing, I might as well use Gatsby!" That brings us to now, where I'm trying to figure out how the hell I configure the static site configuration.
+Additionally, I realized that I couldn't do everything I wanted with just `create-react-app`, my website needed to be statically generated so that I don't render markdown on the client side because that was what I was doing back then. So, I thought, "I'm redesigning this thing, I might as well use Gatsby!" That brings us to now, where I'm trying to figure out how the hell I configure the static site configuration.
