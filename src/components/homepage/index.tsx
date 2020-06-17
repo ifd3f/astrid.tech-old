@@ -2,7 +2,7 @@
 import ExperienceSection from "./ExperienceSection"
 import HeadingSection from "./Heading"
 import ProjectsSection from "./Projects"
-//import SkillsSection from "./Skills"
+import SkillsSection from "./Skills"
 import EducationSection from "./education"
 export {
   ProjectsSection,
@@ -10,5 +10,5 @@ export {
   HeadingSection,
   ExperienceSection,
   EducationSection,
-  //SkillsSection,
+  SkillsSection,
 }

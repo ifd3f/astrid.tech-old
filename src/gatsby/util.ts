@@ -1,6 +1,6 @@
 import crypto from "crypto"
 import { Tag } from "../types/index"
-import { NodeInput } from "gatsby"
+import { NodeInput, Node } from "gatsby"
 
 const SLUG_OVERRIDE = new Map<string, string>([
   ["c++", "cpp"],
@@ -27,7 +27,7 @@ type PreContentDigestNode = {
 
 export function withContentDigest<T extends PreContentDigestNode>(
   node: T
-): NodeInput {
+): Node {
   // Get content digest of node. (Required field)
   const contentDigest = crypto
     .createHash(`md5`)
@@ -35,7 +35,7 @@ export function withContentDigest<T extends PreContentDigestNode>(
     .digest(`hex`)
   // add it to userNode
   node.internal.contentDigest = contentDigest
-  return (node as unknown) as NodeInput
+  return (node as unknown) as Node
 }
 
 type TagNode = {

@@ -41,7 +41,7 @@ export function createCourseTagNode(actions: Actions, courseNode: any) {
   })
   console.log(tagNode.children)
   createNode(tagNode)
-  createParentChildLink(courseNode, tagNode as any)
+  createParentChildLink({ parent: courseNode, child: tagNode as any })
 
   return tagNode
 }

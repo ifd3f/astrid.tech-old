@@ -19,7 +19,11 @@ const mkdirp = require("mkdirp")
 const md5 = require("js-md5")
 const yaml = require("js-yaml")
 
-const ce = require("./src/gatsby/index.ts")
+const {
+  createEducationNode,
+  createCourseTagNode,
+  createSkillNode,
+} = require("./src/gatsby/index.ts")
 
 const SLUG_OVERRIDE = {
   "c++": "cpp",
@@ -482,7 +486,7 @@ exports.onCreateNode = ({ node, actions, getNode }) => {
     }
 
     case "SkillsYaml": {
-      //console.log(node)
+      createSkillNode(actions, node)
       break
     }
 
@@ -492,12 +496,12 @@ exports.onCreateNode = ({ node, actions, getNode }) => {
     }
 
     case "EducationYaml": {
-      ce.createEducationNode(actions, node)
+      createEducationNode(actions, node)
       break
     }
 
     case "Course": {
-      ce.createCourseTagNode(actions, node)
+      createCourseTagNode(actions, node)
       break
     }
 

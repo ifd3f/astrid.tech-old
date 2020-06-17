@@ -3,6 +3,7 @@ import {
   ExperienceSection,
   EducationSection,
   HeadingSection,
+  SkillsSection,
   ProjectsSection,
 } from "../components/homepage"
 import Layout from "../components/layout"
@@ -13,6 +14,7 @@ const Homepage = () => {
     <Layout>
       <SEO title="Astrid Yu" />
       <HeadingSection />
+      <SkillsSection />
       <EducationSection />
       <ExperienceSection />
       <ProjectsSection />
