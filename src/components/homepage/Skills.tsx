@@ -1,4 +1,4 @@
-import React from "react"
+import React, { Component, FC } from "react"
 import handleViewport from "react-in-viewport"
 import {
   Card,
@@ -9,78 +9,92 @@ import {
   Progress,
   Row,
 } from "reactstrap"
-import "../db"
 import style from "./style.module.scss"
+import { Tag } from "../../types/index"
+import { useStaticQuery } from "gatsby"
+import { graphql } from "gatsby"
+import { TagBadge } from "../util"
 
-class SkillData {
-  constructor(data) {
-    this.name = data.name
-    this.skill = data.skill
-    this.projects = data.projects.map()
-  }
+type AnimatedSkillBarProps = {
+  level: number
 }
 
-class AnimatedSkillBarBlock extends React.Component {
-  constructor(props) {
+type AnimatedSkillBarState = {
+  displayed: number
+}
+
+class AnimatedSkillBarBlock extends Component<
+  AnimatedSkillBarProps,
+  AnimatedSkillBarState
+> {
+  constructor(props: AnimatedSkillBarProps) {
     super(props)
-    const { value } = this.props
     this.state = {
       displayed: 0,
-      value: value,
     }
   }
 
   render() {
-    const { value, displayed } = this.state
-    if (this.props.inViewport && value !== displayed) {
-      this.setState({ displayed: value })
+    const { displayed } = this.state
+    if (this.props.inViewport && this.props.level !== displayed) {
+      this.setState({ displayed: this.props.level })
     }
     return <Progress value={displayed} />
   }
 }
 
-function SkillInfoDisplay(props) {
-  const { name, skill } = props.data
+const AnimatedSkillBar: FC<AnimatedSkillBarProps> = handleViewport(
+  AnimatedSkillBarBlock,
+  {
+    rootMargin: "-1.0px",
+  }
+)
+
+type SkillInfoDisplayProps = {
+  tag: Tag
+  level: number
+}
+
+const SkillInfoDisplay: FC<SkillInfoDisplayProps> = ({ tag, level }) => {
   return (
     <Row>
-      <Col md="4">
-        <p>{name}</p>
+      <Col xs={6} sm={5} md={5}>
+        <TagBadge tag={tag} />
       </Col>
-      <Col md="7">
-        <AnimatedSkillBar value={skill} />
+      <Col xs={6} sm={7} md={7}>
+        <AnimatedSkillBar level={level} />
       </Col>
-      <Col sm="1">{/* projects dropdown goes here */}</Col>
     </Row>
   )
 }
 
-function CategoryCard(props) {
-  const { children, skills } = props
-  return (
-    <Card>
-      <CardHeader>
-        <h4>{children}</h4>
-      </CardHeader>
-      <CardBody>
-        <Container>
-          {skills
-            .filter(x => "skill" in x)
-            .map(x => new SkillData(x))
-            .sort((a, b) => b.skill - a.skill)
-            .map(x => (
-              <SkillInfoDisplay key={x.name} data={x} />
-            ))}
-        </Container>
-      </CardBody>
-    </Card>
-  )
+type QueryData = {
+  allSkill: {
+    edges: {
+      node: {
+        level: number
+        tag: Tag
+      }
+    }[]
+  }
 }
 
-const AnimatedSkillBar = handleViewport(AnimatedSkillBarBlock, {
-  rootMargin: "-1.0px",
-})
-
 function SkillsSection() {
+  const query: QueryData = useStaticQuery(graphql`
+    query GetFeaturedSkills {
+      allSkill {
+        edges {
+          node {
+            tag {
+              ...TagBadge
+            }
+            level
+          }
+        }
+      }
+    }
+  `)
+
   return (
     <section>
       <Container>
@@ -88,7 +102,14 @@ function SkillsSection() {
           <h2>Skills</h2>
         </div>
         <Row>
-          <Col lg="6"></Col>
+          {query.allSkill.edges
+            .map(({ node }) => node)
+            .sort(({ level: a }, { level: b }) => b - a)
+            .map(({ level, tag }) => (
+              <Col xs={6} md={4} lg={3}>
+                <SkillInfoDisplay level={level * 10} tag={tag} />
+              </Col>
+            ))}
         </Row>
       </Container>
     </section>
