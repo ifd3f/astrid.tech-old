@@ -16,3 +16,7 @@ url: null
 source: [https://github.com/Plenglin/Hair-Net]
 thumbnail: ./thumbnail.png
 ---
+
+A convolutional neural network (CNN) that accomplishes an image segmentation task. It identifies people's faces as well as what part of their face is hair.
+
+It was originally going to be a component in an image processing pipeline that would allow the user to simulate different hairstyles. A separate
