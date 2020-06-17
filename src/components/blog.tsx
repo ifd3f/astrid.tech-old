@@ -32,6 +32,7 @@ export const PostMainHeader: FC<AbstractPostProps> = ({ post }) => {
       <h1>{post.title!}</h1>
       <p>{new Date(post.date!).toString()}</p>
       <p>{post.description!}</p>
+      <TagList tags={post.tags?.map(({ tag }) => tag)} />
     </header>
   )
 }

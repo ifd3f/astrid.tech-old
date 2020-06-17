@@ -20,10 +20,7 @@ export const pageQuery = graphql`
           }
           tags {
             tag {
-              slug
-              name
-              color
-              textColor
+              ...TagBadge
             }
           }
         }
