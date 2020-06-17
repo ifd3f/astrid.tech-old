@@ -13,9 +13,8 @@ tags:
   - control-systems
   - stepper-motors
   - motion-sensing
+  - sensor-fusion
 url: null
 source: [https://github.com/Plenglin/segwaybot]
 thumbnail: ./thumbnail.png
 ---
-
-\*on carpet
