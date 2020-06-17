@@ -100,6 +100,7 @@ function SkillsSection() {
       <Container>
         <div className={style.sectionHeading}>
           <h2>Skills</h2>
+          <p>Click on a tag to see related projects and blog posts!</p>
         </div>
         <Row>
           {query.allSkill.edges
