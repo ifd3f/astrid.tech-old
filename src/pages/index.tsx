@@ -3,6 +3,7 @@ import {
   ExperienceSection,
   EducationSection,
   HeadingSection,
+  ProjectsSection,
 } from "../components/homepage"
 import Layout from "../components/layout"
 import SEO from "../components/seo"
@@ -14,6 +15,7 @@ const Homepage = () => {
       <HeadingSection />
       <EducationSection />
       <ExperienceSection />
+      <ProjectsSection />
     </Layout>
   )
 }
