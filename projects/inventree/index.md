@@ -3,7 +3,7 @@ type: project
 
 title: Inventree
 status: wip
-description: An inventory tracker to keep track of my pile of crap
+description: An inventory tracker to keep track of all the things I have
 startDate: 2020-01-01
 endDate: null
 tags:
