@@ -20,15 +20,13 @@
   level: 6
 - slug: systemverilog
   level: 4
-- slug: bootstrap-css
-  level: 8
 - slug: node-js
-  level: 5
-- slug: anaconda
-  level: 4
-- slug: opencv
   level: 5
 - slug: tensorflow
   level: 3
+- slug: opencv
+  level: 5
 - slug: haskell
-  level: 2
+  level: 3
+- slug: scala
+  level: 7
