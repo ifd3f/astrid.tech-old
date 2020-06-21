@@ -18,9 +18,12 @@ thumbnail: null
 
 - Laptop: Lenovo Legion Y530
 - CPU: Intel Core i5-8300H
-- GPU: GTX 1080M
+- GPU: GTX 1060M
 - RAM: 32GB DDR4
 - Display: 15.4" 1080p Widescreen
+- Storage:
+  - 1TB NVMe SSD
+  - 500GB SATA SSD
 - Keyboard: I switch between
   - Redragon K552 (Oetemu Blue)
   - Unicomp Classic (Buckling Spring)
