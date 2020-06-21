@@ -96,6 +96,16 @@ module.exports = {
         //trackingId: `ADD YOUR TRACKING ID HERE`,
       },
     },
+    {
+      resolve: `gatsby-plugin-build-date`,
+      options: {
+        formatAsDateString: true,
+        formatting: {
+          format: "HH:MM:SS dddd D MMMM YYYY",
+          utc: true,
+        },
+      },
+    },
     `gatsby-plugin-feed`,
     {
       resolve: `gatsby-plugin-manifest`,
