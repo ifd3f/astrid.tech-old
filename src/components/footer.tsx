@@ -27,15 +27,13 @@ const FooterSection = () => {
       }
       mitLogo: file(relativePath: { eq: "mit-logo.png" }) {
         childImageSharp {
-          fixed(width: 100, height: 40) {
+          fixed(height: 40) {
             ...GatsbyImageSharpFixed
           }
         }
       }
     }
   `)
-
-  console.log(result)
 
   const buildDate = result.currentBuildDate.currentDate
   const mitLogo = result.mitLogo.childImageSharp.fixed

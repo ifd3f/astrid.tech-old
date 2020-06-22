@@ -6,7 +6,7 @@ export interface WorkExperience {
   startDate: Date
   endDate?: Date
   highlights: string[]
-  skills: string[]
+  tags: TagWrapper[]
   summary?: string
 }
 

@@ -3,6 +3,7 @@ import React, { FC, ReactNode } from "react"
 import { Container, Badge } from "reactstrap"
 import { WorkExperience } from "../../types/index"
 import style from "./style.module.scss"
+import { TagList } from "../util"
 
 const IronPanthersTagline = () => {
   return (
@@ -74,6 +75,10 @@ const Article: FC<ArticleProps> = ({ experience, tagline: _tagline }) => {
       </div>
 
       <div>
+        <TagList tags={experience.tags.map(({ tag }) => tag!)} />
+      </div>
+
+      <div>
         <ul>
           {experience.highlights.map(h => (
             <li>{h}</li>
@@ -85,7 +90,7 @@ const Article: FC<ArticleProps> = ({ experience, tagline: _tagline }) => {
 }
 
 type QueryData = {
-  allWorkExperienceYaml: {
+  allWorkExperience: {
     edges: [
       {
         node: WorkExperience
@@ -103,8 +108,12 @@ type QueryData = {
 export const ExperienceSection = () => {
   const query: QueryData = useStaticQuery(graphql`
     {
-      allWorkExperienceYaml(
-        filter: { slug: { in: ["fabtime", "iron-panthers", "micro-vu"] } }
+      allWorkExperience(
+        filter: {
+          slug: {
+            in: ["/work/fabtime", "/work/iron-panthers", "/work/micro-vu"]
+          }
+        }
         sort: { fields: [slug], order: ASC }
       ) {
         edges {
@@ -116,9 +125,12 @@ export const ExperienceSection = () => {
             location
             organization
             position
-            tags
+            tags {
+              tag {
+                ...TagBadge
+              }
+            }
             summary
-            type
             website
             slug
           }
@@ -131,7 +143,7 @@ export const ExperienceSection = () => {
     { node: fabtime },
     { node: ironPanthers },
     { node: microvu },
-  ] = query.allWorkExperienceYaml.edges
+  ] = query.allWorkExperience.edges
 
   return (
     <Container className={style.experienceSection} tag="section">
