@@ -1,11 +1,12 @@
 import React from "react"
 import { Container, Col, Row } from "reactstrap"
-import styles from "./elevator.module.scss"
+import styles from "./style.module.scss"
+import { HomepageSection } from "./util"
 
 export default function ElevatorSection() {
   return (
-    <Container tag="section">
-      <div className={styles.elevatorBlock}>
+    <HomepageSection color="#031675">
+      <div className={styles.textBlock}>
         <p>
           The first program I ever wrote was Hello World in Java back in 6th
           grade, when I wanted to make myself a Minecraft mod. With no one to
@@ -35,6 +36,6 @@ export default function ElevatorSection() {
           playing the Chinese Erhu, or skateboarding.
         </p>
       </div>
-    </Container>
+    </HomepageSection>
   )
 }

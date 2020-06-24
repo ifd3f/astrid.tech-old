@@ -4,6 +4,7 @@ import { Container, Badge } from "reactstrap"
 import { WorkExperience } from "../../types/index"
 import style from "./style.module.scss"
 import { TagList } from "../util"
+import { HomepageSection } from "./util"
 
 const IronPanthersTagline = () => {
   return (
@@ -146,12 +147,12 @@ export const ExperienceSection = () => {
   ] = query.allWorkExperience.edges
 
   return (
-    <Container className={style.experienceSection} tag="section">
+    <HomepageSection color="#993322">
       <h2 className={style.sectionHeading}>Work Experience</h2>
       <Article experience={microvu} />
       <Article experience={fabtime} />
       <Article experience={ironPanthers} tagline={<IronPanthersTagline />} />
-    </Container>
+    </HomepageSection>
   )
 }
 

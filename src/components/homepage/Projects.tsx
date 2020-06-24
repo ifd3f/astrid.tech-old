@@ -3,6 +3,7 @@ import { Container, Row, Col } from "reactstrap"
 import { useStaticQuery, graphql, Link } from "gatsby"
 import { ProjectCard } from "../project"
 import { Project } from "../../types"
+import { HomepageSection } from "./util"
 
 type QueryData = {
   allProject: {
@@ -38,7 +39,7 @@ const ProjectsSection = () => {
   `)
 
   return (
-    <section>
+    <HomepageSection color="#5e0e59">
       <div className="">
         <h2>Featured Projects</h2>
         <Link to="/portfolio">See more</Link>
@@ -52,7 +53,7 @@ const ProjectsSection = () => {
           ))}
         </Row>
       </Container>
-    </section>
+    </HomepageSection>
   )
 }
 
