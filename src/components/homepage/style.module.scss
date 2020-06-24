@@ -1,15 +1,61 @@
+$shared-left-padding: 80px;
+
 .homepageContainer {
+  margin: 0px;
+
+  header {
+    background-color: #70149e;
+    height: 600px;
+  }
+
+  .nameWrapper {
+    display: flex;
+    height: 600px;
+    align-items: center;
+    max-width: 700px;
+
+    .name {
+      max-width: 700px;
+      flex-grow: 1;
+
+      .preTitle {
+        text-align: left;
+        margin: 0;
+        font-size: 32pt;
+      }
+      .pronouns {
+        text-align: center;
+        margin-top: -30px;
+        font-size: 16pt;
+        margin-bottom: 0px;
+      }
+      .postTitle {
+        text-align: right;
+        margin-top: 20px;
+        margin-bottom: 0px;
+        font-size: 32pt;
+      }
+    }
+  }
+
+  h1 {
+    font-size: 100pt;
+    text-align: center;
+    margin: 0;
+  }
+
   section {
     padding-top: 30px;
     padding-bottom: 30px;
-    .sectionContent {
-      max-width: 1000px;
-      padding-left: 50px;
-      padding-right: 50px;
-      height: auto;
-      margin-left: auto;
-      margin-right: auto;
-    }
+  }
+
+  .sectionContent {
+    max-width: 1200px;
+    padding-left: $shared-left-padding;
+    padding-right: 50px;
+    height: auto;
+    margin-left: auto;
+    margin-right: auto;
   }
 
   h2 {

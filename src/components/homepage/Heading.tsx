@@ -2,7 +2,8 @@ import { graphql, useStaticQuery } from "gatsby"
 import React, { FC, ReactNode } from "react"
 import { BsCodeSlash } from "react-icons/bs"
 import { GiCircuitry } from "react-icons/gi"
-import style from "./heading.module.scss"
+import styles from "./style.module.scss"
+import { HomepageHeader } from "./util"
 
 const APPX_BEGAN_PROGRAMMING = new Date("2013-02-01")
 const APPX_BEGAN_HARDWARE = new Date("2015-12-15")
@@ -95,37 +96,16 @@ const HeadingSection = () => {
   const electronics: string = data.electronics.publicURL
 
   return (
-    <header className={style.homepageTop}>
-      <Headline />
-      <div className={style.subRow}>
-        <IconInfoDisplay
-          icon={<BsCodeSlash className={style.wareIcon} />}
-          imageSrc={coding}
-        >
-          <p className={style.warePrimary}>
-            <ProgrammingYears /> YEARS
-          </p>
-          <p className={style.wareSecondary}>
-            writing <strong>SOFTWARE</strong>
-          </p>
-        </IconInfoDisplay>
-        <IconInfoDisplay
-          icon={
-            <GiCircuitry
-              className={`${style.wareIcon} ${style.hardwareIcon}`}
-            />
-          }
-          imageSrc={electronics}
-        >
-          <p className={style.warePrimary}>
-            <HardwareYears /> YEARS
-          </p>
-          <p className={style.wareSecondary}>
-            hacking <strong>HARDWARE</strong>
-          </p>
-        </IconInfoDisplay>
+    <HomepageHeader>
+      <div className={styles.nameWrapper}>
+        <div className={styles.name}>
+          <p className={styles.preTitle}>Hello, my name is</p>
+          <h1>Astrid Yu</h1>
+          <p className={styles.pronouns}>(she/her/hers)</p>
+          <p className={styles.postTitle}>and I'm a Software Developer</p>
+        </div>
       </div>
-    </header>
+    </HomepageHeader>
   )
 }
 

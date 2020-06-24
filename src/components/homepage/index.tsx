@@ -9,13 +9,13 @@ import React from "react"
 
 export default function HomepageContainer() {
   return (
-    <main className={styles.homepageContainer}>
+    <div className={styles.homepageContainer}>
       <HeadingSection />
       <ElevatorSection />
       <SkillsSection />
       <EducationSection />
       <ExperienceSection />
       <ProjectsSection />
-    </main>
+    </div>
   )
 }

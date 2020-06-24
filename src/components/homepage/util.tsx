@@ -20,3 +20,18 @@ export const HomepageSection: FC<HomepageSectionProps> = ({
     </section>
   )
 }
+
+export const HomepageHeader: FC<HomepageSectionProps> = ({
+  children,
+  color,
+}) => {
+  return (
+    <header
+      style={{
+        backgroundColor: color,
+      }}
+    >
+      <div className={styles.sectionContent}>{children}</div>
+    </header>
+  )
+}
