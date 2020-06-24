@@ -101,8 +101,7 @@ const HeadingSection = () => {
         <div className={styles.name}>
           <p className={styles.preTitle}>Hello, my name is</p>
           <h1>Astrid Yu</h1>
-          <p className={styles.pronouns}>(she/her/hers)</p>
-          <p className={styles.postTitle}>and I'm a Software Developer</p>
+          <p className={styles.postTitle}>Software Developer</p>
         </div>
       </div>
     </HomepageHeader>
