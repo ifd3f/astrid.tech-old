@@ -11,9 +11,6 @@ module.exports = {
         posAdj: `her`,
         reflex: `herself`,
       },
-      skills: {
-        c: 10,
-      },
     },
     description: `Astrid Yu's blog and portfolio`,
     siteUrl: `https://astrid.tech/`,

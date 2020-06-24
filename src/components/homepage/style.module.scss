@@ -1,4 +1,18 @@
-.sectionHeading {
-  text-align: center;
-  font: 40pt;
+.homepageContainer {
+  section {
+    padding-top: 30px;
+    padding-bottom: 30px;
+    .sectionContent {
+      max-width: 1000px;
+      padding-left: 50px;
+      padding-right: 50px;
+      height: auto;
+      margin-left: auto;
+      margin-right: auto;
+    }
+  }
+
+  h2 {
+    font-size: 40pt;
+  }
 }

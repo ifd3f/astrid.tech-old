@@ -14,6 +14,7 @@ import { Tag } from "../../types/index"
 import { useStaticQuery } from "gatsby"
 import { graphql } from "gatsby"
 import { TagBadge } from "../util"
+import { HomepageSection } from "./util"
 
 type AnimatedSkillBarProps = {
   level: number
@@ -96,24 +97,22 @@ function SkillsSection() {
   `)
 
   return (
-    <section>
-      <Container>
-        <div className={style.sectionHeading}>
-          <h2>Skills</h2>
-          <p>Click on a tag to see related projects and blog posts!</p>
-        </div>
-        <Row>
-          {query.allSkill.edges
-            .map(({ node }) => node)
-            .sort(({ level: a }, { level: b }) => b - a)
-            .map(({ level, tag }) => (
-              <Col xs={6} md={4} lg={3}>
-                <SkillInfoDisplay level={level * 10} tag={tag} />
-              </Col>
-            ))}
-        </Row>
-      </Container>
-    </section>
+    <HomepageSection color="#223299">
+      <div className={style.sectionHeading}>
+        <h2>Skills</h2>
+        <p>Click on a tag to see related projects and blog posts!</p>
+      </div>
+      <Row>
+        {query.allSkill.edges
+          .map(({ node }) => node)
+          .sort(({ level: a }, { level: b }) => b - a)
+          .map(({ level, tag }) => (
+            <Col xs={6} md={4} lg={3}>
+              <SkillInfoDisplay level={level * 10} tag={tag} />
+            </Col>
+          ))}
+      </Row>
+    </HomepageSection>
   )
 }
 

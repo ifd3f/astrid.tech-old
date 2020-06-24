@@ -1,8 +1,10 @@
 import { useStaticQuery, graphql } from "gatsby"
 import React, { FC } from "react"
 import { Education, Course } from "../../types/index"
+import { HomepageSection } from "./util"
 import { Container } from "reactstrap"
 import { TagList } from "../util"
+import styles from "./style.module.scss"
 
 type CourseInfoProps = {
   course: Course
@@ -80,12 +82,12 @@ const EducationSection = () => {
   `)
 
   return (
-    <Container tag="section">
+    <HomepageSection color="#154734">
       <h2 className="section-heading">Education</h2>
       {result.allEducation.edges.map(({ node: education }) => (
         <EducationInfo education={education} />
       ))}
-    </Container>
+    </HomepageSection>
   )
 }
 
