@@ -1,4 +1,4 @@
-import React, { Component, FC } from "react"
+import React, { Component, FC, ReactNode } from "react"
 import handleViewport from "react-in-viewport"
 import {
   Card,
@@ -10,46 +10,32 @@ import {
   Row,
 } from "reactstrap"
 import style from "./style.module.scss"
+import styleSkills from "./skills.module.scss"
 import { Tag, SkillCategory } from "../../types/index"
-import { useStaticQuery } from "gatsby"
+import { useStaticQuery, Link } from "gatsby"
 import { graphql } from "gatsby"
 import { TagBadge } from "../util"
 import { HomepageSection } from "./util"
+import { BsStarFill, BsBootstrap, BsStar } from "react-icons/bs"
 
-type AnimatedSkillBarProps = {
-  level: number
+type StarsProps = {
+  stars: number
 }
 
-type AnimatedSkillBarState = {
-  displayed: number
+const Stars: FC<StarsProps> = ({ stars }) => {
+  const out: ReactNode[] = Array(5)
+  var i = 0
+  while (i < stars) {
+    out.push(<BsStarFill />)
+    i++
+  }
+  while (i < 5) {
+    out.push(<BsStar />)
+    i++
+  }
+
+  return <>{out}</>
 }
-
-class AnimatedSkillBarBlock extends Component<
-  AnimatedSkillBarProps,
-  AnimatedSkillBarState
-> {
-  constructor(props: AnimatedSkillBarProps) {
-    super(props)
-    this.state = {
-      displayed: 0,
-    }
-  }
-
-  render() {
-    const { displayed } = this.state
-    if (this.props.inViewport && this.props.level !== displayed) {
-      this.setState({ displayed: this.props.level })
-    }
-    return <Progress value={displayed} />
-  }
-}
-
-const AnimatedSkillBar: FC<AnimatedSkillBarProps> = handleViewport(
-  AnimatedSkillBarBlock,
-  {
-    rootMargin: "-1.0px",
-  }
-)
 
 type SkillInfoDisplayProps = {
   tag: Tag
@@ -58,14 +44,17 @@ type SkillInfoDisplayProps = {
 
 const SkillInfoDisplay: FC<SkillInfoDisplayProps> = ({ tag, level }) => {
   return (
-    <Row>
-      <Col xs={6} sm={5} md={5}>
-        <TagBadge tag={tag} />
-      </Col>
-      <Col xs={6} sm={7} md={7}>
-        <AnimatedSkillBar level={20 * level} />
-      </Col>
-    </Row>
+    <Link to={`/tag/${tag.slug}`}>
+      <div
+        className={styleSkills.skillRow}
+        style={{ backgroundColor: tag.color, color: tag.textColor }}
+      >
+        <p className={styleSkills.tagName}>{tag.name}</p>
+        <p className={styleSkills.tagStars}>
+          <Stars stars={level} />
+        </p>
+      </div>
+    </Link>
   )
 }
 
@@ -76,14 +65,12 @@ type SkillCategoryViewProps = {
 const SkillCategoryView: FC<SkillCategoryViewProps> = ({
   category: { name, skills },
 }) => (
-  <div>
-    <h5>{name}</h5>
+  <div className={styleSkills.skillCategory}>
+    <h3>{name}</h3>
     {skills
       .sort(({ level: a }, { level: b }) => b - a)
       .map(({ level, tag }) => (
-        <Col xs={6} md={4} lg={3}>
-          <SkillInfoDisplay level={level} tag={tag} />
-        </Col>
+        <SkillInfoDisplay level={level} tag={tag} />
       ))}
   </div>
 )
@@ -122,9 +109,11 @@ function SkillsSection() {
         <h2>Skills</h2>
         <p>Click on a tag to see related projects and blog posts!</p>
       </div>
-      {query.allSkill.edges.map(({ node }) => (
-        <SkillCategoryView category={node} />
-      ))}
+      <div className={styleSkills.skillSection}>
+        {query.allSkill.edges.map(({ node }) => (
+          <SkillCategoryView category={node} />
+        ))}
+      </div>
     </HomepageSection>
   )
 }
