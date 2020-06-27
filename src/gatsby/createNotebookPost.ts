@@ -1,56 +1,53 @@
-import { FileSystemNode } from "gatsby-source-filesystem"
-import { Actions } from "gatsby"
-import fs from "fs"
-import { Notebook, CodeCell, MarkdownCell } from "./nbformat-v4.d"
-import Remark from "remark"
-
-export function parseMarkdownToHTML(data: string): string {
-  const remark = Remark().data("settings", {
-    commonmark: true,
-    gfm: true,
-    pedantic: true,
-    footnotes: true,
-  })
-  console.log(remark)
-  return ""
+import { Actions, Node } from "gatsby"
+import { Notebook } from "./nbformat-v4.d"
+import { withContentDigest, createLinkedTagList } from "./util"
+import { v4 } from "uuid"
+import path from "path"
+type JupyterNotebookNode = Node & {
+  json: Notebook
+  html: string
+  fileAbsolutePath: string
+  metadata: {
+    blog_data: BlogMetadata
+  }
 }
 
-export function notebookToHTML(notebook: Notebook): string {
-  notebook.cells.map(cell => {
-    switch (cell.cell_type) {
-      case "code": {
-        cell as CodeCell
-        cell
-        break
-      }
-      case "markdown": {
-        cell as MarkdownCell
-        const contents =
-          cell.source instanceof Array ? cell.source.join(",") : cell.source
-        console.log(contents)
-      }
-    }
-  })
-  return ""
+type BlogMetadata = {
+  title: string
+  date: string
+  description: string
+  tags: string[]
 }
 
-function createNotebookNode(actions: Actions, node: FileSystemNode) {
-  const notebook: Notebook = JSON.parse(
-    fs.readFileSync(node.absolutePath, "utf8")
-  )
-  const cells = []
-  notebook.cells.map(cell => {
-    switch (cell.cell_type) {
-      case "code": {
-        cell as CodeCell
-        cell
-        break
-      }
-      case "markdown": {
-        cell as MarkdownCell
-        const contents =
-          cell.source instanceof Array ? cell.source.join(",") : cell.source
-      }
-    }
+export function createJupyterBlogPostNode(
+  actions: Actions,
+  jupyterNode: JupyterNotebookNode
+) {
+  const { createNode, createParentChildLink } = actions
+  const { title, date, description, tags } = jupyterNode.metadata.blog_data
+
+  const slugBase = path.parse(path.dirname(jupyterNode.fileAbsolutePath)).name
+
+  const postNode = withContentDigest({
+    parent: jupyterNode.id,
+    internal: {
+      type: "BlogPost",
+    },
+    id: v4(),
+    children: [],
+    slug: `/blog/${slugBase}/`,
+    title,
+    date,
+    description,
+
+    contentType: "jupyter",
+    markdown___NODE: null,
+    mdx___NODE: null,
+    jupyter___NODE: jupyterNode.id,
+
+    tags: createLinkedTagList(tags),
   })
+
+  createNode(postNode)
+  createParentChildLink({ parent: jupyterNode, child: postNode })
 }

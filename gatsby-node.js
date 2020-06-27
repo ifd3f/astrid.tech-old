@@ -23,7 +23,7 @@ const {
   createEducationNode,
   createCourseTagNode,
   createSkillNode,
-  createNotebookBlogPostNode,
+  createJupyterBlogPostNode,
 } = require("./src/gatsby/index.ts")
 
 const SLUG_OVERRIDE = {
@@ -55,6 +55,7 @@ const setContentDigest = node => {
     .createHash(`md5`)
     .update(JSON.stringify(node))
     .digest(`hex`)
+
   // add it to userNode
   node.internal.contentDigest = contentDigest
 }
@@ -93,7 +94,6 @@ const getTextColor = backgroundColor => {
   const [, r, g, b] = backgroundColor
     .match(/#([0-9a-f]{2})([0-9a-f]{2})([0-9a-f]{2})/i)
     .map(x => new Number("0x" + x))
-
   return r * 0.299 + g * 0.587 + b * 0.114 > 186 ? "#000000" : "#ffffff"
 }
 
@@ -478,6 +478,11 @@ exports.onCreateNode = ({ node, actions, getNode }) => {
           break
         }
       }
+      break
+    }
+
+    case "JupyterNotebook": {
+      createJupyterBlogPostNode(actions, node)
       break
     }
 
