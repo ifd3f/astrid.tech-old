@@ -1,5 +1,5 @@
 import { useStaticQuery, graphql } from "gatsby"
-import React, { FC } from "react"
+import React, { FC, useState } from "react"
 import { Education, Course } from "../../types/index"
 import { HomepageSection } from "./util"
 import { Container } from "reactstrap"
@@ -12,39 +12,64 @@ type CourseInfoProps = {
   course: Course
   color: string
   selected?: boolean
+  onMouseEnter?: (course: Course) => void
+  onMouseLeave?: (course: Course) => void
 }
 
 const CourseInfo: FC<CourseInfoProps> = ({
   course,
   color,
   selected = false,
-}) => (
-  <div className={styleEducation.courseInfo}>
+  onMouseEnter: _onMouseEnter = () => {},
+  onMouseLeave: _onMouseLeave = () => {},
+}) => {
+  const onMouseEnter = () => {
+    _onMouseEnter(course)
+  }
+  const onMouseLeave = () => {
+    _onMouseLeave(course)
+  }
+
+  return (
     <div
-      className={styleEducation.mainBlock}
-      style={{ backgroundColor: color }}
+      className={styleEducation.courseInfo}
+      onMouseEnter={onMouseEnter}
+      onMouseLeave={onMouseLeave}
     >
-      <div className={styleEducation.content}>
-        <h5>{course.number}</h5>
-        <p className={styleEducation.courseTitle}>{course.name}</p>
-      </div>
-      <div>
-        <div className={styleEducation.arrowWrapper}>
-          <BsCaretRightFill className={styleEducation.arrow} />
+      <div
+        className={styleEducation.mainBlock}
+        style={{ backgroundColor: color }}
+      >
+        <div className={styleEducation.content}>
+          <h5>{course.number}</h5>
+          <p className={styleEducation.courseTitle}>{course.name}</p>
         </div>
-        <div
-          className={styleEducation.selectionLineWrapper}
-          style={{ visibility: selected ? "visible" : "collapse" }}
-        >
+        <div>
+          <div className={styleEducation.arrowWrapper}>
+            <BsCaretRightFill className={styleEducation.arrow} />
+          </div>
           <div
-            className={styleEducation.selectionLine}
-            style={{ backgroundColor: color }}
-          ></div>
+            className={styleEducation.selectionLineWrapper}
+            style={{ visibility: selected ? "visible" : "collapse" }}
+          >
+            <div
+              className={styleEducation.selectionLine}
+              style={{ backgroundColor: color }}
+            ></div>
+          </div>
         </div>
       </div>
     </div>
-  </div>
-)
+  )
+}
+
+type CourseDetailProps = {
+  course: Course
+}
+
+const CourseDetail: FC<CourseDetailProps> = ({ course }) => {
+  return <div className={styleEducation.courseDetail}>{course.slug}</div>
+}
 
 type CourseDataDisplayProps = {
   courses: Course[]
@@ -52,15 +77,30 @@ type CourseDataDisplayProps = {
 }
 
 const CourseDataDisplay: FC<CourseDataDisplayProps> = ({ courses, color }) => {
+  const [displayedCourse, setDisplayedCourse] = useState(courses[0])
+
+  const onMouseEnter = (course: Course) => {
+    setDisplayedCourse(course)
+  }
+
   return (
     <div>
-      {courses
-        .sort(
-          (a, b) => b.date.localeCompare(a.date) || a.name.localeCompare(b.name)
-        )
-        .map(course => (
-          <CourseInfo course={course} color={color} />
-        ))}
+      <div>
+        {courses
+          .sort(
+            (a, b) =>
+              b.date.localeCompare(a.date) || a.name.localeCompare(b.name)
+          )
+          .map(course => (
+            <CourseInfo
+              selected={course.slug == displayedCourse.slug}
+              course={course}
+              color={color}
+              onMouseEnter={onMouseEnter}
+            />
+          ))}
+      </div>
+      <CourseDetail course={displayedCourse} />
     </div>
   )
 }
@@ -106,6 +146,7 @@ const EducationSection = () => {
             endDate(formatString: "YYYY-MM")
 
             courses {
+              slug
               name
               number
               date(formatString: "YYYY-MM")

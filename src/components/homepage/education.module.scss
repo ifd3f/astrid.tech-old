@@ -41,9 +41,9 @@
 
   .selectionLine {
     position: relative;
-    top: -20px;
+    top: -22.5px;
     left: 50px;
-    height: 2px;
+    height: 5px;
     width: 50px;
   }
 
@@ -66,4 +66,8 @@
     font-size: 40px;
     margin: 0;
   }
+}
+
+.courseDetail {
+  height: 100%;
 }
