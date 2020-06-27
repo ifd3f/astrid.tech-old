@@ -63,7 +63,7 @@ const SkillInfoDisplay: FC<SkillInfoDisplayProps> = ({ tag, level }) => {
         <TagBadge tag={tag} />
       </Col>
       <Col xs={6} sm={7} md={7}>
-        <AnimatedSkillBar level={level} />
+        <AnimatedSkillBar level={20 * level} />
       </Col>
     </Row>
   )
@@ -82,7 +82,7 @@ const SkillCategoryView: FC<SkillCategoryViewProps> = ({
       .sort(({ level: a }, { level: b }) => b - a)
       .map(({ level, tag }) => (
         <Col xs={6} md={4} lg={3}>
-          <SkillInfoDisplay level={level * 10} tag={tag} />
+          <SkillInfoDisplay level={level} tag={tag} />
         </Col>
       ))}
   </div>
