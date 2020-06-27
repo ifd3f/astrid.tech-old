@@ -5,39 +5,84 @@ import { HomepageSection } from "./util"
 import { Container } from "reactstrap"
 import { TagList } from "../util"
 import styles from "./style.module.scss"
+import styleEducation from "./education.module.scss"
+import { BsCaretRight, BsCaretRightFill } from "react-icons/bs"
 
 type CourseInfoProps = {
   course: Course
+  color: string
+  selected?: boolean
 }
 
-const CourseInfo: FC<CourseInfoProps> = ({ course }) => (
-  <div>
-    <h5>{course.name}</h5>
-    <p>{course.number}</p>
-    <p>{course.date}</p>
-    <TagList tags={course.tags.map(({ tag }) => tag!!)} />
-    {course.desc ? <p>{course.desc}</p> : null}
+const CourseInfo: FC<CourseInfoProps> = ({
+  course,
+  color,
+  selected = false,
+}) => (
+  <div className={styleEducation.courseInfo}>
+    <div
+      className={styleEducation.mainBlock}
+      style={{ backgroundColor: color }}
+    >
+      <div className={styleEducation.content}>
+        <h5>{course.number}</h5>
+        <p className={styleEducation.courseTitle}>{course.name}</p>
+      </div>
+      <div>
+        <div className={styleEducation.arrowWrapper}>
+          <BsCaretRightFill className={styleEducation.arrow} />
+        </div>
+        <div
+          className={styleEducation.selectionLineWrapper}
+          style={{ visibility: selected ? "visible" : "collapse" }}
+        >
+          <div
+            className={styleEducation.selectionLine}
+            style={{ backgroundColor: color }}
+          ></div>
+        </div>
+      </div>
+    </div>
   </div>
 )
 
-type EducationInfoProps = {
-  education: Education
+type CourseDataDisplayProps = {
+  courses: Course[]
+  color: string
 }
 
-const EducationInfo: FC<EducationInfoProps> = ({ education }) => (
-  <article>
-    <h4>{education.name}</h4>
-    <p>{education.degree}</p>
-    <p>
-      {education.startDate} to {education.endDate}
-    </p>
-    {education.courses
-      .sort(
-        (a, b) => b.date.localeCompare(a.date) || a.name.localeCompare(b.name)
-      )
-      .map(course => (
-        <CourseInfo course={course} />
-      ))}
+const CourseDataDisplay: FC<CourseDataDisplayProps> = ({ courses, color }) => {
+  return (
+    <div>
+      {courses
+        .sort(
+          (a, b) => b.date.localeCompare(a.date) || a.name.localeCompare(b.name)
+        )
+        .map(course => (
+          <CourseInfo course={course} color={color} />
+        ))}
+    </div>
+  )
+}
+
+type EducationInfoProps = {
+  education: Education
+  courseColor: string
+}
+
+const EducationInfo: FC<EducationInfoProps> = ({ education, courseColor }) => (
+  <article className={styleEducation.educationArticle}>
+    <div className={styleEducation.articleHeading}>
+      <h3>{education.name}</h3>
+      <div className={styleEducation.subheader}>
+        <p className={styleEducation.degree}>{education.degree}</p>
+        <p className={styleEducation.duration}>
+          {education.startDate} to {education.endDate}
+        </p>
+      </div>
+    </div>
+    <h4>Classes Taken</h4>
+    <CourseDataDisplay courses={education.courses} color={courseColor} />
   </article>
 )
 
@@ -84,9 +129,11 @@ const EducationSection = () => {
   return (
     <HomepageSection color="#154734">
       <h2 className="section-heading">Education</h2>
-      {result.allEducation.edges.map(({ node: education }) => (
-        <EducationInfo education={education} />
-      ))}
+      <div>
+        {result.allEducation.edges.map(({ node: education }) => (
+          <EducationInfo education={education} courseColor="#bd8b13" />
+        ))}
+      </div>
     </HomepageSection>
   )
 }
