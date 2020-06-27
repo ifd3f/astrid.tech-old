@@ -1,42 +1,40 @@
 - name: Languages
   skills:
     - slug: java
-      level: 10
+      level: 5
     - slug: python
-      level: 10
+      level: 5
     - slug: kotlin
-      level: 10
+      level: 5
     - slug: javascript
-      level: 10
+      level: 5
     - slug: typescript
-      level: 10
+      level: 5
     - slug: csharp
-      level: 7
+      level: 4
     - slug: cpp
-      level: 7
+      level: 4
     - slug: scala
-      level: 6
-    - slug: haskell
       level: 3
 - name: Web
   skills:
     - slug: react-js
-      level: 9
-    - slug: html
-      level: 8
-    - slug: css
-      level: 7
-    - slug: sass
-      level: 7
-    - slug: node-js
       level: 5
-    - slug: django
+    - slug: html
+      level: 5
+    - slug: css
       level: 4
+    - slug: sass
+      level: 4
+    - slug: node-js
+      level: 3
+    - slug: django
+      level: 3
 - name: Data Science
   skills:
-    - slug: tensorflow
-      level: 3
     - slug: opencv
-      level: 5
+      level: 4
     - slug: scikit-learn
-      level: 6
+      level: 3
+    - slug: tensorflow
+      level: 2
