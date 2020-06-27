@@ -10,7 +10,7 @@ import {
   Row,
 } from "reactstrap"
 import style from "./style.module.scss"
-import { Tag } from "../../types/index"
+import { Tag, SkillCategory } from "../../types/index"
 import { useStaticQuery } from "gatsby"
 import { graphql } from "gatsby"
 import { TagBadge } from "../util"
@@ -69,13 +69,29 @@ const SkillInfoDisplay: FC<SkillInfoDisplayProps> = ({ tag, level }) => {
   )
 }
 
+type SkillCategoryViewProps = {
+  category: SkillCategory
+}
+
+const SkillCategoryView: FC<SkillCategoryViewProps> = ({
+  category: { name, skills },
+}) => (
+  <div>
+    <h5>{name}</h5>
+    {skills
+      .sort(({ level: a }, { level: b }) => b - a)
+      .map(({ level, tag }) => (
+        <Col xs={6} md={4} lg={3}>
+          <SkillInfoDisplay level={level * 10} tag={tag} />
+        </Col>
+      ))}
+  </div>
+)
+
 type QueryData = {
   allSkill: {
     edges: {
-      node: {
-        level: number
-        tag: Tag
-      }
+      node: SkillCategory
     }[]
   }
 }
@@ -86,15 +102,19 @@ function SkillsSection() {
       allSkill {
         edges {
           node {
-            tag {
-              ...TagBadge
+            name
+            skills {
+              tag {
+                ...TagBadge
+              }
+              level
             }
-            level
           }
         }
       }
     }
   `)
+  console.log(query)
 
   return (
     <HomepageSection color="#223299">
@@ -102,16 +122,9 @@ function SkillsSection() {
         <h2>Skills</h2>
         <p>Click on a tag to see related projects and blog posts!</p>
       </div>
-      <Row>
-        {query.allSkill.edges
-          .map(({ node }) => node)
-          .sort(({ level: a }, { level: b }) => b - a)
-          .map(({ level, tag }) => (
-            <Col xs={6} md={4} lg={3}>
-              <SkillInfoDisplay level={level * 10} tag={tag} />
-            </Col>
-          ))}
-      </Row>
+      {query.allSkill.edges.map(({ node }) => (
+        <SkillCategoryView category={node} />
+      ))}
     </HomepageSection>
   )
 }

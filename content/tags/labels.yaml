@@ -32,10 +32,6 @@
       name: Image Processing
     - slug: anaconda
       name: Anaconda
-    - slug: tensorflow
-      name: TensorFlow
-    - slug: opencv
-      name: OpenCV
     - slug: pandas
       name: Pandas
     - slug: numpy
@@ -133,3 +129,18 @@
   tags:
     - slug: sass
       name: Sass
+
+- color: "#f89939"
+  tags:
+    - slug: scikit-learn
+      name: Scikit-Learn
+
+- color: "#FFA800"
+  tags:
+    - slug: tensorflow
+      name: TensorFlow
+
+- color: "#0000FF"
+  tags:
+    - slug: opencv
+      name: OpenCV

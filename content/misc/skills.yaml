@@ -1,32 +1,42 @@
-- slug: java
-  level: 10
-- slug: python
-  level: 10
-- slug: kotlin
-  level: 10
-- slug: javascript
-  level: 10
-- slug: typescript
-  level: 10
-- slug: react-js
-  level: 7
-- slug: css
-  level: 7
-- slug: html
-  level: 8
-- slug: csharp
-  level: 7
-- slug: cpp
-  level: 6
-- slug: systemverilog
-  level: 4
-- slug: node-js
-  level: 5
-- slug: tensorflow
-  level: 3
-- slug: opencv
-  level: 5
-- slug: haskell
-  level: 3
-- slug: scala
-  level: 7
+- name: Languages
+  skills:
+    - slug: java
+      level: 10
+    - slug: python
+      level: 10
+    - slug: kotlin
+      level: 10
+    - slug: javascript
+      level: 10
+    - slug: typescript
+      level: 10
+    - slug: csharp
+      level: 7
+    - slug: cpp
+      level: 7
+    - slug: scala
+      level: 6
+    - slug: haskell
+      level: 3
+- name: Web
+  skills:
+    - slug: react-js
+      level: 9
+    - slug: html
+      level: 8
+    - slug: css
+      level: 7
+    - slug: sass
+      level: 7
+    - slug: node-js
+      level: 5
+    - slug: django
+      level: 4
+- name: Data Science
+  skills:
+    - slug: tensorflow
+      level: 3
+    - slug: opencv
+      level: 5
+    - slug: scikit-learn
+      level: 6

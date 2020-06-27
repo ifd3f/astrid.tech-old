@@ -3,8 +3,11 @@ import { v4 } from "uuid"
 import { getTagId, withContentDigest } from "./util"
 
 type YamlSkillNode = Node & {
-  slug: string
-  level: number
+  name: string
+  skills: {
+    slug: string
+    level: number
+  }[]
 }
 
 export function createSkillNode(actions: Actions, yamlNode: YamlSkillNode) {
@@ -18,8 +21,11 @@ export function createSkillNode(actions: Actions, yamlNode: YamlSkillNode) {
     children: [],
     id: v4(),
 
-    level: yamlNode.level,
-    tag___NODE: getTagId(yamlNode.slug),
+    name: yamlNode.name,
+    skills: yamlNode.skills.map(({ slug, level }) => ({
+      level: level,
+      tag___NODE: getTagId(slug),
+    })),
   })
   createNode(skillNode)
   createParentChildLink({ parent: yamlNode, child: skillNode })

@@ -46,7 +46,7 @@ const FooterSection = () => {
           Created by Astrid Augusta Yu with a generous helping of <Tea /> and{" "}
           <Witch />. See the{" "}
           <Link to="/project/astrid-tech">self-referential project page</Link>{" "}
-          or try to figure out the spaghetti code yourself on{" "}
+          or see the code yourself on{" "}
           <a href="https://github.com/Plenglin/astrid.tech">GitHub</a>.
         </p>
         <Row>

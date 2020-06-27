@@ -79,3 +79,11 @@ export interface Education {
   slug: string
   courses: Course[]
 }
+
+export type SkillCategory = {
+  name: string
+  skills: {
+    level: number
+    tag: Tag
+  }[]
+}
