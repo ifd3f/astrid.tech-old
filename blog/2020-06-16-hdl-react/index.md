@@ -21,4 +21,4 @@ Web development, especially when there's React there to abstract much of your co
 
 ![An illustration of the relative spacetime distortion effected by different objects. The Sun causes very little distortion. A neutron star causes more distortion. A black hole causes even more distortion, and node_modules goes off the page.](./node_modules_meme.png)
 
-In React, you basically have components
+In React, you basically have components that
