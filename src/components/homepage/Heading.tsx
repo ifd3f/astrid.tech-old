@@ -1,6 +1,6 @@
-import { graphql, useStaticQuery } from "gatsby"
+import { graphql, useStaticQuery, Link } from "gatsby"
 import React, { FC, ReactNode } from "react"
-import { BsCodeSlash } from "react-icons/bs"
+import { BsCodeSlash, BsPerson } from "react-icons/bs"
 import { GiCircuitry } from "react-icons/gi"
 import styles from "./style.module.scss"
 import { HomepageHeader } from "./util"
@@ -103,7 +103,17 @@ const HeadingSection = () => {
           <h1>Astrid Yu</h1>
           <p className={styles.postTitle}>Software Developer</p>
         </div>
+        <div>
+          <BsPerson style={{ fontSize: 300 }} />
+          TODO
+        </div>
       </div>
+      <p className={styles.skillBrag}>
+        An interactive portfolio made using{" "}
+        <Link to="/project/astrid-tech">
+          React, Gatsby, and several other technologies
+        </Link>
+      </p>
     </HomepageHeader>
   )
 }
