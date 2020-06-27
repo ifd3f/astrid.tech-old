@@ -23,6 +23,7 @@ const {
   createEducationNode,
   createCourseTagNode,
   createSkillNode,
+  createNotebookBlogPostNode,
 } = require("./src/gatsby/index.ts")
 
 const SLUG_OVERRIDE = {
