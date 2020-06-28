@@ -18,6 +18,9 @@ export const pageQuery = graphql`
           markdown {
             html
           }
+          jupyter {
+            html
+          }
           tags {
             tag {
               ...TagBadge

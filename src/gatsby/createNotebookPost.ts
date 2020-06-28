@@ -1,5 +1,5 @@
 import { Actions, Node } from "gatsby"
-import { Notebook } from "./nbformat-v4.d"
+import { Notebook } from "../types/nbformat-v4"
 import { withContentDigest, createLinkedTagList } from "./util"
 import { v4 } from "uuid"
 import path from "path"

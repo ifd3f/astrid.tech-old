@@ -46,8 +46,15 @@ export type MarkdownData = {
 }
 
 export interface MarkdownBlogPost extends BlogPost {
-  contentType?: "markdown"
+  contentType: "markdown"
   markdown?: MarkdownData
+}
+
+export type JupyterBlogPost = BlogPost & {
+  contentType: "jupyter"
+  jupyter: {
+    html: string
+  }
 }
 
 export interface TagWrapper {
