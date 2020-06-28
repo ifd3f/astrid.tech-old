@@ -19,6 +19,6 @@ Digital logic on a FPGA is about as low-level as it gets. You're literally manip
 
 Web development, especially when there's React there to abstract much of your code, is about as high-level as it gets. You barely even have to care about RAM, not to mention disk space.
 
-![An illustration of the relative spacetime distortion effected by different objects. The Sun causes very little distortion. A neutron star causes more distortion. A black hole causes even more distortion, and node_modules goes off the page.](./node_modules_meme.png)
+![haha node_modules big](./node_modules_meme.png)
 
 In React, you basically have components that

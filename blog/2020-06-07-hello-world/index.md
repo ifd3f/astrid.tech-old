@@ -4,6 +4,7 @@ type: blog
 title: Hello World! Personal Website Redesign
 date: "2020-06-07T10:23:00-0700"
 description: "Imagine blogging about redesigning a website on the website that you're redesigning before it's even complete. Imagine how dumb and pointlessly meta that would be."
+production: true
 tags:
   - /project/astrid-tech/
   - /project/inventree/
@@ -27,6 +28,6 @@ Every project I work on will have its own page as sort of a general summary of w
 
 ## Wait, what\'s this about a redesign?
 
-I'm glad you probably didn't ask! This is not the first iteration of my website. Back in March, when I was first learning React, I was pretty bad at it! I realized how bad my code was after taking a break due to schoolwork and putting in a bit of work into a different React project, [Inventree](/projects/inventree).
+This is not the first iteration of my website. Back in March, when I was first learning React, I was pretty bad at it! I realized how bad my code was after taking a break due to schoolwork and putting in a bit of work into a different React project, [Inventree](/projects/inventree).
 
-Additionally, I realized that I couldn't do everything I wanted with just `create-react-app`, my website needed to be statically generated so that I don't render markdown on the client side because that was what I was doing back then. So, I thought, "I'm redesigning this thing, I might as well use Gatsby!" That brings us to now, where I'm trying to figure out how the hell I configure the static site configuration.
+Additionally, I realized that I couldn't do everything I wanted with just `create-react-app`, my website needed to be statically generated. (It's probably not good idea to render markdown on the client side, but that was what I was doing back then.) I'm redesigning this thing, I might as well use Gatsby!" That brings us to now, where I'm trying to figure out how the hell I configure the static site configuration.
