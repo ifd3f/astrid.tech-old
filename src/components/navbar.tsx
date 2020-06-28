@@ -30,7 +30,7 @@ const MainNavbar: FC = () => {
   return (
     <Navbar fixed="top" expand="md">
       <NavbarBrand tag={Link} to="/" activeClassName="active">
-        Astrid
+        Astrid's Tech
       </NavbarBrand>
       <NavbarToggler onClick={toggleIsOpen}>
         {isOpen ? <BsArrowsCollapse /> : <GiHamburger />}

@@ -1,9 +1,9 @@
 @import "colors.scss";
 @import "fonts.scss";
 
-@import "~bootswatch/dist/cyborg/variables";
+//@import "~bootswatch/dist/cyborg/variables";
 @import "~bootstrap/scss/bootstrap";
-@import "~bootswatch/dist/cyborg/bootswatch";
+//@import "~bootswatch/dist/cyborg/bootswatch";
 
 $footer-height: 360px;
 
@@ -14,7 +14,7 @@ $footer-height: 360px;
 
 .nav-link {
   box-shadow: none;
-  color: $pink;
+  color: #f8b0b0;
 }
 
 .nav-link:hover {
@@ -23,7 +23,7 @@ $footer-height: 360px;
 
 .navbar-brand {
   box-shadow: none;
-  color: lightblue;
+  color: rgb(49, 192, 240);
 }
 
 .navbar {
@@ -32,7 +32,7 @@ $footer-height: 360px;
 
 .root-wrapper {
   min-height: 100%;
-  padding-top: 70px;
+  padding-top: 56px;
   position: relative;
 }
 
@@ -43,6 +43,7 @@ main {
 html,
 body {
   height: 100%;
+  background-color: #ffe0ce;
 }
 
 footer {
@@ -52,6 +53,9 @@ footer {
   left: 0;
   bottom: 0;
   background: #202030;
+  p {
+    color: whitesmoke;
+  }
 }
 
 .wide-card-columns {

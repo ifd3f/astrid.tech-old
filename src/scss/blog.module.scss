@@ -1,0 +1,34 @@
+.blogContentContainer {
+  max-width: 800px;
+
+  .subtitle {
+    font-size: 18pt;
+  }
+
+  h1 {
+    font-size: 36pt;
+  }
+  h2 {
+    font-size: 28pt;
+    margin-top: 25px;
+    margin-bottom: 15px;
+  }
+  h3 {
+    font-size: 24pt;
+    margin-top: 20px;
+    margin-bottom: 10px;
+  }
+  h4 {
+    font-size: 22pt;
+  }
+  h5 {
+    font-size: 20pt;
+  }
+  h6 {
+    font-size: 18pt;
+  }
+  p {
+    font-size: 16pt;
+    line-height: 150%;
+  }
+}

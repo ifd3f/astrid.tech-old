@@ -58,40 +58,43 @@ const FooterSection = () => {
             </p>
           </Col>
           <Col className="text-center">
-            <a
-              rel="license"
-              href="http://creativecommons.org/licenses/by-sa/4.0/"
-            >
-              <img
-                alt="Creative Commons License"
-                style={{ borderWidth: 0 }}
-                src="https://i.creativecommons.org/l/by-sa/4.0/88x31.png"
-              />
-            </a>
-            <br />
-            <a
-              href="http://purl.org/dc/dcmitype/InteractiveResource"
-              property="dct:title"
-              rel="dct:type"
-            >
-              The page content of astrid.tech
-            </a>{" "}
-            by{" "}
-            <a
-              href="https://astrid.tech"
-              property="cc:attributionName"
-              rel="cc:attributionURL"
-            >
-              Astrid Yu
-            </a>{" "}
-            is licensed under a{" "}
-            <a
-              rel="license"
-              href="http://creativecommons.org/licenses/by-sa/4.0/"
-            >
-              Creative Commons Attribution-ShareAlike 4.0 International License
-            </a>
-            .
+            <p>
+              <a
+                rel="license"
+                href="http://creativecommons.org/licenses/by-sa/4.0/"
+              >
+                <img
+                  alt="Creative Commons License"
+                  style={{ borderWidth: 0 }}
+                  src="https://i.creativecommons.org/l/by-sa/4.0/88x31.png"
+                />
+              </a>
+              <br />
+              <a
+                href="http://purl.org/dc/dcmitype/InteractiveResource"
+                property="dct:title"
+                rel="dct:type"
+              >
+                The page content of astrid.tech
+              </a>{" "}
+              by{" "}
+              <a
+                href="https://astrid.tech"
+                property="cc:attributionName"
+                rel="cc:attributionURL"
+              >
+                Astrid Yu
+              </a>{" "}
+              is licensed under a{" "}
+              <a
+                rel="license"
+                href="http://creativecommons.org/licenses/by-sa/4.0/"
+              >
+                Creative Commons Attribution-ShareAlike 4.0 International
+                License
+              </a>
+              .
+            </p>
           </Col>
         </Row>
       </Container>

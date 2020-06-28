@@ -3,6 +3,7 @@ import { BlogPost, MarkdownBlogPost, JupyterBlogPost } from "../types"
 import { Link } from "gatsby"
 import { TagList } from "./util"
 import SEO from "./seo"
+import style from "../scss/blog.module.scss"
 
 type MarkdownPostProps = {
   post: MarkdownBlogPost
@@ -39,8 +40,8 @@ export const PostMainHeader: FC<AbstractPostProps> = ({ post }) => {
   return (
     <header>
       <h1>{post.title!}</h1>
+      <p className={style.subtitle}>{post.description!}</p>
       <p>{new Date(post.date!).toString()}</p>
-      <p>{post.description!}</p>
       <TagList tags={post.tags!.map(({ tag }) => tag!)} />
     </header>
   )
@@ -96,8 +97,8 @@ export const PostBrief: FC<AbstractPostProps> = ({ post }) => {
         <h3>
           <Link to={post.slug!}>{post.title}</Link>
         </h3>
-        <small>{new Date(post.date!).toString()}</small>
         <p>{post.description}</p>
+        <small>{new Date(post.date!).toString()}</small>
         <TagList tags={post.tags!.map(x => x.tag!)} />
       </header>
       {body}

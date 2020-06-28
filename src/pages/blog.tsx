@@ -5,6 +5,7 @@ import Layout from "../components/layout"
 import SEO from "../components/seo"
 import { BlogPost } from "../types/index"
 import { Container } from "reactstrap"
+import styles from "../scss/blog.module.scss"
 
 type Data = {
   allBlogPost: {
@@ -47,7 +48,7 @@ const BlogIndex = ({ data }: PageProps<Data>) => {
   return (
     <Layout>
       <SEO title="Blog" />
-      <Container>
+      <Container className={styles.blogContentContainer}>
         {data.allBlogPost.edges.map(({ node: post }) => (
           <PostBrief post={post} />
         ))}
