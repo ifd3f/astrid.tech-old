@@ -1,11 +1,28 @@
 @import "colors.scss";
 @import "fonts.scss";
 
-//@import "~bootswatch/dist/cyborg/variables";
 @import "~bootstrap/scss/bootstrap";
-//@import "~bootswatch/dist/cyborg/bootswatch";
 
 $footer-height: 360px;
+$navbar-height: 60px;
+
+h1,
+h2,
+h3,
+h4,
+h5,
+h6 {
+  font-family: $font-header;
+}
+
+p,
+li {
+  font-family: $font-body;
+}
+
+.nteract-display-area-stdout {
+  font-family: $font-mono;
+}
 
 .navbar-toggler {
   border-color: #999999;
@@ -15,6 +32,8 @@ $footer-height: 360px;
 .nav-link {
   box-shadow: none;
   color: #f8b0b0;
+  font-family: $font-header;
+  font-size: 16pt;
 }
 
 .nav-link:hover {
@@ -24,15 +43,18 @@ $footer-height: 360px;
 .navbar-brand {
   box-shadow: none;
   color: rgb(49, 192, 240);
+  font-family: $font-header;
+  font-size: 20pt;
 }
 
 .navbar {
   background-color: #502050;
+  height: $navbar-height;
 }
 
 .root-wrapper {
   min-height: 100%;
-  padding-top: 56px;
+  padding-top: $navbar-height;
   position: relative;
 }
 
