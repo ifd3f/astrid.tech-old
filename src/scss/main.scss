@@ -20,22 +20,6 @@ li {
   font-family: $font-body;
 }
 
-a {
-  color: #1d2e82;
-
-  -moz-transition: all 0.1s ease-in;
-  -o-transition: all 0.1s ease-in;
-  -webkit-transition: all 0.1s ease-in;
-  transition: all 0.1s ease-in;
-  border-bottom: 4px none;
-}
-
-a:hover {
-  color: #8a0b81;
-  text-decoration: none;
-  border-bottom: 4px dotted #81890b;
-}
-
 html,
 body {
   height: 100%;
@@ -52,22 +36,39 @@ body {
   color: $pink;
 }
 
+.navbar-brand,
+.nav-link {
+  -moz-transition: color 0.5s ease-in;
+  -o-transition: color 0.5s ease-in;
+  -webkit-transition: color 0.5s ease-in;
+  transition: color 0.5s ease-in;
+}
+
 .nav-link {
   box-shadow: none;
-  color: #f8b0b0;
+  color: $pink;
   font-family: $font-header;
   font-size: 16pt;
+  border-bottom: none;
 }
 
 .nav-link:hover {
-  color: red;
+  color: white;
+}
+
+.nav-link.active {
+  color: $lightblue;
 }
 
 .navbar-brand {
   box-shadow: none;
-  color: rgb(49, 192, 240);
+  color: $lightblue;
   font-family: $font-header;
   font-size: 20pt;
+}
+
+.navbar-brand:hover {
+  color: white;
 }
 
 .navbar {
@@ -83,6 +84,21 @@ body {
 
 main {
   padding-bottom: $footer-height;
+  a {
+    color: #1d2e82;
+
+    -moz-transition: all 0.1s ease-in;
+    -o-transition: all 0.1s ease-in;
+    -webkit-transition: all 0.1s ease-in;
+    transition: all 0.1s ease-in;
+    border-bottom: 4px none;
+  }
+
+  a:hover {
+    color: #8a0b81;
+    text-decoration: none;
+    border-bottom: 4px dotted #81890b;
+  }
 }
 
 footer {
