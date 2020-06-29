@@ -1,7 +1,7 @@
 import { graphql, PageProps } from "gatsby"
 import React from "react"
 import { PostBrief } from "../components/blog"
-import Layout from "../components/layout"
+import Layout from "../components/layout/layout"
 import SEO from "../components/seo"
 import { BlogPost } from "../types/index"
 import { Container } from "reactstrap"

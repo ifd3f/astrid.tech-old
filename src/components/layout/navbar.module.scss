@@ -1,0 +1,47 @@
+@import "../../scss/fonts.scss";
+@import "../../scss/colors.scss";
+@import "./sizes.scss";
+
+.mainNavbar {
+  .navbar-toggler {
+    border-color: #999999;
+    color: $pink;
+  }
+
+  .navbar-brand,
+  .nav-link {
+    -moz-transition: color 0.5s ease-in;
+    -o-transition: color 0.5s ease-in;
+    -webkit-transition: color 0.5s ease-in;
+    transition: color 0.5s ease-in;
+  }
+
+  .nav-link {
+    box-shadow: none;
+    color: $pink;
+    font-family: $font-header;
+    font-size: 16pt;
+    border-bottom: none;
+  }
+
+  .nav-link:hover {
+    color: white;
+  }
+
+  .nav-link.active {
+    color: $lightblue;
+  }
+
+  .navbar-brand {
+    box-shadow: none;
+    color: $lightblue;
+    font-family: $font-header;
+    font-size: 20pt;
+  }
+
+  .navbar-brand:hover {
+    color: white;
+  }
+  background-color: #502050;
+  height: $navbar-height;
+}

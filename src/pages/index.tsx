@@ -1,6 +1,6 @@
 import React from "react"
 import HomepageContainer from "../components/homepage"
-import Layout from "../components/layout"
+import Layout from "../components/layout/layout"
 import SEO from "../components/seo"
 import ElevatorSection from "../components/homepage/elevator"
 

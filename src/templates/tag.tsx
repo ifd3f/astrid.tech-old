@@ -1,6 +1,6 @@
 import { graphql, PageProps } from "gatsby"
 import React, { FC } from "react"
-import Layout from "../components/layout"
+import Layout from "../components/layout/layout"
 import { Tag, Project, WorkExperience, BlogPost } from "../types/index"
 import { TagBadge } from "../components/util"
 import SEO from "../components/seo"

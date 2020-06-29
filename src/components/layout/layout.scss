@@ -1,10 +1,8 @@
-@import "colors.scss";
-@import "fonts.scss";
+@import "../../scss/colors.scss";
+@import "../../scss/fonts.scss";
+@import "./sizes.scss";
 
 @import "~bootstrap/scss/bootstrap";
-
-$footer-height: 360px;
-$navbar-height: 60px;
 
 h1,
 h2,
@@ -31,51 +29,6 @@ body {
   font-family: $font-mono;
 }
 
-.navbar-toggler {
-  border-color: #999999;
-  color: $pink;
-}
-
-.navbar-brand,
-.nav-link {
-  -moz-transition: color 0.5s ease-in;
-  -o-transition: color 0.5s ease-in;
-  -webkit-transition: color 0.5s ease-in;
-  transition: color 0.5s ease-in;
-}
-
-.nav-link {
-  box-shadow: none;
-  color: $pink;
-  font-family: $font-header;
-  font-size: 16pt;
-  border-bottom: none;
-}
-
-.nav-link:hover {
-  color: white;
-}
-
-.nav-link.active {
-  color: $lightblue;
-}
-
-.navbar-brand {
-  box-shadow: none;
-  color: $lightblue;
-  font-family: $font-header;
-  font-size: 20pt;
-}
-
-.navbar-brand:hover {
-  color: white;
-}
-
-.navbar {
-  background-color: #502050;
-  height: $navbar-height;
-}
-
 .root-wrapper {
   min-height: 100%;
   padding-top: $navbar-height;
@@ -98,18 +51,6 @@ main {
     color: #8a0b81;
     text-decoration: none;
     border-bottom: 4px dotted #81890b;
-  }
-}
-
-footer {
-  height: $footer-height;
-  width: 100%;
-  position: absolute;
-  left: 0;
-  bottom: 0;
-  background: #202030;
-  p {
-    color: whitesmoke;
   }
 }
 

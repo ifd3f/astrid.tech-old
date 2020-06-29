@@ -2,6 +2,7 @@ import React from "react"
 import { Container, Col, Row } from "reactstrap"
 import { Link, useStaticQuery, graphql } from "gatsby"
 import Img from "gatsby-image"
+import style from "./footer.module.scss"
 
 export const Tea = () => {
   return (
@@ -39,7 +40,7 @@ const FooterSection = () => {
   const mitLogo = result.mitLogo.childImageSharp.fixed
 
   return (
-    <footer>
+    <footer className={style.footer}>
       <Container>
         <p>Website was last built at {buildDate}.</p>
         <p>

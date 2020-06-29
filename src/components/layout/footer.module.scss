@@ -1,0 +1,13 @@
+@import "./sizes.scss";
+
+.footer {
+  height: $footer-height;
+  width: 100%;
+  position: absolute;
+  left: 0;
+  bottom: 0;
+  background: #202030;
+  p {
+    color: whitesmoke;
+  }
+}

@@ -1,7 +1,7 @@
 import { Project } from "../types"
 import { PageProps, graphql } from "gatsby"
 import { FC } from "react"
-import Layout from "../components/layout"
+import Layout from "../components/layout/layout"
 import React from "react"
 import SEO from "../components/seo"
 import { Container } from "reactstrap"

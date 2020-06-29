@@ -9,6 +9,7 @@ import {
   NavbarToggler,
   NavLinkProps,
 } from "reactstrap"
+import style from "./navbar.module.scss"
 
 type NavLinkProps = {
   to: string
@@ -28,7 +29,7 @@ const MainNavbar: FC = () => {
   const toggleIsOpen = () => setIsOpen(!isOpen)
 
   return (
-    <Navbar fixed="top" expand="md">
+    <Navbar className={style.mainNavbar} fixed="top" expand="md">
       <NavbarBrand tag={Link} to="/" activeClassName="active">
         Astrid's Tech
       </NavbarBrand>

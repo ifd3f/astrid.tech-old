@@ -1,5 +1,5 @@
 import React, { FC, ReactNode } from "react"
-import "../scss/main.scss"
+import "./layout.scss"
 import FooterSection from "./footer"
 import MainNavbar from "./navbar"
 

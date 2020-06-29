@@ -1,7 +1,7 @@
 import { graphql, Link, PageProps } from "gatsby"
 import React, { FC } from "react"
 import { PostContent, PostMainHeader, PostSEO } from "../components/blog"
-import Layout from "../components/layout"
+import Layout from "../components/layout/layout"
 import { BlogPost } from "../types/index"
 import { Container } from "reactstrap"
 import styleBlog from "../scss/blog.module.scss"
