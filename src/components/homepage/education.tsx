@@ -168,7 +168,7 @@ const EducationSection = () => {
   `)
 
   return (
-    <HomepageSection color="#154734">
+    <HomepageSection color="#80d9b7">
       <h2 className="section-heading">Education</h2>
       <div>
         {result.allEducation.edges.map(({ node: education }) => (

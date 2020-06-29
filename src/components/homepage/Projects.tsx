@@ -39,7 +39,7 @@ const ProjectsSection = () => {
   `)
 
   return (
-    <HomepageSection color="#5e0e59">
+    <HomepageSection color="#f0d0b6">
       <div className="">
         <h2>Featured Projects</h2>
         <Link to="/portfolio">See more</Link>

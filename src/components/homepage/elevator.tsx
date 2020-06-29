@@ -5,7 +5,7 @@ import { HomepageSection } from "./util"
 
 export default function ElevatorSection() {
   return (
-    <HomepageSection color="#031675">
+    <HomepageSection color="#f2f2f2">
       <div className={styles.textBlock}>
         <p>
           The first program I ever wrote was Hello World in Java back in 6th

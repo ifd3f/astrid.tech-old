@@ -96,7 +96,7 @@ const HeadingSection = () => {
   const electronics: string = data.electronics.publicURL
 
   return (
-    <HomepageHeader>
+    <HomepageHeader color="#F7A8B8">
       <div className={styles.nameWrapper}>
         <div className={styles.name}>
           <p className={styles.preTitle}>Hello, my name is</p>

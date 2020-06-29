@@ -20,6 +20,29 @@ li {
   font-family: $font-body;
 }
 
+a {
+  color: #1d2e82;
+
+  -moz-transition: all 0.1s ease-in;
+  -o-transition: all 0.1s ease-in;
+  -webkit-transition: all 0.1s ease-in;
+  transition: all 0.1s ease-in;
+  border-bottom: 4px none;
+}
+
+a:hover {
+  color: #8a0b81;
+  text-decoration: none;
+  border-bottom: 4px dotted #81890b;
+}
+
+html,
+body {
+  height: 100%;
+  background-color: #ffe0ce;
+  color: #333333;
+}
+
 .nteract-display-area-stdout {
   font-family: $font-mono;
 }
@@ -60,12 +83,6 @@ li {
 
 main {
   padding-bottom: $footer-height;
-}
-
-html,
-body {
-  height: 100%;
-  background-color: #ffe0ce;
 }
 
 footer {

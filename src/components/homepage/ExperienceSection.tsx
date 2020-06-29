@@ -147,7 +147,7 @@ export const ExperienceSection = () => {
   ] = query.allWorkExperience.edges
 
   return (
-    <HomepageSection color="#993322">
+    <HomepageSection color="#ddf2c4">
       <h2 className={style.sectionHeading}>Work Experience</h2>
       <Article experience={microvu} />
       <Article experience={fabtime} />

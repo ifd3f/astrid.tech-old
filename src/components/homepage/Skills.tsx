@@ -104,7 +104,7 @@ function SkillsSection() {
   console.log(query)
 
   return (
-    <HomepageSection color="#223299">
+    <HomepageSection color="#55cdfc">
       <div className={style.sectionHeading}>
         <h2>Skills</h2>
         <p>Click on a tag to see related projects and blog posts!</p>
