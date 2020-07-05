@@ -8,6 +8,7 @@ import SEO from "../components/seo"
 import { TagBadge } from "../components/util"
 import { Project } from "../types"
 import { Tag } from "../types/index"
+import portfolioStyles from "./portfolio.module.scss"
 
 type Data = {
   site: {
@@ -62,14 +63,14 @@ const ProjectsIndex: FC<PageProps<Data>> = ({ data }) => {
   const tags = projects.flatMap(project => project.tags).map(({ tag }) => tag)
 
   const cards = projects.map(project => (
-    <Col xs={12} sm={6} xl={4}>
+    <Col className={portfolioStyles.projectCardWrapper} xs={12} sm={6} xl={4}>
       <ProjectCard project={project} hovered={false} />
     </Col>
   ))
   return (
     <Layout>
       <SEO title="Portfolio" />
-      <Container fluid>
+      <Container className={portfolioStyles.portfolioContainer} fluid>
         <Row>
           <Col lg={2}></Col>
           <Col lg={10}>

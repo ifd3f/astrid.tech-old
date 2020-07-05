@@ -102,9 +102,9 @@ export const ProjectCard: FC<ProjectCardProps> = ({
     <>
       <TagList tags={project.tags.map(t => t.tag!!)} />
       {project.url ? <CardLink href={project.url}>{project.url}</CardLink> : ""}
-      {project.source.map(url => (
-        <CardLink href={url}>Source Code</CardLink>
-      ))}
+      {project.source.length > 0 ? (
+        <CardLink href={project.source[0]}>Source Code</CardLink>
+      ) : null}
     </>
   )
   const onClickCard = (ev: React.MouseEvent<HTMLElement>) => {
