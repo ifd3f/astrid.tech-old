@@ -1,5 +1,5 @@
 import { graphql, PageProps } from "gatsby"
-import React from "react"
+import React, { FC } from "react"
 import { PostBrief } from "../components/blog"
 import Layout from "../components/layout/layout"
 import SEO from "../components/seo"
@@ -44,9 +44,10 @@ export const pageQuery = graphql`
   }
 `
 
-const BlogIndex = ({ data }: PageProps<Data>) => {
+const BlogIndex: FC<PageProps<Data>> = props => {
+  const { data } = props
   return (
-    <Layout>
+    <Layout {...props}>
       <SEO title="Blog" />
       <Container className={styles.blogContentContainer}>
         {data.allBlogPost.edges.map(({ node: post }) => (

@@ -57,7 +57,7 @@ const TagsFilterBar: FC<TagsFilterBarProps> = ({
   ))
 }
 
-const ProjectsIndex = ({ data }: PageProps<Data>) => {
+const ProjectsIndex: FC<PageProps<Data>> = ({ data }) => {
   const projects = data.allProject.edges.map(edge => edge.node)
   const tags = projects.flatMap(project => project.tags).map(({ tag }) => tag)
 

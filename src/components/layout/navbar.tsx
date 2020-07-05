@@ -1,14 +1,8 @@
 import { Link } from "gatsby"
-import React, { FC, useState, ReactNode } from "react"
+import React, { FC, ReactNode, useState } from "react"
 import { BsArrowsCollapse } from "react-icons/bs"
 import { GiHamburger } from "react-icons/gi"
-import {
-  Collapse,
-  Navbar,
-  NavbarBrand,
-  NavbarToggler,
-  NavLinkProps,
-} from "reactstrap"
+import { Collapse, Navbar, NavbarBrand, NavbarToggler } from "reactstrap"
 import "./navbar.scss"
 
 type NavLinkProps = {
@@ -18,7 +12,7 @@ type NavLinkProps = {
 
 const NavLink: FC<NavLinkProps> = ({ to, children }) => {
   return (
-    <Link className="nav-link" to={to}>
+    <Link className={`nav-link`} to={to}>
       {children}
     </Link>
   )

@@ -1,11 +1,10 @@
-import React, { FC, ReactNode } from "react"
-import "./layout.scss"
+import { PageProps } from "gatsby"
+import React, { FC, ReactNode, PropsWithChildren } from "react"
 import FooterSection from "./footer"
+import "./layout.scss"
 import MainNavbar from "./navbar"
 
-interface LayoutProps {
-  children: ReactNode
-}
+type LayoutProps = PropsWithChildren<PageProps<undefined>>
 
 const Layout: FC<LayoutProps> = ({ children }) => {
   return (

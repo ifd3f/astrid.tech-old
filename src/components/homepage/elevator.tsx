@@ -8,11 +8,12 @@ export default function ElevatorSection() {
     <HomepageSection color="#f2f2f2">
       <div className={styles.textBlock}>
         <p>
-          The first program I ever wrote was Hello World in Java back in 6th
+          The first program I ever wrote readwas Hello World in Java back in 6th
           grade, when I wanted to make myself a Minecraft mod. With no one to
           teach me, I taught myself, mostly through brute-force googling. At the
           end of all that, I added a few blocks to the game and honestly not
-          much else. But I didn't care, I felt like it was a great achievement.
+          much else. But I didn't care, I felt like it was so cool that I could
+          make the computer do such cool things by writing a few lines of code.
         </p>
         <p>
           Since then, I've explored and built even more interesting projects:
