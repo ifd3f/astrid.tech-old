@@ -481,7 +481,7 @@ exports.onCreateNode = ({ node, actions, getNode }) => {
       break
     }
 
-    case "JupyterNotebook": {
+    case "ipynb": {
       createJupyterBlogPostNode(actions, node)
       break
     }

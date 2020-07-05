@@ -3,12 +3,17 @@ import { Notebook } from "../types/nbformat-v4"
 import { withContentDigest, createLinkedTagList } from "./util"
 import { v4 } from "uuid"
 import path from "path"
+
 type JupyterNotebookNode = Node & {
   json: Notebook
-  html: string
+  internal: {
+    content: string
+  }
   fileAbsolutePath: string
-  metadata: {
-    blog_data: BlogMetadata
+  data: {
+    metadata: {
+      blog_data: BlogMetadata
+    }
   }
 }
 
@@ -24,7 +29,7 @@ export function createJupyterBlogPostNode(
   jupyterNode: JupyterNotebookNode
 ) {
   const { createNode, createParentChildLink } = actions
-  const { title, date, description, tags } = jupyterNode.metadata.blog_data
+  const { title, date, description, tags } = jupyterNode.data.metadata.blog_data
 
   const slugBase = path.parse(path.dirname(jupyterNode.fileAbsolutePath)).name
 

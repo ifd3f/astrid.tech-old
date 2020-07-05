@@ -16,13 +16,15 @@ type AbstractPostProps = {
 }
 
 const MarkdownPostContent: FC<MarkdownPostProps> = ({ post }) => {
-  return (
-    <section dangerouslySetInnerHTML={{ __html: post.markdown!!.html!! }} />
-  )
+  return <section dangerouslySetInnerHTML={{ __html: post.parent!!.html!! }} />
 }
 
 const JupyterPostContent: FC<JupyterPostProps> = ({ post }) => {
-  return <section dangerouslySetInnerHTML={{ __html: post.jupyter!!.html!! }} />
+  return (
+    <section
+      dangerouslySetInnerHTML={{ __html: post.parent!!.internal!!.content!! }}
+    />
+  )
 }
 
 export const PostContent: FC<AbstractPostProps> = ({ post }) => {
@@ -52,7 +54,7 @@ export const MarkdownPostBriefBody: FC<MarkdownPostProps> = ({ post }) => {
     <section>
       <p
         dangerouslySetInnerHTML={{
-          __html: post.markdown!.excerpt!,
+          __html: post.parent!.excerpt!,
         }}
       />{" "}
     </section>
@@ -63,7 +65,7 @@ const MarkdownBlogPostSEO: FC<MarkdownPostProps> = ({ post }) => {
   return (
     <SEO
       title={post.title!}
-      description={post.description || post.markdown?.excerpt || ""}
+      description={post.description || post.parent?.excerpt || ""}
     />
   )
 }

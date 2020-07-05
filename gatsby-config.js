@@ -62,7 +62,7 @@ module.exports = {
         name: `misc-data`,
       },
     },
-    `./gatsby-transformer-ipynb`,
+    `gatsby-transformer-ipynb`,
     `gatsby-transformer-yaml`,
     {
       resolve: `gatsby-transformer-remark`,

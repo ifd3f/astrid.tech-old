@@ -22,14 +22,17 @@ export const pageQuery = graphql`
     allBlogPost(sort: { fields: date, order: DESC }) {
       edges {
         node {
+          parent {
+            ... on MarkdownRemark {
+              html
+              excerpt
+            }
+          }
           title
           date
           slug
           description
           contentType
-          markdown {
-            excerpt
-          }
           tags {
             tag {
               slug

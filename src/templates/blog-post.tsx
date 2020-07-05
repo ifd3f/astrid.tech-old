@@ -12,6 +12,17 @@ export const pageQuery = graphql`
     allBlogPost(filter: { id: { eq: $id } }) {
       edges {
         node {
+          parent {
+            ... on MarkdownRemark {
+              html
+              excerpt
+            }
+            ... on ipynb {
+              internal {
+                content
+              }
+            }
+          }
           title
           date
           slug

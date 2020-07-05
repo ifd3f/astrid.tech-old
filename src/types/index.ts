@@ -24,14 +24,18 @@ export interface Project {
   thumbnailPublicPath?: string
 }
 
-export interface BlogPost {
+export interface BlogPost<
+  ParentType = any,
+  ContentTypeIndicator = "markdown" | "mdx" | "jupyter"
+> {
   title?: string
   date?: Date
   description?: string
   tags?: TagWrapper[]
   slug?: string
+  parent?: ParentType
 
-  contentType?: "markdown" | "mdx" | "jupyter"
+  contentType?: ContentTypeIndicator
 }
 
 export type MarkdownData = {
@@ -45,17 +49,14 @@ export type MarkdownData = {
   }
 }
 
-export interface MarkdownBlogPost extends BlogPost {
-  contentType: "markdown"
-  markdown?: MarkdownData
-}
-
-export type JupyterBlogPost = BlogPost & {
-  contentType: "jupyter"
-  jupyter: {
-    html: string
+export type JupyterData = {
+  internal: {
+    content: string
   }
 }
+
+export type MarkdownBlogPost = BlogPost<MarkdownData, "markdown">
+export type JupyterBlogPost = BlogPost<JupyterData, "jupyter">
 
 export interface TagWrapper {
   slug?: string

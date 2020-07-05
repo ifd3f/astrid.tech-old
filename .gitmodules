@@ -1,3 +1,0 @@
-[submodule "gatsby-transformer-ipynb"]
-	path = gatsby-transformer-ipynb
-	url = https://github.com/gatsby-contrib/gatsby-transformer-ipynb.git
