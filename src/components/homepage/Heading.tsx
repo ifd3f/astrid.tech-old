@@ -3,10 +3,24 @@ import React, { FC, ReactNode } from "react"
 import { BsCodeSlash, BsPerson } from "react-icons/bs"
 import { GiCircuitry } from "react-icons/gi"
 import styles from "./style.module.scss"
-import { HomepageHeader } from "./util"
+import homepageStyles from "./heading.module.scss"
+import { HomepageSectionProps } from "./util"
 
 const APPX_BEGAN_PROGRAMMING = new Date("2013-02-01")
 const APPX_BEGAN_HARDWARE = new Date("2015-12-15")
+
+const HomepageHeader: FC<HomepageSectionProps> = ({ children, color }) => {
+  return (
+    <header
+      className={homepageStyles.homepageHeader}
+      style={{
+        backgroundColor: color,
+      }}
+    >
+      <div className={styles.sectionContent}>{children}</div>
+    </header>
+  )
+}
 
 type YearsSinceProps = {
   date: Date
@@ -37,21 +51,6 @@ const HardwareYears = () => {
   return <YearsSince date={APPX_BEGAN_HARDWARE} />
 }
 
-const Headline = () => {
-  return (
-    <div className={style.headlineOuter}>
-      <div className={style.headlineInner}>
-        <div>
-          <p className="lead">My name is</p>
-          <h1 className={style.headlinePrimary}>ASTRID</h1>
-          <p className="lead">and I'm a</p>
-          <h1 className={style.headlinePrimary}>HACKER</h1>
-        </div>
-      </div>
-    </div>
-  )
-}
-
 interface IconInfoDisplayProps {
   imageSrc: string
   icon: ReactNode
@@ -80,6 +79,13 @@ const IconInfoDisplay: FC<IconInfoDisplayProps> = ({
   )
 }
 
+const ImageOfMyself = () => (
+  <div className={homepageStyles.imageSelf}>
+    <BsPerson style={{ fontSize: 300 }} />
+    TODO
+  </div>
+)
+
 const HeadingSection = () => {
   const data = useStaticQuery(graphql`
     query HeadingBgQuery {
@@ -97,18 +103,15 @@ const HeadingSection = () => {
 
   return (
     <HomepageHeader color="#F7A8B8">
-      <div className={styles.nameWrapper}>
-        <div className={styles.name}>
-          <p className={styles.preTitle}>Hello, my name is</p>
-          <h1>Astrid Yu</h1>
-          <p className={styles.postTitle}>Software Developer</p>
+      <div className={homepageStyles.nameWrapper}>
+        <div className={homepageStyles.introductionGroup}>
+          <p className={homepageStyles.preTitle}>Hello, my name is</p>
+          <h1 className={homepageStyles.name}>Astrid Yu</h1>
+          <p className={homepageStyles.postTitle}>Software Developer</p>
         </div>
-        <div>
-          <BsPerson style={{ fontSize: 300 }} />
-          TODO
-        </div>
+        <ImageOfMyself />
       </div>
-      <p className={styles.skillBrag}>
+      <p className={homepageStyles.skillBrag}>
         An interactive portfolio made using{" "}
         <Link to="/project/astrid-tech">
           React, Gatsby, and several other technologies

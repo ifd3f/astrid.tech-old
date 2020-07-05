@@ -1,7 +1,7 @@
 import styles from "./style.module.scss"
 import React, { ReactNode, FC } from "react"
 
-type HomepageSectionProps = {
+export type HomepageSectionProps = {
   children: ReactNode
   color?: string
 }
@@ -18,20 +18,5 @@ export const HomepageSection: FC<HomepageSectionProps> = ({
     >
       <div className={styles.sectionContent}>{children}</div>
     </section>
-  )
-}
-
-export const HomepageHeader: FC<HomepageSectionProps> = ({
-  children,
-  color,
-}) => {
-  return (
-    <header
-      style={{
-        backgroundColor: color,
-      }}
-    >
-      <div className={styles.sectionContent}>{children}</div>
-    </header>
   )
 }

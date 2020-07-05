@@ -1,126 +1,81 @@
-.homepageTop {
+@import "src/scss/variables.scss";
+
+.homepageHeader {
   width: 100%;
-}
 
-.headline {
-  padding-top: 0px;
-}
-
-.headlineOuter {
-  width: 100%;
-  padding-top: 30px;
-  height: 320px;
-}
-
-.headlineInner {
-  margin-left: auto;
-  margin-right: auto;
-  text-align: center;
-}
-
-.headlinePrimary {
-  font-size: 50pt;
-}
-
-.subRow {
-  display: inline;
-}
-
-.subDisplayOuter {
-  width: 100%;
-  height: 150px;
-  margin: 0;
-  display: inline-flex;
-}
-
-.wareIconOuter {
-  font-size: 70pt;
-  margin-top: -30px;
-  text-align: center;
-  margin-bottom: 0px;
-  height: 100%;
-  margin-right: 10px;
-}
-
-.wareIcon {
-  color: white;
-}
-
-.hardwareIcon {
-  border: 3px white solid;
-  border-radius: 5px;
-}
-
-.subDisplay {
-  padding-top: 25px;
-  display: inline-flex;
-  margin-left: auto;
-  margin-right: auto;
-}
-
-.warePrimary {
-  font-size: 24pt;
-  margin-bottom: 5pt;
-}
-
-.wareSecondary {
-  color: white;
-  line-height: 14pt;
-  margin-bottom: 5pt;
-  font-size: 12pt;
-  text-align: center;
-}
-
-@media only screen and (min-width: 576px) {
-  .headlineOuter {
-    height: 400px;
-    padding-top: 40px;
+  @each $size, $padding-top in (xs: 50px, lg: 100px) {
+    @media only screen and (min-width: map-get($grid-breakpoints, $size)) {
+      padding-top: $padding-top;
+    }
   }
-  .headlinePrimary {
-    font-size: 70pt;
-  }
-}
 
-@media only screen and (min-width: 768px) {
-  .wareSecondary {
-    font-size: 14pt;
+  @each $size, $padding-bottom in (xs: 50px, lg: 100px) {
+    @media only screen and (min-width: map-get($grid-breakpoints, $size)) {
+      padding-bottom: $padding-bottom;
+    }
   }
-  .headlineOuter {
-    height: 450px;
-  }
-  .headlinePrimary {
-    font-size: 80pt;
-  }
-  .wareType {
-    font-size: 30pt;
-  }
-  .subDisplayOuter {
-    width: 50%;
-    height: 180px;
-  }
-  .subDisplay {
-    padding-top: 40px;
-  }
-  .warePrimary {
-    font-size: 28pt;
-  }
-}
 
-@media only screen and (min-width: 992px) {
-  .warePrimary {
-    font-size: 40pt;
+  .nameWrapper {
+    display: flex;
+    max-width: 1000px;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+
+    @media only screen and (max-width: map-get($grid-breakpoints, sm)) {
+      padding-left: 10px;
+      padding-right: 10px;
+      flex-direction: column;
+    }
   }
-  .wareIcon {
-    font-size: 90pt;
+
+  .introductionGroup {
+    max-width: 700px;
+    flex-grow: 1;
   }
-  .wareIconOuter {
-    padding-top: 10px;
+
+  .name {
+    @each $size, $font-size in (xs: 70pt, lg: 100pt) {
+      @media only screen and (min-width: map-get($grid-breakpoints, $size)) {
+        font-size: $font-size;
+      }
+    }
+    text-align: center;
+    margin: 0;
+    order: 1;
   }
-  .subDisplay {
-    padding-top: 25px;
+
+  .preTitle {
+    text-align: left;
   }
-  .subDisplayOuter {
-    height: 200px;
-    padding-top: 20px;
+
+  .postTitle {
+    text-align: right;
+    margin-top: 20px;
+  }
+
+  .preTitle,
+  .postTitle {
+    margin: 0;
+    font-size: 32pt;
+  }
+
+  .imageSelf {
+    text-align: center;
+    order: 1;
+  }
+
+  .skillBrag {
+    text-align: center;
+    font-size: 16pt;
+    order: 2;
+  }
+
+  @media only screen and (max-width: map-get($grid-breakpoints, sm)) {
+    .preTitle,
+    .postTitle {
+      font-size: 24pt;
+      text-align: center;
+    }
   }
 }
