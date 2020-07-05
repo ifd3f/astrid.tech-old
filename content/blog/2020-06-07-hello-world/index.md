@@ -3,7 +3,7 @@ type: blog
 
 title: Hello World! Personal Website Redesign
 date: "2020-06-07T10:23:00-0700"
-description: "Imagine blogging about redesigning a website on the website that you're redesigning before it's even complete. Imagine how dumb and pointlessly meta that would be."
+description: "Because this actually isn't the first iteration of this website"
 production: true
 tags:
   - /project/astrid-tech/

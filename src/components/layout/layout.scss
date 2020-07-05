@@ -11,18 +11,19 @@ h4,
 h5,
 h6 {
   font-family: $font-header;
+  color: $heading-color;
 }
 
 p,
 li {
   font-family: $font-body;
+  color: $content-color;
 }
 
 html,
 body {
   height: 100%;
-  background-color: #ffe0ce;
-  color: #333333;
+  background-color: $background-color;
 }
 
 .nteract-display-area-stdout {

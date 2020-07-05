@@ -43,7 +43,7 @@ export const PostMainHeader: FC<AbstractPostProps> = ({ post }) => {
     <header>
       <h1>{post.title!}</h1>
       <p className={style.subtitle}>{post.description!}</p>
-      <p>{new Date(post.date!).toString()}</p>
+      <p className={style.date}>{new Date(post.date!).toString()}</p>
       <TagList tags={post.tags!.map(({ tag }) => tag!)} />
     </header>
   )
@@ -94,16 +94,13 @@ export const PostBrief: FC<AbstractPostProps> = ({ post }) => {
   }
 
   return (
-    <article>
-      <header>
-        <h3>
-          <Link to={post.slug!}>{post.title}</Link>
-        </h3>
-        <p>{post.description}</p>
-        <small>{new Date(post.date!).toString()}</small>
+    <Link to={post.slug!}>
+      <article className={style.brief}>
+        <h3>{post.title}</h3>
+        <p className={style.date}>{new Date(post.date!).toString()}</p>
         <TagList tags={post.tags!.map(x => x.tag!)} />
-      </header>
-      {body}
-    </article>
+        <p>{post.description}</p>
+      </article>
+    </Link>
   )
 }

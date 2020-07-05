@@ -53,6 +53,7 @@ const BlogIndex: FC<PageProps<Data>> = props => {
     <Layout {...props}>
       <SEO title="Blog" />
       <Container className={styles.blogContentContainer}>
+        <h1>Blog</h1>
         {data.allBlogPost.edges.map(({ node: post }) => (
           <PostBrief post={post} />
         ))}

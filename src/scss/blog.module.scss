@@ -1,9 +1,8 @@
-.blogContentContainer {
-  max-width: 800px;
+@import "./colors.scss";
 
-  .subtitle {
-    font-size: 18pt;
-  }
+.blogContentContainer {
+  padding-top: 20px;
+  max-width: 800px;
 
   h1 {
     font-size: 36pt;
@@ -31,4 +30,29 @@
     font-size: 16pt;
     line-height: 150%;
   }
+
+  .date {
+    font-size: 10pt;
+    color: $secondary-color;
+  }
+}
+
+.subtitle {
+  font-size: 18pt;
+}
+
+.brief {
+  border-radius: 10px;
+  border-color: #cfcccc;
+  border-width: 1px;
+  border-style: solid;
+  padding-left: 20px;
+  padding-right: 20px;
+  margin-bottom: 15px;
+  color: $content-color;
+}
+
+.brief:hover {
+  border-color: #918a8a;
+  cursor: pointer;
 }
