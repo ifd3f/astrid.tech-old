@@ -17,12 +17,6 @@ export const pageQuery = graphql`
           slug
           description
           contentType
-          markdown {
-            html
-          }
-          jupyter {
-            html
-          }
           tags {
             tag {
               ...TagBadge
