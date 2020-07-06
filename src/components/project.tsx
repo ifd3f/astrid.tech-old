@@ -11,7 +11,8 @@ import {
 } from "reactstrap"
 import { Project } from "../types"
 import styles from "./project.module.scss"
-import { getUniqueId, LoadOnView, TagList } from "./util"
+import { getUniqueId, LoadOnView } from "./util"
+import { TagList } from "./tag"
 
 type StatusBadgeProps = {
   status: null | "wip" | "complete" | "scrapped"

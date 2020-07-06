@@ -14,7 +14,7 @@ import styleSkills from "./skills.module.scss"
 import { Tag, SkillCategory } from "../../types/index"
 import { useStaticQuery, Link } from "gatsby"
 import { graphql } from "gatsby"
-import { TagBadge } from "../util"
+import { TagBadge } from "../tag"
 import { HomepageSection } from "./util"
 import { BsStarFill, BsBootstrap, BsStar } from "react-icons/bs"
 

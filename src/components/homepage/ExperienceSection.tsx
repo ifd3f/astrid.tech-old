@@ -3,7 +3,7 @@ import React, { FC, ReactNode } from "react"
 import { Container, Badge } from "reactstrap"
 import { WorkExperience } from "../../types/index"
 import style from "./style.module.scss"
-import { TagList } from "../util"
+import { TagList } from "../tag"
 import { HomepageSection } from "./util"
 
 const IronPanthersTagline = () => {

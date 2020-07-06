@@ -5,7 +5,7 @@ import Layout from "../components/layout/layout"
 import React from "react"
 import SEO from "../components/seo"
 import { Container } from "reactstrap"
-import { TagList } from "../components/util"
+import { TagList } from "../components/tag"
 import { StatusBadge } from "../components/project"
 
 export const pageQuery = graphql`

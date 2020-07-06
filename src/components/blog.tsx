@@ -1,7 +1,7 @@
 import React, { FC, ReactNode } from "react"
 import { BlogPost, MarkdownBlogPost, JupyterBlogPost } from "../types"
 import { Link } from "gatsby"
-import { TagList } from "./util"
+import { TagList } from "./tag"
 import SEO from "./seo"
 import style from "../scss/blog.module.scss"
 
