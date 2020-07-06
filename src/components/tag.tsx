@@ -2,6 +2,7 @@ import { Badge } from "reactstrap"
 import { Tag, TagWrapper } from "../types/index"
 import { Link, graphql } from "gatsby"
 import React, { FC } from "react"
+import style from "./tag.module.scss"
 
 type TagBadgeProps = {
   tag: Tag
@@ -22,11 +23,10 @@ export const TagBadge: FC<TagBadgeProps> = ({ tag }) => {
   return (
     <>
       <Badge
+        className={style.tag}
         style={{
           backgroundColor: tag.color,
           color: tag.textColor,
-          marginRight: 2,
-          marginLeft: 2,
         }}
         tag={Link}
         to={linkTo}
