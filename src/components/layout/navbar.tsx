@@ -2,7 +2,13 @@ import { Link } from "gatsby"
 import React, { FC, ReactNode, useState } from "react"
 import { BsArrowsCollapse } from "react-icons/bs"
 import { GiHamburger } from "react-icons/gi"
-import { Collapse, Navbar, NavbarBrand, NavbarToggler } from "reactstrap"
+import {
+  Collapse,
+  Navbar,
+  NavbarBrand,
+  NavbarToggler,
+  NavLink,
+} from "reactstrap"
 import "./navbar.scss"
 
 type NavLinkProps = {
@@ -10,7 +16,7 @@ type NavLinkProps = {
   children: ReactNode
 }
 
-const NavLink: FC<NavLinkProps> = ({ to, children }) => {
+const GNavLink: FC<NavLinkProps> = ({ to, children }) => {
   return (
     <Link className={`nav-link`} to={to}>
       {children}
@@ -31,8 +37,9 @@ const MainNavbar: FC = () => {
         {isOpen ? <BsArrowsCollapse /> : <GiHamburger />}
       </NavbarToggler>
       <Collapse isOpen={isOpen} navbar>
-        <NavLink to="/portfolio">Portfolio</NavLink>
-        <NavLink to="/blog">Blog</NavLink>
+        <GNavLink to="/portfolio">Portfolio</GNavLink>
+        <GNavLink to="/blog">Blog</GNavLink>
+        <NavLink href="https://github.com/plenglin">GitHub</NavLink>
       </Collapse>
     </Navbar>
   )
