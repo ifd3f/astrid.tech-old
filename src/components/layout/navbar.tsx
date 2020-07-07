@@ -1,5 +1,5 @@
 import { Link } from "gatsby"
-import React, { FC, ReactNode, useState } from "react"
+import React, { FC, ReactNode, useState, PropsWithChildren } from "react"
 import { BsArrowsCollapse } from "react-icons/bs"
 import { GiHamburger } from "react-icons/gi"
 import {

@@ -7,7 +7,6 @@
     border-color: #999999;
     color: $pink;
   }
-
   .navbar-brand,
   .nav-link {
     -moz-transition: "color,border-bottom" 0.1s ease-in;
@@ -49,6 +48,11 @@
   .navbar-brand:hover {
     color: white;
   }
-  background-color: #502050;
+  background-color: $navbar-bg;
   height: $navbar-height;
+}
+
+.navbar-collapse.show,
+.navbar-collapse.collapsing {
+  background-color: $navbar-dropdown-bg;
 }
