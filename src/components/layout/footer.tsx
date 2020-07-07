@@ -1,4 +1,4 @@
-import React from "react"
+import React, { FC } from "react"
 import { Container, Col, Row } from "reactstrap"
 import { Link, useStaticQuery, graphql } from "gatsby"
 import Img from "gatsby-image"
@@ -20,13 +20,61 @@ export const Witch = () => {
   )
 }
 
+const ContentLicense = () => (
+  <p>
+    <a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/">
+      <img
+        alt="Creative Commons License"
+        style={{ borderWidth: 0 }}
+        src="https://i.creativecommons.org/l/by-sa/4.0/88x31.png"
+      />
+    </a>
+    <br />
+    <a
+      href="http://purl.org/dc/dcmitype/InteractiveResource"
+      property="dct:title"
+      rel="dct:type"
+    >
+      The page content of astrid.tech
+    </a>{" "}
+    by{" "}
+    <a
+      href="https://astrid.tech"
+      property="cc:attributionName"
+      rel="cc:attributionURL"
+    >
+      Astrid Yu
+    </a>{" "}
+    is licensed under a{" "}
+    <a rel="license" href="http://creativecommons.org/licenses/by-sa/4.0/">
+      Creative Commons Attribution-ShareAlike 4.0 International License
+    </a>
+    .
+  </p>
+)
+
+const AGPL: FC<{ logo: any }> = ({ logo }) => {
+  return (
+    <>
+      <a href="https://www.gnu.org/licenses/agpl-3.0.en.html">
+        <Img fixed={logo} alt="GNU Affero General Public License" />
+      </a>
+      <p>
+        The source code of the astrid.tech is licensed under the{" "}
+        <a href="https://www.gnu.org/licenses/agpl-3.0.en.html">AGPL License</a>
+        .{" "}
+      </p>
+    </>
+  )
+}
+
 const FooterSection = () => {
   const result = useStaticQuery(graphql`
     query GetFooterData {
       currentBuildDate {
         currentDate
       }
-      mitLogo: file(relativePath: { eq: "mit-logo.png" }) {
+      agplLogo: file(relativePath: { eq: "agpl.png" }) {
         childImageSharp {
           fixed(height: 40) {
             ...GatsbyImageSharpFixed
@@ -37,7 +85,7 @@ const FooterSection = () => {
   `)
 
   const buildDate = result.currentBuildDate.currentDate
-  const mitLogo = result.mitLogo.childImageSharp.fixed
+  const agplLogo = result.agplLogo.childImageSharp.fixed
 
   return (
     <footer className={style.footer}>
@@ -52,50 +100,10 @@ const FooterSection = () => {
         </p>
         <Row>
           <Col className="text-center">
-            <Img fixed={mitLogo} alt="" />
-            <p>
-              The source code of the astrid.tech is licensed under the{" "}
-              <a href="https://mit-license.org/">MIT License</a>.{" "}
-            </p>
+            <AGPL logo={agplLogo} />
           </Col>
           <Col className="text-center">
-            <p>
-              <a
-                rel="license"
-                href="http://creativecommons.org/licenses/by-sa/4.0/"
-              >
-                <img
-                  alt="Creative Commons License"
-                  style={{ borderWidth: 0 }}
-                  src="https://i.creativecommons.org/l/by-sa/4.0/88x31.png"
-                />
-              </a>
-              <br />
-              <a
-                href="http://purl.org/dc/dcmitype/InteractiveResource"
-                property="dct:title"
-                rel="dct:type"
-              >
-                The page content of astrid.tech
-              </a>{" "}
-              by{" "}
-              <a
-                href="https://astrid.tech"
-                property="cc:attributionName"
-                rel="cc:attributionURL"
-              >
-                Astrid Yu
-              </a>{" "}
-              is licensed under a{" "}
-              <a
-                rel="license"
-                href="http://creativecommons.org/licenses/by-sa/4.0/"
-              >
-                Creative Commons Attribution-ShareAlike 4.0 International
-                License
-              </a>
-              .
-            </p>
+            <ContentLicense />
           </Col>
         </Row>
       </Container>
