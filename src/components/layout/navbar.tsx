@@ -37,11 +37,9 @@ const MainNavbar: FC = () => {
         {isOpen ? <BsArrowsCollapse /> : <GiHamburger />}
       </NavbarToggler>
       <Collapse isOpen={isOpen} navbar>
-        <div>
-          <GNavLink to="/portfolio">Portfolio</GNavLink>
-          <GNavLink to="/blog">Blog</GNavLink>
-          <NavLink href="https://github.com/plenglin">GitHub</NavLink>
-        </div>
+        <GNavLink to="/portfolio">Portfolio</GNavLink>
+        <GNavLink to="/blog">Blog</GNavLink>
+        <NavLink href="https://github.com/plenglin">GitHub</NavLink>
       </Collapse>
     </Navbar>
   )

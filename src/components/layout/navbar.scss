@@ -52,6 +52,7 @@
   height: $navbar-height;
 }
 
-.navbar-collapse {
+.navbar-collapse.show,
+.navbar-collapse.collapsing {
   background-color: $navbar-dropdown-bg;
 }
