@@ -4,14 +4,17 @@ import FooterSection from "./footer"
 import "./layout.scss"
 import MainNavbar from "./navbar"
 
-type LayoutProps = PropsWithChildren<PageProps<undefined>>
+type LayoutProps = PageProps<any> & {
+  children?: ReactNode
+  mainClass: string
+}
 
-const Layout: FC<LayoutProps> = ({ children }) => {
+const Layout: FC<LayoutProps> = ({ children, mainClass }) => {
   return (
     <>
       <div className="root-wrapper">
         <MainNavbar />
-        <main>{children}</main>
+        <main className={mainClass}>{children}</main>
         <FooterSection />
       </div>
     </>

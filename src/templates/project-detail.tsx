@@ -7,6 +7,7 @@ import SEO from "../components/seo"
 import { Container } from "reactstrap"
 import { TagList } from "../components/tag"
 import { StatusBadge } from "../components/project"
+import style from "./project-detail.module.scss"
 
 export const pageQuery = graphql`
   query GetProject($id: String!) {
@@ -15,8 +16,8 @@ export const pageQuery = graphql`
         node {
           slug
           thumbnailPublicPath
-          startDate(formatString: "YYYY-MM")
-          endDate(formatString: "YYYY-MM")
+          startDate(formatString: "MMMM YYYY")
+          endDate(formatString: "MMMM YYYY")
           title
           description
           status
@@ -63,14 +64,14 @@ const ProjectDetailTemplate: FC<PageProps<Data, Context>> = ({ data }) => {
   return (
     <Layout>
       <SEO title={project.title!} />
-      <Container>
+      <Container className={style.projectDetailContainer}>
         <article>
           <header>
             <h1>
               {project.title!} <StatusBadge status={project.status} />
             </h1>
-            <p>{date}</p>
-            <p>{project.description}</p>
+            <p className={style.date}>{date}</p>
+            <p className={style.subtitle}>{project.description}</p>
             <TagList tags={project.tags.map(x => x.tag!)} />
           </header>
           <section

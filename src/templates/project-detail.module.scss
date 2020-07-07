@@ -1,0 +1,7 @@
+@import "src/scss/content.scss";
+
+.projectDetailContainer {
+  padding-top: 20px;
+  padding-bottom: 20px;
+  @include content;
+}

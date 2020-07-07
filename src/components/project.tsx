@@ -71,8 +71,6 @@ export const projectCardFragment = graphql`
   fragment ProjectCard on Project {
     slug
     thumbnailPublicPath
-    startDate(formatString: "YYYY-MM")
-    endDate(formatString: "YYYY-MM")
     title
     description
     status
