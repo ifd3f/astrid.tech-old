@@ -27,14 +27,14 @@ I have a messy room with too many disorganized things in random places. This pro
 
 [An attempt was made back in 2018](https://github.com/Plenglin/inv5026) to implement something similar, but it failed due to my lack of experience.
 
-# Technology Stack
+## Technology Stack
 
-## Backend
+### Backend
 
 - Django and Python 3
 - It's literally just a REST API
 
-## Frontend
+### Frontend
 
 - React as the main frontend framework
 - Axios for those API calls

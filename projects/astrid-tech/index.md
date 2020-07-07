@@ -24,7 +24,7 @@ thumbnail: null
 
 This is my website. There are many like it, but this one is mine.
 
-# Technology Stack
+## Technology Stack
 
 - Gatsby.js as the static site generator.
 - React as the main frontend framework
