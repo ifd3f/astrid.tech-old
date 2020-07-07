@@ -1,5 +1,6 @@
 import React, { FC, ReactNode } from "react"
 import { BlogPost, MarkdownBlogPost, JupyterBlogPost } from "../types"
+import moment from "moment"
 import { Link } from "gatsby"
 import { TagList } from "./tag"
 import SEO from "./seo"
@@ -39,11 +40,12 @@ export const PostContent: FC<AbstractPostProps> = ({ post }) => {
 }
 
 export const PostMainHeader: FC<AbstractPostProps> = ({ post }) => {
+  const dateString = moment(post.date).format("h:mma, dddd DD MMMM YYYY")
   return (
     <header>
       <h1>{post.title!}</h1>
       <p className={style.subtitle}>{post.description!}</p>
-      <p className={style.date}>{new Date(post.date!).toString()}</p>
+      <p className={style.date}>{dateString}</p>
       <TagList tags={post.tags!.map(({ tag }) => tag!)} />
     </header>
   )
@@ -93,11 +95,13 @@ export const PostBrief: FC<AbstractPostProps> = ({ post }) => {
       throw Error(`Unsupported content type ${post.contentType}`)
   }
 
+  const dateString = moment(post.date).format("DD MMMM YYYY")
+
   return (
     <Link to={post.slug!}>
       <article className={style.brief}>
         <h3>{post.title}</h3>
-        <p className={style.date}>{new Date(post.date!).toString()}</p>
+        <p className={style.date}>{dateString}</p>
         <TagList tags={post.tags!.map(x => x.tag!)} />
         <p>{post.description}</p>
       </article>
