@@ -1,4 +1,5 @@
 @import "./sizes.scss";
+@import "src/scss/colors.scss";
 
 .footer {
   height: $footer-height;
@@ -7,7 +8,7 @@
   position: absolute;
   left: 0;
   bottom: 0;
-  background: #202030;
+  background: $footer-bg-color;
   p {
     color: whitesmoke;
   }

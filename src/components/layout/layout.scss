@@ -1,5 +1,5 @@
-@import "../../scss/colors.scss";
-@import "../../scss/fonts.scss";
+@import "src/scss/colors.scss";
+@import "src/scss/fonts.scss";
 @import "./sizes.scss";
 
 @import "~bootstrap/scss/bootstrap";
@@ -23,7 +23,7 @@ li {
 html,
 body {
   height: 100%;
-  background-color: $background-color;
+  background-color: $footer-bg-color;
 }
 
 .nteract-display-area-stdout {
@@ -38,6 +38,7 @@ body {
 
 main {
   padding-bottom: $footer-height;
+  background-color: $main-bg-color;
   a {
     color: #1d2e82;
 
