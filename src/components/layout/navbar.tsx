@@ -1,5 +1,5 @@
 import { Link } from "gatsby"
-import React, { FC, ReactNode, useState } from "react"
+import React, { FC, ReactNode, useState, PropsWithChildren } from "react"
 import { BsArrowsCollapse } from "react-icons/bs"
 import { GiHamburger } from "react-icons/gi"
 import {
@@ -37,9 +37,11 @@ const MainNavbar: FC = () => {
         {isOpen ? <BsArrowsCollapse /> : <GiHamburger />}
       </NavbarToggler>
       <Collapse isOpen={isOpen} navbar>
-        <GNavLink to="/portfolio">Portfolio</GNavLink>
-        <GNavLink to="/blog">Blog</GNavLink>
-        <NavLink href="https://github.com/plenglin">GitHub</NavLink>
+        <div>
+          <GNavLink to="/portfolio">Portfolio</GNavLink>
+          <GNavLink to="/blog">Blog</GNavLink>
+          <NavLink href="https://github.com/plenglin">GitHub</NavLink>
+        </div>
       </Collapse>
     </Navbar>
   )
