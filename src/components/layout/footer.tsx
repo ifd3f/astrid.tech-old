@@ -75,6 +75,11 @@ const AGPL: FC<{ logo: any }> = ({ logo }) => {
 const FooterSection = () => {
   const result = useStaticQuery(graphql`
     query GetFooterData {
+      site {
+        siteMetadata {
+          version
+        }
+      }
       currentBuildDate {
         currentDate
       }
@@ -88,20 +93,21 @@ const FooterSection = () => {
     }
   `)
 
+  const version = result.site.siteMetadata.version
   const buildDate = result.currentBuildDate.currentDate
   const agplLogo = result.agplLogo.childImageSharp.fixed
 
   return (
     <footer className={style.footer}>
       <Container>
-        <p>Website was last built at {buildDate}.</p>
         <p>
-          Created by Astrid Augusta Yu with a generous helping of <Tea /> and{" "}
-          <Witch />. See the{" "}
+          astrid.tech v{version} was created by Astrid Yu with a generous
+          helping of <Tea /> and <Witch />. See the{" "}
           <Link to="/project/astrid-tech">self-referential project page</Link>{" "}
           or see the code yourself on{" "}
           <a href="https://github.com/Plenglin/astrid.tech">GitHub</a>.
         </p>
+        <p>Website was built on {buildDate}.</p>
         <Row>
           <Col className="text-center">
             <AGPL logo={agplLogo} />
