@@ -27,13 +27,23 @@ export function getTagId(slug: string): string {
     .digest("hex")
 }
 
-type PreContentDigestNode = NodeInput & {
-  internal: any
+type PreContentDigestNode = {
+  id: string
+  parent?: string
+  children?: string[]
+  internal: {
+    type: string
+    mediaType?: string
+    content?: string
+    description?: string
+    contentDigest?: string
+  }
+  [key: string]: unknown
 }
 
 export function withContentDigest<T extends PreContentDigestNode>(
   node: T
-): Node {
+): T & NodeInput {
   // Get content digest of node. (Required field)
   const contentDigest = crypto
     .createHash(`md5`)
@@ -41,7 +51,7 @@ export function withContentDigest<T extends PreContentDigestNode>(
     .digest(`hex`)
   // add it to userNode
   node.internal.contentDigest = contentDigest
-  return (node as unknown) as Node
+  return (node as unknown) as T & NodeInput
 }
 
 type TagNode = {
