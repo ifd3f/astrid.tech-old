@@ -1,22 +1,22 @@
 - major: 0
-    - minor: 1
-      - patch: 3
-        features: []
-        bugfixes: 
-          - Remove Google Analytics tracking to comply with GDPR.
-        internals: []
-      - patch: 2
-        features: []
-        bugfixes: 
-          - Fixed issue caused by 0.1.1 causing mobile navbar dropdown to show on desktop.
-        internals: []
-      - patch: 1
-        features: []
-        bugfixes: 
-          - Fixed issue on mobile where the navbar dropdown was transparent.
-        internals: []
-      - patch: 0
-        features: 
-          - Released the website!
-        bugfixes: []
-        internals: []
+  - minor: 1
+    - patch: 3
+      features: []
+      bugfixes: 
+        - Remove Google Analytics tracking to comply with GDPR.
+      internals: []
+    - patch: 2
+      features: []
+      bugfixes: 
+        - Fixed issue caused by 0.1.1 causing mobile navbar dropdown to show on desktop.
+      internals: []
+    - patch: 1
+      features: []
+      bugfixes: 
+        - Fixed issue on mobile where the navbar dropdown was transparent.
+      internals: []
+    - patch: 0
+      features: 
+        - Released the website!
+      bugfixes: []
+      internals: []
