@@ -37,6 +37,7 @@ export const onCreateNode: GatsbyNode["onCreateNode"] = ({ node, actions }) => {
     parent: jupyterNode.id,
     internal: {
       type: "BlogPost",
+      content: await loadNodeContent(markdownNode),
     },
     id: v4(),
     children: [],
@@ -44,13 +45,7 @@ export const onCreateNode: GatsbyNode["onCreateNode"] = ({ node, actions }) => {
     title,
     date,
     description,
-
-    contentType: "jupyter",
-    markdown___NODE: null,
-    mdx___NODE: null,
-    jupyter___NODE: jupyterNode.id,
-
-    tags: createLinkedTagList(tags),
+    tagSlugs: tags,
   })
 
   createNode(postNode)

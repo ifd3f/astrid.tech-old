@@ -22,6 +22,7 @@ export function buildTagNode(tag: Tag, parent?: string): NodeInput | Node {
     name: tag.name,
     slug: tag.slug,
     color: tag.color,
+    priority: tag.priority,
     backgroundColor: tag.backgroundColor,
   })
 }

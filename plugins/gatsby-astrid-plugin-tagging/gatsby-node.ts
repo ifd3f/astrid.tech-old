@@ -4,14 +4,16 @@ import {
   GatsbyNode,
   Node,
   SourceNodesArgs,
+  BuildArgs,
+  ParentSpanPluginArgs,
 } from "gatsby"
-import { buildTagNode, Tag } from "./index"
+import { buildTagNode } from "./index"
 
-export const sourceNodes: GatsbyNode["sourceNodes"] = async ({
-  schema,
+export const onPreBootstrap: GatsbyNode["onPreBootstrap"] = async ({
   actions,
-}: SourceNodesArgs) => {
-  const { createTypes, createNode } = actions
+  schema,
+}: ParentSpanPluginArgs) => {
+  const { createTypes } = actions
 
   const Tagged = schema.buildInterfaceType({
     name: "Tagged",
@@ -36,6 +38,38 @@ export const sourceNodes: GatsbyNode["sourceNodes"] = async ({
   })
 
   createTypes([Tag, Tagged])
+}
+
+export const createSchemaCustomization: GatsbyNode["createSchemaCustomization"] = async ({
+  actions,
+  schema,
+}: CreateSchemaCustomizationArgs) => {
+  const { createFieldExtension } = actions
+
+  createFieldExtension({
+    name: `tagify`,
+    extend() {
+      return {
+        resolve(source: any, args: any, context: any, info: any) {
+          return source.tagSlugs.map((slug: string) =>
+            context.nodeModel.runQuery({
+              query: {
+                filter: {
+                  slug: {
+                    eq: slug,
+                  },
+                },
+                sort: { fields: ["priority"], order: ["DESC"] },
+                limit: 1,
+              },
+              type: "Tag",
+              firstOnly: true,
+            })
+          )
+        },
+      }
+    },
+  })
 }
 
 export const onCreateNode: GatsbyNode["onCreateNode"] = async ({
@@ -63,37 +97,6 @@ export const onCreateNode: GatsbyNode["onCreateNode"] = async ({
       createParentChildLink({ parent: node, child: tagNode as Node })
     })
   }
-}
-
-export const createSchemaCustomization: GatsbyNode["createSchemaCustomization"] = async ({
-  actions,
-}: CreateSchemaCustomizationArgs) => {
-  const { createFieldExtension } = actions
-
-  createFieldExtension({
-    name: `tagify`,
-    extend() {
-      return {
-        resolve(source: any, args: any, context: any, info: any) {
-          return source.tagSlugs.map((slug: string) =>
-            context.nodeModel.runQuery({
-              query: {
-                filter: {
-                  slug: {
-                    eq: slug,
-                  },
-                },
-                distinct: "slug",
-                sort: { fields: ["priority"], order: ["DESC"] },
-              },
-              type: "Tag",
-              firstOnly: true,
-            })
-          )
-        },
-      }
-    },
-  })
 }
 
 export const createResolvers: GatsbyNode["createResolvers"] = async ({

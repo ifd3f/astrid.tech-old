@@ -1,7 +1,7 @@
 import { GatsbyNode, Node } from "gatsby"
 import { createFilePath, FileSystemNode } from "gatsby-source-filesystem"
 import { v4 } from "uuid"
-import { createLinkedTagList, withContentDigest } from "../util"
+import { withContentDigest } from "../util"
 
 type MarkdownNode = Node & {
   frontmatter: BlogMetadata
