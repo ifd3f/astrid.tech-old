@@ -1,13 +1,13 @@
 import {
-  GatsbyNode,
-  SourceNodesArgs,
-  NodeInput,
-  Node,
   CreateResolversArgs,
   CreateSchemaCustomizationArgs,
+  GatsbyNode,
+  Node,
+  NodeInput,
+  SourceNodesArgs,
 } from "gatsby"
-import { withContentDigest } from "../util"
 import { v4 } from "uuid"
+import { withContentDigest } from "../util"
 
 type Tag = {
   name: string
@@ -45,27 +45,7 @@ export const sourceNodes: GatsbyNode["sourceNodes"] = async ({
     interfaces: ["Node"],
   })
 
-  const TagResolver = schema.buildObjectType({
-    name: "TagResolver",
-    fields: {},
-    interfaces: ["Node"],
-  })
-
-  createTypes([Tag, TagResolver, Tagged])
-
-  createNode({
-    internal: {
-      type: `Tag`,
-      contentDigest: "asdf",
-    },
-    children: [],
-
-    id: "safghjkashjkld",
-    name: "foobar",
-    slug: "absc",
-    backgroundColor: "#ffffff",
-    color: "#ffffff",
-  })
+  createTypes([Tag, Tagged])
 }
 
 function buildTagNode(tag: Tag, parent?: string): NodeInput | Node {
@@ -129,6 +109,7 @@ export const createSchemaCustomization: GatsbyNode["createSchemaCustomization"] 
                     eq: slug,
                   },
                 },
+                distinct: "slug",
                 sort: { fields: ["priority"], order: ["DESC"] },
               },
               type: "Tag",
@@ -145,5 +126,16 @@ export const createResolvers: GatsbyNode["createResolvers"] = async ({
   actions,
   createResolvers,
 }: CreateResolversArgs) => {
-  const taggedItemResolver = {}
+  createResolvers({
+    Tag: {
+      tagged: {
+        type: ["Tagged"],
+        resolve(source: any, args: any, context: any, info: any) {
+          return context.nodeModel
+            .getAllNodes({ type: "Tagged" })
+            .filter((node: any) => node.tagSlugs.includes(source.slug))
+        },
+      },
+    },
+  })
 }
