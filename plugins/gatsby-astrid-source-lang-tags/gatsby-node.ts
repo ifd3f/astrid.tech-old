@@ -1,7 +1,8 @@
 import axios from "axios"
 import { GatsbyNode, Node, SourceNodesArgs } from "gatsby"
 import yaml from "js-yaml"
-import { getTextColor, buildTagNode, getTagSlug } from "../util"
+import { getTextColor, getTagSlug, withContentDigest } from "../util"
+import { buildTagNode } from "../gatsby-astrid-plugin-tagging"
 
 type LinguistEntry = {
   color: string
@@ -31,15 +32,16 @@ export const sourceNodes: GatsbyNode["sourceNodes"] = async ({
     if (!lang.color) {
       continue
     }
-    const textColor = getTextColor(lang.color)
+    const color = getTextColor(lang.color)
 
-    const node = buildTagNode({
-      name: key,
-      slug: getTagSlug(key),
-      color: lang.color,
-      textColor,
-    }) as any
-    // Create node with the gatsby createNode() API
-    createNode(node)
+    createNode(
+      buildTagNode({
+        name: key,
+        slug: getTagSlug(key),
+        color,
+        backgroundColor: lang.color,
+        priority: 1,
+      })
+    )
   }
 }

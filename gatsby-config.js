@@ -125,10 +125,10 @@ module.exports = {
 
     "gatsby-astrid-plugin-blog",
     "gatsby-astrid-plugin-tagging",
-    // "gatsby-astrid-source-lang-tags",
+    "gatsby-astrid-source-lang-tags",
     // "gatsby-astrid-transform-skills",
     // "gatsby-astrid-transform-education",
-    // "gatsby-astrid-transform-notebook-post",
+    //"gatsby-astrid-transform-notebook-post",
     "gatsby-astrid-transform-markdown-post",
   ],
 }
