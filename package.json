@@ -23,7 +23,6 @@
     "gatsby-plugin-offline": "^3.2.7",
     "gatsby-plugin-react-helmet": "^3.3.2",
     "gatsby-plugin-sharp": "^2.6.9",
-    "gatsby-plugin-typography": "^2.5.2",
     "gatsby-remark-copy-linked-files": "^2.3.3",
     "gatsby-remark-images": "^3.3.8",
     "gatsby-remark-prismjs": "^3.5.2",

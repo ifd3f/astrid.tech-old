@@ -1,11 +1,39 @@
-import { GatsbyNode } from "gatsby"
+import { GatsbyNode, Node } from "gatsby"
 import { resolve } from "path"
+import { v4 } from "uuid"
+import { getTagId, withContentDigest } from "../util"
 
-export const createPages: GatsbyNode["createPages"] = async ({
+type YamlSkillNode = Node & {
+  name: string
+  skills: {
+    slug: string
+    level: number
+  }[]
+}
+export const onCreateNode: GatsbyNode["onCreateNode"] = ({
+  node,
   actions,
-  graphql,
+  getNode,
 }) => {
-  const { createPage } = actions
+  if (node.internal.type != "SkillsYaml") return
 
-  console.log("privyet")
+  const { createNode, createParentChildLink } = actions
+  const yamlNode = (node as unknown) as YamlSkillNode
+
+  const skillNode = withContentDigest({
+    parent: yamlNode.id,
+    internal: {
+      type: "Skill",
+    },
+    children: [],
+    id: v4(),
+
+    name: yamlNode.name,
+    skills: yamlNode.skills.map(({ slug, level }) => ({
+      level: level,
+      tag___NODE: getTagId(slug),
+    })),
+  })
+  createNode(skillNode)
+  createParentChildLink({ parent: yamlNode, child: skillNode })
 }

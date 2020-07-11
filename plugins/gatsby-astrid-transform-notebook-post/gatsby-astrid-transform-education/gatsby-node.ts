@@ -1,6 +1,7 @@
-import { Actions, Node } from "gatsby"
+import { GatsbyNode, Node } from "gatsby"
+import { resolve } from "path"
 import { v4 } from "uuid"
-import { getTagId, withContentDigest } from "./util"
+import { getTagId, withContentDigest } from "../util"
 
 type YamlSkillNode = Node & {
   name: string
@@ -9,9 +10,15 @@ type YamlSkillNode = Node & {
     level: number
   }[]
 }
+export const onCreateNode: GatsbyNode["onCreateNode"] = ({
+  node,
+  actions,
+  getNode,
+}) => {
+  if (node.internal.type != "SkillsYaml") return
 
-export function createSkillNode(actions: Actions, yamlNode: YamlSkillNode) {
   const { createNode, createParentChildLink } = actions
+  const yamlNode = (node as unknown) as YamlSkillNode
 
   const skillNode = withContentDigest({
     parent: yamlNode.id,
@@ -29,6 +36,4 @@ export function createSkillNode(actions: Actions, yamlNode: YamlSkillNode) {
   })
   createNode(skillNode)
   createParentChildLink({ parent: yamlNode, child: skillNode })
-
-  return skillNode
 }

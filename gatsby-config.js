@@ -121,5 +121,7 @@ module.exports = {
     "gatsby-plugin-sass",
 
     "gatsby-astrid-transform-skills",
+    "gatsby-astrid-transform-education",
+    "gatsby-astrid-transform-notebook",
   ],
 }

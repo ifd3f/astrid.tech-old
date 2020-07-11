@@ -19,13 +19,6 @@ const mkdirp = require("mkdirp")
 const md5 = require("js-md5")
 const yaml = require("js-yaml")
 
-const {
-  createEducationNode,
-  createCourseTagNode,
-  createSkillNode,
-  createJupyterBlogPostNode,
-} = require("./src/gatsby/index.ts")
-
 const SLUG_OVERRIDE = {
   "c++": "cpp",
   "c#": "csharp",
@@ -481,33 +474,13 @@ exports.onCreateNode = ({ node, actions, getNode }) => {
       break
     }
 
-    case "ipynb": {
-      createJupyterBlogPostNode(actions, node)
-      break
-    }
-
     case "WorkExperienceYaml": {
       createWorkExperienceNode(actions, node)
       break
     }
 
-    case "SkillsYaml": {
-      createSkillNode(actions, node)
-      break
-    }
-
     case "LabelsYaml": {
       createTagLabels(actions, node)
-      break
-    }
-
-    case "EducationYaml": {
-      createEducationNode(actions, node)
-      break
-    }
-
-    case "Course": {
-      createCourseTagNode(actions, node)
       break
     }
 

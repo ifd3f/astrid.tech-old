@@ -106,3 +106,31 @@ export function createEducationNode(actions: Actions, yamlNode: any) {
 
   return educationNode
 }
+
+export const onCreateNode: GatsbyNode["onCreateNode"] = ({
+  node,
+  actions,
+  getNode,
+}) => {
+  if (node.internal.type != "SkillsYaml") return
+
+  const { createNode, createParentChildLink } = actions
+  const yamlNode = (node as unknown) as YamlSkillNode
+
+  const skillNode = withContentDigest({
+    parent: yamlNode.id,
+    internal: {
+      type: "Skill",
+    },
+    children: [],
+    id: v4(),
+
+    name: yamlNode.name,
+    skills: yamlNode.skills.map(({ slug, level }) => ({
+      level: level,
+      tag___NODE: getTagId(slug),
+    })),
+  })
+  createNode(skillNode)
+  createParentChildLink({ parent: yamlNode, child: skillNode })
+}
