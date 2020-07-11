@@ -1,6 +1,8 @@
 import axios from "axios"
-import { GatsbyNode, SourceNodesArgs } from "gatsby"
+import { GatsbyNode, Node, SourceNodesArgs } from "gatsby"
 import yaml from "js-yaml"
+import { withContentDigest } from "../util"
+import { v4 } from "uuid"
 import { buildTagNode } from "../gatsby-astrid-plugin-tagging"
 
 type LinguistEntry = {
@@ -9,6 +11,13 @@ type LinguistEntry = {
 
 type LinguistData = {
   [name: string]: LinguistEntry
+}
+
+type LinguistLanguageNode = Node & {
+  name: string
+  slug: string
+  color: string
+  backgroundColor: string
 }
 
 const SLUG_OVERRIDE = new Map<string, string>([
@@ -53,13 +62,39 @@ export const sourceNodes: GatsbyNode["sourceNodes"] = async ({
     const color = getTextColor(lang.color)
 
     createNode(
-      buildTagNode({
+      withContentDigest({
+        id: v4(),
+        internal: {
+          type: "LinguistLanguage",
+        },
+        children: [],
         name: key,
         slug: getTagSlug(key),
         color,
         backgroundColor: lang.color,
-        priority: 1,
       })
     )
   }
+}
+
+export const onCreateNode: GatsbyNode["onCreateNode"] = async ({
+  node,
+  actions,
+}) => {
+  if (node.internal.type != "LinguistLanguage") return
+  const { createNode } = actions
+  const linguistNode = (node as unknown) as LinguistLanguageNode
+
+  createNode(
+    buildTagNode(
+      {
+        name: linguistNode.name,
+        slug: linguistNode.slug,
+        color: linguistNode.color,
+        backgroundColor: linguistNode.backgroundColor,
+        priority: 1,
+      },
+      linguistNode.id
+    )
+  )
 }

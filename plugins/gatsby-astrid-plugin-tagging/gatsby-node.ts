@@ -51,20 +51,11 @@ export const createSchemaCustomization: GatsbyNode["createSchemaCustomization"] 
     extend() {
       return {
         resolve(source: any, args: any, context: any, info: any) {
+          const allTags = context.nodeModel.getAllNodes({ type: "Tag" })
           return source.tagSlugs.map((slug: string) =>
-            context.nodeModel.runQuery({
-              query: {
-                filter: {
-                  slug: {
-                    eq: slug,
-                  },
-                },
-                sort: { fields: ["priority"], order: ["DESC"] },
-                limit: 1,
-              },
-              type: "Tag",
-              firstOnly: true,
-            })
+            (allTags.filter(
+              (tag: any) => tag.slug == slug
+            ) as any[]).reduce((a, b) => (a.priority > b.priority ? a : b))
           )
         },
       }

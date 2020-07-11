@@ -125,7 +125,7 @@ module.exports = {
 
     "gatsby-astrid-plugin-blog",
     "gatsby-astrid-plugin-tagging",
-    "gatsby-astrid-source-lang-tags",
+    "gatsby-astrid-plugin-lang-tags",
     // "gatsby-astrid-transform-skills",
     // "gatsby-astrid-transform-education",
     //"gatsby-astrid-transform-notebook-post",
