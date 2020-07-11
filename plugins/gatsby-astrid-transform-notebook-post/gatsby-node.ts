@@ -24,10 +24,10 @@ type BlogMetadata = {
   tags: string[]
 }
 
-function createJupyterBlogPostNode(
-  actions: Actions,
-  jupyterNode: JupyterNotebookNode
-) {
+export const onCreateNode: GatsbyNode["onCreateNode"] = ({ node, actions }) => {
+  if (node.internal.type != "ipynb") return
+
+  const jupyterNode = (node as unknown) as JupyterNotebookNode
   const { createNode, createParentChildLink } = actions
   const { title, date, description, tags } = jupyterNode.data.metadata.blog_data
 
@@ -55,12 +55,4 @@ function createJupyterBlogPostNode(
 
   createNode(postNode)
   createParentChildLink({ parent: jupyterNode, child: postNode })
-}
-
-export const onCreateNode: GatsbyNode["onCreateNode"] = ({ node, actions }) => {
-  if (node.internal.type != "ipynb") return
-
-  const jupyterNode = (node as unknown) as JupyterNotebookNode
-
-  createJupyterBlogPostNode(actions, jupyterNode)
 }

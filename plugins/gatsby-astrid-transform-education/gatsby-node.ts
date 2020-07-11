@@ -108,9 +108,6 @@ export const onCreateNode: GatsbyNode["onCreateNode"] = ({
   getNode,
 }) => {
   if (node.internal.type != "EducationYaml") return
-
-  const { createNode, createParentChildLink } = actions
   const yamlNode = (node as unknown) as YamlEducationNode
-
   createEducationNode(actions, yamlNode)
 }
