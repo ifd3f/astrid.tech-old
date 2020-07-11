@@ -1,3 +1,6 @@
+require("source-map-support").install()
+require("ts-node").register()
+
 module.exports = {
   siteMetadata: {
     title: `astrid.tech`,
@@ -122,6 +125,6 @@ module.exports = {
 
     "gatsby-astrid-transform-skills",
     "gatsby-astrid-transform-education",
-    "gatsby-astrid-transform-notebook",
+    //"gatsby-astrid-transform-notebook-post",
   ],
 }

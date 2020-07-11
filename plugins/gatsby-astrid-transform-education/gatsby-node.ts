@@ -1,11 +1,6 @@
-import { Actions, NodeInput } from "gatsby"
+import { Actions, NodeInput, GatsbyNode } from "gatsby"
 import { v4 } from "uuid"
-import {
-  buildTagNode,
-  getTagId,
-  withContentDigest,
-  createLinkedTagList,
-} from "./util"
+import { buildTagNode, withContentDigest, createLinkedTagList } from "../util"
 
 type YamlClassNode = {
   name: string
@@ -30,7 +25,7 @@ type YamlEducationNode = NodeInput & {
 
 type EducationNodeArg = NodeInput & {}
 
-export function createCourseTagNode(actions: Actions, courseNode: any) {
+function createCourseTagNode(actions: Actions, courseNode: any) {
   const { createNode, createParentChildLink } = actions
   const tagNode = buildTagNode({
     parent: courseNode.id,
@@ -78,7 +73,7 @@ function createCourseNode(
   return courseNode
 }
 
-export function createEducationNode(actions: Actions, yamlNode: any) {
+function createEducationNode(actions: Actions, yamlNode: any) {
   const { createNode } = actions
 
   const slug = "/education/" + yamlNode.slug + "/"
@@ -112,25 +107,10 @@ export const onCreateNode: GatsbyNode["onCreateNode"] = ({
   actions,
   getNode,
 }) => {
-  if (node.internal.type != "SkillsYaml") return
+  if (node.internal.type != "EducationYaml") return
 
   const { createNode, createParentChildLink } = actions
-  const yamlNode = (node as unknown) as YamlSkillNode
+  const yamlNode = (node as unknown) as YamlEducationNode
 
-  const skillNode = withContentDigest({
-    parent: yamlNode.id,
-    internal: {
-      type: "Skill",
-    },
-    children: [],
-    id: v4(),
-
-    name: yamlNode.name,
-    skills: yamlNode.skills.map(({ slug, level }) => ({
-      level: level,
-      tag___NODE: getTagId(slug),
-    })),
-  })
-  createNode(skillNode)
-  createParentChildLink({ parent: yamlNode, child: skillNode })
+  createEducationNode(actions, yamlNode)
 }

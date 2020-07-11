@@ -1,7 +1,7 @@
 import { GatsbyNode, Node } from "gatsby"
 import { resolve } from "path"
 import { v4 } from "uuid"
-import { getTagId, withContentDigest } from "../util"
+import { getTagId, withContentDigest } from "../util/index"
 
 type YamlSkillNode = Node & {
   name: string

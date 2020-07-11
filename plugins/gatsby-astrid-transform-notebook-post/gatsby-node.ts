@@ -1,6 +1,6 @@
-import { Actions, Node } from "gatsby"
-import { Notebook } from "../types/nbformat-v4"
-import { withContentDigest, createLinkedTagList } from "./util"
+import { Actions, Node, GatsbyNode } from "gatsby"
+import { Notebook } from "src/types/nbformat-v4"
+import { withContentDigest, createLinkedTagList } from "util"
 import { v4 } from "uuid"
 import path from "path"
 
@@ -24,7 +24,7 @@ type BlogMetadata = {
   tags: string[]
 }
 
-export function createJupyterBlogPostNode(
+function createJupyterBlogPostNode(
   actions: Actions,
   jupyterNode: JupyterNotebookNode
 ) {
@@ -57,30 +57,10 @@ export function createJupyterBlogPostNode(
   createParentChildLink({ parent: jupyterNode, child: postNode })
 }
 
-export const onCreateNode: GatsbyNode["onCreateNode"] = ({
-  node,
-  actions,
-  getNode,
-}) => {
-  if (node.internal.type != "SkillsYaml") return
+export const onCreateNode: GatsbyNode["onCreateNode"] = ({ node, actions }) => {
+  if (node.internal.type != "ipynb") return
 
-  const { createNode, createParentChildLink } = actions
-  const yamlNode = (node as unknown) as YamlSkillNode
+  const jupyterNode = (node as unknown) as JupyterNotebookNode
 
-  const skillNode = withContentDigest({
-    parent: yamlNode.id,
-    internal: {
-      type: "Skill",
-    },
-    children: [],
-    id: v4(),
-
-    name: yamlNode.name,
-    skills: yamlNode.skills.map(({ slug, level }) => ({
-      level: level,
-      tag___NODE: getTagId(slug),
-    })),
-  })
-  createNode(skillNode)
-  createParentChildLink({ parent: yamlNode, child: skillNode })
+  createJupyterBlogPostNode(actions, jupyterNode)
 }

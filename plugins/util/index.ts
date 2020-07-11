@@ -1,5 +1,4 @@
 import crypto from "crypto"
-import { Tag } from "src/types"
 import { NodeInput, Node } from "gatsby"
 
 const SLUG_OVERRIDE = new Map<string, string>([
