@@ -27,6 +27,7 @@ export const sourceNodes: GatsbyNode["sourceNodes"] = async ({
     fields: {
       tagSlugs: "[String!]",
     },
+    extensions: { nodeInterface: {} },
   })
 
   const Tag = schema.buildObjectType({
@@ -133,7 +134,7 @@ export const createResolvers: GatsbyNode["createResolvers"] = async ({
                   eq: source.slug,
                 },
               },
-              sort: { fields: ["priority"], order: "DESC" },
+              sort: { fields: ["priority"], order: ["DESC"] },
             },
             type: "Tag",
             firstOnly: true,
@@ -142,6 +143,8 @@ export const createResolvers: GatsbyNode["createResolvers"] = async ({
       },
     },
   }
+
+  const taggedItemResolver = {}
 
   createResolvers(tagResolverResolver)
 }
