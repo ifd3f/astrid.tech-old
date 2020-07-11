@@ -14,6 +14,7 @@ export const sourceNodes: GatsbyNode["sourceNodes"] = async ({
       date: "Date!",
       description: "String!",
       tagSlugs: "[String!]",
+      tags: { type: "[Tag]", extensions: { tagify: {} } },
     },
     interfaces: ["Tagged", "Node"],
   })

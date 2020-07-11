@@ -4,6 +4,7 @@ import {
   NodeInput,
   Node,
   CreateResolversArgs,
+  CreateSchemaCustomizationArgs,
 } from "gatsby"
 import { withContentDigest } from "../util"
 import { v4 } from "uuid"
@@ -25,7 +26,7 @@ export const sourceNodes: GatsbyNode["sourceNodes"] = async ({
   const Tagged = schema.buildInterfaceType({
     name: "Tagged",
     fields: {
-      tagSlugs: "[String!]",
+      tagSlugs: "[String]",
     },
     extensions: { nodeInterface: {} },
   })
@@ -116,6 +117,36 @@ export const onCreateNode: GatsbyNode["onCreateNode"] = async ({
       createParentChildLink({ parent: node, child: tagNode as Node })
     })
   }
+}
+
+export const createSchemaCustomization: GatsbyNode["createSchemaCustomization"] = async ({
+  actions,
+}: CreateSchemaCustomizationArgs) => {
+  const { createFieldExtension } = actions
+
+  createFieldExtension({
+    name: `tagify`,
+    extend() {
+      return {
+        resolve(source: any, args: any, context: any, info: any) {
+          return source.tagSlugs.map((slug: string) =>
+            context.nodeModel.runQuery({
+              query: {
+                filter: {
+                  slug: {
+                    eq: slug,
+                  },
+                },
+                sort: { fields: ["priority"], order: ["DESC"] },
+              },
+              type: "Tag",
+              firstOnly: true,
+            })
+          )
+        },
+      }
+    },
+  })
 }
 
 export const createResolvers: GatsbyNode["createResolvers"] = async ({
