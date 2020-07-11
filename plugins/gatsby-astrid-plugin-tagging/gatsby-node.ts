@@ -27,6 +27,7 @@ export const sourceNodes: GatsbyNode["sourceNodes"] = async ({
     name: "Tagged",
     fields: {
       tagSlugs: "[String]",
+      tags: "[Tag]",
     },
     extensions: { nodeInterface: {} },
   })
@@ -93,23 +94,14 @@ export const onCreateNode: GatsbyNode["onCreateNode"] = async ({
   // A taggable type
   if (Array.isArray(node.tagSlugs)) {
     node.tagSlugs.forEach(slug => {
-      const resolverNode = withContentDigest({
-        parent: node.id,
-        internal: { type: "TagResolver" } as any,
-        children: [],
-        id: v4(),
-        slug,
-      })
-      createNode(resolverNode)
-      createParentChildLink({ parent: node, child: resolverNode })
-
+      // Create default tags
       const tagNode = buildTagNode(
         {
           name: slug,
           slug,
           color: "#ffffff",
           backgroundColor: "#313549",
-          priority: 0,
+          priority: 0, // Minimum priority
         },
         node.id
       )
@@ -153,29 +145,5 @@ export const createResolvers: GatsbyNode["createResolvers"] = async ({
   actions,
   createResolvers,
 }: CreateResolversArgs) => {
-  const tagResolverResolver = {
-    TagResolver: {
-      tag: {
-        type: "Tag",
-        resolve(source: any, args: any, context: any, info: any) {
-          return context.nodeModel.runQuery({
-            query: {
-              filter: {
-                slug: {
-                  eq: source.slug,
-                },
-              },
-              sort: { fields: ["priority"], order: ["DESC"] },
-            },
-            type: "Tag",
-            firstOnly: true,
-          })
-        },
-      },
-    },
-  }
-
   const taggedItemResolver = {}
-
-  createResolvers(tagResolverResolver)
 }
