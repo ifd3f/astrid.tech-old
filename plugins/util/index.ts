@@ -27,7 +27,7 @@ export function getTagId(slug: string): string {
     .digest("hex")
 }
 
-type PreContentDigestNode = {
+type PreContentDigestNode = NodeInput & {
   internal: any
 }
 
