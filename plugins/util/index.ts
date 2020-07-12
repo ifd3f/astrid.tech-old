@@ -1,5 +1,7 @@
 import crypto from "crypto"
-import { NodeInput, Node } from "gatsby"
+import { NodeInput, Node, NodePluginArgs } from "gatsby"
+import { FileSystemNode } from "gatsby-source-filesystem"
+import path from "path"
 
 type PreContentDigestNode = {
   id: string
@@ -26,4 +28,21 @@ export function withContentDigest<T extends PreContentDigestNode>(
   // add it to userNode
   node.internal.contentDigest = contentDigest
   return (node as unknown) as T & NodeInput
+}
+
+export type ResolveFileNodeArgs = {
+  file: FileSystemNode
+  relativePath: string
+  getNodesByType: NodePluginArgs["getNodesByType"]
+}
+
+export function resolveFileNode({
+  file,
+  relativePath,
+  getNodesByType,
+}: ResolveFileNodeArgs): FileSystemNode | undefined {
+  const absTargetPath = path.resolve(file.dir + "/" + relativePath)
+  return (getNodesByType("File") as FileSystemNode[]).find(
+    fileNode => fileNode.absolutePath == absTargetPath
+  )
 }
