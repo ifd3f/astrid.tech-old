@@ -138,6 +138,18 @@ export const createSchemaCustomization: GatsbyNode["createSchemaCustomization"] 
         ),
     }),
   })
+
+  createFieldExtension({
+    name: `tagOf`,
+    args: {
+      fieldName: "String!",
+    },
+    extend: () => ({
+      resolve: (source: any, args: any, context: any, info: any) =>
+        (context.nodeModel.getAllNodes({ type: "Tag" }) as (Node &
+          TagNodeData)[]).find(node => node.slug == source.tagSlug),
+    }),
+  })
 }
 
 export const createResolvers: GatsbyNode["createResolvers"] = async ({
