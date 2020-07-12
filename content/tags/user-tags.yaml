@@ -1,4 +1,4 @@
-- color: "#31b8f7"
+- backgroundColor: "#31b8f7"
   tags:
     - slug: frontend
       name: Frontend
@@ -11,7 +11,7 @@
     - slug: gatsby-js
       name: Gatsby.js
 
-- color: "#4a7aad"
+- backgroundColor: "#4a7aad"
   tags:
     - slug: backend
       name: Backend
@@ -24,7 +24,7 @@
     - slug: socket-io
       name: Socket.IO
 
-- color: "#e631f7"
+- backgroundColor: "#e631f7"
   tags:
     - slug: data-science
       name: Data Science
@@ -37,7 +37,7 @@
     - slug: numpy
       name: NumPy
 
-- color: "#525569"
+- backgroundColor: "#525569"
   tags:
     - slug: database
       name: Database
@@ -48,7 +48,7 @@
     - slug: mysql
       name: MySQL
 
-- color: "#ff0066"
+- backgroundColor: "#ff0066"
   tags:
     - slug: pure-fp
       name: Pure Functional Programming
@@ -63,7 +63,7 @@
     - slug: metamathematics
       name: Metamathematics
 
-- color: "#e0c91f"
+- backgroundColor: "#e0c91f"
   tags:
     - slug: chatbots
       name: Chatbots
@@ -82,7 +82,7 @@
     - slug: mechanical-engineering
       name: Mechanical Engineering
 
-- color: "#05befc"
+- backgroundColor: "#05befc"
   tags:
     - slug: electrical-engineering
       name: Electrical Engineering
@@ -95,52 +95,52 @@
     - slug: sensor-fusion
       name: Sensor Fusion
 
-- color: "#3DDC84"
+- backgroundColor: "#3DDC84"
   tags:
     - slug: android
       name: Android
 
-- color: "#62AEB2"
+- backgroundColor: "#62AEB2"
   tags:
     - slug: arduino
       name: Arduino
 
-- color: "#3B5998"
+- backgroundColor: "#3B5998"
   tags:
     - slug: bluetooth
       name: Bluetooth
 
-- color: "#C51A4A"
+- backgroundColor: "#C51A4A"
   tags:
     - slug: raspberry-pi
       name: Raspberry Pi
 
-- color: "#3C873A"
+- backgroundColor: "#3C873A"
   tags:
     - slug: node-js
       name: Node.js
 
-- color: "#222c37"
+- backgroundColor: "#222c37"
   tags:
     - slug: unity
       name: Unity
 
-- color: "#CC6699"
+- backgroundColor: "#CC6699"
   tags:
     - slug: sass
       name: Sass
 
-- color: "#f89939"
+- backgroundColor: "#f89939"
   tags:
     - slug: scikit-learn
       name: Scikit-Learn
 
-- color: "#FFA800"
+- backgroundColor: "#FFA800"
   tags:
     - slug: tensorflow
       name: TensorFlow
 
-- color: "#0000FF"
+- backgroundColor: "#0000FF"
   tags:
     - slug: opencv
       name: OpenCV

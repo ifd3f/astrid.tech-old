@@ -1,4 +1,18 @@
-export interface WorkExperience {
+import { Node } from "gatsby"
+
+export type Tagged = Node & {
+  tags: Tag[]
+}
+
+export type Tag = Node & {
+  name: string
+  color: string
+  backgroundColor: string
+  slug: string
+  tagged: Tagged[]
+}
+
+export type WorkExperience = Tagged & {
   organization: string
   position: string
   location: string
@@ -6,80 +20,46 @@ export interface WorkExperience {
   startDate: Date
   endDate?: Date
   highlights: string[]
-  tags: TagWrapper[]
   summary?: string
 }
 
-export interface Project {
+export type Project = Tagged & {
   title: string
   status: null | "wip" | "complete" | "scrapped"
-  description: string
   startDate: string
   endDate: string | null
-  tags: TagWrapper[]
   slug: string
   url: string
   source: string[]
-  markdown?: MarkdownData
   thumbnailPublicPath?: string
+
+  internal: {
+    content: string
+    description: string
+  }
 }
 
-export interface BlogPost<
-  ParentType = any,
-  ContentTypeIndicator = "markdown" | "mdx" | "jupyter"
-> {
+export type BlogPost = Tagged & {
   title?: string
   date?: Date
   description?: string
-  tags?: TagWrapper[]
   slug?: string
-  parent?: ParentType
 
-  contentType?: ContentTypeIndicator
-}
-
-export type MarkdownData = {
-  html?: string
-  excerpt?: string
-  timeToRead?: number
-  wordCount?: {
-    paragraphs?: number
-    sentences?: number
-    word?: number
-  }
-}
-
-export type JupyterData = {
   internal: {
     content: string
+    description: string
   }
 }
 
-export type MarkdownBlogPost = BlogPost<MarkdownData, "markdown">
-export type JupyterBlogPost = BlogPost<JupyterData, "jupyter">
-
-export interface TagWrapper {
-  slug?: string
-  tag?: Tag
-}
-
-export interface Tag {
-  name: string
-  color: string
-  textColor: string
-  slug: string
-}
-
-export interface Course {
+export type Course = Tagged & {
   name: string
   number: string
   slug: string
   date: string
   desc: string | null
-  tags: TagWrapper[]
 }
 
-export interface Education {
+export type Education = Node & {
   name: string
   degree: string | null
   startDate: string
@@ -88,7 +68,7 @@ export interface Education {
   courses: Course[]
 }
 
-export type SkillCategory = {
+export type SkillGroup = Node & {
   name: string
   skills: {
     level: number

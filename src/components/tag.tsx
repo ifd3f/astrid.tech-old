@@ -12,7 +12,7 @@ export const tagBadgeFragment = graphql`
   fragment TagBadge on Tag {
     name
     color
-    textColor
+    backgroundColor
     slug
   }
 `
@@ -25,8 +25,8 @@ export const TagBadge: FC<TagBadgeProps> = ({ tag }) => {
       <Badge
         className={style.tag}
         style={{
-          backgroundColor: tag.color,
-          color: tag.textColor,
+          backgroundColor: tag.backgroundColor,
+          color: tag.color,
         }}
         tag={Link}
         to={linkTo}

@@ -4,7 +4,9 @@
     {
       "type": "npm",
       "script": "develop",
-      "problemMatcher": ["$eslint-compact"],
+      "problemMatcher": [
+        "$eslint-compact"
+      ],
       "group": "build",
       "label": "npm: develop",
       "detail": "gatsby develop"
@@ -12,7 +14,9 @@
     {
       "type": "npm",
       "script": "build",
-      "problemMatcher": ["$eslint-compact"],
+      "problemMatcher": [
+        "$eslint-compact"
+      ],
       "group": "build",
       "label": "npm: build",
       "detail": "gatsby build"
@@ -31,6 +35,16 @@
       "group": "build",
       "label": "npm: deploy",
       "detail": "gh-pages -r \"git@github.com:Plenglin/plenglin.github.io.git\" -b master -d public -f"
+    },
+    {
+      "type": "npm",
+      "script": "develop",
+      "problemMatcher": [
+        "$eslint-compact"
+      ],
+      "group": "build",
+      "label": "npm: develop",
+      "detail": "gatsby develop"
     }
   ]
 }

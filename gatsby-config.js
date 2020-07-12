@@ -1,3 +1,6 @@
+require("source-map-support").install()
+require("ts-node").register()
+
 module.exports = {
   siteMetadata: {
     title: `astrid.tech`,
@@ -37,8 +40,8 @@ module.exports = {
     {
       resolve: `gatsby-source-filesystem`,
       options: {
-        path: `${__dirname}/content/work-experience`,
-        name: `work-experience`,
+        path: `${__dirname}/content/work`,
+        name: `work`,
       },
     },
     {
@@ -119,8 +122,19 @@ module.exports = {
     },
     `gatsby-plugin-react-helmet`,
     "gatsby-plugin-sass",
-    // this (optional) plugin enables Progressive Web App + Offline functionality
-    // To learn more, visit: https://gatsby.dev/offline
-    // `gatsby-plugin-offline`,
+
+    "gatsby-astrid-plugin-blog",
+    "gatsby-astrid-plugin-tagging",
+
+    "gatsby-astrid-source-lang-tags",
+    "gatsby-astrid-transformer-user-tags",
+    "gatsby-astrid-transformer-skills",
+
+    "gatsby-astrid-transformer-work",
+    "gatsby-astrid-transformer-education",
+
+    "gatsby-astrid-transformer-notebook-post",
+    "gatsby-astrid-transformer-markdown-post",
+    "gatsby-astrid-transformer-project",
   ],
 }
