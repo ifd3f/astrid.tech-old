@@ -4,12 +4,12 @@ import {
   CreateSchemaCustomizationArgs,
   GatsbyNode,
   Node,
+  NodeInput,
   ParentSpanPluginArgs,
   SourceNodesArgs,
-  NodeInput,
 } from "gatsby"
-import { withContentDigest } from "../util"
 import { v4 } from "uuid"
+import { withContentDigest } from "../util"
 import { TagNodeData, TAG_MIME_TYPE } from "./index"
 
 const getTagNodeCreator = ({
@@ -107,7 +107,7 @@ export const onCreateNode: GatsbyNode["onCreateNode"] = async (
   // A tag content holder
   if (node.internal.mediaType == TAG_MIME_TYPE) {
     const tagNode = buildTagNode(
-      { ...JSON.parse(node.internal.content!!), priority: 1 },
+      { ...JSON.parse(node.internal.content!!), priority: 1 }, // Increased priority
       node.id
     )
     createParentChildLink({ parent: node, child: tagNode as Node })
@@ -121,18 +121,22 @@ export const createSchemaCustomization: GatsbyNode["createSchemaCustomization"] 
 
   createFieldExtension({
     name: `tagify`,
-    extend() {
-      return {
-        resolve(source: any, args: any, context: any, info: any) {
-          const allTags = context.nodeModel.getAllNodes({ type: "Tag" })
-          return source.tagSlugs.map((slug: string) =>
-            (allTags.filter(
-              (tag: any) => tag.slug == slug
-            ) as any[]).reduce((a, b) => (a.priority > b.priority ? a : b))
-          )
-        },
-      }
-    },
+    extend: () => ({
+      resolve: (source: any, args: any, context: any, info: any) =>
+        source.tagSlugs.map((slug: string) =>
+          context.nodeModel.runQuery({
+            query: {
+              filter: {
+                slug: {
+                  eq: slug,
+                },
+              },
+            },
+            type: "Tag",
+            firstOnly: true,
+          })
+        ),
+    }),
   })
 }
 
