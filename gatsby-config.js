@@ -134,7 +134,7 @@ module.exports = {
     "gatsby-astrid-transformer-work",
     "gatsby-astrid-transformer-education",
 
-    "gatsby-astrid-transformer-notebook-post",
+    "gatsby-astrid-transformer-notebook-markdown",
     "gatsby-astrid-transformer-markdown-post",
     "gatsby-astrid-transformer-project",
   ],
