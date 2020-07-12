@@ -11,13 +11,11 @@ type LayoutProps = PageProps<any> & {
 
 const Layout: FC<LayoutProps> = ({ children, mainClass }) => {
   return (
-    <>
-      <div className="root-wrapper">
-        <MainNavbar />
-        <main className={mainClass}>{children}</main>
-        <FooterSection />
-      </div>
-    </>
+    <div className="root-wrapper">
+      <MainNavbar />
+      <main className={mainClass}>{children}</main>
+      <FooterSection />
+    </div>
   )
 }
 

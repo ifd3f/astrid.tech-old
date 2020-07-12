@@ -8,7 +8,7 @@ import SEO from "../components/seo"
 import { TagBadge } from "../components/tag"
 import { Project } from "../types"
 import { Tag } from "../types/index"
-import portfolioStyles from "./portfolio.module.scss"
+import styles from "./projects.module.scss"
 
 type Data = {
   site: {
@@ -62,14 +62,14 @@ const ProjectsIndex: FC<PageProps<Data>> = ({ data }) => {
   const projects = data.allProject.edges.map(edge => edge.node)
 
   const cards = projects.map(project => (
-    <Col className={portfolioStyles.projectCardWrapper} xs={12} sm={6} xl={4}>
+    <Col className={styles.projectCardWrapper} xs={12} sm={6} xl={4}>
       <ProjectCard project={project} hovered={false} />
     </Col>
   ))
   return (
     <Layout>
       <SEO title="Portfolio" />
-      <Container className={portfolioStyles.portfolioContainer} fluid>
+      <Container className={styles.portfolioContainer} fluid>
         <Masonry>{cards}</Masonry>
       </Container>
     </Layout>
