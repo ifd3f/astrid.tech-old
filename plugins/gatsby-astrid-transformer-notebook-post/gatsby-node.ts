@@ -1,8 +1,8 @@
-import { Actions, Node, GatsbyNode } from "gatsby"
-import { Notebook } from "src/types/nbformat-v4"
-import { withContentDigest, createLinkedTagList } from "../util"
-import { v4 } from "uuid"
+import { GatsbyNode, Node } from "gatsby"
 import path from "path"
+import { Notebook } from "src/types/nbformat-v4"
+import { v4 } from "uuid"
+import { withContentDigest } from "../util"
 
 type JupyterNotebookNode = Node & {
   json: Notebook
@@ -24,7 +24,11 @@ type BlogMetadata = {
   tags: string[]
 }
 
-export const onCreateNode: GatsbyNode["onCreateNode"] = ({ node, actions }) => {
+export const onCreateNode: GatsbyNode["onCreateNode"] = async ({
+  node,
+  actions,
+  loadNodeContent,
+}) => {
   if (node.internal.type != "ipynb") return
 
   const jupyterNode = (node as unknown) as JupyterNotebookNode
@@ -33,11 +37,11 @@ export const onCreateNode: GatsbyNode["onCreateNode"] = ({ node, actions }) => {
 
   const slugBase = path.parse(path.dirname(jupyterNode.fileAbsolutePath)).name
 
-  const postNode = withContentDigest({
+  const postNode = (withContentDigest({
     parent: jupyterNode.id,
     internal: {
       type: "BlogPost",
-      content: await loadNodeContent(markdownNode),
+      //content: jupyterNode.internal.content,
     },
     id: v4(),
     children: [],
@@ -46,7 +50,7 @@ export const onCreateNode: GatsbyNode["onCreateNode"] = ({ node, actions }) => {
     date,
     description,
     tagSlugs: tags,
-  })
+  }) as unknown) as Node
 
   createNode(postNode)
   createParentChildLink({ parent: jupyterNode, child: postNode })
