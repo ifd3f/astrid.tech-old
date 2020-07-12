@@ -6,6 +6,7 @@ import {
   BlogPostContent,
 } from "../gatsby-astrid-plugin-blog"
 import { withContentDigest } from "../util"
+import { BlogMetadata } from "./index"
 
 type MarkdownNode = Node & {
   frontmatter: BlogMetadata
@@ -13,11 +14,18 @@ type MarkdownNode = Node & {
   html: string
 }
 
-type BlogMetadata = {
-  title: string
-  date: string
-  description: string
-  tags: string[]
+function getFileSystemNode(
+  node: Node,
+  getNode: (id: string) => Node
+): FileSystemNode | null {
+  var out = node
+  while (out && out.internal.type != "File") {
+    if (out.parent == null) {
+      return null
+    }
+    out = getNode(out.parent)
+  }
+  return out as FileSystemNode
 }
 
 export const onCreateNode: GatsbyNode["onCreateNode"] = async ({
@@ -28,8 +36,8 @@ export const onCreateNode: GatsbyNode["onCreateNode"] = async ({
   if (node.internal.type != "MarkdownRemark") return
   const markdownNode = (node as unknown) as MarkdownNode
 
-  const parentFileSystem = getNode(markdownNode.parent) as FileSystemNode
-  if (parentFileSystem.sourceInstanceName != "blog") return
+  const parentFileSystem = getFileSystemNode(markdownNode, getNode)
+  if (parentFileSystem?.sourceInstanceName != "blog") return
 
   const { createNode, createParentChildLink } = actions
   const slug = createFilePath({ node, getNode })
