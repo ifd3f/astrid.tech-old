@@ -1,91 +1,106 @@
-import { Actions, NodeInput, GatsbyNode } from "gatsby"
+import { Actions, GatsbyNode, Node, SourceNodesArgs } from "gatsby"
 import { v4 } from "uuid"
-import { buildTagNode, withContentDigest, createLinkedTagList } from "../util"
+import { withContentDigest } from "../util"
 
-type YamlClassNode = {
+type CourseYamlData = Node & {
   name: string
   number: string
+  desc: string
+  date: string
   tags: string[]
-  desc?: string
 }
 
-type ClassNodeArg = NodeInput & {
-  name: string
-  number: string
-  tags___NODE: string[]
-  desc: string | null
-}
-
-type YamlEducationNode = NodeInput & {
-  name: string
+type SchoolYamlNode = Node & {
   slug: string
-  degree?: string
-  classes: YamlClassNode[]
+  name: string
+  degree: string
+  startDate: string
+  endDate: string
+  courses: CourseYamlData[]
 }
 
-type EducationNodeArg = NodeInput & {}
+// function createCourseTagNode(actions: Actions, courseNode: any) {
+//   const { createNode, createParentChildLink } = actions
+//   const tagNode = buildTagNode({
+//     parent: courseNode.id,
+//     name: courseNode.number,
+//     slug: courseNode.slug,
+//     color: "#18b21b",
+//     textColor: "#ffffff",
+//   })
+//   console.log(tagNode.children)
+//   createNode(tagNode)
+//   createParentChildLink({ parent: courseNode, child: tagNode as any })
 
-function createCourseTagNode(actions: Actions, courseNode: any) {
+//   return tagNode
+// }
+
+type CreateCourseNodeArgs = {
+  actions: Actions
+  schoolSlug: string
+  schoolYamlNode: SchoolYamlNode
+  courseYamlData: CourseYamlData
+}
+
+function createCourseNode({
+  actions,
+  schoolSlug,
+  schoolYamlNode,
+  courseYamlData,
+}: CreateCourseNodeArgs) {
   const { createNode, createParentChildLink } = actions
-  const tagNode = buildTagNode({
-    parent: courseNode.id,
-    name: courseNode.number,
-    slug: courseNode.slug,
-    color: "#18b21b",
-    textColor: "#ffffff",
-  })
-  console.log(tagNode.children)
-  createNode(tagNode)
-  createParentChildLink({ parent: courseNode, child: tagNode as any })
-
-  return tagNode
-}
-
-function createCourseNode(
-  actions: Actions,
-  parentSlug: string,
-  parentId: string,
-  yamlNode: any
-) {
-  const { createNode } = actions
 
   const slug =
-    parentSlug + yamlNode.number.replace(" ", "-").toLowerCase() + "/"
+    schoolSlug + courseYamlData.number.replace(" ", "-").toLowerCase() + "/"
 
   const courseNode = withContentDigest({
-    parent: parentId,
+    parent: schoolYamlNode.id,
     internal: {
       type: "Course",
     },
     id: v4(),
     children: [],
 
-    name: yamlNode.name,
+    name: courseYamlData.name,
     slug: slug,
-    number: yamlNode.number,
-    date: yamlNode.date,
-    desc: yamlNode.desc ? yamlNode.desc : null,
-    tags: createLinkedTagList(yamlNode.tags),
+    number: courseYamlData.number,
+    date: courseYamlData.date,
+    description: courseYamlData.description,
+    tagSlugs: courseYamlData.tags,
   })
 
   createNode(courseNode)
+  createParentChildLink({
+    parent: schoolYamlNode,
+    child: (courseNode as unknown) as Node,
+  })
 
   return courseNode
 }
 
-function createEducationNode(actions: Actions, yamlNode: any) {
+type CreateSchoolNodeArgs = {
+  actions: Actions
+  yamlNode: SchoolYamlNode
+}
+
+function createSchoolNode({ actions, yamlNode }: CreateSchoolNodeArgs) {
   const { createNode } = actions
 
   const slug = "/education/" + yamlNode.slug + "/"
 
-  const courseNodes = yamlNode.courses.map((raw: any) =>
-    createCourseNode(actions, slug, yamlNode.id, raw)
+  const courseNodes = yamlNode.courses.map(courseYamlData =>
+    createCourseNode({
+      actions,
+      schoolYamlNode: yamlNode,
+      schoolSlug: slug,
+      courseYamlData,
+    })
   )
 
-  const educationNode = withContentDigest({
+  const schoolNode = withContentDigest({
     parent: yamlNode.id,
     internal: {
-      type: "Education",
+      type: "School",
     },
     children: [],
     id: v4(),
@@ -97,17 +112,53 @@ function createEducationNode(actions: Actions, yamlNode: any) {
     endDate: yamlNode.endDate,
     courses___NODE: courseNodes.map((classNode: any) => classNode.id),
   })
-  createNode(educationNode)
+  createNode(schoolNode)
 
-  return educationNode
+  return schoolNode
 }
 
-export const onCreateNode: GatsbyNode["onCreateNode"] = ({
+export const sourceNodes: GatsbyNode["sourceNodes"] = async ({
+  actions,
+  schema,
+}: SourceNodesArgs) => {
+  const { createTypes } = actions
+
+  const Course = schema.buildObjectType({
+    name: "Course",
+    fields: {
+      name: "String!",
+      date: "Date!",
+      slug: "String!",
+      number: "String!",
+      description: "String",
+      tags: { type: "Tag!", extensions: { tagify: {} } },
+      tagSlugs: "String!",
+    },
+    interfaces: ["Node"],
+  })
+
+  const School = schema.buildObjectType({
+    name: "School",
+    fields: {
+      name: "String!",
+      degree: "String!",
+      slug: "String!",
+      startDate: "Date!",
+      endDate: "Date!",
+      courses: "[Course!]",
+    },
+    interfaces: ["Node"],
+  })
+
+  createTypes([Course, School])
+}
+
+export const onCreateNode: GatsbyNode["onCreateNode"] = async ({
   node,
   actions,
-  getNode,
 }) => {
-  if (node.internal.type != "EducationYaml") return
-  const yamlNode = (node as unknown) as YamlEducationNode
-  createEducationNode(actions, yamlNode)
+  if (node.internal.type != "SchoolYaml") return
+  const yamlNode = (node as unknown) as SchoolYamlNode
+
+  createSchoolNode({ actions, yamlNode })
 }

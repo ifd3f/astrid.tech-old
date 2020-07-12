@@ -98,7 +98,6 @@ export const sourceNodes: GatsbyNode["sourceNodes"] = async ({
 export const onCreateNode: GatsbyNode["onCreateNode"] = async ({
   node,
   actions,
-  getNode,
 }: CreateNodeArgs) => {
   if (node.internal.type != "SkillsYaml") return
 
