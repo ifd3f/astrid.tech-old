@@ -40,8 +40,8 @@ module.exports = {
     {
       resolve: `gatsby-source-filesystem`,
       options: {
-        path: `${__dirname}/content/work-experience`,
-        name: `work-experience`,
+        path: `${__dirname}/content/work`,
+        name: `work`,
       },
     },
     {
@@ -125,10 +125,14 @@ module.exports = {
 
     "gatsby-astrid-plugin-blog",
     "gatsby-astrid-plugin-tagging",
+
     "gatsby-astrid-source-lang-tags",
     "gatsby-astrid-transformer-user-tags",
     "gatsby-astrid-transformer-skills",
+
+    "gatsby-astrid-transformer-work",
     "gatsby-astrid-transformer-education",
+
     "gatsby-astrid-transformer-notebook-post",
     "gatsby-astrid-transformer-markdown-post",
     "gatsby-astrid-transformer-project",

@@ -162,10 +162,10 @@ export const sourceNodes: GatsbyNode["sourceNodes"] = async ({
       slug: "String!",
       number: "String!",
       description: "String",
-      tags: { type: "Tag!", extensions: { tagify: {} } },
-      tagSlugs: "String!",
+      tags: { type: "[Tag]", extensions: { tagify: {} } },
+      tagSlugs: "[String]",
     },
-    interfaces: ["Node"],
+    interfaces: ["Node", "Tagged"],
   })
 
   const School = schema.buildObjectType({
