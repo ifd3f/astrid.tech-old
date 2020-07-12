@@ -8,8 +8,8 @@ import styleBlog from "../scss/blog.module.scss"
 import Helmet from "react-helmet"
 
 export const pageQuery = graphql`
-  query BlogPostBySlug($id: String!) {
-    allBlogPost(filter: { id: { eq: $id } }) {
+  query BlogPostBySlug($slug: String!) {
+    allBlogPost(filter: { slug: { eq: $slug } }) {
       edges {
         node {
           internal {

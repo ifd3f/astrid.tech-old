@@ -1,7 +1,8 @@
-import { GatsbyNode, SourceNodesArgs, CreateNodeArgs } from "gatsby"
-import { BLOG_POST_MIME_TYPE, BlogPostContent } from "./index"
-import { withContentDigest } from "../util/index"
+import { CreateNodeArgs, GatsbyNode, SourceNodesArgs } from "gatsby"
+import path from "path"
 import { v4 } from "uuid"
+import { withContentDigest } from "../util/index"
+import { BlogPostContent, BLOG_POST_MIME_TYPE } from "./index"
 
 export const sourceNodes: GatsbyNode["sourceNodes"] = async ({
   actions,
@@ -50,4 +51,61 @@ export const onCreateNode: GatsbyNode["onCreateNode"] = async ({
       tagSlugs: content.tagSlugs,
     })
   )
+}
+
+export const createPages: GatsbyNode["createPages"] = async ({
+  graphql,
+  actions,
+}) => {
+  const { createPage } = actions
+
+  type Data = {
+    allBlogPost: {
+      edges: {
+        node: {
+          title: string
+          slug: string
+        }
+      }[]
+    }
+  }
+
+  const result = await graphql(`
+    {
+      allBlogPost(sort: { fields: date, order: DESC }) {
+        edges {
+          node {
+            title
+            id
+            slug
+          }
+        }
+      }
+    }
+  `)
+
+  if (result.errors) {
+    throw result.errors
+  }
+
+  // Create blog posts pages.
+  const posts = (result.data as Data).allBlogPost.edges
+
+  const BlogPostTemplate = path.resolve(`src/templates/blog-post.tsx`)
+  posts.forEach((edge, index) => {
+    const post = edge.node
+
+    const previous = index === posts.length - 1 ? null : posts[index + 1].node
+    const next = index === 0 ? null : posts[index - 1].node
+
+    createPage({
+      path: post.slug,
+      component: BlogPostTemplate,
+      context: {
+        slug: post.slug,
+        previous,
+        next,
+      },
+    })
+  })
 }
