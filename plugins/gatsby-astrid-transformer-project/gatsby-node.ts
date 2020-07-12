@@ -39,8 +39,8 @@ export const sourceNodes: GatsbyNode["sourceNodes"] = async ({
       url: "String",
       source: "String",
       thumbnail: "File",
-      tagSlugs: "[String]",
-      tags: { type: "[Tag]", extensions: { tagify: {} } },
+      tagSlugs: "[String!]",
+      tags: { type: "[Tag!]", extensions: { tagify: {} } },
     },
     interfaces: ["Tagged", "Node"],
   })
@@ -91,7 +91,7 @@ export const onCreateNode: GatsbyNode["onCreateNode"] = async ({
     startDate: frontmatter.startDate,
     endDate: frontmatter.endDate,
     thumbnail___NODE: thumbnailFileNodeId,
-    tagSlugs: markdownNode.frontmatter.tags.concat([slug]),
+    tagSlugs: markdownNode.frontmatter.tags,
   })
   createNode(projectNode)
   createParentChildLink({ parent: markdownNode, child: projectNode })

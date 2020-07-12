@@ -96,16 +96,13 @@ export const ProjectCard: FC<ProjectCardProps> = ({
       <h5>
         {project.title} <StatusBadge status={project.status} />
       </h5>
-      <CardSubtitle>{project.description}</CardSubtitle>
+      <CardSubtitle>{project.internal.description}</CardSubtitle>
     </>
   )
   const bodySection = (
     <>
-      <TagList tags={project.tags.map(t => t.tag!!)} />
+      <TagList tags={project.tags} />
       {project.url ? <CardLink href={project.url}>{project.url}</CardLink> : ""}
-      {project.source.length > 0 ? (
-        <CardLink href={project.source[0]}>Source Code</CardLink>
-      ) : null}
     </>
   )
   const onClickCard = (ev: React.MouseEvent<HTMLElement>) => {
@@ -125,13 +122,7 @@ export const ProjectCard: FC<ProjectCardProps> = ({
   const className =
     (hovered ? styles.hoveredProjectCard : "") + " " + styles.projectCard
 
-  const card = project.thumbnailPublicPath ? (
-    <Card className={className}>
-      <CardBody>{headerSection}</CardBody>
-      <CardImg src={project.thumbnailPublicPath} />
-      <CardBody>{bodySection}</CardBody>
-    </Card>
-  ) : (
+  const card = (
     <Card className={className}>
       <CardBody>
         {headerSection}

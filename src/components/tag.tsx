@@ -21,19 +21,17 @@ export const TagBadge: FC<TagBadgeProps> = ({ tag }) => {
   const linkTo = tag.slug[0] == "/" ? tag.slug : "/tag/" + tag.slug
 
   return (
-    <>
-      <Badge
-        className={style.tag}
-        style={{
-          backgroundColor: tag.backgroundColor,
-          color: tag.color,
-        }}
-        tag={Link}
-        to={linkTo}
-      >
-        {tag.name}
-      </Badge>
-    </>
+    <Badge
+      className={style.tag}
+      style={{
+        backgroundColor: tag.backgroundColor,
+        color: tag.color,
+      }}
+      tag={Link}
+      to={linkTo}
+    >
+      {tag.name}
+    </Badge>
   )
 }
 
@@ -42,6 +40,7 @@ type TagListProps = {
 }
 
 export const TagList: FC<TagListProps> = ({ tags }) => {
+  console.log(tags)
   return (
     <div>
       <p
@@ -49,9 +48,9 @@ export const TagList: FC<TagListProps> = ({ tags }) => {
           fontSize: "12pt",
         }}
       >
-        {tags.map(tag => {
-          return <TagBadge tag={tag} />
-        })}
+        {tags.map(tag => (
+          <TagBadge key={tag.slug} tag={tag} />
+        ))}
       </p>
     </div>
   )

@@ -58,8 +58,8 @@ export const sourceNodes: GatsbyNode["sourceNodes"] = async ({
   const Tagged = schema.buildInterfaceType({
     name: "Tagged",
     fields: {
-      tagSlugs: "[String]",
-      tags: "[Tag]",
+      tagSlugs: "[String!]",
+      tags: "[Tag!]",
     },
     extensions: { nodeInterface: {} },
   })

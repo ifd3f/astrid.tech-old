@@ -60,7 +60,6 @@ const TagsFilterBar: FC<TagsFilterBarProps> = ({
 
 const ProjectsIndex: FC<PageProps<Data>> = ({ data }) => {
   const projects = data.allProject.edges.map(edge => edge.node)
-  const tags = projects.flatMap(project => project.tags).map(({ tag }) => tag)
 
   const cards = projects.map(project => (
     <Col className={portfolioStyles.projectCardWrapper} xs={12} sm={6} xl={4}>
