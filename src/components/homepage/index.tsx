@@ -11,11 +11,6 @@ export default function HomepageContainer() {
   return (
     <div className={styles.homepageContainer}>
       <HeadingSection />
-      <ElevatorSection />
-      <SkillsSection />
-      <EducationSection />
-      <ExperienceSection />
-      <ProjectsSection />
     </div>
   )
 }
