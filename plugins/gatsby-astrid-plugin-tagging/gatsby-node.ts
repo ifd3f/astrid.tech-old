@@ -15,7 +15,7 @@ import { TagNodeData, TAG_MIME_TYPE } from "./index"
 const getTagNodeCreator = ({
   actions,
   getNodesByType,
-}: ParentSpanPluginArgs) => (tag: TagNodeData, parent?: string) => {
+}: ParentSpanPluginArgs) => (tag: TagNodeData, parent?: Node) => {
   const { createNode, deleteNode } = actions
 
   // Check for existing
@@ -31,7 +31,7 @@ const getTagNodeCreator = ({
 
   // Create the node
   const tagNode = withContentDigest({
-    parent,
+    parent: parent?.id,
     internal: {
       type: `Tag`,
     } as any,
@@ -99,16 +99,23 @@ export const onCreateNode: GatsbyNode["onCreateNode"] = async (
           backgroundColor: "#313549",
           priority: 0, // Minimum priority
         },
-        node.id
+        node
       )
     })
   }
 
   // A tag content holder
   if (node.internal.mediaType == TAG_MIME_TYPE) {
+    const tagData = JSON.parse(node.internal.content!!) as TagNodeData
     const tagNode = buildTagNode(
-      { ...JSON.parse(node.internal.content!!), priority: 1 }, // Increased priority
-      node.id
+      {
+        name: tagData.name,
+        color: tagData.color,
+        backgroundColor: tagData.backgroundColor,
+        slug: tagData.slug,
+        priority: 1, // Increased priority
+      },
+      node
     )
     createParentChildLink({ parent: node, child: tagNode as Node })
   }

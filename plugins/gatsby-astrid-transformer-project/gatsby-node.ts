@@ -33,7 +33,7 @@ export const sourceNodes: GatsbyNode["sourceNodes"] = async ({
     fields: {
       id: "String!",
       title: "String!",
-      status: "String!",
+      status: "String",
       startDate: "Date!",
       endDate: "Date",
       url: "String",

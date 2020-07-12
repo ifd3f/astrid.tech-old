@@ -15,22 +15,16 @@ export const pageQuery = graphql`
       edges {
         node {
           slug
-          thumbnailPublicPath
           startDate(formatString: "MMMM YYYY")
           endDate(formatString: "MMMM YYYY")
           title
-          description
           status
-          markdown {
-            html
+          internal {
+            content
+            description
           }
           tags {
-            tag {
-              name
-              color
-              textColor
-              slug
-            }
+            ...TagBadge
           }
           url
           source

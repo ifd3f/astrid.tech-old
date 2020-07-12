@@ -9,72 +9,26 @@ import { ProjectCard } from "../components/project"
 import { PostBrief } from "../components/blog"
 
 export const pageQuery = graphql`
-  query GetTag($slug: String!) {
+  query GetTagInfo($slug: String!) {
     allTag(filter: { slug: { eq: $slug } }) {
       edges {
         node {
-          slug
           name
-          color
-          textColor
-        }
-      }
-    }
-    allProject(
-      filter: { tags: { elemMatch: { slug: { eq: $slug } } } }
-      sort: { fields: [endDate], order: DESC }
-    ) {
-      edges {
-        node {
-          slug
-          thumbnailPublicPath
-          startDate(formatString: "YYYY-MM")
-          endDate(formatString: "YYYY-MM")
-          title
-          description
-          status
-          markdown {
-            html
-          }
-          tags {
-            tag {
-              name
-              color
-              textColor
-              slug
+          tagged {
+            __typename
+            ... on Work {
+              id
             }
-          }
-          url
-          source
-        }
-      }
-    }
-    allWorkExperience(
-      filter: { tags: { elemMatch: { slug: { eq: $slug } } } }
-    ) {
-      edges {
-        node {
-          slug
-        }
-      }
-    }
-    allBlogPost(filter: { tags: { elemMatch: { slug: { eq: $slug } } } }) {
-      edges {
-        node {
-          title
-          date
-          slug
-          description
-          contentType
-          markdown {
-            excerpt
-          }
-          tags {
-            tag {
-              slug
+            ... on Project {
+              id
+            }
+            ... on Course {
+              id
               name
-              color
-              textColor
+            }
+            ... on BlogPost {
+              id
+              date
             }
           }
         }

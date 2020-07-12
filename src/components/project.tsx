@@ -70,14 +70,16 @@ type ProjectCardProps = {
 export const projectCardFragment = graphql`
   fragment ProjectCard on Project {
     slug
-    thumbnailPublicPath
+    startDate(formatString: "MMMM YYYY")
+    endDate(formatString: "MMMM YYYY")
     title
-    description
     status
+    internal {
+      content
+      description
+    }
     tags {
-      tag {
-        ...TagBadge
-      }
+      ...TagBadge
     }
     url
     source
