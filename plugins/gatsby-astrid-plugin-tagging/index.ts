@@ -2,15 +2,23 @@ import { Node, NodeInput } from "gatsby"
 import { v4 } from "uuid"
 import { withContentDigest } from "../util"
 
-export type Tag = {
+export const TAG_MIME_TYPE = "application/prs.astrid-tech-tag"
+
+export type TagContent = {
   name: string
   slug: string
   color: string
   backgroundColor: string
+}
+
+export type TagNodeData = TagContent & {
   priority: number
 }
 
-export function buildTagNode(tag: Tag, parent?: string): NodeInput | Node {
+export function buildTagNode(
+  tag: TagNodeData,
+  parent?: string
+): NodeInput | Node {
   return withContentDigest({
     parent,
     internal: {

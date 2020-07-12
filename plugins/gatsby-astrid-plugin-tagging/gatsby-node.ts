@@ -6,8 +6,9 @@ import {
   SourceNodesArgs,
   BuildArgs,
   ParentSpanPluginArgs,
+  CreateNodeArgs,
 } from "gatsby"
-import { buildTagNode } from "./index"
+import { buildTagNode, TAG_MIME_TYPE } from "./index"
 
 export const onPreBootstrap: GatsbyNode["onPreBootstrap"] = async ({
   actions,
@@ -67,7 +68,7 @@ export const onCreateNode: GatsbyNode["onCreateNode"] = async ({
   node,
   actions,
   getNodesByType,
-}) => {
+}: CreateNodeArgs) => {
   const { createNode, createParentChildLink } = actions
 
   // A taggable type
@@ -85,8 +86,17 @@ export const onCreateNode: GatsbyNode["onCreateNode"] = async ({
         node.id
       )
       createNode(tagNode)
-      createParentChildLink({ parent: node, child: tagNode as Node })
     })
+  }
+
+  // A tag content holder
+  if (node.internal.mediaType == TAG_MIME_TYPE) {
+    const tagNode = buildTagNode(
+      { ...JSON.parse(node.internal.content!!), priority: 1 },
+      node.id
+    )
+    createNode(tagNode)
+    createParentChildLink({ parent: node, child: tagNode as Node })
   }
 }
 

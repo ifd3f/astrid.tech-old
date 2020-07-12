@@ -4,6 +4,7 @@ import yaml from "js-yaml"
 import { withContentDigest } from "../util"
 import { v4 } from "uuid"
 import { buildTagNode } from "../gatsby-astrid-plugin-tagging"
+import { TAG_MIME_TYPE } from "../gatsby-astrid-plugin-tagging/index"
 
 type LinguistEntry = {
   color: string
@@ -66,35 +67,17 @@ export const sourceNodes: GatsbyNode["sourceNodes"] = async ({
         id: v4(),
         internal: {
           type: "LinguistLanguage",
+          mediaType: TAG_MIME_TYPE,
+          content: JSON.stringify({
+            name: key,
+            slug: getTagSlug(key),
+            color,
+            backgroundColor: lang.color,
+          }),
         },
         children: [],
-        name: key,
-        slug: getTagSlug(key),
-        color,
-        backgroundColor: lang.color,
+        data: langs,
       })
     )
   }
-}
-
-export const onCreateNode: GatsbyNode["onCreateNode"] = async ({
-  node,
-  actions,
-}) => {
-  if (node.internal.type != "LinguistLanguage") return
-  const { createNode } = actions
-  const linguistNode = (node as unknown) as LinguistLanguageNode
-
-  createNode(
-    buildTagNode(
-      {
-        name: linguistNode.name,
-        slug: linguistNode.slug,
-        color: linguistNode.color,
-        backgroundColor: linguistNode.backgroundColor,
-        priority: 1,
-      },
-      linguistNode.id
-    )
-  )
 }
