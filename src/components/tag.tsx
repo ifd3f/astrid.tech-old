@@ -40,7 +40,6 @@ type TagListProps = {
 }
 
 export const TagList: FC<TagListProps> = ({ tags }) => {
-  console.log(tags)
   return (
     <div>
       <p

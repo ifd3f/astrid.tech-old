@@ -33,7 +33,7 @@ export const onCreateNode: GatsbyNode["onCreateNode"] = async ({
   const slug = createFilePath({ node, getNode })
 
   const content: BlogPostContent = {
-    slug: "/blog" + slug,
+    slug,
     title: markdownNode.frontmatter.title,
     date: markdownNode.frontmatter.date,
     description: markdownNode.frontmatter.description,

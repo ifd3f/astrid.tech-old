@@ -67,9 +67,8 @@ export const onCreateNode: GatsbyNode["onCreateNode"] = async ({
   const frontmatter = markdownNode.frontmatter
   var thumbnailFileNodeId = null
   if (frontmatter.thumbnail) {
-    const fileNode = getNode(markdownNode.parent) as FileSystemNode
     const file = resolveFileNode({
-      file: fileNode,
+      file: getNode(markdownNode.parent) as FileSystemNode,
       relativePath: frontmatter.thumbnail,
       getNodesByType,
     })
@@ -81,6 +80,7 @@ export const onCreateNode: GatsbyNode["onCreateNode"] = async ({
     internal: {
       type: `Project`,
       content: await loadNodeContent(markdownNode),
+      description: frontmatter.description,
       mediaType: "text/html",
     } as any,
     id: v4(),

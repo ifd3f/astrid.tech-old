@@ -34,6 +34,8 @@ export const onCreateNode: GatsbyNode["onCreateNode"] = async ({
   const { createNode } = actions
   const content = JSON.parse(node.internal.content!!) as BlogPostContent
 
+  const slug = "/blog" + content.slug
+
   createNode(
     withContentDigest({
       id: v4(),
@@ -43,7 +45,7 @@ export const onCreateNode: GatsbyNode["onCreateNode"] = async ({
         description: content.description,
       },
       title: content.title,
-      slug: content.slug,
+      slug,
       date: content.date,
       tagSlugs: content.tagSlugs,
     })

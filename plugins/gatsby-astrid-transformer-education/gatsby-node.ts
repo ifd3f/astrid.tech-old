@@ -40,8 +40,8 @@ function createCourseTagNode({ actions, courseNode }: CreateCourseTagNodeArgs) {
   const content = {
     name: courseNode.number,
     slug: courseNode.slug,
-    color: "#18b21b",
-    textColor: "#ffffff",
+    backgroundColor: "#18b21b",
+    color: "#ffffff",
   }
 
   const tagNode = withContentDigest({

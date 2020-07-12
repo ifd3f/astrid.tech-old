@@ -10,7 +10,15 @@
       date: 2020-04-01
       tags:
         - fpgas
-        - verilog
+        - systemverilog
+        - computer-engineering
+    - name: Computer Architecture and Assembly Language
+      number: CPE 133
+      description: Created a microcontroller on a Artix-7 FPGA.
+      date: 2020-01-01
+      tags:
+        - fpgas
+        - systemverilog
         - computer-engineering
     - name: Data Structures
       number: CSC 202
