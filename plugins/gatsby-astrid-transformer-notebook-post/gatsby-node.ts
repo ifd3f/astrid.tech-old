@@ -5,6 +5,7 @@ import { v4 } from "uuid"
 import { BlogPostContent } from "../gatsby-astrid-plugin-blog"
 import { BLOG_POST_MIME_TYPE } from "../gatsby-astrid-plugin-blog/index"
 import { withContentDigest } from "../util"
+import { BlogMetadata } from "plugins/gatsby-astrid-transformer-markdown-post"
 
 type JupyterNotebookNode = Node & {
   json: Notebook
@@ -17,14 +18,6 @@ type JupyterNotebookNode = Node & {
       blog_data: BlogMetadata
     }
   }
-  html: string
-}
-
-type BlogMetadata = {
-  title: string
-  date: string
-  description: string
-  tags: string[]
 }
 
 export const onCreateNode: GatsbyNode["onCreateNode"] = async ({
@@ -40,28 +33,28 @@ export const onCreateNode: GatsbyNode["onCreateNode"] = async ({
   if (parentFileSystem.sourceInstanceName != "blog") return
 
   const { createNode, createParentChildLink } = actions
-  const { title, date, description, tags } = jupyterNode.data.metadata.blog_data
 
-  const slug = createFilePath({ node, getNode })
+  const id = v4()
 
-  const content: BlogPostContent = {
-    slug,
-    title,
-    date,
-    description,
-    content: await loadNodeContent(jupyterNode),
-    tagSlugs: tags,
-  }
+  const frontmatter = jupyterNode.data.metadata.blog_data
+  const content = jupyterNode.internal.content
+
+  const markdown = `---
+${JSON.stringify(frontmatter)}
+---
+${content}
+`
 
   const postNode = (withContentDigest({
     parent: jupyterNode.id,
     internal: {
-      type: "JupyterBlogPost",
-      mediaType: BLOG_POST_MIME_TYPE,
-      content: JSON.stringify(content),
+      type: "JupyterMarkdownBridge",
+      mediaType: "text/markdown",
+      content: markdown,
     },
-    id: v4(),
+    id,
     children: [],
+    html: jupyterNode.internal.content,
   }) as unknown) as Node
 
   createNode(postNode)

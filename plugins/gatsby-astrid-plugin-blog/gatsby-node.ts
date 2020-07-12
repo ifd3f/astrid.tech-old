@@ -1,4 +1,4 @@
-import { CreateNodeArgs, GatsbyNode, SourceNodesArgs } from "gatsby"
+import { CreateNodeArgs, GatsbyNode, Node, SourceNodesArgs } from "gatsby"
 import path from "path"
 import { v4 } from "uuid"
 import { withContentDigest } from "../util/index"
@@ -10,6 +10,13 @@ export const sourceNodes: GatsbyNode["sourceNodes"] = async ({
 }: SourceNodesArgs) => {
   const { createTypes } = actions
 
+  const ContentLocation = schema.buildObjectType({
+    name: "ContentLocation",
+    fields: {
+      id: "String!",
+      path: "[String!]",
+    },
+  })
   const BlogPost = schema.buildObjectType({
     name: "BlogPost",
     fields: {
@@ -19,38 +26,42 @@ export const sourceNodes: GatsbyNode["sourceNodes"] = async ({
       slug: "String!",
       tagSlugs: "[String!]",
       tags: { type: "[Tag!]", extensions: { tagify: {} } },
+      source: "MarkdownRemark!",
     },
     interfaces: ["Tagged", "Node"],
   })
 
-  createTypes([BlogPost])
+  createTypes([BlogPost, ContentLocation])
 }
 
 export const onCreateNode: GatsbyNode["onCreateNode"] = async ({
   node,
   actions,
+  getNode,
 }: CreateNodeArgs) => {
   if (node.internal.mediaType != BLOG_POST_MIME_TYPE) return
 
-  const { createNode } = actions
+  const { createNode, createParentChildLink } = actions
   const content = JSON.parse(node.internal.content!!) as BlogPostContent
 
   const slug = "/blog" + content.slug
 
-  createNode(
-    withContentDigest({
-      id: v4(),
-      internal: {
-        type: "BlogPost",
-        content: content.content,
-        description: content.description,
-      },
-      title: content.title,
-      slug,
-      date: content.date,
-      tagSlugs: content.tagSlugs,
-    })
-  )
+  const blogPostNode = withContentDigest({
+    id: v4(),
+    internal: {
+      type: "BlogPost",
+    },
+    title: content.title,
+    slug,
+    date: content.date,
+    tagSlugs: content.tagSlugs,
+    source___NODE: content.markdownNode,
+  })
+  createNode(blogPostNode)
+  createParentChildLink({
+    parent: node,
+    child: (blogPostNode as unknown) as Node,
+  })
 }
 
 export const createPages: GatsbyNode["createPages"] = async ({
