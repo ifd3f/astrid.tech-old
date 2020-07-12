@@ -1,6 +1,7 @@
 import { GatsbyNode, Node, SourceNodesArgs } from "gatsby"
 import { createFilePath, FileSystemNode } from "gatsby-source-filesystem"
 import { v4 } from "uuid"
+import { TagNodeData, TAG_MIME_TYPE } from "../gatsby-astrid-plugin-tagging"
 import { withContentDigest } from "../util"
 import { resolveFileNode } from "../util/index"
 
@@ -61,7 +62,7 @@ export const onCreateNode: GatsbyNode["onCreateNode"] = async ({
   if (parentFileSystem.sourceInstanceName != "projects") return
 
   const { createNode, createParentChildLink } = actions
-  const slug = createFilePath({ node, getNode })
+  const slug = "/projects" + createFilePath({ node, getNode })
 
   const frontmatter = markdownNode.frontmatter
   var thumbnailFileNodeId = null
@@ -75,7 +76,7 @@ export const onCreateNode: GatsbyNode["onCreateNode"] = async ({
     thumbnailFileNodeId = file?.id ?? null
   }
 
-  const postNode = withContentDigest({
+  const projectNode = withContentDigest({
     parent: markdownNode.id,
     internal: {
       type: `Project`,
@@ -90,9 +91,33 @@ export const onCreateNode: GatsbyNode["onCreateNode"] = async ({
     startDate: frontmatter.startDate,
     endDate: frontmatter.endDate,
     thumbnail___NODE: thumbnailFileNodeId,
-    tagSlugs: markdownNode.frontmatter.tags,
+    tagSlugs: markdownNode.frontmatter.tags.concat([slug]),
+  })
+  createNode(projectNode)
+  createParentChildLink({ parent: markdownNode, child: projectNode })
+
+  const tagContent: TagNodeData = {
+    name: projectNode.title,
+    slug: projectNode.slug,
+    backgroundColor: "#313549", // TODO: CHANGE TO NICER COLORING SYSTEM
+    color: "#ffffff",
+    priority: 2,
+  }
+
+  const tagNode = withContentDigest({
+    parent: projectNode.id,
+    id: v4(),
+    internal: {
+      type: "ProjectTag",
+      mediaType: TAG_MIME_TYPE,
+      content: JSON.stringify(tagContent),
+    },
+    children: [],
   })
 
-  createNode(postNode)
-  createParentChildLink({ parent: markdownNode, child: postNode })
+  createNode(tagNode)
+  createParentChildLink({
+    parent: projectNode,
+    child: (tagNode as unknown) as Node,
+  })
 }
