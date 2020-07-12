@@ -1,13 +1,16 @@
-import { GatsbyNode, Node } from "gatsby"
+import { GatsbyNode, Node, CreateResolversArgs, SourceNodesArgs } from "gatsby"
 import { createFilePath, FileSystemNode } from "gatsby-source-filesystem"
 import { v4 } from "uuid"
-import { BlogPostContent } from "../gatsby-astrid-plugin-blog"
-import { BLOG_POST_MIME_TYPE } from "../gatsby-astrid-plugin-blog/index"
+import {
+  BLOG_POST_MIME_TYPE,
+  BlogPostContent,
+} from "../gatsby-astrid-plugin-blog"
 import { withContentDigest } from "../util"
 
 type MarkdownNode = Node & {
   frontmatter: BlogMetadata
   excerpt: string
+  html: string
 }
 
 type BlogMetadata = {
@@ -21,7 +24,6 @@ export const onCreateNode: GatsbyNode["onCreateNode"] = async ({
   node,
   actions,
   getNode,
-  loadNodeContent,
 }) => {
   if (node.internal.type != "MarkdownRemark") return
   const markdownNode = (node as unknown) as MarkdownNode
@@ -37,7 +39,7 @@ export const onCreateNode: GatsbyNode["onCreateNode"] = async ({
     title: markdownNode.frontmatter.title,
     date: markdownNode.frontmatter.date,
     description: markdownNode.frontmatter.description,
-    content: await loadNodeContent(markdownNode),
+    markdownNode: markdownNode.id,
     tagSlugs: markdownNode.frontmatter.tags,
   }
 

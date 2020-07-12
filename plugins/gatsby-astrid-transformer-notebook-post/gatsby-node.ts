@@ -17,7 +17,6 @@ type JupyterNotebookNode = Node & {
       blog_data: BlogMetadata
     }
   }
-  html: string
 }
 
 type BlogMetadata = {
@@ -43,13 +42,14 @@ export const onCreateNode: GatsbyNode["onCreateNode"] = async ({
   const { title, date, description, tags } = jupyterNode.data.metadata.blog_data
 
   const slug = createFilePath({ node, getNode })
+  const id = v4()
 
   const content: BlogPostContent = {
     slug,
     title,
     date,
     description,
-    content: await loadNodeContent(jupyterNode),
+    markdownNode: id,
     tagSlugs: tags,
   }
 
@@ -60,8 +60,9 @@ export const onCreateNode: GatsbyNode["onCreateNode"] = async ({
       mediaType: BLOG_POST_MIME_TYPE,
       content: JSON.stringify(content),
     },
-    id: v4(),
+    id,
     children: [],
+    html: jupyterNode.internal.content,
   }) as unknown) as Node
 
   createNode(postNode)

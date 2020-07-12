@@ -6,5 +6,5 @@ export type BlogPostContent = {
   slug: string
   tagSlugs: string[]
   description: string
-  content: string
+  markdownNode: string
 }
