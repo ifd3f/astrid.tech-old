@@ -1,7 +1,7 @@
 import axios from "axios"
 import { GatsbyNode, Node, SourceNodesArgs } from "gatsby"
 import yaml from "js-yaml"
-import { withContentDigest } from "../util"
+import { withContentDigest, getContrastingTextColor } from "../util"
 import { v4 } from "uuid"
 import { TAG_MIME_TYPE } from "../gatsby-astrid-plugin-tagging/index"
 
@@ -19,13 +19,6 @@ const SLUG_OVERRIDE = new Map<string, string>([
   ["f#", "fsharp"],
   ["objective-c++", "objective-cpp"],
 ])
-
-function getTextColor(backgroundColor: string): string {
-  const [, r, g, b] = backgroundColor
-    .match(/#([0-9a-f]{2})([0-9a-f]{2})([0-9a-f]{2})/i)!
-    .map(x => new Number("0x" + x) as number)
-  return r * 0.299 + g * 0.587 + b * 0.114 > 186 ? "#000000" : "#ffffff"
-}
 
 function getTagSlug(name: string): string {
   const lower = name.toLowerCase()
@@ -52,7 +45,7 @@ export const sourceNodes: GatsbyNode["sourceNodes"] = async ({
     if (!lang.color) {
       continue
     }
-    const color = getTextColor(lang.color)
+    const color = getContrastingTextColor(lang.color)
 
     createNode(
       withContentDigest({
