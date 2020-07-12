@@ -123,7 +123,7 @@ const HeadingSection = () => {
         >
           <p>
             This website is currently under construction! Very soon, this page
-            and others will look a lot nicer than they do right now ^_^
+            and others will look <em>much</em> nicer ^_^
           </p>
           <p>
             In the meantime, feel free to look around and see what's on here

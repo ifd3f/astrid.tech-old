@@ -71,12 +71,7 @@ const ProjectsIndex: FC<PageProps<Data>> = ({ data }) => {
     <Layout>
       <SEO title="Portfolio" />
       <Container className={portfolioStyles.portfolioContainer} fluid>
-        <Row>
-          <Col lg={2}></Col>
-          <Col lg={10}>
-            <Masonry>{cards}</Masonry>
-          </Col>
-        </Row>
+        <Masonry>{cards}</Masonry>
       </Container>
     </Layout>
   )
