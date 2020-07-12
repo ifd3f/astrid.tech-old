@@ -1,12 +1,14 @@
 import { Actions, GatsbyNode, Node, SourceNodesArgs } from "gatsby"
 import { v4 } from "uuid"
 import { withContentDigest } from "../util"
+import { TAG_MIME_TYPE } from "../gatsby-astrid-plugin-tagging/index"
 
 type CourseYamlData = Node & {
   name: string
   number: string
-  desc: string
+  description: string
   date: string
+  slug?: string
   tags: string[]
 }
 
@@ -19,21 +21,45 @@ type SchoolYamlNode = Node & {
   courses: CourseYamlData[]
 }
 
-// function createCourseTagNode(actions: Actions, courseNode: any) {
-//   const { createNode, createParentChildLink } = actions
-//   const tagNode = buildTagNode({
-//     parent: courseNode.id,
-//     name: courseNode.number,
-//     slug: courseNode.slug,
-//     color: "#18b21b",
-//     textColor: "#ffffff",
-//   })
-//   console.log(tagNode.children)
-//   createNode(tagNode)
-//   createParentChildLink({ parent: courseNode, child: tagNode as any })
+type CourseNode = Node & {
+  name: string
+  number: string
+  description: string
+  date: string
+  slug: string
+}
 
-//   return tagNode
-// }
+type CreateCourseTagNodeArgs = {
+  actions: Actions
+  courseNode: CourseNode
+}
+
+function createCourseTagNode({ actions, courseNode }: CreateCourseTagNodeArgs) {
+  const { createNode, createParentChildLink } = actions
+
+  const content = {
+    name: courseNode.number,
+    slug: courseNode.slug,
+    color: "#18b21b",
+    textColor: "#ffffff",
+  }
+
+  const tagNode = withContentDigest({
+    parent: courseNode.id,
+    id: v4(),
+    internal: {
+      type: "CourseTag",
+      mediaType: TAG_MIME_TYPE,
+      content: JSON.stringify(content),
+    },
+    children: [],
+  })
+
+  createNode(tagNode)
+  createParentChildLink({ parent: courseNode, child: tagNode as any })
+
+  return tagNode
+}
 
 type CreateCourseNodeArgs = {
   actions: Actions
@@ -73,6 +99,11 @@ function createCourseNode({
   createParentChildLink({
     parent: schoolYamlNode,
     child: (courseNode as unknown) as Node,
+  })
+
+  createCourseTagNode({
+    courseNode: (courseNode as unknown) as CourseNode,
+    actions,
   })
 
   return courseNode
