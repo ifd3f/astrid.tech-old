@@ -3,7 +3,6 @@ import { GatsbyNode, Node, SourceNodesArgs } from "gatsby"
 import yaml from "js-yaml"
 import { withContentDigest } from "../util"
 import { v4 } from "uuid"
-import { buildTagNode } from "../gatsby-astrid-plugin-tagging"
 import { TAG_MIME_TYPE } from "../gatsby-astrid-plugin-tagging/index"
 
 type LinguistEntry = {
@@ -12,13 +11,6 @@ type LinguistEntry = {
 
 type LinguistData = {
   [name: string]: LinguistEntry
-}
-
-type LinguistLanguageNode = Node & {
-  name: string
-  slug: string
-  color: string
-  backgroundColor: string
 }
 
 const SLUG_OVERRIDE = new Map<string, string>([

@@ -1,19 +1,58 @@
 import {
+  CreateNodeArgs,
   CreateResolversArgs,
   CreateSchemaCustomizationArgs,
   GatsbyNode,
   Node,
-  SourceNodesArgs,
-  BuildArgs,
   ParentSpanPluginArgs,
-  CreateNodeArgs,
+  SourceNodesArgs,
+  NodeInput,
 } from "gatsby"
-import { buildTagNode, TAG_MIME_TYPE } from "./index"
+import { withContentDigest } from "../util"
+import { v4 } from "uuid"
+import { TagNodeData, TAG_MIME_TYPE } from "./index"
 
-export const onPreBootstrap: GatsbyNode["onPreBootstrap"] = async ({
+const getTagNodeCreator = ({
+  actions,
+  getNodesByType,
+}: ParentSpanPluginArgs) => (tag: TagNodeData, parent?: string) => {
+  const { createNode, deleteNode } = actions
+
+  // Check for existing
+  const existing = (getNodesByType("Tag") as (Node & TagNodeData)[]).find(
+    node => node.slug == tag.slug
+  )
+
+  // Delete existing if necessary, or quit if it has higher priority
+  if (existing) {
+    if (existing.priority >= tag.priority) return null
+    deleteNode({ node: existing })
+  }
+
+  // Create the node
+  const tagNode = withContentDigest({
+    parent,
+    internal: {
+      type: `Tag`,
+    } as any,
+    children: [],
+
+    id: v4(),
+    name: tag.name,
+    slug: tag.slug,
+    color: tag.color,
+    priority: tag.priority,
+    backgroundColor: tag.backgroundColor,
+  })
+  createNode(tagNode)
+
+  return tagNode as Node | NodeInput
+}
+
+export const sourceNodes: GatsbyNode["sourceNodes"] = async ({
   actions,
   schema,
-}: ParentSpanPluginArgs) => {
+}: SourceNodesArgs) => {
   const { createTypes } = actions
 
   const Tagged = schema.buildInterfaceType({
@@ -41,9 +80,42 @@ export const onPreBootstrap: GatsbyNode["onPreBootstrap"] = async ({
   createTypes([Tag, Tagged])
 }
 
+export const onCreateNode: GatsbyNode["onCreateNode"] = async (
+  args: CreateNodeArgs
+) => {
+  const { node, actions, getNodesByType } = args
+  const { createNode, createParentChildLink } = actions
+  const buildTagNode = getTagNodeCreator(args)
+
+  // A taggable type
+  if (Array.isArray(node.tagSlugs)) {
+    node.tagSlugs.forEach(slug => {
+      // Create default tags
+      buildTagNode(
+        {
+          name: slug,
+          slug,
+          color: "#ffffff",
+          backgroundColor: "#313549",
+          priority: 0, // Minimum priority
+        },
+        node.id
+      )
+    })
+  }
+
+  // A tag content holder
+  if (node.internal.mediaType == TAG_MIME_TYPE) {
+    const tagNode = buildTagNode(
+      { ...JSON.parse(node.internal.content!!), priority: 1 },
+      node.id
+    )
+    createParentChildLink({ parent: node, child: tagNode as Node })
+  }
+}
+
 export const createSchemaCustomization: GatsbyNode["createSchemaCustomization"] = async ({
   actions,
-  schema,
 }: CreateSchemaCustomizationArgs) => {
   const { createFieldExtension } = actions
 
@@ -62,42 +134,6 @@ export const createSchemaCustomization: GatsbyNode["createSchemaCustomization"] 
       }
     },
   })
-}
-
-export const onCreateNode: GatsbyNode["onCreateNode"] = async ({
-  node,
-  actions,
-  getNodesByType,
-}: CreateNodeArgs) => {
-  const { createNode, createParentChildLink } = actions
-
-  // A taggable type
-  if (Array.isArray(node.tagSlugs)) {
-    node.tagSlugs.forEach(slug => {
-      // Create default tags
-      const tagNode = buildTagNode(
-        {
-          name: slug,
-          slug,
-          color: "#ffffff",
-          backgroundColor: "#313549",
-          priority: 0, // Minimum priority
-        },
-        node.id
-      )
-      createNode(tagNode)
-    })
-  }
-
-  // A tag content holder
-  if (node.internal.mediaType == TAG_MIME_TYPE) {
-    const tagNode = buildTagNode(
-      { ...JSON.parse(node.internal.content!!), priority: 1 },
-      node.id
-    )
-    createNode(tagNode)
-    createParentChildLink({ parent: node, child: tagNode as Node })
-  }
 }
 
 export const createResolvers: GatsbyNode["createResolvers"] = async ({
