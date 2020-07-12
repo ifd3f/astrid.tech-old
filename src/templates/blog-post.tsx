@@ -13,8 +13,10 @@ export const pageQuery = graphql`
       edges {
         node {
           internal {
-            content
             description
+          }
+          source {
+            html
           }
           title
           date

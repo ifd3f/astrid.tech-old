@@ -11,7 +11,7 @@ type PostProps = {
 }
 
 export const PostContent: FC<PostProps> = ({ post }) => {
-  return <section dangerouslySetInnerHTML={{ __html: post.internal.content }} />
+  return <section dangerouslySetInnerHTML={{ __html: post.source.html }} />
 }
 
 export const PostMainHeader: FC<PostProps> = ({ post }) => {

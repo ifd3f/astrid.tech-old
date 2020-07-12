@@ -40,13 +40,15 @@ export type Project = Tagged & {
 }
 
 export type BlogPost = Tagged & {
-  title?: string
-  date?: Date
-  description?: string
-  slug?: string
+  title: string
+  date: Date
+  slug: string
 
+  source: {
+    html: string
+    excerpt: string
+  }
   internal: {
-    content: string
     description: string
   }
 }
