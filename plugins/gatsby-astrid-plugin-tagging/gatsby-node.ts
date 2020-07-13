@@ -1,3 +1,4 @@
+import path from "path"
 import {
   CreateNodeArgs,
   CreateResolversArgs,
@@ -175,4 +176,53 @@ export const createResolvers: GatsbyNode["createResolvers"] = async ({
       },
     },
   })
+}
+
+export const createPages: GatsbyNode["createPages"] = async ({
+  actions,
+  graphql,
+}) => {
+  const { createPage } = actions
+
+  type Data = {
+    allTag: {
+      edges: {
+        node: {
+          slug: string
+        }
+      }[]
+    }
+  }
+
+  const result = await graphql(`
+    {
+      allTag {
+        edges {
+          node {
+            slug
+          }
+        }
+      }
+    }
+  `)
+
+  if (result.errors) {
+    throw result.errors
+  }
+
+  const tags = (result.data as Data).allTag.edges
+
+  const TagTemplate = path.resolve(`src/templates/tag.tsx`)
+  tags
+    .filter(({ node }) => node.slug[0] != "/")
+    .map(({ node }) => node.slug)
+    .forEach(slug => {
+      createPage({
+        path: "/tags/" + slug,
+        component: TagTemplate,
+        context: {
+          slug: slug,
+        },
+      })
+    })
 }

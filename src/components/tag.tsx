@@ -18,7 +18,8 @@ export const tagBadgeFragment = graphql`
 `
 
 export const TagBadge: FC<TagBadgeProps> = ({ tag }) => {
-  const linkTo = tag.slug[0] == "/" ? tag.slug : "/tag/" + tag.slug
+  console.log(tag)
+  const linkTo = tag.slug[0] == "/" ? tag.slug : "/tags/" + tag.slug
 
   return (
     <Badge
