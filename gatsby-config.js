@@ -62,6 +62,13 @@ module.exports = {
     {
       resolve: `gatsby-source-filesystem`,
       options: {
+        path: `${__dirname}/assets`,
+        name: `assets`,
+      },
+    },
+    {
+      resolve: `gatsby-source-filesystem`,
+      options: {
         path: `${__dirname}/content/misc`,
         name: `misc-data`,
       },
@@ -118,7 +125,7 @@ module.exports = {
         background_color: `#ffffff`,
         theme_color: `#663399`,
         display: `minimal-ui`,
-        icon: `content/assets/astrid-tech-icon.png`,
+        icon: `assets/astrid-tech-icon.png`,
       },
     },
     `gatsby-plugin-react-helmet`,
