@@ -8,6 +8,7 @@ production: true
 tags:
   - /projects/astrid-tech/
   - /projects/inventree/
+  - react-js
 ---
 
 Now that I think of it, this actually isn't too bad of an idea. By the time I finish this website, I will have a blog with actual content!
