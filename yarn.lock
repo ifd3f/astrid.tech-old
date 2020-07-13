@@ -7040,6 +7040,15 @@ gatsby-remark-images@^3.3.8:
     unist-util-select "^1.5.0"
     unist-util-visit-parents "^2.1.2"
 
+gatsby-remark-katex@^3.3.10:
+  version "3.3.10"
+  resolved "https://registry.yarnpkg.com/gatsby-remark-katex/-/gatsby-remark-katex-3.3.10.tgz#a0a0953a2dc001a8fef71e1c0f8edfbea7a5a564"
+  integrity sha512-DnOEHtdiO/Ir8jz5ywjvpxgYw2/ySCPTfQ1xSAaR6wLoaIusTet305zrH9wquzchkFiiMOdk73xDYWSnM91wmg==
+  dependencies:
+    "@babel/runtime" "^7.10.3"
+    remark-math "^1.0.6"
+    unist-util-visit "^1.4.1"
+
 gatsby-remark-prismjs@^3.5.2:
   version "3.5.3"
   resolved "https://registry.yarnpkg.com/gatsby-remark-prismjs/-/gatsby-remark-prismjs-3.5.3.tgz#44a74d2b8faf2c1a1f614dc48f59cd6ff9837fa4"
@@ -9505,6 +9514,13 @@ katex@^0.10.0, katex@^0.10.0-alpha:
   version "0.10.2"
   resolved "https://registry.yarnpkg.com/katex/-/katex-0.10.2.tgz#39973edbb65eda5b6f9e7f41648781e557dd4932"
   integrity sha512-cQOmyIRoMloCoSIOZ1+gEwsksdJZ1EW4SWm3QzxSza/QsnZr6D4U1V9S4q+B/OLm2OQ8TCBecQ8MaIfnScI7cw==
+  dependencies:
+    commander "^2.19.0"
+
+katex@^0.12.0:
+  version "0.12.0"
+  resolved "https://registry.yarnpkg.com/katex/-/katex-0.12.0.tgz#2fb1c665dbd2b043edcf8a1f5c555f46beaa0cb9"
+  integrity sha512-y+8btoc/CK70XqcHqjxiGWBOeIL8upbS0peTPXTvgrh21n1RiWWcIpSWM+4uXq+IAgNh9YYQWdc7LVDPDAEEAg==
   dependencies:
     commander "^2.19.0"
 
@@ -13156,7 +13172,7 @@ remark-highlight.js@^6.0.0:
     lowlight "^1.2.0"
     unist-util-visit "^2.0.0"
 
-remark-math@^1.0.4:
+remark-math@^1.0.4, remark-math@^1.0.6:
   version "1.0.6"
   resolved "https://registry.yarnpkg.com/remark-math/-/remark-math-1.0.6.tgz#49eb3dd15d298734c9ae21673115389793af4d1b"
   integrity sha512-I43wU/QOQpXvVFXKjA4FHp5xptK65+5F6yolm8+69/JV0EqSOB64wURUZ3JK50JtnTL8FvwLiH2PZ+fvsBxviA==
