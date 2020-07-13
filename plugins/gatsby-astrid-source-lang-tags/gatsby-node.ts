@@ -1,6 +1,7 @@
 import axios from "axios"
 import { GatsbyNode, Node, SourceNodesArgs } from "gatsby"
 import yaml from "js-yaml"
+import fs from "fs"
 import { withContentDigest, getContrastingTextColor } from "../util"
 import { v4 } from "uuid"
 import { TAG_MIME_TYPE } from "../gatsby-astrid-plugin-tagging/index"
@@ -30,11 +31,11 @@ export const sourceNodes: GatsbyNode["sourceNodes"] = async ({
 }: SourceNodesArgs) => {
   const { createNode } = actions
 
-  const res = await axios.get(
-    "https://raw.githubusercontent.com/github/linguist/master/lib/linguist/languages.yml"
-  )
-
-  const langs = yaml.load(res.data) as LinguistData
+  const file = fs.readFileSync(`${__dirname}/languages.yml`, {
+    encoding: "utf-8",
+    flag: "r",
+  })
+  const langs = yaml.load(file) as LinguistData
 
   for (let key in langs) {
     if (!langs.hasOwnProperty(key)) {
