@@ -1,5 +1,10 @@
 import { Node } from "gatsby"
 
+export type MarkdownRemark = Node & {
+  html: string
+  excerpt: string
+}
+
 export type Tagged = Node & {
   tags: Tag[]
 }
@@ -44,10 +49,7 @@ export type BlogPost = Tagged & {
   date: Date
   slug: string
 
-  source: {
-    html: string
-    excerpt: string
-  }
+  source: MarkdownRemark
   internal: {
     description: string
   }

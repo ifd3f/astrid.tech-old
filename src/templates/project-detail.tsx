@@ -10,8 +10,8 @@ import { StatusBadge } from "../components/project"
 import style from "./project-detail.module.scss"
 
 export const pageQuery = graphql`
-  query GetProject($id: String!) {
-    allProject(filter: { id: { eq: $id } }) {
+  query GetProject($slug: String!) {
+    allProject(filter: { slug: { eq: $slug } }) {
       edges {
         node {
           slug
@@ -28,6 +28,9 @@ export const pageQuery = graphql`
           }
           url
           source
+          markdown {
+            html
+          }
         }
       }
     }
@@ -65,11 +68,11 @@ const ProjectDetailTemplate: FC<PageProps<Data, Context>> = ({ data }) => {
               {project.title!} <StatusBadge status={project.status} />
             </h1>
             <p className={style.date}>{date}</p>
-            <p className={style.subtitle}>{project.description}</p>
-            <TagList tags={project.tags.map(x => x.tag!)} />
+            <p className={style.subtitle}>{project.internal.description}</p>
+            <TagList tags={project.tags} />
           </header>
           <section
-            dangerouslySetInnerHTML={{ __html: project.markdown!!.html!! }}
+            dangerouslySetInnerHTML={{ __html: project.markdown.html!! }}
           />
         </article>
       </Container>

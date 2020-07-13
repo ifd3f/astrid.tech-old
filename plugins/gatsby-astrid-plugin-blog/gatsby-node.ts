@@ -87,7 +87,6 @@ export const createPages: GatsbyNode["createPages"] = async ({
         edges {
           node {
             title
-            id
             slug
           }
         }
@@ -99,21 +98,18 @@ export const createPages: GatsbyNode["createPages"] = async ({
     throw result.errors
   }
 
-  // Create blog posts pages.
   const posts = (result.data as Data).allBlogPost.edges
 
   const BlogPostTemplate = path.resolve(`src/templates/blog-post.tsx`)
-  posts.forEach((edge, index) => {
-    const post = edge.node
-
+  posts.forEach(({ node }, index) => {
     const previous = index === posts.length - 1 ? null : posts[index + 1].node
     const next = index === 0 ? null : posts[index - 1].node
 
     createPage({
-      path: post.slug,
+      path: node.slug,
       component: BlogPostTemplate,
       context: {
-        slug: post.slug,
+        slug: node.slug,
         previous,
         next,
       },

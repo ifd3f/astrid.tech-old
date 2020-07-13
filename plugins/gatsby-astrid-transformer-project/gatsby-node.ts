@@ -1,5 +1,6 @@
 import { GatsbyNode, Node, SourceNodesArgs } from "gatsby"
 import { createFilePath, FileSystemNode } from "gatsby-source-filesystem"
+import path from "path"
 import { v4 } from "uuid"
 import { TagNodeData, TAG_MIME_TYPE } from "../gatsby-astrid-plugin-tagging"
 import { withContentDigest } from "../util"
@@ -39,6 +40,7 @@ export const sourceNodes: GatsbyNode["sourceNodes"] = async ({
       url: "String",
       source: "String",
       thumbnail: "File",
+      markdown: "MarkdownRemark!",
       tagSlugs: "[String!]",
       tags: { type: "[Tag!]", extensions: { tagify: {} } },
     },
@@ -79,7 +81,6 @@ export const onCreateNode: GatsbyNode["onCreateNode"] = async ({
     parent: markdownNode.id,
     internal: {
       type: `Project`,
-      content: await loadNodeContent(markdownNode),
       description: frontmatter.description,
       mediaType: "text/html",
     } as any,
@@ -91,6 +92,7 @@ export const onCreateNode: GatsbyNode["onCreateNode"] = async ({
     startDate: frontmatter.startDate,
     endDate: frontmatter.endDate,
     thumbnail___NODE: thumbnailFileNodeId,
+    markdown___NODE: markdownNode.id,
     tagSlugs: markdownNode.frontmatter.tags,
   })
   createNode(projectNode)
@@ -119,5 +121,49 @@ export const onCreateNode: GatsbyNode["onCreateNode"] = async ({
   createParentChildLink({
     parent: projectNode,
     child: (tagNode as unknown) as Node,
+  })
+}
+
+export const createPages: GatsbyNode["createPages"] = async ({
+  graphql,
+  actions,
+}) => {
+  const { createPage } = actions
+
+  type Data = {
+    allProject: {
+      edges: {
+        node: {
+          slug: string
+        }
+      }[]
+    }
+  }
+
+  const result = await graphql(`
+    {
+      allProject {
+        edges {
+          node {
+            slug
+          }
+        }
+      }
+    }
+  `)
+
+  if (result.errors) {
+    throw result.errors
+  }
+
+  const projects = (result.data as Data).allProject.edges
+  const ProjectDetailTemplate = path.resolve(`src/templates/project-detail.tsx`)
+
+  projects.forEach(({ node }) => {
+    createPage({
+      path: node.slug,
+      component: ProjectDetailTemplate,
+      context: { slug: node.slug },
+    })
   })
 }
