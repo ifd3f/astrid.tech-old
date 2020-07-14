@@ -20,6 +20,11 @@ li {
   color: $content-color;
 }
 
+pre,
+code {
+  font-family: $font-mono;
+}
+
 html,
 body {
   height: 100%;

@@ -5,11 +5,13 @@
         - patch: 0
           features:
             - Jupyter Notebooks are now converted into Markdown and are treated as such. What this means is that the frequency shifting post looks fabulous now.
+            - Now we use Fira Code for monospace fonts for those _sexy ligatures._
           bugfixes:
-            - Fix Latex formulas not being rendered correctly.
+            - Fixed Latex formulas not being rendered correctly.
           internals:
-            - Completely redesigned the backend to be more modular.
-            - Add GraphViz support to markdown documents.
+            - Completely redesigned the backend to be more modular. For a detailed technical look at it, see [this post](https://astrid.tech/blog/2020-07-12-new-gatsby-config/)
+            - Added GraphViz support to markdown documents.
+            - Downloaded a local copy of languages.yml so that GitHub doesn't rate-limit me
 
     - minor: 1
       patches:

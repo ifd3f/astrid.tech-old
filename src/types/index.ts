@@ -1,4 +1,5 @@
 import { Node } from "gatsby"
+import { FileSystemNode } from "gatsby-source-filesystem"
 
 export type MarkdownRemark = Node & {
   html: string
@@ -36,8 +37,8 @@ export type Project = Tagged & {
   slug: string
   url: string
   source: string[]
-  thumbnailPublicPath?: string
-
+  thumbnail: FileSystemNode
+  markdown: MarkdownRemark
   internal: {
     content: string
     description: string
