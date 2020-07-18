@@ -70,7 +70,11 @@ const ProjectsIndex: FC<PageProps<Data>> = ({ data }) => {
     <Layout>
       <SEO title="Portfolio" />
       <Container className={styles.portfolioContainer} fluid>
-        <Masonry>{cards}</Masonry>
+        <div>
+          {projects.map(project => (
+            <ProjectCard project={project} />
+          ))}
+        </div>
       </Container>
     </Layout>
   )

@@ -1,5 +1,5 @@
 import { navigate, graphql } from "gatsby"
-import React, { FC, useState, useEffect } from "react"
+import React, { FC, useState, useEffect, PropsWithChildren } from "react"
 import {
   Badge,
   Card,
@@ -11,7 +11,12 @@ import {
 } from "reactstrap"
 import { Project } from "../../types"
 import styles from "./project.module.scss"
-import { getUniqueId, LoadOnView } from "../util"
+import {
+  getUniqueId,
+  LoadOnView,
+  getPersistentColor,
+  PastelTheme,
+} from "../util"
 import { TagList } from "../tag"
 
 type StatusBadgeProps = {
@@ -85,6 +90,19 @@ export const projectCardFragment = graphql`
     source
   }
 `
+
+const ProjectCardOuter: FC<PropsWithChildren<ProjectCardProps>> = ({
+  project,
+  children,
+}) => {
+  if (project.thumbnail == null) {
+    const background = getPersistentColor(project.slug, PastelTheme)
+    return <Card style={{ backgroundColor: background }}>{children}</Card>
+  } else {
+    return <Card>{children}</Card>
+  }
+}
+
 export const ProjectCard: FC<ProjectCardProps> = ({
   project,
   hovered = false,
@@ -123,12 +141,12 @@ export const ProjectCard: FC<ProjectCardProps> = ({
     (hovered ? styles.hoveredProjectCard : "") + " " + styles.projectCard
 
   const card = (
-    <Card className={className}>
+    <ProjectCardOuter className={className} project={project}>
       <CardBody>
         {headerSection}
         {bodySection}
       </CardBody>
-    </Card>
+    </ProjectCardOuter>
   )
 
   return (
