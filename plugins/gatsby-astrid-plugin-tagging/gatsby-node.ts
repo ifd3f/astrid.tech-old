@@ -118,7 +118,26 @@ export const onCreateNode: GatsbyNode["onCreateNode"] = async (
       },
       node
     )
+
+    // If this slug is occupied by a higher priority tag, there are no children to link
+    if (!tagNode) {
+      return
+    }
     createParentChildLink({ parent: node, child: tagNode as Node })
+  }
+}
+
+function buildTagQueryForSlug(slug: string) {
+  return {
+    query: {
+      filter: {
+        slug: {
+          eq: slug,
+        },
+      },
+    },
+    type: "Tag",
+    firstOnly: true,
   }
 }
 
@@ -130,20 +149,14 @@ export const createSchemaCustomization: GatsbyNode["createSchemaCustomization"] 
   createFieldExtension({
     name: `tagify`,
     extend: () => ({
-      resolve: (source: any, args: any, context: any, info: any) =>
-        source.tagSlugs.map((slug: string) =>
-          context.nodeModel.runQuery({
-            query: {
-              filter: {
-                slug: {
-                  eq: slug,
-                },
-              },
-            },
-            type: "Tag",
-            firstOnly: true,
-          })
-        ),
+      resolve: async (source: any, args: any, context: any, info: any) => {
+        const tags = await Promise.all(
+          source.tagSlugs.map((slug: string) =>
+            context.nodeModel.runQuery(buildTagQueryForSlug(slug))
+          )
+        )
+        return tags
+      },
     }),
   })
 
