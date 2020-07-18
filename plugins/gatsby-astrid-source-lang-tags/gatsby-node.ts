@@ -1,10 +1,9 @@
-import axios from "axios"
-import { GatsbyNode, Node, SourceNodesArgs } from "gatsby"
-import yaml from "js-yaml"
 import fs from "fs"
-import { withContentDigest, getContrastingTextColor } from "../util"
+import { GatsbyNode, SourceNodesArgs } from "gatsby"
+import yaml from "js-yaml"
 import { v4 } from "uuid"
 import { TAG_MIME_TYPE } from "../gatsby-astrid-plugin-tagging/index"
+import { getContrastingTextColor, withContentDigest } from "../util"
 
 type LinguistEntry = {
   color: string

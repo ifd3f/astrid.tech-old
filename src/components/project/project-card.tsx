@@ -9,10 +9,10 @@ import {
   CardSubtitle,
   UncontrolledTooltip,
 } from "reactstrap"
-import { Project } from "../types"
+import { Project } from "../../types"
 import styles from "./project.module.scss"
-import { getUniqueId, LoadOnView } from "./util"
-import { TagList } from "./tag"
+import { getUniqueId, LoadOnView } from "../util"
+import { TagList } from "../tag"
 
 type StatusBadgeProps = {
   status: null | "wip" | "complete" | "scrapped"
