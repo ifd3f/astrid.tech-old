@@ -6817,6 +6817,11 @@ gatsby-plugin-build-date@^1.0.0:
   dependencies:
     date-and-time "^0.11.1"
 
+gatsby-plugin-disqus@^1.2.0:
+  version "1.2.0"
+  resolved "https://registry.yarnpkg.com/gatsby-plugin-disqus/-/gatsby-plugin-disqus-1.2.0.tgz#8579e33b983d6de957390aef5445c99e8cb38af5"
+  integrity sha512-1Vgifach9KOCTKWmOESHbGDEAVxLwg7uJZbSyohQzBqqDzfnl42SOWJhIPCOCAtKi1GcqU4JIQiWBZmN1V0Zlg==
+
 gatsby-plugin-feed@^2.5.3:
   version "2.5.4"
   resolved "https://registry.yarnpkg.com/gatsby-plugin-feed/-/gatsby-plugin-feed-2.5.4.tgz#5d94956137496b31d8d0b4b2ff702a8da8694783"

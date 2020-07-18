@@ -1,4 +1,5 @@
 require(`katex/dist/katex.min.css`)
+import { Disqus, CommentCount } from "gatsby-plugin-disqus"
 import { graphql, Link, PageProps } from "gatsby"
 import React, { FC } from "react"
 import { Container } from "reactstrap"
@@ -51,6 +52,11 @@ const BlogPostTemplate: FC<PageProps<Data, Context>> = ({
 }) => {
   const post = data.allBlogPost.edges[0].node
   const { previous, next } = pageContext
+  const disqusConfig = {
+    url: `https://astrid.tech${post.slug}`,
+    identifier: post.slug,
+    title: post.title,
+  }
 
   return (
     <Layout>
@@ -61,7 +67,6 @@ const BlogPostTemplate: FC<PageProps<Data, Context>> = ({
           <PostMainHeader post={post} />
           <PostContent post={post} />
         </article>
-
         <nav>
           <ul
             style={{
@@ -88,6 +93,7 @@ const BlogPostTemplate: FC<PageProps<Data, Context>> = ({
             </li>
           </ul>
         </nav>
+        <Disqus config={disqusConfig} />
       </Container>
     </Layout>
   )

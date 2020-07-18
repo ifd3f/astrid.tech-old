@@ -123,6 +123,12 @@ module.exports = {
         icon: `assets/astrid-tech-icon.png`,
       },
     },
+    {
+      resolve: `gatsby-plugin-disqus`,
+      options: {
+        shortname: `astridtech`,
+      },
+    },
     `gatsby-plugin-react-helmet`,
     "gatsby-plugin-sass",
 
