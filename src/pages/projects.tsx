@@ -9,6 +9,7 @@ import { TagBadge } from "../components/tag"
 import { Project } from "../types"
 import { Tag } from "../types/index"
 import styles from "./projects.module.scss"
+import { ProjectCardContainer } from "../components/project"
 
 type Data = {
   site: {
@@ -70,11 +71,7 @@ const ProjectsIndex: FC<PageProps<Data>> = ({ data }) => {
     <Layout>
       <SEO title="Portfolio" />
       <Container className={styles.portfolioContainer} fluid>
-        <div>
-          {projects.map(project => (
-            <ProjectCard project={project} />
-          ))}
-        </div>
+        <ProjectCardContainer projects={projects} />
       </Container>
     </Layout>
   )

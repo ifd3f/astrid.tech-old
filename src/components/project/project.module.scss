@@ -6,8 +6,17 @@
 
   background-color: #ecccb9;
   cursor: pointer;
+  width: 400px;
+}
+
+.projectCard > div {
+  width: 400px;
+  height: 200px;
 }
 
 .projectCard:hover {
   background-color: #e9e7e7;
+}
+
+.projectCardContainer {
 }

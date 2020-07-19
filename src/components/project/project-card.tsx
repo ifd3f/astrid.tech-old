@@ -1,5 +1,11 @@
 import { navigate, graphql } from "gatsby"
-import React, { FC, useState, useEffect, PropsWithChildren } from "react"
+import React, {
+  FC,
+  useState,
+  useEffect,
+  PropsWithChildren,
+  ReactNode,
+} from "react"
 import {
   Badge,
   Card,
@@ -80,7 +86,6 @@ export const projectCardFragment = graphql`
     title
     status
     internal {
-      content
       description
     }
     tags {
@@ -94,20 +99,55 @@ export const projectCardFragment = graphql`
 const ProjectCardOuter: FC<PropsWithChildren<ProjectCardProps>> = ({
   project,
   children,
+  hovered,
+  onMouseEnter: _onEnter,
+  onMouseLeave: _onLeave,
 }) => {
-  if (project.thumbnail == null) {
-    const background = getPersistentColor(project.slug, PastelTheme)
-    return <Card style={{ backgroundColor: background }}>{children}</Card>
+  const className =
+    (hovered ? styles.hoveredProjectCard : "") + " " + styles.projectCard
+  const onEnter = () => {
+    _onEnter && _onEnter(project)
+  }
+
+  const onExit = () => {
+    _onLeave && _onLeave(project)
+  }
+
+  const onClickCard = (ev: React.MouseEvent<HTMLElement>) => {
+    if ((ev.target.tagName as string) != "A") {
+      navigate(project.slug, { replace: false })
+    }
+  }
+
+  const cardOuterProps = {
+    onClick: onClickCard,
+    onMouseEnter: onEnter,
+    onMouseLeave: onExit,
+    className: className,
+  }
+
+  if (project.thumbnail) {
+    return (
+      <div {...cardOuterProps}>
+        <div></div>
+        {children}
+      </div>
+    )
   } else {
-    return <Card>{children}</Card>
+    const background = getPersistentColor(project.slug, PastelTheme)
+    return (
+      <div {...cardOuterProps} style={{ backgroundColor: background }}>
+        {children}
+      </div>
+    )
   }
 }
 
 export const ProjectCard: FC<ProjectCardProps> = ({
   project,
   hovered = false,
-  onMouseEnter: _onEnter,
-  onMouseLeave: _onLeave,
+  onMouseEnter,
+  onMouseLeave,
 }) => {
   const headerSection = (
     <>
@@ -119,39 +159,38 @@ export const ProjectCard: FC<ProjectCardProps> = ({
   )
   const bodySection = (
     <>
-      <TagList tags={project.tags} />
+      <TagList tags={project.tags.slice(0, 5)} />
       {project.url ? <CardLink href={project.url}>{project.url}</CardLink> : ""}
     </>
   )
-  const onClickCard = (ev: React.MouseEvent<HTMLElement>) => {
-    if (ev.target.tagName != "A") {
-      navigate(project.slug, { replace: false })
-    }
-  }
 
-  const onEnter = () => {
-    _onEnter && _onEnter(project)
-  }
-
-  const onExit = () => {
-    _onLeave && _onLeave(project)
-  }
-
-  const className =
-    (hovered ? styles.hoveredProjectCard : "") + " " + styles.projectCard
-
-  const card = (
-    <ProjectCardOuter className={className} project={project}>
+  return (
+    <ProjectCardOuter
+      project={project}
+      hovered={hovered}
+      onMouseEnter={onMouseEnter}
+      onMouseLeave={onMouseLeave}
+    >
       <CardBody>
         {headerSection}
         {bodySection}
       </CardBody>
     </ProjectCardOuter>
   )
+}
 
+type ProjectCardContainerProps = {
+  projects: Project[]
+}
+
+export const ProjectCardContainer: FC<ProjectCardContainerProps> = ({
+  projects,
+}) => {
   return (
-    <div onClick={onClickCard} onMouseEnter={onEnter} onMouseLeave={onExit}>
-      {card}
+    <div className={styles.projectCardContainer}>
+      {projects.map(project => (
+        <ProjectCard project={project} />
+      ))}
     </div>
   )
 }

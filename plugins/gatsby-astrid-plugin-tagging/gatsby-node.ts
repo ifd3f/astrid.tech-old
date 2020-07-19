@@ -13,11 +13,15 @@ import { v4 } from "uuid"
 import { withContentDigest } from "../util"
 import { TagNodeData, TAG_MIME_TYPE } from "./index"
 
+function getTagID(slug: string) {
+  return "tech.astrid.tagging." + slug
+}
+
 const getTagNodeCreator = ({
   actions,
   getNodesByType,
 }: ParentSpanPluginArgs) => (tag: TagNodeData, parent?: Node) => {
-  const { createNode, deleteNode } = actions
+  const { createNode, deleteNode, createParentChildLink } = actions
 
   // Check for existing
   const existing = (getNodesByType("Tag") as (Node & TagNodeData)[]).find(
@@ -38,7 +42,7 @@ const getTagNodeCreator = ({
     } as any,
     children: [],
 
-    id: v4(),
+    id: getTagID(tag.slug),
     name: tag.name,
     slug: tag.slug,
     color: tag.color,
@@ -46,6 +50,9 @@ const getTagNodeCreator = ({
     backgroundColor: tag.backgroundColor,
   })
   createNode(tagNode)
+  if (parent) {
+    createParentChildLink({ parent, child: tagNode as Node })
+  }
 
   return tagNode as Node | NodeInput
 }
@@ -86,13 +93,13 @@ export const onCreateNode: GatsbyNode["onCreateNode"] = async (
 ) => {
   const { node, actions, getNodesByType } = args
   const { createNode, createParentChildLink } = actions
-  const buildTagNode = getTagNodeCreator(args)
+  const createTagNode = getTagNodeCreator(args)
 
   // A taggable type
   if (Array.isArray(node.tagSlugs)) {
     node.tagSlugs.forEach(slug => {
       // Create default tags
-      buildTagNode(
+      createTagNode(
         {
           name: slug,
           slug,
@@ -108,7 +115,7 @@ export const onCreateNode: GatsbyNode["onCreateNode"] = async (
   // A tag content holder
   if (node.internal.mediaType == TAG_MIME_TYPE) {
     const tagData = JSON.parse(node.internal.content!!) as TagNodeData
-    const tagNode = buildTagNode(
+    const tagNode = createTagNode(
       {
         name: tagData.name,
         color: tagData.color,
@@ -123,7 +130,6 @@ export const onCreateNode: GatsbyNode["onCreateNode"] = async (
     if (!tagNode) {
       return
     }
-    createParentChildLink({ parent: node, child: tagNode as Node })
   }
 }
 
@@ -143,6 +149,7 @@ function buildTagQueryForSlug(slug: string) {
 
 export const createSchemaCustomization: GatsbyNode["createSchemaCustomization"] = async ({
   actions,
+  getNode,
 }: CreateSchemaCustomizationArgs) => {
   const { createFieldExtension } = actions
 
@@ -150,10 +157,8 @@ export const createSchemaCustomization: GatsbyNode["createSchemaCustomization"] 
     name: `tagify`,
     extend: () => ({
       resolve: async (source: any, args: any, context: any, info: any) => {
-        const tags = await Promise.all(
-          source.tagSlugs.map((slug: string) =>
-            context.nodeModel.runQuery(buildTagQueryForSlug(slug))
-          )
+        const tags = source.tagSlugs.map((slug: string) =>
+          getNode(getTagID(slug))
         )
         return tags
       },
