@@ -133,17 +133,17 @@ export const onCreateNode: GatsbyNode["onCreateNode"] = async (
   }
 }
 
-function buildTagQueryForSlug(slug: string) {
+function buildTagQueryForSlugs(slugs: string[]) {
   return {
     query: {
       filter: {
         slug: {
-          eq: slug,
+          in: slugs,
         },
       },
     },
     type: "Tag",
-    firstOnly: true,
+    firstOnly: false,
   }
 }
 
@@ -157,8 +157,8 @@ export const createSchemaCustomization: GatsbyNode["createSchemaCustomization"] 
     name: `tagify`,
     extend: () => ({
       resolve: async (source: any, args: any, context: any, info: any) => {
-        const tags = source.tagSlugs.map((slug: string) =>
-          getNode(getTagID(slug))
+        const tags = await context.nodeModel.runQuery(
+          buildTagQueryForSlugs(source.tagSlugs)
         )
         return tags
       },

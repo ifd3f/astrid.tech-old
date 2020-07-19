@@ -179,6 +179,22 @@ export const ProjectCard: FC<ProjectCardProps> = ({
   )
 }
 
+type ProjectCardSwimlaneProps = {
+  projects: Project[]
+}
+
+export const ProjectCardSwimlane: FC<ProjectCardSwimlaneProps> = ({
+  projects,
+}) => {
+  return (
+    <div className={styles.swimlane}>
+      {projects.map(project => (
+        <ProjectCard project={project} />
+      ))}
+    </div>
+  )
+}
+
 type ProjectCardContainerProps = {
   projects: Project[]
 }
@@ -187,10 +203,8 @@ export const ProjectCardContainer: FC<ProjectCardContainerProps> = ({
   projects,
 }) => {
   return (
-    <div className={styles.projectCardContainer}>
-      {projects.map(project => (
-        <ProjectCard project={project} />
-      ))}
+    <div className={styles.outerContainer}>
+      <ProjectCardSwimlane projects={projects} />
     </div>
   )
 }
