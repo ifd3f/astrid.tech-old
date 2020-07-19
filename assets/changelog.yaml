@@ -8,6 +8,7 @@
             - Now we use Fira Code for monospace fonts for those _sexy ligatures._
           bugfixes:
             - Fixed Latex formulas not being rendered correctly.
+            - Fixed navbar not highlighting the current section.
           internals:
             - Completely redesigned the backend to be more modular. For a detailed technical look at it, see [this post](https://astrid.tech/blog/2020-07-12-new-gatsby-config/)
             - Added GraphViz support to markdown documents.

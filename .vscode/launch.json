@@ -28,7 +28,18 @@
       "console": "integratedTerminal",
       "internalConsoleOptions": "neverOpen",
       "sourceMaps": true,
-      "cwd": "${workspaceFolder}"
+      "cwd": "${workspaceFolder}",
+      "serverReadyAction": {
+        "action": "openExternally",
+        "uriFormat": "http://localhost:8000",
+        "pattern": "You can now view"
+      }
+    }
+  ],
+  "compounds": [
+    {
+      "name": "ALL the develops",
+      "configurations": ["Launch Firefox", "Gatsby develop"]
     }
   ]
 }

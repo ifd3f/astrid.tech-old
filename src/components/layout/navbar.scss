@@ -50,6 +50,10 @@
   .navbar-brand:hover {
     color: white;
   }
+
+  .navbar-separator {
+    flex-grow: 1;
+  }
   background-color: $navbar-bg;
   height: $navbar-height;
 }

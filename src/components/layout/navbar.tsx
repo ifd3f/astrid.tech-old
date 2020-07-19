@@ -2,6 +2,7 @@ import { Link } from "gatsby"
 import React, { FC, ReactNode, useState, PropsWithChildren } from "react"
 import { BsArrowsCollapse } from "react-icons/bs"
 import { GiHamburger } from "react-icons/gi"
+import { GoMarkGithub } from "react-icons/go"
 import {
   Collapse,
   Navbar,
@@ -26,6 +27,8 @@ const GNavLink: FC<NavLinkProps> = ({ to, children, active }) => {
     </Link>
   )
 }
+
+const NavbarSeparator = () => <div className="navbar-separator" />
 
 type MainNavbarProps = {
   currentLocation: NavBarLinks
@@ -55,7 +58,10 @@ const MainNavbar: FC<MainNavbarProps> = ({ currentLocation, fixed }) => {
         <GNavLink to="/blog" active={currentLocation == "blog"}>
           Blog
         </GNavLink>
-        <NavLink href="https://github.com/plenglin">GitHub</NavLink>
+        <NavbarSeparator />
+        <NavLink href="https://github.com/plenglin" alt="GitHub">
+          <GoMarkGithub /> plenglin
+        </NavLink>
       </Collapse>
     </Navbar>
   )
