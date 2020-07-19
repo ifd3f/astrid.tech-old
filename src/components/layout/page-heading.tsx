@@ -1,0 +1,3 @@
+type PageHeadingProps = {
+  bgColor: string
+}

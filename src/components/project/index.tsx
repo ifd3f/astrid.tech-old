@@ -1,1 +1,1 @@
-export { ProjectCard, ProjectCardContainer, StatusBadge } from "./project-card"
+export { ProjectCard, StatusBadge } from "./project-card"

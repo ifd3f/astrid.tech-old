@@ -1,13 +1,37 @@
-.viewWrapper {
-  width: 100vw;
-  height: 100vh;
-}
+@import "src/scss/colors.scss";
 
 .cardsContainer {
+  padding-top: 40px;
+  padding-bottom: 40px;
   position: relative;
   display: flex;
   flex-direction: row;
-  columns: 3;
+  flex-wrap: wrap;
+  justify-content: space-evenly;
+}
+
+.header {
+  text-align: center;
+  background-color: $black;
+
+  padding-top: 100px;
+  padding-bottom: 50px;
+  padding-left: 50px;
+  padding-right: 50px;
+
+  h1,
+  p {
+    color: $white;
+  }
+
+  h1 {
+    font-size: 70pt;
+    margin-bottom: 50px;
+  }
+
+  p {
+    font-size: 20pt;
+  }
 }
 
 .projectCardWrapper {
@@ -16,36 +40,5 @@
 
 .main {
   background-color: #002456;
-  padding-bottom: 0;
   margin-top: 0;
-}
-
-.swimlane {
-  flex-grow: 1;
-  margin-left: 50px;
-  margin-right: 50px;
-  width: 200px;
-}
-
-.swimlaneHeader {
-  background-color: orange;
-  padding: 5px;
-  display: inline-block;
-  h2 {
-    color: white;
-    display: inline;
-  }
-}
-
-.swimlaneScroll {
-  overflow-y: auto;
-  height: 100%;
-}
-
-.swimlaneContents {
-  display: flex;
-  flex-direction: row;
-  flex-wrap: wrap;
-  justify-content: center;
-  border: 3px solid orange;
 }

@@ -1,7 +1,7 @@
 import { graphql, PageProps } from "gatsby"
 import React, { FC } from "react"
 import Masonry from "react-masonry-component"
-import { Col, Container, Row } from "reactstrap"
+import { Col, Container, Row, Jumbotron } from "reactstrap"
 import Layout, { MainNavbar } from "../components/layout"
 import { ProjectCard } from "../components/project"
 import SEO from "../components/seo"
@@ -58,33 +58,6 @@ const TagsFilterBar: FC<TagsFilterBarProps> = ({
   ))
 }
 
-type ProjectCardSwimlaneProps = {
-  projects: Project[]
-  title: string
-}
-
-export const ProjectCardSwimlane: FC<ProjectCardSwimlaneProps> = ({
-  projects,
-  title,
-}) => {
-  return (
-    <div className={styles.swimlane}>
-      <div className={styles.swimlaneHeader}>
-        <div>
-          <h2>{title}</h2>
-        </div>
-      </div>
-      <div className={styles.swimlaneScroll}>
-        <div className={styles.swimlaneContents}>
-          {projects.map(project => (
-            <ProjectCard project={project} />
-          ))}
-        </div>
-      </div>
-    </div>
-  )
-}
-
 type ProjectCardContainerProps = {
   projects: Project[]
 }
@@ -94,20 +67,11 @@ export const ProjectCardContainer: FC<ProjectCardContainerProps> = ({
 }) => {
   return (
     <div className={styles.cardsContainer}>
-      <ProjectCardSwimlane
-        projects={projects.filter(project => project.status == "wip")}
-        title="In Progress"
-      />
-      <ProjectCardSwimlane
-        projects={projects.filter(project => project.status == "complete")}
-        title="Complete"
-      />
-      <ProjectCardSwimlane
-        projects={projects.filter(
-          project => project.status != "complete" && project.status != "wip"
-        )}
-        title="Other"
-      />
+      {projects.map(project => (
+        <div className={styles.projectCardWrapper}>
+          <ProjectCard project={project} />
+        </div>
+      ))}
     </div>
   )
 }
@@ -121,18 +85,19 @@ const ProjectsIndex: FC<PageProps<Data>> = ({ data }) => {
     </Col>
   ))
   return (
-    <div className={styles.viewWrapper}>
+    <Layout currentLocation="projects" className={`${styles.main}`}>
       <SEO title="Projects" />
-      <MainNavbar currentLocation="projects" />
-      <Container
-        tag="main"
-        className={`${styles.portfolioContainer} ${styles.main}`}
-        style={{ height: "100%" }}
-        fluid
-      >
+      <header className={styles.header}>
+        <h1>Projects</h1>
+        <p>
+          Below is an incomplete list of the projects I have worked on, of all
+          sizes and types.
+        </p>
+      </header>
+      <Container>
         <ProjectCardContainer projects={projects} />
       </Container>
-    </div>
+    </Layout>
   )
 }
 
