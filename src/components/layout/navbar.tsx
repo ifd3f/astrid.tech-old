@@ -24,7 +24,11 @@ const GNavLink: FC<NavLinkProps> = ({ to, children }) => {
   )
 }
 
-const MainNavbar: FC = () => {
+type MainNavbarProps = {
+  highlighted: "brand" | "projects" | "blog"
+}
+
+const MainNavbar: FC<MainNavbarProps> = ({ highlighted }) => {
   const [isOpen, setIsOpen] = useState(false)
   const toggleIsOpen = () => setIsOpen(!isOpen)
 

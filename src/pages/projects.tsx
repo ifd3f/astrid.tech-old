@@ -2,7 +2,7 @@ import { graphql, PageProps } from "gatsby"
 import React, { FC } from "react"
 import Masonry from "react-masonry-component"
 import { Col, Container, Row } from "reactstrap"
-import Layout from "../components/layout/layout"
+import Layout, { MainNavbar } from "../components/layout"
 import { ProjectCard } from "../components/project"
 import SEO from "../components/seo"
 import { TagBadge } from "../components/tag"
@@ -125,8 +125,9 @@ const ProjectsIndex: FC<PageProps<Data>> = ({ data }) => {
     </Col>
   ))
   return (
-    <Layout className={styles.main} showFooter={false}>
-      <SEO title="Portfolio" />
+    <div>
+      <SEO title="Projects" />
+      <MainNavbar highlighted="projects" />
       <Container
         className={styles.portfolioContainer}
         fluid
@@ -134,7 +135,7 @@ const ProjectsIndex: FC<PageProps<Data>> = ({ data }) => {
       >
         <ProjectCardContainer projects={projects} />
       </Container>
-    </Layout>
+    </div>
   )
 }
 
