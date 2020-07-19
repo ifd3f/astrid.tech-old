@@ -203,6 +203,8 @@ export const createPages: GatsbyNode["createPages"] = async ({
     projects.forEach(project => this.add(project))
   })
 
+  const indexJSON = JSON.stringify(index)
+
   createNode(
     withContentDigest({
       parent: null,
@@ -211,7 +213,7 @@ export const createPages: GatsbyNode["createPages"] = async ({
         type: "ProjectSearchIndex",
       },
       children: [],
-      data: JSON.stringify(index),
+      data: indexJSON,
     })
   )
 

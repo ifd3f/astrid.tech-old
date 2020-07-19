@@ -1855,6 +1855,11 @@
     "@types/istanbul-lib-coverage" "*"
     "@types/istanbul-lib-report" "*"
 
+"@types/js-base64@^3.0.0":
+  version "3.0.0"
+  resolved "https://registry.yarnpkg.com/@types/js-base64/-/js-base64-3.0.0.tgz#b7b4c130facefefd5c57ba82664c41e2995f91be"
+  integrity sha512-BnEyOcDE4H6bkg8m84xhdbkYoAoCg8sYERmAvE4Ff50U8jTfbmOinRdJpauBn1P9XsCCQgCLuSiyz3PM4WHYOA==
+
 "@types/js-yaml@^3.12.5":
   version "3.12.5"
   resolved "https://registry.yarnpkg.com/@types/js-yaml/-/js-yaml-3.12.5.tgz#136d5e6a57a931e1cce6f9d8126aa98a9c92a6bb"
@@ -9363,11 +9368,6 @@ js-base64@^2.1.8:
   resolved "https://registry.yarnpkg.com/js-base64/-/js-base64-2.5.2.tgz#313b6274dda718f714d00b3330bbae6e38e90209"
   integrity sha512-Vg8czh0Q7sFBSUMWWArX/miJeBWYBPpdU/3M/DKSaekLMqrqVPaedp+5mZhie/r0lgrcaYBfwXatEew6gwgiQQ==
 
-js-md5@^0.7.3:
-  version "0.7.3"
-  resolved "https://registry.yarnpkg.com/js-md5/-/js-md5-0.7.3.tgz#b4f2fbb0b327455f598d6727e38ec272cd09c3f2"
-  integrity sha512-ZC41vPSTLKGwIRjqDh8DfXoCrdQIyBgspJVPXHBGu4nZlAEvG3nf+jO9avM9RmLiGakg7vz974ms99nEV0tmTQ==
-
 "js-tokens@^3.0.0 || ^4.0.0", js-tokens@^4.0.0:
   version "4.0.0"
   resolved "https://registry.yarnpkg.com/js-tokens/-/js-tokens-4.0.0.tgz#19203fb59991df98e3a287050d4647cdeaf32499"
@@ -10047,11 +10047,6 @@ lunr@^2.3.8:
   version "2.3.8"
   resolved "https://registry.yarnpkg.com/lunr/-/lunr-2.3.8.tgz#a8b89c31f30b5a044b97d2d28e2da191b6ba2072"
   integrity sha512-oxMeX/Y35PNFuZoHp+jUj5OSEmLCaIH4KTFJh7a93cHBoFmpw2IoPs22VIz7vyO2YUnx2Tn9dzIwO2P/4quIRg==
-
-lzma-js@^1.0.1:
-  version "1.0.1"
-  resolved "https://registry.yarnpkg.com/lzma-js/-/lzma-js-1.0.1.tgz#0d3eb0947b32c0eb49bbf7b5e27e959fd8f83b53"
-  integrity sha512-JMBqMjHTHvH4ubDADxgJKqDTv9pgKanTDePkxDaMoewY47vevub5O2SCM1f2buXzvppX+FqCY9raJBLMua8PDg==
 
 magic-string@^0.25.3:
   version "0.25.7"
@@ -13658,7 +13653,7 @@ rimraf@2.6.3:
   dependencies:
     glob "^7.1.3"
 
-rimraf@^3.0.0, rimraf@^3.0.2:
+rimraf@^3.0.0:
   version "3.0.2"
   resolved "https://registry.yarnpkg.com/rimraf/-/rimraf-3.0.2.tgz#f1a5402ba6220ad52cc1282bac1ae3aa49fd061a"
   integrity sha512-JZkJMZkAGFFPP2YqXZXPbMlMBgsxzE8ILs4lMIX/2o0L9UBw9O/Y3o6wFw/i9YLapcUJWwqbi3kdxIPdC62TIA==
