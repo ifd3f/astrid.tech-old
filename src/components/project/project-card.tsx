@@ -181,10 +181,12 @@ export const ProjectCard: FC<ProjectCardProps> = ({
 
 type ProjectCardSwimlaneProps = {
   projects: Project[]
+  title: string
 }
 
 export const ProjectCardSwimlane: FC<ProjectCardSwimlaneProps> = ({
   projects,
+  title,
 }) => {
   return (
     <div className={styles.swimlane}>

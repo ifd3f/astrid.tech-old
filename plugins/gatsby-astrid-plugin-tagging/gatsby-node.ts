@@ -21,7 +21,12 @@ const getTagNodeCreator = ({
   actions,
   getNodesByType,
 }: ParentSpanPluginArgs) => (tag: TagNodeData, parent?: Node) => {
-  const { createNode, deleteNode, createParentChildLink } = actions
+  const {
+    createNode,
+    deleteNode,
+    createNodeField,
+    createParentChildLink,
+  } = actions
 
   // Check for existing
   const existing = (getNodesByType("Tag") as (Node & TagNodeData)[]).find(
@@ -31,7 +36,7 @@ const getTagNodeCreator = ({
   // Delete existing if necessary, or quit if it has higher priority
   if (existing) {
     if (existing.priority >= tag.priority) return null
-    deleteNode({ node: existing })
+    createNodeField({ node: existing, name: "valid", value: false })
   }
 
   // Create the node
