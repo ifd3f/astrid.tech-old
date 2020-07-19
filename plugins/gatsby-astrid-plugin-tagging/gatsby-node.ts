@@ -17,6 +17,33 @@ function getTagID(slug: string) {
   return "tech.astrid.tagging." + slug
 }
 
+function buildTagNode(tag: TagNodeData, parent?: Node) {
+  return withContentDigest({
+    parent: parent?.id,
+    internal: {
+      type: `Tag`,
+    } as any,
+    children: [],
+
+    id: v4(),
+    name: tag.name,
+    slug: tag.slug,
+    color: tag.color,
+    priority: tag.priority,
+    backgroundColor: tag.backgroundColor,
+  })
+}
+
+function buildDefaultTagNode(slug: string): TagNodeData {
+  return {
+    name: slug,
+    slug,
+    color: "#ffffff",
+    backgroundColor: "#313549",
+    priority: 0, // Minimum priority
+  }
+}
+
 const getTagNodeCreator = ({
   actions,
   getNodesByType,
@@ -35,20 +62,7 @@ const getTagNodeCreator = ({
   }
 
   // Create the node
-  const tagNode = withContentDigest({
-    parent: parent?.id,
-    internal: {
-      type: `Tag`,
-    } as any,
-    children: [],
-
-    id: v4(),
-    name: tag.name,
-    slug: tag.slug,
-    color: tag.color,
-    priority: tag.priority,
-    backgroundColor: tag.backgroundColor,
-  })
+  const tagNode = buildTagNode(tag, parent)
   createNode(tagNode)
   createNodeField({ node: tagNode as Node, name: "valid", value: true })
   if (parent) {
@@ -100,16 +114,7 @@ export const onCreateNode: GatsbyNode["onCreateNode"] = async (
   if (Array.isArray(node.tagSlugs)) {
     node.tagSlugs.forEach(slug => {
       // Create default tags
-      createTagNode(
-        {
-          name: slug,
-          slug,
-          color: "#ffffff",
-          backgroundColor: "#313549",
-          priority: 0, // Minimum priority
-        },
-        node
-      )
+      createTagNode(buildDefaultTagNode(slug))
     })
   }
 
@@ -163,10 +168,16 @@ export const createSchemaCustomization: GatsbyNode["createSchemaCustomization"] 
     name: `tagify`,
     extend: () => ({
       resolve: async (source: any, args: any, context: any, info: any) => {
-        const tags = Promise.all(
-          source.tagSlugs.map((slug: string) =>
-            context.nodeModel.runQuery(buildTagQueryForSlug(slug))
-          )
+        const tags = await Promise.all(
+          source.tagSlugs.map(async (slug: string) => {
+            const found = await context.nodeModel.runQuery(
+              buildTagQueryForSlug(slug)
+            )
+            if (found == null) {
+              return buildDefaultTagNode(slug)
+            }
+            return found
+          })
         )
         return tags
       },
