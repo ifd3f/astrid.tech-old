@@ -89,6 +89,7 @@ export const onCreateNode: GatsbyNode["onCreateNode"] = async ({
 
     slug: slug,
     title: frontmatter.title,
+    status: frontmatter.status,
     startDate: frontmatter.startDate,
     endDate: frontmatter.endDate,
     thumbnail___NODE: thumbnailFileNodeId,

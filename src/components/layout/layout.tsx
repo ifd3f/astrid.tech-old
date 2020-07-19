@@ -6,15 +6,20 @@ import MainNavbar from "./navbar"
 
 type LayoutProps = PageProps<any> & {
   children?: ReactNode
-  mainClass: string
+  className: string
+  showFooter?: boolean
 }
 
-const Layout: FC<LayoutProps> = ({ children, mainClass }) => {
+const Layout: FC<LayoutProps> = ({
+  showFooter = true,
+  children,
+  className,
+}) => {
   return (
     <div className="root-wrapper">
       <MainNavbar />
-      <main className={mainClass}>{children}</main>
-      <FooterSection />
+      <main className={className}>{children}</main>
+      {showFooter ? <FooterSection /> : null}
     </div>
   )
 }

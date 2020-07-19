@@ -9,7 +9,6 @@ import { TagBadge } from "../components/tag"
 import { Project } from "../types"
 import { Tag } from "../types/index"
 import styles from "./projects.module.scss"
-import { ProjectCardContainer } from "../components/project"
 
 type Data = {
   site: {
@@ -59,6 +58,64 @@ const TagsFilterBar: FC<TagsFilterBarProps> = ({
   ))
 }
 
+type ProjectCardSwimlaneProps = {
+  projects: Project[]
+  title: string
+}
+
+export const ProjectCardSwimlane: FC<ProjectCardSwimlaneProps> = ({
+  projects,
+  title,
+}) => {
+  return (
+    <div className={styles.swimlane}>
+      <h2>{title}</h2>
+      <div className={styles.swimlaneScroll}>
+        <div className={styles.swimlaneContents}>
+          {projects.map(project => (
+            <ProjectCard project={project} />
+          ))}
+        </div>
+      </div>
+    </div>
+  )
+}
+
+type ProjectCardContainerProps = {
+  projects: Project[]
+}
+
+export const ProjectCardContainer: FC<ProjectCardContainerProps> = ({
+  projects,
+}) => {
+  return (
+    <div className={styles.outerContainer}>
+      <Row>
+        <Col>
+          <ProjectCardSwimlane
+            projects={projects.filter(project => project.status == "wip")}
+            title="In Progress"
+          />
+        </Col>
+        <Col>
+          <ProjectCardSwimlane
+            projects={projects.filter(project => project.status == "complete")}
+            title="Complete"
+          />
+        </Col>
+        <Col>
+          <ProjectCardSwimlane
+            projects={projects.filter(
+              project => project.status != "complete" && project.status != "wip"
+            )}
+            title="Other"
+          />
+        </Col>
+      </Row>
+    </div>
+  )
+}
+
 const ProjectsIndex: FC<PageProps<Data>> = ({ data }) => {
   const projects = data.allProject.edges.map(edge => edge.node)
 
@@ -68,9 +125,13 @@ const ProjectsIndex: FC<PageProps<Data>> = ({ data }) => {
     </Col>
   ))
   return (
-    <Layout>
+    <Layout className={styles.main} showFooter={false}>
       <SEO title="Portfolio" />
-      <Container className={styles.portfolioContainer} fluid>
+      <Container
+        className={styles.portfolioContainer}
+        fluid
+        style={{ height: "100%" }}
+      >
         <ProjectCardContainer projects={projects} />
       </Container>
     </Layout>

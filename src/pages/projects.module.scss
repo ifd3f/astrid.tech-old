@@ -5,3 +5,26 @@
 .projectCardWrapper {
   padding-bottom: 20px;
 }
+
+.main {
+  background-color: #5d2163;
+  height: 100vh;
+  padding-bottom: 0;
+  margin-top: 0;
+}
+
+.swimlane {
+  height: 100%;
+}
+
+.swimlaneScroll {
+  overflow-y: auto;
+  height: 100%;
+}
+
+.swimlaneContents {
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: center;
+}

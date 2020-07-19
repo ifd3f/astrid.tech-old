@@ -14,6 +14,8 @@ import {
   CardLink,
   CardSubtitle,
   UncontrolledTooltip,
+  Col,
+  Row,
 } from "reactstrap"
 import { Project } from "../../types"
 import styles from "./project.module.scss"
@@ -151,10 +153,7 @@ export const ProjectCard: FC<ProjectCardProps> = ({
 }) => {
   const headerSection = (
     <>
-      <h5>
-        {project.title} <StatusBadge status={project.status} />
-      </h5>
-      <CardSubtitle>{project.internal.description}</CardSubtitle>
+      <h3>{project.title}</h3>
     </>
   )
   const bodySection = (
@@ -190,9 +189,14 @@ export const ProjectCardSwimlane: FC<ProjectCardSwimlaneProps> = ({
 }) => {
   return (
     <div className={styles.swimlane}>
-      {projects.map(project => (
-        <ProjectCard project={project} />
-      ))}
+      <h2>{title}</h2>
+      <div className={styles.swimlaneScroll}>
+        <div className={styles.swimlaneContents}>
+          {projects.map(project => (
+            <ProjectCard project={project} />
+          ))}
+        </div>
+      </div>
     </div>
   )
 }
@@ -206,7 +210,28 @@ export const ProjectCardContainer: FC<ProjectCardContainerProps> = ({
 }) => {
   return (
     <div className={styles.outerContainer}>
-      <ProjectCardSwimlane projects={projects} />
+      <Row>
+        <Col>
+          <ProjectCardSwimlane
+            projects={projects.filter(project => project.status == "wip")}
+            title="In Progress"
+          />
+        </Col>
+        <Col>
+          <ProjectCardSwimlane
+            projects={projects.filter(project => project.status == "complete")}
+            title="Complete"
+          />
+        </Col>
+        <Col>
+          <ProjectCardSwimlane
+            projects={projects.filter(
+              project => project.status != "complete" && project.status != "wip"
+            )}
+            title="Other"
+          />
+        </Col>
+      </Row>
     </div>
   )
 }
