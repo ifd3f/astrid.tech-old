@@ -5,7 +5,7 @@ import path from "path"
 
 type PreContentDigestNode = {
   id: string
-  parent?: string
+  parent?: string | null
   children?: string[]
   internal: {
     type: string

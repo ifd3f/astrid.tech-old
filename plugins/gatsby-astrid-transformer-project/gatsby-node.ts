@@ -1,6 +1,7 @@
 import { GatsbyNode, Node, SourceNodesArgs } from "gatsby"
 import { createFilePath, FileSystemNode } from "gatsby-source-filesystem"
 import path from "path"
+import lunr from "lunr"
 import { v4 } from "uuid"
 import { TagNodeData, TAG_MIME_TYPE } from "../gatsby-astrid-plugin-tagging"
 import { withContentDigest } from "../util"
@@ -47,7 +48,16 @@ export const sourceNodes: GatsbyNode["sourceNodes"] = async ({
     interfaces: ["Tagged", "Node"],
   })
 
-  createTypes([Project])
+  const ProjectSearchIndex = schema.buildObjectType({
+    name: "ProjectSearchIndex",
+    fields: {
+      id: "String!",
+      data: "String!",
+    },
+    interfaces: ["Node"],
+  })
+
+  createTypes([Project, ProjectSearchIndex])
 }
 
 export const onCreateNode: GatsbyNode["onCreateNode"] = async ({
@@ -129,13 +139,19 @@ export const createPages: GatsbyNode["createPages"] = async ({
   graphql,
   actions,
 }) => {
-  const { createPage } = actions
+  const { createPage, createNode } = actions
 
   type Data = {
     allProject: {
       edges: {
         node: {
           slug: string
+          internal: { description: string }
+          title: string
+          tags: {
+            name: string
+            slug: string
+          }[]
         }
       }[]
     }
@@ -147,6 +163,14 @@ export const createPages: GatsbyNode["createPages"] = async ({
         edges {
           node {
             slug
+            internal {
+              description
+            }
+            title
+            tags {
+              name
+              slug
+            }
           }
         }
       }
@@ -158,13 +182,46 @@ export const createPages: GatsbyNode["createPages"] = async ({
   }
 
   const projects = (result.data as Data).allProject.edges
+    .filter(({ node }) => {
+      if (node.tags) return true
+      console.warn("tags is null for queried project node", node)
+      return false
+    })
+    .map(({ node }) => ({
+      slug: node.slug,
+      description: node.internal.description,
+      title: node.title,
+      tags: node.tags.map(({ name, slug }) => `${name} ${slug}`),
+    }))
+
+  const index = lunr(function () {
+    this.ref("slug")
+    this.field("title")
+    this.field("description")
+    this.field("tags")
+
+    projects.forEach(project => this.add(project))
+  })
+
+  createNode(
+    withContentDigest({
+      parent: null,
+      id: v4(),
+      internal: {
+        type: "ProjectSearchIndex",
+      },
+      children: [],
+      data: JSON.stringify(index),
+    })
+  )
+
   const ProjectDetailTemplate = path.resolve(`src/templates/project-detail.tsx`)
 
-  projects.forEach(({ node }) => {
+  projects.forEach(({ slug }) => {
     createPage({
-      path: node.slug,
+      path: slug,
       component: ProjectDetailTemplate,
-      context: { slug: node.slug },
+      context: { slug },
     })
   })
 }
