@@ -21,12 +21,7 @@ const getTagNodeCreator = ({
   actions,
   getNodesByType,
 }: ParentSpanPluginArgs) => (tag: TagNodeData, parent?: Node) => {
-  const {
-    createNode,
-    deleteNode,
-    createNodeField,
-    createParentChildLink,
-  } = actions
+  const { createNode, createNodeField, createParentChildLink } = actions
 
   // Check for existing
   const existing = (getNodesByType("Tag") as (Node & TagNodeData)[]).find(
@@ -47,7 +42,7 @@ const getTagNodeCreator = ({
     } as any,
     children: [],
 
-    id: getTagID(tag.slug),
+    id: v4(),
     name: tag.name,
     slug: tag.slug,
     color: tag.color,
@@ -55,6 +50,7 @@ const getTagNodeCreator = ({
     backgroundColor: tag.backgroundColor,
   })
   createNode(tagNode)
+  createNodeField({ node: tagNode as Node, name: "valid", value: true })
   if (parent) {
     createParentChildLink({ parent, child: tagNode as Node })
   }
@@ -138,17 +134,22 @@ export const onCreateNode: GatsbyNode["onCreateNode"] = async (
   }
 }
 
-function buildTagQueryForSlugs(slugs: string[]) {
+function buildTagQueryForSlug(slug: string) {
   return {
     query: {
       filter: {
         slug: {
-          in: slugs,
+          eq: slug,
+        },
+        fields: {
+          valid: {
+            eq: true,
+          },
         },
       },
     },
     type: "Tag",
-    firstOnly: false,
+    firstOnly: true,
   }
 }
 
@@ -162,8 +163,10 @@ export const createSchemaCustomization: GatsbyNode["createSchemaCustomization"] 
     name: `tagify`,
     extend: () => ({
       resolve: async (source: any, args: any, context: any, info: any) => {
-        const tags = await context.nodeModel.runQuery(
-          buildTagQueryForSlugs(source.tagSlugs)
+        const tags = Promise.all(
+          source.tagSlugs.map((slug: string) =>
+            context.nodeModel.runQuery(buildTagQueryForSlug(slug))
+          )
         )
         return tags
       },
@@ -205,13 +208,15 @@ export const createPages: GatsbyNode["createPages"] = async ({
   actions,
   graphql,
 }) => {
-  const { createPage } = actions
+  const { createPage, deleteNode } = actions
 
   type Data = {
     allTag: {
       edges: {
         node: {
           slug: string
+          tagged: any[]
+          priority: number
         }
       }[]
     }
@@ -219,10 +224,14 @@ export const createPages: GatsbyNode["createPages"] = async ({
 
   const result = await graphql(`
     {
-      allTag {
+      allTag(filter: { fields: { valid: { eq: true } } }) {
         edges {
           node {
             slug
+            priority
+            tagged {
+              __typename
+            }
           }
         }
       }
@@ -237,9 +246,8 @@ export const createPages: GatsbyNode["createPages"] = async ({
 
   const TagTemplate = path.resolve(`src/templates/tag.tsx`)
   tags
-    .filter(({ node }) => node.slug[0] != "/")
-    .map(({ node }) => node.slug)
-    .forEach(slug => {
+    .filter(({ node }) => node.tagged.length > 0 && node.slug[0] != "/")
+    .forEach(({ node: { slug, priority } }) => {
       createPage({
         path: "/tags/" + slug,
         component: TagTemplate,
