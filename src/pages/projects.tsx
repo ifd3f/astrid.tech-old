@@ -69,7 +69,11 @@ export const ProjectCardSwimlane: FC<ProjectCardSwimlaneProps> = ({
 }) => {
   return (
     <div className={styles.swimlane}>
-      <h2>{title}</h2>
+      <div className={styles.swimlaneHeader}>
+        <div>
+          <h2>{title}</h2>
+        </div>
+      </div>
       <div className={styles.swimlaneScroll}>
         <div className={styles.swimlaneContents}>
           {projects.map(project => (
@@ -89,29 +93,21 @@ export const ProjectCardContainer: FC<ProjectCardContainerProps> = ({
   projects,
 }) => {
   return (
-    <div className={styles.outerContainer}>
-      <Row>
-        <Col>
-          <ProjectCardSwimlane
-            projects={projects.filter(project => project.status == "wip")}
-            title="In Progress"
-          />
-        </Col>
-        <Col>
-          <ProjectCardSwimlane
-            projects={projects.filter(project => project.status == "complete")}
-            title="Complete"
-          />
-        </Col>
-        <Col>
-          <ProjectCardSwimlane
-            projects={projects.filter(
-              project => project.status != "complete" && project.status != "wip"
-            )}
-            title="Other"
-          />
-        </Col>
-      </Row>
+    <div className={styles.cardsContainer}>
+      <ProjectCardSwimlane
+        projects={projects.filter(project => project.status == "wip")}
+        title="In Progress"
+      />
+      <ProjectCardSwimlane
+        projects={projects.filter(project => project.status == "complete")}
+        title="Complete"
+      />
+      <ProjectCardSwimlane
+        projects={projects.filter(
+          project => project.status != "complete" && project.status != "wip"
+        )}
+        title="Other"
+      />
     </div>
   )
 }
@@ -125,13 +121,14 @@ const ProjectsIndex: FC<PageProps<Data>> = ({ data }) => {
     </Col>
   ))
   return (
-    <div>
+    <div className={styles.viewWrapper}>
       <SEO title="Projects" />
       <MainNavbar currentLocation="projects" />
       <Container
-        className={styles.portfolioContainer}
-        fluid
+        tag="main"
+        className={`${styles.portfolioContainer} ${styles.main}`}
         style={{ height: "100%" }}
+        fluid
       >
         <ProjectCardContainer projects={projects} />
       </Container>

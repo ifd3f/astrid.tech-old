@@ -1,5 +1,13 @@
-.portfolioContainer {
-  padding-top: 20px;
+.viewWrapper {
+  width: 100vw;
+  height: 100vh;
+}
+
+.cardsContainer {
+  position: relative;
+  display: flex;
+  flex-direction: row;
+  columns: 3;
 }
 
 .projectCardWrapper {
@@ -7,14 +15,26 @@
 }
 
 .main {
-  background-color: #5d2163;
-  height: 100vh;
+  background-color: #002456;
   padding-bottom: 0;
   margin-top: 0;
 }
 
 .swimlane {
-  height: 100%;
+  flex-grow: 1;
+  margin-left: 50px;
+  margin-right: 50px;
+  width: 200px;
+}
+
+.swimlaneHeader {
+  background-color: orange;
+  padding: 5px;
+  display: inline-block;
+  h2 {
+    color: white;
+    display: inline;
+  }
 }
 
 .swimlaneScroll {
@@ -27,4 +47,5 @@
   flex-direction: row;
   flex-wrap: wrap;
   justify-content: center;
+  border: 3px solid orange;
 }
