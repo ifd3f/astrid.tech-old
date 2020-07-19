@@ -59,7 +59,7 @@ const ProjectDetailTemplate: FC<PageProps<Data, Context>> = ({ data }) => {
     : project.startDate
 
   return (
-    <Layout>
+    <Layout currentLocation="projects">
       <SEO title={project.title!} />
       <Container className={style.projectDetailContainer}>
         <article>

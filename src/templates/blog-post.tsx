@@ -59,7 +59,7 @@ const BlogPostTemplate: FC<PageProps<Data, Context>> = ({
   }
 
   return (
-    <Layout>
+    <Layout currentLocation="blog">
       <PostSEO post={post} />
 
       <Container className={styleBlog.blogContentContainer}>

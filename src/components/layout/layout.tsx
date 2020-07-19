@@ -2,22 +2,24 @@ import { PageProps } from "gatsby"
 import React, { FC, ReactNode, PropsWithChildren } from "react"
 import FooterSection from "./footer"
 import "./layout.scss"
-import MainNavbar from "./navbar"
+import MainNavbar, { NavBarLinks } from "./navbar"
 
 type LayoutProps = PageProps<any> & {
   children?: ReactNode
   className: string
   showFooter?: boolean
+  currentLocation: NavBarLinks
 }
 
 const Layout: FC<LayoutProps> = ({
   showFooter = true,
   children,
   className,
+  currentLocation,
 }) => {
   return (
     <div className="root-wrapper">
-      <MainNavbar />
+      <MainNavbar fixed currentLocation={currentLocation} />
       <main className={className}>{children}</main>
       {showFooter ? <FooterSection /> : null}
     </div>

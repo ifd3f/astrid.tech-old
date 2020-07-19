@@ -11,29 +11,37 @@ import {
 } from "reactstrap"
 import "./navbar.scss"
 
+export type NavBarLinks = "brand" | "projects" | "blog"
+
 type NavLinkProps = {
   to: string
   children: ReactNode
+  active: boolean
 }
 
-const GNavLink: FC<NavLinkProps> = ({ to, children }) => {
+const GNavLink: FC<NavLinkProps> = ({ to, children, active }) => {
   return (
-    <Link className={`nav-link`} to={to}>
+    <Link className={`nav-link ` + (active ? "active" : "")} to={to}>
       {children}
     </Link>
   )
 }
 
 type MainNavbarProps = {
-  highlighted: "brand" | "projects" | "blog"
+  currentLocation: NavBarLinks
+  fixed?: boolean
 }
 
-const MainNavbar: FC<MainNavbarProps> = ({ highlighted }) => {
+const MainNavbar: FC<MainNavbarProps> = ({ currentLocation, fixed }) => {
   const [isOpen, setIsOpen] = useState(false)
   const toggleIsOpen = () => setIsOpen(!isOpen)
 
   return (
-    <Navbar className="main-navbar" fixed="top" expand="md">
+    <Navbar
+      className="main-navbar"
+      fixed={fixed ? "top" : undefined}
+      expand="md"
+    >
       <NavbarBrand tag={Link} to="/" activeClassName="active">
         Astrid's Tech
       </NavbarBrand>
@@ -41,8 +49,12 @@ const MainNavbar: FC<MainNavbarProps> = ({ highlighted }) => {
         {isOpen ? <BsArrowsCollapse /> : <GiHamburger />}
       </NavbarToggler>
       <Collapse isOpen={isOpen} navbar>
-        <GNavLink to="/projects">Projects</GNavLink>
-        <GNavLink to="/blog">Blog</GNavLink>
+        <GNavLink to="/projects" active={currentLocation == "projects"}>
+          Projects
+        </GNavLink>
+        <GNavLink to="/blog" active={currentLocation == "blog"}>
+          Blog
+        </GNavLink>
         <NavLink href="https://github.com/plenglin">GitHub</NavLink>
       </Collapse>
     </Navbar>

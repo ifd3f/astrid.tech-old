@@ -127,7 +127,7 @@ const ProjectsIndex: FC<PageProps<Data>> = ({ data }) => {
   return (
     <div>
       <SEO title="Projects" />
-      <MainNavbar highlighted="projects" />
+      <MainNavbar currentLocation="projects" />
       <Container
         className={styles.portfolioContainer}
         fluid
