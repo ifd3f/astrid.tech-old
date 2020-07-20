@@ -17,7 +17,7 @@ import { TagBadge } from "../components/tag"
 import { Project } from "../types"
 import { Tag } from "../types/index"
 import styles from "./projects.module.scss"
-import { Index } from "lunr"
+import Fuse from "fuse.js"
 
 type Data = {
   site: {
@@ -30,7 +30,10 @@ type Data = {
       node: Project
     }[]
   }
-  projectSearchIndex: { data: string }
+  projectSearchIndex: {
+    data: string
+    keys: string[]
+  }
 }
 
 export const pageQuery = graphql`
@@ -49,13 +52,14 @@ export const pageQuery = graphql`
     }
     projectSearchIndex {
       data
+      keys
     }
   }
 `
 
 type SearchContext = {
   tags: Map<string, Tag>
-  projects: Map<string, Project>
+  projects: Project[]
 
   displayedProjects: Project[]
 
@@ -75,12 +79,12 @@ const SearchContext = createContext<SearchContext>({} as any)
 
 type FiltererArgs = {
   children: ReactNode
-  projects: Map<string, Project>
+  projects: Project[]
   tags: Map<string, Tag>
-  index: Index
+  fuse: Fuse<Project, any>
 }
 
-const Filterer: FC<FiltererArgs> = ({ children, projects, index, tags }) => {
+const Filterer: FC<FiltererArgs> = ({ children, projects, fuse, tags }) => {
   const [searchString, _setSearchString] = useState("")
   const [filterTags, setFilterTags] = useState<string[]>([])
   const [shouldFilterAny, _setShouldFilterAnyTags] = useState<boolean>(false)
@@ -107,9 +111,12 @@ const Filterer: FC<FiltererArgs> = ({ children, projects, index, tags }) => {
 
   const filterTagsSet = new Set(filterTags)
 
-  var displayedProjects = index
-    .search(searchString)
-    .map(result => projects.get(result.ref)!!)
+  var displayedProjects =
+    searchString == ""
+      ? projects
+      : fuse.search(searchString).map(result => {
+          return result.item
+        })
 
   if (filterTags.length > 0) {
     displayedProjects = displayedProjects.filter(project => {
@@ -180,21 +187,23 @@ export const ProjectCardContainer: FC = () => {
 }
 
 const ProjectsIndex: FC<PageProps<Data>> = ({ data }) => {
-  const index = Index.load(JSON.parse(data.projectSearchIndex.data))
-  const projects = new Map(
-    data.allProject.edges.map(({ node }) => [node.slug, node])
-  )
+  const projects = data.allProject.edges.map(({ node }) => node)
   const tagMap = new Map(
     Array.from(projects.values())
       .flatMap(project => project.tags)
       .map(tag => [tag.slug, tag])
   )
 
-  const cards = Array.from(projects.values()).map(project => (
-    <Col className={styles.projectCardWrapper} xs={12} sm={6} xl={4}>
-      <ProjectCard project={project} hovered={false} />
-    </Col>
-  ))
+  const index = Fuse.parseIndex(JSON.parse(data.projectSearchIndex.data))
+  const fuse = new Fuse<Project, any>(
+    projects,
+    {
+      threshold: 0.1,
+      keys: ["title", "slug", "internal.description", "tags.name", "tags.slug"],
+    },
+    index
+  )
+
   return (
     <Layout currentLocation="projects" className={`${styles.main}`}>
       <SEO title="Projects" />
@@ -205,7 +214,7 @@ const ProjectsIndex: FC<PageProps<Data>> = ({ data }) => {
           sizes and types.
         </p>
       </header>
-      <Filterer projects={projects} tags={tagMap} index={index}>
+      <Filterer projects={projects} tags={tagMap} fuse={fuse}>
         <TagsFilterBar />
         <Container>
           <ProjectCardContainer />

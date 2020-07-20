@@ -1,7 +1,7 @@
 import { GatsbyNode, Node, SourceNodesArgs } from "gatsby"
 import { createFilePath, FileSystemNode } from "gatsby-source-filesystem"
 import path from "path"
-import lunr from "lunr"
+import Fuse from "fuse.js"
 import { v4 } from "uuid"
 import { TagNodeData, TAG_MIME_TYPE } from "../gatsby-astrid-plugin-tagging"
 import { withContentDigest } from "../util"
@@ -53,6 +53,7 @@ export const sourceNodes: GatsbyNode["sourceNodes"] = async ({
     fields: {
       id: "String!",
       data: "String!",
+      keys: "[String!]",
     },
     interfaces: ["Node"],
   })
@@ -159,7 +160,7 @@ export const createPages: GatsbyNode["createPages"] = async ({
 
   const result = await graphql(`
     {
-      allProject {
+      allProject(sort: { fields: [endDate], order: DESC }) {
         edges {
           node {
             slug
@@ -187,23 +188,16 @@ export const createPages: GatsbyNode["createPages"] = async ({
       console.warn("tags is null for queried project node", node)
       return false
     })
-    .map(({ node }) => ({
-      slug: node.slug,
-      description: node.internal.description,
-      title: node.title,
-      tags: node.tags.map(({ name, slug }) => `${name} ${slug}`),
-    }))
+    .map(({ node }) => node)
 
-  const index = lunr(function () {
-    this.ref("slug")
-    this.field("title")
-    this.field("description")
-    this.field("tags")
-
-    projects.forEach(project => this.add(project))
-  })
-
-  const indexJSON = JSON.stringify(index)
+  const keys = [
+    "title",
+    "slug",
+    "internal.description",
+    "tags.name",
+    "tags.slug",
+  ]
+  const index = Fuse.createIndex(keys, projects)
 
   createNode(
     withContentDigest({
@@ -213,7 +207,8 @@ export const createPages: GatsbyNode["createPages"] = async ({
         type: "ProjectSearchIndex",
       },
       children: [],
-      data: indexJSON,
+      data: JSON.stringify(index.toJSON()),
+      keys,
     })
   )
 
