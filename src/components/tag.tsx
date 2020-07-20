@@ -6,6 +6,7 @@ import style from "./tag.module.scss"
 
 type TagBadgeProps = {
   tag: Tag
+  link?: boolean
 }
 
 export const tagBadgeFragment = graphql`
@@ -17,7 +18,7 @@ export const tagBadgeFragment = graphql`
   }
 `
 
-export const TagBadge: FC<TagBadgeProps> = ({ tag }) => {
+export const TagBadge: FC<TagBadgeProps> = ({ tag, link = false }) => {
   const linkTo = tag.slug[0] == "/" ? tag.slug : "/tags/" + tag.slug
 
   return (
@@ -27,7 +28,7 @@ export const TagBadge: FC<TagBadgeProps> = ({ tag }) => {
         backgroundColor: tag.backgroundColor,
         color: tag.color,
       }}
-      tag={Link}
+      tag={link ? Link : undefined}
       to={linkTo}
     >
       {tag.name}

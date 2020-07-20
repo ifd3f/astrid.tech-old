@@ -1,6 +1,15 @@
 import { graphql, PageProps, useStaticQuery } from "gatsby"
-import React, { FC, useState } from "react"
-import { Col, Container, Row, Jumbotron } from "reactstrap"
+import React, {
+  FC,
+  useState,
+  createContext,
+  PropsWithChildren,
+  ReactNode,
+  useContext,
+  ChangeEvent,
+  ChangeEventHandler,
+} from "react"
+import { Col, Container, Row, Jumbotron, InputGroup, Input } from "reactstrap"
 import Layout, { MainNavbar } from "../components/layout"
 import { ProjectCard } from "../components/project"
 import SEO from "../components/seo"
@@ -44,38 +53,124 @@ export const pageQuery = graphql`
   }
 `
 
-type TagsFilterBarProps = {
-  tagSet: Set<Tag>
-  select: (tag: Tag) => void
-  deselect: (tag: Tag) => void
-  searchIndexData: any
+type SearchContext = {
+  tags: Map<string, Tag>
+  projects: Map<string, Project>
+
+  displayedProjects: Project[]
+
+  searchString: string
+  setSearchString: (searchString: string) => void
+
+  filterTags: Tag[]
+  addFilterTag: (slug: string) => void
+  removeFilterTag: (slug: string) => void
+  clearFilterTags: () => void
+
+  shouldFilterAny: boolean
+  setShouldFilterAny: (shouldFilterAny: boolean) => void
 }
 
-const TagsFilterBar: FC<TagsFilterBarProps> = ({
-  tagSet,
-  select,
-  deselect,
-  searchIndexData,
-}) => {
-  return [...tagSet].map(tag => (
+const SearchContext = createContext<SearchContext>({} as any)
+
+type FiltererArgs = {
+  children: ReactNode
+  projects: Map<string, Project>
+  tags: Map<string, Tag>
+  index: Index
+}
+
+const Filterer: FC<FiltererArgs> = ({ children, projects, index, tags }) => {
+  const [searchString, _setSearchString] = useState("")
+  const [filterTags, setFilterTags] = useState<string[]>([])
+  const [shouldFilterAny, _setShouldFilterAnyTags] = useState<boolean>(false)
+
+  const setSearchString = (searchString: string) => {
+    _setSearchString(searchString)
+  }
+
+  const setShouldFilterAny = (shouldFilterAny: boolean) => {
+    _setShouldFilterAnyTags(shouldFilterAny)
+  }
+
+  const addFilterTag = (slug: string) => {
+    setFilterTags([...filterTags, slug])
+  }
+
+  const removeFilterTag = (slug: string) => {
+    setFilterTags(filterTags.filter(tag => tag != slug))
+  }
+
+  const clearFilterTags = () => {
+    setFilterTags([])
+  }
+
+  const filterTagsSet = new Set(filterTags)
+
+  var displayedProjects = index
+    .search(searchString)
+    .map(result => projects.get(result.ref)!!)
+
+  if (filterTags.length > 0) {
+    displayedProjects = displayedProjects.filter(project => {
+      const filteredCount = project.tags.filter(tag =>
+        filterTagsSet.has(tag.slug)
+      ).length
+
+      return shouldFilterAny
+        ? filteredCount > 0
+        : filteredCount == filterTags.length
+    })
+  }
+
+  return (
+    <SearchContext.Provider
+      value={{
+        tags,
+        projects,
+
+        displayedProjects,
+
+        searchString,
+        setSearchString,
+
+        filterTags: filterTags.map(slug => tags.get(slug)!!),
+        addFilterTag,
+        removeFilterTag,
+        clearFilterTags,
+
+        shouldFilterAny,
+        setShouldFilterAny,
+      }}
+    >
+      {children}
+    </SearchContext.Provider>
+  )
+}
+const TagsFilterBar: FC = () => {
+  const { tags, setSearchString } = useContext(SearchContext)
+  const onChange: ChangeEventHandler<HTMLInputElement> = ev => {
+    setSearchString(ev.target.value)
+  }
+  return (
     <div className={styles.tagsFilterBar}>
       <Container>
-        <TagBadge tag={tag} />
+        <InputGroup>
+          <Input placeholder="Filter..." onChange={onChange} />
+        </InputGroup>
+        {[...tags.values()].map(tag => (
+          <TagBadge tag={tag} />
+        ))}
       </Container>
     </div>
-  ))
+  )
 }
 
-type ProjectCardContainerProps = {
-  projects: Project[]
-}
-
-export const ProjectCardContainer: FC<ProjectCardContainerProps> = ({
-  projects,
-}) => {
+export const ProjectCardContainer: FC = () => {
+  const { displayedProjects } = useContext(SearchContext)
   return (
     <div className={styles.cardsContainer}>
-      {projects.map(project => (
+      {displayedProjects.map(project => (
         <div className={styles.projectCardWrapper}>
           <ProjectCard project={project} />
         </div>
@@ -85,16 +180,17 @@ export const ProjectCardContainer: FC<ProjectCardContainerProps> = ({
 }
 
 const ProjectsIndex: FC<PageProps<Data>> = ({ data }) => {
-  const [index] = useState(Index.load(JSON.parse(data.projectSearchIndex.data)))
-  const projects = data.allProject.edges.map(edge => edge.node)
-
-  const tagSet = new Set(
-    new Map(
-      projects.flatMap(project => project.tags).map(tag => [tag.slug, tag])
-    ).values()
+  const index = Index.load(JSON.parse(data.projectSearchIndex.data))
+  const projects = new Map(
+    data.allProject.edges.map(({ node }) => [node.slug, node])
+  )
+  const tagMap = new Map(
+    Array.from(projects.values())
+      .flatMap(project => project.tags)
+      .map(tag => [tag.slug, tag])
   )
 
-  const cards = projects.map(project => (
+  const cards = Array.from(projects.values()).map(project => (
     <Col className={styles.projectCardWrapper} xs={12} sm={6} xl={4}>
       <ProjectCard project={project} hovered={false} />
     </Col>
@@ -109,10 +205,12 @@ const ProjectsIndex: FC<PageProps<Data>> = ({ data }) => {
           sizes and types.
         </p>
       </header>
-      <TagsFilterBar tagSet={tagSet} />
-      <Container>
-        <ProjectCardContainer projects={projects} />
-      </Container>
+      <Filterer projects={projects} tags={tagMap} index={index}>
+        <TagsFilterBar />
+        <Container>
+          <ProjectCardContainer />
+        </Container>
+      </Filterer>
     </Layout>
   )
 }
