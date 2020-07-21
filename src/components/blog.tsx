@@ -19,9 +19,9 @@ export const PostMainHeader: FC<PostProps> = ({ post }) => {
   return (
     <header>
       <h1>{post.title!}</h1>
-      <p className={style.subtitle}>{post.description!}</p>
+      <p className={style.subtitle}>{post.internal.description!}</p>
       <p className={style.date}>{dateString}</p>
-      <TagList tags={post.tags} />
+      <TagList tags={post.tags} link />
     </header>
   )
 }
@@ -38,7 +38,7 @@ export const PostBrief: FC<PostProps> = ({ post }) => {
       <article className={style.brief}>
         <h3>{post.title}</h3>
         <p className={style.date}>{dateString}</p>
-        <TagList tags={post.tags} />
+        <TagList tags={post.tags} link />
         <p>{post.internal.description}</p>
       </article>
     </Link>

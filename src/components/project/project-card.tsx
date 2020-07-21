@@ -158,7 +158,7 @@ export const ProjectCard: FC<ProjectCardProps> = ({
   )
   const bodySection = (
     <>
-      <TagList tags={project.tags.slice(0, 5)} />
+      <TagList tags={project.tags.slice(0, 5)} link />
       {project.url ? <CardLink href={project.url}>{project.url}</CardLink> : ""}
     </>
   )

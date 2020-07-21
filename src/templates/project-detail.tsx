@@ -69,7 +69,7 @@ const ProjectDetailTemplate: FC<PageProps<Data, Context>> = ({ data }) => {
             </h1>
             <p className={style.date}>{date}</p>
             <p className={style.subtitle}>{project.internal.description}</p>
-            <TagList tags={project.tags} />
+            <TagList tags={project.tags} link />
           </header>
           <section
             dangerouslySetInnerHTML={{ __html: project.markdown.html!! }}

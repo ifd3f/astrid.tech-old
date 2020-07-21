@@ -44,9 +44,10 @@ export const TagBadge: FC<TagBadgeProps> = ({
 
 type TagListProps = {
   tags: Tag[]
+  link?: boolean
 }
 
-export const TagList: FC<TagListProps> = ({ tags }) => {
+export const TagList: FC<TagListProps> = ({ tags, link = false }) => {
   return (
     <div>
       <p
@@ -55,7 +56,7 @@ export const TagList: FC<TagListProps> = ({ tags }) => {
         }}
       >
         {tags.map(tag => (
-          <TagBadge key={tag.slug} tag={tag} />
+          <TagBadge key={tag.slug} tag={tag} link={link} />
         ))}
       </p>
     </div>
