@@ -43,6 +43,10 @@
   overflow-y: scroll;
 }
 
+.selectableTag {
+  cursor: pointer;
+}
+
 .deletableTag {
   margin-right: 5px;
   cursor: pointer;

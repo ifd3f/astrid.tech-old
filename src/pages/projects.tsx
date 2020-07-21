@@ -178,7 +178,11 @@ const SelectableTagList: FC = () => {
   return (
     <div className={styles.selectableTagsContainer}>
       {[...slugToTag.values()].map(tag => (
-        <span onClick={() => addFilterTag(tag.slug)} key={tag.slug}>
+        <span
+          className={styles.selectableTag}
+          onClick={() => addFilterTag(tag.slug)}
+          key={tag.slug}
+        >
           <TagBadge tag={tag}>
             {" "}
             <Badge
