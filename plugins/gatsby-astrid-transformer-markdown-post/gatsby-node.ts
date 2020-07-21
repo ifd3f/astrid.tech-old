@@ -5,8 +5,8 @@ import {
   BLOG_POST_MIME_TYPE,
   BlogPostContent,
 } from "../gatsby-astrid-plugin-blog"
-import { withContentDigest } from "../util"
 import { BlogMetadata } from "./index"
+import { buildNode } from "../util"
 
 type MarkdownNode = Node & {
   frontmatter: BlogMetadata
@@ -51,16 +51,18 @@ export const onCreateNode: GatsbyNode["onCreateNode"] = async ({
     tagSlugs: markdownNode.frontmatter.tags,
   }
 
-  const postNode = withContentDigest({
-    parent: markdownNode.id,
-    internal: {
-      type: `MarkdownBlogPost`,
-      content: JSON.stringify(content),
-      mediaType: BLOG_POST_MIME_TYPE,
-    } as any,
-    id: v4(),
-    children: [],
-  })
+  const postNode = buildNode(
+    {
+      internal: {
+        type: `MarkdownBlogPost`,
+        content: JSON.stringify(content),
+        mediaType: BLOG_POST_MIME_TYPE,
+      } as any,
+    },
+    {
+      parent: markdownNode.id,
+    }
+  )
 
   createNode(postNode)
   createParentChildLink({ parent: markdownNode, child: postNode })

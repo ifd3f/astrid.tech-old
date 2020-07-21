@@ -4,7 +4,7 @@ import path from "path"
 import Fuse from "fuse.js"
 import { v4 } from "uuid"
 import { TagNodeData, TAG_MIME_TYPE } from "../gatsby-astrid-plugin-tagging"
-import { withContentDigest } from "../util"
+import { buildNode } from "../util"
 import { resolveFileNode } from "../util/index"
 
 type MarkdownNode = Node & {
@@ -88,25 +88,27 @@ export const onCreateNode: GatsbyNode["onCreateNode"] = async ({
     thumbnailFileNodeId = file?.id ?? null
   }
 
-  const projectNode = withContentDigest({
-    parent: markdownNode.id,
-    internal: {
-      type: `Project`,
-      description: frontmatter.description,
-      mediaType: "text/html",
-    } as any,
-    id: v4(),
-    children: [],
+  const projectNode = buildNode(
+    {
+      internal: {
+        type: `Project`,
+        description: frontmatter.description,
+        mediaType: "text/html",
+      } as any,
 
-    slug: slug,
-    title: frontmatter.title,
-    status: frontmatter.status,
-    startDate: frontmatter.startDate,
-    endDate: frontmatter.endDate,
-    thumbnail___NODE: thumbnailFileNodeId,
-    markdown___NODE: markdownNode.id,
-    tagSlugs: markdownNode.frontmatter.tags,
-  })
+      slug: slug,
+      title: frontmatter.title,
+      status: frontmatter.status,
+      startDate: frontmatter.startDate,
+      endDate: frontmatter.endDate,
+      thumbnail___NODE: thumbnailFileNodeId,
+      markdown___NODE: markdownNode.id,
+      tagSlugs: markdownNode.frontmatter.tags,
+    },
+    {
+      parent: markdownNode.id,
+    }
+  )
   createNode(projectNode)
   createParentChildLink({ parent: markdownNode, child: projectNode })
 
@@ -118,16 +120,18 @@ export const onCreateNode: GatsbyNode["onCreateNode"] = async ({
     priority: 2,
   }
 
-  const tagNode = withContentDigest({
-    parent: projectNode.id,
-    id: v4(),
-    internal: {
-      type: "ProjectTag",
-      mediaType: TAG_MIME_TYPE,
-      content: JSON.stringify(tagContent),
+  const tagNode = buildNode(
+    {
+      internal: {
+        type: "ProjectTag",
+        mediaType: TAG_MIME_TYPE,
+        content: JSON.stringify(tagContent),
+      },
     },
-    children: [],
-  })
+    {
+      parent: projectNode.id,
+    }
+  )
 
   createNode(tagNode)
   createParentChildLink({
@@ -200,13 +204,10 @@ export const createPages: GatsbyNode["createPages"] = async ({
   const index = Fuse.createIndex(keys, projects)
 
   createNode(
-    withContentDigest({
-      parent: null,
-      id: v4(),
+    buildNode({
       internal: {
         type: "ProjectSearchIndex",
       },
-      children: [],
       data: JSON.stringify(index.toJSON()),
       keys,
     })

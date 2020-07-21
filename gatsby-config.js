@@ -132,6 +132,8 @@ module.exports = {
     `gatsby-plugin-react-helmet`,
     "gatsby-plugin-sass",
 
+    "gatsby-astrid-source-lang-tags",
+
     "gatsby-astrid-transformer-user-tags",
     "gatsby-astrid-transformer-skills",
 
@@ -144,7 +146,5 @@ module.exports = {
 
     "gatsby-astrid-plugin-blog",
     "gatsby-astrid-plugin-tagging",
-
-    "gatsby-astrid-source-lang-tags",
   ],
 }

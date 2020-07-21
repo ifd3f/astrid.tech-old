@@ -4,7 +4,7 @@ import {
   TagNodeData,
   TAG_MIME_TYPE,
 } from "../gatsby-astrid-plugin-tagging/index"
-import { getContrastingTextColor, withContentDigest } from "../util"
+import { getContrastingTextColor, buildNode } from "../util"
 
 type UserTagsYaml = {
   backgroundColor: string
@@ -38,14 +38,12 @@ export const onCreateNode: GatsbyNode["onCreateNode"] = async ({
       priority: 1,
     }
 
-    const tagNode = withContentDigest({
-      id: v4(),
+    const tagNode = buildNode({
       internal: {
         type: "UserTag",
         mediaType: TAG_MIME_TYPE,
         content: JSON.stringify(content),
       },
-      children: [],
     })
 
     createNode(tagNode)

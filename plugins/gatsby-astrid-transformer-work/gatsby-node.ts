@@ -1,6 +1,6 @@
 import { Actions, GatsbyNode, Node, SourceNodesArgs } from "gatsby"
 import { v4 } from "uuid"
-import { withContentDigest } from "../util"
+import { buildNode } from "../util"
 import { TAG_MIME_TYPE } from "../gatsby-astrid-plugin-tagging/index"
 
 type WorkYamlNode = Node & {
@@ -19,36 +19,43 @@ type WorkYamlNode = Node & {
 type CreateWorkNodeArgs = {
   actions: Actions
   yamlNode: WorkYamlNode
+  createContentDigest: (data: string) => string
 }
 
-function createWorkNode({ actions, yamlNode }: CreateWorkNodeArgs) {
+function createWorkNode({
+  actions,
+  yamlNode,
+  createContentDigest,
+}: CreateWorkNodeArgs) {
   const { createNode, createParentChildLink } = actions
-  const workNode = withContentDigest({
-    parent: yamlNode.id,
-    internal: {
-      type: `Work`,
+  const workNode = buildNode(
+    {
+      internal: {
+        type: `Work`,
+      },
+
+      slug: "/work/" + yamlNode.slug,
+      organization: yamlNode.organization,
+      position: yamlNode.position,
+      location: yamlNode.location,
+      startDate: yamlNode.startDate,
+      endDate: yamlNode.endDate,
+
+      summary: yamlNode.summary,
+      website: yamlNode.website,
+
+      highlights: yamlNode.highlights,
+
+      tagSlugs: yamlNode.tags,
     },
-    id: v4(),
-    children: [],
-
-    slug: "/work/" + yamlNode.slug,
-    organization: yamlNode.organization,
-    position: yamlNode.position,
-    location: yamlNode.location,
-    startDate: yamlNode.startDate,
-    endDate: yamlNode.endDate,
-
-    summary: yamlNode.summary,
-    website: yamlNode.website,
-
-    highlights: yamlNode.highlights,
-
-    tagSlugs: yamlNode.tags,
-  })
+    {
+      parent: yamlNode.id,
+    }
+  )
   createNode(workNode)
   createParentChildLink({
     parent: yamlNode,
-    child: (workNode as unknown) as Node,
+    child: workNode,
   })
 }
 
@@ -82,9 +89,10 @@ export const sourceNodes: GatsbyNode["sourceNodes"] = async ({
 export const onCreateNode: GatsbyNode["onCreateNode"] = async ({
   node,
   actions,
+  createContentDigest,
 }) => {
   if (node.internal.type != "WorkYaml") return
   const yamlNode = (node as unknown) as WorkYamlNode
 
-  createWorkNode({ actions, yamlNode })
+  createWorkNode({ actions, yamlNode, createContentDigest })
 }

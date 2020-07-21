@@ -1,7 +1,7 @@
 import { CreateNodeArgs, GatsbyNode, Node, SourceNodesArgs } from "gatsby"
 import path from "path"
 import { v4 } from "uuid"
-import { withContentDigest } from "../util/index"
+import { buildNode } from "../util"
 import { BlogPostContent, BLOG_POST_MIME_TYPE } from "./index"
 
 export const sourceNodes: GatsbyNode["sourceNodes"] = async ({
@@ -46,8 +46,7 @@ export const onCreateNode: GatsbyNode["onCreateNode"] = async ({
 
   const slug = "/blog" + content.slug
 
-  const blogPostNode = withContentDigest({
-    id: v4(),
+  const blogPostNode = buildNode({
     internal: {
       type: "BlogPost",
     },

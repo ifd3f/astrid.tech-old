@@ -3,7 +3,7 @@ import { GatsbyNode, SourceNodesArgs } from "gatsby"
 import yaml from "js-yaml"
 import { v4 } from "uuid"
 import { TAG_MIME_TYPE } from "../gatsby-astrid-plugin-tagging/index"
-import { getContrastingTextColor, withContentDigest } from "../util"
+import { getContrastingTextColor, buildNode } from "../util"
 
 type LinguistEntry = {
   color: string
@@ -48,8 +48,7 @@ export const sourceNodes: GatsbyNode["sourceNodes"] = async ({
     const color = getContrastingTextColor(lang.color)
 
     createNode(
-      withContentDigest({
-        id: v4(),
+      buildNode({
         internal: {
           type: "LinguistLanguage",
           mediaType: TAG_MIME_TYPE,

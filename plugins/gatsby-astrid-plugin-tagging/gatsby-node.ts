@@ -10,28 +10,30 @@ import {
   SourceNodesArgs,
 } from "gatsby"
 import { v4 } from "uuid"
-import { withContentDigest } from "../util"
 import { TagNodeData, TAG_MIME_TYPE } from "./index"
+import { buildNode } from "../util"
 
 function getTagID(slug: string) {
   return "tech.astrid.tagging." + slug
 }
 
 function buildTagNode(tag: TagNodeData, parent?: Node) {
-  return withContentDigest({
-    parent: parent?.id,
-    internal: {
-      type: `Tag`,
-    } as any,
-    children: [],
+  return buildNode(
+    {
+      internal: {
+        type: `Tag`,
+      },
+      name: tag.name,
+      slug: tag.slug,
+      color: tag.color,
+      priority: tag.priority,
+      backgroundColor: tag.backgroundColor,
+    },
 
-    id: v4(),
-    name: tag.name,
-    slug: tag.slug,
-    color: tag.color,
-    priority: tag.priority,
-    backgroundColor: tag.backgroundColor,
-  })
+    {
+      parent: parent?.id,
+    }
+  )
 }
 
 function buildDefaultTagNode(slug: string): TagNodeData {

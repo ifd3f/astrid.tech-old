@@ -2,32 +2,38 @@ import crypto from "crypto"
 import { NodeInput, Node, NodePluginArgs } from "gatsby"
 import { FileSystemNode } from "gatsby-source-filesystem"
 import path from "path"
+import { v4 } from "uuid"
 
-type PreContentDigestNode = {
-  id: string
-  parent?: string | null
+type TransientData = {
+  id?: string
+  parent?: string
   children?: string[]
-  internal: {
-    type: string
-    mediaType?: string
-    content?: string
-    description?: string
-    contentDigest?: string
-  }
-  [key: string]: unknown
 }
 
-export function withContentDigest<T extends PreContentDigestNode>(
-  node: T
-): T & NodeInput {
-  // Get content digest of node. (Required field)
-  const contentDigest = crypto
-    .createHash(`md5`)
-    .update(JSON.stringify(node))
-    .digest(`hex`)
-  // add it to userNode
-  node.internal.contentDigest = contentDigest
-  return (node as unknown) as T & NodeInput
+type NodeData<T> = T & {
+  internal: {
+    type: string
+  }
+}
+
+export function buildNode<T>(
+  nodeData: NodeData<T>,
+  transient?: TransientData
+): NodeData<T> & Node & NodeInput {
+  const internal = {
+    ...(nodeData.internal ?? {}),
+    contentDigest: crypto
+      .createHash(`md5`)
+      .update(JSON.stringify(nodeData))
+      .digest(`hex`),
+  }
+  return ({
+    id: transient?.id ?? v4(),
+    parent: transient?.parent,
+    children: transient?.children,
+    ...nodeData,
+    internal,
+  } as any) as NodeData<T> & Node & NodeInput
 }
 
 export type ResolveFileNodeArgs = {

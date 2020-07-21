@@ -6,7 +6,7 @@ import {
   SourceNodesArgs,
 } from "gatsby"
 import { v4 } from "uuid"
-import { withContentDigest } from "../util"
+import { buildNode } from "../util"
 
 type YamlSkillLevel = {
   slug: string
@@ -26,16 +26,19 @@ type CreateSkillLevelArgs = {
 
 function createSkillLevel({ data, actions, yamlNode }: CreateSkillLevelArgs) {
   const { createNode, createParentChildLink } = actions
-  const node = withContentDigest({
-    parent: yamlNode.id,
-    id: v4(),
-    internal: {
-      type: "SkillLevel",
-    },
+  const node = buildNode(
+    {
+      internal: {
+        type: "SkillLevel",
+      },
 
-    tagSlug: data.slug,
-    level: data.level,
-  })
+      tagSlug: data.slug,
+      level: data.level,
+    },
+    {
+      parent: yamlNode.id,
+    }
+  )
   createNode(node)
   createParentChildLink({ parent: yamlNode, child: (node as unknown) as Node })
   return node
@@ -53,16 +56,19 @@ function createSkillGroup({
   actions,
 }: CreateSkillGroupArgs) {
   const { createNode, createParentChildLink } = actions
-  const node = withContentDigest({
-    parent: yamlNode.id,
-    id: v4(),
-    internal: {
-      type: "SkillGroup",
-    },
+  const node = buildNode(
+    {
+      internal: {
+        type: "SkillGroup",
+      },
 
-    name: yamlNode.name,
-    skills___NODE: skillIds,
-  })
+      name: yamlNode.name,
+      skills___NODE: skillIds,
+    },
+    {
+      parent: yamlNode.id,
+    }
+  )
   createNode(node)
   createParentChildLink({ parent: yamlNode, child: (node as unknown) as Node })
 }

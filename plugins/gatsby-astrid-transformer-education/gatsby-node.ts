@@ -1,7 +1,7 @@
 import { Actions, GatsbyNode, Node, SourceNodesArgs } from "gatsby"
 import { v4 } from "uuid"
-import { withContentDigest } from "../util"
 import { TAG_MIME_TYPE } from "../gatsby-astrid-plugin-tagging/index"
+import { buildNode } from "../util/index"
 
 type CourseYamlData = Node & {
   name: string
@@ -44,16 +44,19 @@ function createCourseTagNode({ actions, courseNode }: CreateCourseTagNodeArgs) {
     color: "#ffffff",
   }
 
-  const tagNode = withContentDigest({
-    parent: courseNode.id,
-    id: v4(),
-    internal: {
-      type: "CourseTag",
-      mediaType: TAG_MIME_TYPE,
-      content: JSON.stringify(content),
+  const tagNode = buildNode(
+    {
+      internal: {
+        type: "CourseTag",
+        mediaType: TAG_MIME_TYPE,
+        content: JSON.stringify(content),
+      },
+      children: [],
     },
-    children: [],
-  })
+    {
+      parent: courseNode.id,
+    }
+  )
 
   createNode(tagNode)
   createParentChildLink({ parent: courseNode, child: tagNode as any })
@@ -79,21 +82,24 @@ function createCourseNode({
   const slug =
     schoolSlug + courseYamlData.number.replace(" ", "-").toLowerCase() + "/"
 
-  const courseNode = withContentDigest({
-    parent: schoolYamlNode.id,
-    internal: {
-      type: "Course",
-    },
-    id: v4(),
-    children: [],
+  const courseNode = buildNode(
+    {
+      internal: {
+        type: "Course",
+      },
+      children: [],
 
-    name: courseYamlData.name,
-    slug: slug,
-    number: courseYamlData.number,
-    date: courseYamlData.date,
-    description: courseYamlData.description,
-    tagSlugs: courseYamlData.tags,
-  })
+      name: courseYamlData.name,
+      slug: slug,
+      number: courseYamlData.number,
+      date: courseYamlData.date,
+      description: courseYamlData.description,
+      tagSlugs: courseYamlData.tags,
+    },
+    {
+      parent: schoolYamlNode.id,
+    }
+  )
 
   createNode(courseNode)
   createParentChildLink({
@@ -128,21 +134,23 @@ function createSchoolNode({ actions, yamlNode }: CreateSchoolNodeArgs) {
     })
   )
 
-  const schoolNode = withContentDigest({
-    parent: yamlNode.id,
-    internal: {
-      type: "School",
-    },
-    children: [],
-    id: v4(),
+  const schoolNode = buildNode(
+    {
+      internal: {
+        type: "School",
+      },
 
-    name: yamlNode.name,
-    degree: yamlNode.degree,
-    slug: slug,
-    startDate: yamlNode.startDate,
-    endDate: yamlNode.endDate,
-    courses___NODE: courseNodes.map((classNode: any) => classNode.id),
-  })
+      name: yamlNode.name,
+      degree: yamlNode.degree,
+      slug: slug,
+      startDate: yamlNode.startDate,
+      endDate: yamlNode.endDate,
+      courses___NODE: courseNodes.map((classNode: any) => classNode.id),
+    },
+    {
+      parent: yamlNode.id,
+    }
+  )
   createNode(schoolNode)
 
   return schoolNode

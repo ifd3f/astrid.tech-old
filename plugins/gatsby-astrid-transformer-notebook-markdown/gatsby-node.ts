@@ -3,7 +3,7 @@ import { FileSystemNode } from "gatsby-source-filesystem"
 import { BlogMetadata } from "plugins/gatsby-astrid-transformer-markdown-post"
 import { v4 } from "uuid"
 import { Notebook, CodeCell, Output } from "../../src/types/nbformat-v4"
-import { withContentDigest } from "../util"
+import { buildNode } from "../util"
 
 type JupyterNotebookNode = Node & {
   internal: {
@@ -20,7 +20,7 @@ type JupyterNotebookNode = Node & {
 function convertOutputsToMarkdown(output: Output) {
   switch (output.output_type) {
     case "stream":
-      return "```" + output.text + "```"
+      return "```\n" + output.text + "\n```"
     case "display_data":
       return `<img src="data:image/png;base64, ${output.data["image/png"]}" alt="${output.data["text/plain"]}" />`
   }
@@ -28,7 +28,7 @@ function convertOutputsToMarkdown(output: Output) {
 
 function convertCodeCellToMarkdown(lang: string, cell: CodeCell) {
   const code =
-    "```" + lang + "\n" + convertSourceToString(cell.source) + "\n```"
+    "```\n" + lang + "\n" + convertSourceToString(cell.source) + "\n```"
   const outputs = cell.outputs.map(convertOutputsToMarkdown)
 
   return code + "\n\n" + outputs.join("\n\n")
@@ -68,8 +68,6 @@ export const onCreateNode: GatsbyNode["onCreateNode"] = async ({
 
   const { createNode, createParentChildLink } = actions
 
-  const id = v4()
-
   const frontmatter = jupyterNode.data.metadata.blog_data
 
   const markdown = `---
@@ -78,17 +76,17 @@ ${JSON.stringify(frontmatter)}
 ${convertNotebookToMarkdown(jupyterNode.data)}
 `
 
-  const postNode = (withContentDigest({
-    parent: jupyterNode.id,
-    internal: {
-      type: "JupyterMarkdownBridge",
-      mediaType: "text/markdown",
-      content: markdown,
+  const postNode = buildNode(
+    {
+      internal: {
+        type: "JupyterMarkdownBridge",
+        mediaType: "text/markdown",
+        content: markdown,
+      },
+      html: jupyterNode.internal.content,
     },
-    id,
-    children: [],
-    html: jupyterNode.internal.content,
-  }) as unknown) as Node
+    { parent: jupyterNode.id }
+  )
 
   createNode(postNode)
   createParentChildLink({ parent: jupyterNode, child: postNode })
