@@ -18,6 +18,7 @@ import { Project } from "../types"
 import { Tag } from "../types/index"
 import styles from "./projects.module.scss"
 import Fuse from "fuse.js"
+import { BsX } from "react-icons/bs"
 
 type Data = {
   site: {
@@ -84,7 +85,7 @@ type FiltererArgs = {
   fuse: Fuse<Project, any>
 }
 
-const Filterer: FC<FiltererArgs> = ({ children, projects, fuse, tags }) => {
+const Filterer: FC<FiltererArgs> = ({ children, projects, tags, fuse }) => {
   const [searchString, _setSearchString] = useState("")
   const [filterTags, setFilterTags] = useState<string[]>([])
   const [shouldFilterAny, _setShouldFilterAnyTags] = useState<boolean>(false)
@@ -110,7 +111,6 @@ const Filterer: FC<FiltererArgs> = ({ children, projects, fuse, tags }) => {
   }
 
   const filterTagsSet = new Set(filterTags)
-
   var displayedProjects =
     searchString == ""
       ? projects
@@ -130,10 +130,16 @@ const Filterer: FC<FiltererArgs> = ({ children, projects, fuse, tags }) => {
     })
   }
 
+  const remainingFilterTags = new Map(
+    displayedProjects
+      .flatMap(project => project.tags)
+      .map(tag => [tag.slug, tag])
+  )
+
   return (
     <SearchContext.Provider
       value={{
-        tags,
+        tags: remainingFilterTags,
         projects,
 
         displayedProjects,
@@ -154,22 +160,65 @@ const Filterer: FC<FiltererArgs> = ({ children, projects, fuse, tags }) => {
     </SearchContext.Provider>
   )
 }
+
+const SelectableTagList: FC = () => {
+  const { tags, addFilterTag } = useContext(SearchContext)
+
+  return (
+    <div className={styles.selectableTagsContainer}>
+      {[...tags.values()].map(tag => (
+        <span onClick={() => addFilterTag(tag.slug)} key={tag.slug}>
+          <TagBadge tag={tag} />
+        </span>
+      ))}
+    </div>
+  )
+}
+
+const CurrentlyUsedTagList: FC = () => {
+  const { filterTags, removeFilterTag } = useContext(SearchContext)
+  return (
+    <div>
+      {[...filterTags.values()].map(tag => (
+        <span
+          className={styles.deletableTag}
+          onClick={() => removeFilterTag(tag.slug)}
+          key={tag.slug}
+        >
+          <TagBadge tag={tag} />
+          <BsX />
+        </span>
+      ))}
+    </div>
+  )
+}
+
 const TagsFilterBar: FC = () => {
   const { tags, setSearchString } = useContext(SearchContext)
   const onChange: ChangeEventHandler<HTMLInputElement> = ev => {
     setSearchString(ev.target.value)
   }
   return (
-    <div className={styles.tagsFilterBar}>
+    <section className={styles.searchSection}>
       <Container>
-        <InputGroup>
-          <Input placeholder="Filter..." onChange={onChange} />
-        </InputGroup>
-        {[...tags.values()].map(tag => (
-          <TagBadge tag={tag} />
-        ))}
+        <Row>
+          <Col>
+            <h2>Search</h2>
+            <InputGroup>
+              <Input
+                placeholder="astrid.tech, CPE 233, React, etc."
+                onChange={onChange}
+              />
+            </InputGroup>
+            <CurrentlyUsedTagList />
+          </Col>
+          <Col>
+            <h3>Or select tags to filter by</h3>
+            <SelectableTagList />
+          </Col>
+        </Row>
       </Container>
-    </div>
+    </section>
   )
 }
 
@@ -188,20 +237,19 @@ export const ProjectCardContainer: FC = () => {
 
 const ProjectsIndex: FC<PageProps<Data>> = ({ data }) => {
   const projects = data.allProject.edges.map(({ node }) => node)
-  const tagMap = new Map(
-    Array.from(projects.values())
-      .flatMap(project => project.tags)
-      .map(tag => [tag.slug, tag])
-  )
 
   const index = Fuse.parseIndex(JSON.parse(data.projectSearchIndex.data))
   const fuse = new Fuse<Project, any>(
     projects,
     {
-      threshold: 0.1,
+      threshold: 0.4,
       keys: ["title", "slug", "internal.description", "tags.name", "tags.slug"],
     },
     index
+  )
+
+  const tags = new Map(
+    projects.flatMap(project => project.tags).map(tag => [tag.slug, tag])
   )
 
   return (
@@ -214,7 +262,7 @@ const ProjectsIndex: FC<PageProps<Data>> = ({ data }) => {
           sizes and types.
         </p>
       </header>
-      <Filterer projects={projects} tags={tagMap} fuse={fuse}>
+      <Filterer projects={projects} fuse={fuse} tags={tags}>
         <TagsFilterBar />
         <Container>
           <ProjectCardContainer />
