@@ -59,7 +59,8 @@ export const pageQuery = graphql`
 `
 
 type SearchContext = {
-  tags: Map<string, Tag>
+  slugToTag: Map<string, Tag>
+  selectableTags: Tag[]
   projects: Project[]
 
   displayedProjects: Project[]
@@ -81,11 +82,10 @@ const SearchContext = createContext<SearchContext>({} as any)
 type FiltererArgs = {
   children: ReactNode
   projects: Project[]
-  tags: Map<string, Tag>
   fuse: Fuse<Project, any>
 }
 
-const Filterer: FC<FiltererArgs> = ({ children, projects, tags, fuse }) => {
+const Filterer: FC<FiltererArgs> = ({ children, projects, fuse }) => {
   const [searchString, _setSearchString] = useState("")
   const [filterTags, setFilterTags] = useState<string[]>([])
   const [shouldFilterAny, _setShouldFilterAnyTags] = useState<boolean>(false)
@@ -130,16 +130,17 @@ const Filterer: FC<FiltererArgs> = ({ children, projects, tags, fuse }) => {
     })
   }
 
-  const remainingFilterTags = new Map(
-    displayedProjects
-      .flatMap(project => project.tags)
-      .map(tag => [tag.slug, tag])
-  )
+  const tagUsageCounts = countTagUsages(displayedProjects)
+  const orderedTags = displayedProjects
+    .flatMap(project => project.tags)
+    .sort((a, b) => tagUsageCounts.get(b.slug)! - tagUsageCounts.get(a.slug)!)
+  const slugToTag = new Map(orderedTags.map(tag => [tag.slug, tag]))
 
   return (
     <SearchContext.Provider
       value={{
-        tags: remainingFilterTags,
+        slugToTag,
+        selectableTags: orderedTags,
         projects,
 
         displayedProjects,
@@ -147,7 +148,7 @@ const Filterer: FC<FiltererArgs> = ({ children, projects, tags, fuse }) => {
         searchString,
         setSearchString,
 
-        filterTags: filterTags.map(slug => tags.get(slug)!!),
+        filterTags: filterTags.map(slug => slugToTag.get(slug)!!),
         addFilterTag,
         removeFilterTag,
         clearFilterTags,
@@ -162,7 +163,7 @@ const Filterer: FC<FiltererArgs> = ({ children, projects, tags, fuse }) => {
 }
 
 const SelectableTagList: FC = () => {
-  const { tags, addFilterTag } = useContext(SearchContext)
+  const { slugToTag: tags, addFilterTag } = useContext(SearchContext)
 
   return (
     <div className={styles.selectableTagsContainer}>
@@ -194,7 +195,7 @@ const CurrentlyUsedTagList: FC = () => {
 }
 
 const TagsFilterBar: FC = () => {
-  const { tags, setSearchString } = useContext(SearchContext)
+  const { slugToTag: tags, setSearchString } = useContext(SearchContext)
   const onChange: ChangeEventHandler<HTMLInputElement> = ev => {
     setSearchString(ev.target.value)
   }
@@ -235,6 +236,16 @@ export const ProjectCardContainer: FC = () => {
   )
 }
 
+function countTagUsages(projects: Project[]) {
+  const count = new Map<string, number>()
+  for (const project of projects) {
+    for (const tag of project.tags) {
+      count.set(tag.slug, 1 + (count.get(tag.slug) ?? 0))
+    }
+  }
+  return count
+}
+
 const ProjectsIndex: FC<PageProps<Data>> = ({ data }) => {
   const projects = data.allProject.edges.map(({ node }) => node)
 
@@ -248,10 +259,6 @@ const ProjectsIndex: FC<PageProps<Data>> = ({ data }) => {
     index
   )
 
-  const tags = new Map(
-    projects.flatMap(project => project.tags).map(tag => [tag.slug, tag])
-  )
-
   return (
     <Layout currentLocation="projects" className={`${styles.main}`}>
       <SEO title="Projects" />
@@ -262,7 +269,7 @@ const ProjectsIndex: FC<PageProps<Data>> = ({ data }) => {
           sizes and types.
         </p>
       </header>
-      <Filterer projects={projects} fuse={fuse} tags={tags}>
+      <Filterer projects={projects} fuse={fuse}>
         <TagsFilterBar />
         <Container>
           <ProjectCardContainer />
