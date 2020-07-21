@@ -4,6 +4,7 @@
       patches:
         - patch: 0
           features:
+            - Updated and revamped new projects page with filtering!
             - Jupyter Notebooks are now converted into Markdown and are treated as such. What this means is that the frequency shifting post looks fabulous now.
             - Now we use Fira Code for monospace fonts for those _sexy ligatures._
           bugfixes:
