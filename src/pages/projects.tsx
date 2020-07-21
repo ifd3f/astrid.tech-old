@@ -9,7 +9,15 @@ import React, {
   ChangeEvent,
   ChangeEventHandler,
 } from "react"
-import { Col, Container, Row, Jumbotron, InputGroup, Input } from "reactstrap"
+import {
+  Col,
+  Container,
+  Row,
+  Jumbotron,
+  InputGroup,
+  Input,
+  Badge,
+} from "reactstrap"
 import Layout, { MainNavbar } from "../components/layout"
 import { ProjectCard } from "../components/project"
 import SEO from "../components/seo"
@@ -60,6 +68,7 @@ export const pageQuery = graphql`
 
 type SearchContext = {
   slugToTag: Map<string, Tag>
+  tagUsageCounts: Map<string, number>
   selectableTags: Tag[]
   projects: Project[]
 
@@ -141,6 +150,7 @@ const Filterer: FC<FiltererArgs> = ({ children, projects, fuse }) => {
       value={{
         slugToTag,
         selectableTags: orderedTags,
+        tagUsageCounts,
         projects,
 
         displayedProjects,
@@ -163,13 +173,23 @@ const Filterer: FC<FiltererArgs> = ({ children, projects, fuse }) => {
 }
 
 const SelectableTagList: FC = () => {
-  const { slugToTag: tags, addFilterTag } = useContext(SearchContext)
+  const { slugToTag, tagUsageCounts, addFilterTag } = useContext(SearchContext)
 
   return (
     <div className={styles.selectableTagsContainer}>
-      {[...tags.values()].map(tag => (
+      {[...slugToTag.values()].map(tag => (
         <span onClick={() => addFilterTag(tag.slug)} key={tag.slug}>
-          <TagBadge tag={tag} />
+          <TagBadge tag={tag}>
+            {" "}
+            <Badge
+              style={{
+                color: tag.backgroundColor,
+                backgroundColor: tag.color,
+              }}
+            >
+              {tagUsageCounts.get(tag.slug)}
+            </Badge>
+          </TagBadge>
         </span>
       ))}
     </div>
@@ -186,8 +206,10 @@ const CurrentlyUsedTagList: FC = () => {
           onClick={() => removeFilterTag(tag.slug)}
           key={tag.slug}
         >
-          <TagBadge tag={tag} />
-          <BsX />
+          <TagBadge tag={tag}>
+            {" "}
+            <BsX />
+          </TagBadge>
         </span>
       ))}
     </div>

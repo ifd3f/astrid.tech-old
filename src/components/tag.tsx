@@ -1,12 +1,13 @@
 import { Badge } from "reactstrap"
 import { Tag, TagWrapper } from "../types/index"
 import { Link, graphql } from "gatsby"
-import React, { FC } from "react"
+import React, { FC, ReactNode } from "react"
 import style from "./tag.module.scss"
 
 type TagBadgeProps = {
   tag: Tag
   link?: boolean
+  children?: ReactNode
 }
 
 export const tagBadgeFragment = graphql`
@@ -18,7 +19,11 @@ export const tagBadgeFragment = graphql`
   }
 `
 
-export const TagBadge: FC<TagBadgeProps> = ({ tag, link = false }) => {
+export const TagBadge: FC<TagBadgeProps> = ({
+  tag,
+  link = false,
+  children,
+}) => {
   const linkTo = tag.slug[0] == "/" ? tag.slug : "/tags/" + tag.slug
 
   return (
@@ -32,6 +37,7 @@ export const TagBadge: FC<TagBadgeProps> = ({ tag, link = false }) => {
       to={linkTo}
     >
       {tag.name}
+      {children}
     </Badge>
   )
 }
