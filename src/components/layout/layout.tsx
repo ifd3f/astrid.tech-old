@@ -3,6 +3,7 @@ import React, { FC, ReactNode, PropsWithChildren } from "react"
 import FooterSection from "./footer"
 import "./layout.scss"
 import MainNavbar from "./navbar"
+import { BLMBanner } from "./blm"
 
 type LayoutProps = PageProps<any> & {
   children?: ReactNode
@@ -14,6 +15,7 @@ const Layout: FC<LayoutProps> = ({ children, mainClass }) => {
     <>
       <div className="root-wrapper">
         <MainNavbar />
+        <BLMBanner />
         <main className={mainClass}>{children}</main>
         <FooterSection />
       </div>

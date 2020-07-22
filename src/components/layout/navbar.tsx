@@ -10,6 +10,7 @@ import {
   NavLink,
 } from "reactstrap"
 import "./navbar.scss"
+import { BLMBanner } from "./blm"
 
 type NavLinkProps = {
   to: string
@@ -29,7 +30,7 @@ const MainNavbar: FC = () => {
   const toggleIsOpen = () => setIsOpen(!isOpen)
 
   return (
-    <Navbar className="main-navbar" fixed="top" expand="md">
+    <Navbar className="main-navbar" expand="md" fixed="top">
       <NavbarBrand tag={Link} to="/" activeClassName="active">
         Astrid's Tech
       </NavbarBrand>
