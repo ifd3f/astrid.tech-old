@@ -4,7 +4,7 @@ require("ts-node").register()
 module.exports = {
   siteMetadata: {
     title: `astrid.tech`,
-    version: "0.1.0",
+    version: "0.2.0",
     author: {
       name: `Astrid Yu`,
       summary: `who likes to engineer awesome things`,

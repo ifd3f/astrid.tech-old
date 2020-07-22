@@ -17,6 +17,9 @@
 
     - minor: 1
       patches:
+        - patch: 4
+          features:
+            - Added links to bail funds.
         - patch: 3
           internals:
             - Remove Google Analytics tracking to comply with GDPR.

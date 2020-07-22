@@ -3,6 +3,7 @@ import React, { FC, ReactNode, PropsWithChildren } from "react"
 import FooterSection from "./footer"
 import "./layout.scss"
 import MainNavbar, { NavBarLinks } from "./navbar"
+import { BLMBanner } from "./blm"
 
 type LayoutProps = PageProps<any> & {
   children?: ReactNode
@@ -20,6 +21,7 @@ const Layout: FC<LayoutProps> = ({
   return (
     <div className="root-wrapper">
       <MainNavbar fixed currentLocation={currentLocation} />
+      <BLMBanner />
       <main className={className}>{children}</main>
       {showFooter ? <FooterSection /> : null}
     </div>
