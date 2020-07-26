@@ -1,10 +1,10 @@
 import { Project } from "../types"
 import { PageProps, graphql } from "gatsby"
-import { FC } from "react"
+import { FC, PropsWithChildren } from "react"
 import Layout from "../components/layout/layout"
 import React from "react"
 import SEO from "../components/seo"
-import { Container } from "reactstrap"
+import { Container, Col, Row } from "reactstrap"
 import { TagList } from "../components/tag"
 import { StatusBadge } from "../components/project"
 import style from "./project-detail.module.scss"
@@ -51,30 +51,64 @@ type Context = {
   id: string
 }
 
+// TODO betterize
+const SidebarGroup: FC<PropsWithChildren<{}>> = ({ children }) => (
+  <div>{children}</div>
+)
+
+type SidebarProps = {
+  project: Project
+}
+const Sidebar: FC<SidebarProps> = ({ project }) => {
+  return (
+    <div>
+      <SidebarGroup>
+        <h2>Dates</h2>
+        <p className={style.date}>
+          {project.endDate
+            ? `${project.startDate} to ${project.endDate}`
+            : project.startDate}
+        </p>
+      </SidebarGroup>
+      <SidebarGroup>
+        <h2>Status</h2>
+        <StatusBadge status={project.status} />
+      </SidebarGroup>
+      <SidebarGroup>
+        <h2>Tags</h2>
+        <TagList tags={project.tags} link />
+      </SidebarGroup>
+      <SidebarGroup>
+        <h2>Related Blog Posts</h2>
+      </SidebarGroup>
+      <SidebarGroup>
+        <h2>Similar Projects</h2>
+      </SidebarGroup>
+    </div>
+  )
+}
+
 const ProjectDetailTemplate: FC<PageProps<Data, Context>> = ({ data }) => {
   const project = data.allProject.edges[0].node
-
-  const date = project.endDate
-    ? `${project.startDate} to ${project.endDate}`
-    : project.startDate
 
   return (
     <Layout currentLocation="projects">
       <SEO title={project.title!} />
-      <Container className={style.projectDetailContainer}>
-        <article>
-          <header>
-            <h1>
-              {project.title!} <StatusBadge status={project.status} />
-            </h1>
-            <p className={style.date}>{date}</p>
-            <p className={style.subtitle}>{project.internal.description}</p>
-            <TagList tags={project.tags} link />
-          </header>
-          <section
-            dangerouslySetInnerHTML={{ __html: project.markdown.html!! }}
-          />
-        </article>
+      <Container tag="article" className={style.projectDetailContainer}>
+        <Row>
+          <Col lg={8}>
+            <header>
+              <h1>{project.title!}</h1>
+              <p className={style.subtitle}>{project.internal.description}</p>
+            </header>
+            <section
+              dangerouslySetInnerHTML={{ __html: project.markdown.html!! }}
+            />
+          </Col>
+          <Col lg={4}>
+            <Sidebar project={project} />
+          </Col>
+        </Row>
       </Container>
     </Layout>
   )
