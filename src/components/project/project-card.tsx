@@ -1,31 +1,12 @@
-import { navigate, graphql } from "gatsby"
-import React, {
-  FC,
-  useState,
-  useEffect,
-  PropsWithChildren,
-  ReactNode,
-} from "react"
-import {
-  Badge,
-  Card,
-  CardBody,
-  CardImg,
-  CardLink,
-  CardSubtitle,
-  UncontrolledTooltip,
-  Col,
-  Row,
-} from "reactstrap"
+import { graphql, navigate } from "gatsby"
+import GatsbyImage from "gatsby-image"
+import React, { FC, PropsWithChildren, useEffect, useState } from "react"
+import { Badge, CardBody, CardLink, UncontrolledTooltip } from "reactstrap"
 import { Project } from "../../types"
-import styles from "./project.module.scss"
-import {
-  getUniqueId,
-  LoadOnView,
-  getPersistentColor,
-  PastelTheme,
-} from "../util"
 import { TagList } from "../tag"
+import { getPersistentColor, getUniqueId, PastelTheme } from "../util"
+import styles from "./project.module.scss"
+import BackgroundImage from "gatsby-background-image"
 
 type StatusBadgeProps = {
   status: null | "wip" | "complete" | "scrapped"
@@ -95,6 +76,14 @@ export const projectCardFragment = graphql`
     }
     url
     source
+    thumbnail {
+      childImageSharp {
+        fluid(maxWidth: 400, maxHeight: 160) {
+          ...GatsbyImageSharpFluid
+        }
+      }
+      publicURL
+    }
   }
 `
 
@@ -128,12 +117,17 @@ const ProjectCardOuter: FC<PropsWithChildren<ProjectCardProps>> = ({
     className: className,
   }
 
-  if (project.thumbnail) {
+  if (project.thumbnail && project.thumbnail.childImageSharp) {
     return (
-      <div {...cardOuterProps}>
-        <div></div>
+      <BackgroundImage
+        {...(project.thumbnail as any).childImageSharp}
+        {...cardOuterProps}
+        style={{
+          backgroundColor: "clear",
+        }}
+      >
         {children}
-      </div>
+      </BackgroundImage>
     )
   } else {
     const background = getPersistentColor(project.slug, PastelTheme)
@@ -151,17 +145,8 @@ export const ProjectCard: FC<ProjectCardProps> = ({
   onMouseEnter,
   onMouseLeave,
 }) => {
-  const headerSection = (
-    <>
-      <h3>{project.title}</h3>
-    </>
-  )
-  const bodySection = (
-    <>
-      <TagList tags={project.tags.slice(0, 5)} link />
-      {project.url ? <CardLink href={project.url}>{project.url}</CardLink> : ""}
-    </>
-  )
+  const headerSection = <></>
+  const bodySection = <></>
 
   return (
     <ProjectCardOuter
@@ -170,9 +155,16 @@ export const ProjectCard: FC<ProjectCardProps> = ({
       onMouseEnter={onMouseEnter}
       onMouseLeave={onMouseLeave}
     >
-      <CardBody>
-        {headerSection}
-        {bodySection}
+      <CardBody className={styles.inner}>
+        <h3 className={`${styles.title} ${titleBorder ? styles.border : ""}`}>
+          {project.title}
+        </h3>{" "}
+        <TagList tags={project.tags.slice(0, 5)} link />
+        {project.url ? (
+          <CardLink href={project.url}>{project.url}</CardLink>
+        ) : (
+          ""
+        )}
       </CardBody>
     </ProjectCardOuter>
   )

@@ -1,29 +1,51 @@
 @import "src/scss/variables.scss";
 
-.projectCard {
-  -moz-transition: all 0.2s ease-in;
-  -o-transition: all 0.2s ease-in;
-  -webkit-transition: all 0.2s ease-in;
-  transition: all 0.2s ease-in;
+.projectCard,
+.projectCard::before,
+.projectCard::after {
+  -moz-transition: background-color 0.2s ease-in;
+  -o-transition: background-color 0.2s ease-in;
+  -webkit-transition: background-color 0.2s ease-in;
+  transition: background-color 0.2s ease-in;
 
-  background-color: #ecccb9;
   cursor: pointer;
-  height: 160px;
+  height: 170px;
   border-radius: 20px;
-
-  h3 {
-    @each $size, $font-size in (xs: 15pt, md: 17pt, lg: 20pt) {
-      @media only screen and (min-width: map-get($grid-breakpoints, $size)) {
-        font-size: $font-size;
-      }
-    }
-  }
+  position: relative;
+  background-color: white;
 
   @each $size, $width in (xs: 300px, md: 300px, lg: 400px, xl: 350px) {
     @media only screen and (min-width: map-get($grid-breakpoints, $size)) {
       width: $width;
     }
   }
+}
+
+.title {
+  @each $size, $font-size in (xs: 15pt, md: 17pt, lg: 20pt) {
+    @media only screen and (min-width: map-get($grid-breakpoints, $size)) {
+      font-size: $font-size;
+    }
+  }
+}
+
+.title.border {
+  display: block;
+  padding: 3px;
+  border-radius: 10px;
+  background-color: rgba($color: white, $alpha: 0.5);
+}
+
+.projectCard::before {
+  filter: brightness(3) saturate(1.2) blur(1px);
+}
+
+.bgImage {
+  position: absolute;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 0;
 }
 
 .projectCard:hover {
