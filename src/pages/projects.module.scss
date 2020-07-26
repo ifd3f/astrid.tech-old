@@ -1,0 +1,64 @@
+@import "src/scss/colors.scss";
+@import "src/scss/variables.scss";
+
+.cardsContainer {
+  padding-top: 40px;
+  padding-bottom: 40px;
+  position: relative;
+  display: flex;
+  flex-direction: row;
+  flex-wrap: wrap;
+  justify-content: space-evenly;
+}
+
+.header {
+  text-align: center;
+  background-color: #3baddd;
+
+  padding-top: 100px;
+  padding-bottom: 50px;
+  padding-left: 50px;
+  padding-right: 50px;
+
+  h1,
+  p {
+    color: $black;
+  }
+
+  h1 {
+    font-size: 70pt;
+    margin-bottom: 50px;
+  }
+
+  p {
+    font-size: 20pt;
+  }
+}
+
+.projectCardWrapper {
+  padding-bottom: 20px;
+}
+
+.selectableTagsContainer {
+  height: 250px;
+  overflow-y: scroll;
+}
+
+.selectableTag {
+  cursor: pointer;
+}
+
+.deletableTag {
+  margin-right: 5px;
+  cursor: pointer;
+}
+
+.main {
+  background-color: #002456;
+  margin-top: 0;
+}
+
+.searchSection {
+  background-color: $main-bg-color;
+  padding: 20px;
+}

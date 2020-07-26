@@ -4,8 +4,11 @@
 .blogContentContainer {
   padding-top: 20px;
   max-width: 800px;
-
+  padding-bottom: 50px;
   @include content;
+  h1 {
+    font-size: 50pt;
+  }
 }
 
 .brief {

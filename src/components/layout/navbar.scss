@@ -13,13 +13,15 @@
     -o-transition: color 0.1s ease-in;
     -webkit-transition: color 0.1s ease-in;
     transition: color 0.1s ease-in;
-    border-bottom: 3px solid transparent;
+    border-bottom: 3px none;
+    margin-bottom: 3px;
   }
 
   .navbar-brand.active,
   .nav-link.active {
     border-bottom: 3px solid $cyan;
     color: white;
+    margin-bottom: 0px;
   }
 
   .nav-link {
@@ -35,7 +37,7 @@
   }
 
   .nav-link.active {
-    color: $lightblue;
+    color: white;
   }
 
   .navbar-brand {
@@ -47,6 +49,10 @@
 
   .navbar-brand:hover {
     color: white;
+  }
+
+  .navbar-separator {
+    flex-grow: 1;
   }
   background-color: $navbar-bg;
   height: $navbar-height;

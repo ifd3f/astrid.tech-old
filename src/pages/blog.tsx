@@ -22,24 +22,15 @@ export const pageQuery = graphql`
     allBlogPost(sort: { fields: date, order: DESC }) {
       edges {
         node {
-          parent {
-            ... on MarkdownRemark {
-              html
-              excerpt
-            }
+          internal {
+            description
+            content
           }
           title
           date
           slug
-          description
-          contentType
           tags {
-            tag {
-              slug
-              name
-              color
-              textColor
-            }
+            ...TagBadge
           }
         }
       }
@@ -50,7 +41,7 @@ export const pageQuery = graphql`
 const BlogIndex: FC<PageProps<Data>> = props => {
   const { data } = props
   return (
-    <Layout {...props}>
+    <Layout {...props} currentLocation="blog">
       <SEO title="Blog" />
       <Container className={styles.blogContentContainer}>
         <h1>Blog</h1>

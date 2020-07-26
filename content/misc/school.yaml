@@ -6,22 +6,30 @@
   courses:
     - name: Computer Architecture and Assembly Language
       number: CPE 233
-      desc: Created a microcontroller on a Artix-7 FPGA.
+      description: Created a microcontroller on a Artix-7 FPGA.
       date: 2020-04-01
       tags:
         - fpgas
-        - verilog
+        - systemverilog
+        - computer-engineering
+    - name: Computer Architecture and Assembly Language
+      number: CPE 133
+      description: Created a microcontroller on a Artix-7 FPGA.
+      date: 2020-01-01
+      tags:
+        - fpgas
+        - systemverilog
         - computer-engineering
     - name: Data Structures
       number: CSC 202
-      desc: null
+      description: null
       date: 2019-09-01
       tags:
         - python
         - computer-science
     - name: Linear Analysis
       number: MATH 244
-      desc: null
+      description: null
       date: 2019-09-01
       tags:
         - math
@@ -29,7 +37,7 @@
     - name: Discrete Structures
       number: CSC 348
       date: 2020-04-01
-      desc: null
+      description: null
       tags:
         - math
         - computer-science

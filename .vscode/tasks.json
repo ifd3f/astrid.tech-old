@@ -1,29 +1,50 @@
 {
-	"version": "2.0.0",
-	"tasks": [
-		{
-			"type": "npm",
-			"script": "build",
-			"problemMatcher": [
-				"$eslint-compact"
-			],
-			"group": "build",
-			"label": "npm: build",
-			"detail": "gatsby build"
-		},
-		{
-			"type": "npm",
-			"script": "clean",
-			"problemMatcher": [],
-			"label": "npm: clean",
-			"detail": "gatsby clean"
-		},
-		{
-			"type": "npm",
-			"script": "deploy",
-			"problemMatcher": [],
-			"label": "npm: deploy",
-			"detail": "gh-pages -r \"git@github.com:Plenglin/plenglin.github.io.git\" -b master -d public -f"
-		}
-	]
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "type": "npm",
+      "script": "develop",
+      "problemMatcher": [
+        "$eslint-compact"
+      ],
+      "group": "build",
+      "label": "npm: develop",
+      "detail": "gatsby develop"
+    },
+    {
+      "type": "npm",
+      "script": "build",
+      "problemMatcher": [
+        "$eslint-compact"
+      ],
+      "group": "build",
+      "label": "npm: build",
+      "detail": "gatsby build"
+    },
+    {
+      "type": "npm",
+      "script": "clean",
+      "problemMatcher": [],
+      "label": "npm: clean",
+      "detail": "gatsby clean"
+    },
+    {
+      "type": "npm",
+      "script": "deploy",
+      "problemMatcher": [],
+      "group": "build",
+      "label": "npm: deploy",
+      "detail": "gh-pages -r \"git@github.com:Plenglin/plenglin.github.io.git\" -b master -d public -f"
+    },
+    {
+      "type": "npm",
+      "script": "develop",
+      "problemMatcher": [
+        "$eslint-compact"
+      ],
+      "group": "build",
+      "label": "npm: develop",
+      "detail": "gatsby develop"
+    }
+  ]
 }

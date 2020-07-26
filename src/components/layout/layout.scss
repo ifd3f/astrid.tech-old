@@ -14,16 +14,17 @@ h6 {
   color: $heading-color;
 }
 
-p,
-li {
-  font-family: $font-body;
-  color: $content-color;
+pre,
+code {
+  font-family: $font-mono;
 }
 
 html,
 body {
   height: 100%;
   background-color: $footer-bg-color;
+  font-family: $font-body;
+  color: $content-color;
 }
 
 .nteract-display-area-stdout {
@@ -37,7 +38,6 @@ body {
 }
 
 main {
-  padding-bottom: $footer-height;
   background-color: $main-bg-color;
   a {
     color: #1d2e82;

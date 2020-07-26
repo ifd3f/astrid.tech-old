@@ -28,7 +28,14 @@
       "console": "integratedTerminal",
       "internalConsoleOptions": "neverOpen",
       "sourceMaps": true,
-      "cwd": "${workspaceFolder}"
+      "cwd": "${workspaceFolder}",
+      "preLaunchTask": "npm: clean"
+    }
+  ],
+  "compounds": [
+    {
+      "name": "ALL the develops",
+      "configurations": ["Launch Firefox", "Gatsby develop"]
     }
   ]
 }

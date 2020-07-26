@@ -1,7 +1,10 @@
+require("source-map-support").install()
+require("ts-node").register()
+
 module.exports = {
   siteMetadata: {
     title: `astrid.tech`,
-    version: "0.1.4",
+    version: "0.2.0",
     author: {
       name: `Astrid Yu`,
       summary: `who likes to engineer awesome things`,
@@ -38,8 +41,8 @@ module.exports = {
     {
       resolve: `gatsby-source-filesystem`,
       options: {
-        path: `${__dirname}/content/work-experience`,
-        name: `work-experience`,
+        path: `${__dirname}/content/work`,
+        name: `work`,
       },
     },
     {
@@ -52,7 +55,7 @@ module.exports = {
     {
       resolve: `gatsby-source-filesystem`,
       options: {
-        path: `${__dirname}/content/assets`,
+        path: `${__dirname}/assets`,
         name: `assets`,
       },
     },
@@ -81,6 +84,8 @@ module.exports = {
               wrapperStyle: `margin-bottom: 1.0725rem`,
             },
           },
+          "gatsby-remark-katex",
+          "gatsby-remark-graphviz",
           `gatsby-remark-prismjs`,
           `gatsby-remark-copy-linked-files`,
           `gatsby-remark-smartypants`,
@@ -105,7 +110,7 @@ module.exports = {
         },
       },
     },
-    `gatsby-plugin-feed`,
+    //`gatsby-plugin-feed`,
     {
       resolve: `gatsby-plugin-manifest`,
       options: {
@@ -115,13 +120,31 @@ module.exports = {
         background_color: `#ffffff`,
         theme_color: `#663399`,
         display: `minimal-ui`,
-        icon: `content/assets/astrid-tech-icon.png`,
+        icon: `assets/astrid-tech-icon.png`,
+      },
+    },
+    {
+      resolve: `gatsby-plugin-disqus`,
+      options: {
+        shortname: `astridtech`,
       },
     },
     `gatsby-plugin-react-helmet`,
     "gatsby-plugin-sass",
-    // this (optional) plugin enables Progressive Web App + Offline functionality
-    // To learn more, visit: https://gatsby.dev/offline
-    // `gatsby-plugin-offline`,
+
+    "gatsby-astrid-source-lang-tags",
+
+    "gatsby-astrid-transformer-user-tags",
+    "gatsby-astrid-transformer-skills",
+
+    "gatsby-astrid-transformer-work",
+    "gatsby-astrid-transformer-education",
+
+    "gatsby-astrid-transformer-notebook-markdown",
+    "gatsby-astrid-transformer-markdown-post",
+    "gatsby-astrid-transformer-project",
+
+    "gatsby-astrid-plugin-blog",
+    "gatsby-astrid-plugin-tagging",
   ],
 }

@@ -1,80 +1,32 @@
 import { graphql, PageProps } from "gatsby"
 import React, { FC } from "react"
-import Layout from "../components/layout/layout"
-import { Tag, Project, WorkExperience, BlogPost } from "../types/index"
-import { TagBadge } from "../components/tag"
-import SEO from "../components/seo"
 import { Container } from "reactstrap"
-import { ProjectCard } from "../components/project"
-import { PostBrief } from "../components/blog"
+import Layout from "../components/layout/layout"
+import SEO from "../components/seo"
+import { TagBadge } from "../components/tag"
+import { Tag } from "../types/index"
 
 export const pageQuery = graphql`
-  query GetTag($slug: String!) {
+  query GetTagInfo($slug: String!) {
     allTag(filter: { slug: { eq: $slug } }) {
       edges {
         node {
-          slug
-          name
-          color
-          textColor
-        }
-      }
-    }
-    allProject(
-      filter: { tags: { elemMatch: { slug: { eq: $slug } } } }
-      sort: { fields: [endDate], order: DESC }
-    ) {
-      edges {
-        node {
-          slug
-          thumbnailPublicPath
-          startDate(formatString: "YYYY-MM")
-          endDate(formatString: "YYYY-MM")
-          title
-          description
-          status
-          markdown {
-            html
-          }
-          tags {
-            tag {
-              name
-              color
-              textColor
-              slug
+          ...TagBadge
+          tagged {
+            __typename
+            ... on Work {
+              id
             }
-          }
-          url
-          source
-        }
-      }
-    }
-    allWorkExperience(
-      filter: { tags: { elemMatch: { slug: { eq: $slug } } } }
-    ) {
-      edges {
-        node {
-          slug
-        }
-      }
-    }
-    allBlogPost(filter: { tags: { elemMatch: { slug: { eq: $slug } } } }) {
-      edges {
-        node {
-          title
-          date
-          slug
-          description
-          contentType
-          markdown {
-            excerpt
-          }
-          tags {
-            tag {
-              slug
+            ... on Project {
+              id
+            }
+            ... on Course {
+              id
               name
-              color
-              textColor
+            }
+            ... on BlogPost {
+              id
+              date
             }
           }
         }
@@ -85,24 +37,11 @@ export const pageQuery = graphql`
 
 type Data = {
   allTag: {
-    edges: {
-      node: Tag
-    }[]
-  }
-  allProject: {
-    edges: {
-      node: Project
-    }[]
-  }
-  allWorkExperience: {
-    edges: {
-      node: WorkExperience
-    }[]
-  }
-  allBlogPost: {
-    edges: {
-      node: BlogPost
-    }[]
+    edges: [
+      {
+        node: Tag
+      }
+    ]
   }
 }
 
@@ -112,8 +51,10 @@ type Context = {
 
 const TagDetailTemplate: FC<PageProps<Data, Context>> = ({ data }) => {
   const tag = data.allTag.edges[0].node
+  console.log(data)
 
-  const postsEmpty = data.allBlogPost.edges.length == 0
+  /*
+  const postsEmpty = tag.allBlogPost.edges.length == 0
   const postsSection = () => (
     <section>
       <h2>Blog Posts</h2>
@@ -131,7 +72,7 @@ const TagDetailTemplate: FC<PageProps<Data, Context>> = ({ data }) => {
         <ProjectCard project={project} />
       ))}
     </section>
-  )
+  )*/
 
   return (
     <Layout>
@@ -142,8 +83,6 @@ const TagDetailTemplate: FC<PageProps<Data, Context>> = ({ data }) => {
             <TagBadge tag={tag} />
           </h1>
         </header>
-        {postsEmpty ? null : postsSection()}
-        {projectsEmpty ? null : projectsSection()}
       </Container>
     </Layout>
   )

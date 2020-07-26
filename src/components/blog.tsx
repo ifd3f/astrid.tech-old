@@ -1,100 +1,36 @@
-import React, { FC, ReactNode } from "react"
-import { BlogPost, MarkdownBlogPost, JupyterBlogPost } from "../types"
-import moment from "moment"
 import { Link } from "gatsby"
-import { TagList } from "./tag"
-import SEO from "./seo"
+import moment from "moment"
+import React, { FC } from "react"
 import style from "../scss/blog.module.scss"
+import { BlogPost } from "../types"
+import SEO from "./seo"
+import { TagList } from "./tag"
 
-type MarkdownPostProps = {
-  post: MarkdownBlogPost
-}
-type JupyterPostProps = {
-  post: JupyterBlogPost
-}
-type AbstractPostProps = {
+type PostProps = {
   post: BlogPost
 }
 
-const MarkdownPostContent: FC<MarkdownPostProps> = ({ post }) => {
-  return <section dangerouslySetInnerHTML={{ __html: post.parent!!.html!! }} />
+export const PostContent: FC<PostProps> = ({ post }) => {
+  return <section dangerouslySetInnerHTML={{ __html: post.source.html }} />
 }
 
-const JupyterPostContent: FC<JupyterPostProps> = ({ post }) => {
-  return (
-    <section
-      dangerouslySetInnerHTML={{ __html: post.parent!!.internal!!.content!! }}
-    />
-  )
-}
-
-export const PostContent: FC<AbstractPostProps> = ({ post }) => {
-  switch (post.contentType) {
-    case "markdown":
-      return <MarkdownPostContent post={post as MarkdownBlogPost} />
-    case "jupyter":
-      return <JupyterPostContent post={post as JupyterBlogPost} />
-    default:
-      throw Error(`Unsupported content type ${post.contentType}`)
-  }
-}
-
-export const PostMainHeader: FC<AbstractPostProps> = ({ post }) => {
+export const PostMainHeader: FC<PostProps> = ({ post }) => {
   const dateString = moment(post.date).format("h:mma, dddd DD MMMM YYYY")
   return (
     <header>
       <h1>{post.title!}</h1>
-      <p className={style.subtitle}>{post.description!}</p>
+      <p className={style.subtitle}>{post.internal.description!}</p>
       <p className={style.date}>{dateString}</p>
-      <TagList tags={post.tags!.map(({ tag }) => tag!)} />
+      <TagList tags={post.tags} link />
     </header>
   )
 }
 
-export const MarkdownPostBriefBody: FC<MarkdownPostProps> = ({ post }) => {
-  return (
-    <section>
-      <p
-        dangerouslySetInnerHTML={{
-          __html: post.parent!.excerpt!,
-        }}
-      />{" "}
-    </section>
-  )
+export const PostSEO: FC<PostProps> = ({ post }) => {
+  return <SEO title={post.title!} description={post.internal.description} />
 }
 
-const MarkdownBlogPostSEO: FC<MarkdownPostProps> = ({ post }) => {
-  return (
-    <SEO
-      title={post.title!}
-      description={post.description || post.parent?.excerpt || ""}
-    />
-  )
-}
-
-export const PostSEO: FC<AbstractPostProps> = ({ post }) => {
-  switch (post.contentType) {
-    case "markdown":
-      return <MarkdownBlogPostSEO post={post as MarkdownBlogPost} />
-    case "jupyter":
-      return null
-    default:
-      throw Error(`Unsupported content type ${post.contentType}`)
-  }
-}
-
-export const PostBrief: FC<AbstractPostProps> = ({ post }) => {
-  let body: ReactNode
-  switch (post.contentType) {
-    case "markdown":
-      body = <MarkdownPostBriefBody post={post as MarkdownBlogPost} />
-      break
-    case "jupyter":
-      break
-    default:
-      throw Error(`Unsupported content type ${post.contentType}`)
-  }
-
+export const PostBrief: FC<PostProps> = ({ post }) => {
   const dateString = moment(post.date).format("DD MMMM YYYY")
 
   return (
@@ -102,8 +38,8 @@ export const PostBrief: FC<AbstractPostProps> = ({ post }) => {
       <article className={style.brief}>
         <h3>{post.title}</h3>
         <p className={style.date}>{dateString}</p>
-        <TagList tags={post.tags!.map(x => x.tag!)} />
-        <p>{post.description}</p>
+        <TagList tags={post.tags} link />
+        <p>{post.internal.description}</p>
       </article>
     </Link>
   )

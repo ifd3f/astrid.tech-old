@@ -19,8 +19,10 @@ tags:
 url: https://astrid.tech
 source:
   - https://github.com/Plenglin/astrid.tech
-thumbnail: null
+thumbnail: ./thumbnail.png
 ---
+
+<iframe src="https://astrid.tech" title="My website, but with recursion"></iframe>
 
 This is my website. There are many like it, but this one is mine.
 

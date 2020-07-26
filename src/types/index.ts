@@ -1,4 +1,28 @@
-export interface WorkExperience {
+import { Node } from "gatsby"
+import { FileSystemNode } from "gatsby-source-filesystem"
+
+export type MarkdownRemark = Node & {
+  html: string
+  excerpt: string
+}
+
+export type Tagged = TypeName & {
+  tags: Tag[]
+}
+
+export type Tag = Node & {
+  name: string
+  color: string
+  backgroundColor: string
+  slug: string
+  tagged: Tagged[]
+}
+
+export type TypeName = Node & {
+  __typename: string
+}
+
+export type WorkExperience = Tagged & {
   organization: string
   position: string
   location: string
@@ -6,80 +30,48 @@ export interface WorkExperience {
   startDate: Date
   endDate?: Date
   highlights: string[]
-  tags: TagWrapper[]
   summary?: string
 }
 
-export interface Project {
+export type Project = Tagged & {
+  __typename: "Project"
   title: string
   status: null | "wip" | "complete" | "scrapped"
-  description: string
   startDate: string
   endDate: string | null
-  tags: TagWrapper[]
   slug: string
   url: string
   source: string[]
-  markdown?: MarkdownData
-  thumbnailPublicPath?: string
-}
-
-export interface BlogPost<
-  ParentType = any,
-  ContentTypeIndicator = "markdown" | "mdx" | "jupyter"
-> {
-  title?: string
-  date?: Date
-  description?: string
-  tags?: TagWrapper[]
-  slug?: string
-  parent?: ParentType
-
-  contentType?: ContentTypeIndicator
-}
-
-export type MarkdownData = {
-  html?: string
-  excerpt?: string
-  timeToRead?: number
-  wordCount?: {
-    paragraphs?: number
-    sentences?: number
-    word?: number
-  }
-}
-
-export type JupyterData = {
+  thumbnail: FileSystemNode
+  markdown: MarkdownRemark
+  childProjectTag: { childTag: Tag }
   internal: {
     content: string
+    description: string
   }
 }
 
-export type MarkdownBlogPost = BlogPost<MarkdownData, "markdown">
-export type JupyterBlogPost = BlogPost<JupyterData, "jupyter">
-
-export interface TagWrapper {
-  slug?: string
-  tag?: Tag
-}
-
-export interface Tag {
-  name: string
-  color: string
-  textColor: string
+export type BlogPost = Tagged & {
+  __typename: "BlogPost"
+  title: string
+  date: Date
   slug: string
+
+  source: MarkdownRemark
+  internal: {
+    description: string
+  }
 }
 
-export interface Course {
+export type Course = Tagged & {
   name: string
   number: string
   slug: string
   date: string
   desc: string | null
-  tags: TagWrapper[]
 }
 
-export interface Education {
+export type Education = Node & {
   name: string
   degree: string | null
   startDate: string
@@ -88,7 +80,7 @@ export interface Education {
   courses: Course[]
 }
 
-export type SkillCategory = {
+export type SkillGroup = Node & {
   name: string
   skills: {
     level: number

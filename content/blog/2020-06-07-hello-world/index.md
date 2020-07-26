@@ -6,8 +6,9 @@ date: "2020-06-07T10:23:00-0700"
 description: "Because this actually isn't the first iteration of this website"
 production: true
 tags:
-  - /project/astrid-tech/
-  - /project/inventree/
+  - /projects/astrid-tech/
+  - /projects/inventree/
+  - react-js
 ---
 
 Now that I think of it, this actually isn't too bad of an idea. By the time I finish this website, I will have a blog with actual content!

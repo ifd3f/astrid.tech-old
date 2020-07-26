@@ -1,3 +1,4 @@
 {
-  "python.pythonPath": "/home/astrid/anaconda3/bin/python"
+  "python.pythonPath": "/home/astrid/anaconda3/bin/python",
+  "C_Cpp.intelliSenseEngineFallback": "Enabled"
 }
