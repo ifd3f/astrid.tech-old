@@ -152,11 +152,15 @@ const Filterer: FC<FiltererArgs> = ({ children, projects, fuse }) => {
     .sort((a, b) => tagUsageCounts.get(b.slug)! - tagUsageCounts.get(a.slug)!)
   const slugToTag = new Map(orderedTags.map(tag => [tag.slug, tag]))
 
+  const selectableTags = [...slugToTag.values()].filter(
+    tag => !filterTagsSet.has(tag.slug)
+  )
+
   return (
     <SearchContext.Provider
       value={{
         slugToTag,
-        selectableTags: orderedTags,
+        selectableTags,
         tagUsageCounts,
         projects,
 
@@ -179,12 +183,30 @@ const Filterer: FC<FiltererArgs> = ({ children, projects, fuse }) => {
   )
 }
 
+type CountBadgeProps = {
+  tag: Tag
+  count: number
+}
+
+const CountBadge: FC<CountBadgeProps> = ({ tag, count }) => (
+  <Badge
+    style={{
+      color: tag.backgroundColor,
+      backgroundColor: tag.color,
+    }}
+  >
+    {count}
+  </Badge>
+)
+
 const SelectableTagList: FC = () => {
-  const { slugToTag, tagUsageCounts, addFilterTag } = useContext(SearchContext)
+  const { selectableTags, tagUsageCounts, addFilterTag } = useContext(
+    SearchContext
+  )
 
   return (
     <div className={styles.selectableTagsContainer}>
-      {[...slugToTag.values()].map(tag => (
+      {selectableTags.map(tag => (
         <span
           className={styles.selectableTag}
           onClick={() => addFilterTag(tag.slug)}
@@ -192,14 +214,7 @@ const SelectableTagList: FC = () => {
         >
           <TagBadge tag={tag}>
             {" "}
-            <Badge
-              style={{
-                color: tag.backgroundColor,
-                backgroundColor: tag.color,
-              }}
-            >
-              {tagUsageCounts.get(tag.slug)}
-            </Badge>
+            <CountBadge tag={tag} count={tagUsageCounts.get(tag.slug)!} />
           </TagBadge>
         </span>
       ))}
@@ -208,7 +223,9 @@ const SelectableTagList: FC = () => {
 }
 
 const CurrentlyUsedTagList: FC = () => {
-  const { filterTags, removeFilterTag } = useContext(SearchContext)
+  const { filterTags, tagUsageCounts, removeFilterTag } = useContext(
+    SearchContext
+  )
   return (
     <div>
       {[...filterTags.values()].map(tag => (
@@ -219,6 +236,7 @@ const CurrentlyUsedTagList: FC = () => {
         >
           <TagBadge tag={tag}>
             {" "}
+            <CountBadge tag={tag} count={tagUsageCounts.get(tag.slug)!} />
             <BsX />
           </TagBadge>
         </span>
@@ -227,53 +245,64 @@ const CurrentlyUsedTagList: FC = () => {
   )
 }
 
-const TagsFilterBar: FC = () => {
-  const { slugToTag: tags, setSearchString } = useContext(SearchContext)
-  const onChange: ChangeEventHandler<HTMLInputElement> = ev => {
-    setSearchString(ev.target.value)
-  }
-
+const TagsFilterDropdown: FC = () => {
   const [tagListOpen, setTagListOpen] = useState(false)
   const toggleOpen = () => {
     setTagListOpen(!tagListOpen)
   }
 
   return (
+    <Card>
+      <CardBody>
+        <Row>
+          <h3
+            style={{
+              paddingLeft: 10,
+            }}
+          >
+            Filter by tag
+          </h3>
+          <Col style={{ textAlign: "right" }}>
+            <Button onClick={toggleOpen} outline size="sm">
+              {tagListOpen ? <BsCaretUp /> : <BsCaretDown />}
+            </Button>
+          </Col>
+        </Row>
+        <Collapse isOpen={tagListOpen}>
+          <SelectableTagList />
+        </Collapse>
+      </CardBody>
+    </Card>
+  )
+}
+
+const SearchBar: FC = () => {
+  const { setSearchString } = useContext(SearchContext)
+  const onChange: ChangeEventHandler<HTMLInputElement> = ev => {
+    setSearchString(ev.target.value)
+  }
+  return (
+    <InputGroup>
+      <Input
+        placeholder="astrid.tech, CPE 233, React, etc."
+        onChange={onChange}
+      />
+    </InputGroup>
+  )
+}
+
+const SearchSection: FC = () => {
+  return (
     <section className={styles.searchSection}>
       <Container>
         <Row>
           <Col xs={12} md={6} style={{ paddingBottom: 20 }}>
             <h2>Search</h2>
-            <InputGroup>
-              <Input
-                placeholder="astrid.tech, CPE 233, React, etc."
-                onChange={onChange}
-              />
-            </InputGroup>
+            <SearchBar />
             <CurrentlyUsedTagList />
           </Col>
           <Col xs={12} md={6}>
-            <Card>
-              <CardBody>
-                <Row>
-                  <h3
-                    style={{
-                      paddingLeft: 10,
-                    }}
-                  >
-                    Filter by tag
-                  </h3>
-                  <Col style={{ textAlign: "right" }}>
-                    <Button onClick={toggleOpen} outline size="sm">
-                      {tagListOpen ? <BsCaretUp /> : <BsCaretDown />}
-                    </Button>
-                  </Col>
-                </Row>
-                <Collapse isOpen={tagListOpen}>
-                  <SelectableTagList />
-                </Collapse>
-              </CardBody>
-            </Card>
+            <TagsFilterDropdown />
           </Col>
         </Row>
       </Container>
@@ -328,7 +357,7 @@ const ProjectsIndex: FC<PageProps<Data>> = ({ data }) => {
         </p>
       </header>
       <Filterer projects={projects} fuse={fuse}>
-        <TagsFilterBar />
+        <SearchSection />
         <Container>
           <ProjectCardContainer />
         </Container>
