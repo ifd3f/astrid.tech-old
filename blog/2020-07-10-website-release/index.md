@@ -6,7 +6,8 @@ date: "2020-07-10T11:48:00-0700"
 description: "Yay!"
 production: true
 tags:
-  - /project/astrid-tech/
+  - /projects/astrid-tech/
+  - gatsby-js
 ---
 
 My website is now live! Actually, it's been live for a few days by now, I'm just a bit late to make the post. As you can see, it's not completely done, but don't worry, I'll still be pushing new updates and content to it.

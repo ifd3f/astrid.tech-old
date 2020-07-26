@@ -13,6 +13,8 @@ tags:
   - html
   - css
   - socket-io
+  - electrical-engineering
+  - circuit-design
 url: null
 source:
   - https://github.com/Plenglin/QuadFrost-Arduino
