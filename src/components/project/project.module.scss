@@ -1,3 +1,5 @@
+@import "src/scss/variables.scss";
+
 .projectCard {
   -moz-transition: all 0.2s ease-in;
   -o-transition: all 0.2s ease-in;
@@ -6,12 +8,21 @@
 
   background-color: #ecccb9;
   cursor: pointer;
-  width: 350px;
   height: 160px;
   border-radius: 20px;
 
   h3 {
-    font-size: 24px;
+    @each $size, $font-size in (xs: 15pt, md: 17pt, lg: 20pt) {
+      @media only screen and (min-width: map-get($grid-breakpoints, $size)) {
+        font-size: $font-size;
+      }
+    }
+  }
+
+  @each $size, $width in (xs: 300px, md: 300px, lg: 400px, xl: 350px) {
+    @media only screen and (min-width: map-get($grid-breakpoints, $size)) {
+      width: $width;
+    }
   }
 }
 

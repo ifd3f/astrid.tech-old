@@ -1,7 +1,7 @@
 ---
 type: project
 
-title: Servomechanism Congratulatory Articulation Augmentation for Tassels
+title: Tassel Spinner
 status:
 description: Why graduate like a normal person when you can s p i n
 startDate: 2019-05-14

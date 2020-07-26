@@ -17,6 +17,10 @@ import {
   InputGroup,
   Input,
   Badge,
+  Collapse,
+  DropdownToggle,
+  Button,
+  NavbarToggler,
 } from "reactstrap"
 import Layout, { MainNavbar } from "../components/layout"
 import { ProjectCard } from "../components/project"
@@ -26,7 +30,7 @@ import { Project } from "../types"
 import { Tag } from "../types/index"
 import styles from "./projects.module.scss"
 import Fuse from "fuse.js"
-import { BsX } from "react-icons/bs"
+import { BsX, BsCaretDown, BsCaretUp } from "react-icons/bs"
 
 type Data = {
   site: {
@@ -225,11 +229,17 @@ const TagsFilterBar: FC = () => {
   const onChange: ChangeEventHandler<HTMLInputElement> = ev => {
     setSearchString(ev.target.value)
   }
+
+  const [tagListOpen, setTagListOpen] = useState(false)
+  const toggleOpen = () => {
+    setTagListOpen(!tagListOpen)
+  }
+
   return (
     <section className={styles.searchSection}>
       <Container>
         <Row>
-          <Col>
+          <Col xs={12} md={6} style={{ paddingBottom: 20 }}>
             <h2>Search</h2>
             <InputGroup>
               <Input
@@ -239,9 +249,26 @@ const TagsFilterBar: FC = () => {
             </InputGroup>
             <CurrentlyUsedTagList />
           </Col>
-          <Col>
-            <h3>Or select tags to filter by</h3>
-            <SelectableTagList />
+          <Col xs={12} md={6}>
+            <Row>
+              <Col xs={8}>
+                <h3
+                  style={{
+                    paddingLeft: 10,
+                  }}
+                >
+                  Filter by tag
+                </h3>
+              </Col>
+              <Col style={{ textAlign: "right" }}>
+                <Button onClick={toggleOpen} outline size="sm">
+                  {tagListOpen ? <BsCaretUp /> : <BsCaretDown />}
+                </Button>
+              </Col>
+            </Row>
+            <Collapse isOpen={tagListOpen}>
+              <SelectableTagList />
+            </Collapse>
           </Col>
         </Row>
       </Container>
