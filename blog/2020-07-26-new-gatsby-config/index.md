@@ -2,7 +2,7 @@
 type: blog
 
 title: An overview of the new Gatsby backend
-date: "2020-07-27T11:48:00-0700"
+date: "2020-07-26T01:07:00-0700"
 description: "Come on in, there's digraphs in here"
 production: true
 tags:
