@@ -93,6 +93,7 @@ const BlogPostTemplate: FC<PageProps<Data, Context>> = ({
             </li>
           </ul>
         </nav>
+        <h2>Comments</h2>
         <Disqus config={disqusConfig} />
       </Container>
     </Layout>
