@@ -21,6 +21,9 @@ import {
   DropdownToggle,
   Button,
   NavbarToggler,
+  Card,
+  CardBody,
+  CardHeader,
 } from "reactstrap"
 import Layout, { MainNavbar } from "../components/layout"
 import { ProjectCard } from "../components/project"
@@ -250,25 +253,27 @@ const TagsFilterBar: FC = () => {
             <CurrentlyUsedTagList />
           </Col>
           <Col xs={12} md={6}>
-            <Row>
-              <Col xs={8}>
-                <h3
-                  style={{
-                    paddingLeft: 10,
-                  }}
-                >
-                  Filter by tag
-                </h3>
-              </Col>
-              <Col style={{ textAlign: "right" }}>
-                <Button onClick={toggleOpen} outline size="sm">
-                  {tagListOpen ? <BsCaretUp /> : <BsCaretDown />}
-                </Button>
-              </Col>
-            </Row>
-            <Collapse isOpen={tagListOpen}>
-              <SelectableTagList />
-            </Collapse>
+            <Card>
+              <CardBody>
+                <Row>
+                  <h3
+                    style={{
+                      paddingLeft: 10,
+                    }}
+                  >
+                    Filter by tag
+                  </h3>
+                  <Col style={{ textAlign: "right" }}>
+                    <Button onClick={toggleOpen} outline size="sm">
+                      {tagListOpen ? <BsCaretUp /> : <BsCaretDown />}
+                    </Button>
+                  </Col>
+                </Row>
+                <Collapse isOpen={tagListOpen}>
+                  <SelectableTagList />
+                </Collapse>
+              </CardBody>
+            </Card>
           </Col>
         </Row>
       </Container>
