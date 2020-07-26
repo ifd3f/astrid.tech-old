@@ -6,7 +6,7 @@ export type MarkdownRemark = Node & {
   excerpt: string
 }
 
-export type Tagged = Node & {
+export type Tagged = TypeName & {
   tags: Tag[]
 }
 
@@ -16,6 +16,10 @@ export type Tag = Node & {
   backgroundColor: string
   slug: string
   tagged: Tagged[]
+}
+
+export type TypeName = Node & {
+  __typename: string
 }
 
 export type WorkExperience = Tagged & {
@@ -30,6 +34,7 @@ export type WorkExperience = Tagged & {
 }
 
 export type Project = Tagged & {
+  __typename: "Project"
   title: string
   status: null | "wip" | "complete" | "scrapped"
   startDate: string
@@ -39,6 +44,7 @@ export type Project = Tagged & {
   source: string[]
   thumbnail: FileSystemNode
   markdown: MarkdownRemark
+  childProjectTag: { childTag: Tag }
   internal: {
     content: string
     description: string
@@ -46,6 +52,7 @@ export type Project = Tagged & {
 }
 
 export type BlogPost = Tagged & {
+  __typename: "BlogPost"
   title: string
   date: Date
   slug: string
