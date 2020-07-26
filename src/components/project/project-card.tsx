@@ -54,6 +54,10 @@ export const StatusBadge: FC<StatusBadgeProps> = ({ status }) => {
 
 const ProjectCardImg = () => {}
 
+type PropsWithProject = {
+  project: Project
+}
+
 type ProjectCardProps = {
   project: Project
   hovered?: boolean
@@ -87,10 +91,33 @@ export const projectCardFragment = graphql`
   }
 `
 
-const ProjectCardOuter: FC<PropsWithChildren<ProjectCardProps>> = ({
+type ProjectTitleProps = {
+  project: Project
+  titleBorder?: boolean
+}
+
+const ProjectTitle: FC<ProjectTitleProps> = ({ project, titleBorder }) => (
+  <h3 className={`${styles.title} ${titleBorder ? styles.border : ""}`}>
+    {project.title}
+  </h3>
+)
+
+type ProjectBodyProps = {
+  project: Project
+  showBorder?: boolean
+}
+
+const ProjectBody: FC<ProjectBodyProps> = ({ project, showBorder = false }) => (
+  <TagList
+    tags={project.tags.slice(0, 5)}
+    className={styles.tags + (showBorder ? " " + styles.border : "")}
+    link
+  />
+)
+
+export const ProjectCard: FC<ProjectCardProps> = ({
   project,
-  children,
-  hovered,
+  hovered = false,
   onMouseEnter: _onEnter,
   onMouseLeave: _onLeave,
 }) => {
@@ -126,46 +153,21 @@ const ProjectCardOuter: FC<PropsWithChildren<ProjectCardProps>> = ({
           backgroundColor: "clear",
         }}
       >
-        {children}
+        <CardBody>
+          <ProjectTitle project={project} titleBorder />
+          <ProjectBody project={project} showBorder />
+        </CardBody>
       </BackgroundImage>
     )
   } else {
     const background = getPersistentColor(project.slug, PastelTheme)
     return (
       <div {...cardOuterProps} style={{ backgroundColor: background }}>
-        {children}
+        <CardBody>
+          <ProjectTitle project={project} />
+          <ProjectBody project={project} />
+        </CardBody>
       </div>
     )
   }
-}
-
-export const ProjectCard: FC<ProjectCardProps> = ({
-  project,
-  hovered = false,
-  onMouseEnter,
-  onMouseLeave,
-}) => {
-  const headerSection = <></>
-  const bodySection = <></>
-
-  return (
-    <ProjectCardOuter
-      project={project}
-      hovered={hovered}
-      onMouseEnter={onMouseEnter}
-      onMouseLeave={onMouseLeave}
-    >
-      <CardBody className={styles.inner}>
-        <h3 className={`${styles.title} ${titleBorder ? styles.border : ""}`}>
-          {project.title}
-        </h3>{" "}
-        <TagList tags={project.tags.slice(0, 5)} link />
-        {project.url ? (
-          <CardLink href={project.url}>{project.url}</CardLink>
-        ) : (
-          ""
-        )}
-      </CardBody>
-    </ProjectCardOuter>
-  )
 }

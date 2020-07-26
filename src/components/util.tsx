@@ -59,8 +59,8 @@ export const FullSpectrumTheme: PersistentColorTheme = {
 
 export const PastelTheme: PersistentColorTheme = {
   h: [0, 360],
-  s: [30, 50],
-  v: [70, 100],
+  s: [50, 50],
+  v: [70, 70],
 }
 
 export function getPersistentColor(

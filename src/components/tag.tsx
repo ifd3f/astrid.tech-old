@@ -45,14 +45,20 @@ export const TagBadge: FC<TagBadgeProps> = ({
 type TagListProps = {
   tags: Tag[]
   link?: boolean
+  className?: string
 }
 
-export const TagList: FC<TagListProps> = ({ tags, link = false }) => {
+export const TagList: FC<TagListProps> = ({
+  tags,
+  link = false,
+  className,
+}) => {
   return (
-    <div>
+    <div className={className}>
       <p
         style={{
           fontSize: "12pt",
+          marginBottom: 3,
         }}
       >
         {tags.map(tag => (

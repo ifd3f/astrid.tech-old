@@ -14,7 +14,8 @@
   position: relative;
   background-color: white;
 
-  @each $size, $width in (xs: 300px, md: 300px, lg: 400px, xl: 350px) {
+  @each $size, $width in (xs: 300px, sm: 450px, md: 300px, lg: 400px, xl: 350px)
+  {
     @media only screen and (min-width: map-get($grid-breakpoints, $size)) {
       width: $width;
     }
@@ -22,6 +23,7 @@
 }
 
 .title {
+  padding: 3px;
   @each $size, $font-size in (xs: 15pt, md: 17pt, lg: 20pt) {
     @media only screen and (min-width: map-get($grid-breakpoints, $size)) {
       font-size: $font-size;
@@ -31,13 +33,23 @@
 
 .title.border {
   display: block;
-  padding: 3px;
+  padding-left: 6px;
+  padding-right: 6px;
   border-radius: 10px;
-  background-color: rgba($color: white, $alpha: 0.5);
+  background-color: rgba($color: white, $alpha: 0.7);
 }
 
 .projectCard::before {
   filter: brightness(3) saturate(1.2) blur(1px);
+}
+
+.tags {
+  border-radius: 10px;
+}
+
+.tags.border {
+  padding: 5px;
+  background-color: rgba($color: gray, $alpha: 0.5);
 }
 
 .bgImage {
