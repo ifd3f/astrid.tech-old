@@ -25,14 +25,13 @@ const PrivacyPolicy: FC<PageProps<Data>> = props => {
   const { data } = props
   return (
     <Layout {...props}>
-      <SEO title="Blog" />
-      <Container className={styles.blogContentContainer}>
-        <div
-          dangerouslySetInnerHTML={{
-            __html: data.file.childMarkdownRemark.html,
-          }}
-        />
-      </Container>
+      <SEO title="Privacy Policy" />
+      <Container
+        className={styles.blogContentContainer}
+        dangerouslySetInnerHTML={{
+          __html: data.file.childMarkdownRemark.html,
+        }}
+      />
     </Layout>
   )
 }

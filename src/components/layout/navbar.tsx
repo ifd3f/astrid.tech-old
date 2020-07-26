@@ -1,7 +1,7 @@
 import { Link } from "gatsby"
-import React, { FC, ReactNode, useState, PropsWithChildren } from "react"
+import React, { FC, ReactNode, useState } from "react"
 import { BsArrowsCollapse } from "react-icons/bs"
-import { GiHamburger } from "react-icons/gi"
+import { GiHamburger, GiBirdTwitter } from "react-icons/gi"
 import { GoMarkGithub } from "react-icons/go"
 import {
   Collapse,
@@ -9,11 +9,12 @@ import {
   NavbarBrand,
   NavbarToggler,
   NavLink,
+  Row,
+  NavbarText,
 } from "reactstrap"
 import "./navbar.scss"
-import { BLMBanner } from "./blm"
 
-export type NavBarLinks = "brand" | "projects" | "blog"
+export type NavBarLinks = "brand" | "projects" | "blog" | "about"
 
 type NavLinkProps = {
   to: string
@@ -60,9 +61,9 @@ const MainNavbar: FC<MainNavbarProps> = ({ currentLocation, fixed }) => {
           Blog
         </GNavLink>
         <NavbarSeparator />
-        <NavLink href="https://github.com/plenglin" alt="GitHub">
-          <GoMarkGithub /> plenglin
-        </NavLink>
+        <GNavLink to="/about" active={currentLocation == "about"}>
+          About
+        </GNavLink>
       </Collapse>
     </Navbar>
   )
