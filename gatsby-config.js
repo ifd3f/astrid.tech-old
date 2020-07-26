@@ -129,6 +129,15 @@ module.exports = {
         shortname: `astridtech`,
       },
     },
+    `gatsby-plugin-sitemap`,
+    {
+      resolve: "gatsby-plugin-robots-txt",
+      options: {
+        host: "https://astrid.tech",
+        sitemap: "https://astrid.tech/sitemap.xml",
+        policy: [{ userAgent: "*", allow: "/" }],
+      },
+    },
     `gatsby-plugin-react-helmet`,
     "gatsby-plugin-sass",
 
