@@ -60,16 +60,16 @@ export const FullSpectrumTheme: PersistentColorTheme = {
 export const PastelTheme: PersistentColorTheme = {
   h: [0, 360],
   s: [50, 50],
-  v: [70, 70],
+  v: [80, 80],
 }
 
 export function getPersistentColor(
   slug: string,
   theme: PersistentColorTheme = FullSpectrumTheme
-): string {
+): [number, number, number] {
   const random = seedrandom(crypto.createHash(`md5`).update(slug).digest(`hex`))
   var h = (rescale(random(), theme.h) | 0) % 360
   var s = rescale(random(), theme.s) | 0
   var v = rescale(random(), theme.v) | 0
-  return `hsl(${h}, ${s}%, ${v}%)`
+  return [h, s, v]
 }

@@ -22,6 +22,8 @@ source:
 thumbnail: ./thumbnail.png
 ---
 
+<iframe src="https://astrid.tech" title="My website, but with recursion"></iframe>
+
 This is my website. There are many like it, but this one is mine.
 
 ## Technology Stack

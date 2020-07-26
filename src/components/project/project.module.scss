@@ -10,6 +10,7 @@
 
   cursor: pointer;
   height: 170px;
+  border: 1px solid;
   border-radius: 20px;
   position: relative;
   background-color: white;
@@ -20,6 +21,10 @@
       width: $width;
     }
   }
+}
+
+.projectCard::before {
+  filter: blur(1px);
 }
 
 .title {
@@ -37,10 +42,6 @@
   padding-right: 6px;
   border-radius: 10px;
   background-color: rgba($color: white, $alpha: 0.7);
-}
-
-.projectCard::before {
-  filter: brightness(3) saturate(1.2) blur(1px);
 }
 
 .tags {

@@ -144,25 +144,33 @@ export const ProjectCard: FC<ProjectCardProps> = ({
     className: className,
   }
 
+  const [h, s, v] = getPersistentColor(project.slug, PastelTheme)
   if (project.thumbnail && project.thumbnail.childImageSharp) {
+    const stack = [
+      `linear-gradient(to bottom, hsla(${h}, 80%, 100%, 0.9), hsla(${h}, 80%, 80%, 0.7), rgba(0.6, 0.6, 0.6, 0.3))`,
+      (project.thumbnail as any).childImageSharp.fluid,
+    ]
     return (
       <BackgroundImage
-        {...(project.thumbnail as any).childImageSharp}
+        fluid={stack}
         {...cardOuterProps}
         style={{
           backgroundColor: "clear",
         }}
       >
         <CardBody>
-          <ProjectTitle project={project} titleBorder />
-          <ProjectBody project={project} showBorder />
+          <ProjectTitle project={project} />
+          <ProjectBody project={project} />
         </CardBody>
       </BackgroundImage>
     )
   } else {
-    const background = getPersistentColor(project.slug, PastelTheme)
+    const color = `hsl(${h}, ${s}%, ${v}%)`
     return (
-      <div {...cardOuterProps} style={{ backgroundColor: background }}>
+      <div
+        {...cardOuterProps}
+        style={{ backgroundColor: color, borderColor: color }}
+      >
         <CardBody>
           <ProjectTitle project={project} />
           <ProjectBody project={project} />
