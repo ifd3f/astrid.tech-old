@@ -8,6 +8,7 @@ startDate: 2017-05-14
 endDate: 2017-07-03
 tags:
   - python
+  - robotics
   - circuit-design
   - mechanical-engineering
   - electrical-engineering
