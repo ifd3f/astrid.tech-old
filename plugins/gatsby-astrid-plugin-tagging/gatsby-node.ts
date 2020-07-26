@@ -258,15 +258,17 @@ export const createPages: GatsbyNode["createPages"] = async ({
   const tags = (result.data as Data).allTag.edges
 
   const TagTemplate = path.resolve(`src/templates/tag.tsx`)
-  tags
-    .filter(({ node }) => node.tagged.length > 0 && node.slug[0] != "/")
-    .forEach(({ node: { slug, priority } }) => {
-      createPage({
-        path: "/tags/" + slug,
-        component: TagTemplate,
-        context: {
-          slug: slug,
-        },
-      })
-    })
+  // TODO reenable this
+
+  // tags
+  //   .filter(({ node }) => node.tagged.length > 0 && node.slug[0] != "/")
+  //   .forEach(({ node: { slug, priority } }) => {
+  //     createPage({
+  //       path: "/tags/" + slug,
+  //       component: TagTemplate,
+  //       context: {
+  //         slug: slug,
+  //       },
+  //     })
+  //   })
 }

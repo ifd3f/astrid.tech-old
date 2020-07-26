@@ -110,7 +110,7 @@ module.exports = {
         },
       },
     },
-    `gatsby-plugin-feed`,
+    //`gatsby-plugin-feed`,
     {
       resolve: `gatsby-plugin-manifest`,
       options: {
