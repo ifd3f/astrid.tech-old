@@ -19,7 +19,7 @@ tags:
 url: https://astrid.tech
 source:
   - https://github.com/Plenglin/astrid.tech
-thumbnail: null
+thumbnail: ./thumbnail.png
 ---
 
 This is my website. There are many like it, but this one is mine.
