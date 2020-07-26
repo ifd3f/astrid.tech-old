@@ -2,6 +2,10 @@
   minors:
     - minor: 2
       patches:
+        - patch: 1
+          features:
+            - Added privacy policy.
+            - Re-enabled analytics. All your usage information are belong to us 😈
         - patch: 0
           features:
             - Updated and revamped new projects page with filtering!

@@ -1,4 +1,4 @@
-import React, { FC } from "react"
+import React, { FC, ReactNode } from "react"
 import { Container, Col, Row } from "reactstrap"
 import { Link, useStaticQuery, graphql } from "gatsby"
 import Img from "gatsby-image"
@@ -72,6 +72,17 @@ const AGPL: FC<{ logo: any }> = ({ logo }) => {
   )
 }
 
+type SiteLinkProps = {
+  to: string
+  children: ReactNode
+}
+
+const SiteLink: FC<SiteLinkProps> = ({ to, children }) => (
+  <Col>
+    <Link to={to}>{children}</Link>
+  </Col>
+)
+
 const FooterSection = () => {
   const result = useStaticQuery(graphql`
     query GetFooterData {
@@ -100,14 +111,21 @@ const FooterSection = () => {
   return (
     <footer className={style.footer}>
       <Container>
-        <p>
-          astrid.tech v{version} was created by Astrid Yu with a generous
-          helping of <Tea /> and <Witch />. See the{" "}
-          <Link to="/project/astrid-tech">self-referential project page</Link>{" "}
-          or see the code yourself on{" "}
-          <a href="https://github.com/Plenglin/astrid.tech">GitHub</a>.
-        </p>
-        <p>Website was built on {buildDate}.</p>
+        <Col>
+          <Row tag="nav">
+            <SiteLink to="/privacy">Privacy Policy</SiteLink>
+          </Row>
+        </Col>
+        <Col>
+          <p>Website was last updated on {buildDate}.</p>
+          <p>
+            astrid.tech v{version} was created by Astrid Yu with a generous
+            helping of <Tea /> and <Witch />. See the{" "}
+            <Link to="/project/astrid-tech">self-referential project page</Link>{" "}
+            or see the code yourself on{" "}
+            <a href="https://github.com/Plenglin/astrid.tech">GitHub</a>.
+          </p>
+        </Col>
         <Row>
           <Col className="text-center">
             <AGPL logo={agplLogo} />
