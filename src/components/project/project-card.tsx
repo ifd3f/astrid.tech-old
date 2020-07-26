@@ -39,16 +39,14 @@ export const StatusBadge: FC<StatusBadgeProps> = ({ status }) => {
       return null
   }
   return (
-    <>
-      <Badge id={badgeId} color={color}>
-        {title}
-      </Badge>
+    <Badge id={badgeId} color={color}>
+      {title}
       {badgeId ? (
         <UncontrolledTooltip placement="top" target={badgeId}>
           {tooltip}
         </UncontrolledTooltip>
       ) : null}
-    </>
+    </Badge>
   )
 }
 

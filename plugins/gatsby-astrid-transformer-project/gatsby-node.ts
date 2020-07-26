@@ -19,7 +19,7 @@ type ProjectMetadata = {
   endDate: Date
   description: string
   url: string
-  source: string
+  source: string[]
   tags: string[]
   thumbnail: string | null
 }
@@ -39,7 +39,7 @@ export const sourceNodes: GatsbyNode["sourceNodes"] = async ({
       startDate: "Date!",
       endDate: "Date",
       url: "String",
-      source: "String",
+      source: "[String]",
       thumbnail: "File",
       markdown: "MarkdownRemark!",
       tagSlugs: "[String!]",
@@ -97,6 +97,8 @@ export const onCreateNode: GatsbyNode["onCreateNode"] = async ({
       } as any,
 
       slug: slug,
+      url: frontmatter.url,
+      source: frontmatter.source,
       title: frontmatter.title,
       status: frontmatter.status,
       startDate: frontmatter.startDate,

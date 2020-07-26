@@ -8,6 +8,7 @@ import { Container, Col, Row } from "reactstrap"
 import { TagList } from "../components/tag"
 import { StatusBadge } from "../components/project"
 import style from "./project-detail.module.scss"
+import { BsArrowLeft } from "react-icons/bs"
 
 export const pageQuery = graphql`
   query GetProject($slug: String!) {
@@ -65,31 +66,57 @@ type Context = {
   id: string
 }
 
-// TODO betterize
 const SidebarGroup: FC<PropsWithChildren<{}>> = ({ children }) => (
-  <div>{children}</div>
+  <div className={style.sidebarGroup}>{children}</div>
 )
 
-const DatesGroup = () => {
-  const { project } = useContext(ProjectContext)
-  return (
-    <SidebarGroup>
-      <h2>Date</h2>
-      <p className={style.date}>
-        {project.endDate
-          ? `${project.startDate} to ${project.endDate}`
-          : `${project.startDate} to now`}
-      </p>
-    </SidebarGroup>
-  )
+function formatDateInterval(startDate: string, endDate: string) {
+  if (startDate == endDate) {
+    return startDate
+  }
+  return endDate ? `${startDate} to ${endDate}` : `${startDate} to now`
 }
 
 const StatusGroup = () => {
   const { project } = useContext(ProjectContext)
   return (
     <SidebarGroup>
-      <h2>Status</h2>
-      <StatusBadge status={project.status} />
+      <table style={{ width: "100%" }}>
+        <tr>
+          <th>Date</th>
+          <td className={style.statusData}>
+            {formatDateInterval(project.startDate, project.endDate)}
+          </td>
+        </tr>
+        {project.status ? (
+          <tr>
+            <th>Status</th>
+            <td className={style.statusData}>
+              <StatusBadge status={project.status} />
+            </td>
+          </tr>
+        ) : null}
+        {project.url ? (
+          <tr>
+            <th>URL</th>
+            <td className={style.statusData}>
+              <a href={project.url}>{project.url}</a>
+            </td>
+          </tr>
+        ) : null}
+        {project.source.length > 0 ? (
+          <tr>
+            <th>Source</th>
+            <td className={style.statusData}>
+              {project.source.map(url => (
+                <p>
+                  <a href={url}>{url}</a>
+                </p>
+              ))}
+            </td>
+          </tr>
+        ) : null}
+      </table>
     </SidebarGroup>
   )
 }
@@ -178,9 +205,8 @@ const RelatedProjectsGroup = () => {
 const Sidebar: FC = () => {
   return (
     <>
-      <DatesGroup />
-      <TagsGroup />
       <StatusGroup />
+      <TagsGroup />
       <RelatedProjectsGroup />
       <BlogPostsGroup />
     </>
@@ -216,8 +242,13 @@ const ProjectDetailTemplate: FC<PageProps<Data, Context>> = ({ data }) => {
       <Layout currentLocation="projects">
         <SEO title={project.title!} />
         <Container tag="article" className={style.projectDetailContainer}>
+          <nav>
+            <Link to="/projects" className={style.backToProjects}>
+              <BsArrowLeft /> Back to Projects
+            </Link>
+          </nav>
           <Row>
-            <Col lg={8}>
+            <Col lg={8} className={style.content}>
               <Content />
             </Col>
             <Col lg={4}>
