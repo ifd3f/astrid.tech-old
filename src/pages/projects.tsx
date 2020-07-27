@@ -341,7 +341,7 @@ const ProjectsIndex: FC<PageProps<Data>> = ({ data }) => {
     projects,
     {
       threshold: 0.4,
-      keys: ["title", "slug", "internal.description", "tags.name", "tags.slug"],
+      keys: data.projectSearchIndex.keys,
     },
     index
   )
