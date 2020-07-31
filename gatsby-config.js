@@ -1,12 +1,16 @@
 require("source-map-support").install()
 require("ts-node").register()
 
+const fs = require("fs")
+
+const packageJson = JSON.parse(fs.readFileSync(`${__dirname}/package.json`))
+
 module.exports = {
   siteMetadata: {
     title: `astrid.tech`,
-    version: "0.2.1",
+    version: packageJson.version,
     author: {
-      name: `Astrid Yu`,
+      name: `Astrid A. Yu`,
       summary: `who likes to engineer awesome things`,
       pronouns: {
         subj: `she`,
