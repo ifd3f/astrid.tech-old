@@ -3,8 +3,8 @@
   "homepage": "https://astrid.tech",
   "private": true,
   "description": "Personal Website of Astrid Yu",
-  "version": "0.2.1",
-  "author": "Astrid Augusta Yu <astridyu3.14@gmail.com>",
+  "version": "0.2.2",
+  "author": "Astrid A. Yu <astridyu3.14@gmail.com>",
   "bugs": {
     "url": "https://github.com/Plenglin/astrid.tech/issues"
   },
@@ -22,6 +22,7 @@
     "gatsby-background-image": "^1.1.1",
     "gatsby-image": "^2.4.6",
     "gatsby-plugin-build-date": "^1.0.0",
+    "gatsby-plugin-catch-links": "^2.3.11",
     "gatsby-plugin-disqus": "^1.2.0",
     "gatsby-plugin-feed": "^2.5.3",
     "gatsby-plugin-google-analytics": "^2.3.2",
@@ -110,14 +111,13 @@
     "url": "git+https://github.com/plenglin/astrid.tech.git"
   },
   "scripts": {
-    "build": "gatsby clean && gatsby build",
-    "develop": "gatsby clean && gatsby develop",
+    "build": "npx gatsby clean && npx gatsby build",
+    "develop": "npx gatsby clean && npx gatsby develop",
     "format": "prettier --write \"**/*.{js,jsx,json,md}\"",
     "start": "npm run develop",
-    "serve": "gatsby serve",
-    "clean": "gatsby clean",
+    "serve": "npx gatsby serve",
+    "clean": "npx gatsby clean",
     "test": "echo \"Write tests! -> https://gatsby.dev/unit-testing\" && exit 1",
-    "predeploy": "gatsby clean && gatsby build",
     "deploy": "gh-pages -r \"git@github.com:Plenglin/plenglin.github.io.git\" -b master -d public"
   },
   "eslintConfig": {
