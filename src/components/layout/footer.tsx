@@ -121,7 +121,9 @@ const FooterSection = () => {
           <p>
             astrid.tech v{version} was created by Astrid Yu with a generous
             helping of <Tea /> and <Witch />. See the{" "}
-            <Link to="/project/astrid-tech">self-referential project page</Link>{" "}
+            <Link to="/projects/astrid-tech">
+              self-referential project page
+            </Link>{" "}
             or see the code yourself on{" "}
             <a href="https://github.com/Plenglin/astrid.tech">GitHub</a>.
           </p>
