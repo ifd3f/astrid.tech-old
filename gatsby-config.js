@@ -142,9 +142,11 @@ module.exports = {
         policy: [{ userAgent: "*", allow: "/" }],
       },
     },
+    `gatsby-source-local-git`,
     `gatsby-plugin-catch-links`,
     `gatsby-plugin-react-helmet`,
     "gatsby-plugin-sass",
+    "gatsby-source-license",
 
     "gatsby-astrid-source-lang-tags",
 
