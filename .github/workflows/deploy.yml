@@ -4,31 +4,28 @@ on:
   push:
     branches:
       - main
-  pull_request:
-    branches:
-      - main
   workflow_dispatch:
     skip-publish: true
 
 jobs:
-  build:
+  deploy:
     runs-on: ubuntu-latest
 
     steps:
       - name: Checkout
         uses: actions/checkout@v2
-        
+
       - name: Import private key
         uses: webfactory/ssh-agent@v0.4.0
         with:
           ssh-private-key: ${{secrets.PRIVATE_KEY}}
-      
+
       - name: Set Git user.email
         run: git config --global user.email "astridyu3.14@gmail.com"
-      
+
       - name: Set Git user.name
         run: git config --global user.name "Astrid A. Yu"
-        
+
       - name: Yarn install
         uses: bahmutov/npm-install@v1.1.0
 
@@ -37,4 +34,3 @@ jobs:
 
       - name: Publish
         run: npm run deploy
-
