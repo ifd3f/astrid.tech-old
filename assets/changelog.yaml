@@ -5,6 +5,7 @@
         - patch: 2
           bugfixes:
             - Fix broken self-referential project link in footer.
+            - Fix lists having weird padding.
           internal:
             - Add working CI after, like, 17 attempts!
         - patch: 1
