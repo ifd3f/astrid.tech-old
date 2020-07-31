@@ -105,14 +105,13 @@
     "url": "git+https://github.com/plenglin/astrid.tech.git"
   },
   "scripts": {
-    "build": "gatsby build",
-    "develop": "gatsby clean && gatsby develop",
+    "build": "npx gatsby clean && npx gatsby build",
+    "develop": "npx gatsby clean && npx gatsby develop",
     "format": "prettier --write \"**/*.{js,jsx,json,md}\"",
     "start": "npm run develop",
-    "serve": "gatsby serve",
-    "clean": "gatsby clean",
+    "serve": "npx gatsby serve",
+    "clean": "npx gatsby clean",
     "test": "echo \"Write tests! -> https://gatsby.dev/unit-testing\" && exit 1",
-    "predeploy": "gatsby clean && gatsby build",
     "deploy": "gh-pages -r \"git@github.com:Plenglin/plenglin.github.io.git\" -b master -d public"
   },
   "eslintConfig": {
