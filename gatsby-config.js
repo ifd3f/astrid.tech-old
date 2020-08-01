@@ -7,7 +7,8 @@ const packageJson = JSON.parse(fs.readFileSync(`${__dirname}/package.json`))
 
 module.exports = {
   siteMetadata: {
-    title: `astrid.tech`,
+    title: packageJson.title,
+    package: packageJson,
     version: packageJson.version,
     author: {
       name: `Astrid A. Yu`,
@@ -20,8 +21,8 @@ module.exports = {
         reflex: `herself`,
       },
     },
-    description: `Astrid Yu's blog and portfolio`,
-    siteUrl: `https://astrid.tech/`,
+    description: packageJson.description,
+    siteUrl: packageJson.homepage,
     social: {
       twitter: `none`,
       github: `Plenglin`,
