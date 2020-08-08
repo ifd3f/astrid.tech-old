@@ -240,7 +240,10 @@ const ProjectDetailTemplate: FC<PageProps<Data, Context>> = ({ data }) => {
   return (
     <ProjectContext.Provider value={{ project }}>
       <Layout currentLocation="projects">
-        <SEO title={project.title!} />
+        <SEO
+          title={project.title!}
+          description={project.internal.description}
+        />
         <Container tag="article" className={style.projectDetailContainer}>
           <nav>
             <Link to="/projects" className={style.backToProjects}>

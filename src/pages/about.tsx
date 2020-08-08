@@ -27,7 +27,10 @@ const About: FC<PageProps<Data>> = props => {
   const { data } = props
   return (
     <Layout {...props} currentLocation="about">
-      <SEO title="About" />
+      <SEO
+        title="About"
+        description="Information about the illustrious character known as Astrid Yu"
+      />
       <Container className={styles.blogContentContainer}>
         <div
           dangerouslySetInnerHTML={{

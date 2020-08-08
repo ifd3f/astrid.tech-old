@@ -348,16 +348,16 @@ const ProjectsIndex: FC<PageProps<Data>> = ({ data }) => {
     index
   )
 
+  const description =
+    "Below is an incomplete list of the projects I have worked on, of all sizes and types."
+
   return (
     <Layout currentLocation="projects">
-      <SEO title="Projects" />
+      <SEO title="Projects" description={description} />
       <main>
         <header className={styles.header}>
           <h1>Projects</h1>
-          <p>
-            Below is an incomplete list of the projects I have worked on, of all
-            sizes and types.
-          </p>
+          <p>{description}</p>
         </header>
         <Filterer projects={projects} fuse={fuse}>
           <SearchSection />

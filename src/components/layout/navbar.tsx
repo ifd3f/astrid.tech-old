@@ -1,18 +1,9 @@
-import { Link } from "gatsby"
+import { graphql, Link, useStaticQuery } from "gatsby"
 import React, { FC, ReactNode, useState } from "react"
 import { BsArrowsCollapse } from "react-icons/bs"
-import { GiHamburger, GiBirdTwitter } from "react-icons/gi"
-import { GoMarkGithub } from "react-icons/go"
-import {
-  Collapse,
-  Navbar,
-  NavbarBrand,
-  NavbarToggler,
-  NavLink,
-  Row,
-  NavbarText,
-  NavItem,
-} from "reactstrap"
+import { GiHamburger } from "react-icons/gi"
+import { Collapse, Navbar, NavbarBrand, NavbarToggler } from "reactstrap"
+import { Site } from "src/types"
 import "./navbar.scss"
 
 export type NavBarLinks = "brand" | "projects" | "blog" | "about"
@@ -38,9 +29,22 @@ type MainNavbarProps = {
   fixed?: boolean
 }
 
+type QueryData = {
+  site: Site
+}
+
 const MainNavbar: FC<MainNavbarProps> = ({ currentLocation, fixed }) => {
   const [isOpen, setIsOpen] = useState(false)
   const toggleIsOpen = () => setIsOpen(!isOpen)
+  const data: QueryData = useStaticQuery(graphql`
+    query NavbarQuery {
+      site {
+        siteMetadata {
+          title
+        }
+      }
+    }
+  `)
 
   return (
     <Navbar
@@ -49,7 +53,7 @@ const MainNavbar: FC<MainNavbarProps> = ({ currentLocation, fixed }) => {
       expand="md"
     >
       <NavbarBrand tag={Link} to="/" activeClassName="active">
-        Astrid's Tech
+        {data.site.siteMetadata.title}
       </NavbarBrand>
       <NavbarToggler onClick={toggleIsOpen}>
         {isOpen ? <BsArrowsCollapse /> : <GiHamburger />}
