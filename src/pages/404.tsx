@@ -5,6 +5,7 @@ import Layout from "../components/layout/layout"
 import SEO from "../components/seo"
 import Fuse from "fuse.js"
 import { Container } from "reactstrap"
+import { Site } from "src/types"
 
 export const pageQuery = graphql`
   query {
@@ -12,6 +13,15 @@ export const pageQuery = graphql`
       edges {
         node {
           path
+        }
+      }
+    }
+    site {
+      siteMetadata {
+        package {
+          bugs {
+            url
+          }
         }
       }
     }
@@ -28,6 +38,7 @@ type Data = {
       node: SitePage
     }[]
   }
+  site: Site
 }
 
 type Result = {
@@ -57,7 +68,10 @@ const NotFoundPage: FC<PageProps<Data>> = props => {
 
   return (
     <Layout {...props}>
-      <SEO title="404 Not Found" />
+      <SEO
+        title="404 Not Found"
+        description="This page doesn't exist! Panic!"
+      />
       <Container style={{ padding: 20 }}>
         <h1>404 Not Found</h1>
         <p style={{ fontSize: 20 }}>
@@ -74,6 +88,13 @@ const NotFoundPage: FC<PageProps<Data>> = props => {
             </li>
           ))}
         </ul>
+        <p>
+          Maybe I brought you here on accident! In that event, please{" "}
+          <a href={data.site.siteMetadata.package.bugs.url}>
+            file a bug report on my GitHub issues page
+          </a>{" "}
+          and I will fix it as soon as possible!
+        </p>
       </Container>
     </Layout>
   )
