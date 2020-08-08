@@ -9,7 +9,7 @@ type LayoutProps = PageProps<any> & {
   children?: ReactNode
   className: string
   showFooter?: boolean
-  currentLocation: NavBarLinks
+  currentLocation?: NavBarLinks
 }
 
 const Layout: FC<LayoutProps> = ({

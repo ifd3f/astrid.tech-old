@@ -45,13 +45,10 @@ const NotFoundPage: FC<PageProps<Data>> = props => {
 
   const paths = data.allSitePage.edges.map(({ node }) => node.path)
 
-  console.log(location.pathname, paths)
-
   const result = StringSimilarity.findBestMatch(
     location.pathname,
     paths
   ) as MatchResults
-  console.log(result)
 
   const suggestions = result.ratings
     .sort((a, b) => b.rating - a.rating)

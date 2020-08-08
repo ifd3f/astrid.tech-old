@@ -33,7 +33,7 @@ const GNavLink: FC<NavLinkProps> = ({ to, children, active }) => {
 const NavbarSeparator = () => <div className="navbar-separator" />
 
 type MainNavbarProps = {
-  currentLocation: NavBarLinks
+  currentLocation?: NavBarLinks
   fixed?: boolean
 }
 
