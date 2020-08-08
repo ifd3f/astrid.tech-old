@@ -19,8 +19,8 @@ export const PostMainHeader: FC<PostProps> = ({ post }) => {
   return (
     <header>
       <h1>{post.title!}</h1>
-      <p className={style.subtitle}>{post.internal.description!}</p>
-      <p className={style.date}>{dateString}</p>
+      <p className="text-muted">{post.internal.description!}</p>
+      <p className="text-muted text-small">{dateString}</p>
       <TagList tags={post.tags} link />
     </header>
   )

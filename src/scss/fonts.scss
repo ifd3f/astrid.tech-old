@@ -1,8 +1,6 @@
-@import url("https://fonts.googleapis.com/css?family=Comfortaa");
-@import url("https://fonts.googleapis.com/css?family=Roboto");
-@import url("https://fonts.googleapis.com/css?family=Muli");
-
-$font-header: "Comfortaa", "Roboto", "Helvetica", "Helvetica Neue", "Arial",
-  sans-serif;
-$font-body: "Muli", "Roboto", "Helvetica", "Helvetica Neue", "Arial", sans-serif;
-$font-mono: "Fira Code", monospace;
+$font-family-sans-serif: "Muli", "Roboto", "Helvetica", "Helvetica Neue",
+  "Arial", sans-serif;
+$headings-font-family: "Comfortaa", "Roboto", "Helvetica", "Helvetica Neue",
+  "Arial", sans-serif;
+$font-family-base: $font-family-sans-serif;
+$font-family-monospace: "Fira Code", monospace;

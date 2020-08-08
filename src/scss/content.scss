@@ -1,53 +1,11 @@
-@import "./colors.scss";
+@import "./variables.scss";
 @import "./fonts.scss";
 
 @mixin content {
-  h1 {
-    font-size: 36pt;
-  }
-  h2 {
-    font-size: 28pt;
-    margin-top: 25px;
-    margin-bottom: 15px;
-  }
-  h3 {
-    font-size: 24pt;
-    margin-top: 20px;
-    margin-bottom: 10px;
-  }
-  h4 {
-    font-size: 22pt;
-  }
-  h5 {
-    font-size: 20pt;
-  }
+  h3,
+  h4,
+  h5,
   h6 {
-    font-size: 18pt;
-  }
-  p {
-    font-size: 16pt;
-    line-height: 150%;
-  }
-  li {
-    font-size: 16pt;
-    line-height: 140%;
-    &,
-    & p {
-      margin-top: 0px;
-      margin-bottom: 5px;
-    }
-  }
-  .date {
-    font-size: 10pt;
-    color: $secondary-color;
-  }
-  .subtitle {
-    font-size: 18pt;
-    font-style: italic;
-    color: $secondary-color;
-  }
-  pre,
-  code {
-    font-family: $font-mono;
+    color: $text-muted;
   }
 }

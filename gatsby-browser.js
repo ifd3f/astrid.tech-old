@@ -1,6 +1,7 @@
 // custom typefaces
-//import "typeface-montserrat"
-//import "typeface-merriweather"
+import "typeface-muli"
+import "typeface-comfortaa"
+import "firacode"
 
 import "prismjs/themes/prism.css"
-import "bootstrap/dist/css/bootstrap.css"
+import "./src/scss/custom.scss"

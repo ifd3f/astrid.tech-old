@@ -310,16 +310,18 @@ const SearchSection: FC = () => {
   )
 }
 
-export const ProjectCardContainer: FC = () => {
+export const ProjectCardSection: FC = () => {
   const { displayedProjects } = useContext(SearchContext)
   return (
-    <div className={styles.cardsContainer}>
-      {displayedProjects.map(project => (
-        <div className={styles.projectCardWrapper}>
-          <ProjectCard project={project} />
-        </div>
-      ))}
-    </div>
+    <section className={styles.main}>
+      <Container className={styles.cardsContainer}>
+        {displayedProjects.map(project => (
+          <div className={styles.projectCardWrapper}>
+            <ProjectCard project={project} />
+          </div>
+        ))}
+      </Container>
+    </section>
   )
 }
 
@@ -341,27 +343,27 @@ const ProjectsIndex: FC<PageProps<Data>> = ({ data }) => {
     projects,
     {
       threshold: 0.4,
-      keys: ["title", "slug", "internal.description", "tags.name", "tags.slug"],
+      keys: data.projectSearchIndex.keys,
     },
     index
   )
 
+  const description =
+    "Below is an incomplete list of the projects I have worked on, of all sizes and types."
+
   return (
-    <Layout currentLocation="projects" className={`${styles.main}`}>
-      <SEO title="Projects" />
-      <header className={styles.header}>
-        <h1>Projects</h1>
-        <p>
-          Below is an incomplete list of the projects I have worked on, of all
-          sizes and types.
-        </p>
-      </header>
-      <Filterer projects={projects} fuse={fuse}>
-        <SearchSection />
-        <Container>
-          <ProjectCardContainer />
-        </Container>
-      </Filterer>
+    <Layout currentLocation="projects">
+      <SEO title="Projects" description={description} />
+      <main>
+        <header className={styles.header}>
+          <h1>Projects</h1>
+          <p>{description}</p>
+        </header>
+        <Filterer projects={projects} fuse={fuse}>
+          <SearchSection />
+          <ProjectCardSection />
+        </Filterer>
+      </main>
     </Layout>
   )
 }

@@ -2,7 +2,7 @@ import React, { FC, ReactNode, useState, useEffect } from "react"
 import { handleViewport } from "react-in-viewport"
 import crypto from "crypto"
 import seedrandom from "seedrandom"
-import convert from "color-convert"
+import hslToHex from "hsl-to-hex"
 
 var id = 0
 export function getUniqueId() {
@@ -51,25 +51,29 @@ export function rescale(x: number, [a, b]: [number, number]) {
   return (b - a) * x + a
 }
 
-export const FullSpectrumTheme: PersistentColorTheme = {
-  h: [0, 255],
-  s: [192, 255],
-  v: [192, 255],
-}
-
 export const PastelTheme: PersistentColorTheme = {
   h: [0, 360],
   s: [50, 50],
   v: [80, 80],
 }
 
+export const RichColorTheme: PersistentColorTheme = {
+  h: [0, 360],
+  s: [100, 100],
+  v: [30, 60],
+}
+
 export function getPersistentColor(
   slug: string,
-  theme: PersistentColorTheme = FullSpectrumTheme
+  theme: PersistentColorTheme = PastelTheme
 ): [number, number, number] {
   const random = seedrandom(crypto.createHash(`md5`).update(slug).digest(`hex`))
   var h = (rescale(random(), theme.h) | 0) % 360
   var s = rescale(random(), theme.s) | 0
   var v = rescale(random(), theme.v) | 0
   return [h, s, v]
+}
+
+export function getHSLString([h, s, l]: number[]) {
+  return hslToHex(h, s, l)
 }

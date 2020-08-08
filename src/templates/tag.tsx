@@ -76,7 +76,10 @@ const TagDetailTemplate: FC<PageProps<Data, Context>> = ({ data }) => {
 
   return (
     <Layout>
-      <SEO title={tag.name!} />
+      <SEO
+        title={tag.name!}
+        description={`Items on astrid.tech related to ${tag.name}`}
+      />
       <Container tag="article">
         <header>
           <h1>

@@ -42,7 +42,10 @@ const BlogIndex: FC<PageProps<Data>> = props => {
   const { data } = props
   return (
     <Layout {...props} currentLocation="blog">
-      <SEO title="Blog" />
+      <SEO
+        title="Blog"
+        description="Astrid Yu's Designated Mind Dump Location"
+      />
       <Container className={styles.blogContentContainer}>
         <h1>Blog</h1>
         {data.allBlogPost.edges.map(({ node: post }) => (

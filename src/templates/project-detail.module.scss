@@ -1,5 +1,5 @@
-@import "src/scss/content.scss";
 @import "src/scss/variables.scss";
+@import "src/scss/content.scss";
 @import "src/scss/fonts.scss";
 
 .projectDetailContainer {
@@ -15,7 +15,6 @@
   th {
     vertical-align: top;
     padding-right: 10px;
-    font-family: $font-header;
   }
 
   td {
@@ -27,11 +26,14 @@
 }
 
 .content {
-  border-bottom: 1px dashed gray;
   padding-bottom: 20px;
   margin-bottom: 20px;
+
+  $border-style: 1px dashed gray;
+  border-bottom: $border-style;
   @media only screen and (min-width: map-get($grid-breakpoints, lg)) {
     border-bottom: none;
+    border-right: $border-style;
   }
 }
 
@@ -46,8 +48,11 @@
   li {
     font-size: 14pt;
   }
+  margin-top: 10px;
+  margin-bottom: 20px;
 }
 
 .statusData {
   text-align: right;
+  color: $text-muted;
 }

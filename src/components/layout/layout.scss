@@ -1,47 +1,10 @@
-@import "src/scss/colors.scss";
-@import "src/scss/fonts.scss";
-@import "./sizes.scss";
-
-@import "~bootstrap/scss/bootstrap";
-
-h1,
-h2,
-h3,
-h4,
-h5,
-h6 {
-  font-family: $font-header;
-  color: $heading-color;
-}
-
-pre,
-code {
-  font-family: $font-mono;
-}
-
-html,
-body {
-  height: 100%;
-  background-color: $footer-bg-color;
-  font-family: $font-body;
-  color: $content-color;
-}
-
-.nteract-display-area-stdout {
-  font-family: $font-mono;
-}
+@import "src/scss/variables.scss";
 
 .root-wrapper {
-  min-height: 100%;
   padding-top: $navbar-height;
   position: relative;
-}
-
-main {
   background-color: $main-bg-color;
   a {
-    color: #1d2e82;
-
     -moz-transition: all 0.1s ease-in;
     -o-transition: all 0.1s ease-in;
     -webkit-transition: all 0.1s ease-in;
@@ -50,42 +13,11 @@ main {
   }
 
   a:hover {
-    color: #8a0b81;
     text-decoration: none;
     border-bottom: 4px dotted #81890b;
   }
 }
 
-.wide-card-columns {
-  @media (min-width: 34em) {
-    .card-columns {
-      -webkit-column-count: 2;
-      -moz-column-count: 2;
-      column-count: 2;
-    }
-  }
-
-  @media (min-width: 48em) {
-    .card-columns {
-      -webkit-column-count: 2;
-      -moz-column-count: 2;
-      column-count: 2;
-    }
-  }
-
-  @media (min-width: 62em) {
-    .card-columns {
-      -webkit-column-count: 3;
-      -moz-column-count: 3;
-      column-count: 3;
-    }
-  }
-
-  @media (min-width: 75em) {
-    .card-columns {
-      -webkit-column-count: 4;
-      -moz-column-count: 4;
-      column-count: 4;
-    }
-  }
+.root-wrapper.expanded-min-height {
+  min-height: 70vh;
 }

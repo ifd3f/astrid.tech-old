@@ -7,7 +7,10 @@ import ElevatorSection from "../components/homepage/elevator"
 const Homepage = () => {
   return (
     <Layout>
-      <SEO title="Astrid Yu" />
+      <SEO
+        title="Astrid Yu"
+        description="My name is Astrid Yu and I create software. This is my website, and it's currently under construction!"
+      />
       <HomepageContainer />
     </Layout>
   )

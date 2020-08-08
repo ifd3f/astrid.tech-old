@@ -219,7 +219,7 @@ const Content: FC = () => {
     <>
       <header>
         <h1>{project.title!}</h1>
-        <p className={style.subtitle}>{project.internal.description}</p>
+        <p className="text-subtitle">{project.internal.description}</p>
       </header>
       <section dangerouslySetInnerHTML={{ __html: project.markdown.html!! }} />
     </>
@@ -240,7 +240,10 @@ const ProjectDetailTemplate: FC<PageProps<Data, Context>> = ({ data }) => {
   return (
     <ProjectContext.Provider value={{ project }}>
       <Layout currentLocation="projects">
-        <SEO title={project.title!} />
+        <SEO
+          title={project.title!}
+          description={project.internal.description}
+        />
         <Container tag="article" className={style.projectDetailContainer}>
           <nav>
             <Link to="/projects" className={style.backToProjects}>

@@ -1,4 +1,4 @@
-import { Node } from "gatsby"
+import { Node, PackageJson } from "gatsby"
 import { FileSystemNode } from "gatsby-source-filesystem"
 
 export type MarkdownRemark = Node & {
@@ -86,4 +86,18 @@ export type SkillGroup = Node & {
     level: number
     tag: Tag
   }[]
+}
+
+export type SiteMetadata = {
+  siteUrl: string
+  title: string
+  package: PackageJson & {
+    bugs: {
+      url: string
+    }
+  }
+}
+
+export type Site = Node & {
+  siteMetadata: SiteMetadata
 }

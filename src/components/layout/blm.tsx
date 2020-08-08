@@ -2,6 +2,7 @@ import React from "react"
 
 export const BLMBanner = () => (
   <div
+    className="text-light large"
     style={{
       backgroundColor: "black",
       margin: 0,
@@ -12,9 +13,7 @@ export const BLMBanner = () => (
   >
     <p
       style={{
-        color: "white",
         textAlign: "center",
-        fontSize: "16pt",
         margin: 0,
       }}
     >

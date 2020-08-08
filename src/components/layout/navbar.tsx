@@ -1,19 +1,12 @@
-import { Link } from "gatsby"
-import React, { FC, ReactNode, useState, PropsWithChildren } from "react"
+import { graphql, Link, useStaticQuery } from "gatsby"
+import React, { FC, ReactNode, useState } from "react"
 import { BsArrowsCollapse } from "react-icons/bs"
 import { GiHamburger } from "react-icons/gi"
-import { GoMarkGithub } from "react-icons/go"
-import {
-  Collapse,
-  Navbar,
-  NavbarBrand,
-  NavbarToggler,
-  NavLink,
-} from "reactstrap"
+import { Collapse, Navbar, NavbarBrand, NavbarToggler } from "reactstrap"
+import { Site } from "src/types"
 import "./navbar.scss"
-import { BLMBanner } from "./blm"
 
-export type NavBarLinks = "brand" | "projects" | "blog"
+export type NavBarLinks = "brand" | "projects" | "blog" | "about"
 
 type NavLinkProps = {
   to: string
@@ -32,13 +25,26 @@ const GNavLink: FC<NavLinkProps> = ({ to, children, active }) => {
 const NavbarSeparator = () => <div className="navbar-separator" />
 
 type MainNavbarProps = {
-  currentLocation: NavBarLinks
+  currentLocation?: NavBarLinks
   fixed?: boolean
+}
+
+type QueryData = {
+  site: Site
 }
 
 const MainNavbar: FC<MainNavbarProps> = ({ currentLocation, fixed }) => {
   const [isOpen, setIsOpen] = useState(false)
   const toggleIsOpen = () => setIsOpen(!isOpen)
+  const data: QueryData = useStaticQuery(graphql`
+    query NavbarQuery {
+      site {
+        siteMetadata {
+          title
+        }
+      }
+    }
+  `)
 
   return (
     <Navbar
@@ -47,7 +53,7 @@ const MainNavbar: FC<MainNavbarProps> = ({ currentLocation, fixed }) => {
       expand="md"
     >
       <NavbarBrand tag={Link} to="/" activeClassName="active">
-        Astrid's Tech
+        {data.site.siteMetadata.title}
       </NavbarBrand>
       <NavbarToggler onClick={toggleIsOpen}>
         {isOpen ? <BsArrowsCollapse /> : <GiHamburger />}
@@ -60,9 +66,9 @@ const MainNavbar: FC<MainNavbarProps> = ({ currentLocation, fixed }) => {
           Blog
         </GNavLink>
         <NavbarSeparator />
-        <NavLink href="https://github.com/plenglin" alt="GitHub">
-          <GoMarkGithub /> plenglin
-        </NavLink>
+        <GNavLink to="/about" active={currentLocation == "about"}>
+          About
+        </GNavLink>
       </Collapse>
     </Navbar>
   )

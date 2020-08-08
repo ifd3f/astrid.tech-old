@@ -78,7 +78,7 @@ type SiteLinkProps = {
 }
 
 const SiteLink: FC<SiteLinkProps> = ({ to, children }) => (
-  <Col>
+  <Col xs={6} sm={4}>
     <Link to={to}>{children}</Link>
   </Col>
 )
@@ -110,10 +110,12 @@ const FooterSection = () => {
 
   return (
     <footer className={style.footer}>
-      <Container>
+      <Container className="text-light small">
         <Col>
           <Row tag="nav">
             <SiteLink to="/privacy">Privacy Policy</SiteLink>
+            <SiteLink to="/licenses">Open Source Licenses</SiteLink>
+            <SiteLink to="/about">About/Contact</SiteLink>
           </Row>
         </Col>
         <Col>

@@ -7,7 +7,8 @@ const packageJson = JSON.parse(fs.readFileSync(`${__dirname}/package.json`))
 
 module.exports = {
   siteMetadata: {
-    title: `astrid.tech`,
+    title: "astrid.tech",
+    package: packageJson,
     version: packageJson.version,
     author: {
       name: `Astrid A. Yu`,
@@ -20,8 +21,8 @@ module.exports = {
         reflex: `herself`,
       },
     },
-    description: `Astrid Yu's blog and portfolio`,
-    siteUrl: `https://astrid.tech/`,
+    description: packageJson.description,
+    siteUrl: packageJson.homepage,
     social: {
       twitter: `none`,
       github: `Plenglin`,
@@ -133,9 +134,97 @@ module.exports = {
         shortname: `astridtech`,
       },
     },
+    {
+      resolve: `gatsby-plugin-sitemap`,
+      options: {
+        query: `
+        {
+          site {
+            siteMetadata {
+              siteUrl
+            }
+          }
+
+          allSitePage {
+            nodes {
+              path
+            }
+          }
+        }`,
+        resolveSiteUrl: ({ site }) => {
+          return site.siteMetadata.siteUrl
+        },
+        serialize: ({ site, allSitePage }) =>
+          allSitePage.nodes.map(node => {
+            const url = `${site.siteMetadata.siteUrl}${node.path}`
+            if (node.path == "/")
+              return {
+                url,
+                changefreq: "monthly",
+                priority: 1.0,
+              }
+            if (node.path == "/projects/")
+              return {
+                url,
+                changefreq: "weekly",
+                priority: 0.9,
+              }
+            if (node.path == "/about/")
+              return {
+                url,
+                changefreq: "monthly",
+                priority: 0.7,
+              }
+            if (node.path == "/privacy/")
+              return {
+                url,
+                changefreq: "weekly",
+                priority: 0.1,
+              }
+            if (/\/projects\/.+/.test(node.path))
+              return {
+                url,
+                changefreq: "weekly",
+                priority: 0.6,
+              }
+            if (node.path == "/blog/")
+              return {
+                url,
+                changefreq: "daily",
+                priority: 0.8,
+              }
+            if (/\/blog\/.+/.test(node.path))
+              return {
+                url,
+                changefreq: "weekly",
+                priority: 0.6,
+              }
+            return {
+              url,
+              changefreq: "monthly",
+              priority: 0.6,
+            }
+          }),
+      },
+    },
+    {
+      resolve: "gatsby-plugin-robots-txt",
+      options: {
+        host: "https://astrid.tech",
+        sitemap: "https://astrid.tech/sitemap.xml",
+        policy: [{ userAgent: "*", allow: "/" }],
+      },
+    },
+    `gatsby-source-local-git`,
     `gatsby-plugin-catch-links`,
     `gatsby-plugin-react-helmet`,
-    "gatsby-plugin-sass",
+    {
+      resolve: `gatsby-plugin-sass`,
+      options: {
+        includePaths: [__dirname],
+      },
+    },
+    "gatsby-source-license",
 
     "gatsby-astrid-source-lang-tags",
 
