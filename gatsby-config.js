@@ -7,7 +7,7 @@ const packageJson = JSON.parse(fs.readFileSync(`${__dirname}/package.json`))
 
 module.exports = {
   siteMetadata: {
-    title: packageJson.title,
+    title: packageJson.name,
     package: packageJson,
     version: packageJson.version,
     author: {
@@ -134,7 +134,79 @@ module.exports = {
         shortname: `astridtech`,
       },
     },
-    `gatsby-plugin-sitemap`,
+    {
+      resolve: `gatsby-plugin-sitemap`,
+      options: {
+        query: `
+        {
+          site {
+            siteMetadata {
+              siteUrl
+            }
+          }
+
+          allSitePage {
+            nodes {
+              path
+            }
+          }
+        }`,
+        resolveSiteUrl: ({ site }) => {
+          return site.siteMetadata.siteUrl
+        },
+        serialize: ({ site, allSitePage }) =>
+          allSitePage.nodes.map(node => {
+            const url = `${site.siteMetadata.siteUrl}${node.path}`
+            if (node.path == "/")
+              return {
+                url,
+                changefreq: "monthly",
+                priority: 1.0,
+              }
+            if (node.path == "/projects/")
+              return {
+                url,
+                changefreq: "weekly",
+                priority: 0.9,
+              }
+            if (node.path == "/about/")
+              return {
+                url,
+                changefreq: "monthly",
+                priority: 0.7,
+              }
+            if (node.path == "/privacy/")
+              return {
+                url,
+                changefreq: "weekly",
+                priority: 0.1,
+              }
+            if (/\/projects\/.+/.test(node.path))
+              return {
+                url,
+                changefreq: "weekly",
+                priority: 0.6,
+              }
+            if (node.path == "/blog/")
+              return {
+                url,
+                changefreq: "daily",
+                priority: 0.8,
+              }
+            if (/\/blog\/.+/.test(node.path))
+              return {
+                url,
+                changefreq: "weekly",
+                priority: 0.6,
+              }
+            return {
+              url,
+              changefreq: "monthly",
+              priority: 0.6,
+            }
+          }),
+      },
+    },
     {
       resolve: "gatsby-plugin-robots-txt",
       options: {
