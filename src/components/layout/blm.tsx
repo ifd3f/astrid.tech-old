@@ -2,6 +2,7 @@ import React from "react"
 
 export const BLMBanner = () => (
   <div
+    className="dark"
     style={{
       backgroundColor: "black",
       margin: 0,

@@ -9,6 +9,7 @@ type LayoutProps = PageProps<any> & {
   children?: ReactNode
   className: string
   showFooter?: boolean
+  doNotExpandHeight?: boolean
   currentLocation?: NavBarLinks
 }
 
@@ -16,15 +17,20 @@ const Layout: FC<LayoutProps> = ({
   showFooter = true,
   children,
   className,
+  doNotExpandHeight = false,
   currentLocation,
 }) => {
   return (
-    <div className="root-wrapper">
+    <>
       <MainNavbar fixed currentLocation={currentLocation} />
-      <BLMBanner />
-      <main className={className}>{children}</main>
+      <div
+        className={"root-wrapper" + (doNotExpandHeight ? "" : " expand-height")}
+      >
+        <BLMBanner />
+        {children}
+      </div>
       {showFooter ? <FooterSection /> : null}
-    </div>
+    </>
   )
 }
 

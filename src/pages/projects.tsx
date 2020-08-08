@@ -310,16 +310,18 @@ const SearchSection: FC = () => {
   )
 }
 
-export const ProjectCardContainer: FC = () => {
+export const ProjectCardSection: FC = () => {
   const { displayedProjects } = useContext(SearchContext)
   return (
-    <div className={styles.cardsContainer}>
-      {displayedProjects.map(project => (
-        <div className={styles.projectCardWrapper}>
-          <ProjectCard project={project} />
-        </div>
-      ))}
-    </div>
+    <section className={styles.main}>
+      <Container className={styles.cardsContainer}>
+        {displayedProjects.map(project => (
+          <div className={styles.projectCardWrapper}>
+            <ProjectCard project={project} />
+          </div>
+        ))}
+      </Container>
+    </section>
   )
 }
 
@@ -347,21 +349,21 @@ const ProjectsIndex: FC<PageProps<Data>> = ({ data }) => {
   )
 
   return (
-    <Layout currentLocation="projects" className={`${styles.main}`}>
+    <Layout currentLocation="projects">
       <SEO title="Projects" />
-      <header className={styles.header}>
-        <h1>Projects</h1>
-        <p>
-          Below is an incomplete list of the projects I have worked on, of all
-          sizes and types.
-        </p>
-      </header>
-      <Filterer projects={projects} fuse={fuse}>
-        <SearchSection />
-        <Container>
-          <ProjectCardContainer />
-        </Container>
-      </Filterer>
+      <main>
+        <header className={styles.header}>
+          <h1>Projects</h1>
+          <p>
+            Below is an incomplete list of the projects I have worked on, of all
+            sizes and types.
+          </p>
+        </header>
+        <Filterer projects={projects} fuse={fuse}>
+          <SearchSection />
+          <ProjectCardSection />
+        </Filterer>
+      </main>
     </Layout>
   )
 }

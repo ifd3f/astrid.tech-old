@@ -32,12 +32,8 @@ body {
 }
 
 .root-wrapper {
-  min-height: 100%;
   padding-top: $navbar-height;
   position: relative;
-}
-
-main {
   background-color: $main-bg-color;
   a {
     color: #1d2e82;
@@ -54,6 +50,10 @@ main {
     text-decoration: none;
     border-bottom: 4px dotted #81890b;
   }
+}
+
+.root-wrapper.expanded-min-height {
+  min-height: 70vh;
 }
 
 .wide-card-columns {
