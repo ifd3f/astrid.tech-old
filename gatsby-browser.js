@@ -3,4 +3,4 @@
 //import "typeface-merriweather"
 
 import "prismjs/themes/prism.css"
-import "bootstrap/dist/css/bootstrap.css"
+import "./src/scss/custom.scss"

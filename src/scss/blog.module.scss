@@ -1,4 +1,4 @@
-@import "./colors.scss";
+@import "./variables.scss";
 @import "./content.scss";
 
 .blogContentContainer {
@@ -19,7 +19,6 @@
   padding-left: 20px;
   padding-right: 20px;
   margin-bottom: 15px;
-  color: $content-color;
 }
 
 .brief:hover {

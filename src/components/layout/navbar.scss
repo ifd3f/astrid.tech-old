@@ -1,5 +1,5 @@
 @import "../../scss/fonts.scss";
-@import "../../scss/colors.scss";
+@import "src/scss/variables.scss";
 @import "./sizes.scss";
 
 .main-navbar {
@@ -27,7 +27,7 @@
   .nav-link {
     box-shadow: none;
     color: $pink;
-    font-family: $font-header;
+    font-family: $headings-font-family;
     font-size: 16pt;
     border-bottom: none;
   }
@@ -43,7 +43,7 @@
   .navbar-brand {
     box-shadow: none;
     color: $lightblue;
-    font-family: $font-header;
+    font-family: $headings-font-family;
     font-size: 20pt;
   }
 

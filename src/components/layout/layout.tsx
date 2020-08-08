@@ -7,7 +7,6 @@ import { BLMBanner } from "./blm"
 
 type LayoutProps = PageProps<any> & {
   children?: ReactNode
-  className: string
   showFooter?: boolean
   doNotExpandHeight?: boolean
   currentLocation?: NavBarLinks
@@ -16,7 +15,6 @@ type LayoutProps = PageProps<any> & {
 const Layout: FC<LayoutProps> = ({
   showFooter = true,
   children,
-  className,
   doNotExpandHeight = false,
   currentLocation,
 }) => {

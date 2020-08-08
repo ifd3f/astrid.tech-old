@@ -1,4 +1,4 @@
-@import "./colors.scss";
+@import "./variables.scss";
 @import "./fonts.scss";
 
 @mixin content {
@@ -45,9 +45,5 @@
     font-size: 18pt;
     font-style: italic;
     color: $secondary-color;
-  }
-  pre,
-  code {
-    font-family: $font-mono;
   }
 }

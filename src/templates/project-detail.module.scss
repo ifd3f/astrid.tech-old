@@ -1,5 +1,5 @@
-@import "src/scss/content.scss";
 @import "src/scss/variables.scss";
+@import "src/scss/content.scss";
 @import "src/scss/fonts.scss";
 
 .projectDetailContainer {
@@ -15,7 +15,6 @@
   th {
     vertical-align: top;
     padding-right: 10px;
-    font-family: $font-header;
   }
 
   td {

@@ -1,12 +1,9 @@
 @import "./sizes.scss";
-@import "src/scss/colors.scss";
+@import "src/scss/variables.scss";
 
 .footer {
   height: $footer-height;
   width: 100%;
   padding-top: 20px;
   background: $footer-bg-color;
-  p {
-    color: whitesmoke;
-  }
 }

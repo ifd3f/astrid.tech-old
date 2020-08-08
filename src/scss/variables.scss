@@ -1,3 +1,42 @@
+$white: #fff !default;
+$gray-100: #f8f9fa !default;
+$gray-200: #e9ecef !default;
+$gray-300: #dee2e6 !default;
+$gray-400: #ced4da !default;
+$gray-500: #adb5bd !default;
+$gray-600: #868e96 !default;
+$gray-700: #495057 !default;
+$gray-800: #343a40 !default;
+$gray-900: #212529 !default;
+$black: #000 !default;
+
+$lightblue: #55cdfc !default;
+$indigo: #3f51b5 !default;
+$purple: #673ab7 !default;
+$pink: #f7a8b8 !default;
+$red: #f44336 !default;
+$orange: #ff5722 !default;
+$yellow: #ffab00 !default;
+$green: #8bc34a !default;
+$teal: #009688 !default;
+$cyan: #00bcd4 !default;
+
+$navbar-bg: #502050;
+$navbar-dropdown-bg: #3a153a;
+
+$heading-color: #141414;
+$text-color: #3d3d3d;
+$main-bg-color: #ffe0ce;
+$secondary-color: #888888;
+$link-color: $indigo;
+$link-hover-color: $teal;
+$footer-bg-color: #202030;
+$body-bg: $footer-bg-color;
+
+html {
+  font-size: 16pt;
+}
+
 $grid-breakpoints: (
   xs: 0,
   sm: 576px,

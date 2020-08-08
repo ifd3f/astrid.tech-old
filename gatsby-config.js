@@ -218,7 +218,12 @@ module.exports = {
     `gatsby-source-local-git`,
     `gatsby-plugin-catch-links`,
     `gatsby-plugin-react-helmet`,
-    "gatsby-plugin-sass",
+    {
+      resolve: `gatsby-plugin-sass`,
+      options: {
+        includePaths: [__dirname],
+      },
+    },
     "gatsby-source-license",
 
     "gatsby-astrid-source-lang-tags",
