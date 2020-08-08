@@ -110,7 +110,7 @@ const FooterSection = () => {
 
   return (
     <footer className={style.footer}>
-      <Container className="text-light">
+      <Container className="text-light small">
         <Col>
           <Row tag="nav">
             <SiteLink to="/privacy">Privacy Policy</SiteLink>

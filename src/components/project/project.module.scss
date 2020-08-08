@@ -29,7 +29,9 @@
 
 .title {
   padding: 3px;
-  @each $size, $font-size in (xs: 15pt, md: 17pt, lg: 20pt) {
+  padding-top: 0;
+  margin-bottom: 0;
+  @each $size, $font-size in (xs: 15pt, sm: 19pt, md: 17pt, lg: 20pt) {
     @media only screen and (min-width: map-get($grid-breakpoints, $size)) {
       font-size: $font-size;
     }

@@ -2,7 +2,7 @@ import React from "react"
 
 export const BLMBanner = () => (
   <div
-    className="text-light"
+    className="text-light large"
     style={{
       backgroundColor: "black",
       margin: 0,
