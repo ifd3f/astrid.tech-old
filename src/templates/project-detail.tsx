@@ -219,7 +219,7 @@ const Content: FC = () => {
     <>
       <header>
         <h1>{project.title!}</h1>
-        <p className={style.subtitle}>{project.internal.description}</p>
+        <p className="text-subtitle">{project.internal.description}</p>
       </header>
       <section dangerouslySetInnerHTML={{ __html: project.markdown.html!! }} />
     </>

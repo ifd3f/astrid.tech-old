@@ -18,7 +18,13 @@
   border-style: solid;
   padding-left: 20px;
   padding-right: 20px;
+  padding-top: 20px;
   margin-bottom: 15px;
+  text-decoration: none;
+  h3,
+  p {
+    color: $text-color;
+  }
 }
 
 .brief:hover {

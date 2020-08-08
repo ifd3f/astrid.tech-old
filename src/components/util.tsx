@@ -2,7 +2,6 @@ import React, { FC, ReactNode, useState, useEffect } from "react"
 import { handleViewport } from "react-in-viewport"
 import crypto from "crypto"
 import seedrandom from "seedrandom"
-import convert from "color-convert"
 
 var id = 0
 export function getUniqueId() {
