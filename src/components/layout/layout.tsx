@@ -4,6 +4,8 @@ import FooterSection from "./footer"
 import "./layout.scss"
 import MainNavbar, { NavBarLinks } from "./navbar"
 import { BLMBanner } from "./blm"
+import { CookieNotification } from "./cookie-notification"
+import { CookiesProvider } from "react-cookie"
 
 type LayoutProps = PageProps<any> & {
   children?: ReactNode
@@ -19,8 +21,8 @@ const Layout: FC<LayoutProps> = ({
   currentLocation,
 }) => {
   return (
-    <>
-      <MainNavbar fixed currentLocation={currentLocation} />
+    <CookiesProvider>
+      <MainNavbar currentLocation={currentLocation} fixed />
       <div
         className={"root-wrapper" + (doNotExpandHeight ? "" : " expand-height")}
       >
@@ -28,7 +30,8 @@ const Layout: FC<LayoutProps> = ({
         {children}
       </div>
       {showFooter ? <FooterSection /> : null}
-    </>
+      <CookieNotification />
+    </CookiesProvider>
   )
 }
 
