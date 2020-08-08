@@ -11,6 +11,7 @@ import {
   NavLink,
   Row,
   NavbarText,
+  NavItem,
 } from "reactstrap"
 import "./navbar.scss"
 
