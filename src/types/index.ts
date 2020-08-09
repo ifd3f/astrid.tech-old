@@ -91,6 +91,7 @@ export type SkillGroup = Node & {
 export type SiteMetadata = {
   siteUrl: string
   title: string
+  cookiePolicyVersion: string
   package: PackageJson & {
     bugs: {
       url: string

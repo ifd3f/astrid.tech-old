@@ -10,6 +10,7 @@ module.exports = {
     title: "astrid.tech",
     package: packageJson,
     version: packageJson.version,
+    cookiePolicyVersion: "1",
     author: {
       name: `Astrid A. Yu`,
       summary: `who likes to engineer awesome things`,
