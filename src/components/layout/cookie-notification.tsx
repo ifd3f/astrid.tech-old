@@ -1,12 +1,16 @@
 import React, { FC } from "react"
 import { useCookies } from "react-cookie"
 import { Button, Container } from "reactstrap"
+import { useStaticQuery } from "gatsby"
+import { graphql } from "gatsby"
+import { Site } from "src/types"
 
-const CLOSED_COOKIE = "closed-cookie-provider"
+const COOKIE_NAME = "cookie-policy-notification"
 
 type CookieNotificationDisplayProps = {
   onAcceptTerms: () => void
 }
+
 const CookieNotificationObject: FC<CookieNotificationDisplayProps> = ({
   onAcceptTerms,
 }) => (
@@ -37,14 +41,27 @@ const CookieNotificationObject: FC<CookieNotificationDisplayProps> = ({
 )
 
 export const CookieNotification = () => {
-  const [cookies, setCookie] = useCookies([CLOSED_COOKIE])
+  const [cookies, setCookie] = useCookies([COOKIE_NAME])
+  const data: { site: Site } = useStaticQuery(graphql`
+    {
+      site {
+        siteMetadata {
+          cookiePolicyVersion
+        }
+      }
+    }
+  `)
+  const isSSR = typeof window === "undefined"
+  const { cookiePolicyVersion } = data.site.siteMetadata
 
   const onAcceptTerms = () => {
-    setCookie(CLOSED_COOKIE, true, { path: "/", sameSite: true })
+    setCookie(COOKIE_NAME, cookiePolicyVersion, {
+      path: "/",
+      maxAge: 365 * 24 * 3600,
+    })
   }
 
-  console.log(cookies[CLOSED_COOKIE])
-  return cookies[CLOSED_COOKIE] ? null : (
+  return isSSR || cookies[COOKIE_NAME] == cookiePolicyVersion ? null : (
     <CookieNotificationObject onAcceptTerms={onAcceptTerms} />
   )
 }
