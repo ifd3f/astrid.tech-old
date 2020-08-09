@@ -1,33 +1,13 @@
 import { Link } from "gatsby"
 import moment from "moment"
 import React, { FC } from "react"
+import { Col, Row } from "reactstrap"
 import style from "../scss/blog.module.scss"
 import { BlogPost } from "../types"
-import SEO from "./seo"
 import { TagList } from "./tag"
 
 type PostProps = {
   post: BlogPost
-}
-
-export const PostContent: FC<PostProps> = ({ post }) => {
-  return <section dangerouslySetInnerHTML={{ __html: post.source.html }} />
-}
-
-export const PostMainHeader: FC<PostProps> = ({ post }) => {
-  const dateString = moment(post.date).format("h:mma, dddd DD MMMM YYYY")
-  return (
-    <header>
-      <h1>{post.title!}</h1>
-      <p className="text-muted">{post.internal.description!}</p>
-      <p className="text-muted text-small">{dateString}</p>
-      <TagList tags={post.tags} link />
-    </header>
-  )
-}
-
-export const PostSEO: FC<PostProps> = ({ post }) => {
-  return <SEO title={post.title!} description={post.internal.description} />
 }
 
 export const PostBrief: FC<PostProps> = ({ post }) => {
@@ -36,10 +16,19 @@ export const PostBrief: FC<PostProps> = ({ post }) => {
   return (
     <Link to={post.slug!}>
       <article className={style.brief}>
-        <h3>{post.title}</h3>
-        <p className={style.date}>{dateString}</p>
-        <TagList tags={post.tags} link />
-        <p>{post.internal.description}</p>
+        <Row className="col">
+          <Col sm={8}>
+            <h3>{post.title}</h3>
+            <p className="text-muted">{post.internal.description}</p>
+          </Col>
+          <Col sm={4}>
+            <p className={`text-muted ${style.date}`}>{dateString}</p>
+            <TagList tags={post.tags} link />
+          </Col>
+        </Row>
+        <Col>
+          <p>{post.source.excerpt}</p>
+        </Col>
       </article>
     </Link>
   )

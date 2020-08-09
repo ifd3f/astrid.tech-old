@@ -33,6 +33,9 @@ export const pageQuery = graphql`
           tags {
             ...TagBadge
           }
+          source {
+            excerpt
+          }
         }
       }
     }
