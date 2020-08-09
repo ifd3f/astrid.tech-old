@@ -9,6 +9,8 @@ import { TagList } from "../components/tag"
 import { StatusBadge } from "../components/project"
 import style from "./project-detail.module.scss"
 import { BsArrowLeft } from "react-icons/bs"
+import { SidebarGroup, LongformLayout } from "src/components/layout"
+import { getPersistentColor, getHSLString } from "src/components/util"
 
 export const pageQuery = graphql`
   query GetProject($slug: String!) {
@@ -65,10 +67,6 @@ type Data = {
 type Context = {
   id: string
 }
-
-const SidebarGroup: FC<PropsWithChildren<{}>> = ({ children }) => (
-  <div className={style.sidebarGroup}>{children}</div>
-)
 
 function formatDateInterval(startDate: string, endDate: string) {
   if (startDate == endDate) {
@@ -216,13 +214,7 @@ const Sidebar: FC = () => {
 const Content: FC = () => {
   const { project } = useContext(ProjectContext)
   return (
-    <>
-      <header>
-        <h1>{project.title!}</h1>
-        <p className="text-subtitle">{project.internal.description}</p>
-      </header>
-      <section dangerouslySetInnerHTML={{ __html: project.markdown.html!! }} />
-    </>
+    <section dangerouslySetInnerHTML={{ __html: project.markdown.html!! }} />
   )
 }
 
@@ -234,31 +226,26 @@ const ProjectContext = createContext<ProjectContextData>(
   {} as ProjectContextData
 )
 
-const ProjectDetailTemplate: FC<PageProps<Data, Context>> = ({ data }) => {
+const ProjectDetailTemplate: FC<PageProps<Data, Context>> = props => {
+  const { data } = props
   const project = data.project
 
   return (
     <ProjectContext.Provider value={{ project }}>
-      <Layout currentLocation="projects">
-        <SEO
-          title={project.title!}
+      <Layout {...props} currentLocation="projects">
+        <LongformLayout
+          title={project.title}
           description={project.internal.description}
-        />
-        <Container tag="article" className={style.projectDetailContainer}>
-          <nav>
+          headingColor={getHSLString(getPersistentColor(project.slug))}
+          above={
             <Link to="/projects" className={style.backToProjects}>
               <BsArrowLeft /> Back to Projects
             </Link>
-          </nav>
-          <Row>
-            <Col lg={8} className={style.content}>
-              <Content />
-            </Col>
-            <Col lg={4}>
-              <Sidebar />
-            </Col>
-          </Row>
-        </Container>
+          }
+          sidebar={<Sidebar />}
+        >
+          <Content />
+        </LongformLayout>
       </Layout>
     </ProjectContext.Provider>
   )

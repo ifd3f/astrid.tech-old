@@ -3,7 +3,7 @@
 .header {
   text-align: center;
 
-  padding-top: 100px;
+  padding-top: 80px;
   padding-bottom: 50px;
   padding-left: 50px;
   padding-right: 50px;
@@ -21,4 +21,10 @@
   p {
     font-size: 20pt;
   }
+}
+
+.above {
+  max-width: 1200px;
+  margin-left: auto;
+  margin-right: auto;
 }

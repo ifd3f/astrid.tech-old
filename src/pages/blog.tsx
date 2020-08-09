@@ -42,7 +42,7 @@ export const pageQuery = graphql`
 const BlogIndex: FC<PageProps<Data>> = props => {
   const { data } = props
   const title = "Blog"
-  const description = "Astrid Yu's Designated Mind Dump Location"
+  const description = "Astrid Yu's designated mind dump location"
   return (
     <Layout {...props} currentLocation="blog">
       <SEO title={title} description={description} />

@@ -7,8 +7,8 @@ import { BLMBanner } from "./blm"
 import { CookieNotification } from "./cookie-notification"
 import { CookiesProvider } from "react-cookie"
 
-type LayoutProps = PageProps<any> & {
-  children?: ReactNode
+type LayoutProps = {
+  children: ReactNode
   showFooter?: boolean
   doNotExpandHeight?: boolean
   currentLocation?: NavBarLinks

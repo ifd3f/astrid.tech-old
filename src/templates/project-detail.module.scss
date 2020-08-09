@@ -1,6 +1,5 @@
 @import "src/scss/variables.scss";
 @import "src/scss/content.scss";
-@import "src/scss/fonts.scss";
 
 .projectDetailContainer {
   padding-top: 20px;
@@ -25,31 +24,8 @@
   }
 }
 
-.content {
-  padding-bottom: 20px;
-  margin-bottom: 20px;
-
-  $border-style: 1px dashed gray;
-  border-bottom: $border-style;
-  @media only screen and (min-width: map-get($grid-breakpoints, lg)) {
-    border-bottom: none;
-    border-right: $border-style;
-  }
-}
-
 .backToProjects {
   font-size: 14pt;
-}
-
-.sidebarGroup {
-  h2 {
-    font-size: 18pt;
-  }
-  li {
-    font-size: 14pt;
-  }
-  margin-top: 10px;
-  margin-bottom: 20px;
 }
 
 .statusData {
