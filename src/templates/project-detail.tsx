@@ -7,6 +7,7 @@ import {
   StatusGroup,
   InfoRow,
   Layout,
+  TagsGroup,
 } from "src/components/layout"
 import { getHSLString, getPersistentColor } from "src/components/util"
 import { StatusBadge } from "../components/project"
@@ -124,16 +125,6 @@ const BlogPostsGroup = () => {
   )
 }
 
-const TagsGroup = () => {
-  const { project } = useContext(ProjectContext)
-  return (
-    <SidebarGroup>
-      <h2>Tags</h2>
-      <TagList tags={project.tags} link />
-    </SidebarGroup>
-  )
-}
-
 const RelatedProjectsGroup = () => {
   const { project } = useContext(ProjectContext)
 
@@ -207,7 +198,7 @@ const ProjectDetailTemplate: FC<PageProps<Data, Context>> = props => {
           sidebar={
             <>
               <ProjectStatusGroup />
-              <TagsGroup />
+              <TagsGroup tags={project.tags} />
               <RelatedProjectsGroup />
               <BlogPostsGroup />
             </>

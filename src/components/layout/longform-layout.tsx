@@ -5,6 +5,8 @@ import { Link } from "gatsby"
 import { BsArrowLeft } from "react-icons/bs"
 import style from "./longform-layout.module.scss"
 import { PageHeading } from "./page-heading"
+import { Tag } from "src/types"
+import { TagList } from "../tag"
 
 type LongformLayoutProps = {
   title: string
@@ -73,3 +75,16 @@ export const StatusGroup: FC<StatusGroupProps> = ({ children }) => (
     <table style={{ width: "100%" }}>{children}</table>
   </SidebarGroup>
 )
+
+type TagsGroupProps = {
+  tags: Tag[]
+}
+
+export const TagsGroup: FC<TagsGroupProps> = ({ tags }) => {
+  return (
+    <SidebarGroup>
+      <h2>Tags</h2>
+      <TagList tags={tags} link />
+    </SidebarGroup>
+  )
+}

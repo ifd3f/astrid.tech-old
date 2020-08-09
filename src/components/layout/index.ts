@@ -5,6 +5,7 @@ export {
   SidebarGroup,
   StatusGroup,
   InfoRow,
+  TagsGroup,
 } from "./longform-layout"
 export { PageHeading } from "./page-heading"
 
