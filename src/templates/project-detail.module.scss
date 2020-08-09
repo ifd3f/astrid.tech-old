@@ -1,29 +1,6 @@
 @import "src/scss/variables.scss";
 @import "src/scss/content.scss";
 
-.projectDetailContainer {
-  padding-top: 20px;
-  padding-bottom: 20px;
-  @include content;
-
-  th,
-  td {
-    font-size: 14pt;
-  }
-
-  th {
-    vertical-align: top;
-    padding-right: 10px;
-  }
-
-  td {
-    p {
-      margin: 0;
-      font-size: 14pt;
-    }
-  }
-}
-
 .backToProjects {
   font-size: 14pt;
 }

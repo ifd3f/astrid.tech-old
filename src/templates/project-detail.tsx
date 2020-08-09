@@ -1,16 +1,13 @@
-import { Project, BlogPost } from "../types"
-import { PageProps, graphql, Link } from "gatsby"
-import { FC, PropsWithChildren, createContext, useContext } from "react"
-import Layout from "../components/layout/layout"
-import React from "react"
-import SEO from "../components/seo"
-import { Container, Col, Row } from "reactstrap"
-import { TagList } from "../components/tag"
-import { StatusBadge } from "../components/project"
-import style from "./project-detail.module.scss"
+import { graphql, Link, PageProps } from "gatsby"
+import React, { createContext, FC, useContext } from "react"
 import { BsArrowLeft } from "react-icons/bs"
-import { SidebarGroup, LongformLayout } from "src/components/layout"
-import { getPersistentColor, getHSLString } from "src/components/util"
+import { LongformLayout, SidebarGroup } from "src/components/layout"
+import { getHSLString, getPersistentColor } from "src/components/util"
+import Layout from "../components/layout/layout"
+import { StatusBadge } from "../components/project"
+import { TagList } from "../components/tag"
+import { BlogPost, Project } from "../types"
+import style from "./project-detail.module.scss"
 
 export const pageQuery = graphql`
   query GetProject($slug: String!) {
@@ -68,7 +65,7 @@ type Context = {
   id: string
 }
 
-function formatDateInterval(startDate: string, endDate: string) {
+function formatDateInterval(startDate: string, endDate?: string) {
   if (startDate == endDate) {
     return startDate
   }
@@ -174,9 +171,7 @@ const RelatedProjectsGroup = () => {
   }
 
   const projects = []
-  for (let [slug, project] of slugToProject) {
-    console.log(slug, score.get(slug))
-    //score.set(slug, connectivity.get(slug)! + tagCardinality.get(slug)!)
+  for (let [, project] of slugToProject) {
     projects.push(project)
   }
 
@@ -197,24 +192,6 @@ const RelatedProjectsGroup = () => {
       <h2>Similar Projects</h2>
       {projects.length == 0 ? <p>N/A</p> : list}
     </SidebarGroup>
-  )
-}
-
-const Sidebar: FC = () => {
-  return (
-    <>
-      <StatusGroup />
-      <TagsGroup />
-      <RelatedProjectsGroup />
-      <BlogPostsGroup />
-    </>
-  )
-}
-
-const Content: FC = () => {
-  const { project } = useContext(ProjectContext)
-  return (
-    <section dangerouslySetInnerHTML={{ __html: project.markdown.html!! }} />
   )
 }
 
@@ -242,9 +219,18 @@ const ProjectDetailTemplate: FC<PageProps<Data, Context>> = props => {
               <BsArrowLeft /> Back to Projects
             </Link>
           }
-          sidebar={<Sidebar />}
+          sidebar={
+            <>
+              <StatusGroup />
+              <TagsGroup />
+              <RelatedProjectsGroup />
+              <BlogPostsGroup />
+            </>
+          }
         >
-          <Content />
+          <article
+            dangerouslySetInnerHTML={{ __html: project.markdown.html!! }}
+          />
         </LongformLayout>
       </Layout>
     </ProjectContext.Provider>
