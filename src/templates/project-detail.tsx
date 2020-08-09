@@ -1,9 +1,14 @@
 import { graphql, Link, PageProps } from "gatsby"
 import React, { createContext, FC, useContext } from "react"
 import { BsArrowLeft } from "react-icons/bs"
-import { LongformLayout, SidebarGroup } from "src/components/layout"
+import {
+  LongformLayout,
+  SidebarGroup,
+  StatusGroup,
+  InfoRow,
+  Layout,
+} from "src/components/layout"
 import { getHSLString, getPersistentColor } from "src/components/util"
-import Layout from "../components/layout/layout"
 import { StatusBadge } from "../components/project"
 import { TagList } from "../components/tag"
 import { BlogPost, Project } from "../types"
@@ -65,54 +70,34 @@ type Context = {
   id: string
 }
 
-function formatDateInterval(startDate: string, endDate?: string) {
+function formatDateInterval(startDate: string, endDate?: string | null) {
   if (startDate == endDate) {
     return startDate
   }
   return endDate ? `${startDate} to ${endDate}` : `${startDate} to now`
 }
 
-const StatusGroup = () => {
+const ProjectStatusGroup = () => {
   const { project } = useContext(ProjectContext)
   return (
-    <SidebarGroup>
-      <table style={{ width: "100%" }}>
-        <tr>
-          <th>Date</th>
-          <td className={style.statusData}>
-            {formatDateInterval(project.startDate, project.endDate)}
-          </td>
-        </tr>
-        {project.status ? (
-          <tr>
-            <th>Status</th>
-            <td className={style.statusData}>
-              <StatusBadge status={project.status} />
-            </td>
-          </tr>
-        ) : null}
-        {project.url ? (
-          <tr>
-            <th>URL</th>
-            <td className={style.statusData}>
-              <a href={project.url}>{project.url}</a>
-            </td>
-          </tr>
-        ) : null}
-        {project.source.length > 0 ? (
-          <tr>
-            <th>Source</th>
-            <td className={style.statusData}>
-              {project.source.map(url => (
-                <p>
-                  <a href={url}>{url}</a>
-                </p>
-              ))}
-            </td>
-          </tr>
-        ) : null}
-      </table>
-    </SidebarGroup>
+    <StatusGroup>
+      <InfoRow name="Date">
+        {formatDateInterval(project.startDate, project.endDate)}
+      </InfoRow>
+      <InfoRow name="URL">
+        <a href={project.url}>{project.url}</a>
+      </InfoRow>
+      <InfoRow name="Source">
+        {project.source.map(url => (
+          <p>
+            <a href={url}>{url}</a>
+          </p>
+        ))}
+      </InfoRow>
+      <InfoRow name="Status">
+        <StatusBadge status={project.status} />
+      </InfoRow>
+    </StatusGroup>
   )
 }
 
@@ -221,7 +206,7 @@ const ProjectDetailTemplate: FC<PageProps<Data, Context>> = props => {
           }
           sidebar={
             <>
-              <StatusGroup />
+              <ProjectStatusGroup />
               <TagsGroup />
               <RelatedProjectsGroup />
               <BlogPostsGroup />

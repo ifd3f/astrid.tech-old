@@ -49,3 +49,27 @@ export const LongformLayout: FC<LongformLayoutProps> = ({
 export const SidebarGroup: FC<PropsWithChildren<{}>> = ({ children }) => (
   <div className={style.sidebarGroup}>{children}</div>
 )
+
+type InfoRowProps = {
+  name: string
+  show?: any
+  children: ReactNode
+}
+
+export const InfoRow: FC<InfoRowProps> = ({ name, children, show = true }) =>
+  show ? (
+    <tr>
+      <th>{name}</th>
+      <td className={style.statusData}>{children}</td>
+    </tr>
+  ) : null
+
+type StatusGroupProps = {
+  children: ReactNode
+}
+
+export const StatusGroup: FC<StatusGroupProps> = ({ children }) => (
+  <SidebarGroup>
+    <table style={{ width: "100%" }}>{children}</table>
+  </SidebarGroup>
+)
