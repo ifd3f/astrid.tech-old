@@ -22,6 +22,7 @@ export const sourceNodes: GatsbyNode["sourceNodes"] = async ({
     fields: {
       id: "String!",
       title: "String!",
+      description: "String!",
       date: "Date!",
       slug: "String!",
       tagSlugs: "[String!]",
@@ -49,8 +50,10 @@ export const onCreateNode: GatsbyNode["onCreateNode"] = async ({
   const blogPostNode = buildNode({
     internal: {
       type: "BlogPost",
+      description: content.description,
     },
     title: content.title,
+    description: content.description,
     slug,
     date: content.date,
     tagSlugs: content.tagSlugs,

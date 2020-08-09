@@ -54,6 +54,7 @@ export type Project = Tagged & {
 export type BlogPost = Tagged & {
   __typename: "BlogPost"
   title: string
+  description: string
   date: Date
   slug: string
 

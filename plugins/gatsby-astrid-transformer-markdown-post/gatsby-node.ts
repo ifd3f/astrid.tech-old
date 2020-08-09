@@ -55,6 +55,7 @@ export const onCreateNode: GatsbyNode["onCreateNode"] = async ({
     {
       internal: {
         type: `MarkdownBlogPost`,
+        description: content.description,
         content: JSON.stringify(content),
         mediaType: BLOG_POST_MIME_TYPE,
       } as any,

@@ -7,15 +7,16 @@ import { PostContent, PostMainHeader, PostSEO } from "../components/blog"
 import Layout from "../components/layout/layout"
 import styleBlog from "../scss/blog.module.scss"
 import { BlogPost } from "../types/index"
+import { LongformLayout } from "src/components/layout"
+import { getPersistentColor } from "src/components/util"
+import { getHSLString } from "../components/util"
 
 export const pageQuery = graphql`
   query BlogPostBySlug($slug: String!) {
     allBlogPost(filter: { slug: { eq: $slug } }) {
       edges {
         node {
-          internal {
-            description
-          }
+          description
           source {
             html
           }
@@ -46,6 +47,10 @@ type Context = {
   next: BlogPost
 }
 
+const Sidebar: FC = () => {
+  return null
+}
+
 const BlogPostTemplate: FC<PageProps<Data, Context>> = ({
   data,
   pageContext,
@@ -60,42 +65,46 @@ const BlogPostTemplate: FC<PageProps<Data, Context>> = ({
 
   return (
     <Layout currentLocation="blog">
-      <PostSEO post={post} />
-
-      <Container className={styleBlog.blogContentContainer}>
-        <article>
-          <PostMainHeader post={post} />
-          <PostContent post={post} />
-        </article>
-        <nav>
-          <ul
-            style={{
-              display: `flex`,
-              flexWrap: `wrap`,
-              justifyContent: `space-between`,
-              listStyle: `none`,
-              padding: 0,
-            }}
-          >
-            <li>
-              {previous && (
-                <Link to={previous.slug!} rel="prev">
-                  ← {previous.title}
-                </Link>
-              )}
-            </li>
-            <li>
-              {next && (
-                <Link to={next.slug!} rel="next">
-                  {next.title} →
-                </Link>
-              )}
-            </li>
-          </ul>
-        </nav>
-        <h2>Comments</h2>
-        <Disqus config={disqusConfig} />
-      </Container>
+      <LongformLayout
+        title={post.title}
+        description={post.description}
+        headingColor={getHSLString(getPersistentColor(post.slug))}
+        sidebar={<></>}
+        above={
+          <nav>
+            <ul
+              style={{
+                display: `flex`,
+                flexWrap: `wrap`,
+                justifyContent: `space-between`,
+                listStyle: `none`,
+                padding: 0,
+              }}
+            >
+              <li>
+                {previous && (
+                  <Link to={previous.slug!} rel="prev">
+                    ← {previous.title}
+                  </Link>
+                )}
+              </li>
+              <li>
+                {next && (
+                  <Link to={next.slug!} rel="next">
+                    {next.title} →
+                  </Link>
+                )}
+              </li>
+            </ul>
+          </nav>
+        }
+      >
+        <article dangerouslySetInnerHTML={{ __html: post.source.html }} />
+        <section>
+          <h2>Comments</h2>
+          <Disqus config={disqusConfig} />
+        </section>
+      </LongformLayout>
     </Layout>
   )
 }
