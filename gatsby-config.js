@@ -225,6 +225,7 @@ module.exports = {
       },
     },
     "gatsby-source-license",
+    "gatsby-plugin-root-import",
 
     "gatsby-astrid-source-lang-tags",
 

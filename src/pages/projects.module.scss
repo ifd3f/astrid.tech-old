@@ -10,30 +10,6 @@
   justify-content: space-evenly;
 }
 
-.header {
-  text-align: center;
-  background-color: #3baddd;
-
-  padding-top: 100px;
-  padding-bottom: 50px;
-  padding-left: 50px;
-  padding-right: 50px;
-
-  h1,
-  p {
-    color: $black;
-  }
-
-  h1 {
-    font-size: 70pt;
-    margin-bottom: 50px;
-  }
-
-  p {
-    font-size: 20pt;
-  }
-}
-
 .projectCardWrapper {
   padding-bottom: 20px;
 }

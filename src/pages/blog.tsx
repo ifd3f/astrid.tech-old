@@ -6,6 +6,7 @@ import SEO from "../components/seo"
 import { BlogPost } from "../types/index"
 import { Container } from "reactstrap"
 import styles from "../scss/blog.module.scss"
+import { PageHeading } from "src/components/layout"
 
 type Data = {
   allBlogPost: {
@@ -40,14 +41,13 @@ export const pageQuery = graphql`
 
 const BlogIndex: FC<PageProps<Data>> = props => {
   const { data } = props
+  const title = "Blog"
+  const description = "Astrid Yu's Designated Mind Dump Location"
   return (
     <Layout {...props} currentLocation="blog">
-      <SEO
-        title="Blog"
-        description="Astrid Yu's Designated Mind Dump Location"
-      />
+      <SEO title={title} description={description} />
+      <PageHeading title={title} description={description} bgColor="#eecc8d" />
       <Container className={styles.blogContentContainer}>
-        <h1>Blog</h1>
         {data.allBlogPost.edges.map(({ node: post }) => (
           <PostBrief post={post} />
         ))}
