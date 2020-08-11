@@ -9,6 +9,8 @@ endDate: 2018-05-30
 tags:
   - csharp
   - unity
+  - aerodynamics
+  - math
   - game-design
   - ux-design
 url: null

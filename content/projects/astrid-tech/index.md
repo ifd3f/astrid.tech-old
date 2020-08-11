@@ -26,9 +26,26 @@ thumbnail: ./thumbnail.png
 
 This is my website. There are many like it, but this one is mine.
 
+## Goals
+
+- I want my website to represent my abilities and personality.
+- I want my website to be accessible to those with disabilities. I use semantic tags as well as alt text on visual elements.
+- I want my website to be responsive and mobile-friendly. The pages cannot be too large, and they must be usable on all resolutions and devices.
+
 ## Technology Stack
 
-- Gatsby.js as the static site generator.
-- React as the main frontend framework
-- Typescript because I kinda like it when VS Code can give me suggestions for my massive objects
+This website is statically generated!
+
+### The site
+
+- Typescript
+- Sass
+- [React](https://reactjs.org/)
+- [Gatsby](https://www.gatsbyjs.org/) as the static site generator.
 - Bootstrap to make things look nice
+- Jupyter notebooks for a few blog posts
+
+### Deployment
+
+- [GitHub Pages](https://github.com/plenglin/astrid.tech) to statically host the website.
+- [GitHub Actions](https://github.com/plenglin/astrid.tech/actions) to automatically build and publish the site on a push to the main branch.
