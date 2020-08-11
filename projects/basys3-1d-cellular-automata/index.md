@@ -19,6 +19,8 @@ thumbnail: null
 
 This is the report I submitted for the final project, transcribed into Markdown by hand, transformed into HTML by the static site generator, and rendered into pixels by your browser for your eyes to see.
 
+![A Basys 3 running the program](./basys3.jpeg)
+
 ## Description
 
 ### What is an elementary cellular automata?
@@ -45,6 +47,8 @@ This project simulates a 1-dimensional cellular automata displayed on the LEDs. 
 
 ## Top-Level Black Box
 
+![A schematic black box named top. Inputs: CLK, dec, dig_next, dig_prev, inc, reset, sw_IBUF[15:0], and toggle_BUFG. Outputs: an_OBUF[3:0], dp_OBUF, led_OBUF[15:0], seg_OBUF[6:0], and toggle_reg.](blackbox.png)
+
 ## Top-Level Structural Diagram
 
 ### Notes
@@ -55,6 +59,8 @@ This project simulates a 1-dimensional cellular automata displayed on the LEDs. 
 - DisplayDrv is the submodule found in DisplayDriver.sv
 
 ## Simulation Results
+
+![Xilinx Vivado simulation results.](simulation.png)
 
 What this simulation does is:
 
@@ -73,7 +79,7 @@ The code can be found on GitHub at https://github.com/Plenglin/Basys3-1D-Cellula
 
 ## Appendix B: Efficient, adder-only approximately constant-increment frequency selection
 
-Link to the Desmos graph: https://www.desmos.com/calculator/8matylisfr
+<iframe src="https://www.desmos.com/calculator/ehfsvq25rk?embed" width="500px" height="500px" style="border: 1px solid #ccc" frameborder=0></iframe>
 
 ### Motivation
 
@@ -91,7 +97,7 @@ Let the third-order Taylor series approximation of $T_1(t)$ be the cubic functio
 
 $g_1(n)=g(\frac{n-8}{8})$
 
-# Optimization of $g_1(n)$
+### Optimization of $g_1(n)$
 
 Since multiplication is slow and exponentiation is even slower, I decided to optimize the polynomial calculation using a third-order recursive sequence:
 
@@ -107,14 +113,14 @@ A third-order recursive sequence like this creates a sequence of numbers that li
 
 This allows us to calculate the result in a single clock cycle, and only using a few adders when going forward, or doing a small amount of subtraction when going backward.
 
-I set $s_0(0)=g_1(12)$ and found the formulas for the initial values for these functions using a computer algebra system (specifically, a TI-92+):
+I set $s_0(0)=g_1(\frac{1}{2})$ and found the formulas for the initial values for these functions using a computer algebra system (specifically, a TI-92+):
 
 $$s_0(0)=d$$
 
-$$s_1(0)=a+b+c8$$
+$$s_1(0)=\frac{a+b+c}{8}$$
 
-$$s_2(0)=b^4$$
+$$s_2(0)=\frac{b}{4}$$
 
-$$s_3(n)=3a^4$$
+$$s_3=\frac{3a}{4}$$
 
 The code that implements these formulas is in [SpeedControl.sv](https://github.com/Plenglin/Basys3-1D-Cellular-Automata/blob/master/FinalProject.srcs/sources_1/new/SpeedControl.sv).

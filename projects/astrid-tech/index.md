@@ -22,7 +22,7 @@ source:
 thumbnail: ./thumbnail.png
 ---
 
-<iframe src="https://astrid.tech" title="My website, but with recursion"></iframe>
+<iframe src="https://astrid.tech" title="My website, but with recursion" width="300" height="250"></iframe>
 
 This is my website. There are many like it, but this one is mine.
 
