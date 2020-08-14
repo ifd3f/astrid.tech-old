@@ -42,7 +42,7 @@ const BlogIndex: FC<PageProps<Data>> = props => {
       <Container className={styles.blogContentContainer}>
         <section>
           <p className="text-right">
-            <a href="https://astrid.tech/feed.xml">
+            <a href="https://astrid.tech/rss.xml">
               <FaRssSquare title="Subscribe to the Blog!" />
             </a>
           </p>
