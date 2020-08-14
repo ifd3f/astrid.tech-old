@@ -34,7 +34,7 @@ export const LongformLayout: FC<LongformLayoutProps> = ({
         description={description}
         bgColor={headingColor}
       />
-      <Container tag="article" className={style.container}>
+      <Container className={style.container}>
         <Row>
           <Col lg={8} className={style.content}>
             {children}

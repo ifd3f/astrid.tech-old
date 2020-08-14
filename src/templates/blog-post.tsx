@@ -49,7 +49,7 @@ const PostStatusGroup: FC = () => {
     <StatusGroup>
       <InfoRow name="Date">{post.date}</InfoRow>
       <InfoRow name="Comments">
-        <a href="#comments-section">
+        <a href="#comments">
           <CommentCount config={disqusConfig} />
         </a>
       </InfoRow>
@@ -111,10 +111,13 @@ const BlogPostTemplate: FC<PageProps<Data, Context>> = ({
             </nav>
           }
         >
-          <article dangerouslySetInnerHTML={{ __html: post.source.html }} />
+          <article
+            className="longform"
+            dangerouslySetInnerHTML={{ __html: post.source.html }}
+          />
         </LongformLayout>
         <Container>
-          <section id="comments-section">
+          <section id="comments">
             <h2>Comments</h2>
             <Disqus config={disqusConfig} />
           </section>

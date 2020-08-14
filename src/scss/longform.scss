@@ -1,0 +1,47 @@
+@import "./variables.scss";
+
+.longform {
+  $factor: 1.2;
+  $h6-size: $factor;
+  $h5-size: $factor * $h6-size;
+  $h4-size: $factor * $h5-size;
+  $h3-size: $factor * $h4-size;
+  $h2-size: $factor * $h3-size;
+  $h1-size: $factor * $h2-size;
+
+  h1 {
+    font-size: #{$h1-size}rem;
+  }
+  h2 {
+    font-size: #{$h2-size}rem;
+    margin-top: 25px;
+    margin-bottom: 15px;
+  }
+  h3 {
+    font-size: #{$h3-size}rem;
+    margin-top: 20px;
+    margin-bottom: 10px;
+  }
+  h4 {
+    font-size: #{$h4-size}rem;
+  }
+  h5 {
+    font-size: #{$h5-size}rem;
+  }
+  h6 {
+    font-size: #{$h6-size}rem;
+  }
+  p {
+    font-size: 1rem;
+    line-height: 150%;
+  }
+  li {
+    font-size: 1rem;
+    line-height: 1.4rem;
+    &,
+    & p {
+      margin-top: 0px;
+      margin-bottom: 5px;
+    }
+  }
+}
