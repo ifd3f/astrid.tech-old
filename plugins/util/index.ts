@@ -1,5 +1,5 @@
 import crypto from "crypto"
-import { NodeInput, Node, NodePluginArgs } from "gatsby"
+import { NodeInput, Node, NodePluginArgs, NodePluginSchema } from "gatsby"
 import { FileSystemNode } from "gatsby-source-filesystem"
 import path from "path"
 import { v4 } from "uuid"
@@ -58,4 +58,34 @@ export function getContrastingTextColor(backgroundColor: string): string {
     .match(/#([0-9a-f]{2})([0-9a-f]{2})([0-9a-f]{2})/i)!
     .map(x => new Number("0x" + x) as number)
   return r * 0.299 + g * 0.587 + b * 0.114 > 186 ? "#000000" : "#ffffff"
+}
+
+export function getMarkdownStringType(
+  pluginName: string,
+  schema: NodePluginSchema
+) {
+  const name = `${pluginName}MarkdownString`
+  return {
+    name,
+    type: schema.buildObjectType({
+      name,
+      fields: {
+        id: "String!",
+        text: "[String!]",
+      },
+      interfaces: ["Node"],
+    }),
+  }
+}
+
+export function buildMarkdownStringNode(pluginName: string, text: string) {
+  const type = `${pluginName}MarkdownString`
+  return buildNode({
+    text,
+    internal: {
+      type,
+      content: text,
+      mediaType: "text/markdown",
+    },
+  })
 }

@@ -1,7 +1,11 @@
 import { CreateNodeArgs, GatsbyNode, Node, SourceNodesArgs } from "gatsby"
 import path from "path"
 import { v4 } from "uuid"
-import { buildNode } from "../util"
+import {
+  buildNode,
+  getMarkdownStringType,
+  buildMarkdownStringNode,
+} from "../util"
 import { BlogPostContent, BLOG_POST_MIME_TYPE } from "./index"
 
 export const sourceNodes: GatsbyNode["sourceNodes"] = async ({
@@ -17,12 +21,16 @@ export const sourceNodes: GatsbyNode["sourceNodes"] = async ({
       path: "[String!]",
     },
   })
+  const {
+    name: MarkdownString,
+    type: BlogPostMarkdownString,
+  } = getMarkdownStringType("BlogPost", schema)
   const BlogPost = schema.buildObjectType({
     name: "BlogPost",
     fields: {
       id: "String!",
       title: "String!",
-      description: "String!",
+      description: MarkdownString + "!",
       date: "Date!",
       slug: "String!",
       tagSlugs: "[String!]",
@@ -32,13 +40,12 @@ export const sourceNodes: GatsbyNode["sourceNodes"] = async ({
     interfaces: ["Tagged", "Node"],
   })
 
-  createTypes([BlogPost, ContentLocation])
+  createTypes([BlogPost, BlogPostMarkdownString, ContentLocation])
 }
 
 export const onCreateNode: GatsbyNode["onCreateNode"] = async ({
   node,
   actions,
-  getNode,
 }: CreateNodeArgs) => {
   if (node.internal.mediaType != BLOG_POST_MIME_TYPE) return
 
@@ -47,18 +54,30 @@ export const onCreateNode: GatsbyNode["onCreateNode"] = async ({
 
   const slug = "/blog" + content.slug
 
+  const descriptionNode = buildMarkdownStringNode(
+    "BlogPost",
+    content.description
+  )
+
+  createNode(descriptionNode)
+  createParentChildLink({
+    parent: node,
+    child: (descriptionNode as unknown) as Node,
+  })
+
   const blogPostNode = buildNode({
     internal: {
       type: "BlogPost",
       description: content.description,
     },
     title: content.title,
-    description: content.description,
+    description___NODE: descriptionNode.id,
     slug,
     date: content.date,
     tagSlugs: content.tagSlugs,
     source___NODE: content.markdownNode,
   })
+
   createNode(blogPostNode)
   createParentChildLink({
     parent: node,
