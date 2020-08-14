@@ -55,16 +55,19 @@ const NotFoundPage: FC<PageProps<Data>> = props => {
   const { data, location } = props
 
   const paths = data.allSitePage.edges.map(({ node }) => node.path)
+  const isSSR = typeof window === "undefined"
 
   const result = StringSimilarity.findBestMatch(
     location.pathname,
     paths
   ) as MatchResults
 
-  const suggestions = result.ratings
-    .sort((a, b) => b.rating - a.rating)
-    .map(result => result.target)
-    .slice(1, 7)
+  const suggestions = isSSR
+    ? []
+    : result.ratings
+        .sort((a, b) => b.rating - a.rating)
+        .map(result => result.target)
+        .slice(1, 7)
 
   return (
     <Layout {...props}>
