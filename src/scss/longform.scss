@@ -9,6 +9,14 @@
   $h2-size: $factor * $h3-size;
   $h1-size: $factor * $h2-size;
 
+  td {
+    border: 1px solid $text-color;
+    padding-top: 3px;
+    padding-bottom: 3px;
+    padding-left: 5px;
+    padding-right: 5px;
+  }
+
   h1 {
     font-size: #{$h1-size}rem;
   }
@@ -35,6 +43,7 @@
     font-size: 1rem;
     line-height: 150%;
   }
+
   li {
     font-size: 1rem;
     line-height: 1.4rem;
@@ -43,5 +52,10 @@
       margin-top: 0px;
       margin-bottom: 5px;
     }
+  }
+
+  table {
+    width: 100%;
+    margin-bottom: 10px;
   }
 }

@@ -205,6 +205,7 @@ const ProjectDetailTemplate: FC<PageProps<Data, Context>> = props => {
           }
         >
           <article
+            className="longform"
             dangerouslySetInnerHTML={{ __html: project.markdown.html!! }}
           />
         </LongformLayout>
