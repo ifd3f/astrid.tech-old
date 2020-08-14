@@ -92,9 +92,17 @@ module.exports = {
           },
           "gatsby-remark-katex",
           "gatsby-remark-graphviz",
+          {
+            resolve: `gatsby-remark-autolink-headers`,
+            options: {
+              isIconAfterHeader: true,
+              className: "header-link",
+            },
+          },
           `gatsby-remark-prismjs`,
-          `gatsby-remark-copy-linked-files`,
           `gatsby-remark-smartypants`,
+          `@pauliescanlon/gatsby-remark-sticky-table`,
+          `gatsby-remark-copy-linked-files`,
         ],
       },
     },
