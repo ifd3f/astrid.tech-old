@@ -1,11 +1,9 @@
 @import "./variables.scss";
-@import "./content.scss";
 
 .blogContentContainer {
-  padding-top: 20px;
+  padding-top: 30px;
   max-width: 800px;
-  padding-bottom: 50px;
-  @include content;
+  padding-bottom: 20px;
   h1 {
     font-size: 50pt;
   }
@@ -21,9 +19,25 @@
   padding-top: 20px;
   margin-bottom: 15px;
   text-decoration: none;
+
   h3,
   p {
     color: $text-color;
+  }
+
+  h3 {
+    font-size: 1.3rem;
+  }
+  p {
+    font-size: 0.85rem;
+  }
+  @media only screen and (min-width: map-get($grid-breakpoints, md)) {
+    h3 {
+      font-size: 1.5rem;
+    }
+    p {
+      font-size: 1rem;
+    }
   }
 }
 

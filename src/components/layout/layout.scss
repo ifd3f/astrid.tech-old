@@ -4,18 +4,6 @@
   padding-top: $navbar-height;
   position: relative;
   background-color: $main-bg-color;
-  a {
-    -moz-transition: all 0.1s ease-in;
-    -o-transition: all 0.1s ease-in;
-    -webkit-transition: all 0.1s ease-in;
-    transition: all 0.1s ease-in;
-    border-bottom: 4px none;
-  }
-
-  a:hover {
-    text-decoration: none;
-    border-bottom: 4px dotted #81890b;
-  }
 }
 
 .root-wrapper.expanded-min-height {

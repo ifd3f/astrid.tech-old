@@ -92,9 +92,17 @@ module.exports = {
           },
           "gatsby-remark-katex",
           "gatsby-remark-graphviz",
+          {
+            resolve: `gatsby-remark-autolink-headers`,
+            options: {
+              isIconAfterHeader: true,
+              className: "header-link",
+            },
+          },
           `gatsby-remark-prismjs`,
-          `gatsby-remark-copy-linked-files`,
           `gatsby-remark-smartypants`,
+          `@pauliescanlon/gatsby-remark-sticky-table`,
+          `gatsby-remark-copy-linked-files`,
         ],
       },
     },
@@ -116,7 +124,69 @@ module.exports = {
         },
       },
     },
-    //`gatsby-plugin-feed`,
+    {
+      resolve: `gatsby-plugin-feed`,
+      options: {
+        query: `
+          {
+            site {
+              siteMetadata {
+                title
+                author {
+                  name
+                }
+                description 
+                siteUrl
+                site_url: siteUrl
+              }
+            }
+          }
+        `,
+        feeds: [
+          {
+            serialize: ({ query: { site, allBlogPost } }) => {
+              return allBlogPost.edges.map(({ node }) => {
+                return {
+                  author: "Astrid Yu",
+                  title: node.title,
+                  description: node.description.text,
+                  date: node.date,
+                  categories: node.tags.map(t => t.name),
+                  url: site.siteMetadata.siteUrl + node.slug,
+                  guid: site.siteMetadata.siteUrl + node.slug,
+                }
+              })
+            },
+            query: `
+              {
+                allBlogPost(
+                  sort: { order: DESC, fields: [date] },
+                ) {
+                  edges {
+                    node {
+                      tags {
+                        name
+                      }
+                      slug
+                      description {
+                        text
+                      }
+                      source {
+                        html
+                      }
+                      title
+                      date
+                    }
+                  }
+                }
+              }
+            `,
+            output: "/rss.xml",
+            title: "Astrid's Blog",
+          },
+        ],
+      },
+    },
     {
       resolve: `gatsby-plugin-manifest`,
       options: {
@@ -216,7 +286,6 @@ module.exports = {
         policy: [{ userAgent: "*", allow: "/" }],
       },
     },
-    `gatsby-source-local-git`,
     `gatsby-plugin-catch-links`,
     `gatsby-plugin-react-helmet`,
     {
@@ -226,6 +295,7 @@ module.exports = {
       },
     },
     "gatsby-source-license",
+    "gatsby-plugin-root-import",
 
     "gatsby-astrid-source-lang-tags",
 

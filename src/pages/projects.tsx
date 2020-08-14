@@ -25,7 +25,7 @@ import {
   CardBody,
   CardHeader,
 } from "reactstrap"
-import Layout, { MainNavbar } from "../components/layout"
+import Layout, { MainNavbar, PageHeading } from "../components/layout"
 import { ProjectCard } from "../components/project"
 import SEO from "../components/seo"
 import { TagBadge } from "../components/tag"
@@ -98,7 +98,7 @@ const SearchContext = createContext<SearchContext>({} as any)
 type FiltererArgs = {
   children: ReactNode
   projects: Project[]
-  fuse: Fuse<Project, any>
+  fuse: Fuse<Project>
 }
 
 const Filterer: FC<FiltererArgs> = ({ children, projects, fuse }) => {
@@ -130,9 +130,9 @@ const Filterer: FC<FiltererArgs> = ({ children, projects, fuse }) => {
   var displayedProjects =
     searchString == ""
       ? projects
-      : fuse.search(searchString).map(result => {
+      : (fuse.search(searchString).map((result: any) => {
           return result.item
-        })
+        }) as Project[])
 
   if (filterTags.length > 0) {
     displayedProjects = displayedProjects.filter(project => {
@@ -348,17 +348,15 @@ const ProjectsIndex: FC<PageProps<Data>> = ({ data }) => {
     index
   )
 
+  const title = "Projects"
   const description =
-    "Below is an incomplete list of the projects I have worked on, of all sizes and types."
+    "An incomplete list of the projects I have worked on, of all sizes and types."
 
   return (
     <Layout currentLocation="projects">
-      <SEO title="Projects" description={description} />
+      <SEO title={title} description={description} />
+      <PageHeading title={title} description={description} bgColor="#3baddd" />
       <main>
-        <header className={styles.header}>
-          <h1>Projects</h1>
-          <p>{description}</p>
-        </header>
         <Filterer projects={projects} fuse={fuse}>
           <SearchSection />
           <ProjectCardSection />

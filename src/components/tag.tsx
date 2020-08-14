@@ -45,6 +45,7 @@ export const TagBadge: FC<TagBadgeProps> = ({
 
 type TagListProps = {
   tags: Tag[]
+  limit?: number
   link?: boolean
   className?: string
 }
@@ -52,8 +53,11 @@ type TagListProps = {
 export const TagList: FC<TagListProps> = ({
   tags,
   link = false,
+  limit = Number.MAX_SAFE_INTEGER,
   className,
 }) => {
+  const excluded = tags.slice(limit)
+  const alt = excluded.map(tag => tag.name).join(", ")
   return (
     <div className={className}>
       <p
@@ -62,9 +66,12 @@ export const TagList: FC<TagListProps> = ({
           marginBottom: 3,
         }}
       >
-        {tags.map(tag => (
+        {tags.slice(0, limit).map(tag => (
           <TagBadge key={tag.slug} tag={tag} link={link} />
-        ))}
+        ))}{" "}
+        {excluded.length > 0 ? (
+          <Badge title={alt}>+{excluded.length}</Badge>
+        ) : null}
       </p>
     </div>
   )

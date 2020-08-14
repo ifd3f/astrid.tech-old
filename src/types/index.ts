@@ -6,6 +6,11 @@ export type MarkdownRemark = Node & {
   excerpt: string
 }
 
+export type MarkdownString = Node & {
+  text: string
+  childMarkdownRemark: MarkdownRemark
+}
+
 export type Tagged = TypeName & {
   tags: Tag[]
 }
@@ -54,6 +59,7 @@ export type Project = Tagged & {
 export type BlogPost = Tagged & {
   __typename: "BlogPost"
   title: string
+  description: MarkdownString
   date: Date
   slug: string
 

@@ -1,14 +1,19 @@
-import { Project, BlogPost } from "../types"
-import { PageProps, graphql, Link } from "gatsby"
-import { FC, PropsWithChildren, createContext, useContext } from "react"
-import Layout from "../components/layout/layout"
-import React from "react"
-import SEO from "../components/seo"
-import { Container, Col, Row } from "reactstrap"
-import { TagList } from "../components/tag"
-import { StatusBadge } from "../components/project"
-import style from "./project-detail.module.scss"
+import { graphql, Link, PageProps } from "gatsby"
+import React, { createContext, FC, useContext } from "react"
 import { BsArrowLeft } from "react-icons/bs"
+import {
+  LongformLayout,
+  SidebarGroup,
+  StatusGroup,
+  InfoRow,
+  Layout,
+  TagsGroup,
+} from "src/components/layout"
+import { getHSLString, getPersistentColor } from "src/components/util"
+import { StatusBadge } from "../components/project"
+import { TagList } from "../components/tag"
+import { BlogPost, Project } from "../types"
+import style from "./project-detail.module.scss"
 
 export const pageQuery = graphql`
   query GetProject($slug: String!) {
@@ -66,58 +71,34 @@ type Context = {
   id: string
 }
 
-const SidebarGroup: FC<PropsWithChildren<{}>> = ({ children }) => (
-  <div className={style.sidebarGroup}>{children}</div>
-)
-
-function formatDateInterval(startDate: string, endDate: string) {
+function formatDateInterval(startDate: string, endDate?: string | null) {
   if (startDate == endDate) {
     return startDate
   }
   return endDate ? `${startDate} to ${endDate}` : `${startDate} to now`
 }
 
-const StatusGroup = () => {
+const ProjectStatusGroup = () => {
   const { project } = useContext(ProjectContext)
   return (
-    <SidebarGroup>
-      <table style={{ width: "100%" }}>
-        <tr>
-          <th>Date</th>
-          <td className={style.statusData}>
-            {formatDateInterval(project.startDate, project.endDate)}
-          </td>
-        </tr>
-        {project.status ? (
-          <tr>
-            <th>Status</th>
-            <td className={style.statusData}>
-              <StatusBadge status={project.status} />
-            </td>
-          </tr>
-        ) : null}
-        {project.url ? (
-          <tr>
-            <th>URL</th>
-            <td className={style.statusData}>
-              <a href={project.url}>{project.url}</a>
-            </td>
-          </tr>
-        ) : null}
-        {project.source.length > 0 ? (
-          <tr>
-            <th>Source</th>
-            <td className={style.statusData}>
-              {project.source.map(url => (
-                <p>
-                  <a href={url}>{url}</a>
-                </p>
-              ))}
-            </td>
-          </tr>
-        ) : null}
-      </table>
-    </SidebarGroup>
+    <StatusGroup>
+      <InfoRow name="Date">
+        {formatDateInterval(project.startDate, project.endDate)}
+      </InfoRow>
+      <InfoRow name="URL">
+        <a href={project.url}>{project.url}</a>
+      </InfoRow>
+      <InfoRow name="Source">
+        {project.source.map(url => (
+          <p>
+            <a href={url}>{url}</a>
+          </p>
+        ))}
+      </InfoRow>
+      <InfoRow name="Status">
+        <StatusBadge status={project.status} />
+      </InfoRow>
+    </StatusGroup>
   )
 }
 
@@ -144,16 +125,6 @@ const BlogPostsGroup = () => {
   )
 }
 
-const TagsGroup = () => {
-  const { project } = useContext(ProjectContext)
-  return (
-    <SidebarGroup>
-      <h2>Tags</h2>
-      <TagList tags={project.tags} link />
-    </SidebarGroup>
-  )
-}
-
 const RelatedProjectsGroup = () => {
   const { project } = useContext(ProjectContext)
 
@@ -176,9 +147,7 @@ const RelatedProjectsGroup = () => {
   }
 
   const projects = []
-  for (let [slug, project] of slugToProject) {
-    console.log(slug, score.get(slug))
-    //score.set(slug, connectivity.get(slug)! + tagCardinality.get(slug)!)
+  for (let [, project] of slugToProject) {
     projects.push(project)
   }
 
@@ -202,30 +171,6 @@ const RelatedProjectsGroup = () => {
   )
 }
 
-const Sidebar: FC = () => {
-  return (
-    <>
-      <StatusGroup />
-      <TagsGroup />
-      <RelatedProjectsGroup />
-      <BlogPostsGroup />
-    </>
-  )
-}
-
-const Content: FC = () => {
-  const { project } = useContext(ProjectContext)
-  return (
-    <>
-      <header>
-        <h1>{project.title!}</h1>
-        <p className="text-subtitle">{project.internal.description}</p>
-      </header>
-      <section dangerouslySetInnerHTML={{ __html: project.markdown.html!! }} />
-    </>
-  )
-}
-
 type ProjectContextData = {
   project: Project
 }
@@ -234,31 +179,37 @@ const ProjectContext = createContext<ProjectContextData>(
   {} as ProjectContextData
 )
 
-const ProjectDetailTemplate: FC<PageProps<Data, Context>> = ({ data }) => {
+const ProjectDetailTemplate: FC<PageProps<Data, Context>> = props => {
+  const { data } = props
   const project = data.project
 
   return (
     <ProjectContext.Provider value={{ project }}>
-      <Layout currentLocation="projects">
-        <SEO
-          title={project.title!}
+      <Layout {...props} currentLocation="projects">
+        <LongformLayout
+          title={project.title}
           description={project.internal.description}
-        />
-        <Container tag="article" className={style.projectDetailContainer}>
-          <nav>
+          descriptionRaw={project.internal.description}
+          headingColor={getHSLString(getPersistentColor(project.slug))}
+          above={
             <Link to="/projects" className={style.backToProjects}>
               <BsArrowLeft /> Back to Projects
             </Link>
-          </nav>
-          <Row>
-            <Col lg={8} className={style.content}>
-              <Content />
-            </Col>
-            <Col lg={4}>
-              <Sidebar />
-            </Col>
-          </Row>
-        </Container>
+          }
+          sidebar={
+            <>
+              <ProjectStatusGroup />
+              <TagsGroup tags={project.tags} />
+              <RelatedProjectsGroup />
+              <BlogPostsGroup />
+            </>
+          }
+        >
+          <article
+            className="longform"
+            dangerouslySetInnerHTML={{ __html: project.markdown.html!! }}
+          />
+        </LongformLayout>
       </Layout>
     </ProjectContext.Provider>
   )
