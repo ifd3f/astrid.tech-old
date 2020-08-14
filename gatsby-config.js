@@ -149,7 +149,7 @@ module.exports = {
                 return {
                   author: "Astrid Yu",
                   title: node.title,
-                  description: node.description.text,
+                  description: node.internal.description,
                   date: node.date,
                   categories: node.tags.map(t => t.name),
                   url: site.siteMetadata.siteUrl + node.slug,
@@ -168,8 +168,8 @@ module.exports = {
                         name
                       }
                       slug
-                      description {
-                        text
+                      internal {
+                        description
                       }
                       source {
                         html
