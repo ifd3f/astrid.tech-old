@@ -51,12 +51,14 @@ This project simulates a 1-dimensional cellular automata displayed on the LEDs. 
 
 ## Top-Level Structural Diagram
 
+![The structural diagram.](./structural.jpg)
+
 ### Notes
 
-- DBNC is the debouncing circuit found in Debouncer.sv
-- SelRule is the submodule found in SelectRule.sv
-- Divider is the variable clock divider circuit found in ClockDivider.sv
-- DisplayDrv is the submodule found in DisplayDriver.sv
+- `DBNC` is the debouncing circuit found in `Debouncer.sv`
+- `SelRule` is the submodule found in `SelectRule.sv`
+- `Divider` is the variable clock divider circuit found in `ClockDivider.sv`
+- `DisplayDrv` is the submodule found in `DisplayDriver.sv`
 
 ## Simulation Results
 
@@ -64,14 +66,14 @@ This project simulates a 1-dimensional cellular automata displayed on the LEDs. 
 
 What this simulation does is:
 
-- 0s to 10s: Set the rule to 16 by using inc, dec, and the digit cursor.
-  - Rule is changed, but active_rule is not changed until Reset is pressed.
+- 0s to 10s: Set the rule to 16 by using `inc`, `dec`, and the digit cursor.
+  - Rule is changed, but `active_rule` is not changed until `Reset` is pressed.
 - 12s to 60s: Increase the speed.
   - The simulation clock accelerates during this time.
-  - The simulation clock divider N decreases during this time.
+  - The simulation clock divider `N` decreases during this time.
 - 65s to 120s: Decrease the speed.
   - The simulation clock decelerates during this time.
-  - The simulation clock divider N increased during this time.
+  - The simulation clock divider `N` increased during this time.
 
 ## Appendix A: Code
 
@@ -83,7 +85,7 @@ The code can be found on GitHub at https://github.com/Plenglin/Basys3-1D-Cellula
 
 ### Motivation
 
-I wanted to make it so that if you increment, you increase the frequency at a constant rate. Say we started at a clock divider output period of 1000ms = 1hz, and we wanted to increase the frequency by 0.1hz every time the increment button is pressed. We would have to change the period to 1/1.1hz = 909ms, then 1/1.2hz = 833ms, then 1/1.3hz = 769ms, etc.
+I wanted to make it so that if you increment, you increase the frequency at a constant rate. Say we started at a clock divider output period of $1000ms$, or $1Hz$, and we wanted to increase the frequency by 0.1hz every time the increment button is pressed. We would have to change the period to $\frac{1}{1.1Hz} = 909ms$, then $\frac{1}{1.2Hz} = 833ms$, then $\frac{1}{1.3Hz} = 769ms$, etc.
 
 If I’m being completely honest, I didn’t need to do any of this, but I thought it would be cool at the time.
 
@@ -123,4 +125,4 @@ $$s_2(0)=\frac{b}{4}$$
 
 $$s_3=\frac{3a}{4}$$
 
-The code that implements these formulas is in [SpeedControl.sv](https://github.com/Plenglin/Basys3-1D-Cellular-Automata/blob/master/FinalProject.srcs/sources_1/new/SpeedControl.sv).
+The code that implements these formulas is in [`SpeedControl.sv`](https://github.com/Plenglin/Basys3-1D-Cellular-Automata/blob/master/FinalProject.srcs/sources_1/new/SpeedControl.sv).
