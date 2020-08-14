@@ -1,4 +1,4 @@
-name: Publish to astrid.tech
+name: Deploy
 
 on:
   push:
