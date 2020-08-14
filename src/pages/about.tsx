@@ -25,11 +25,12 @@ export const pageQuery = graphql`
 `
 const About: FC<PageProps<Data>> = props => {
   const { data } = props
+  // TODO add linkedin when... well, you know
   return (
     <Layout {...props} currentLocation="about">
       <SEO
         title="About"
-        description="Information about the illustrious character known as Astrid Yu"
+        description="Information about the not-particularly-illustrious person known as Astrid Yu."
       />
       <Container className={styles.blogContentContainer}>
         <div
@@ -40,18 +41,18 @@ const About: FC<PageProps<Data>> = props => {
         <div>
           <ul>
             <li>
-              <a href="mailto:astridyu3.14@gmail.com">
-                <BsEnvelope title="email" /> astridyu3.14@gmail.com
+              <a href="mailto:hello@astrid.tech">
+                <BsEnvelope title="Email" /> hello@astrid.tech
               </a>
             </li>
             <li>
               <a href="tel:+18052705368">
-                <GiPhone title="phone" /> ‪(805) 270-5368‬
+                <GiPhone title="Phone" /> ‪(805) 270-5368‬
               </a>
             </li>
             <li>
               <a href="https://github.com/Plenglin">
-                <GoMarkGithub /> Follow me on GitHub
+                <GoMarkGithub title="GitHub" /> Follow me on GitHub
               </a>
             </li>
           </ul>
