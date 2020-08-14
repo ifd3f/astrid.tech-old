@@ -54,6 +54,7 @@ const BlogIndex: FC<PageProps<Data>> = props => {
         {data.allBlogPost.edges.map(({ node: post }) => (
           <PostBrief post={post} />
         ))}
+        <p className="text-center text-muted">(End of posts)</p>
       </Container>
     </Layout>
   )
