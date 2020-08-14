@@ -98,7 +98,7 @@ const SearchContext = createContext<SearchContext>({} as any)
 type FiltererArgs = {
   children: ReactNode
   projects: Project[]
-  fuse: Fuse<Project, any>
+  fuse: Fuse<Project>
 }
 
 const Filterer: FC<FiltererArgs> = ({ children, projects, fuse }) => {
@@ -130,9 +130,9 @@ const Filterer: FC<FiltererArgs> = ({ children, projects, fuse }) => {
   var displayedProjects =
     searchString == ""
       ? projects
-      : fuse.search(searchString).map(result => {
+      : (fuse.search(searchString).map((result: any) => {
           return result.item
-        })
+        }) as Project[])
 
   if (filterTags.length > 0) {
     displayedProjects = displayedProjects.filter(project => {

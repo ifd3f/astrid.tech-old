@@ -189,6 +189,7 @@ const ProjectDetailTemplate: FC<PageProps<Data, Context>> = props => {
         <LongformLayout
           title={project.title}
           description={project.internal.description}
+          descriptionRaw={project.internal.description}
           headingColor={getHSLString(getPersistentColor(project.slug))}
           above={
             <Link to="/projects" className={style.backToProjects}>

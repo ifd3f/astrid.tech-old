@@ -24,19 +24,7 @@ export const pageQuery = graphql`
     allBlogPost(sort: { fields: date, order: DESC }) {
       edges {
         node {
-          internal {
-            description
-            content
-          }
-          title
-          date
-          slug
-          tags {
-            ...TagBadge
-          }
-          source {
-            excerpt
-          }
+          ...PostBrief
         }
       }
     }

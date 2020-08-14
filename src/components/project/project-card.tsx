@@ -107,7 +107,8 @@ type ProjectBodyProps = {
 
 const ProjectBody: FC<ProjectBodyProps> = ({ project, showBorder = false }) => (
   <TagList
-    tags={project.tags.slice(0, 5)}
+    tags={project.tags}
+    limit={5}
     className={styles.tags + (showBorder ? " " + styles.border : "")}
     link
   />

@@ -13,7 +13,11 @@ import { Container } from "reactstrap"
 export const pageQuery = graphql`
   query BlogPostBySlug($slug: String!) {
     blogPost(slug: { eq: $slug }) {
-      description
+      description {
+        childMarkdownRemark {
+          html
+        }
+      }
       source {
         html
       }
@@ -74,7 +78,14 @@ const BlogPostTemplate: FC<PageProps<Data, Context>> = ({
       <Layout currentLocation="blog">
         <LongformLayout
           title={post.title}
-          description={post.description}
+          description={
+            <span
+              dangerouslySetInnerHTML={{
+                __html: post.description.childMarkdownRemark.html,
+              }}
+            />
+          }
+          descriptionRaw={post.description.text}
           headingColor={getHSLString(getPersistentColor(post.slug))}
           sidebar={
             <>

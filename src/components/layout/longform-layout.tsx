@@ -10,7 +10,8 @@ import { TagList } from "../tag"
 
 type LongformLayoutProps = {
   title: string
-  description: string
+  description: ReactNode
+  descriptionRaw: string
   headingColor: string
   above?: ReactNode
   sidebar: ReactNode
@@ -20,6 +21,7 @@ type LongformLayoutProps = {
 export const LongformLayout: FC<LongformLayoutProps> = ({
   title,
   description,
+  descriptionRaw,
   headingColor,
   above,
   sidebar,
@@ -27,7 +29,7 @@ export const LongformLayout: FC<LongformLayoutProps> = ({
 }) => {
   return (
     <>
-      <SEO title={title!} description={description} />
+      <SEO title={title!} description={descriptionRaw} />
       <PageHeading
         above={above}
         title={title}

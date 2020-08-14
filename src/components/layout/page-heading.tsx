@@ -3,7 +3,7 @@ import styles from "./page-heading.module.scss"
 
 type PageHeadingProps = {
   title: string
-  description: string
+  description: ReactNode
   bgColor: string
   above?: ReactNode
 }
