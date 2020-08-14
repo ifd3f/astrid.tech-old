@@ -82,7 +82,14 @@ const SEO: FC<SEOProps> = ({
           content: metaDescription,
         },
       ].concat(meta)}
-    />
+    >
+      <link
+        title="Subscribe to the Blog!"
+        rel="alternate"
+        type="application/rss+xml"
+        href="http://astrid.tech/feed"
+      />
+    </Helmet>
   )
 }
 

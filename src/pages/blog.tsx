@@ -7,6 +7,7 @@ import { BlogPost } from "../types/index"
 import { Container } from "reactstrap"
 import styles from "../scss/blog.module.scss"
 import { PageHeading } from "src/components/layout"
+import { FaRssSquare } from "react-icons/fa"
 
 type Data = {
   allBlogPost: {
@@ -51,10 +52,19 @@ const BlogIndex: FC<PageProps<Data>> = props => {
       <SEO title={title} description={description} />
       <PageHeading title={title} description={description} bgColor="#eecc8d" />
       <Container className={styles.blogContentContainer}>
-        {data.allBlogPost.edges.map(({ node: post }) => (
-          <PostBrief post={post} />
-        ))}
-        <p className="text-center text-muted">(End of posts)</p>
+        <section>
+          <p className="text-right">
+            <a href="https://astrid.tech/feed.xml">
+              <FaRssSquare title="Subscribe to the Blog!" />
+            </a>
+          </p>
+        </section>
+        <section>
+          {data.allBlogPost.edges.map(({ node: post }) => (
+            <PostBrief post={post} />
+          ))}
+          <p className="text-center text-muted">(End of posts)</p>
+        </section>
       </Container>
     </Layout>
   )
