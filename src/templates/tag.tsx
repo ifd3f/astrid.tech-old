@@ -4,31 +4,24 @@ import { Container } from "reactstrap"
 import Layout from "../components/layout/layout"
 import SEO from "../components/seo"
 import { TagBadge } from "../components/tag"
-import { Tag } from "../types/index"
+import { Tag, Project, BlogPost } from "src/types"
 
 export const pageQuery = graphql`
   query GetTagInfo($slug: String!) {
-    allTag(filter: { slug: { eq: $slug } }) {
-      edges {
-        node {
-          ...TagBadge
-          tagged {
-            __typename
-            ... on Work {
-              id
-            }
-            ... on Project {
-              id
-            }
-            ... on Course {
-              id
-              name
-            }
-            ... on BlogPost {
-              id
-              date
-            }
-          }
+    tag(slug: { eq: $slug }) {
+      ...TagBadge
+      tagged {
+        __typename
+        ... on Project {
+          title
+          slug
+          startDate
+          endDate
+        }
+        ... on BlogPost {
+          title
+          slug
+          date
         }
       }
     }
@@ -36,56 +29,102 @@ export const pageQuery = graphql`
 `
 
 type Data = {
-  allTag: {
-    edges: [
-      {
-        node: Tag
-      }
-    ]
+  tag: Tag & {
+    projects: Project[]
+    blogPosts: BlogPost[]
   }
 }
+
+type SiteObject<T, TypeString> = T & {
+  sortDate: Date
+  __typename: TypeString
+}
+
+type SiteObjectUnion =
+  | SiteObject<Project, "Project">
+  | SiteObject<BlogPost, "BlogPost">
 
 type Context = {
   id: string
 }
 
-const TagDetailTemplate: FC<PageProps<Data, Context>> = ({ data }) => {
-  const tag = data.allTag.edges[0].node
-  console.log(data)
+type SiteObjectDisplayProps = {
+  object: SiteObjectUnion
+}
 
-  /*
-  const postsEmpty = tag.allBlogPost.edges.length == 0
-  const postsSection = () => (
-    <section>
-      <h2>Blog Posts</h2>
-      {data.allBlogPost.edges.map(({ node: post }) => (
-        <PostBrief post={post} />
-      ))}
-    </section>
+function convertDateStringInterval(start: string, end?: string | null) {
+  if (end) {
+    return new Date(end)
+  }
+  const midpoint = (new Date(start).getTime() + new Date().getTime()) / 2
+  return new Date(midpoint)
+}
+
+const BlogPostDisplay: FC<{ post: BlogPost }> = ({ post }) => {
+  return (
+    <p>
+      {post.title} {post.date}
+    </p>
+  )
+}
+
+const ProjectDisplay: FC<{ project: Project }> = ({ project }) => {
+  return (
+    <p>
+      {project.title} {project.startDate}
+    </p>
+  )
+}
+const SiteObjectDisplay: FC<SiteObjectDisplayProps> = ({ object }) => {
+  switch (object.__typename) {
+    case "BlogPost":
+      return <BlogPostDisplay post={object} />
+    case "Project":
+      return <ProjectDisplay project={object} />
+  }
+  return <p>invalid</p>
+}
+
+const TagDetailTemplate: FC<PageProps<Data, Context>> = ({ data: { tag } }) => {
+  const projects = (tag.tagged.filter(
+    t => t.__typename == "Project"
+  ) as Project[]).map(
+    project =>
+      ({
+        ...project,
+        sortDate: convertDateStringInterval(project.startDate, project.endDate),
+      } as SiteObjectUnion)
   )
 
-  const projectsEmpty = data.allProject.edges.length == 0
-  const projectsSection = () => (
-    <section>
-      <h2>Projects</h2>
-      {data.allProject.edges.map(({ node: project }) => (
-        <ProjectCard project={project} />
-      ))}
-    </section>
-  )*/
+  const blogPosts = (tag.tagged.filter(
+    t => t.__typename == "BlogPost"
+  ) as BlogPost[]).map(
+    post =>
+      ({
+        ...post,
+        sortDate: new Date(post.date),
+      } as SiteObjectUnion)
+  )
+
+  const objects = projects
+    .concat(blogPosts)
+    .sort((a, b) => b.sortDate.getTime() - a.sortDate.getTime())
 
   return (
     <Layout>
-      <SEO
-        title={tag.name!}
-        description={`Items on astrid.tech related to ${tag.name}`}
-      />
+      <SEO title={tag.name!} description={`Items related to ${tag.name}`} />
       <Container tag="article">
         <header>
           <h1>
-            <TagBadge tag={tag} />
+            Items related to <TagBadge tag={tag} />
           </h1>
         </header>
+
+        <section>
+          {objects.map(object => (
+            <SiteObjectDisplay object={object} />
+          ))}
+        </section>
       </Container>
     </Layout>
   )

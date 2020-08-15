@@ -24,7 +24,6 @@ export const TagBadge: FC<TagBadgeProps> = ({
   link = false,
   children,
 }) => {
-  link = false
   const linkTo = tag.slug[0] == "/" ? tag.slug : "/tags/" + tag.slug
 
   return (
