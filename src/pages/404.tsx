@@ -1,11 +1,10 @@
-import React, { FC } from "react"
 import { graphql, PageProps } from "gatsby"
+import React, { FC, useEffect, useState } from "react"
+import { Container } from "reactstrap"
+import { Site } from "src/types"
 import StringSimilarity from "string-similarity"
 import Layout from "../components/layout/layout"
 import SEO from "../components/seo"
-import Fuse from "fuse.js"
-import { Container } from "reactstrap"
-import { Site } from "src/types"
 
 export const pageQuery = graphql`
   query {
@@ -51,53 +50,73 @@ type MatchResults = {
   ratings: Result[]
 }
 
+const NotFoundPageContents: FC<{ suggestions: string[]; bugsURL: string }> = ({
+  suggestions,
+  bugsURL,
+}) => (
+  <div>
+    <p style={{ fontSize: 20 }}>
+      Perhaps you meant to go to{" "}
+      <strong>
+        <a href={suggestions[0]}>{suggestions[0]}</a>
+      </strong>
+      ? Or, maybe one of...
+    </p>
+    <ul>
+      {suggestions.slice(1, 8).map(path => (
+        <li key={path}>
+          <a href={path}>{path}</a>
+        </li>
+      ))}
+    </ul>
+    <p>
+      Maybe I brought you here on accident! In that event, please{" "}
+      <a href={bugsURL}>file a bug report on my GitHub issues page</a> and I
+      will fix it as soon as possible!
+    </p>
+  </div>
+)
+
 const NotFoundPage: FC<PageProps<Data>> = props => {
   const { data, location } = props
 
   const paths = data.allSitePage.edges.map(({ node }) => node.path)
-  const isSSR = typeof window === "undefined"
 
-  const result = StringSimilarity.findBestMatch(
-    location.pathname,
-    paths
-  ) as MatchResults
+  const [suggestions, setSuggestions] = useState(null as string[] | null)
 
-  const suggestions = isSSR
-    ? []
-    : result.ratings
+  useEffect(() => {
+    const results = StringSimilarity.findBestMatch(
+      location.pathname,
+      paths
+    ) as MatchResults
+    setSuggestions(
+      results.ratings
         .sort((a, b) => b.rating - a.rating)
         .map(result => result.target)
-        .slice(1, 7)
+        .slice(1, 8)
+    )
+  }, [suggestions])
 
   return (
     <Layout {...props}>
-      <SEO
-        title="404 Not Found"
-        description="This page doesn't exist! Panic!"
-      />
-      <Container style={{ padding: 20 }}>
+      <Container
+        style={{
+          padding: 20,
+          height: "70vh",
+        }}
+        tag="main"
+      >
         <h1>404 Not Found</h1>
-        <p style={{ fontSize: 20 }}>
-          Perhaps you meant to go to{" "}
-          <b>
-            <a href={result.bestMatch.target}>{result.bestMatch.target}</a>
-          </b>
-          ? Or, maybe one of...
-        </p>
-        <ul>
-          {suggestions.map(path => (
-            <li key={path}>
-              <a href={path}>{path}</a>
-            </li>
-          ))}
-        </ul>
-        <p>
-          Maybe I brought you here on accident! In that event, please{" "}
-          <a href={data.site.siteMetadata.package.bugs.url}>
-            file a bug report on my GitHub issues page
-          </a>{" "}
-          and I will fix it as soon as possible!
-        </p>
+        <SEO
+          title="404 Not Found"
+          description="This page doesn't exist! Panic!"
+        />
+        {suggestions ? (
+          <NotFoundPageContents
+            suggestions={suggestions}
+            bugsURL={data.site.siteMetadata.package.bugs.url}
+          />
+        ) : null}
       </Container>
     </Layout>
   )

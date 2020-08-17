@@ -1,4 +1,4 @@
-import React, { FC } from "react"
+import React, { FC, useEffect, useState } from "react"
 import { useCookies } from "react-cookie"
 import { Button, Container } from "reactstrap"
 import { useStaticQuery } from "gatsby"
@@ -51,8 +51,12 @@ export const CookieNotification = () => {
       }
     }
   `)
-  const isSSR = typeof window === "undefined"
+  const [isSSR, setIsSSR] = useState(true)
   const { cookiePolicyVersion } = data.site.siteMetadata
+
+  useEffect(() => {
+    setIsSSR(false)
+  }, [isSSR])
 
   const onAcceptTerms = () => {
     setCookie(COOKIE_NAME, cookiePolicyVersion, {
