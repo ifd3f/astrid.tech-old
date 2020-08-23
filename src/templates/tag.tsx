@@ -1,6 +1,7 @@
 import { graphql, Link, PageProps } from "gatsby"
 import moment from "moment"
 import React, { FC } from "react"
+import Masonry from "react-masonry-component"
 import {
   Badge,
   Card,
@@ -9,13 +10,11 @@ import {
   CardHeader,
   Col,
   Container,
-  Row,
 } from "reactstrap"
 import { formatDateInterval } from "src/components/util"
 import { BlogPost, Project, Tag } from "src/types"
 import Layout from "../components/layout/layout"
 import SEO from "../components/seo"
-import Masonry from "react-masonry-component"
 import { TagBadge, TagList } from "../components/tag"
 import style from "./tag.module.scss"
 
@@ -194,13 +193,16 @@ const TagDetailTemplate: FC<PageProps<Data, Context>> = ({ data: { tag } }) => {
     <Layout>
       <SEO title={tag.name!} description={`Items related to ${tag.name}`} />
       <Container tag="article">
-        <header>
+        <header style={{ marginTop: 20 }}>
           <h1>
             Items related to <TagBadge tag={tag} />
           </h1>
         </header>
-
         <section>
+          <h6>Related Tags</h6>
+        </section>
+
+        <section style={{ paddingBottom: 30 }}>
           <Masonry
             options={{
               transitionDuration: 0,
