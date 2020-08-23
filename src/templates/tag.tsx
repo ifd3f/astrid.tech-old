@@ -15,6 +15,7 @@ import { formatDateInterval } from "src/components/util"
 import { BlogPost, Project, Tag } from "src/types"
 import Layout from "../components/layout/layout"
 import SEO from "../components/seo"
+import Masonry from "react-masonry-component"
 import { TagBadge, TagList } from "../components/tag"
 import style from "./tag.module.scss"
 
@@ -199,13 +200,19 @@ const TagDetailTemplate: FC<PageProps<Data, Context>> = ({ data: { tag } }) => {
           </h1>
         </header>
 
-        <Row>
-          {objects.map(object => (
-            <Col xs="12" md="6" lg="4" style={{ paddingBottom: 30 }}>
-              <SiteObjectDisplay object={object} />
-            </Col>
-          ))}
-        </Row>
+        <section>
+          <Masonry
+            options={{
+              transitionDuration: 0,
+            }}
+          >
+            {objects.map(object => (
+              <Col xs="12" md="6" lg="4" style={{ paddingBottom: 30 }}>
+                <SiteObjectDisplay object={object} />
+              </Col>
+            ))}
+          </Masonry>
+        </section>
       </Container>
     </Layout>
   )
