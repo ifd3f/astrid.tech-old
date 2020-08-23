@@ -1,4 +1,3 @@
-import path from "path"
 import {
   CreateNodeArgs,
   CreateResolversArgs,
@@ -9,9 +8,14 @@ import {
   ParentSpanPluginArgs,
   SourceNodesArgs,
 } from "gatsby"
-import { v4 } from "uuid"
+import path from "path"
+import {
+  getHSLString,
+  getPersistentColor,
+  RichColorTheme,
+} from "../../src/util"
+import { buildNode, getContrastingTextColor } from "../util"
 import { TagNodeData, TAG_MIME_TYPE } from "./index"
-import { buildNode } from "../util"
 
 function getTagID(slug: string) {
   return "tech.astrid.tagging." + slug
@@ -37,11 +41,12 @@ function buildTagNode(tag: TagNodeData, parent?: Node) {
 }
 
 function buildDefaultTagNode(slug: string): TagNodeData {
+  const backgroundColor = getHSLString(getPersistentColor(slug, RichColorTheme))
   return {
     name: slug,
     slug,
-    color: "#ffffff",
-    backgroundColor: "#313549",
+    color: getContrastingTextColor(backgroundColor),
+    backgroundColor,
     priority: 0, // Minimum priority
   }
 }
