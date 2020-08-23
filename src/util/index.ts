@@ -1,5 +1,5 @@
 import crypto from "crypto"
-import hslToHex from "hsl-to-hex"
+const hslToHex = require("hsl-to-hex")
 import seedrandom from "seedrandom"
 
 var id = 0
@@ -53,7 +53,7 @@ export function getPersistentColor(
 }
 
 export function getHSLString([h, s, l]: number[]) {
-  return hslToHex(h, s, l)
+  return hslToHex(h, s, l) as string
 }
 
 export function formatDateInterval(startDate: string, endDate?: string | null) {
