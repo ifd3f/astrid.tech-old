@@ -1,33 +1,62 @@
-import { graphql, PageProps } from "gatsby"
+import { graphql, Link, PageProps } from "gatsby"
+import moment from "moment"
 import React, { FC } from "react"
-import { Container } from "reactstrap"
+import Masonry from "react-masonry-component"
+import {
+  Badge,
+  Card,
+  CardBody,
+  CardFooter,
+  CardHeader,
+  Col,
+  Container,
+} from "reactstrap"
+import { formatDateInterval } from "src/components/util"
+import { BlogPost, Project, Tag, Tagged } from "src/types"
 import Layout from "../components/layout/layout"
 import SEO from "../components/seo"
-import { TagBadge } from "../components/tag"
-import { Tag } from "../types/index"
+import { TagBadge, TagList } from "../components/tag"
+import style from "./tag.module.scss"
+import {
+  BipartiteNode,
+  orderByResistorSimilarity,
+} from "src/components/tag-similarity/algorithm"
 
 export const pageQuery = graphql`
   query GetTagInfo($slug: String!) {
-    allTag(filter: { slug: { eq: $slug } }) {
-      edges {
-        node {
-          ...TagBadge
-          tagged {
-            __typename
-            ... on Work {
-              id
+    tag(slug: { eq: $slug }) {
+      ...TagBadge
+      tagged {
+        __typename
+        ... on Project {
+          title
+          slug
+          internal {
+            description
+          }
+          startDate
+          endDate
+          markdown {
+            excerpt(pruneLength: 70)
+          }
+          tags {
+            ...TagBadge
+          }
+        }
+        ... on BlogPost {
+          title
+          slug
+          date
+          description {
+            childMarkdownRemark {
+              html
             }
-            ... on Project {
-              id
-            }
-            ... on Course {
-              id
-              name
-            }
-            ... on BlogPost {
-              id
-              date
-            }
+          }
+          source {
+            excerpt(pruneLength: 70)
+          }
+          tags {
+            ...TagBadge
           }
         }
       }
@@ -36,56 +65,178 @@ export const pageQuery = graphql`
 `
 
 type Data = {
-  allTag: {
-    edges: [
-      {
-        node: Tag
-      }
-    ]
+  tag: Tag & {
+    projects: Project[]
+    blogPosts: BlogPost[]
   }
 }
+
+type SiteObject<T, TypeString> = T & {
+  sortDate: Date
+  __typename: TypeString
+}
+
+type SiteObjectUnion =
+  | SiteObject<Project, "Project">
+  | SiteObject<BlogPost, "BlogPost">
 
 type Context = {
   id: string
 }
 
-const TagDetailTemplate: FC<PageProps<Data, Context>> = ({ data }) => {
-  const tag = data.allTag.edges[0].node
-  console.log(data)
+type SiteObjectDisplayProps = {
+  object: SiteObjectUnion
+}
 
-  /*
-  const postsEmpty = tag.allBlogPost.edges.length == 0
-  const postsSection = () => (
-    <section>
-      <h2>Blog Posts</h2>
-      {data.allBlogPost.edges.map(({ node: post }) => (
-        <PostBrief post={post} />
-      ))}
-    </section>
+function convertDateStringInterval(start: string, end?: string | null) {
+  if (end) {
+    return new Date(end)
+  }
+  const adjusted = (new Date(start).getTime() + new Date().getTime() * 3) / 4
+  return new Date(adjusted)
+}
+
+const dateClassName = `text-muted ${style.date}`
+
+const BlogPostDisplay: FC<{ post: BlogPost }> = ({ post }) => {
+  return (
+    <Card>
+      <Link className={style.cardLink} to={post.slug}>
+        <CardHeader>
+          <h5>
+            {post.title} <Badge color="success">Blog</Badge>
+          </h5>
+          <p className={dateClassName}>
+            {moment(post.date).format("DD MMM YYYY")}
+          </p>
+        </CardHeader>
+        <CardBody>
+          <div
+            className="lead"
+            dangerouslySetInnerHTML={{
+              __html: post.description.childMarkdownRemark.html,
+            }}
+          />
+          <small className="text-muted">{post.source.excerpt}</small>
+        </CardBody>
+      </Link>
+      <CardFooter>
+        <TagList tags={post.tags} limit={7} link />
+      </CardFooter>
+    </Card>
+  )
+}
+
+const ProjectDisplay: FC<{ project: Project }> = ({ project }) => {
+  function format(date?: string | null) {
+    if (date) {
+      return moment(date).format("MMM YYYY")
+    }
+    return null
+  }
+  return (
+    <Card>
+      <Link className={style.cardLink} to={project.slug}>
+        <CardHeader>
+          <h5>
+            {project.title} <Badge color="primary">Project</Badge>
+          </h5>
+          <p className={dateClassName}>
+            {formatDateInterval(
+              format(project.startDate)!,
+              format(project.endDate)
+            )}
+          </p>
+        </CardHeader>
+        <CardBody>
+          <p className="lead">{project.internal.description} </p>
+          <small className="text-muted">{project.markdown.excerpt}</small>
+        </CardBody>
+      </Link>
+      <CardFooter>
+        <TagList tags={project.tags} limit={7} link />
+      </CardFooter>
+    </Card>
+  )
+}
+const SiteObjectDisplay: FC<SiteObjectDisplayProps> = ({ object }) => {
+  switch (object.__typename) {
+    case "BlogPost":
+      return <BlogPostDisplay post={object} />
+    case "Project":
+      return <ProjectDisplay project={object} />
+  }
+}
+
+const TagDetailTemplate: FC<PageProps<Data, Context>> = ({ data: { tag } }) => {
+  const projects = (tag.tagged.filter(
+    t => t.__typename == "Project"
+  ) as Project[]).map(
+    project =>
+      ({
+        ...project,
+        sortDate: convertDateStringInterval(project.startDate, project.endDate),
+      } as SiteObjectUnion)
   )
 
-  const projectsEmpty = data.allProject.edges.length == 0
-  const projectsSection = () => (
-    <section>
-      <h2>Projects</h2>
-      {data.allProject.edges.map(({ node: project }) => (
-        <ProjectCard project={project} />
-      ))}
-    </section>
-  )*/
+  const blogPosts = (tag.tagged.filter(
+    t => t.__typename == "BlogPost"
+  ) as BlogPost[]).map(
+    post =>
+      ({
+        ...post,
+        sortDate: new Date(post.date),
+      } as SiteObjectUnion)
+  )
+
+  const objects = projects
+    .concat(blogPosts)
+    .sort((a, b) => b.sortDate.getTime() - a.sortDate.getTime())
+
+  const neighbors: BipartiteNode<Tagged, Tag>[] = tag.tagged
+    .filter(obj => obj.tags)
+    .map(obj => ({
+      id: obj.slug,
+      value: obj,
+      neighbors: obj.tags.map(tag => ({
+        id: tag.slug,
+        neighbors: [],
+        value: tag,
+      })),
+    }))
+  const relatedTags = orderByResistorSimilarity(neighbors, "equal")
+    .map(({ value }) => value)
+    .filter(({ slug }) => slug != tag.slug)
 
   return (
     <Layout>
-      <SEO
-        title={tag.name!}
-        description={`Items on astrid.tech related to ${tag.name}`}
-      />
+      <SEO title={tag.name!} description={`Items related to ${tag.name}`} />
       <Container tag="article">
-        <header>
+        <header style={{ marginTop: 20 }}>
           <h1>
-            <TagBadge tag={tag} />
+            Items related to <TagBadge tag={tag} />
           </h1>
         </header>
+        <section>
+          <h4>Similar Tags</h4>
+          <p>
+            <TagList tags={relatedTags} link />
+          </p>
+        </section>
+
+        <section style={{ paddingBottom: 30 }}>
+          <Masonry
+            options={{
+              transitionDuration: 0,
+            }}
+          >
+            {objects.map(object => (
+              <Col xs="12" md="6" lg="4" style={{ paddingBottom: 30 }}>
+                <SiteObjectDisplay object={object} />
+              </Col>
+            ))}
+          </Masonry>
+        </section>
       </Container>
     </Layout>
   )

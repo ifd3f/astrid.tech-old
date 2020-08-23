@@ -11,6 +11,7 @@ tags:
   - verilog
   - fpga
   - hdl
+  - computer-engineering
 url: null
 source:
   - https://github.com/Plenglin/Basys3-1D-Cellular-Automata

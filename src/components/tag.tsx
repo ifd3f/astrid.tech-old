@@ -1,8 +1,9 @@
 import { Badge } from "reactstrap"
 import { Tag, TagWrapper } from "../types/index"
 import { Link, graphql } from "gatsby"
-import React, { FC, ReactNode } from "react"
+import React, { FC, ReactNode, useState } from "react"
 import style from "./tag.module.scss"
+import { BsCaretLeftFill } from "react-icons/bs"
 
 type TagBadgeProps = {
   tag: Tag
@@ -24,7 +25,6 @@ export const TagBadge: FC<TagBadgeProps> = ({
   link = false,
   children,
 }) => {
-  link = false
   const linkTo = tag.slug[0] == "/" ? tag.slug : "/tags/" + tag.slug
 
   return (
@@ -56,8 +56,22 @@ export const TagList: FC<TagListProps> = ({
   limit = Number.MAX_SAFE_INTEGER,
   className,
 }) => {
+  const [isOpened, setOpened] = useState(false)
+
   const excluded = tags.slice(limit)
-  const alt = excluded.map(tag => tag.name).join(", ")
+
+  const onClick = (ev: React.MouseEvent<HTMLElement, MouseEvent>) => {
+    ev.preventDefault()
+    ev.stopPropagation()
+    setOpened(!isOpened)
+  }
+
+  const alt = isOpened
+    ? "Close"
+    : "Click to show: " + excluded.map(tag => tag.name).join(", ")
+  const shownTags = isOpened ? tags : tags.slice(0, limit)
+  const openBadgeText = isOpened ? <BsCaretLeftFill /> : <>+{excluded.length}</>
+
   return (
     <div className={className}>
       <p
@@ -66,11 +80,13 @@ export const TagList: FC<TagListProps> = ({
           marginBottom: 3,
         }}
       >
-        {tags.slice(0, limit).map(tag => (
+        {shownTags.map(tag => (
           <TagBadge key={tag.slug} tag={tag} link={link} />
         ))}{" "}
         {excluded.length > 0 ? (
-          <Badge title={alt}>+{excluded.length}</Badge>
+          <Badge title={alt} onClick={onClick}>
+            {openBadgeText}
+          </Badge>
         ) : null}
       </p>
     </div>
