@@ -77,3 +77,10 @@ export function getPersistentColor(
 export function getHSLString([h, s, l]: number[]) {
   return hslToHex(h, s, l)
 }
+
+export function formatDateInterval(startDate: string, endDate?: string | null) {
+  if (startDate == endDate) {
+    return startDate
+  }
+  return endDate ? `${startDate} to ${endDate}` : `${startDate} to now`
+}

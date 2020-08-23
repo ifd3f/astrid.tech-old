@@ -9,10 +9,18 @@ import {
   Layout,
   TagsGroup,
 } from "src/components/layout"
-import { getHSLString, getPersistentColor } from "src/components/util"
+import {
+  getHSLString,
+  getPersistentColor,
+  formatDateInterval,
+} from "src/components/util"
 import { StatusBadge } from "../components/project"
 import { TagList } from "../components/tag"
-import { BlogPost, Project } from "../types"
+import {
+  orderByResistorSimilarity,
+  BipartiteNode,
+} from "../components/tag-similarity/algorithm"
+import { BlogPost, Project, Tag } from "../types"
 import style from "./project-detail.module.scss"
 
 export const pageQuery = graphql`
@@ -71,13 +79,6 @@ type Context = {
   id: string
 }
 
-function formatDateInterval(startDate: string, endDate?: string | null) {
-  if (startDate == endDate) {
-    return startDate
-  }
-  return endDate ? `${startDate} to ${endDate}` : `${startDate} to now`
-}
-
 const ProjectStatusGroup = () => {
   const { project } = useContext(ProjectContext)
   return (
@@ -119,7 +120,7 @@ const BlogPostsGroup = () => {
   )
   return (
     <SidebarGroup>
-      <h2>Related Blog Posts</h2>
+      <h2>Associated Blog Posts</h2>
       {blogPosts.length == 0 ? <p>N/A</p> : list}
     </SidebarGroup>
   )
@@ -128,34 +129,24 @@ const BlogPostsGroup = () => {
 const RelatedProjectsGroup = () => {
   const { project } = useContext(ProjectContext)
 
-  // Consider the hypergraph where projects are vertices and tags are edges.
-
-  const score = new Map<string, number>()
-  const slugToProject = new Map<string, Project>()
-
-  for (let tag of project.tags) {
-    const cardinality = tag.tagged.length
-    for (let item of tag.tagged) {
-      if (item.__typename != "Project") continue
-      const other = item as Project
-      if (project.slug == other.slug) continue
-
-      const currentScore = score.get(other.slug) ?? 0
-      score.set(other.slug, 1 / cardinality + currentScore)
-      slugToProject.set(other.slug, other)
-    }
-  }
-
-  const projects = []
-  for (let [, project] of slugToProject) {
-    projects.push(project)
-  }
-
-  projects.sort((a, b) => score.get(b.slug)! - score.get(a.slug)!)
+  const neighborNodes: BipartiteNode<Tag, Project>[] = project.tags.map(
+    tag => ({
+      id: tag.slug,
+      neighbors: tag.tagged.map(project => ({
+        id: project.slug,
+        neighbors: [],
+        value: project as Project,
+      })),
+      value: tag,
+    })
+  )
+  const orderedProjects = orderByResistorSimilarity(neighborNodes).filter(
+    other => ![undefined, project.slug].includes(other.value.slug)
+  )
 
   const list = (
     <ul>
-      {projects.slice(0, 5).map(project => (
+      {orderedProjects.slice(0, 5).map(({ value: project }) => (
         <li key={project.slug}>
           <Link to={project.slug}>{project.title}</Link>
         </li>
@@ -166,7 +157,7 @@ const RelatedProjectsGroup = () => {
   return (
     <SidebarGroup>
       <h2>Similar Projects</h2>
-      {projects.length == 0 ? <p>N/A</p> : list}
+      {orderedProjects.length == 0 ? <p>N/A</p> : list}
     </SidebarGroup>
   )
 }
@@ -200,8 +191,8 @@ const ProjectDetailTemplate: FC<PageProps<Data, Context>> = props => {
             <>
               <ProjectStatusGroup />
               <TagsGroup tags={project.tags} />
-              <RelatedProjectsGroup />
               <BlogPostsGroup />
+              <RelatedProjectsGroup />
             </>
           }
         >
