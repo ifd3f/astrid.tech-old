@@ -3,7 +3,7 @@
   "homepage": "https://astrid.tech",
   "private": true,
   "description": "Personal Website of Astrid Yu",
-  "version": "0.5.1",
+  "version": "0.5.2",
   "author": "Astrid A. Yu <astrid@astrid.tech>",
   "bugs": {
     "url": "https://github.com/Plenglin/astrid.tech/issues"
@@ -119,7 +119,7 @@
     "serve": "npx gatsby serve",
     "clean": "npx gatsby clean",
     "test": "echo \"Write tests! -> https://gatsby.dev/unit-testing\" && exit 1",
-    "deploy": "gh-pages -r \"git@github.com:Plenglin/plenglin.github.io.git\" -b master -d public"
+    "deploy": "gh-pages -r \"git@github.com:Plenglin/plenglin.github.io.git\" -b master -d public -f"
   },
   "eslintConfig": {
     "extends": "react-app"

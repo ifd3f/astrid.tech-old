@@ -24,39 +24,45 @@ import {
 
 export const pageQuery = graphql`
   query GetTagInfo($slug: String!) {
-    tag(slug: { eq: $slug }) {
-      ...TagBadge
-      tagged {
-        __typename
-        ... on Project {
-          title
-          slug
-          internal {
-            description
-          }
-          startDate
-          endDate
-          markdown {
-            excerpt(pruneLength: 70)
-          }
-          tags {
-            ...TagBadge
-          }
-        }
-        ... on BlogPost {
-          title
-          slug
-          date
-          description {
-            childMarkdownRemark {
-              html
+    allTag(
+      limit: 1
+      sort: { order: DESC, fields: priority }
+      filter: { slug: { eq: $slug } }
+    ) {
+      nodes {
+        ...TagBadge
+        tagged {
+          __typename
+          ... on Project {
+            title
+            slug
+            internal {
+              description
+            }
+            startDate
+            endDate
+            markdown {
+              excerpt(pruneLength: 70)
+            }
+            tags {
+              ...TagBadge
             }
           }
-          source {
-            excerpt(pruneLength: 70)
-          }
-          tags {
-            ...TagBadge
+          ... on BlogPost {
+            title
+            slug
+            date
+            description {
+              childMarkdownRemark {
+                html
+              }
+            }
+            source {
+              excerpt(pruneLength: 70)
+            }
+            tags {
+              ...TagBadge
+            }
           }
         }
       }
@@ -65,9 +71,13 @@ export const pageQuery = graphql`
 `
 
 type Data = {
-  tag: Tag & {
-    projects: Project[]
-    blogPosts: BlogPost[]
+  allTag: {
+    nodes: [
+      Tag & {
+        projects: Project[]
+        blogPosts: BlogPost[]
+      }
+    ]
   }
 }
 
@@ -168,7 +178,8 @@ const SiteObjectDisplay: FC<SiteObjectDisplayProps> = ({ object }) => {
   }
 }
 
-const TagDetailTemplate: FC<PageProps<Data, Context>> = ({ data: { tag } }) => {
+const TagDetailTemplate: FC<PageProps<Data, Context>> = ({ data }) => {
+  const [tag] = data.allTag.nodes
   const projects = (tag.tagged.filter(
     t => t.__typename == "Project"
   ) as Project[]).map(
