@@ -9,11 +9,7 @@ import {
   Layout,
   TagsGroup,
 } from "src/components/layout"
-import {
-  getHSLString,
-  getPersistentColor,
-  formatDateInterval,
-} from "src/components/util"
+import { getHSLString, getPersistentColor, formatDateInterval } from "src/util"
 import { StatusBadge } from "../components/project"
 import { TagList } from "../components/tag"
 import {

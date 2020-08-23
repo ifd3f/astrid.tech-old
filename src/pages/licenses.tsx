@@ -2,11 +2,7 @@ import { graphql, PageProps } from "gatsby"
 import React, { FC } from "react"
 import { Container } from "reactstrap"
 import Layout from "../components/layout/layout"
-import {
-  getPersistentColor,
-  getHSLString,
-  RichColorTheme,
-} from "../components/util"
+import { getPersistentColor, getHSLString, RichColorTheme } from "src/util"
 import SEO from "../components/seo"
 import spdxLicenseList from "spdx-license-list"
 import { PieChart } from "react-minimal-pie-chart"

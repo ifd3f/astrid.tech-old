@@ -4,7 +4,7 @@ import React, { FC, PropsWithChildren, useEffect, useState } from "react"
 import { Badge, CardBody, CardLink, UncontrolledTooltip } from "reactstrap"
 import { Project } from "../../types"
 import { TagList } from "../tag"
-import { getPersistentColor, getUniqueId, PastelTheme } from "../util"
+import { getPersistentColor, getUniqueId, PastelTheme } from "src/util"
 import styles from "./project.module.scss"
 import BackgroundImage from "gatsby-background-image"
 
