@@ -13,6 +13,7 @@ export type MarkdownString = Node & {
 
 export type Tagged = TypeName & {
   tags: Tag[]
+  slug: string
 }
 
 export type Tag = Node & {
