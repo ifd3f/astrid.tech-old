@@ -1,14 +1,12 @@
 import { graphql, PageProps } from "gatsby"
 import React, { FC } from "react"
-import { PostBrief } from "../components/blog"
-import Layout from "../components/layout/layout"
-import SEO from "../components/seo"
-import { BlogPost } from "../types/index"
-import { Container } from "reactstrap"
-import styles from "../scss/blog.module.scss"
-import { BsEnvelope, BsPhone } from "react-icons/bs"
+import { BsEnvelope } from "react-icons/bs"
 import { GiPhone } from "react-icons/gi"
 import { GoMarkGithub } from "react-icons/go"
+import { Container } from "reactstrap"
+import Layout from "../components/layout/layout"
+import SEO from "../components/seo"
+import styles from "../scss/blog.module.scss"
 
 type Data = {
   file: { childMarkdownRemark: { html: string } }
@@ -23,6 +21,7 @@ export const pageQuery = graphql`
     }
   }
 `
+
 const About: FC<PageProps<Data>> = props => {
   const { data } = props
   // TODO add linkedin when... well, you know

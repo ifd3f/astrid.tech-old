@@ -9,7 +9,11 @@ import {
   Layout,
   TagsGroup,
 } from "src/components/layout"
-import { getHSLString, getPersistentColor } from "src/components/util"
+import {
+  getHSLString,
+  getPersistentColor,
+  formatDateInterval,
+} from "src/components/util"
 import { StatusBadge } from "../components/project"
 import { TagList } from "../components/tag"
 import { BlogPost, Project } from "../types"
@@ -69,13 +73,6 @@ type Data = {
 
 type Context = {
   id: string
-}
-
-function formatDateInterval(startDate: string, endDate?: string | null) {
-  if (startDate == endDate) {
-    return startDate
-  }
-  return endDate ? `${startDate} to ${endDate}` : `${startDate} to now`
 }
 
 const ProjectStatusGroup = () => {

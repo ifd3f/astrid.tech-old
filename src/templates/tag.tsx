@@ -1,10 +1,22 @@
-import { graphql, PageProps } from "gatsby"
+import { graphql, Link, PageProps } from "gatsby"
+import moment from "moment"
 import React, { FC } from "react"
-import { Container } from "reactstrap"
+import {
+  Badge,
+  Card,
+  CardBody,
+  CardFooter,
+  CardHeader,
+  Col,
+  Container,
+  Row,
+} from "reactstrap"
+import { formatDateInterval } from "src/components/util"
+import { BlogPost, Project, Tag } from "src/types"
 import Layout from "../components/layout/layout"
 import SEO from "../components/seo"
-import { TagBadge } from "../components/tag"
-import { Tag, Project, BlogPost } from "src/types"
+import { TagBadge, TagList } from "../components/tag"
+import style from "./tag.module.scss"
 
 export const pageQuery = graphql`
   query GetTagInfo($slug: String!) {
@@ -15,13 +27,33 @@ export const pageQuery = graphql`
         ... on Project {
           title
           slug
+          internal {
+            description
+          }
           startDate
           endDate
+          markdown {
+            excerpt(pruneLength: 70)
+          }
+          tags {
+            ...TagBadge
+          }
         }
         ... on BlogPost {
           title
           slug
           date
+          description {
+            childMarkdownRemark {
+              html
+            }
+          }
+          source {
+            excerpt(pruneLength: 70)
+          }
+          tags {
+            ...TagBadge
+          }
         }
       }
     }
@@ -56,23 +88,71 @@ function convertDateStringInterval(start: string, end?: string | null) {
   if (end) {
     return new Date(end)
   }
-  const midpoint = (new Date(start).getTime() + new Date().getTime()) / 2
-  return new Date(midpoint)
+  const adjusted = (new Date(start).getTime() + new Date().getTime() * 3) / 4
+  return new Date(adjusted)
 }
+
+const dateClassName = `text-muted ${style.date}`
 
 const BlogPostDisplay: FC<{ post: BlogPost }> = ({ post }) => {
   return (
-    <p>
-      {post.title} {post.date}
-    </p>
+    <Card>
+      <Link className={style.cardLink} to={post.slug}>
+        <CardHeader>
+          <h5>
+            {post.title} <Badge color="success">Blog</Badge>
+          </h5>
+          <p className={dateClassName}>
+            {moment(post.date).format("DD MMM YYYY")}
+          </p>
+        </CardHeader>
+        <CardBody>
+          <div
+            className="lead"
+            dangerouslySetInnerHTML={{
+              __html: post.description.childMarkdownRemark.html,
+            }}
+          />
+          <small className="text-muted">{post.source.excerpt}</small>
+        </CardBody>
+      </Link>
+      <CardFooter>
+        <TagList tags={post.tags} limit={7} link />
+      </CardFooter>
+    </Card>
   )
 }
 
 const ProjectDisplay: FC<{ project: Project }> = ({ project }) => {
+  function format(date?: string | null) {
+    if (date) {
+      return moment(date).format("MMM YYYY")
+    }
+    return null
+  }
   return (
-    <p>
-      {project.title} {project.startDate}
-    </p>
+    <Card>
+      <Link className={style.cardLink} to={project.slug}>
+        <CardHeader>
+          <h5>
+            {project.title} <Badge color="primary">Project</Badge>
+          </h5>
+          <p className={dateClassName}>
+            {formatDateInterval(
+              format(project.startDate)!,
+              format(project.endDate)
+            )}
+          </p>
+        </CardHeader>
+        <CardBody>
+          <p className="lead">{project.internal.description} </p>
+          <small className="text-muted">{project.markdown.excerpt}</small>
+        </CardBody>
+      </Link>
+      <CardFooter>
+        <TagList tags={project.tags} limit={7} link />
+      </CardFooter>
+    </Card>
   )
 }
 const SiteObjectDisplay: FC<SiteObjectDisplayProps> = ({ object }) => {
@@ -82,7 +162,6 @@ const SiteObjectDisplay: FC<SiteObjectDisplayProps> = ({ object }) => {
     case "Project":
       return <ProjectDisplay project={object} />
   }
-  return <p>invalid</p>
 }
 
 const TagDetailTemplate: FC<PageProps<Data, Context>> = ({ data: { tag } }) => {
@@ -120,11 +199,13 @@ const TagDetailTemplate: FC<PageProps<Data, Context>> = ({ data: { tag } }) => {
           </h1>
         </header>
 
-        <section>
+        <Row>
           {objects.map(object => (
-            <SiteObjectDisplay object={object} />
+            <Col xs="12" md="6" lg="4" style={{ paddingBottom: 30 }}>
+              <SiteObjectDisplay object={object} />
+            </Col>
           ))}
-        </section>
+        </Row>
       </Container>
     </Layout>
   )

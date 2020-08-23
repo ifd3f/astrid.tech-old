@@ -62,6 +62,7 @@ export const TagList: FC<TagListProps> = ({
 
   const onClick = (ev: React.MouseEvent<HTMLElement, MouseEvent>) => {
     ev.preventDefault()
+    ev.stopPropagation()
     setOpened(!isOpened)
   }
 
