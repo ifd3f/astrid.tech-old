@@ -12,11 +12,15 @@ import {
   Container,
 } from "reactstrap"
 import { formatDateInterval } from "src/components/util"
-import { BlogPost, Project, Tag } from "src/types"
+import { BlogPost, Project, Tag, Tagged } from "src/types"
 import Layout from "../components/layout/layout"
 import SEO from "../components/seo"
 import { TagBadge, TagList } from "../components/tag"
 import style from "./tag.module.scss"
+import {
+  BipartiteNode,
+  orderByResistorSimilarity,
+} from "src/components/tag-similarity/algorithm"
 
 export const pageQuery = graphql`
   query GetTagInfo($slug: String!) {
@@ -189,6 +193,21 @@ const TagDetailTemplate: FC<PageProps<Data, Context>> = ({ data: { tag } }) => {
     .concat(blogPosts)
     .sort((a, b) => b.sortDate.getTime() - a.sortDate.getTime())
 
+  const neighbors: BipartiteNode<Tagged, Tag>[] = tag.tagged
+    .filter(obj => obj.tags)
+    .map(obj => ({
+      id: obj.slug,
+      value: obj,
+      neighbors: obj.tags.map(tag => ({
+        id: tag.slug,
+        neighbors: [],
+        value: tag,
+      })),
+    }))
+  const relatedTags = orderByResistorSimilarity(neighbors, "equal")
+    .map(({ value }) => value)
+    .filter(({ slug }) => slug != tag.slug)
+
   return (
     <Layout>
       <SEO title={tag.name!} description={`Items related to ${tag.name}`} />
@@ -199,7 +218,10 @@ const TagDetailTemplate: FC<PageProps<Data, Context>> = ({ data: { tag } }) => {
           </h1>
         </header>
         <section>
-          <h6>Related Tags</h6>
+          <h4>Similar Tags</h4>
+          <p>
+            <TagList tags={relatedTags} link />
+          </p>
         </section>
 
         <section style={{ paddingBottom: 30 }}>
