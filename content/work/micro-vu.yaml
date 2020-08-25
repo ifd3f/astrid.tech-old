@@ -10,6 +10,7 @@ highlights:
   - Worked on the InSpec 3 software that interfaces with MicroVu's metrology devices.
   - Designed and implemented UI elements for intuitiveness and usability.
   - Researched efficient algorithms for geometric tolerance optimization and fitting.
+  - Built the foundations for the Reporting component, which allows for an extensible framework for reporting measurement results to external programs.
 tags:
   - csharp
   - reactive-programming
