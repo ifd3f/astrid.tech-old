@@ -2,19 +2,18 @@ import { graphql, Link, PageProps } from "gatsby"
 import React, { createContext, FC, useContext } from "react"
 import { BsArrowLeft } from "react-icons/bs"
 import {
+  InfoRow,
+  Layout,
   LongformLayout,
   SidebarGroup,
   StatusGroup,
-  InfoRow,
-  Layout,
   TagsGroup,
 } from "src/components/layout"
-import { getHSLString, getPersistentColor, formatDateInterval } from "src/util"
+import { formatDateInterval, getHSLString, getPersistentColor } from "src/util"
 import { StatusBadge } from "../components/project"
-import { TagList } from "../components/tag"
 import {
-  orderByResistorSimilarity,
   BipartiteNode,
+  orderByResistorSimilarity,
 } from "../components/tag-similarity/algorithm"
 import { BlogPost, Project, Tag } from "../types"
 import style from "./project-detail.module.scss"
