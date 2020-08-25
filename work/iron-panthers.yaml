@@ -9,8 +9,7 @@ endDate: 2019-05-30
 highlights:
   - Built game element detection system running on a Nvidia Jetson using OpenCV and neural network. Used to assist driver in robot alignment.
   - Researched advanced motion and path planning algorithms.
-  - Designed autonomous operation code.
-  - Designed a command queueing system for FTC.
+  - Designed an extensible framework for the autonomous operation code in FTC.
 tags:
   - java
   - robotics
