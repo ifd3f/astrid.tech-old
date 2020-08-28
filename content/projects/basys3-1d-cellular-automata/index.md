@@ -15,7 +15,7 @@ tags:
 url: null
 source:
   - https://github.com/Plenglin/Basys3-1D-Cellular-Automata
-thumbnail: null
+thumbnail: './basys3.jpeg'
 ---
 
 This is the report I submitted for the final project, transcribed into Markdown by hand, transformed into HTML by the static site generator, and rendered into pixels by your browser for your eyes to see.
@@ -35,7 +35,7 @@ There is an array of cells that can have one of 2 states: either dead or alive. 
 | **Current Pattern**           | 000 | 001 | 010 | 011 | 100 | 101 | 110 | 111 |
 | **New state for center cell** |  1  |  0  |  0  |  1  |  0  |  0  |  0  |  1  |
 
-where the current pattern is [left][center][right]. Assuming that the bordering cells are surrounded by 0, this is what will happen in one step of this rule:
+where the current pattern is \[left]\[center]\[right]. Assuming that the bordering cells are surrounded by 0, this is what will happen in one step of this rule:
 
 |             |        |
 | :---------- | -----: |
