@@ -1,22 +1,18 @@
 require(`katex/dist/katex.min.css`)
 import { graphql, Link, PageProps } from "gatsby"
-import { Disqus, CommentCount } from "gatsby-plugin-disqus"
-import React, { createContext, FC, useContext, ReactNode } from "react"
-import { LongformLayout, StatusGroup } from "src/components/layout"
-import Layout from "../components/layout/layout"
-import { getHSLString, getPersistentColor } from "src/util"
-import { BlogPost } from "../types/index"
-import { InfoRow, TagsGroup } from "src/components/layout/longform-layout"
+import { CommentCount, Disqus } from "gatsby-plugin-disqus"
+import React, { createContext, FC, useContext } from "react"
 import { Container } from "reactstrap"
+import { LongformLayout, StatusGroup } from "src/components/layout"
+import { InfoRow, TagsGroup } from "src/components/layout/longform-layout"
+import { getHSLString, getPersistentColor } from "src/util"
+import Layout from "../components/layout/layout"
+import { BlogPost } from "../types/index"
 
 export const pageQuery = graphql`
   query BlogPostBySlug($slug: String!) {
     blogPost(slug: { eq: $slug }) {
-      description {
-        childMarkdownRemark {
-          html
-        }
-      }
+      description
       source {
         html
       }
@@ -77,13 +73,7 @@ const BlogPostTemplate: FC<PageProps<Data, Context>> = ({
       <Layout currentLocation="blog">
         <LongformLayout
           title={post.title}
-          description={
-            <span
-              dangerouslySetInnerHTML={{
-                __html: post.description.childMarkdownRemark.html,
-              }}
-            />
-          }
+          description={post.description}
           descriptionRaw={post.description.text}
           headingColor={getHSLString(getPersistentColor(post.slug))}
           sidebar={

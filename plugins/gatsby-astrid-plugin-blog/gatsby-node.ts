@@ -1,12 +1,27 @@
 import { CreateNodeArgs, GatsbyNode, Node, SourceNodesArgs } from "gatsby"
+import { createFilePath, FileSystemNode } from "gatsby-source-filesystem"
 import path from "path"
-import { v4 } from "uuid"
-import {
-  buildNode,
-  getMarkdownStringType,
-  buildMarkdownStringNode,
-} from "../util"
-import { BlogPostContent, BLOG_POST_MIME_TYPE } from "./index"
+import { BlogMetadata, buildNode } from "../util"
+
+type MarkdownNode = Node & {
+  frontmatter: BlogMetadata
+  excerpt: string
+  html: string
+}
+
+function getRootFileSystemNode(
+  node: Node,
+  getNode: (id: string) => Node
+): FileSystemNode | null {
+  var out = node
+  while (out) {
+    if (out.internal.type == "File" && out.parent == null) {
+      return out as FileSystemNode
+    }
+    out = getNode(out.parent)
+  }
+  return out as FileSystemNode
+}
 
 export const sourceNodes: GatsbyNode["sourceNodes"] = async ({
   actions,
@@ -14,23 +29,12 @@ export const sourceNodes: GatsbyNode["sourceNodes"] = async ({
 }: SourceNodesArgs) => {
   const { createTypes } = actions
 
-  const ContentLocation = schema.buildObjectType({
-    name: "ContentLocation",
-    fields: {
-      id: "String!",
-      path: "[String!]",
-    },
-  })
-  const {
-    name: MarkdownString,
-    type: BlogPostMarkdownString,
-  } = getMarkdownStringType("BlogPost", schema)
   const BlogPost = schema.buildObjectType({
     name: "BlogPost",
     fields: {
       id: "String!",
       title: "String!",
-      description: MarkdownString + "!",
+      description: "String!",
       date: "Date!",
       slug: "String!",
       tagSlugs: "[String!]",
@@ -40,47 +44,40 @@ export const sourceNodes: GatsbyNode["sourceNodes"] = async ({
     interfaces: ["Tagged", "Node"],
   })
 
-  createTypes([BlogPost, BlogPostMarkdownString, ContentLocation])
+  createTypes([BlogPost])
 }
 
 export const onCreateNode: GatsbyNode["onCreateNode"] = async ({
   node,
   actions,
+  getNode,
 }: CreateNodeArgs) => {
-  if (node.internal.mediaType != BLOG_POST_MIME_TYPE) return
+  if (node.internal.type != "MarkdownRemark") return
+  const markdownNode = (node as unknown) as MarkdownNode
+
+  const parentFileSystem = getRootFileSystemNode(markdownNode, getNode)
+  if (parentFileSystem?.sourceInstanceName != "blog") return
 
   const { createNode, createParentChildLink } = actions
-  const content = JSON.parse(node.internal.content!!) as BlogPostContent
+  const slug = "/blog" + createFilePath({ node: parentFileSystem, getNode })
 
-  const slug = "/blog" + content.slug
-
-  const descriptionNode = buildMarkdownStringNode(
-    "BlogPost",
-    content.description
-  )
-
-  createNode(descriptionNode)
-  createParentChildLink({
-    parent: node,
-    child: (descriptionNode as unknown) as Node,
-  })
-
+  const description = markdownNode.frontmatter.description
   const blogPostNode = buildNode({
     internal: {
       type: "BlogPost",
-      description: content.description,
+      description,
     },
-    title: content.title,
-    description___NODE: descriptionNode.id,
+    title: markdownNode.frontmatter.title,
+    date: markdownNode.frontmatter.date,
+    description,
     slug,
-    date: content.date,
-    tagSlugs: content.tagSlugs,
-    source___NODE: content.markdownNode,
+    tagSlugs: markdownNode.frontmatter.tags,
+    source___NODE: markdownNode.id,
   })
 
   createNode(blogPostNode)
   createParentChildLink({
-    parent: node,
+    parent: markdownNode,
     child: (blogPostNode as unknown) as Node,
   })
 }

@@ -52,11 +52,7 @@ export const pageQuery = graphql`
             title
             slug
             date
-            description {
-              childMarkdownRemark {
-                html
-              }
-            }
+            description
             source {
               excerpt(pruneLength: 70)
             }
@@ -121,12 +117,7 @@ const BlogPostDisplay: FC<{ post: BlogPost }> = ({ post }) => {
           </p>
         </CardHeader>
         <CardBody>
-          <div
-            className="lead"
-            dangerouslySetInnerHTML={{
-              __html: post.description.childMarkdownRemark.html,
-            }}
-          />
+          <div className="lead">{post.description}</div>
           <small className="text-muted">{post.source.excerpt}</small>
         </CardBody>
       </Link>

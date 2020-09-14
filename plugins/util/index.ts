@@ -1,5 +1,5 @@
 import crypto from "crypto"
-import { NodeInput, Node, NodePluginArgs, NodePluginSchema } from "gatsby"
+import { Node, NodeInput, NodePluginArgs, NodePluginSchema } from "gatsby"
 import { FileSystemNode } from "gatsby-source-filesystem"
 import path from "path"
 import { v4 } from "uuid"
@@ -16,6 +16,13 @@ type NodeData<T> = T & {
   }
 }
 
+export type BlogMetadata = {
+  title: string
+  date: string
+  description: string
+  tags: string[]
+}
+
 export function buildNode<T>(
   nodeData: NodeData<T>,
   transient?: TransientData
@@ -30,7 +37,7 @@ export function buildNode<T>(
   return ({
     id: transient?.id ?? v4(),
     parent: transient?.parent,
-    children: transient?.children,
+    children: transient?.children ?? [],
     ...nodeData,
     internal,
   } as any) as NodeData<T> & Node & NodeInput
