@@ -1,12 +1,12 @@
-import { GatsbyNode, Node, Actions } from "gatsby"
-import { FileSystemNode } from "gatsby-source-filesystem"
-import { BlogMetadata } from "plugins/gatsby-astrid-transformer-markdown-post"
-import { v4 } from "uuid"
-import { Notebook, CodeCell, Output, Cell } from "../../src/types/nbformat-v4"
-import { buildNode } from "../util"
-import path from "path"
-import crypto from "crypto"
 import { promises as fs } from "fs"
+import { GatsbyNode, Node, NodePluginArgs } from "gatsby"
+import {
+  createFileNodeFromBuffer,
+  FileSystemNode,
+} from "gatsby-source-filesystem"
+import path from "path"
+import { BlogMetadata } from "plugins/gatsby-astrid-transformer-markdown-post"
+import { Cell, CodeCell, Notebook, Output } from "../../src/types/nbformat-v4"
 
 type JupyterNotebookNode = Node & {
   internal: {
@@ -26,7 +26,7 @@ class Context {
   private nextImage: number = 0
 
   constructor(
-    private readonly actions: Actions,
+    private readonly ctx: NodePluginArgs,
     private readonly jupyterNode: JupyterNotebookNode
   ) {
     this.frontmatter = jupyterNode.data.metadata.blog_data
@@ -34,11 +34,15 @@ class Context {
   }
 
   private async createImage(data: string) {
-    const buf = Buffer.from(data, "base64")
-    const filename = `${this.nextImage++}.generated.png`
-    const outpath = path.join(`${this.parsedPath.dir}/${filename}`)
-    await fs.writeFile(outpath, buf)
-    return filename
+    const buffer = Buffer.from(data, "base64")
+    return await createFileNodeFromBuffer({
+      buffer,
+      store: this.ctx.store,
+      cache: this.ctx.cache,
+      ext: ".png",
+      createNode: this.ctx.actions.createNode,
+      createNodeId: this.ctx.createNodeId,
+    })
   }
 
   private async convertOutputsToMarkdown(output: Output) {
@@ -46,9 +50,9 @@ class Context {
       case "stream":
         return "```\n" + output.text + "\n```"
       case "display_data":
-        const path = await this.createImage(output.data["image/png"] as string)
+        const file = await this.createImage(output.data["image/png"] as string)
         const alt = output.data["text/plain"]
-        return `![${alt}](./${path})`
+        return `![${alt}](${file.absolutePath})`
     }
     return ""
   }
@@ -103,38 +107,29 @@ ${await this.convertNotebookToMarkdown(this.jupyterNode.data)}
     }
   }
 
-  async createMarkdownFile() {
-    const hashFilePath = path.join(`${this.parsedPath.dir}/hash.generated.txt`)
-    const hash = crypto
-      .createHash("md5")
-      .update(
-        this.jupyterNode.internal.contentDigest +
-          (await fs.readFile(`${__dirname}/gatsby-node.ts`))
-      )
-      .digest()
-      .toString("base64")
-
-    if (!(await this.hasFileBeenUpdated(hashFilePath, hash))) return
-
-    const markdownOutPath = path.join(
-      `${this.parsedPath.dir}/${this.parsedPath.name}.generated.md`
-    )
-    await fs.writeFile(markdownOutPath, await this.createMarkdown())
-    await fs.writeFile(hashFilePath, hash)
+  async createMarkdownFile(parent: Node) {
+    const buffer = Buffer.from(await this.createMarkdown())
+    const fileNode = await createFileNodeFromBuffer({
+      buffer,
+      parentNodeId: parent.id,
+      store: this.ctx.store,
+      cache: this.ctx.cache,
+      ext: ".md",
+      createNode: this.ctx.actions.createNode,
+      createNodeId: this.ctx.createNodeId,
+    })
+    await this.ctx.actions.createParentChildLink({ parent, child: fileNode })
   }
 }
 
-export const onCreateNode: GatsbyNode["onCreateNode"] = async ({
-  node,
-  actions,
-  getNode,
-  loadNodeContent,
-}) => {
+export const onCreateNode: GatsbyNode["onCreateNode"] = async context => {
+  const { node, actions, cache, getNode, loadNodeContent } = context
+
   if (node.internal.type != "ipynb") return
   const jupyterNode = (node as unknown) as JupyterNotebookNode
 
   const parentFileSystem = getNode(jupyterNode.parent) as FileSystemNode
   if (parentFileSystem.sourceInstanceName != "blog") return
 
-  await new Context(actions, jupyterNode).createMarkdownFile()
+  await new Context(context, jupyterNode).createMarkdownFile(node)
 }
