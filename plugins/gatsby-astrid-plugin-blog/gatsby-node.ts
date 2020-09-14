@@ -1,12 +1,7 @@
 import { CreateNodeArgs, GatsbyNode, Node, SourceNodesArgs } from "gatsby"
 import { createFilePath, FileSystemNode } from "gatsby-source-filesystem"
 import path from "path"
-import { BlogMetadata } from "plugins/util"
-import {
-  buildMarkdownStringNode,
-  buildNode,
-  getMarkdownStringType,
-} from "../util"
+import { BlogMetadata, buildNode } from "../util"
 
 type MarkdownNode = Node & {
   frontmatter: BlogMetadata
@@ -34,23 +29,12 @@ export const sourceNodes: GatsbyNode["sourceNodes"] = async ({
 }: SourceNodesArgs) => {
   const { createTypes } = actions
 
-  const ContentLocation = schema.buildObjectType({
-    name: "ContentLocation",
-    fields: {
-      id: "String!",
-      path: "[String!]",
-    },
-  })
-  const {
-    name: MarkdownString,
-    type: BlogPostMarkdownString,
-  } = getMarkdownStringType("BlogPost", schema)
   const BlogPost = schema.buildObjectType({
     name: "BlogPost",
     fields: {
       id: "String!",
       title: "String!",
-      description: MarkdownString + "!",
+      description: "String!",
       date: "Date!",
       slug: "String!",
       tagSlugs: "[String!]",
@@ -60,7 +44,7 @@ export const sourceNodes: GatsbyNode["sourceNodes"] = async ({
     interfaces: ["Tagged", "Node"],
   })
 
-  createTypes([BlogPost, BlogPostMarkdownString, ContentLocation])
+  createTypes([BlogPost])
 }
 
 export const onCreateNode: GatsbyNode["onCreateNode"] = async ({
@@ -78,30 +62,22 @@ export const onCreateNode: GatsbyNode["onCreateNode"] = async ({
   const slug = "/blog" + createFilePath({ node: parentFileSystem, getNode })
 
   const description = markdownNode.frontmatter.description
-  const descriptionNode = buildMarkdownStringNode("BlogPost", description)
-
-  createNode(descriptionNode)
-  createParentChildLink({
-    parent: node,
-    child: (descriptionNode as unknown) as Node,
-  })
-
   const blogPostNode = buildNode({
     internal: {
       type: "BlogPost",
-      description: description,
+      description,
     },
     title: markdownNode.frontmatter.title,
     date: markdownNode.frontmatter.date,
-    description___NODE: descriptionNode.id,
+    description,
     slug,
     tagSlugs: markdownNode.frontmatter.tags,
-    source___NODE: markdownNode,
+    source___NODE: markdownNode.id,
   })
 
   createNode(blogPostNode)
   createParentChildLink({
-    parent: node,
+    parent: markdownNode,
     child: (blogPostNode as unknown) as Node,
   })
 }

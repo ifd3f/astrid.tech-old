@@ -37,7 +37,7 @@ export function buildNode<T>(
   return ({
     id: transient?.id ?? v4(),
     parent: transient?.parent,
-    children: transient?.children,
+    children: transient?.children ?? [],
     ...nodeData,
     internal,
   } as any) as NodeData<T> & Node & NodeInput
