@@ -1,4 +1,4 @@
-import { Link, graphql } from "gatsby"
+import { graphql, Link } from "gatsby"
 import moment from "moment"
 import React, { FC } from "react"
 import { Col, Row } from "reactstrap"
@@ -12,11 +12,7 @@ type PostProps = {
 
 export const PostBriefFragment = graphql`
   fragment PostBrief on BlogPost {
-    description {
-      childMarkdownRemark {
-        html
-      }
-    }
+    description
     title
     date
     slug
@@ -37,12 +33,7 @@ export const PostBrief: FC<PostProps> = ({ post }) => {
         <Row className="col">
           <Col sm={8}>
             <h3>{post.title}</h3>
-            <div
-              className="text-muted"
-              dangerouslySetInnerHTML={{
-                __html: post.description.childMarkdownRemark.html,
-              }}
-            />
+            <div className="text-muted">{post.description}</div>
           </Col>
           <Col sm={4}>
             <p className={`text-muted ${style.date}`}>{dateString}</p>

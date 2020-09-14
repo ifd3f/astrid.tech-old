@@ -1,12 +1,11 @@
 import { graphql, navigate } from "gatsby"
-import GatsbyImage from "gatsby-image"
-import React, { FC, PropsWithChildren, useEffect, useState } from "react"
-import { Badge, CardBody, CardLink, UncontrolledTooltip } from "reactstrap"
-import { Project } from "../../types"
-import { TagList } from "../tag"
-import { getPersistentColor, getUniqueId, PastelTheme } from "src/util"
-import styles from "./project.module.scss"
 import BackgroundImage from "gatsby-background-image"
+import React, { FC, useEffect, useState } from "react"
+import { Badge, CardBody, UncontrolledTooltip } from "reactstrap"
+import { Project } from "../../types"
+import { getPersistentColor, getUniqueId, PastelTheme } from "../../util"
+import { TagList } from "../tag"
+import styles from "./project.module.scss"
 
 type StatusBadgeProps = {
   status: null | "wip" | "complete" | "scrapped"

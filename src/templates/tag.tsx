@@ -11,16 +11,16 @@ import {
   Col,
   Container,
 } from "reactstrap"
-import { formatDateInterval } from "src/util"
-import { BlogPost, Project, Tag, Tagged } from "src/types"
-import Layout from "../components/layout/layout"
-import SEO from "../components/seo"
-import { TagBadge, TagList } from "../components/tag"
-import style from "./tag.module.scss"
 import {
   BipartiteNode,
   orderByResistorSimilarity,
 } from "src/components/tag-similarity/algorithm"
+import { BlogPost, Project, Tag, Tagged } from "src/types"
+import { formatDateInterval } from "src/util"
+import Layout from "../components/layout/layout"
+import SEO from "../components/seo"
+import { TagBadge, TagList } from "../components/tag"
+import style from "./tag.module.scss"
 
 export const pageQuery = graphql`
   query GetTagInfo($slug: String!) {
@@ -52,11 +52,7 @@ export const pageQuery = graphql`
             title
             slug
             date
-            description {
-              childMarkdownRemark {
-                html
-              }
-            }
+            description
             source {
               excerpt(pruneLength: 70)
             }
@@ -121,12 +117,7 @@ const BlogPostDisplay: FC<{ post: BlogPost }> = ({ post }) => {
           </p>
         </CardHeader>
         <CardBody>
-          <div
-            className="lead"
-            dangerouslySetInnerHTML={{
-              __html: post.description.childMarkdownRemark.html,
-            }}
-          />
+          <div className="lead">{post.description}</div>
           <small className="text-muted">{post.source.excerpt}</small>
         </CardBody>
       </Link>
