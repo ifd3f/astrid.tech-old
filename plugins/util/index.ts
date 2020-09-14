@@ -1,5 +1,5 @@
 import crypto from "crypto"
-import { NodeInput, Node, NodePluginArgs, NodePluginSchema } from "gatsby"
+import { Node, NodeInput, NodePluginArgs, NodePluginSchema } from "gatsby"
 import { FileSystemNode } from "gatsby-source-filesystem"
 import path from "path"
 import { v4 } from "uuid"
@@ -14,6 +14,13 @@ type NodeData<T> = T & {
   internal: {
     type: string
   }
+}
+
+export type BlogMetadata = {
+  title: string
+  date: string
+  description: string
+  tags: string[]
 }
 
 export function buildNode<T>(

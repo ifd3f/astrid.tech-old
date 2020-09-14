@@ -306,7 +306,6 @@ module.exports = {
     "gatsby-astrid-transformer-education",
 
     "gatsby-astrid-transformer-notebook-markdown",
-    "gatsby-astrid-transformer-markdown-post",
     "gatsby-astrid-transformer-project",
 
     "gatsby-astrid-plugin-blog",

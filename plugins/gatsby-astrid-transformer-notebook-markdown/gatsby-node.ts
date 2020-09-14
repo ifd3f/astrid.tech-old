@@ -5,7 +5,7 @@ import {
   FileSystemNode,
 } from "gatsby-source-filesystem"
 import path from "path"
-import { BlogMetadata } from "plugins/gatsby-astrid-transformer-markdown-post"
+import { BlogMetadata } from "plugins/util"
 import { Cell, CodeCell, Notebook, Output } from "../../src/types/nbformat-v4"
 
 type JupyterNotebookNode = Node & {

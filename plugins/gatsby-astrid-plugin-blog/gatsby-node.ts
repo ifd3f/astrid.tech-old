@@ -1,12 +1,32 @@
 import { CreateNodeArgs, GatsbyNode, Node, SourceNodesArgs } from "gatsby"
+import { createFilePath, FileSystemNode } from "gatsby-source-filesystem"
 import path from "path"
-import { v4 } from "uuid"
+import { BlogMetadata } from "plugins/util"
 import {
+  buildMarkdownStringNode,
   buildNode,
   getMarkdownStringType,
-  buildMarkdownStringNode,
 } from "../util"
-import { BlogPostContent, BLOG_POST_MIME_TYPE } from "./index"
+
+type MarkdownNode = Node & {
+  frontmatter: BlogMetadata
+  excerpt: string
+  html: string
+}
+
+function getRootFileSystemNode(
+  node: Node,
+  getNode: (id: string) => Node
+): FileSystemNode | null {
+  var out = node
+  while (out) {
+    if (out.internal.type == "File" && out.parent == null) {
+      return out as FileSystemNode
+    }
+    out = getNode(out.parent)
+  }
+  return out as FileSystemNode
+}
 
 export const sourceNodes: GatsbyNode["sourceNodes"] = async ({
   actions,
@@ -46,18 +66,19 @@ export const sourceNodes: GatsbyNode["sourceNodes"] = async ({
 export const onCreateNode: GatsbyNode["onCreateNode"] = async ({
   node,
   actions,
+  getNode,
 }: CreateNodeArgs) => {
-  if (node.internal.mediaType != BLOG_POST_MIME_TYPE) return
+  if (node.internal.type != "MarkdownRemark") return
+  const markdownNode = (node as unknown) as MarkdownNode
+
+  const parentFileSystem = getRootFileSystemNode(markdownNode, getNode)
+  if (parentFileSystem?.sourceInstanceName != "blog") return
 
   const { createNode, createParentChildLink } = actions
-  const content = JSON.parse(node.internal.content!!) as BlogPostContent
+  const slug = "/blog" + createFilePath({ node: parentFileSystem, getNode })
 
-  const slug = "/blog" + content.slug
-
-  const descriptionNode = buildMarkdownStringNode(
-    "BlogPost",
-    content.description
-  )
+  const description = markdownNode.frontmatter.description
+  const descriptionNode = buildMarkdownStringNode("BlogPost", description)
 
   createNode(descriptionNode)
   createParentChildLink({
@@ -68,14 +89,14 @@ export const onCreateNode: GatsbyNode["onCreateNode"] = async ({
   const blogPostNode = buildNode({
     internal: {
       type: "BlogPost",
-      description: content.description,
+      description: description,
     },
-    title: content.title,
+    title: markdownNode.frontmatter.title,
+    date: markdownNode.frontmatter.date,
     description___NODE: descriptionNode.id,
     slug,
-    date: content.date,
-    tagSlugs: content.tagSlugs,
-    source___NODE: content.markdownNode,
+    tagSlugs: markdownNode.frontmatter.tags,
+    source___NODE: markdownNode,
   })
 
   createNode(blogPostNode)
