@@ -197,9 +197,12 @@ export const createSchemaCustomization: GatsbyNode["createSchemaCustomization"] 
       fieldName: "String!",
     },
     extend: () => ({
-      resolve: (source: any, args: any, context: any, info: any) =>
-        (context.nodeModel.getAllNodes({ type: "Tag" }) as (Node &
-          TagNodeData)[]).find(node => node.slug == source.tagSlug),
+      resolve: (source: any, args: any, context: any, info: any) => {
+        const allTags = (context.nodeModel.getAllNodes({ type: "Tag" }) as (Node & TagNodeData)[])
+        const filtered = allTags.filter(node => node.slug == source.tagSlug)
+        const tag = filtered.sort(node => -node.priority)[0]
+        return tag
+      },
     }),
   })
 }
