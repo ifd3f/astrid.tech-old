@@ -1,22 +1,29 @@
 slug: fabtime
-organization: FabTime
+organization: FabTime Inc.
 position: Software Intern
 location: San Luis Obispo, CA, USA
 website: https://fabtime.com
+summary: Provides charting systems for silicon wafer fabrication plants
 startDate: 2019-11-27
 endDate: 2020-06-11
 highlights:
-  - Designed features to improve user experience and streamline fab cycles
-  - Implemented main site newsletter archive system
-  - Researched ways to migrate code to ASP.NET Core
-  - Pinpointed and eliminated bugs in various languages, including C, VBScript, JS, and SQL
+  - Implemented the https://fabtime.com newsletter archive system
+  - Eliminated bugs in various languages, including C, JavaScript, SQL, and VBScript
+  - Modernized the data extraction system by designing and implementing a REST API
+  - Researched ways to migrate code from VBScript ASP Classic to to C# ASP.NET Core
+quotes:
+  - >
+    "[Astrid is] a skilled troubleshooter and programmer and [her] strength is getting up to speed quickly as well as
+    creating new functionality -- none of these can be taught in an internship. I never saw [her] get stuck on a
+    task or not have a proposed solution to a problem." - Lara Nichols, Director of Engineering
 tags:
-  - asp-classic
-  - asp-net-core
-  - c
-  - csharp
-  - vbscript
   - javascript
+  - csharp
+  - asp-net-core
+  - rest-api
+  - c
+  - asp-classic
+  - vbscript
   - html
   - jquery
   - sql-server

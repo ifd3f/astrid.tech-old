@@ -1,16 +1,21 @@
-type: work-experience
 slug: micro-vu
-organization: Micro Vu
+organization: Micro-Vu Corp.
 position: Software Intern
-location: Burlingame, CA, USA
+location: Windsor, CA, USA
 website: https://www.microvu.com/
-summary: TODO
+summary: Metrology devices for measuring dimensions of mechanical parts
 startDate: 2020-06-22
-endDate: 2020-09-04
+endDate: null
 highlights:
-  - TODO
+  - Worked on the InSpec 3 software that interfaces with MicroVu's metrology devices.
+  - Designed and implemented UI elements for intuitiveness and usability.
+  - Researched efficient algorithms for geometric tolerance optimization and fitting.
 tags:
   - csharp
+  - reactive-programming
+  - ux-design
+  - math
+  - linear-algebra
   - wpf
   - angular-js
   - typescript
@@ -18,4 +23,3 @@ tags:
   - html
   - css
   - sass
-  - ux-design

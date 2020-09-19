@@ -4,17 +4,32 @@
   startDate: 2019-09-14
   endDate: 2023-06-11
   courses:
+    - name: Systems Programming
+      number: CPE 357
+      description: Wrote programs using low-level Unix system calls.
+      date: 2020-06-01
+      tags:
+        - c
+        - linux
     - name: Computer Architecture and Assembly Language
       number: CPE 233
-      description: Created a microcontroller on a Artix-7 FPGA.
+      description: Created and programmed a fully RISC-V compliant microcontroller on a Artix-7 FPGA.
       date: 2020-04-01
       tags:
+        - risc-v
         - fpgas
         - systemverilog
         - computer-engineering
-    - name: Computer Architecture and Assembly Language
+    - name: Discrete Structures
+      number: CSC 348
+      date: 2020-04-01
+      description: null
+      tags:
+        - math
+        - computer-science
+    - name: Digital Design
       number: CPE 133
-      description: Created a microcontroller on a Artix-7 FPGA.
+      description: Worked with SystemVerilog to create simple digital circuits on a Artix-7 FPGA.
       date: 2020-01-01
       tags:
         - fpgas
@@ -34,10 +49,3 @@
       tags:
         - math
         - linear-algebra
-    - name: Discrete Structures
-      number: CSC 348
-      date: 2020-04-01
-      description: null
-      tags:
-        - math
-        - computer-science
