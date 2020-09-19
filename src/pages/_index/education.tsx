@@ -124,14 +124,10 @@ const EducationInfo: FC<EducationInfoProps> = ({ education, courseColor }) => (
 )
 
 type EducationQueryData = {
-  allEducation: {
-    edges: {
-      node: Education
-    }[]
-  }
+  calPoly: Education
 }
 
-const EducationSection = () => {
+export function EducationSection() {
   const result: EducationQueryData = useStaticQuery(graphql`
     query GetEducationHeader {
       calPoly: school(slug: { eq: "/education/cal-poly/" }) {
@@ -153,11 +149,7 @@ const EducationSection = () => {
   return (
     <HomepageSection color="#80d9b7">
       <h2 className="section-heading">Education</h2>
-      <div>
-        {result.allEducation.edges.map(({ node: education }) => (
-          <EducationInfo education={education} courseColor="#bd8b13" />
-        ))}
-      </div>
+      <EducationInfo education={result.calPoly} courseColor="#bd8b13" />
     </HomepageSection>
   )
 }

@@ -1,7 +1,7 @@
-import React, { useState } from "react"
-import { Container, Row, Col } from "reactstrap"
-import { useStaticQuery, graphql, Link } from "gatsby"
-import { ProjectCard } from "../project"
+import { graphql, Link, useStaticQuery } from "gatsby"
+import React from "react"
+import { Col, Container, Row } from "reactstrap"
+import { ProjectCard } from "src/components/project"
 import { Project } from "../../types"
 import { HomepageSection } from "./util"
 
@@ -13,7 +13,7 @@ type QueryData = {
   }
 }
 
-const ProjectsSection = () => {
+export function ProjectsSection() {
   const result: QueryData = useStaticQuery(graphql`
     query GetFeaturedProjects {
       allProject(
@@ -56,5 +56,3 @@ const ProjectsSection = () => {
     </HomepageSection>
   )
 }
-
-export default ProjectsSection

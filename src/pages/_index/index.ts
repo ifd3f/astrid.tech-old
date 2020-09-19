@@ -1,0 +1,6 @@
+export { EducationSection } from "./education"
+export { ElevatorSection } from "./elevator"
+export { ExperienceSection } from "./ExperienceSection"
+export { HeadingSection } from "./Heading"
+export { ProjectsSection } from "./Projects"
+export { SkillsSection } from "./Skills"

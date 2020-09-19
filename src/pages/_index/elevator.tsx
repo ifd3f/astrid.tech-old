@@ -1,9 +1,8 @@
 import React from "react"
-import { Container, Col, Row } from "reactstrap"
 import styles from "./style.module.scss"
 import { HomepageSection } from "./util"
 
-export default function ElevatorSection() {
+export function ElevatorSection() {
   return (
     <HomepageSection color="#f2f2f2">
       <div className={styles.textBlock}>

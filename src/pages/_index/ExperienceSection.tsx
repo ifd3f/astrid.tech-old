@@ -1,8 +1,8 @@
 import { graphql, useStaticQuery } from "gatsby"
 import React, { FC, ReactNode } from "react"
 import { Badge } from "reactstrap"
+import { TagList } from "src/components/tag"
 import { WorkExperience } from "../../types/index"
-import { TagList } from "../tag"
 import style from "./style.module.scss"
 import { HomepageSection } from "./util"
 
@@ -76,7 +76,7 @@ const Article: FC<ArticleProps> = ({ experience, tagline: _tagline }) => {
       </div>
 
       <div>
-        <TagList tags={experience.tags.map(({ tag }) => tag!)} />
+        <TagList tags={experience.tags} />
       </div>
 
       <div>
@@ -91,22 +91,12 @@ const Article: FC<ArticleProps> = ({ experience, tagline: _tagline }) => {
 }
 
 type QueryData = {
-  allWorkExperience: {
-    edges: [
-      {
-        node: WorkExperience
-      },
-      {
-        node: WorkExperience
-      },
-      {
-        node: WorkExperience
-      }
-    ]
-  }
+  fabtime: WorkExperience
+  microvu: WorkExperience
+  ironPanthers: WorkExperience
 }
 
-export default () => {
+export function ExperienceSection() {
   const query: QueryData = useStaticQuery(graphql`
     fragment ExperienceSectionFragment on Work {
       startDate(formatString: "YYYY-MM")
@@ -124,24 +114,27 @@ export default () => {
       slug
     }
     query WorkQuery {
-      work(slug: { eq: "/work/fabtime" }) {
+      microvu: work(slug: { eq: "/work/micro-vu" }) {
+        ...ExperienceSectionFragment
+      }
+      fabtime: work(slug: { eq: "/work/fabtime" }) {
+        ...ExperienceSectionFragment
+      }
+      ironPanthers: work(slug: { eq: "/work/iron-panthers" }) {
         ...ExperienceSectionFragment
       }
     }
   `)
 
-  const [
-    { node: fabtime },
-    { node: ironPanthers },
-    { node: microvu },
-  ] = query.allWorkExperience.edges
-
   return (
     <HomepageSection color="#ddf2c4">
       <h2 className={style.sectionHeading}>Work Experience</h2>
-      <Article experience={microvu} />
-      <Article experience={fabtime} />
-      <Article experience={ironPanthers} tagline={<IronPanthersTagline />} />
+      <Article experience={query.microvu} />
+      <Article experience={query.fabtime} />
+      <Article
+        experience={query.ironPanthers}
+        tagline={<IronPanthersTagline />}
+      />
     </HomepageSection>
   )
 }

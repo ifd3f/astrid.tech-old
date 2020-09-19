@@ -1,6 +1,15 @@
 import React from "react"
 import Layout from "../components/layout/layout"
 import SEO from "../components/seo"
+import {
+  EducationSection,
+  ElevatorSection,
+  ExperienceSection,
+  HeadingSection,
+  ProjectsSection,
+  SkillsSection,
+} from "./_index"
+import styles from "./_index/style.module.scss"
 
 const Homepage = () => {
   return (

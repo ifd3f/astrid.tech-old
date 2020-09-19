@@ -1,4 +1,4 @@
-import { Link } from "gatsby"
+import { graphql, Link, useStaticQuery } from "gatsby"
 import React, { FC, ReactNode } from "react"
 import { BsStar, BsStarFill } from "react-icons/bs"
 import { SkillCategory, Tag } from "../../types/index"
@@ -64,15 +64,31 @@ const SkillCategoryView: FC<SkillCategoryViewProps> = ({
 )
 
 type QueryData = {
-  allSkill: {
-    edges: {
-      node: SkillCategory
-    }[]
+  allSkillGroup: {
+    nodes: SkillCategory[]
   }
 }
 
-function SkillsSection() {
-  console.log(query)
+export function SkillsSection() {
+  const query: QueryData = useStaticQuery(graphql`
+    query GetFeaturedSkills {
+      allSkillGroup {
+        nodes {
+          id
+          name
+          skills {
+            level
+            tag {
+              color
+              name
+              slug
+              backgroundColor
+            }
+          }
+        }
+      }
+    }
+  `)
 
   return (
     <HomepageSection color="#55cdfc">
@@ -81,12 +97,10 @@ function SkillsSection() {
         <p>Click on a tag to see related projects and blog posts!</p>
       </div>
       <div className={styleSkills.skillSection}>
-        {query.allSkill.edges.map(({ node }) => (
+        {query.allSkillGroup.nodes.map(node => (
           <SkillCategoryView category={node} />
         ))}
       </div>
     </HomepageSection>
   )
 }
-
-export default SkillsSection

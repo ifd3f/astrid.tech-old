@@ -1,9 +1,8 @@
-import { graphql, useStaticQuery, Link } from "gatsby"
+import { graphql, Link, useStaticQuery } from "gatsby"
 import React, { FC, ReactNode } from "react"
-import { BsCodeSlash, BsPerson } from "react-icons/bs"
-import { GiCircuitry } from "react-icons/gi"
-import styles from "./style.module.scss"
+import { BsPerson } from "react-icons/bs"
 import homepageStyles from "./heading.module.scss"
+import styles from "./style.module.scss"
 import { HomepageSectionProps } from "./util"
 
 const APPX_BEGAN_PROGRAMMING = new Date("2013-02-01")
@@ -86,7 +85,7 @@ const ImageOfMyself = () => (
   </div>
 )
 
-const HeadingSection = () => {
+export function HeadingSection() {
   const data = useStaticQuery(graphql`
     query HeadingBgQuery {
       coding: file(absolutePath: { regex: "/computer-coding.jpg/" }) {
@@ -120,5 +119,3 @@ const HeadingSection = () => {
     </HomepageHeader>
   )
 }
-
-export default HeadingSection
