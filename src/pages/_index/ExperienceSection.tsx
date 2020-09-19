@@ -1,9 +1,9 @@
 import { graphql, useStaticQuery } from "gatsby"
 import React, { FC, ReactNode } from "react"
-import { Container, Badge } from "reactstrap"
+import { Badge } from "reactstrap"
 import { WorkExperience } from "../../types/index"
-import style from "./style.module.scss"
 import { TagList } from "../tag"
+import style from "./style.module.scss"
 import { HomepageSection } from "./util"
 
 const IronPanthersTagline = () => {
@@ -106,36 +106,26 @@ type QueryData = {
   }
 }
 
-export const ExperienceSection = () => {
+export default () => {
   const query: QueryData = useStaticQuery(graphql`
-    {
-      allWorkExperience(
-        filter: {
-          slug: {
-            in: ["/work/fabtime", "/work/iron-panthers", "/work/micro-vu"]
-          }
-        }
-        sort: { fields: [slug], order: ASC }
-      ) {
-        edges {
-          node {
-            startDate(formatString: "YYYY-MM")
-            endDate(formatString: "YYYY-MM")
-            highlights
-            id
-            location
-            organization
-            position
-            tags {
-              tag {
-                ...TagBadge
-              }
-            }
-            summary
-            website
-            slug
-          }
-        }
+    fragment ExperienceSectionFragment on Work {
+      startDate(formatString: "YYYY-MM")
+      endDate(formatString: "YYYY-MM")
+      highlights
+      id
+      location
+      organization
+      position
+      tags {
+        ...TagBadge
+      }
+      summary
+      website
+      slug
+    }
+    query WorkQuery {
+      work(slug: { eq: "/work/fabtime" }) {
+        ...ExperienceSectionFragment
       }
     }
   `)
@@ -155,5 +145,3 @@ export const ExperienceSection = () => {
     </HomepageSection>
   )
 }
-
-export default ExperienceSection

@@ -1,22 +1,10 @@
-import React, { Component, FC, ReactNode } from "react"
-import handleViewport from "react-in-viewport"
-import {
-  Card,
-  CardBody,
-  CardHeader,
-  Col,
-  Container,
-  Progress,
-  Row,
-} from "reactstrap"
-import style from "./style.module.scss"
+import { Link } from "gatsby"
+import React, { FC, ReactNode } from "react"
+import { BsStar, BsStarFill } from "react-icons/bs"
+import { SkillCategory, Tag } from "../../types/index"
 import styleSkills from "./skills.module.scss"
-import { Tag, SkillCategory } from "../../types/index"
-import { useStaticQuery, Link } from "gatsby"
-import { graphql } from "gatsby"
-import { TagBadge } from "../tag"
+import style from "./style.module.scss"
 import { HomepageSection } from "./util"
-import { BsStarFill, BsBootstrap, BsStar } from "react-icons/bs"
 
 type StarsProps = {
   stars: number
@@ -84,23 +72,6 @@ type QueryData = {
 }
 
 function SkillsSection() {
-  const query: QueryData = useStaticQuery(graphql`
-    query GetFeaturedSkills {
-      allSkill {
-        edges {
-          node {
-            name
-            skills {
-              tag {
-                ...TagBadge
-              }
-              level
-            }
-          }
-        }
-      }
-    }
-  `)
   console.log(query)
 
   return (

@@ -1,7 +1,6 @@
 import React from "react"
 import Layout from "../components/layout/layout"
 import SEO from "../components/seo"
-import { Heading } from "./_index/_layout"
 
 const Homepage = () => {
   return (
@@ -10,7 +9,14 @@ const Homepage = () => {
         title="Astrid Yu"
         description="My name is Astrid Yu and I create software. This is my website, and it's currently under construction!"
       />
-      <Heading backgroundColor="#F7A8B8"></Heading>
+      <div className={styles.homepageContainer}>
+        <HeadingSection />
+        <ElevatorSection />
+        <SkillsSection />
+        <EducationSection />
+        <ExperienceSection />
+        <ProjectsSection />
+      </div>
     </Layout>
   )
 }

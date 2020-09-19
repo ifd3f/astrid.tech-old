@@ -3,7 +3,6 @@ import BackgroundImage from "gatsby-background-image"
 import React, { FC, useEffect, useState } from "react"
 import { Badge, CardBody, UncontrolledTooltip } from "reactstrap"
 import { Project } from "../../types"
-import { getPersistentColor, getUniqueId, PastelTheme } from "../../util"
 import { TagList } from "../tag"
 import styles from "./project.module.scss"
 

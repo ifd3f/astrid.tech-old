@@ -1,12 +1,9 @@
-import { useStaticQuery, graphql } from "gatsby"
+import { graphql, useStaticQuery } from "gatsby"
 import React, { FC, useState } from "react"
-import { Education, Course } from "../../types/index"
-import { HomepageSection } from "./util"
-import { Container } from "reactstrap"
-import { TagList } from "../util"
-import styles from "./style.module.scss"
+import { BsCaretRightFill } from "react-icons/bs"
+import { Course, Education } from "../../types/index"
 import styleEducation from "./education.module.scss"
-import { BsCaretRight, BsCaretRightFill } from "react-icons/bs"
+import { HomepageSection } from "./util"
 
 type CourseInfoProps = {
   course: Course
@@ -137,31 +134,17 @@ type EducationQueryData = {
 const EducationSection = () => {
   const result: EducationQueryData = useStaticQuery(graphql`
     query GetEducationHeader {
-      allEducation(filter: { slug: { eq: "/education/cal-poly/" } }) {
-        edges {
-          node {
-            degree
-            name
-            startDate(formatString: "YYYY-MM")
-            endDate(formatString: "YYYY-MM")
-
-            courses {
-              slug
-              name
-              number
-              date(formatString: "YYYY-MM")
-              desc
-              tags {
-                slug
-                tag {
-                  name
-                  slug
-                  color
-                  textColor
-                }
-              }
-            }
-          }
+      calPoly: school(slug: { eq: "/education/cal-poly/" }) {
+        degree
+        name
+        startDate(formatString: "YYYY-MM")
+        endDate(formatString: "YYYY-MM")
+        courses {
+          slug
+          name
+          number
+          date(formatString: "YYYY-MM")
+          description
         }
       }
     }

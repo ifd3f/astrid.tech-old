@@ -31,6 +31,10 @@ module.exports = {
   },
   plugins: [
     {
+      resolve: "gatsby-plugin-exclude",
+      options: { paths: ["/_index/**"] },
+    },
+    {
       resolve: `gatsby-source-filesystem`,
       options: {
         path: `${__dirname}/content/blog`,
