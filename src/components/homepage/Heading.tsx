@@ -103,34 +103,20 @@ const HeadingSection = () => {
 
   return (
     <HomepageHeader color="#F7A8B8">
-      <div>
-        <div
-          className={homepageStyles.introductionGroup}
-          style={{ marginLeft: "auto", marginRight: "auto" }}
-        >
+      <div className={homepageStyles.nameWrapper}>
+        <div className={homepageStyles.introductionGroup}>
           <p className={homepageStyles.preTitle}>Hello, my name is</p>
           <h1 className={homepageStyles.name}>Astrid Yu</h1>
-          <p className={homepageStyles.postTitle}>and I create software</p>
+          <p className={homepageStyles.postTitle}>Software Developer</p>
         </div>
-        <div
-          className={homepageStyles.skillBrag}
-          style={{
-            marginLeft: "auto",
-            marginRight: "auto",
-            fontSize: "19pt",
-            paddingTop: 30,
-          }}
-        >
-          <p>
-            This website is currently under construction! Very soon, this page
-            and others will look <em>much</em> nicer ^_^
-          </p>
-          <p>
-            In the meantime, feel free to look around and see what's on here
-            right now!
-          </p>
-        </div>
+        <ImageOfMyself />
       </div>
+      <p className={homepageStyles.skillBrag}>
+        An interactive portfolio made using{" "}
+        <Link to="/project/astrid-tech">
+          React, Gatsby, and several other technologies
+        </Link>
+      </p>
     </HomepageHeader>
   )
 }
