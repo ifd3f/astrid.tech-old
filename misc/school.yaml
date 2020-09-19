@@ -4,6 +4,23 @@
   startDate: 2019-09-14
   endDate: 2023-06-11
   courses:
+    - name: Computer Graphics (grad-level)
+      number: CSC 572
+      description: Studying ways to use OpenGL shaders for rendering and for physics acceleration.
+      date: 2020-09-01
+      tags:
+        - opengl
+        - linear-algebra
+        - high-performance-computing
+        - computer-science
+    - name: Special Problems for Undergraduates
+      number: CSC 400
+      description: Researching software floats that have higher precision than doubles while still remaining performant. See the bigfloat project for details.
+      date: 2020-09-01
+      tags:
+        - floating-point
+        - high-performance-computing
+        - /projects/bigfloat
     - name: Systems Programming
       number: CPE 357
       description: Wrote programs using low-level Unix system calls.
@@ -11,9 +28,10 @@
       tags:
         - c
         - linux
+        - /projects/fast-malloc-357
     - name: Computer Architecture and Assembly Language
       number: CPE 233
-      description: Created and programmed a fully RISC-V compliant microcontroller on a Artix-7 FPGA.
+      description: Created and programmed a fully RISC-V compliant microcontroller with interrupts on a Artix-7 FPGA.
       date: 2020-04-01
       tags:
         - risc-v
@@ -23,7 +41,7 @@
     - name: Discrete Structures
       number: CSC 348
       date: 2020-04-01
-      description: null
+      description: Studied fundamental topics related to discrete math and computer science, including proofs, set theory, and algorithms.
       tags:
         - math
         - computer-science
