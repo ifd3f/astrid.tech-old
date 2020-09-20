@@ -129,8 +129,11 @@ export function ExperienceSection() {
   return (
     <HomepageSection color="#ddf2c4">
       <h2 className={style.sectionHeading}>Work Experience</h2>
+      <hr/>
       <Article experience={query.microvu} />
+      <hr/>
       <Article experience={query.fabtime} />
+      <hr/>
       <Article
         experience={query.ironPanthers}
         tagline={<IronPanthersTagline />}

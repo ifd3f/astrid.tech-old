@@ -5,6 +5,7 @@ import { Badge, CardBody, UncontrolledTooltip } from "reactstrap"
 import { Project } from "../../types"
 import { TagList } from "../tag"
 import styles from "./project.module.scss"
+import { getPersistentColor, getUniqueId, PastelTheme } from "src/util"
 
 type StatusBadgeProps = {
   status: null | "wip" | "complete" | "scrapped"

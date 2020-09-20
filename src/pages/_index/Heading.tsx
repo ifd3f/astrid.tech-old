@@ -112,7 +112,7 @@ export function HeadingSection() {
       </div>
       <p className={homepageStyles.skillBrag}>
         An interactive portfolio made using{" "}
-        <Link to="/project/astrid-tech">
+        <Link to="/projects/astrid-tech">
           React, Gatsby, and several other technologies
         </Link>
       </p>
