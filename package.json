@@ -34,6 +34,7 @@
     "gatsby-plugin-sitemap": "^2.4.11",
     "gatsby-remark-autolink-headers": "^2.3.11",
     "gatsby-remark-copy-linked-files": "^2.3.3",
+    "gatsby-remark-embedder": "^3.0.0",
     "gatsby-remark-graphviz": "^1.3.10",
     "gatsby-remark-images": "^3.3.8",
     "gatsby-remark-katex": "^3.3.10",

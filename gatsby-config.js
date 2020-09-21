@@ -107,6 +107,7 @@ module.exports = {
           `gatsby-remark-smartypants`,
           `@pauliescanlon/gatsby-remark-sticky-table`,
           `gatsby-remark-copy-linked-files`,
+          "gatsby-remark-embedder",
         ],
       },
     },
