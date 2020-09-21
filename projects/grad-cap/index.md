@@ -15,3 +15,7 @@ url: null
 source: [https://github.com/Plenglin/Articulated-Tassel]
 thumbnail: ./td-thumb.jpg
 ---
+
+![A closeup of the robotic tassel spinner.](./td.jpg)
+
+This project was a joke that went too far.

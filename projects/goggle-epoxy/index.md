@@ -25,9 +25,13 @@ source: [https://github.com/Plenglin/Goggle-Epoxy]
 thumbnail: null
 ---
 
+![The circuitry.](./circuitry.jpg)
+
 Low-cost experimental AR headset similar to the Google Glass.
 
 At its heart was a Raspberry Pi Zero that drew images on an OLED display. The display projected images on the casted epoxy prism, which reflected images onto the user's eye. Its frame would have been made from 3D printed parts.
+
+![The resin mold.](./prism-casting.jpg)
 
 Unfortunately, the project was unsuccessful due to limitations in the epoxy casting process: the surface of the prism was too rough and opaque for any meaningful reflections.
 

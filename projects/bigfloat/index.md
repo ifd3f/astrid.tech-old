@@ -15,4 +15,4 @@ source:
 thumbnail: null
 ---
 
-This is my research project  for CSC 400.
+This is my research project for CSC 400.

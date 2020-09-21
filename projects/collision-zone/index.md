@@ -22,6 +22,8 @@ source: []
 thumbnail: ./thumbnail.gif
 ---
 
+![The hectic game with multiple AI players.](./thumbnail.gif)
+
 An IO-style game that involves cars crashing into each other.
 
 The initial prototype was created during [HSHacks III](https://github.com/Plenglin/HSHacks-III) back in 2017 under the name of "High Octane Elastic Snowploughs." There were many incomplete rewrites of the project until eventually I completed this project in 2019.

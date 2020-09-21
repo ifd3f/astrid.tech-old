@@ -13,5 +13,15 @@ tags:
   - autodesk-eagle
 url: null
 source: []
-thumbnail: null
+thumbnail: ./completed-cnc.jpg
 ---
+
+## Build pictures
+
+![My clean worktable. I actually cleaned it for once! Can you believe it?](./clean-desk.jpg)
+
+![All the parts laid out.](./parts.jpg)
+
+![Build in progress.](./progress.jpg)
+
+![Completed!](./completed-cnc.jpg)
