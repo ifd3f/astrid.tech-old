@@ -1,135 +1,54 @@
 import { graphql, useStaticQuery } from "gatsby"
-import React, { FC, useState } from "react"
-import { BsCaretRightFill } from "react-icons/bs"
+import { FileSystemNode } from "gatsby-source-filesystem"
+import React from "react"
+import { Card, CardDeck, CardText, CardTitle } from "reactstrap"
+import { TagList } from "src/components/tag"
 import { Course, Education } from "../../types/index"
-import styleEducation from "./education.module.scss"
 import { HomepageSection } from "./util"
 
-type CourseInfoProps = {
-  course: Course
-  color: string
-  selected?: boolean
-  onMouseEnter?: (course: Course) => void
-  onMouseLeave?: (course: Course) => void
-}
-
-const CourseInfo: FC<CourseInfoProps> = ({
+function CourseCard({
   course,
-  color,
-  selected = false,
-  onMouseEnter: _onMouseEnter = () => {},
-  onMouseLeave: _onMouseLeave = () => {},
-}) => {
-  const onMouseEnter = () => {
-    _onMouseEnter(course)
-  }
-  const onMouseLeave = () => {
-    _onMouseLeave(course)
-  }
-
-  return (
-    <div
-      className={styleEducation.courseInfo}
-      onMouseEnter={onMouseEnter}
-      onMouseLeave={onMouseLeave}
-    >
-      <div
-        className={styleEducation.mainBlock}
-        style={{ backgroundColor: color }}
-      >
-        <div className={styleEducation.content}>
-          <h5>{course.number}</h5>
-          <p className={styleEducation.courseTitle}>{course.name}</p>
-        </div>
-        <div>
-          <div className={styleEducation.arrowWrapper}>
-            <BsCaretRightFill className={styleEducation.arrow} />
-          </div>
-          <div
-            className={styleEducation.selectionLineWrapper}
-            style={{ visibility: selected ? "visible" : "collapse" }}
-          >
-            <div
-              className={styleEducation.selectionLine}
-              style={{ backgroundColor: color }}
-            ></div>
-          </div>
-        </div>
-      </div>
-    </div>
-  )
-}
-
-type CourseDetailProps = {
+  inProgress = false,
+}: {
   course: Course
-}
-
-const CourseDetail: FC<CourseDetailProps> = ({ course }) => {
-  return <div className={styleEducation.courseDetail}>{course.slug}</div>
-}
-
-type CourseDataDisplayProps = {
-  courses: Course[]
-  color: string
-}
-
-const CourseDataDisplay: FC<CourseDataDisplayProps> = ({ courses, color }) => {
-  const [displayedCourse, setDisplayedCourse] = useState(courses[0])
-
-  const onMouseEnter = (course: Course) => {
-    setDisplayedCourse(course)
-  }
-
+  inProgress?: boolean
+}) {
   return (
-    <div>
-      <div>
-        {courses
-          .sort(
-            (a, b) =>
-              b.date.localeCompare(a.date) || a.name.localeCompare(b.name)
-          )
-          .map(course => (
-            <CourseInfo
-              selected={course.slug == displayedCourse.slug}
-              course={course}
-              color={color}
-              onMouseEnter={onMouseEnter}
-            />
-          ))}
-      </div>
-      <CourseDetail course={displayedCourse} />
-    </div>
+    <Card body inverse style={{ backgroundColor: "#BD8B13" }}>
+      <CardTitle style={{ marginBottom: 0, fontWeight: "bold" }}>
+        {course.name}
+      </CardTitle>
+      <CardText style={{ marginBottom: 0 }}>{course.number}</CardText>
+      <TagList tags={course.tags} link />
+    </Card>
   )
 }
 
-type EducationInfoProps = {
-  education: Education
-  courseColor: string
-}
-
-const EducationInfo: FC<EducationInfoProps> = ({ education, courseColor }) => (
-  <article className={styleEducation.educationArticle}>
-    <div className={styleEducation.articleHeading}>
-      <h3>{education.name}</h3>
-      <div className={styleEducation.subheader}>
-        <p className={styleEducation.degree}>{education.degree}</p>
-        <p className={styleEducation.duration}>
-          {education.startDate} to {education.endDate}
-        </p>
-      </div>
-    </div>
-    <h4>Classes Taken</h4>
-    <CourseDataDisplay courses={education.courses} color={courseColor} />
-  </article>
-)
-
-type EducationQueryData = {
+type Query = {
   calPoly: Education
+  wordmark: FileSystemNode & {
+    publicURL: string
+  }
+  csc572: Course
+  cpe357: Course
+  csc348: Course
+  csc400: Course
+  cpe233: Course
 }
 
 export function EducationSection() {
-  const result: EducationQueryData = useStaticQuery(graphql`
-    query GetEducationHeader {
+  const result: Query = useStaticQuery(graphql`
+    fragment IndexEducationSectionCourseCard on Course {
+      name
+      number
+      slug
+      description
+      date
+      tags {
+        ...TagBadge
+      }
+    }
+    query IndexEducationSection {
       calPoly: school(slug: { eq: "/education/cal-poly/" }) {
         degree
         name
@@ -143,13 +62,56 @@ export function EducationSection() {
           description
         }
       }
+      wordmark: file(relativePath: { eq: "cal-poly-wordmark.svg" }) {
+        publicURL
+      }
+
+      csc572: course(slug: { eq: "/education/cal-poly/csc-572/" }) {
+        ...IndexEducationSectionCourseCard
+      }
+      cpe357: course(slug: { eq: "/education/cal-poly/cpe-357/" }) {
+        ...IndexEducationSectionCourseCard
+      }
+      csc348: course(slug: { eq: "/education/cal-poly/csc-348/" }) {
+        ...IndexEducationSectionCourseCard
+      }
+      csc400: course(slug: { eq: "/education/cal-poly/csc-400/" }) {
+        ...IndexEducationSectionCourseCard
+      }
+      cpe233: course(slug: { eq: "/education/cal-poly/cpe-233/" }) {
+        ...IndexEducationSectionCourseCard
+      }
     }
   `)
 
   return (
-    <HomepageSection color="#80d9b7">
+    <HomepageSection style={{ color: "white", backgroundColor: "#154734" }}>
       <h2 className="section-heading">Education</h2>
-      <EducationInfo education={result.calPoly} courseColor="#bd8b13" />
+      <div>
+        <div className="float-right" style={{ paddingLeft: 15 }}>
+          <img
+            height="150"
+            src={result.wordmark.publicURL}
+            alt="Cal Poly Logo"
+          />
+        </div>
+        <h3>California Polytechnic State University</h3>
+        <p>BSc. Computer Science 2023</p>
+
+        <p>Click on courses for more details!</p>
+
+        <h4>In Progress</h4>
+        <CardDeck style={{ marginBottom: 20 }}>
+          <CourseCard course={result.csc572} inProgress />
+          <CourseCard course={result.csc400} inProgress />
+        </CardDeck>
+
+        <h4>Completed</h4>
+        <CardDeck>
+          <CourseCard course={result.csc348} />
+          <CourseCard course={result.cpe357} />
+        </CardDeck>
+      </div>
     </HomepageSection>
   )
 }

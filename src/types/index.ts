@@ -70,7 +70,7 @@ export type Course = Tagged & {
   number: string
   slug: string
   date: string
-  desc: string | null
+  description: string
 }
 
 export type Education = Node & {

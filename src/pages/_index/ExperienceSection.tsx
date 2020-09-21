@@ -10,6 +10,7 @@ import { HomepageSection } from "./util"
 const IronPanthersTagline = () => {
   return (
     <p style={{ display: "inline-block", marginBottom: 5, marginRight: 5 }}>
+      <FaTrophy />{" "}
       <a href="https://theburlingameb.org/1990/news/iron-panthers-win-world-championships/">
         World
       </a>{" "}
@@ -23,7 +24,7 @@ const IronPanthersTagline = () => {
       <a href="https://www.smdailyjournal.com/news/local/burlingame-high-school-claims-robotics-crown/article_8a3bb226-6895-11e9-9d1a-9b53ee5976f3.html">
         Winning
       </a>{" "}
-      Robotics Team <FaTrophy />{" "}
+      Robotics Team -{" "}
       <Badge
         pill={true}
         color="primary"

@@ -39,7 +39,7 @@ export function ProjectsSection() {
   `)
 
   return (
-    <HomepageSection color="#f0d0b6">
+    <HomepageSection style={{ backgroundColor: "#f0d0b6" }}>
       <div className="">
         <h2>Featured Projects</h2>
         <Link to="/portfolio">See more</Link>

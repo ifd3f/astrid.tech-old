@@ -4,7 +4,7 @@
   startDate: 2019-09-14
   endDate: 2023-06-11
   courses:
-    - name: Computer Graphics (grad-level)
+    - name: Computer Graphics (graduate-level)
       number: CSC 572
       description: Studying ways to use OpenGL shaders for rendering and for physics acceleration.
       date: 2020-09-01
@@ -15,7 +15,7 @@
         - computer-science
     - name: Special Problems for Undergraduates
       number: CSC 400
-      description: Researching software floats that have higher precision than doubles while still remaining performant. See the bigfloat project for details.
+      description: Researching software floats that have higher precision than doubles while still remaining performant. See the linked bigfloat project for details.
       date: 2020-09-01
       tags:
         - floating-point
@@ -27,6 +27,7 @@
       date: 2020-06-01
       tags:
         - c
+        - cpp
         - linux
         - /projects/fast-malloc-357
     - name: Computer Architecture and Assembly Language

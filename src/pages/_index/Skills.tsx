@@ -93,7 +93,7 @@ export function SkillsSection() {
   `)
 
   return (
-    <HomepageSection color="#55cdfc">
+    <HomepageSection style={{ backgroundColor: "#55cdfc" }}>
       <div className={style.sectionHeading}>
         <h2>Skills</h2>
         <p>Click on a tag to see related projects and blog posts!</p>
