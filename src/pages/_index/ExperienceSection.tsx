@@ -1,5 +1,6 @@
 import { graphql, useStaticQuery } from "gatsby"
 import React, { FC, ReactNode } from "react"
+import { FaTrophy } from "react-icons/fa"
 import { Badge } from "reactstrap"
 import { TagList } from "src/components/tag"
 import { WorkExperience } from "../../types/index"
@@ -9,6 +10,20 @@ import { HomepageSection } from "./util"
 const IronPanthersTagline = () => {
   return (
     <p style={{ display: "inline-block", marginBottom: 5, marginRight: 5 }}>
+      <a href="https://theburlingameb.org/1990/news/iron-panthers-win-world-championships/">
+        World
+      </a>{" "}
+      <a href="https://en.wikipedia.org/wiki/Burlingame_High_School_(California)#Robotics">
+        Champion
+      </a>
+      <a href="https://www.businesswire.com/news/home/20190420005006/en/Youth-Robotics-Teams-Inspire-Record-Crowds-FIRST%C2%AE">
+        ship
+      </a>
+      -
+      <a href="https://www.smdailyjournal.com/news/local/burlingame-high-school-claims-robotics-crown/article_8a3bb226-6895-11e9-9d1a-9b53ee5976f3.html">
+        Winning
+      </a>{" "}
+      Robotics Team <FaTrophy />{" "}
       <Badge
         pill={true}
         color="primary"
@@ -23,20 +38,6 @@ const IronPanthersTagline = () => {
       >
         FTC #7316
       </Badge>
-      <a href="https://theburlingameb.org/1990/news/iron-panthers-win-world-championships/">
-        World
-      </a>{" "}
-      <a href="https://en.wikipedia.org/wiki/Burlingame_High_School_(California)#Robotics">
-        Champion
-      </a>
-      <a href="https://www.businesswire.com/news/home/20190420005006/en/Youth-Robotics-Teams-Inspire-Record-Crowds-FIRST%C2%AE">
-        ship
-      </a>
-      -
-      <a href="https://www.smdailyjournal.com/news/local/burlingame-high-school-claims-robotics-crown/article_8a3bb226-6895-11e9-9d1a-9b53ee5976f3.html">
-        Winning
-      </a>{" "}
-      Robotics Team
     </p>
   )
 }
@@ -129,11 +130,11 @@ export function ExperienceSection() {
   return (
     <HomepageSection color="#ddf2c4">
       <h2 className={style.sectionHeading}>Work Experience</h2>
-      <hr/>
+      <hr />
       <Article experience={query.microvu} />
-      <hr/>
+      <hr />
       <Article experience={query.fabtime} />
-      <hr/>
+      <hr />
       <Article
         experience={query.ironPanthers}
         tagline={<IronPanthersTagline />}

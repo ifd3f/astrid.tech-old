@@ -1,7 +1,9 @@
 import { graphql, Link, useStaticQuery } from "gatsby"
 import React, { FC, ReactNode } from "react"
 import { BsStar, BsStarFill } from "react-icons/bs"
-import { SkillCategory, Tag } from "../../types/index"
+import Masonry from "react-masonry-component"
+import { Col } from "reactstrap"
+import { SkillGroup, Tag } from "../../types/index"
 import styleSkills from "./skills.module.scss"
 import style from "./style.module.scss"
 import { HomepageSection } from "./util"
@@ -32,7 +34,7 @@ type SkillInfoDisplayProps = {
 
 const SkillInfoDisplay: FC<SkillInfoDisplayProps> = ({ tag, level }) => {
   return (
-    <Link to={`/tag/${tag.slug}`}>
+    <Link to={`/tags/${tag.slug}`}>
       <div
         className={styleSkills.skillRow}
         style={{ backgroundColor: tag.backgroundColor, color: tag.color }}
@@ -47,25 +49,25 @@ const SkillInfoDisplay: FC<SkillInfoDisplayProps> = ({ tag, level }) => {
 }
 
 type SkillCategoryViewProps = {
-  category: SkillCategory
+  category: SkillGroup
 }
 
 const SkillCategoryView: FC<SkillCategoryViewProps> = ({
   category: { name, skills },
 }) => (
-  <div className={styleSkills.skillCategory}>
+  <Col xs="12" sm="6" lg="4">
     <h3>{name}</h3>
     {skills
       .sort(({ level: a }, { level: b }) => b - a)
       .map(({ level, tag }) => (
         <SkillInfoDisplay level={level} tag={tag} />
       ))}
-  </div>
+  </Col>
 )
 
 type QueryData = {
   allSkillGroup: {
-    nodes: SkillCategory[]
+    nodes: SkillGroup[]
   }
 }
 
@@ -96,11 +98,11 @@ export function SkillsSection() {
         <h2>Skills</h2>
         <p>Click on a tag to see related projects and blog posts!</p>
       </div>
-      <div className={styleSkills.skillSection}>
+      <Masonry options={{ transitionDuration: 0 }}>
         {query.allSkillGroup.nodes.map(node => (
           <SkillCategoryView category={node} />
         ))}
-      </div>
+      </Masonry>
     </HomepageSection>
   )
 }
