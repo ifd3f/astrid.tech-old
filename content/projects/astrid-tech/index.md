@@ -20,6 +20,11 @@ url: https://astrid.tech
 source:
   - https://github.com/Plenglin/astrid.tech
 thumbnail: ./thumbnail.png
+highlights:
+  - Utilized Gatsby to statically generate the website from raw YAML and - Markdown files.
+  - Designed user-friendly interactive views in React.
+  - Applied responsive web design concepts to ensure the website fully takes advantage of mobile, tablet, and desktop.
+  - Configured continuous integration using GitHub Actions to build, deploy, and - publish the website.
 ---
 
 <iframe src="https://astrid.tech" title="My website, but with recursion" width="300" height="250"></iframe>

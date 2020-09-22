@@ -15,6 +15,9 @@ tags:
 url: null
 source: [https://github.com/Plenglin/Hair-Net]
 thumbnail: ./thumbnail.png
+highlights:
+  - Created a convolutional neural network using Python and Tensorflow to detect people’s hair and faces in real-time.
+  - Synthetically expanded the dataset by applying random distortions to training data.
 ---
 
 ![Results of the CNN on a single image](./thumbnail.png)
