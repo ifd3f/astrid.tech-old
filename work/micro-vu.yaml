@@ -7,10 +7,12 @@ summary: Metrology devices for measuring dimensions of mechanical parts
 startDate: 2020-06-22
 endDate: null
 highlights:
-  - Worked on the InSpec 3 software that interfaces with MicroVu's metrology devices.
-  - Designed and implemented UI elements for intuitiveness and usability.
-  - Researched efficient algorithms for geometric tolerance optimization and fitting.
-  - Built the foundations for the Reporting component, which allows for an extensible framework for reporting measurement results to external programs.
+  - Designed and implemented UI elements in WPF for intuitiveness and usability.
+  - Researched efficient optimization algorithms for circle-circle geometric tolerance fitting.
+  - Transformed features between multiple coordinate systems using linear algebra.
+  - Built the foundations for the Reporting and Data Access components, which are extensible frameworks that allow users to extract raw data from InSpec 3.
+  - Assisted the full-time engineers with refactoring large sections of the C# codebase.
+
 tags:
   - csharp
   - reactive-programming

@@ -7,10 +7,9 @@ summary: Provides charting systems for silicon wafer fabrication plants
 startDate: 2019-11-27
 endDate: 2020-06-11
 highlights:
-  - Implemented the https://fabtime.com newsletter archive system
-  - Eliminated bugs in various languages, including C, JavaScript, SQL, and VBScript
-  - Modernized the data extraction system by designing and implementing a REST API
-  - Researched ways to migrate code from VBScript ASP Classic to to C# ASP.NET Core
+  - Modernized the user-facing data extraction system, migrating from the old VBA/Excel-based system to a REST API server running on C# ASP.NET Core.
+  - Implemented a password-restricted newsletter archive feature in PHP for the fabtime.com website.
+  - Eliminated many difficult bugs in various languages including C, JavaScript, SQL, and VBScript.
 quotes:
   - >
     "[Astrid is] a skilled troubleshooter and programmer and [her] strength is getting up to speed quickly as well as
@@ -22,6 +21,7 @@ tags:
   - asp-net-core
   - rest-api
   - c
+  - php
   - asp-classic
   - vbscript
   - html
