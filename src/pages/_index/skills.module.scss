@@ -1,0 +1,36 @@
+@import "~src/scss/variables";
+
+.skillCategory {
+  background-color: #1d93c2;
+  margin-left: 30px;
+  margin-bottom: 10px;
+  border-radius: 15px;
+  padding: 15px;
+  padding-left: 20px;
+
+  h3 {
+    font-size: 18pt;
+    color: #ffcfcf;
+  }
+}
+
+.skillRow {
+  padding: 10px;
+  padding-left: 20px;
+  padding-right: 20px;
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 10px;
+  height: 50px;
+  font-size: 10pt;
+  border-radius: 25px;
+}
+
+.tagName {
+  margin: 0;
+  font-size: 14pt;
+}
+
+.tagStars {
+  margin: 0px;
+}

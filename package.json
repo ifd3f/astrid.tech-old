@@ -3,7 +3,7 @@
   "homepage": "https://astrid.tech",
   "private": true,
   "description": "Personal Website of Astrid Yu",
-  "version": "0.5.3",
+  "version": "0.6.0",
   "author": "Astrid A. Yu <astrid@astrid.tech>",
   "bugs": {
     "url": "https://github.com/Plenglin/astrid.tech/issues"
@@ -23,6 +23,7 @@
     "gatsby-plugin-build-date": "^1.0.0",
     "gatsby-plugin-catch-links": "^2.3.11",
     "gatsby-plugin-disqus": "^1.2.0",
+    "gatsby-plugin-exclude": "^1.0.2",
     "gatsby-plugin-feed": "^2.5.3",
     "gatsby-plugin-google-analytics": "^2.3.2",
     "gatsby-plugin-manifest": "^2.4.9",
@@ -33,6 +34,7 @@
     "gatsby-plugin-sitemap": "^2.4.11",
     "gatsby-remark-autolink-headers": "^2.3.11",
     "gatsby-remark-copy-linked-files": "^2.3.3",
+    "gatsby-remark-embedder": "^3.0.0",
     "gatsby-remark-graphviz": "^1.3.10",
     "gatsby-remark-images": "^3.3.8",
     "gatsby-remark-katex": "^3.3.10",

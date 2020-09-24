@@ -20,7 +20,14 @@ tags:
 url: https://collision.zone
 source: []
 thumbnail: ./thumbnail.gif
+highlights:
+  - Built an efficient, single-instance game server in C++ and a matchmaking server in Node.js to ensure the app is scalable.
+  - Designed a custom binary client-server communication protocol to efficiently minimize WebSocket bandwidth usage.
+  - Deployed the server on AWS EC2.
+  - Analyzed playtester feedback to tune game parameters and improve player experience.
 ---
+
+![The hectic game with multiple AI players.](./thumbnail.gif)
 
 An IO-style game that involves cars crashing into each other.
 

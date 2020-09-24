@@ -19,3 +19,5 @@ url: null
 source: [https://github.com/Plenglin/segwaybot]
 thumbnail: ./thumbnail.png
 ---
+
+![CAD image of the segway](./thumbnail.png)

@@ -20,28 +20,25 @@ url: https://astrid.tech
 source:
   - https://github.com/Plenglin/astrid.tech
 thumbnail: ./thumbnail.png
+highlights:
+  - Utilized Gatsby to statically generate the website from raw YAML and - Markdown files.
+  - Designed user-friendly interactive views in React.
+  - Applied responsive web design concepts to ensure the website fully takes advantage of mobile, tablet, and desktop.
+  - Configured continuous integration using GitHub Actions to build, deploy, and - publish the website.
 ---
 
 <iframe src="https://astrid.tech" title="My website, but with recursion" width="300" height="250"></iframe>
 
 This is my website. There are many like it, but this one is mine.
 
-## Goals
-
-- I want my website to represent my abilities and personality.
-- I want my website to be accessible to those with disabilities. I use semantic tags as well as alt text on visual elements.
-- I want my website to be responsive and mobile-friendly. The pages cannot be too large, and they must be usable on all resolutions and devices.
-
 ## Technology Stack
-
-This website is statically generated!
 
 ### The site
 
+- This website is statically generated using [Gatsby](https://www.gatsbyjs.org/).
 - Typescript
 - Sass
 - [React](https://reactjs.org/)
-- [Gatsby](https://www.gatsbyjs.org/) as the static site generator.
 - Bootstrap to make things look nice
 - Jupyter notebooks for a few blog posts
 

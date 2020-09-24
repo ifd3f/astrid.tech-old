@@ -31,6 +31,10 @@ module.exports = {
   },
   plugins: [
     {
+      resolve: "gatsby-plugin-exclude",
+      options: { paths: ["/_index/**"] },
+    },
+    {
       resolve: `gatsby-source-filesystem`,
       options: {
         path: `${__dirname}/content/blog`,
@@ -103,6 +107,7 @@ module.exports = {
           `gatsby-remark-smartypants`,
           `@pauliescanlon/gatsby-remark-sticky-table`,
           `gatsby-remark-copy-linked-files`,
+          "gatsby-remark-embedder",
         ],
       },
     },
