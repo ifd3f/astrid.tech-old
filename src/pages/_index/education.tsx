@@ -19,6 +19,7 @@ function CourseCard({
         {course.name}
       </CardTitle>
       <CardText style={{ marginBottom: 0 }}>{course.number}</CardText>
+      <CardText style={{ marginBottom: 0 }}>{course.description}</CardText>
       <TagList tags={course.tags} link />
     </Card>
   )
@@ -96,7 +97,7 @@ export function EducationSection() {
           />
         </div>
         <h3>California Polytechnic State University</h3>
-        <p>BSc. Computer Science 2023</p>
+        <p>BSc. Computer Science 2023 / GPA 3.91</p>
 
         <p>Click on courses for more details!</p>
 

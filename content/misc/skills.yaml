@@ -14,8 +14,8 @@
       level: 4
     - slug: cpp
       level: 4
-    - slug: scala
-      level: 3
+    #- slug: scala
+    #  level: 3
 - name: Web
   skills:
     - slug: react-js

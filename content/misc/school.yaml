@@ -6,7 +6,7 @@
   courses:
     - name: Computer Graphics (graduate-level)
       number: CSC 572
-      description: Studying ways to use OpenGL shaders for rendering and for physics acceleration.
+      description: Study advanced applications of OpenGL shaders. Perform fast physics simulations using compute shaders.
       date: 2020-09-01
       tags:
         - opengl
@@ -15,7 +15,7 @@
         - computer-science
     - name: Special Problems for Undergraduates
       number: CSC 400
-      description: Researching software floats that have higher precision than doubles while still remaining performant. See the linked bigfloat project for details.
+      description: Research ways to optimize software floating-point number operations. See the linked bigfloat project for details.
       date: 2020-09-01
       tags:
         - floating-point
@@ -23,7 +23,7 @@
         - /projects/bigfloat
     - name: Systems Programming
       number: CPE 357
-      description: Wrote programs using low-level Unix system calls.
+      description: Wrote C programs using low-level Unix calls. Additionally, I designed a malloc() implementation that was second-fastest in the class.
       date: 2020-06-01
       tags:
         - c
@@ -32,7 +32,7 @@
         - /projects/fast-malloc-357
     - name: Computer Architecture and Assembly Language
       number: CPE 233
-      description: Created and programmed a fully RISC-V compliant microcontroller with interrupts on a Artix-7 FPGA.
+      description: Studied concepts in discrete math and theoretical computer science. I utilized functional programming concepts for my final assignment.
       date: 2020-04-01
       tags:
         - risc-v

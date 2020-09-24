@@ -1,6 +1,6 @@
 import { graphql, Link, useStaticQuery } from "gatsby"
+import Img from "gatsby-image"
 import React, { FC, ReactNode } from "react"
-import { BsPerson } from "react-icons/bs"
 import homepageStyles from "./heading.module.scss"
 import styles from "./style.module.scss"
 import { HomepageSectionProps } from "./util"
@@ -56,49 +56,26 @@ interface IconInfoDisplayProps {
   children: ReactNode
 }
 
-const IconInfoDisplay: FC<IconInfoDisplayProps> = ({
-  icon,
-  imageSrc,
-  children,
-}) => {
-  return (
-    <div
-      className={style.subDisplayOuter}
-      style={{
-        background: `linear-gradient(rgba(0, 0, 0, 0.5), rgba(0, 0, 0, 0.5)), url(${imageSrc})`,
-        backgroundSize: "cover",
-        backgroundPosition: "center",
-      }}
-    >
-      <div className={style.subDisplay}>
-        <div className={style.wareIconOuter}>{icon}</div>
-        <div className={style.wareTextOuter}>{children}</div>
-      </div>
-    </div>
-  )
-}
-
-const ImageOfMyself = () => (
+const ImageOfMyself = ({ image }: { image: any }) => (
   <div className={homepageStyles.imageSelf}>
-    <BsPerson style={{ fontSize: 300 }} />
-    TODO
+    <Img fluid={image} />
   </div>
 )
 
 export function HeadingSection() {
   const data = useStaticQuery(graphql`
     query HeadingBgQuery {
-      coding: file(absolutePath: { regex: "/computer-coding.jpg/" }) {
-        publicURL
-      }
-      electronics: file(absolutePath: { regex: "/electronics.jpg/" }) {
-        publicURL
+      avatar: file(relativePath: { eq: "avatar2.jpg" }) {
+        childImageSharp {
+          fluid(maxHeight: 500) {
+            ...GatsbyImageSharpFluid
+          }
+        }
       }
     }
   `)
 
-  const coding: string = data.coding.publicURL
-  const electronics: string = data.electronics.publicURL
+  const myself: any = data.avatar.childImageSharp.fluid
 
   return (
     <HomepageHeader color="#F7A8B8">
@@ -108,7 +85,7 @@ export function HeadingSection() {
           <h1 className={homepageStyles.name}>Astrid Yu</h1>
           <p className={homepageStyles.postTitle}>Software Developer</p>
         </div>
-        <ImageOfMyself />
+        <ImageOfMyself image={myself} />
       </div>
       <p className={homepageStyles.skillBrag}>
         An interactive portfolio made using{" "}
