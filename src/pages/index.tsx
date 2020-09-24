@@ -11,9 +11,9 @@ import {
   ExperienceSection,
   HeadingSection,
   SkillsSection,
-} from "./_index"
-import styles from "./_index/style.module.scss"
-import { HomepageSection } from "./_index/util"
+} from "../components/_index/index"
+import styles from "../components/_index/style.module.scss"
+import { HomepageSection } from "../components/_index/util"
 
 const Homepage = () => {
   return (
