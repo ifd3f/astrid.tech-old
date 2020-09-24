@@ -31,22 +31,14 @@ highlights:
 
 This is my website. There are many like it, but this one is mine.
 
-## Goals
-
-- I want my website to represent my abilities and personality.
-- I want my website to be accessible to those with disabilities. I use semantic tags as well as alt text on visual elements.
-- I want my website to be responsive and mobile-friendly. The pages cannot be too large, and they must be usable on all resolutions and devices.
-
 ## Technology Stack
-
-This website is statically generated!
 
 ### The site
 
+- This website is statically generated using [Gatsby](https://www.gatsbyjs.org/).
 - Typescript
 - Sass
 - [React](https://reactjs.org/)
-- [Gatsby](https://www.gatsbyjs.org/) as the static site generator.
 - Bootstrap to make things look nice
 - Jupyter notebooks for a few blog posts
 

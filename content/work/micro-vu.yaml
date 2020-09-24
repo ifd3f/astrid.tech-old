@@ -9,7 +9,6 @@ endDate: null
 highlights:
   - Designed and implemented UI elements in WPF for intuitiveness and usability.
   - Researched efficient optimization algorithms for circle-circle geometric tolerance fitting.
-  - Transformed features between multiple coordinate systems using linear algebra.
   - Built the foundations for the Reporting and Data Access components, which are extensible frameworks that allow users to extract raw data from InSpec 3.
   - Assisted the full-time engineers with refactoring large sections of the C# codebase.
 

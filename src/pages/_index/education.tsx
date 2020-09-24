@@ -91,7 +91,7 @@ export function EducationSection() {
       <div>
         <div className="float-right" style={{ paddingLeft: 15 }}>
           <img
-            height="150"
+            height="140"
             src={result.wordmark.publicURL}
             alt="Cal Poly Logo"
           />
