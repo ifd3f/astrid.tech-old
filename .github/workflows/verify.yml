@@ -1,9 +1,7 @@
 name: Verify dev branch
 
 on:
-  push:
-    branches:
-      - dev
+  - push
 
 jobs:
   deploy:
