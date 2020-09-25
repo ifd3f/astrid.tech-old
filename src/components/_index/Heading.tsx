@@ -68,7 +68,7 @@ export function HeadingSection() {
       avatar: file(relativePath: { eq: "avatar2.jpg" }) {
         childImageSharp {
           fluid(maxHeight: 500) {
-            ...GatsbyImageSharpFluid
+            ...GatsbyImageSharpFluid_tracedSVG
           }
         }
       }
