@@ -17,8 +17,7 @@ tags:
   - circuit-design
 url: null
 source:
-  - https://github.com/Plenglin/QuadFrost-Arduino
-  - https://github.com/Plenglin/QuadFrost-Octoprint
+  - https://github.com/Plenglin/QuadFrost
 thumbnail: ./3dp-colors.webp
 ---
 
