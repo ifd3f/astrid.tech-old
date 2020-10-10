@@ -14,13 +14,6 @@
   border-radius: 20px;
   position: relative;
   background-color: white;
-
-  @each $size, $width in (xs: 300px, sm: 450px, md: 300px, lg: 400px, xl: 350px)
-  {
-    @media only screen and (min-width: map-get($grid-breakpoints, $size)) {
-      width: $width;
-    }
-  }
 }
 
 .projectCard::before {

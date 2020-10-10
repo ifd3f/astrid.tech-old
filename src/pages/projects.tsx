@@ -318,13 +318,19 @@ export const CardGroup: FC<{ title?: string; projects: Project[] }> = ({
   return (
     <div className={styles.cardGroupOuter}>
       <h3 className={styles.cardSectionTitle}>{title}</h3>
-      <div className={styles.cardList}>
+      <Row>
         {projects.map(project => (
-          <div key={project.slug} className={styles.projectCardWrapper}>
+          <Col
+            xs="12"
+            md="6"
+            xl="4"
+            key={project.slug}
+            className={styles.projectCardWrapper}
+          >
             <ProjectCard project={project} />
-          </div>
+          </Col>
         ))}
-      </div>
+      </Row>
     </div>
   )
 }
