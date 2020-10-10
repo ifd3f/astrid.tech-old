@@ -316,7 +316,7 @@ export const CardGroup: FC<{ title?: string; projects: Project[] }> = ({
   projects,
 }) => {
   return (
-    <div className={styles.cardGroupOuter}>
+    <section className={styles.cardGroupOuter}>
       <h3 className={styles.cardSectionTitle}>{title}</h3>
       <Row>
         {projects.map(project => (
@@ -331,26 +331,26 @@ export const CardGroup: FC<{ title?: string; projects: Project[] }> = ({
           </Col>
         ))}
       </Row>
-    </div>
+    </section>
   )
 }
 
 export const ProjectCardsView: FC = () => {
   const { isSearching, displayedProjects } = useContext(SearchContext)
   if (isSearching) {
-    return <CardGroup projects={displayedProjects} />
+    return <CardGroup title="Results" projects={displayedProjects} />
   } else {
     const map = groupBy(displayedProjects, project =>
       project.featured ? "featured" : project.status ?? "other"
     )
     return (
       <>
-        <CardGroup projects={map.get("featured") ?? []} title="Featured" />
-        <CardGroup projects={map.get("early") ?? []} title="Early Phase" />
-        <CardGroup projects={map.get("wip") ?? []} title="WIP" />
-        <CardGroup projects={map.get("complete") ?? []} title="Complete" />
-        <CardGroup projects={map.get("scrapped") ?? []} title="Scrapped" />
-        <CardGroup projects={map.get("other") ?? []} title="Other" />
+        <CardGroup title="Featured" projects={map.get("featured") ?? []} />
+        <CardGroup title="Early Phase" projects={map.get("early") ?? []} />
+        <CardGroup title="WIP" projects={map.get("wip") ?? []} />
+        <CardGroup title="Complete" projects={map.get("complete") ?? []} />
+        <CardGroup title="Scrapped" projects={map.get("scrapped") ?? []} />
+        <CardGroup title="Other" projects={map.get("other") ?? []} />
       </>
     )
   }
@@ -390,11 +390,11 @@ const ProjectsIndex: FC<PageProps<Data>> = ({ data }) => {
       <main>
         <Filterer projects={projects} fuse={fuse}>
           <SearchSection />
-          <section className={styles.main}>
-            <Container>
+          <div className={styles.projectsView}>
+            <Container style={{ paddingTop: 10 }}>
               <ProjectCardsView />
             </Container>
-          </section>
+          </div>
         </Filterer>
       </main>
     </Layout>
