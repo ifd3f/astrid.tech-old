@@ -3,6 +3,7 @@ type: project
 
 title: Collision Zone
 status: complete
+featured: true
 description: IO game where you crash trucks into each other and do wacky jukes
 startDate: 2019-06-01
 endDate: 2019-08-30

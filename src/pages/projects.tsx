@@ -1,39 +1,33 @@
-import { graphql, PageProps, useStaticQuery } from "gatsby"
+import Fuse from "fuse.js"
+import { graphql, PageProps } from "gatsby"
 import React, {
-  FC,
-  useState,
+  ChangeEventHandler,
   createContext,
-  PropsWithChildren,
+  FC,
   ReactNode,
   useContext,
-  ChangeEvent,
-  ChangeEventHandler,
+  useState,
 } from "react"
+import { BsCaretDown, BsCaretUp, BsX } from "react-icons/bs"
 import {
-  Col,
-  Container,
-  Row,
-  Jumbotron,
-  InputGroup,
-  Input,
   Badge,
-  Collapse,
-  DropdownToggle,
   Button,
-  NavbarToggler,
   Card,
   CardBody,
-  CardHeader,
+  Col,
+  Collapse,
+  Container,
+  Input,
+  InputGroup,
+  Row,
 } from "reactstrap"
-import Layout, { MainNavbar, PageHeading } from "../components/layout"
+import Layout, { PageHeading } from "../components/layout"
 import { ProjectCard } from "../components/project"
 import SEO from "../components/seo"
 import { TagBadge } from "../components/tag"
 import { Project } from "../types"
 import { Tag } from "../types/index"
 import styles from "./projects.module.scss"
-import Fuse from "fuse.js"
-import { BsX, BsCaretDown, BsCaretUp } from "react-icons/bs"
 
 type Data = {
   site: {
@@ -310,19 +304,24 @@ const SearchSection: FC = () => {
   )
 }
 
-export const ProjectCardSection: FC = () => {
-  const { displayedProjects } = useContext(SearchContext)
+export const CardGroup: FC<{ title: string; projects: Project[] }> = ({
+  title,
+  projects,
+}) => {
   return (
-    <section className={styles.main}>
-      <Container className={styles.cardsContainer}>
-        {displayedProjects.map(project => (
-          <div className={styles.projectCardWrapper}>
-            <ProjectCard project={project} />
-          </div>
-        ))}
-      </Container>
-    </section>
+    <Container className={styles.cardsContainer}>
+      {projects.map(project => (
+        <div className={styles.projectCardWrapper}>
+          <ProjectCard project={project} />
+        </div>
+      ))}
+    </Container>
   )
+}
+
+export const ProjectCardsView: FC = () => {
+  const { displayedProjects } = useContext(SearchContext)
+  return <CardGroup projects={displayedProjects} title="" />
 }
 
 function countTagUsages(projects: Project[]) {
@@ -339,7 +338,7 @@ const ProjectsIndex: FC<PageProps<Data>> = ({ data }) => {
   const projects = data.allProject.edges.map(({ node }) => node)
 
   const index = Fuse.parseIndex(JSON.parse(data.projectSearchIndex.data))
-  const fuse = new Fuse<Project, any>(
+  const fuse = new Fuse<Project>(
     projects,
     {
       threshold: 0.4,
@@ -359,7 +358,9 @@ const ProjectsIndex: FC<PageProps<Data>> = ({ data }) => {
       <main>
         <Filterer projects={projects} fuse={fuse}>
           <SearchSection />
-          <ProjectCardSection />
+          <section className={styles.main}>
+            <ProjectCardsView />
+          </section>
         </Filterer>
       </main>
     </Layout>

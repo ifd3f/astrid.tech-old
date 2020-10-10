@@ -1,8 +1,7 @@
+import Fuse from "fuse.js"
 import { GatsbyNode, Node, SourceNodesArgs } from "gatsby"
 import { createFilePath, FileSystemNode } from "gatsby-source-filesystem"
 import path from "path"
-import Fuse from "fuse.js"
-import { v4 } from "uuid"
 import { TagNodeData, TAG_MIME_TYPE } from "../gatsby-astrid-plugin-tagging"
 import { buildNode } from "../util"
 import { resolveFileNode } from "../util/index"
@@ -18,6 +17,7 @@ type ProjectMetadata = {
   startDate: Date
   endDate: Date
   description: string
+  featured?: boolean
   url: string
   source: string[]
   tags: string[]
@@ -37,6 +37,7 @@ export const sourceNodes: GatsbyNode["sourceNodes"] = async ({
       slug: "String!",
       title: "String!",
       status: "String",
+      featured: "Boolean",
       startDate: "Date!",
       endDate: "Date",
       url: "String",
@@ -101,6 +102,7 @@ export const onCreateNode: GatsbyNode["onCreateNode"] = async ({
       url: frontmatter.url,
       source: frontmatter.source,
       title: frontmatter.title,
+      featured: frontmatter.featured ?? false,
       status: frontmatter.status,
       startDate: frontmatter.startDate,
       endDate: frontmatter.endDate,
