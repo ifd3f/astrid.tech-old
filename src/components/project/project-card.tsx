@@ -1,59 +1,11 @@
 import { graphql, navigate } from "gatsby"
 import BackgroundImage from "gatsby-background-image"
-import React, { FC, useEffect, useState } from "react"
-import { Badge, CardBody, UncontrolledTooltip } from "reactstrap"
-import { getPersistentColor, getUniqueId, PastelTheme } from "src/util"
+import React, { FC } from "react"
+import { CardBody } from "reactstrap"
+import { getPersistentColor, PastelTheme } from "src/util"
 import { Project } from "../../types"
 import { TagList } from "../tag"
 import styles from "./project.module.scss"
-
-type StatusBadgeProps = {
-  status: null | "wip" | "complete" | "scrapped"
-}
-
-export const StatusBadge: FC<StatusBadgeProps> = ({ status }) => {
-  const [badgeId, setBadgeId] = useState<string | null>(null)
-  useEffect(() => {
-    setBadgeId(`status-badge-${getUniqueId()}`)
-  }, [])
-
-  let title: string, tooltip: string, color: string
-  switch (status) {
-    case "wip":
-      title = "WIP"
-      tooltip = "I am currently working on this."
-      color = "info"
-      break
-    case "complete":
-      title = "Complete"
-      tooltip = "This project is complete!"
-      color = "success"
-      break
-    case "scrapped":
-      title = "Scrapped"
-      tooltip = "I decided it wasn't worth pursuing anymore."
-      color = "danger"
-      break
-    default:
-      return null
-  }
-  return (
-    <Badge id={badgeId} color={color}>
-      {title}
-      {badgeId ? (
-        <UncontrolledTooltip placement="top" target={badgeId}>
-          {tooltip}
-        </UncontrolledTooltip>
-      ) : null}
-    </Badge>
-  )
-}
-
-const ProjectCardImg = () => {}
-
-type PropsWithProject = {
-  project: Project
-}
 
 type ProjectCardProps = {
   project: Project
@@ -88,31 +40,6 @@ export const projectCardFragment = graphql`
   }
 `
 
-type ProjectTitleProps = {
-  project: Project
-  titleBorder?: boolean
-}
-
-const ProjectTitle: FC<ProjectTitleProps> = ({ project, titleBorder }) => (
-  <h3 className={`${styles.title} ${titleBorder ? styles.border : ""}`}>
-    {project.title}
-  </h3>
-)
-
-type ProjectBodyProps = {
-  project: Project
-  showBorder?: boolean
-}
-
-const ProjectBody: FC<ProjectBodyProps> = ({ project, showBorder = false }) => (
-  <TagList
-    tags={project.tags}
-    limit={5}
-    className={styles.tags + (showBorder ? " " + styles.border : "")}
-    link
-  />
-)
-
 export const ProjectCard: FC<ProjectCardProps> = ({
   project,
   hovered = false,
@@ -142,6 +69,13 @@ export const ProjectCard: FC<ProjectCardProps> = ({
     className: className,
   }
 
+  const inner = (
+    <CardBody>
+      <h3 className={styles.title}>{project.title}</h3>
+      <TagList tags={project.tags} limit={5} className={styles.tags} link />
+    </CardBody>
+  )
+
   const [h, s, v] = getPersistentColor(project.slug, PastelTheme)
   if (project.thumbnail && project.thumbnail.childImageSharp) {
     const stack = [
@@ -156,10 +90,7 @@ export const ProjectCard: FC<ProjectCardProps> = ({
           backgroundColor: "clear",
         }}
       >
-        <CardBody>
-          <ProjectTitle project={project} />
-          <ProjectBody project={project} />
-        </CardBody>
+        {inner}
       </BackgroundImage>
     )
   } else {
@@ -169,10 +100,7 @@ export const ProjectCard: FC<ProjectCardProps> = ({
         {...cardOuterProps}
         style={{ backgroundColor: color, borderColor: color }}
       >
-        <CardBody>
-          <ProjectTitle project={project} />
-          <ProjectBody project={project} />
-        </CardBody>
+        {inner}
       </div>
     )
   }
