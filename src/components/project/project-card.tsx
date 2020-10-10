@@ -1,21 +1,18 @@
 import { graphql, navigate } from "gatsby"
 import BackgroundImage from "gatsby-background-image"
-import React, { FC, useEffect, useState } from "react"
+import React, { FC, useRef } from "react"
 import { Badge, CardBody, UncontrolledTooltip } from "reactstrap"
+import { getPersistentColor, PastelTheme } from "src/util"
 import { Project } from "../../types"
 import { TagList } from "../tag"
 import styles from "./project.module.scss"
-import { getPersistentColor, getUniqueId, PastelTheme } from "src/util"
 
 type StatusBadgeProps = {
-  status: null | "wip" | "complete" | "scrapped"
+  status: Project["status"]
 }
 
 export const StatusBadge: FC<StatusBadgeProps> = ({ status }) => {
-  const [badgeId, setBadgeId] = useState<string | null>(null)
-  useEffect(() => {
-    setBadgeId(`status-badge-${getUniqueId()}`)
-  }, [])
+  const badgeId = useRef(null)
 
   let title: string, tooltip: string, color: string
   switch (status) {
@@ -38,21 +35,13 @@ export const StatusBadge: FC<StatusBadgeProps> = ({ status }) => {
       return null
   }
   return (
-    <Badge id={badgeId} color={color}>
+    <Badge ref={badgeId} color={color}>
       {title}
-      {badgeId ? (
-        <UncontrolledTooltip placement="top" target={badgeId}>
-          {tooltip}
-        </UncontrolledTooltip>
-      ) : null}
+      <UncontrolledTooltip placement="top" target={badgeId}>
+        {tooltip}
+      </UncontrolledTooltip>
     </Badge>
   )
-}
-
-const ProjectCardImg = () => {}
-
-type PropsWithProject = {
-  project: Project
 }
 
 type ProjectCardProps = {
@@ -88,31 +77,6 @@ export const projectCardFragment = graphql`
   }
 `
 
-type ProjectTitleProps = {
-  project: Project
-  titleBorder?: boolean
-}
-
-const ProjectTitle: FC<ProjectTitleProps> = ({ project, titleBorder }) => (
-  <h3 className={`${styles.title} ${titleBorder ? styles.border : ""}`}>
-    {project.title}
-  </h3>
-)
-
-type ProjectBodyProps = {
-  project: Project
-  showBorder?: boolean
-}
-
-const ProjectBody: FC<ProjectBodyProps> = ({ project, showBorder = false }) => (
-  <TagList
-    tags={project.tags}
-    limit={5}
-    className={styles.tags + (showBorder ? " " + styles.border : "")}
-    link
-  />
-)
-
 export const ProjectCard: FC<ProjectCardProps> = ({
   project,
   hovered = false,
@@ -130,7 +94,7 @@ export const ProjectCard: FC<ProjectCardProps> = ({
   }
 
   const onClickCard = (ev: React.MouseEvent<HTMLElement>) => {
-    if ((ev.target.tagName as string) != "A") {
+    if ((ev.target as any).tagName != "A") {
       navigate(project.slug, { replace: false })
     }
   }
@@ -141,6 +105,13 @@ export const ProjectCard: FC<ProjectCardProps> = ({
     onMouseLeave: onExit,
     className: className,
   }
+
+  const inner = (
+    <CardBody>
+      <h3 className={styles.title}>{project.title}</h3>
+      <TagList tags={project.tags} limit={5} className={styles.tags} link />
+    </CardBody>
+  )
 
   const [h, s, v] = getPersistentColor(project.slug, PastelTheme)
   if (project.thumbnail && project.thumbnail.childImageSharp) {
@@ -156,10 +127,7 @@ export const ProjectCard: FC<ProjectCardProps> = ({
           backgroundColor: "clear",
         }}
       >
-        <CardBody>
-          <ProjectTitle project={project} />
-          <ProjectBody project={project} />
-        </CardBody>
+        {inner}
       </BackgroundImage>
     )
   } else {
@@ -169,10 +137,7 @@ export const ProjectCard: FC<ProjectCardProps> = ({
         {...cardOuterProps}
         style={{ backgroundColor: color, borderColor: color }}
       >
-        <CardBody>
-          <ProjectTitle project={project} />
-          <ProjectBody project={project} />
-        </CardBody>
+        {inner}
       </div>
     )
   }

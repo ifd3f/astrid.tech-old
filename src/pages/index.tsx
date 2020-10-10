@@ -1,9 +1,12 @@
+import { graphql, PageProps } from "gatsby"
+import { FileSystemNode } from "gatsby-source-filesystem"
 import React from "react"
 import { BsEnvelope } from "react-icons/bs"
 import { FaLinkedin } from "react-icons/fa"
 import { GiPhone } from "react-icons/gi"
 import { GoMarkGithub } from "react-icons/go"
 import { Col, Row } from "reactstrap"
+import { MarkdownRemark } from "src/types"
 import Layout from "../components/layout/layout"
 import SEO from "../components/seo"
 import {
@@ -15,7 +18,24 @@ import {
 import styles from "../components/_index/style.module.scss"
 import { HomepageSection } from "../components/_index/util"
 
-const Homepage = () => {
+export const pageQuery = graphql`
+  query {
+    bio: file(relativePath: { eq: "text/bio.md" }) {
+      childMarkdownRemark {
+        html
+      }
+    }
+  }
+`
+
+type Query = {
+  bio: FileSystemNode & {
+    childMarkdownRemark: MarkdownRemark
+  }
+}
+
+const Homepage = ({ data }: PageProps<Query>) => {
+  console.log(data)
   return (
     <Layout>
       <SEO
@@ -24,6 +44,13 @@ const Homepage = () => {
       />
       <div className={styles.homepageContainer}>
         <HeadingSection />
+        <HomepageSection>
+          <section
+            dangerouslySetInnerHTML={{
+              __html: data.bio.childMarkdownRemark.html,
+            }}
+          ></section>
+        </HomepageSection>
         <SkillsSection />
         <EducationSection />
         <ExperienceSection />

@@ -1,6 +1,6 @@
 import crypto from "crypto"
-const hslToHex = require("hsl-to-hex")
 import seedrandom from "seedrandom"
+const hslToHex = require("hsl-to-hex")
 
 var id = 0
 export function getUniqueId() {
@@ -17,6 +17,15 @@ export function hashString(str: string) {
     hash |= 0 // Convert to 32bit integer
   }
   return hash
+}
+
+export function groupBy<T>(xs: T[], key: (x: T) => string) {
+  const out = new Map<string, T[]>()
+  for (const x of xs) {
+    const k = key(x)
+    out.get(k)?.push(x) ?? out.set(k, [x])
+  }
+  return out
 }
 
 export type PersistentColorTheme = {

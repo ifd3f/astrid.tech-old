@@ -1,39 +1,36 @@
-import { graphql, PageProps, useStaticQuery } from "gatsby"
+import Fuse from "fuse.js"
+import { graphql, PageProps } from "gatsby"
 import React, {
-  FC,
-  useState,
+  ChangeEventHandler,
   createContext,
-  PropsWithChildren,
+  FC,
   ReactNode,
   useContext,
-  ChangeEvent,
-  ChangeEventHandler,
+  useState,
 } from "react"
+import { BsCaretDown, BsCaretUp, BsX } from "react-icons/bs"
+import { FaInfoCircle } from "react-icons/fa"
 import {
-  Col,
-  Container,
-  Row,
-  Jumbotron,
-  InputGroup,
-  Input,
   Badge,
-  Collapse,
-  DropdownToggle,
   Button,
-  NavbarToggler,
   Card,
   CardBody,
-  CardHeader,
+  Col,
+  Collapse,
+  Container,
+  Input,
+  InputGroup,
+  Row,
+  UncontrolledTooltip,
 } from "reactstrap"
-import Layout, { MainNavbar, PageHeading } from "../components/layout"
+import { groupBy } from "src/util"
+import Layout, { PageHeading } from "../components/layout"
 import { ProjectCard } from "../components/project"
 import SEO from "../components/seo"
 import { TagBadge } from "../components/tag"
 import { Project } from "../types"
 import { Tag } from "../types/index"
 import styles from "./projects.module.scss"
-import Fuse from "fuse.js"
-import { BsX, BsCaretDown, BsCaretUp } from "react-icons/bs"
 
 type Data = {
   site: {
@@ -62,6 +59,7 @@ export const pageQuery = graphql`
     allProject(sort: { fields: [endDate], order: DESC }) {
       edges {
         node {
+          featured
           ...ProjectCard
         }
       }
@@ -81,6 +79,7 @@ type SearchContext = {
 
   displayedProjects: Project[]
 
+  isSearching: boolean
   searchString: string
   setSearchString: (searchString: string) => void
 
@@ -105,6 +104,8 @@ const Filterer: FC<FiltererArgs> = ({ children, projects, fuse }) => {
   const [searchString, _setSearchString] = useState("")
   const [filterTags, setFilterTags] = useState<string[]>([])
   const [shouldFilterAny, _setShouldFilterAnyTags] = useState<boolean>(false)
+
+  const isSearching = searchString.length != 0
 
   const setSearchString = (searchString: string) => {
     _setSearchString(searchString)
@@ -159,6 +160,8 @@ const Filterer: FC<FiltererArgs> = ({ children, projects, fuse }) => {
   return (
     <SearchContext.Provider
       value={{
+        isSearching,
+
         slugToTag,
         selectableTags,
         tagUsageCounts,
@@ -310,19 +313,108 @@ const SearchSection: FC = () => {
   )
 }
 
-export const ProjectCardSection: FC = () => {
-  const { displayedProjects } = useContext(SearchContext)
+export const CardGroup: FC<{
+  idPrefix: string
+  title?: { text: string; description?: string }
+  projects: Project[]
+}> = ({ title, idPrefix, projects }) => {
+  var heading = null
+  if (title) {
+    const infoId = `${idPrefix}-section-info`
+    heading = (
+      <h3 className={styles.cardSectionTitle}>
+        {title.text}{" "}
+        {title.description ? (
+          <>
+            <FaInfoCircle
+              title="Hover for information about this section"
+              id={infoId}
+            />
+            <UncontrolledTooltip placement="right" target={infoId}>
+              {title.description}
+            </UncontrolledTooltip>
+          </>
+        ) : null}
+      </h3>
+    )
+  }
+
   return (
-    <section className={styles.main}>
-      <Container className={styles.cardsContainer}>
-        {displayedProjects.map(project => (
-          <div className={styles.projectCardWrapper}>
+    <section className={styles.cardGroupOuter}>
+      {heading}
+      <Row>
+        {projects.map(project => (
+          <Col
+            xs="12"
+            md="6"
+            xl="4"
+            key={project.slug}
+            className={styles.projectCardWrapper}
+          >
             <ProjectCard project={project} />
-          </div>
+          </Col>
         ))}
-      </Container>
+      </Row>
     </section>
   )
+}
+
+export const ProjectCardsView: FC = () => {
+  const { isSearching, displayedProjects } = useContext(SearchContext)
+  if (isSearching) {
+    return (
+      <CardGroup
+        idPrefix="results"
+        title={{ text: "Results" }}
+        projects={displayedProjects}
+      />
+    )
+  } else {
+    const map = groupBy(displayedProjects, project =>
+      project.featured ? "featured" : project.status ?? "other"
+    )
+    return (
+      <>
+        <CardGroup
+          idPrefix="featured"
+          title={{ text: "Featured", description: "" }}
+          projects={map.get("featured") ?? []}
+        />
+        <CardGroup
+          idPrefix="wip"
+          title={{ text: "WIP", description: "Things I'm actively working on" }}
+          projects={map.get("wip") ?? []}
+        />
+        <CardGroup
+          idPrefix="early"
+          title={{
+            text: "Early Phase",
+            description:
+              "Projects or ideas at the beginning of development. May be scrapped later.",
+          }}
+          projects={map.get("early") ?? []}
+        />
+        <CardGroup
+          idPrefix="complete"
+          title={{ text: "Complete", description: "Things I've finished!" }}
+          projects={map.get("complete") ?? []}
+        />
+        <CardGroup
+          idPrefix="scrapped"
+          title={{
+            text: "Scrapped",
+            description: "Things I've deemed no longer viable.",
+          }}
+          projects={map.get("scrapped") ?? []}
+        />
+        <CardGroup
+          idPrefix="other"
+          title={{ text: "Other" }}
+          projects={map.get("other") ?? []}
+        />
+      </>
+    )
+  }
 }
 
 function countTagUsages(projects: Project[]) {
@@ -339,7 +431,7 @@ const ProjectsIndex: FC<PageProps<Data>> = ({ data }) => {
   const projects = data.allProject.edges.map(({ node }) => node)
 
   const index = Fuse.parseIndex(JSON.parse(data.projectSearchIndex.data))
-  const fuse = new Fuse<Project, any>(
+  const fuse = new Fuse<Project>(
     projects,
     {
       threshold: 0.4,
@@ -359,7 +451,11 @@ const ProjectsIndex: FC<PageProps<Data>> = ({ data }) => {
       <main>
         <Filterer projects={projects} fuse={fuse}>
           <SearchSection />
-          <ProjectCardSection />
+          <div className={styles.projectsView}>
+            <Container style={{ paddingTop: 10 }}>
+              <ProjectCardsView />
+            </Container>
+          </div>
         </Filterer>
       </main>
     </Layout>

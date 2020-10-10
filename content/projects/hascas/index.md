@@ -2,7 +2,7 @@
 type: project
 
 title: HasCAS
-status: wip
+status: early
 description: Theoretical Computer Algebra System
 startDate: 2020-03-01
 endDate: null

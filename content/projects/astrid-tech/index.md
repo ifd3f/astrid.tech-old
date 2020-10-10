@@ -2,7 +2,8 @@
 type: project
 
 title: astrid.tech
-status: wip
+status: complete
+featured: true
 description: This very website
 startDate: 2020-03-01
 endDate: null

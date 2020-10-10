@@ -1,6 +1,8 @@
 @import "src/scss/variables.scss";
 
-.cardsContainer {
+$group-spacing: 20px;
+
+.cardList {
   padding-top: 40px;
   padding-bottom: 40px;
   position: relative;
@@ -8,6 +10,17 @@
   flex-direction: row;
   flex-wrap: wrap;
   justify-content: space-evenly;
+}
+
+.cardSectionTitle {
+  color: white;
+}
+
+.cardGroupOuter {
+  background-color: rgba($color: white, $alpha: 0.4);
+  margin-top: $group-spacing;
+  padding: 20px;
+  border-radius: 10px;
 }
 
 .projectCardWrapper {
@@ -28,9 +41,9 @@
   cursor: pointer;
 }
 
-.main {
+.projectsView {
   background-color: #002456;
-  margin-top: 0;
+  padding-bottom: $group-spacing;
 }
 
 .searchSection {

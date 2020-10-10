@@ -37,7 +37,8 @@ export type WorkExperience = Tagged & {
 export type Project = Tagged & {
   __typename: "Project"
   title: string
-  status: null | "wip" | "complete" | "scrapped"
+  status: null | "early" | "wip" | "complete" | "scrapped"
+  featured: boolean
   startDate: string
   endDate: string | null
   slug: string
