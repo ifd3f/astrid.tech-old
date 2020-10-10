@@ -9,6 +9,7 @@ import React, {
   useState,
 } from "react"
 import { BsCaretDown, BsCaretUp, BsX } from "react-icons/bs"
+import { FaInfoCircle } from "react-icons/fa"
 import {
   Badge,
   Button,
@@ -20,6 +21,7 @@ import {
   Input,
   InputGroup,
   Row,
+  UncontrolledTooltip,
 } from "reactstrap"
 import { groupBy } from "src/util"
 import Layout, { PageHeading } from "../components/layout"
@@ -311,13 +313,35 @@ const SearchSection: FC = () => {
   )
 }
 
-export const CardGroup: FC<{ title?: string; projects: Project[] }> = ({
-  title,
-  projects,
-}) => {
+export const CardGroup: FC<{
+  idPrefix: string
+  title?: { text: string; description?: string }
+  projects: Project[]
+}> = ({ title, idPrefix, projects }) => {
+  var heading = null
+  if (title) {
+    const infoId = `${idPrefix}-section-info`
+    heading = (
+      <h3 className={styles.cardSectionTitle}>
+        {title.text}{" "}
+        {title.description ? (
+          <>
+            <FaInfoCircle
+              title="Hover for information about this section"
+              id={infoId}
+            />
+            <UncontrolledTooltip placement="right" target={infoId}>
+              {title.description}
+            </UncontrolledTooltip>
+          </>
+        ) : null}
+      </h3>
+    )
+  }
+
   return (
     <section className={styles.cardGroupOuter}>
-      <h3 className={styles.cardSectionTitle}>{title}</h3>
+      {heading}
       <Row>
         {projects.map(project => (
           <Col
@@ -338,19 +362,56 @@ export const CardGroup: FC<{ title?: string; projects: Project[] }> = ({
 export const ProjectCardsView: FC = () => {
   const { isSearching, displayedProjects } = useContext(SearchContext)
   if (isSearching) {
-    return <CardGroup title="Results" projects={displayedProjects} />
+    return (
+      <CardGroup
+        idPrefix="results"
+        title={{ text: "Results" }}
+        projects={displayedProjects}
+      />
+    )
   } else {
     const map = groupBy(displayedProjects, project =>
       project.featured ? "featured" : project.status ?? "other"
     )
     return (
       <>
-        <CardGroup title="Featured" projects={map.get("featured") ?? []} />
-        <CardGroup title="Early Phase" projects={map.get("early") ?? []} />
-        <CardGroup title="WIP" projects={map.get("wip") ?? []} />
-        <CardGroup title="Complete" projects={map.get("complete") ?? []} />
-        <CardGroup title="Scrapped" projects={map.get("scrapped") ?? []} />
-        <CardGroup title="Other" projects={map.get("other") ?? []} />
+        <CardGroup
+          idPrefix="featured"
+          title={{ text: "Featured", description: "" }}
+          projects={map.get("featured") ?? []}
+        />
+        <CardGroup
+          idPrefix="wip"
+          title={{ text: "WIP", description: "Things I'm actively working on" }}
+          projects={map.get("wip") ?? []}
+        />
+        <CardGroup
+          idPrefix="early"
+          title={{
+            text: "Early Phase",
+            description:
+              "Projects or ideas at the beginning of development. May be scrapped later.",
+          }}
+          projects={map.get("early") ?? []}
+        />
+        <CardGroup
+          idPrefix="complete"
+          title={{ text: "Complete", description: "Things I've finished!" }}
+          projects={map.get("complete") ?? []}
+        />
+        <CardGroup
+          idPrefix="scrapped"
+          title={{
+            text: "Scrapped",
+            description: "Things I've deemed no longer viable.",
+          }}
+          projects={map.get("scrapped") ?? []}
+        />
+        <CardGroup
+          idPrefix="other"
+          title={{ text: "Other" }}
+          projects={map.get("other") ?? []}
+        />
       </>
     )
   }
