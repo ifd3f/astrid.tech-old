@@ -3,6 +3,7 @@ type: project
 
 title: Fast malloc() Implementation
 status: complete
+featured: true
 description: haha memory management go nyooooom
 startDate: 2020-07-01
 endDate: 2020-07-30
