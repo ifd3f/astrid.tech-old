@@ -1,6 +1,6 @@
 @import "src/scss/variables.scss";
 
-.cardsContainer {
+.cardList {
   padding-top: 40px;
   padding-bottom: 40px;
   position: relative;
@@ -8,6 +8,13 @@
   flex-direction: row;
   flex-wrap: wrap;
   justify-content: space-evenly;
+}
+
+.cardSectionTitle {
+  color: white;
+}
+
+.cardGroupOuter {
 }
 
 .projectCardWrapper {

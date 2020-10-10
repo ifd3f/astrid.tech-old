@@ -21,6 +21,7 @@ import {
   InputGroup,
   Row,
 } from "reactstrap"
+import { groupBy } from "src/util"
 import Layout, { PageHeading } from "../components/layout"
 import { ProjectCard } from "../components/project"
 import SEO from "../components/seo"
@@ -56,6 +57,7 @@ export const pageQuery = graphql`
     allProject(sort: { fields: [endDate], order: DESC }) {
       edges {
         node {
+          featured
           ...ProjectCard
         }
       }
@@ -75,6 +77,7 @@ type SearchContext = {
 
   displayedProjects: Project[]
 
+  isSearching: boolean
   searchString: string
   setSearchString: (searchString: string) => void
 
@@ -99,6 +102,8 @@ const Filterer: FC<FiltererArgs> = ({ children, projects, fuse }) => {
   const [searchString, _setSearchString] = useState("")
   const [filterTags, setFilterTags] = useState<string[]>([])
   const [shouldFilterAny, _setShouldFilterAnyTags] = useState<boolean>(false)
+
+  const isSearching = searchString.length != 0
 
   const setSearchString = (searchString: string) => {
     _setSearchString(searchString)
@@ -153,6 +158,8 @@ const Filterer: FC<FiltererArgs> = ({ children, projects, fuse }) => {
   return (
     <SearchContext.Provider
       value={{
+        isSearching,
+
         slugToTag,
         selectableTags,
         tagUsageCounts,
@@ -304,24 +311,43 @@ const SearchSection: FC = () => {
   )
 }
 
-export const CardGroup: FC<{ title: string; projects: Project[] }> = ({
+export const CardGroup: FC<{ title?: string; projects: Project[] }> = ({
   title,
   projects,
 }) => {
   return (
-    <Container className={styles.cardsContainer}>
-      {projects.map(project => (
-        <div className={styles.projectCardWrapper}>
-          <ProjectCard project={project} />
-        </div>
-      ))}
-    </Container>
+    <div className={styles.cardGroupOuter}>
+      <h3 className={styles.cardSectionTitle}>{title}</h3>
+      <div className={styles.cardList}>
+        {projects.map(project => (
+          <div key={project.slug} className={styles.projectCardWrapper}>
+            <ProjectCard project={project} />
+          </div>
+        ))}
+      </div>
+    </div>
   )
 }
 
 export const ProjectCardsView: FC = () => {
-  const { displayedProjects } = useContext(SearchContext)
-  return <CardGroup projects={displayedProjects} title="" />
+  const { isSearching, displayedProjects } = useContext(SearchContext)
+  if (isSearching) {
+    return <CardGroup projects={displayedProjects} />
+  } else {
+    const map = groupBy(displayedProjects, project =>
+      project.featured ? "featured" : project.status ?? "other"
+    )
+    return (
+      <>
+        <CardGroup projects={map.get("featured") ?? []} title="Featured" />
+        <CardGroup projects={map.get("early") ?? []} title="Early Phase" />
+        <CardGroup projects={map.get("wip") ?? []} title="WIP" />
+        <CardGroup projects={map.get("complete") ?? []} title="Complete" />
+        <CardGroup projects={map.get("scrapped") ?? []} title="Scrapped" />
+        <CardGroup projects={map.get("other") ?? []} title="Other" />
+      </>
+    )
+  }
 }
 
 function countTagUsages(projects: Project[]) {
@@ -359,7 +385,9 @@ const ProjectsIndex: FC<PageProps<Data>> = ({ data }) => {
         <Filterer projects={projects} fuse={fuse}>
           <SearchSection />
           <section className={styles.main}>
-            <ProjectCardsView />
+            <Container>
+              <ProjectCardsView />
+            </Container>
           </section>
         </Filterer>
       </main>

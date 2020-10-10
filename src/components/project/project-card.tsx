@@ -2,10 +2,10 @@ import { graphql, navigate } from "gatsby"
 import BackgroundImage from "gatsby-background-image"
 import React, { FC, useEffect, useState } from "react"
 import { Badge, CardBody, UncontrolledTooltip } from "reactstrap"
+import { getPersistentColor, getUniqueId, PastelTheme } from "src/util"
 import { Project } from "../../types"
 import { TagList } from "../tag"
 import styles from "./project.module.scss"
-import { getPersistentColor, getUniqueId, PastelTheme } from "src/util"
 
 type StatusBadgeProps = {
   status: null | "wip" | "complete" | "scrapped"
@@ -130,7 +130,7 @@ export const ProjectCard: FC<ProjectCardProps> = ({
   }
 
   const onClickCard = (ev: React.MouseEvent<HTMLElement>) => {
-    if ((ev.target.tagName as string) != "A") {
+    if ((ev.target as any).tagName != "A") {
       navigate(project.slug, { replace: false })
     }
   }
