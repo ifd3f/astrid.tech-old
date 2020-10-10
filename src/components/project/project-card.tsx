@@ -1,11 +1,48 @@
 import { graphql, navigate } from "gatsby"
 import BackgroundImage from "gatsby-background-image"
-import React, { FC } from "react"
-import { CardBody } from "reactstrap"
+import React, { FC, useRef } from "react"
+import { Badge, CardBody, UncontrolledTooltip } from "reactstrap"
 import { getPersistentColor, PastelTheme } from "src/util"
 import { Project } from "../../types"
 import { TagList } from "../tag"
 import styles from "./project.module.scss"
+
+type StatusBadgeProps = {
+  status: Project["status"]
+}
+
+export const StatusBadge: FC<StatusBadgeProps> = ({ status }) => {
+  const badgeId = useRef(null)
+
+  let title: string, tooltip: string, color: string
+  switch (status) {
+    case "wip":
+      title = "WIP"
+      tooltip = "I am currently working on this."
+      color = "info"
+      break
+    case "complete":
+      title = "Complete"
+      tooltip = "This project is complete!"
+      color = "success"
+      break
+    case "scrapped":
+      title = "Scrapped"
+      tooltip = "I decided it wasn't worth pursuing anymore."
+      color = "danger"
+      break
+    default:
+      return null
+  }
+  return (
+    <Badge ref={badgeId} color={color}>
+      {title}
+      <UncontrolledTooltip placement="top" target={badgeId}>
+        {tooltip}
+      </UncontrolledTooltip>
+    </Badge>
+  )
+}
 
 type ProjectCardProps = {
   project: Project
