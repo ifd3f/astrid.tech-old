@@ -3,8 +3,8 @@
   "homepage": "https://astrid.tech",
   "private": true,
   "description": "Personal Website of Astrid Yu",
-  "version": "1.0.0",
-  "author": "Astrid A. Yu <astrid@astrid.tech>",
+  "version": "1.0.1",
+  "author": "Astrid Yu <astrid@astrid.tech>",
   "bugs": {
     "url": "https://github.com/Plenglin/astrid.tech/issues"
   },

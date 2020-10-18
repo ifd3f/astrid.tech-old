@@ -89,6 +89,13 @@ module.exports = {
             },
           },
           {
+            resolve: `gatsby-remark-autolink-headers`,
+            options: {
+              isIconAfterHeader: true,
+              className: "header-link",
+            },
+          },
+          {
             resolve: `gatsby-remark-responsive-iframe`,
             options: {
               wrapperStyle: `margin-bottom: 1.0725rem`,
@@ -96,13 +103,6 @@ module.exports = {
           },
           "gatsby-remark-katex",
           "gatsby-remark-graphviz",
-          {
-            resolve: `gatsby-remark-autolink-headers`,
-            options: {
-              isIconAfterHeader: true,
-              className: "header-link",
-            },
-          },
           `gatsby-remark-prismjs`,
           `gatsby-remark-smartypants`,
           `@pauliescanlon/gatsby-remark-sticky-table`,
