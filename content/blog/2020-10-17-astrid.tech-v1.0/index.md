@@ -28,7 +28,7 @@ I learned **so much** while developing this project. Not just how to use entire 
 - Jesus Christ, I did [so many random projects](/projects/) back in my high school days
 - Jesus Christ, I actually finished more projects than I remember finishing
 - Circular images are just normal images but with `border-radius` values equal to their `width` and `height`
-- Sometimes, you really don't need any fancy algorithmic crap; all you need is a simple equation. For example, I used a variation of the parallel resistor formula to check how similar two projects are.
+- Sometimes, you really don't need any fancy algorithmic crap; all you need is a simple equation. For example, I used a variation of the parallel resistor formula $\left(\frac{1}{\frac{1}{a} + \frac{1}{b} + \frac{1}{c} + \dots}\right)$ to check how similar two projects are.
 - TypeScript's type system is _amazing._ It's got unions and intersections, and its type inference system can even do this kind of stuff:
 
 ```typescript
