@@ -6,7 +6,7 @@ status: complete
 featured: true
 description: This very website
 startDate: 2020-03-01
-endDate: null
+endDate: 2020-10-08
 tags:
   - react-js
   - javascript
