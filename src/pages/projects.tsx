@@ -409,7 +409,10 @@ export const ProjectCardsView: FC = () => {
         />
         <CardGroup
           idPrefix="other"
-          title={{ text: "Other" }}
+          title={{
+            text: "Other",
+            description: "Not scrapped, but not being worked on either.",
+          }}
           projects={map.get("other") ?? []}
         />
       </>

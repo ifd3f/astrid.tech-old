@@ -109,6 +109,7 @@ export const ProjectCard: FC<ProjectCardProps> = ({
   const inner = (
     <CardBody>
       <h3 className={styles.title}>{project.title}</h3>
+      <p className={styles.subtitle}>{project.internal.description}</p>
       <TagList tags={project.tags} limit={5} className={styles.tags} link />
     </CardBody>
   )
@@ -116,7 +117,7 @@ export const ProjectCard: FC<ProjectCardProps> = ({
   const [h, s, v] = getPersistentColor(project.slug, PastelTheme)
   if (project.thumbnail && project.thumbnail.childImageSharp) {
     const stack = [
-      `linear-gradient(to bottom, hsla(${h}, 80%, 100%, 0.9), hsla(${h}, 80%, 80%, 0.7), rgba(0.6, 0.6, 0.6, 0.3))`,
+      `linear-gradient(to bottom, hsla(${h}, 80%, 100%, 0.9), hsla(${h}, 80%, 80%, 0.9), rgba(0.6, 0.6, 0.6, 0.3))`,
       (project.thumbnail as any).childImageSharp.fluid,
     ]
     return (

@@ -9,7 +9,7 @@
   transition: background-color 0.2s ease-in;
 
   cursor: pointer;
-  height: 170px;
+  height: 240px;
   border: 1px solid;
   border-radius: 20px;
   position: relative;
@@ -29,6 +29,10 @@
       font-size: $font-size;
     }
   }
+}
+
+.subtitle {
+  line-height: 100%;
 }
 
 .title.border {

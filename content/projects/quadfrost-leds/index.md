@@ -1,7 +1,7 @@
 ---
 type: project
 
-title: QuadFrost 3D Printer Lighting System
+title: QuadFrost 3D Printer System
 status: complete
 description: Making 3D Printers not only a noise complaint, but a light complaint too!
 featured: true

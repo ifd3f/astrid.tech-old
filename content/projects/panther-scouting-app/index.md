@@ -3,7 +3,7 @@ type: project
 
 title: Bluetooth Scouting App
 status: scrapped
-description: A scouting app FIRST Robotics Competition
+description: A scouting app for FIRST Robotics Competition
 startDate: 2018-02-27
 endDate: 2018-04-17
 tags:
