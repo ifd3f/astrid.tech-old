@@ -17,6 +17,8 @@ tags:
   - control-systems
   - cr-servo
   - fusion-360
+  - robotics
+  - mechanical-engineering
 url: null
 source: [https://github.com/Plenglin/KiwiBot]
 thumbnail: ./kiwibot-thumb.jpg
