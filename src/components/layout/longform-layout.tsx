@@ -1,12 +1,12 @@
-import React, { FC, ReactNode, PropsWithChildren } from "react"
+import { CommentCount } from "gatsby-plugin-disqus"
+import React, { FC, PropsWithChildren, ReactNode } from "react"
+import { MdComment } from "react-icons/md"
+import { Col, Container, Row } from "reactstrap"
+import { Tag } from "src/types"
 import SEO from "../seo"
-import { Container, Row, Col } from "reactstrap"
-import { Link } from "gatsby"
-import { BsArrowLeft } from "react-icons/bs"
+import { TagList } from "../tag"
 import style from "./longform-layout.module.scss"
 import { PageHeading } from "./page-heading"
-import { Tag } from "src/types"
-import { TagList } from "../tag"
 
 type LongformLayoutProps = {
   title: string
@@ -56,14 +56,23 @@ export const SidebarGroup: FC<PropsWithChildren<{}>> = ({ children }) => (
 
 type InfoRowProps = {
   name: string
+  icon?: ReactNode
   show?: any
   children: ReactNode
 }
 
-export const InfoRow: FC<InfoRowProps> = ({ name, children, show = true }) =>
+export const InfoRow: FC<InfoRowProps> = ({
+  name,
+  icon,
+  children,
+  show = true,
+}) =>
   show ? (
     <tr>
-      <th>{name}</th>
+      <th>
+        {icon ? <>{icon} </> : null}
+        {name}
+      </th>
       <td className={style.statusData}>{children}</td>
     </tr>
   ) : null
@@ -88,5 +97,15 @@ export const TagsGroup: FC<TagsGroupProps> = ({ tags }) => {
       <h2>Tags</h2>
       <TagList tags={tags} link />
     </SidebarGroup>
+  )
+}
+
+export const CommentsRow = ({ disqusConfig }: { disqusConfig: any }) => {
+  return (
+    <InfoRow name="Comments" icon={<MdComment />}>
+      <a href="#comments">
+        <CommentCount config={disqusConfig} />
+      </a>
+    </InfoRow>
   )
 }

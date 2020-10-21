@@ -1,10 +1,15 @@
 require(`katex/dist/katex.min.css`)
 import { graphql, Link, PageProps } from "gatsby"
-import { CommentCount, Disqus } from "gatsby-plugin-disqus"
+import { Disqus } from "gatsby-plugin-disqus"
 import React, { createContext, FC, useContext } from "react"
+import { FaCalendar } from "react-icons/fa"
 import { Container } from "reactstrap"
 import { LongformLayout, StatusGroup } from "src/components/layout"
-import { InfoRow, TagsGroup } from "src/components/layout/longform-layout"
+import {
+  CommentsRow,
+  InfoRow,
+  TagsGroup,
+} from "src/components/layout/longform-layout"
 import { getHSLString, getPersistentColor } from "src/util"
 import Layout from "../components/layout/layout"
 import { BlogPost } from "../types/index"
@@ -46,12 +51,10 @@ const PostStatusGroup: FC = () => {
   const { post, disqusConfig } = useContext(ProjectContext)
   return (
     <StatusGroup>
-      <InfoRow name="Date">{post.date}</InfoRow>
-      <InfoRow name="Comments">
-        <a href="#comments">
-          <CommentCount config={disqusConfig} />
-        </a>
+      <InfoRow name="Date" icon={<FaCalendar />}>
+        {post.date}
       </InfoRow>
+      <CommentsRow disqusConfig={disqusConfig} />
     </StatusGroup>
   )
 }

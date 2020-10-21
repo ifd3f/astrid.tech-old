@@ -1,6 +1,12 @@
 import { graphql, Link, PageProps } from "gatsby"
 import React, { createContext, FC, useContext } from "react"
-import { BsArrowLeft } from "react-icons/bs"
+import {
+  BsArrowLeft,
+  BsCodeSlash,
+  BsLink,
+  BsQuestionCircle,
+} from "react-icons/bs"
+import { FaCalendar, FaGithub } from "react-icons/fa"
 import {
   InfoRow,
   Layout,
@@ -9,12 +15,12 @@ import {
   StatusGroup,
   TagsGroup,
 } from "src/components/layout"
-import { formatDateInterval, getHSLString, getPersistentColor } from "src/util"
-import { StatusBadge } from "../components/project"
 import {
   BipartiteNode,
   orderByResistorSimilarity,
-} from "../components/tag-similarity/algorithm"
+} from "src/components/tag-similarity/algorithm"
+import { formatDateInterval, getHSLString, getPersistentColor } from "src/util"
+import { StatusBadge } from "../components/project"
 import { BlogPost, Project, Tag } from "../types"
 import style from "./project-detail.module.scss"
 
@@ -74,24 +80,38 @@ type Context = {
   id: string
 }
 
+function SourceCodeURLDisplay({ url }: { url: string }) {
+  const info = new URL(url)
+  if (info.hostname.endsWith("github.com")) {
+    return (
+      <a href={url}>
+        <FaGithub title="GitHub" />
+      </a>
+    )
+  }
+  return <a href={url}>{url}</a>
+}
+
 const ProjectStatusGroup = () => {
   const { project } = useContext(ProjectContext)
   return (
     <StatusGroup>
-      <InfoRow name="Date">
+      <InfoRow name="Date" icon={<FaCalendar />}>
         {formatDateInterval(project.startDate, project.endDate)}
       </InfoRow>
-      <InfoRow name="URL">
-        <a href={project.url}>{project.url}</a>
-      </InfoRow>
-      <InfoRow name="Source">
+      {project.url ? (
+        <InfoRow name="URL" icon={<BsLink />}>
+          <a href={project.url}>{project.url}</a>
+        </InfoRow>
+      ) : null}
+      <InfoRow name="Source" icon={<BsCodeSlash />}>
         {project.source.map(url => (
           <p>
-            <a href={url}>{url}</a>
+            <SourceCodeURLDisplay url={url} />
           </p>
         ))}
       </InfoRow>
-      <InfoRow name="Status">
+      <InfoRow name="Status" icon={<BsQuestionCircle />}>
         <StatusBadge status={project.status} />
       </InfoRow>
     </StatusGroup>
