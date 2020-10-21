@@ -36,26 +36,6 @@ Here's a GIF of some AIs playing the game against each other!
 
 <div style="width:100%;height:0;padding-bottom:64%;position:relative;"><iframe src="https://giphy.com/embed/ulDFC0vEJQrTLFBO1h" width="100%" height="100%" style="position:absolute" frameBorder="0" class="giphy-embed" allowFullScreen></iframe></div><p>
 
-## The Protocol
-
-There are three entities at play here:
-
-- The **client**, or the browser that the player is using.
-- The **matchmaking server**, a Node.js HTTP server.
-- The **instance server**, a C++ server that exposes a _spectator socket_ and a _player socket_.
-
-The general high-level flow is as follows:
-
-1. The client visits collision.zone. The matchmaking server gives the user:
-
-   - a HTML page and tells them about what gamemodes are available
-   - an instance server's spectator socket to allow the client to see a game without interacting with it.
-
-2. The client begins matchmaking. The matchmaking server puts them in the matchmaking queue.
-3. When there is an open instance server, the matchmaking server gives the client that instance server's player socket, and the client connects to that socket and starts playing.
-
-During gameplay, the instance server's sockets use a custom binary protocol to send game updates in order to reduce bandwidth as much as humanly possible. See [this document](https://github.com/Plenglin/collision-zone/blob/main/GameProtocol.md) for its specification.
-
 ## Technology Stack
 
 ### The site views
@@ -77,6 +57,26 @@ During gameplay, the instance server's sockets use a custom binary protocol to s
 - Markdown
 - Jupyter notebooks for a few blog posts
   - **I wrote a custom Gatsby plugin** that transforms the Jupyter notebooks into Markdown files, which theemselves get transformed into blog posts.
+
+## The Protocol
+
+There are three entities at play here:
+
+- The **client**, or the browser that the player is using.
+- The **matchmaking server**, a Node.js HTTP server.
+- The **instance server**, a C++ server that exposes a _spectator socket_ and a _player socket_.
+
+The general high-level flow is as follows:
+
+1. The client visits collision.zone. The matchmaking server gives the user:
+
+   - a HTML page and tells them about what gamemodes are available
+   - an instance server's spectator socket to allow the client to see a game without interacting with it.
+
+2. The client begins matchmaking. The matchmaking server puts them in the matchmaking queue.
+3. When there is an open instance server, the matchmaking server gives the client that instance server's player socket, and the client connects to that socket and starts playing.
+
+During gameplay, the instance server's sockets use a custom binary protocol to send game updates in order to reduce bandwidth as much as humanly possible. See [this document](https://github.com/Plenglin/collision-zone/blob/main/GameProtocol.md) for its specification.
 
 ## Fun facts!
 
