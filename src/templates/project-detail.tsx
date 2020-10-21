@@ -1,4 +1,5 @@
 import { graphql, Link, PageProps } from "gatsby"
+import { Disqus } from "gatsby-plugin-disqus"
 import React, { createContext, FC, useContext } from "react"
 import {
   BsArrowLeft,
@@ -7,6 +8,7 @@ import {
   BsQuestionCircle,
 } from "react-icons/bs"
 import { FaCalendar, FaGithub } from "react-icons/fa"
+import { Container } from "reactstrap"
 import {
   InfoRow,
   Layout,
@@ -15,6 +17,7 @@ import {
   StatusGroup,
   TagsGroup,
 } from "src/components/layout"
+import { CommentsRow } from "src/components/layout/longform-layout"
 import {
   BipartiteNode,
   orderByResistorSimilarity,
@@ -93,7 +96,7 @@ function SourceCodeURLDisplay({ url }: { url: string }) {
 }
 
 const ProjectStatusGroup = () => {
-  const { project } = useContext(ProjectContext)
+  const { project, disqusConfig } = useContext(ProjectContext)
   return (
     <StatusGroup>
       <InfoRow name="Date" icon={<FaCalendar />}>
@@ -114,6 +117,7 @@ const ProjectStatusGroup = () => {
       <InfoRow name="Status" icon={<BsQuestionCircle />}>
         <StatusBadge status={project.status} />
       </InfoRow>
+      <CommentsRow disqusConfig={disqusConfig} />
     </StatusGroup>
   )
 }
@@ -179,6 +183,7 @@ const RelatedProjectsGroup = () => {
 
 type ProjectContextData = {
   project: Project
+  disqusConfig: any
 }
 
 const ProjectContext = createContext<ProjectContextData>(
@@ -188,9 +193,14 @@ const ProjectContext = createContext<ProjectContextData>(
 const ProjectDetailTemplate: FC<PageProps<Data, Context>> = props => {
   const { data } = props
   const project = data.project
+  const disqusConfig = {
+    url: `https://astrid.tech${project.slug}`,
+    identifier: project.slug,
+    title: project.title,
+  }
 
   return (
-    <ProjectContext.Provider value={{ project }}>
+    <ProjectContext.Provider value={{ project, disqusConfig }}>
       <Layout {...props} currentLocation="projects">
         <LongformLayout
           title={project.title}
@@ -216,6 +226,12 @@ const ProjectDetailTemplate: FC<PageProps<Data, Context>> = props => {
             dangerouslySetInnerHTML={{ __html: project.markdown.html!! }}
           />
         </LongformLayout>
+        <Container>
+          <section id="comments">
+            <h2>Comments</h2>
+            <Disqus config={disqusConfig} />
+          </section>
+        </Container>
       </Layout>
     </ProjectContext.Provider>
   )
