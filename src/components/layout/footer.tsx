@@ -1,7 +1,7 @@
-import React, { FC, ReactNode } from "react"
-import { Container, Col, Row } from "reactstrap"
-import { Link, useStaticQuery, graphql } from "gatsby"
+import { graphql, Link, useStaticQuery } from "gatsby"
 import Img from "gatsby-image"
+import React, { FC, ReactNode } from "react"
+import { Col, Container, Row } from "reactstrap"
 import style from "./footer.module.scss"
 
 export const Tea = () => {
@@ -130,6 +130,9 @@ const FooterSection = () => {
             <a href="https://github.com/Plenglin/astrid.tech">GitHub</a>.
           </p>
         </Col>
+        <Row>
+          <Col></Col>
+        </Row>
         <Row>
           <Col className="text-center">
             <AGPL logo={agplLogo} />

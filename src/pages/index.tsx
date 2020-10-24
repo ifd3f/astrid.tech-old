@@ -59,8 +59,8 @@ const Homepage = ({ data }: PageProps<Query>) => {
           <hr />
           <Row className="text-center" style={{ fontSize: "16pt" }}>
             <Col xs="12" md="6" lg="3">
-              <a href="mailto:hi@astrid.tech">
-                <BsEnvelope title="Email" /> hi@astrid.tech
+              <a href="mailto:astrid@astrid.tech" rel="me">
+                <BsEnvelope title="Email" /> astrid@astrid.tech
               </a>
             </Col>
             <Col xs="12" md="6" lg="3">
@@ -69,7 +69,7 @@ const Homepage = ({ data }: PageProps<Query>) => {
               </a>
             </Col>
             <Col xs="12" md="6" lg="3">
-              <a href="https://github.com/Plenglin">
+              <a href="https://github.com/Plenglin" rel="me">
                 <GoMarkGithub title="GitHub" /> Follow me on GitHub
               </a>
             </Col>

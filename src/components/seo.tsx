@@ -5,10 +5,9 @@
  * See: https://www.gatsbyjs.org/docs/use-static-query/
  */
 
-import React from "react"
+import { graphql, useStaticQuery } from "gatsby"
+import React, { FC } from "react"
 import { Helmet } from "react-helmet"
-import { useStaticQuery, graphql } from "gatsby"
-import { FC } from "react"
 
 interface SEOProps {
   description?: string
@@ -89,6 +88,8 @@ const SEO: FC<SEOProps> = ({
         type="application/rss+xml"
         href="http://astrid.tech/feed"
       />
+      <link href="https://github.com/Plenglin" rel="me authn" />
+      <link href="mailto:astrid@astrid.tech" rel="me" />
     </Helmet>
   )
 }
