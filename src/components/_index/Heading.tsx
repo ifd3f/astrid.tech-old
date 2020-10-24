@@ -57,7 +57,7 @@ interface IconInfoDisplayProps {
 }
 
 const ImageOfMyself = ({ image }: { image: any }) => (
-  <div className={homepageStyles.imageSelf}>
+  <div className={homepageStyles.imageSelf + " u-photo"}>
     <Img fluid={image} />
   </div>
 )
@@ -79,10 +79,10 @@ export function HeadingSection() {
 
   return (
     <HomepageHeader color="#F7A8B8">
-      <div className={homepageStyles.nameWrapper}>
+      <div className={homepageStyles.nameWrapper + " h-card"}>
         <div className={homepageStyles.introductionGroup}>
           <p className={homepageStyles.preTitle}>Hello, my name is</p>
-          <h1 className={homepageStyles.name}>Astrid Yu</h1>
+          <h1 className={homepageStyles.name + " p-name"}>Astrid Yu</h1>
           <p className={homepageStyles.postTitle}>Software Developer</p>
         </div>
         <ImageOfMyself image={myself} />

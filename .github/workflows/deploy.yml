@@ -1,4 +1,4 @@
-name: Deploy
+name: Build and Deploy
 
 on:
   push:
@@ -34,4 +34,5 @@ jobs:
         run: npm run build
 
       - name: Publish
+        if: github.ref == 'refs/heads/main'
         run: npm run deploy
