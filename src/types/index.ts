@@ -48,7 +48,8 @@ export type Project = Tagged & {
   markdown: MarkdownRemark
   description?: string
   childProjectTag: { childTag: Tag }
-  highlights?: []
+  highlights?: string[]
+  keywords?: string[]
   internal: {
     content: string
     description: string

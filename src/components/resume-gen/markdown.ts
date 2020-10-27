@@ -45,9 +45,10 @@ function renderEducation(levels: number, education: Education) {
 
 function renderProject(levels: number, project: Project) {
   const heading = h(levels) + project.title
-  const skills = "_" + project.tags.map(t => t.name).join(", ") + "_"
+  const url = `https://astrid.tech${project.slug}`
+  const skills = "_" + project.keywords!.join(", ") + "_"
 
-  return [heading, project.description, skills].join("\n\n")
+  return [heading, url, project.description, skills].join("\n\n")
 }
 
 export const generateMarkdownResume = (resume: Resume, order: string) => {

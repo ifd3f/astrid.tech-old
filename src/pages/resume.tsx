@@ -52,9 +52,8 @@ export const pageQuery = graphql`
     title
     description
     highlights
-    tags {
-      name
-    }
+    keywords
+    slug
   }
   query ResumeGeneratorQuery {
     calpoly: school(slug: { eq: "/education/cal-poly/" }) {

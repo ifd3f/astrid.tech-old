@@ -21,6 +21,7 @@ type ProjectMetadata = {
   url: string
   source: string[]
   tags: string[]
+  keywords?: string[]
   highlights?: string[]
   thumbnail: string | null
 }
@@ -109,6 +110,7 @@ export const onCreateNode: GatsbyNode["onCreateNode"] = async ({
       featured: frontmatter.featured ?? false,
       status: frontmatter.status,
       startDate: frontmatter.startDate,
+      keywords: frontmatter.keywords,
       highlights: frontmatter.highlights,
       endDate: frontmatter.endDate,
       thumbnail___NODE: thumbnailFileNodeId,
