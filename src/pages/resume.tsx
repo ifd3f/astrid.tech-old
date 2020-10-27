@@ -1,9 +1,14 @@
 import { graphql, PageProps } from "gatsby"
-import React, { useState } from "react"
+import React, { useEffect, useState } from "react"
+import { useCookies } from "react-cookie"
 import { Col, Container, Form, FormGroup, Input, Label, Row } from "reactstrap"
 import Layout from "src/components/layout"
 import { TextResumeGenerator } from "src/components/resume-gen/text-field-gen"
-import { Resume, ResumeGenerator } from "src/components/resume-gen/types"
+import {
+  Resume,
+  ResumeGenerator,
+  UserInjected,
+} from "src/components/resume-gen/types"
 import SEO from "src/components/seo"
 import { Education, WorkExperience } from "src/types"
 import { generateJSONResume } from "../components/resume-gen/json"
@@ -96,18 +101,45 @@ function ResumeGenerationView({
   )
 }
 
+declare global {
+  interface Window {
+    injectResumeData?: (data: UserInjected) => void
+  }
+}
+
 export default ({ data }: PageProps<Query>) => {
+  const [cookie, setCookie] = useCookies(["resumeInjection"])
+
+  var injection: UserInjected = cookie.resumeInjection ?? {}
+
   const resume: Resume = {
     email: "astrid@astrid.tech",
     projects: [],
     schools: [data.calpoly],
     work: [data.microvu, data.fabtime, data.ironPanthers],
+    ...injection,
   }
 
   const generators = [
     new TextResumeGenerator("md", "Markdown", generateMarkdownResume),
     new TextResumeGenerator("json", "JSON", generateJSONResume),
   ]
+
+  useEffect(() => {
+    window.injectResumeData = (data: UserInjected) => {
+      setCookie("resumeInjection", JSON.stringify(data), {
+        maxAge: 365 * 24 * 3600,
+      })
+      console.log(
+        "Successfully injected the following object: ",
+        data,
+        "Have a nice day, Astrid!"
+      )
+    }
+    return () => {
+      window.injectResumeData = undefined
+    }
+  }, [])
 
   return (
     <Layout>

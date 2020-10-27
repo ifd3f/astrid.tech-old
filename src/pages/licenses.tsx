@@ -1,13 +1,13 @@
 import { graphql, PageProps } from "gatsby"
 import React, { FC } from "react"
-import { Container } from "reactstrap"
-import Layout from "../components/layout/layout"
-import { getPersistentColor, getHSLString, RichColorTheme } from "src/util"
-import SEO from "../components/seo"
-import spdxLicenseList from "spdx-license-list"
-import { PieChart } from "react-minimal-pie-chart"
 import { BsCircleFill } from "react-icons/bs"
+import { PieChart } from "react-minimal-pie-chart"
+import { Container } from "reactstrap"
+import spdxLicenseList from "spdx-license-list"
 import { Site } from "src/types"
+import { getHSLString, getPersistentColor, RichColorTheme } from "src/util"
+import Layout from "../components/layout/layout"
+import SEO from "../components/seo"
 
 type SPDX = {
   name: string
@@ -96,7 +96,6 @@ const LicensesChart: FC<LicensesChartProps> = ({ licenses }) => {
     url: license.url,
   }))
   data.push(other)
-  console.log()
 
   return (
     <section>

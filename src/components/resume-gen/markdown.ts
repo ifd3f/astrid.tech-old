@@ -56,15 +56,14 @@ function renderProject(levels: number, project: Project) {
 }
 
 export const generateMarkdownResume = (resume: Resume, order: string) => {
-  console.log(resume)
   let output = [
     h(1) + "Astrid Yu",
-    `Email: ${resume.email} | Phone: ${resume.phone} | Website: https://astrid.tech | GitHub: https://github.com/Plenglin | LinkedIn: https://linkedin.com/in/astrid-a-yu`,
-  ].join("\n\n")
-
-  if (resume.address) {
-    output += `\n\nAddress: ${resume.address}\n\n`
-  }
+    resume.email + (resume.phone ? ` | ${resume.phone}` : ``),
+    resume.address ? resume.address : null,
+    `https://astrid.tech | https://github.com/Plenglin | https://linkedin.com/in/astrid-a-yu`,
+  ]
+    .filter(l => l)
+    .join("\n\n")
 
   for (const sectionType of order) {
     switch (sectionType) {
