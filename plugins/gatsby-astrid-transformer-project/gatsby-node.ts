@@ -16,11 +16,13 @@ type ProjectMetadata = {
   status: string
   startDate: Date
   endDate: Date
-  description: string
+  description?: string
   featured?: boolean
   url: string
   source: string[]
   tags: string[]
+  keywords?: string[]
+  highlights?: string[]
   thumbnail: string | null
 }
 
@@ -36,6 +38,7 @@ export const sourceNodes: GatsbyNode["sourceNodes"] = async ({
       id: "String!",
       slug: "String!",
       title: "String!",
+      description: "String",
       status: "String",
       featured: "Boolean",
       startDate: "Date!",
@@ -44,6 +47,7 @@ export const sourceNodes: GatsbyNode["sourceNodes"] = async ({
       source: "[String]",
       thumbnail: "File",
       markdown: "MarkdownRemark!",
+      highlights: "[String!]",
       tagSlugs: "[String!]",
       tags: { type: "[Tag!]", extensions: { tagify: {} } },
     },
@@ -102,9 +106,12 @@ export const onCreateNode: GatsbyNode["onCreateNode"] = async ({
       url: frontmatter.url,
       source: frontmatter.source,
       title: frontmatter.title,
+      description: frontmatter.description,
       featured: frontmatter.featured ?? false,
       status: frontmatter.status,
       startDate: frontmatter.startDate,
+      keywords: frontmatter.keywords,
+      highlights: frontmatter.highlights,
       endDate: frontmatter.endDate,
       thumbnail___NODE: thumbnailFileNodeId,
       markdown___NODE: markdownNode.id,

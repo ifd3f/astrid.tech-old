@@ -9,6 +9,7 @@
     "url": "https://github.com/Plenglin/astrid.tech/issues"
   },
   "dependencies": {
+    "@kurone-kito/jsonresume-types": "^0.1.2",
     "@nteract/notebook-render": "^5.0.4-alpha.0",
     "@pauliescanlon/gatsby-remark-sticky-table": "^0.0.11",
     "@types/js-yaml": "^3.12.5",

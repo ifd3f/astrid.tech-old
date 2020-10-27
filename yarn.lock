@@ -1649,6 +1649,11 @@
     "@babel/runtime" "^7.7.2"
     regenerator-runtime "^0.13.3"
 
+"@kurone-kito/jsonresume-types@^0.1.2":
+  version "0.1.2"
+  resolved "https://registry.yarnpkg.com/@kurone-kito/jsonresume-types/-/jsonresume-types-0.1.2.tgz#9e784d4e140893c7d6408d5a834483cc3b9e0f0c"
+  integrity sha512-PolALEnOKwZZbted/sq/bmNrirlndV2TyQyBsiecuU70SIkQdi4st1eiM08XspuiW54UWU/n0bBV5gW0DH46NA==
+
 "@mdx-js/mdx@^2.0.0-next.4", "@mdx-js/mdx@^2.0.0-next.8":
   version "2.0.0-next.8"
   resolved "https://registry.yarnpkg.com/@mdx-js/mdx/-/mdx-2.0.0-next.8.tgz#7d29d7ee634ab0c37cf44bd8d9b1e93c5e09649f"
