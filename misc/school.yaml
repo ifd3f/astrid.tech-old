@@ -1,6 +1,7 @@
 - slug: cal-poly
   name: California Polytechnic State University
   degree: BSc Computer Science
+  gpa: 3.91
   startDate: 2019-09-14
   endDate: 2023-06-11
   courses:
