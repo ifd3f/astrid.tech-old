@@ -116,13 +116,13 @@ export function ExperienceSection() {
       slug
     }
     query WorkQuery {
-      microvu: work(slug: { eq: "/work/micro-vu" }) {
+      microvu: work(slug: { eq: "/work/micro-vu/" }) {
         ...ExperienceSectionFragment
       }
-      fabtime: work(slug: { eq: "/work/fabtime" }) {
+      fabtime: work(slug: { eq: "/work/fabtime/" }) {
         ...ExperienceSectionFragment
       }
-      ironPanthers: work(slug: { eq: "/work/iron-panthers" }) {
+      ironPanthers: work(slug: { eq: "/work/iron-panthers/" }) {
         ...ExperienceSectionFragment
       }
     }

@@ -35,12 +35,7 @@ function renderExperience(levels: number, experience: WorkExperience) {
 
 function renderEducation(levels: number, education: Education) {
   const heading = h(levels) + education.degree + " @ " + education.name
-  let subtitle =
-    date(education.startDate) +
-    " - " +
-    date(education.endDate) +
-    " / " +
-    education.location
+  let subtitle = date(education.startDate) + " - " + date(education.endDate)
   if (education.gpa) {
     subtitle += " / " + education.gpa
   }
@@ -52,7 +47,7 @@ function renderProject(levels: number, project: Project) {
   const heading = h(levels) + project.title
   const skills = "_" + project.tags.map(t => t.name).join(", ") + "_"
 
-  return heading + "\n\n" + skills
+  return [heading, project.description, skills].join("\n\n")
 }
 
 export const generateMarkdownResume = (resume: Resume, order: string) => {

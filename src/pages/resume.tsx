@@ -10,7 +10,7 @@ import {
   UserInjected,
 } from "src/components/resume-gen/types"
 import SEO from "src/components/seo"
-import { Education, WorkExperience } from "src/types"
+import { Education, Project, WorkExperience } from "src/types"
 import { generateJSONResume } from "../components/resume-gen/json"
 import { generateMarkdownResume } from "../components/resume-gen/markdown"
 
@@ -21,6 +21,9 @@ type Query = {
   microvu: WorkExperience
   fabtime: WorkExperience
   ironPanthers: WorkExperience
+  collisionZone: Project
+  astridTech: Project
+  segway: Project
 }
 
 export const pageQuery = graphql`
@@ -45,16 +48,13 @@ export const pageQuery = graphql`
     startDate(formatString: "MMM YYYY")
     endDate(formatString: "MMM YYYY")
   }
-  fragment GeneratorSkillGroup on SkillGroup {
-    skills {
-      level
-      tag {
-        name
-      }
+  fragment GeneratorProject on Project {
+    title
+    description
+    highlights
+    tags {
+      name
     }
-  }
-  fragment TextProject on Project {
-    name
   }
   query ResumeGeneratorQuery {
     calpoly: school(slug: { eq: "/education/cal-poly/" }) {
@@ -68,6 +68,15 @@ export const pageQuery = graphql`
     }
     ironPanthers: work(slug: { eq: "/work/iron-panthers/" }) {
       ...GeneratorWork
+    }
+    astridTech: project(slug: { eq: "/projects/astrid-tech/" }) {
+      ...GeneratorProject
+    }
+    segway: project(slug: { eq: "/projects/segway-bot/" }) {
+      ...GeneratorProject
+    }
+    collisionZone: project(slug: { eq: "/projects/collision-zone/" }) {
+      ...GeneratorProject
     }
   }
 `
@@ -109,14 +118,15 @@ declare global {
 
 export default ({ data }: PageProps<Query>) => {
   const [cookie, setCookie] = useCookies(["resumeInjection"])
+  console.log(data)
 
   var injection: UserInjected = cookie.resumeInjection ?? {}
 
   const resume: Resume = {
     email: "astrid@astrid.tech",
-    projects: [],
     schools: [data.calpoly],
     work: [data.microvu, data.fabtime, data.ironPanthers],
+    projects: [data.astridTech, data.collisionZone, data.segway],
     ...injection,
   }
 

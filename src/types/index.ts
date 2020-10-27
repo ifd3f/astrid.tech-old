@@ -46,6 +46,7 @@ export type Project = Tagged & {
   source: string[]
   thumbnail: FileSystemNode
   markdown: MarkdownRemark
+  description?: string
   childProjectTag: { childTag: Tag }
   highlights?: []
   internal: {
