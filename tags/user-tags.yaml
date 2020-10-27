@@ -144,3 +144,18 @@
   tags:
     - slug: opencv
       name: OpenCV
+
+- backgroundColor: "#B52E31"
+  tags:
+    - slug: angular-js
+      name: Angular.js
+
+- backgroundColor: "#00A4EF"
+  tags:
+    - slug: wpf
+      name: WPF
+
+- backgroundColor: "#00A4EF"
+  tags:
+    - slug: sql
+      name: SQL

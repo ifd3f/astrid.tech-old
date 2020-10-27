@@ -17,6 +17,12 @@ tags:
   - motion-sensing
   - sensor-fusion
   - fusion-360
+keywords:
+  - C++
+  - Robotics
+  - Sensor Fusion
+  - Signal Processing
+  - Circuit Design
 url: null
 source: [https://github.com/Plenglin/segwaybot]
 thumbnail: ./thumbnail.png
