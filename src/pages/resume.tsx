@@ -1,44 +1,26 @@
 import { graphql, PageProps } from "gatsby"
-import { ReactNode } from "react"
-import { Education, Project, WorkExperience } from "../types"
-
-type UserInjected = {
-  phone: string
-  address?: string
-  order?: string
-}
-
-type ResumeURL = {
-  label: string
-  url: string
-}
-
-type Resume = {
-  email: string
-  phone?: string
-  address?: string
-  order?: string
-  urls: ResumeURL[]
-  skills: { name: string; stars: number }[]
-  schools: Education[]
-  work: WorkExperience[]
-  projects: Project[]
-}
+import React from "react"
+import { Container } from "reactstrap"
+import Layout from "src/components/layout"
+import { TextResumeGenerator } from "src/components/resume-gen/text-field-gen"
+import { Resume } from "src/components/resume-gen/types"
+import SEO from "src/components/seo"
+import { Education, WorkExperience } from "src/types"
+import { generateMarkdownResume } from "../components/resume-gen/markdown"
 
 const DEFAULT_ORDER = "sewp"
 
-export type ResumeGenerator = {
-  id: string
-  label: string
-  generate: (resume: Resume) => ReactNode
+type Query = {
+  calpoly: Education
+  microvu: WorkExperience
+  fabtime: WorkExperience
+  ironPanthers: WorkExperience
 }
-
-type Query = {}
 
 export const pageQuery = graphql`
   fragment GeneratorWork on Work {
-    startDate(formatString: "YYYY-MM")
-    endDate(formatString: "YYYY-MM")
+    startDate(formatString: "MMM YYYY")
+    endDate(formatString: "MMM YYYY")
     highlights
     location
     organization
@@ -52,6 +34,10 @@ export const pageQuery = graphql`
   }
   fragment GeneratorSchool on School {
     name
+    degree
+    gpa
+    startDate(formatString: "MMM YYYY")
+    endDate(formatString: "MMM YYYY")
   }
   fragment GeneratorSkillGroup on SkillGroup {
     skills {
@@ -65,18 +51,42 @@ export const pageQuery = graphql`
     name
   }
   query ResumeGeneratorQuery {
-    microvu: work(slug: { eq: "/work/micro-vu" }) {
-      ...TextWork
+    calpoly: school(slug: { eq: "/education/cal-poly/" }) {
+      ...GeneratorSchool
     }
-    fabtime: work(slug: { eq: "/work/fabtime" }) {
-      ...TextWork
+    microvu: work(slug: { eq: "/work/micro-vu/" }) {
+      ...GeneratorWork
     }
-    ironPanthers: work(slug: { eq: "/work/iron-panthers" }) {
-      ...TextWork
+    fabtime: work(slug: { eq: "/work/fabtime/" }) {
+      ...GeneratorWork
+    }
+    ironPanthers: work(slug: { eq: "/work/iron-panthers/" }) {
+      ...GeneratorWork
     }
   }
 `
 
 export default ({ data }: PageProps<Query>) => {
-  const resume: Resume = {}
+  const resume: Resume = {
+    phone: "(650) 483-0527",
+    email: "astrid@astrid.tech",
+    projects: [],
+    schools: [data.calpoly],
+    work: [data.microvu, data.fabtime, data.ironPanthers],
+  }
+
+  const generator = new TextResumeGenerator(
+    "md",
+    "Markdown",
+    generateMarkdownResume
+  )
+
+  return (
+    <Layout>
+      <SEO title="Resume" description="My Resume" />
+      <main>
+        <Container>{generator.generate(resume, "wsp")}</Container>
+      </main>
+    </Layout>
+  )
 }

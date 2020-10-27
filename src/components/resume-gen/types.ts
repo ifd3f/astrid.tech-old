@@ -16,9 +16,6 @@ export type Resume = {
   phone: string
   email: string
   address?: string
-  order?: string
-  urls: ResumeURL[]
-  skills: { name: string; stars: number }[]
   schools: Education[]
   work: WorkExperience[]
   projects: Project[]
@@ -29,8 +26,8 @@ export const SECTION_WORK = "w"
 export const SECTION_EDUCATION = "s"
 export const SECTION_PROJECTS = "p"
 
-export type ResumeGenerator = {
-  id: string
+export interface ResumeGenerator {
+  ext: string
   label: string
   generate: (resume: Resume, order: string) => ReactNode
 }

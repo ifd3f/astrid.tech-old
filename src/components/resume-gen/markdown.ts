@@ -7,7 +7,7 @@ import {
   SECTION_WORK,
 } from "./types"
 
-function date(date: Date | string | null) {
+function date(date?: Date | string | null) {
   if (typeof date == "string") {
     return date
   }
@@ -56,6 +56,7 @@ function renderProject(levels: number, project: Project) {
 }
 
 export const generateMarkdownResume = (resume: Resume, order: string) => {
+  console.log(resume)
   let output = [
     h(1) + "Astrid Yu",
     `Email: ${resume.email} | Phone: ${resume.phone} | Website: https://astrid.tech | GitHub: https://github.com/Plenglin | LinkedIn: https://linkedin.com/in/astrid-a-yu`,
