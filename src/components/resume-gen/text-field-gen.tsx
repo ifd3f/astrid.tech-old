@@ -27,5 +27,3 @@ export class TextResumeGenerator implements ResumeGenerator {
     return <TextFieldView text={text} />
   }
 }
-
-Object.freeze(TextResumeGenerator)
