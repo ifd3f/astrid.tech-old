@@ -1,5 +1,4 @@
 import { Actions, GatsbyNode, Node, SourceNodesArgs } from "gatsby"
-import { v4 } from "uuid"
 import { TAG_MIME_TYPE } from "../gatsby-astrid-plugin-tagging/index"
 import { buildNode } from "../util/index"
 
@@ -142,6 +141,7 @@ function createSchoolNode({ actions, yamlNode }: CreateSchoolNodeArgs) {
 
       name: yamlNode.name,
       degree: yamlNode.degree,
+      gpa: yamlNode.gpa,
       slug: slug,
       startDate: yamlNode.startDate,
       endDate: yamlNode.endDate,

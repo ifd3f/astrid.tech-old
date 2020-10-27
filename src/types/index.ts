@@ -81,6 +81,7 @@ export type Education = Node & {
   endDate: string
   slug: string
   courses: Course[]
+  gpa: number
 }
 
 export type SkillGroup = Node & {
