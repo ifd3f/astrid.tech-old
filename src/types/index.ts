@@ -46,7 +46,10 @@ export type Project = Tagged & {
   source: string[]
   thumbnail: FileSystemNode
   markdown: MarkdownRemark
+  description?: string
   childProjectTag: { childTag: Tag }
+  highlights?: string[]
+  keywords?: string[]
   internal: {
     content: string
     description: string
@@ -81,6 +84,7 @@ export type Education = Node & {
   endDate: string
   slug: string
   courses: Course[]
+  gpa: number
 }
 
 export type SkillGroup = Node & {

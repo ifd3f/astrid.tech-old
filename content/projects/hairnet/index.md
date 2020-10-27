@@ -12,6 +12,11 @@ tags:
   - python
   - data-science
   - anaconda
+keywords:
+  - TensorFlow
+  - Python
+  - Data Science
+  - Computer Vision
 url: null
 featured: true
 source: [https://github.com/Plenglin/Hair-Net]

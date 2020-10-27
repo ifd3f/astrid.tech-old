@@ -1,7 +1,5 @@
 import { Actions, GatsbyNode, Node, SourceNodesArgs } from "gatsby"
-import { v4 } from "uuid"
 import { buildNode } from "../util"
-import { TAG_MIME_TYPE } from "../gatsby-astrid-plugin-tagging/index"
 
 type WorkYamlNode = Node & {
   slug: string
@@ -34,7 +32,7 @@ function createWorkNode({
         type: `Work`,
       },
 
-      slug: "/work/" + yamlNode.slug,
+      slug: "/work/" + yamlNode.slug + "/",
       organization: yamlNode.organization,
       position: yamlNode.position,
       location: yamlNode.location,

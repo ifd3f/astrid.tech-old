@@ -35,7 +35,6 @@ type Query = {
 }
 
 const Homepage = ({ data }: PageProps<Query>) => {
-  console.log(data)
   return (
     <Layout>
       <SEO
