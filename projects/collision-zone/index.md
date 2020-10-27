@@ -19,6 +19,14 @@ tags:
   - cpp
   - node-js
   - aws
+keywords:
+  - C++
+  - TypeScript
+  - JavaScript
+  - Phaser.js
+  - Node.js
+  - AWS
+  - Websockets
 url: https://collision.zone
 source:
   - https://github.com/Plenglin/collision-zone

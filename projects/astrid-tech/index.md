@@ -17,6 +17,11 @@ tags:
   - sass
   - bootstrap-css
   - website
+keywords:
+  - Gatsby.js
+  - React.js
+  - TypeScript
+  - Sass
 url: https://astrid.tech
 source:
   - https://github.com/Plenglin/astrid.tech
