@@ -2,7 +2,7 @@ import { ReactNode } from "react"
 import { Education, Project, WorkExperience } from "../../types"
 
 export type UserInjected = {
-  phone: string
+  phone?: string
   address?: string
   order?: string
 }
@@ -13,7 +13,7 @@ export type ResumeURL = {
 }
 
 export type Resume = {
-  phone: string
+  phone?: string
   email: string
   address?: string
   schools: Education[]

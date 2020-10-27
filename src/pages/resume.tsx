@@ -1,6 +1,6 @@
 import { graphql, PageProps } from "gatsby"
 import React, { useState } from "react"
-import { Container, Form, FormGroup, Input, Label } from "reactstrap"
+import { Col, Container, Form, FormGroup, Input, Label, Row } from "reactstrap"
 import Layout from "src/components/layout"
 import { TextResumeGenerator } from "src/components/resume-gen/text-field-gen"
 import { Resume, ResumeGenerator } from "src/components/resume-gen/types"
@@ -98,7 +98,6 @@ function ResumeGenerationView({
 
 export default ({ data }: PageProps<Query>) => {
   const resume: Resume = {
-    phone: "(650) 483-0527",
     email: "astrid@astrid.tech",
     projects: [],
     schools: [data.calpoly],
@@ -116,7 +115,11 @@ export default ({ data }: PageProps<Query>) => {
       <main>
         <Container>
           <h1>Resume Generator</h1>
-          <ResumeGenerationView resume={resume} generators={generators} />
+          <Row>
+            <Col>
+              <ResumeGenerationView resume={resume} generators={generators} />
+            </Col>
+          </Row>
         </Container>
       </main>
     </Layout>
