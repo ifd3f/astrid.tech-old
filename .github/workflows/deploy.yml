@@ -28,6 +28,19 @@ jobs:
       - name: Set Git credentials
         run: git config --global user.email "astrid@astrid.tech" && git config --global user.name "Astrid A. Yu"
 
+      - name: Get yarn cache directory path
+        id: yarn-cache-dir-path
+        run: echo "::set-output name=dir::$(yarn cache dir)"
+
+      - name: Enable yarn caches
+        uses: actions/cache@v2
+        id: yarn-cache # use this to check for `cache-hit` (`steps.yarn-cache.outputs.cache-hit != 'true'`)
+        with:
+          path: ${{ steps.yarn-cache-dir-path.outputs.dir }}
+          key: ${{ runner.os }}-yarn-${{ hashFiles('**/yarn.lock') }}
+          restore-keys: |
+            ${{ runner.os }}-yarn-
+
       - name: Yarn install
         uses: bahmutov/npm-install@v1.1.0
 
