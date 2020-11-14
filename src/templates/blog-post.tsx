@@ -77,7 +77,7 @@ const BlogPostTemplate: FC<PageProps<Data, Context>> = ({
         <LongformLayout
           title={post.title}
           description={post.description}
-          descriptionRaw={post.description.text}
+          descriptionRaw={post.description}
           headingColor={getHSLString(getPersistentColor(post.slug))}
           sidebar={
             <>

@@ -25,7 +25,7 @@ module.exports = {
     description: packageJson.description,
     siteUrl: packageJson.homepage,
     social: {
-      twitter: `none`,
+      twitter: `astralbijection`,
       github: `Plenglin`,
     },
   },
