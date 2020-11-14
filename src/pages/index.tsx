@@ -73,7 +73,7 @@ const Homepage = ({ data }: PageProps<Query>) => {
               </a>
             </Col>
             <Col xs="12" md="6" lg="3">
-              <a href="https://linkedin.com/in/astrid-a-yu">
+              <a href="https://linkedin.com/in/astrid-yu">
                 <FaLinkedin title="LinkedIn" /> Connect on LinkedIn
               </a>
             </Col>
