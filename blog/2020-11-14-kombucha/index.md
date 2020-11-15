@@ -116,3 +116,5 @@ I saw bubbles in the jar and was really happy, and I decided to bottle my kombuc
 I gave it a bit of a taste, and to my surprise, it tasted really good, and it was way fizzier than it looked! The fizziness surprised me so much that I actually spat some of it out a bit, even!
 
 It turns out in the end, I was a massive idiot and fermented for only 35 hours when I probably should have been aiming for 48. I've been losing track of time due to school and work! If I did it longer, perhaps it might be more outwardly fizzy, but whatever. Anyways, if I don't die of septic shock within the next 48 hours as my mother has been warning me, I'll deem this experiment a success!
+
+EDIT on 2020-11-15: I have not gotten septic shock.
