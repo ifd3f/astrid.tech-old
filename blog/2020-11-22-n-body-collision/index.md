@@ -1,7 +1,7 @@
 ---
 title: Iterative n-body Collision Problem
 date: 2020-11-22
-description: One part of a rigid-body physics engine
+description: An essential part of a complete rigid-body physics engine
 tags:
   - notes
   - math
