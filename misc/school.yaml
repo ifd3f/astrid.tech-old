@@ -7,7 +7,7 @@
   courses:
     - name: Computer Graphics (graduate-level)
       number: CSC 572
-      description: Study advanced applications of OpenGL shaders. Perform fast physics simulations using compute shaders.
+      description: Studied advanced applications of OpenGL shaders. Perform fast physics simulations using compute shaders.
       date: 2020-09-01
       tags:
         - opengl
@@ -16,7 +16,7 @@
         - computer-science
     - name: Special Problems for Undergraduates
       number: CSC 400
-      description: Research ways to optimize software floating-point number operations. See the linked bigfloat project for details.
+      description: Researched ways to optimize software floating-point number operations. See the linked bigfloat project for details.
       date: 2020-09-01
       tags:
         - floating-point
