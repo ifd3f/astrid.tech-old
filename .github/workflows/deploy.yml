@@ -8,6 +8,14 @@ on:
   workflow_dispatch: {}
 
 jobs:
+  cancel-previous:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Cancel Previous Runs
+        uses: styfle/cancel-workflow-action@0.6.0
+        with:
+          access_token: ${{ secrets.GITHUB_TOKEN }}
+
   deploy:
     runs-on: ubuntu-latest
 
@@ -21,7 +29,7 @@ jobs:
         run: git lfs checkout
 
       - name: Import private key
-        uses: webfactory/ssh-agent@v0.4.0
+        uses: webfactory/ssh-agent@v0.4.1
         with:
           ssh-private-key: ${{secrets.PRIVATE_KEY}}
 
