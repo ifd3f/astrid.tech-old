@@ -13,6 +13,7 @@ interface SEOProps {
   description?: string
   lang?: string
   meta?: any[]
+  image?: string
   title: string
 }
 
@@ -20,6 +21,7 @@ const SEO: FC<SEOProps> = ({
   description = "",
   lang = "en",
   meta = [],
+  image,
   title,
 }) => {
   const { site } = useStaticQuery(
@@ -40,6 +42,44 @@ const SEO: FC<SEOProps> = ({
 
   const metaDescription = description || site.siteMetadata.description
 
+  const metas = [
+    {
+      name: `description`,
+      content: metaDescription,
+    },
+    {
+      property: `og:title`,
+      content: title,
+    },
+    {
+      property: `og:description`,
+      content: metaDescription,
+    },
+    {
+      property: `og:type`,
+      content: `website`,
+    },
+    {
+      name: `twitter:card`,
+      content: `summary`,
+    },
+    {
+      name: `twitter:creator`,
+      content: site.siteMetadata.social.twitter,
+    },
+    {
+      name: `twitter:title`,
+      content: title,
+    },
+    {
+      name: `twitter:description`,
+      content: metaDescription,
+    },
+  ].concat(meta)
+  if (image) {
+    metas.push({ name: "og:image", content: image })
+  }
+
   return (
     <Helmet
       htmlAttributes={{
@@ -47,40 +87,7 @@ const SEO: FC<SEOProps> = ({
       }}
       title={title}
       titleTemplate={`%s | ${site.siteMetadata.title}`}
-      meta={[
-        {
-          name: `description`,
-          content: metaDescription,
-        },
-        {
-          property: `og:title`,
-          content: title,
-        },
-        {
-          property: `og:description`,
-          content: metaDescription,
-        },
-        {
-          property: `og:type`,
-          content: `website`,
-        },
-        {
-          name: `twitter:card`,
-          content: `summary`,
-        },
-        {
-          name: `twitter:creator`,
-          content: site.siteMetadata.social.twitter,
-        },
-        {
-          name: `twitter:title`,
-          content: title,
-        },
-        {
-          name: `twitter:description`,
-          content: metaDescription,
-        },
-      ].concat(meta)}
+      meta={metas}
     >
       <link
         title="Subscribe to the Blog!"

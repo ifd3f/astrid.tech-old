@@ -14,6 +14,7 @@ type LongformLayoutProps = {
   descriptionRaw: string
   headingColor: string
   above?: ReactNode
+  thumbnail?: string
   sidebar: ReactNode
   children: ReactNode
 }
@@ -25,11 +26,12 @@ export const LongformLayout: FC<LongformLayoutProps> = ({
   headingColor,
   above,
   sidebar,
+  thumbnail,
   children,
 }) => {
   return (
     <>
-      <SEO title={title!} description={descriptionRaw} />
+      <SEO title={title!} description={descriptionRaw} image={thumbnail} />
       <PageHeading
         above={above}
         title={title}

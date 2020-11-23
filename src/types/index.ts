@@ -62,6 +62,9 @@ export type BlogPost = Tagged & {
   description: string
   date: Date
   slug: string
+  thumbnail: FileSystemNode & {
+    childImageSharp: any
+  }
 
   source: MarkdownRemark
   internal: {
