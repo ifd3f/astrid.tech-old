@@ -4,7 +4,6 @@ type: blog
 title: I'm thinking of becoming a CS major
 date: "2020-06-08T14:14:00-0700"
 description: A rambling post about my thoughts on swapping majors
-production: true
 tags:
   - school
   - math

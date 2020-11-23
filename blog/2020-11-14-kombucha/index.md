@@ -2,6 +2,7 @@
 title: Brewing Kombucha
 date: 2020-11-14
 description: FizzBuzz but without the Buzz
+thumbnail: ./2020-11-14-bottle.jpg
 tags:
   - kombucha
   - notes
