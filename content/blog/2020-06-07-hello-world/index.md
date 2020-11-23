@@ -4,7 +4,6 @@ type: blog
 title: Hello World! Personal Website Redesign
 date: "2020-06-07T10:23:00-0700"
 description: "Because this actually isn't the first iteration of this website"
-production: true
 tags:
   - /projects/astrid-tech/
   - /projects/inventree/

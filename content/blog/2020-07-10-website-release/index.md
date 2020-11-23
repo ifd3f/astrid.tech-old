@@ -4,7 +4,6 @@ type: blog
 title: Finally live!
 date: "2020-07-10T11:48:00-0700"
 description: "Yay!"
-production: true
 tags:
   - /projects/astrid-tech/
   - gatsby-js

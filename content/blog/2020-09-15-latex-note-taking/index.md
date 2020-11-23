@@ -2,6 +2,7 @@
 title: The possibility of using LaTeX to take notes for Physics class
 date: 2020-09-15
 description: When LaTeX is your hammer...
+thumbnail: ./svg-in-latex.png
 tags:
   - notes
   - note-taking

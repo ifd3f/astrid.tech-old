@@ -1,7 +1,7 @@
 import { CreateNodeArgs, GatsbyNode, Node, SourceNodesArgs } from "gatsby"
 import { createFilePath, FileSystemNode } from "gatsby-source-filesystem"
 import path from "path"
-import { BlogMetadata, buildNode } from "../util"
+import { BlogMetadata, buildNode, resolveFileNode } from "../util"
 
 type MarkdownNode = Node & {
   frontmatter: BlogMetadata
@@ -38,6 +38,7 @@ export const sourceNodes: GatsbyNode["sourceNodes"] = async ({
       date: "Date!",
       slug: "String!",
       tagSlugs: "[String!]",
+      thumbnail: "File",
       tags: { type: "[Tag!]", extensions: { tagify: {} } },
       source: "MarkdownRemark!",
     },
@@ -50,6 +51,7 @@ export const sourceNodes: GatsbyNode["sourceNodes"] = async ({
 export const onCreateNode: GatsbyNode["onCreateNode"] = async ({
   node,
   actions,
+  getNodesByType,
   getNode,
 }: CreateNodeArgs) => {
   if (node.internal.type != "MarkdownRemark") return
@@ -58,20 +60,33 @@ export const onCreateNode: GatsbyNode["onCreateNode"] = async ({
   const parentFileSystem = getRootFileSystemNode(markdownNode, getNode)
   if (parentFileSystem?.sourceInstanceName != "blog") return
 
+  const { frontmatter, parent } = markdownNode
+
+  var thumbnailFileNodeId = null
+  if (frontmatter.thumbnail) {
+    const file = resolveFileNode({
+      file: getNode(parent) as FileSystemNode,
+      relativePath: frontmatter.thumbnail,
+      getNodesByType,
+    })
+    thumbnailFileNodeId = file?.id ?? null
+  }
+
   const { createNode, createParentChildLink } = actions
   const slug = "/blog" + createFilePath({ node: parentFileSystem, getNode })
 
-  const description = markdownNode.frontmatter.description
+  const description = frontmatter.description
   const blogPostNode = buildNode({
     internal: {
       type: "BlogPost",
       description,
     },
-    title: markdownNode.frontmatter.title,
-    date: markdownNode.frontmatter.date,
+    title: frontmatter.title,
+    date: frontmatter.date,
     description,
     slug,
-    tagSlugs: markdownNode.frontmatter.tags,
+    tagSlugs: frontmatter.tags,
+    thumbnail___NODE: thumbnailFileNodeId,
     source___NODE: markdownNode.id,
   })
 

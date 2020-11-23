@@ -21,6 +21,7 @@ export type BlogMetadata = {
   date: string
   description: string
   tags: string[]
+  thumbnail: string
 }
 
 export function buildNode<T>(
