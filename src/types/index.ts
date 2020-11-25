@@ -44,7 +44,9 @@ export type Project = Tagged & {
   slug: string
   url: string
   source: string[]
-  thumbnail: FileSystemNode
+  thumbnail: FileSystemNode & {
+    childImageSharp: any
+  }
   markdown: MarkdownRemark
   description?: string
   childProjectTag: { childTag: Tag }
@@ -62,6 +64,9 @@ export type BlogPost = Tagged & {
   description: string
   date: Date
   slug: string
+  thumbnail: FileSystemNode & {
+    childImageSharp: any
+  }
 
   source: MarkdownRemark
   internal: {

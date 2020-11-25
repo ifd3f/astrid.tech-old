@@ -21,6 +21,13 @@ export const pageQuery = graphql`
       source {
         html
       }
+      thumbnail {
+        childImageSharp {
+          fixed(width: 1200, height: 630, toFormat: PNG, cropFocus: CENTER) {
+            src
+          }
+        }
+      }
       title
       date(formatString: "YYYY MMMM DD")
       slug
@@ -71,10 +78,13 @@ const BlogPostTemplate: FC<PageProps<Data, Context>> = ({
     title: post.title,
   }
 
+  const thumbnail = `https://astrid.tech${data.blogPost.thumbnail.childImageSharp.fixed.src}`
+
   return (
     <ProjectContext.Provider value={{ post, disqusConfig }}>
       <Layout currentLocation="blog">
         <LongformLayout
+          thumbnail={thumbnail}
           title={post.title}
           description={post.description}
           descriptionRaw={post.description}
