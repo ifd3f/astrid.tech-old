@@ -39,6 +39,13 @@ export const pageQuery = graphql`
         content
         description
       }
+      thumbnail {
+        childImageSharp {
+          fixed(width: 1200, height: 630, toFormat: PNG, cropFocus: CENTER) {
+            src
+          }
+        }
+      }
       url
       source
       markdown {
@@ -198,6 +205,7 @@ const ProjectDetailTemplate: FC<PageProps<Data, Context>> = props => {
     identifier: project.slug,
     title: project.title,
   }
+  const thumbnail = `https://astrid.tech${data.project.thumbnail.childImageSharp.fixed.src}`
 
   return (
     <ProjectContext.Provider value={{ project, disqusConfig }}>
@@ -212,6 +220,7 @@ const ProjectDetailTemplate: FC<PageProps<Data, Context>> = props => {
               <BsArrowLeft /> Back to Projects
             </Link>
           }
+          thumbnail={thumbnail}
           sidebar={
             <>
               <ProjectStatusGroup />
