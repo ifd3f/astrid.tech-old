@@ -7,6 +7,7 @@ tags:
   - math
   - physics
   - /education/cal-poly/csc-572/
+  - /projects/planet-collision-572/
 ---
 
 For my CSC 572 final project, I implemented a 3D rigid-body physics engine. Naturally, the problem of n-body collisions arises and we need to figure out what to do about them. Here are notes I wrote about my implementation.
