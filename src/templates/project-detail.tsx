@@ -205,7 +205,10 @@ const ProjectDetailTemplate: FC<PageProps<Data, Context>> = props => {
     identifier: project.slug,
     title: project.title,
   }
-  const thumbnail = `https://astrid.tech${data.project.thumbnail.childImageSharp.fixed.src}`
+
+  const thumbnail = data.project.thumbnail
+    ? `https://astrid.tech${data.project.thumbnail.childImageSharp.fixed.src}`
+    : undefined
 
   return (
     <ProjectContext.Provider value={{ project, disqusConfig }}>

@@ -2,7 +2,7 @@
 title: Brewing Kombucha
 date: 2020-11-14
 description: FizzBuzz but without the Buzz
-thumbnail: "./2020-10-31-thermometer.jpg"
+thumbnail: ./2020-10-31-thermometer.jpg
 tags:
   - kombucha
   - notes

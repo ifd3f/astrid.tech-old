@@ -78,7 +78,10 @@ const BlogPostTemplate: FC<PageProps<Data, Context>> = ({
     title: post.title,
   }
 
-  const thumbnail = `https://astrid.tech${data.blogPost.thumbnail.childImageSharp.fixed.src}`
+  const thumbnail = data.blogPost.thumbnail
+    ? `https://astrid.tech${data.blogPost.thumbnail.childImageSharp.fixed.src}`
+    : undefined
+  console.log(data.blogPost.thumbnail)
 
   return (
     <ProjectContext.Provider value={{ post, disqusConfig }}>

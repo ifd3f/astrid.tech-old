@@ -77,7 +77,7 @@ const SEO: FC<SEOProps> = ({
     },
   ].concat(meta)
   if (image) {
-    metas.push({ name: "og:image", content: image })
+    metas.push({ property: "og:image", content: image })
   }
 
   return (
