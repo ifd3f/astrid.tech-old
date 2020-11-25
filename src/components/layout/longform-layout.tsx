@@ -17,6 +17,7 @@ type LongformLayoutProps = {
   thumbnail?: string
   sidebar: ReactNode
   children: ReactNode
+  url?: string
 }
 
 export const LongformLayout: FC<LongformLayoutProps> = ({
@@ -28,10 +29,16 @@ export const LongformLayout: FC<LongformLayoutProps> = ({
   sidebar,
   thumbnail,
   children,
+  url,
 }) => {
   return (
     <>
-      <SEO title={title!} description={descriptionRaw} image={thumbnail} />
+      <SEO
+        canonicalUrl={url}
+        title={title!}
+        description={descriptionRaw}
+        image={thumbnail}
+      />
       <PageHeading
         above={above}
         title={title}

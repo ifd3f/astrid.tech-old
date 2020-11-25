@@ -41,7 +41,7 @@ export const pageQuery = graphql`
       }
       thumbnail {
         childImageSharp {
-          fixed(width: 1200, height: 630, toFormat: PNG, cropFocus: CENTER) {
+          fixed(width: 1200, toFormat: PNG) {
             src
           }
         }
@@ -200,14 +200,15 @@ const ProjectContext = createContext<ProjectContextData>(
 const ProjectDetailTemplate: FC<PageProps<Data, Context>> = props => {
   const { data } = props
   const project = data.project
+  const url = `${location.origin}${project.slug}`
   const disqusConfig = {
-    url: `https://astrid.tech${project.slug}`,
+    url,
     identifier: project.slug,
     title: project.title,
   }
 
   const thumbnail = data.project.thumbnail
-    ? `https://astrid.tech${data.project.thumbnail.childImageSharp.fixed.src}`
+    ? `${location.origin}${data.project.thumbnail.childImageSharp.fixed.src}`
     : undefined
 
   return (
@@ -215,6 +216,7 @@ const ProjectDetailTemplate: FC<PageProps<Data, Context>> = props => {
       <Layout {...props} currentLocation="projects">
         <LongformLayout
           title={project.title}
+          url={url}
           description={project.internal.description}
           descriptionRaw={project.internal.description}
           headingColor={getHSLString(getPersistentColor(project.slug))}

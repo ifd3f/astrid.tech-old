@@ -117,7 +117,6 @@ declare global {
 
 export default ({ data }: PageProps<Query>) => {
   const [cookie, setCookie] = useCookies(["resumeInjection"])
-  console.log(data)
 
   var injection: UserInjected = cookie.resumeInjection ?? {}
 

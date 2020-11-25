@@ -69,19 +69,20 @@ const PostStatusGroup: FC = () => {
 const BlogPostTemplate: FC<PageProps<Data, Context>> = ({
   data,
   pageContext,
+  location,
 }) => {
   const post = data.blogPost
   const { previous, next } = pageContext
+  const url = `${location.origin}${post.slug}`
   const disqusConfig = {
-    url: `https://astrid.tech${post.slug}`,
+    url,
     identifier: post.slug,
     title: post.title,
   }
 
   const thumbnail = data.blogPost.thumbnail
-    ? `https://astrid.tech${data.blogPost.thumbnail.childImageSharp.fixed.src}`
+    ? `${location.origin}${data.blogPost.thumbnail.childImageSharp.fixed.src}`
     : undefined
-  console.log(data.blogPost.thumbnail)
 
   return (
     <ProjectContext.Provider value={{ post, disqusConfig }}>
@@ -89,6 +90,7 @@ const BlogPostTemplate: FC<PageProps<Data, Context>> = ({
         <LongformLayout
           thumbnail={thumbnail}
           title={post.title}
+          url={url}
           description={post.description}
           descriptionRaw={post.description}
           headingColor={getHSLString(getPersistentColor(post.slug))}

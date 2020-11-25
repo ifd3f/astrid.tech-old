@@ -15,12 +15,16 @@ interface SEOProps {
   meta?: any[]
   image?: string
   title: string
+  origin?: string
+  canonicalUrl?: string
 }
 
 const SEO: FC<SEOProps> = ({
   description = "",
   lang = "en",
   meta = [],
+  origin = "http://astrid.tech",
+  canonicalUrl,
   image,
   title,
 }) => {
@@ -48,18 +52,6 @@ const SEO: FC<SEOProps> = ({
       content: metaDescription,
     },
     {
-      property: `og:title`,
-      content: title,
-    },
-    {
-      property: `og:description`,
-      content: metaDescription,
-    },
-    {
-      property: `og:type`,
-      content: `website`,
-    },
-    {
       name: `twitter:card`,
       content: `summary`,
     },
@@ -75,9 +67,27 @@ const SEO: FC<SEOProps> = ({
       name: `twitter:description`,
       content: metaDescription,
     },
+    {
+      property: `og:title`,
+      content: title,
+    },
+    {
+      property: `og:description`,
+      content: metaDescription,
+    },
+    {
+      property: `og:type`,
+      content: `website`,
+    },
   ].concat(meta)
   if (image) {
     metas.push({ property: "og:image", content: image })
+    metas.push({ property: "twitter:image", content: image })
+    metas.push({ property: "twitter:card", content: "summary" })
+  }
+
+  if (canonicalUrl) {
+    metas.push({ property: "og:url", content: canonicalUrl })
   }
 
   return (
@@ -90,11 +100,13 @@ const SEO: FC<SEOProps> = ({
       meta={metas}
     >
       <link
-        title="Subscribe to the Blog!"
+        title="Blog"
         rel="alternate"
         type="application/rss+xml"
-        href="http://astrid.tech/feed"
+        href={`${location}/feed`}
       />
+
+      {/* Web login */}
       <link href="https://github.com/Plenglin" rel="me authn" />
       <link href="mailto:astrid@astrid.tech" rel="me" />
     </Helmet>
