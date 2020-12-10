@@ -2,6 +2,7 @@ import os
 from datetime import datetime, timedelta
 from typing import Union
 
+import requests
 from django.conf import settings
 from django.db import models
 from django.db.models import IntegerChoices, IntegerField, ForeignKey
@@ -21,12 +22,17 @@ class OAuthProvider:
         self.client = BackendApplicationClient(client_id=client_id)
 
     def authorize(self, code):
-        oauth = OAuth2Session(client=self.client)
-        return oauth.fetch_token(
+        res = requests.post(
             self.token_endpoint,
-            client_secret=self.client_secret,
-            authorization_response=code
+            {
+                'client_id': self.client_id,
+                'client_secret': self.client_secret,
+                'grant_type': 'authorization_code',
+                'redirect_uri': 'http://localhost:8000/auth/google/authorized',
+                'code': code
+            }
         )
+        return res.json()
 
     def __repr__(self):
         return f'OAuthProvider({self.subpath_name}, {self.db_id})'
@@ -76,15 +82,18 @@ class OAuthIdentity(Model):
     user = ForeignKey(
         settings.AUTH_USER_MODEL,
         on_delete=models.CASCADE,
+        null=True
     )
     refresh_token = TextField(null=False)
     access_token = TextField(null=True)
     expiration = DateField(null=True)
 
     @classmethod
-    def create_from_token(cls, provider: int, token: str):
+    def create_from_token(cls, provider: int, token: dict):
         return OAuthIdentity(
-            refresh_token=token,
+            refresh_token=token['refresh_token'],
+            access_token=token['access_token'],
+            expiration=datetime.now() + timedelta(seconds=int(token['expires_in'])),
             provider_code=provider
         )
 
