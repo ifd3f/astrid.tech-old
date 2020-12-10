@@ -3,9 +3,13 @@
 import os
 import sys
 
+import dotenv
+
 
 def main():
     """Run administrative tasks."""
+    dotenv.load_dotenv()
+
     os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'astrid_tech.settings')
     try:
         from django.core.management import execute_from_command_line
