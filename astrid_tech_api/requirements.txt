@@ -1,3 +1,6 @@
 django-rest-framework
 django-webmention
 channels
+python-dotenv
+PyGithub
+requests
