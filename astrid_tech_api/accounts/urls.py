@@ -5,8 +5,6 @@ from accounts import views
 
 router = routers.DefaultRouter()
 
-# Wire up our API using automatic URL routing.
-# Additionally, we include login URLs for the browsable API.
 urlpatterns = [
-    path('<str:provider>/authorized', views.auth),
+  #  path('<str:provider>/authorized', views.google_create_account),
 ]

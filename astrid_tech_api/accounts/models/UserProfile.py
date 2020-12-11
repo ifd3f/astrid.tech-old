@@ -1,6 +1,6 @@
 from django.conf import settings
 from django.db import models
-from django.db.models import TextField, Model
+from django.db.models import Model, CharField, ImageField
 
 
 class UserProfile(Model):
@@ -9,5 +9,5 @@ class UserProfile(Model):
         on_delete=models.CASCADE,
         primary_key=True
     )
-    name = TextField(null=False)
-    email = TextField(null=False)
+    display_name = CharField(max_length=64, null=False)
+    picture = ImageField()
