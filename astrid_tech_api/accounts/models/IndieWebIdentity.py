@@ -2,7 +2,7 @@ from django.conf import settings
 from django.db import models
 from django.db.models import URLField
 
-from authentication.models.IdentityBase import IdentityBase
+from accounts.models.IdentityBase import IdentityBase
 
 
 class IndieWebIdentity(IdentityBase):

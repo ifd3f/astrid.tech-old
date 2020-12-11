@@ -6,12 +6,12 @@ from django.db.models import URLField, EmailField
 from google.auth.transport import requests
 from google.oauth2 import id_token
 
-from authentication.models.IdentityBase import IdentityBase
+from accounts.models.IdentityBase import IdentityBase
 
 
-class GithubIdentity(IdentityBase):
+class GoogleIdentity(IdentityBase):
     email = EmailField(null=False, primary_key=True)
-    user_id = TextField(null=False)
+    google_user_id = TextField(null=False)
     name = TextField(null=False)
     picture = URLField(null=False)
 

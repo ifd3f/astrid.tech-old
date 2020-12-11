@@ -45,7 +45,7 @@ INSTALLED_APPS = [
     'blog',
     'comments',
     'analytics',
-    'authentication',
+    'accounts',
     'api'
 ]
 
