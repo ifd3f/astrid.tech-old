@@ -5,7 +5,7 @@ python-dotenv~=0.15.0
 PyGithub
 requests
 requests_oauthlib
-
 Django~=3.1.4
 oauthlib~=3.1.0
 djangorestframework~=3.12.2
+google-auth

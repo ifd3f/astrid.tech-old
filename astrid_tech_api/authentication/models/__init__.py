@@ -1,3 +1,4 @@
-from .oauth import OAuthIdentity
-from .indieauth import IndieAuthIdentity
+from .GithubIdentity import GithubIdentity
+from .GoogleIdentity import GoogleIdentity
+from .IndieWebIdentity import IndieWebIdentity
 
