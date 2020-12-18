@@ -198,7 +198,7 @@ const ProjectContext = createContext<ProjectContextData>(
 )
 
 const ProjectDetailTemplate: FC<PageProps<Data, Context>> = props => {
-  const { data } = props
+  const { data, location } = props
   const project = data.project
   const url = `${location.origin}${project.slug}`
   const disqusConfig = {
