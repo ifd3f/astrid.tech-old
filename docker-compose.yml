@@ -1,0 +1,17 @@
+version: "3.7"
+services:
+  frontend:
+    image: astrid_tech_frontend
+    build:
+      context: .
+      target: development
+    ports:
+      - "5000:5000"
+    volumes:
+      - ./gatsby-config:/build/gatsby-config.js
+      - ./gatsby-browser:/build/gatsby-browser.js
+      - ./static:/build/static/
+      - ./content:/build/content/
+      - ./assets:/build/assets/
+      - ./plugins:/build/plugins/
+      - ./src:/build/src/

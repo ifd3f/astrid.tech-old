@@ -100,10 +100,10 @@ const SEO: FC<SEOProps> = ({
       meta={metas}
     >
       <link
-        title="Blog"
+        title="Astrid Yu's Blog"
         rel="alternate"
         type="application/rss+xml"
-        href={`${location}/feed`}
+        href="https://astrid.tech/rss.xml"
       />
 
       {/* Web login */}
