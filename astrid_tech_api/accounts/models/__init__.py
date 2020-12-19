@@ -1,5 +1,5 @@
 from .GithubIdentity import GithubIdentity
-from .GoogleIdentity import GoogleIdentity
+from .GoogleToken import GoogleToken
 from .IndieWebIdentity import IndieWebIdentity
 from .UserProfile import UserProfile
 from .User import User

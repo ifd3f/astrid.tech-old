@@ -3,6 +3,13 @@ from django.db import models
 from django.db.models import Model, DateField, OneToOneField
 
 
+class TokenBase(Model):
+    class Meta:
+        abstract = True
+
+    time_registered = DateField(null=False, auto_now_add=True)
+
+
 class IdentityBase(Model):
     class Meta:
         abstract = True
@@ -12,4 +19,4 @@ class IdentityBase(Model):
         on_delete=models.CASCADE,
         null=True
     )
-    registered = DateField(null=False, auto_now_add=True)
+    time_registered = DateField(null=False, auto_now_add=True)

@@ -1,7 +1,7 @@
 import json
 from datetime import datetime, timedelta
 
-from django.db.models import TextField, DateField
+from django.db.models import TextField, DateField, OneToOneField, CASCADE, IntegerField
 from oauthlib.oauth2 import OAuth2Token
 from requests_oauthlib import OAuth2Session
 
@@ -9,7 +9,7 @@ from accounts.google import get_secrets
 from accounts.models.IdentityBase import IdentityBase
 
 
-class GoogleIdentity(IdentityBase):
+class GoogleToken(IdentityBase):
     access_token = TextField(null=False)
     refresh_token = TextField(null=False)
     token_type = TextField(null=False)
@@ -17,7 +17,7 @@ class GoogleIdentity(IdentityBase):
 
     @classmethod
     def from_token(cls, token: OAuth2Token):
-        obj = GoogleIdentity()
+        obj = GoogleToken(time_registered=datetime.now())
         obj.token = token
         return obj
 
@@ -29,15 +29,15 @@ class GoogleIdentity(IdentityBase):
         return {
             'access_token': self.access_token,
             'refresh_token': self.refresh_token,
-            'token_type': self.token_type[0],
+            'token_type': self.token_type,
             'expires_in': (self.time_expires - datetime.now()).total_seconds()
         }
 
     @token.setter
     def token(self, value):
-        self.access_token = value['access_token'],
-        self.refresh_token = value['refresh_token'],
-        self.token_type = value['token_type'],
+        self.access_token = value['access_token']
+        self.refresh_token = value['refresh_token']
+        self.token_type = value['token_type']
         self.time_expires = datetime.now() + timedelta(seconds=float(value['expires_in']))
 
     @property
@@ -48,3 +48,20 @@ class GoogleIdentity(IdentityBase):
             auto_refresh_url="https://www.googleapis.com/oauth2/v4/token",
             token_updater=self.save_token
         )
+
+
+class GoogleIdentity(IdentityBase):
+    google_id = TextField(primary_key=True)
+    email = TextField(null=False)
+    token = OneToOneField(
+        GoogleToken,
+        on_delete=CASCADE,
+        null=False
+    )
+
+    @classmethod
+    def create(cls, token: GoogleToken):
+        profile = token.session.get('https://www.googleapis.com/oauth2/v1/userinfo').json()
+        return profile, GoogleIdentity(token=token, google_id=profile['id'], email=profile['email'], time_registered=datetime.now())
+
+

@@ -10,11 +10,11 @@ from rest_framework.request import Request
 from rest_framework.response import Response
 
 from accounts.google import get_authorization_url, get_authorization_session, get_secrets
-from accounts.models import GoogleIdentity, User
+from accounts.models import GoogleToken, User
+from accounts.models.GoogleToken import GoogleIdentity
 
 PrefillUserData = namedtuple('PrefillUserData', 'name email')
 http = httplib2.Http(cache=".cache")
-
 
 
 @api_view()
@@ -26,20 +26,19 @@ def google_link(request: Request):
         client_secret=get_secrets()['web']['client_secret'],
         code=request.query_params['code']
     )
-    identity = GoogleIdentity.from_token(token)
+    google_token = GoogleToken.from_token(token)
+    google_token.save()
+    profile, identity = GoogleIdentity.create(google_token)
     identity.save()
 
-    session = identity.session
-    profile = session.get('https://www.googleapis.com/oauth2/v1/userinfo')
-
-    user = User.objects.create_user(
-        username=str(uuid4()),
-        email=identity.email,
-    )
-    user.set_unusable_password()
-    user.save()
-
-    return Response(PrefillUserData(name=identity.name, email=identity.email))
+    return Response({
+        'name': profile['name'],
+        'email': identity.email,
+        'integration': {
+            'type': 'google',
+            'id': identity.google_id
+        }
+    })
 
 
 def google_redirect_authorize(request: HttpRequest):
