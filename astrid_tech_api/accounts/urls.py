@@ -1,12 +1,14 @@
-from django.urls import path
-from rest_framework import routers
+from django.urls import path, include
+from rest_framework.routers import DefaultRouter
 
 from accounts import views
+from accounts.views.user import UserViewSet
 
-router = routers.DefaultRouter()
+router = DefaultRouter()
+router.register(r'users', UserViewSet, basename='user')
 
 urlpatterns = [
-    path('google/link', views.google_link),
-    path('google/authorize', views.google_redirect_authorize),
-    path('create', views.create_account_from_integration),
+    path('google/link', views.google.link),
+    path('google/authorize', views.google.authorization_redirect),
+    path('', include(router.urls))
 ]

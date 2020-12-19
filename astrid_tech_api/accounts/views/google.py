@@ -11,7 +11,6 @@ from rest_framework.response import Response
 
 from accounts.google import get_authorization_url, get_authorization_session, get_secrets
 from accounts.models import GoogleIdentity, GoogleToken, GoogleAuthAttempt
-from accounts.models.serializers import CreateUserForm
 
 PrefillUserData = namedtuple('PrefillUserData', 'name email')
 http = httplib2.Http(cache=".cache")
@@ -19,7 +18,7 @@ http = httplib2.Http(cache=".cache")
 
 @api_view()
 @permission_classes([AllowAny])
-def google_link(request: Request):
+def link(request: Request):
     attempt = GoogleAuthAttempt.objects.filter(state=request.query_params['state'])
     if not attempt.exists():
         raise ParseError(
@@ -39,24 +38,16 @@ def google_link(request: Request):
     identity.save()
 
     return Response({
-        'name': profile['name'],
+        'username': profile['name'],
         'email': identity.email,
-        'integration': {
+        'authentication': {
             'type': 'google',
             'id': identity.google_id
         }
     })
 
 
-def google_redirect_authorize(request: HttpRequest):
+def authorization_redirect(request: HttpRequest):
     url, state = get_authorization_url()
     GoogleAuthAttempt(state=state).save()
     return redirect(url)
-
-
-@api_view(['POST'])
-@permission_classes([AllowAny])
-def create_account_from_integration(request: Request):
-    form = CreateUserForm(data=request.data)
-    if form.is_valid():
-        return Response(form.save())
