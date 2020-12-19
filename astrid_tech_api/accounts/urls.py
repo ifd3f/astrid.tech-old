@@ -8,4 +8,5 @@ router = routers.DefaultRouter()
 urlpatterns = [
     path('google/link', views.google_link),
     path('google/authorize', views.google_redirect_authorize),
+    path('create', views.create_account_from_integration),
 ]

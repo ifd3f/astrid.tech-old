@@ -11,6 +11,7 @@ from rest_framework.response import Response
 
 from accounts.google import get_authorization_url, get_authorization_session, get_secrets
 from accounts.models import GoogleIdentity, GoogleToken, GoogleAuthAttempt
+from accounts.models.serializers import CreateUserForm
 
 PrefillUserData = namedtuple('PrefillUserData', 'name email')
 http = httplib2.Http(cache=".cache")
@@ -53,7 +54,9 @@ def google_redirect_authorize(request: HttpRequest):
     return redirect(url)
 
 
-@api_view()
+@api_view(['POST'])
 @permission_classes([AllowAny])
 def create_account_from_integration(request: Request):
-    return
+    form = CreateUserForm(data=request.data)
+    if form.is_valid():
+        return Response(form.save())
