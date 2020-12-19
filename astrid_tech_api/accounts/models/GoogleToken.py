@@ -1,19 +1,23 @@
-import json
 from datetime import datetime, timedelta
 
-from django.db.models import TextField, DateField, OneToOneField, CASCADE, IntegerField
+from django.db.models import TextField, DateField, OneToOneField, CASCADE, DateTimeField, Model
 from oauthlib.oauth2 import OAuth2Token
 from requests_oauthlib import OAuth2Session
 
 from accounts.google import get_secrets
-from accounts.models.IdentityBase import IdentityBase
+from accounts.models.IdentityBase import IdentityBase, TokenBase
 
 
-class GoogleToken(IdentityBase):
+class GoogleAuthAttempt(Model):
+    state = TextField(null=False, primary_key=True)
+    time_registered = DateTimeField(null=False, auto_now_add=True)
+
+
+class GoogleToken(TokenBase):
     access_token = TextField(null=False)
     refresh_token = TextField(null=False)
     token_type = TextField(null=False)
-    time_expires = DateField(null=False)
+    time_expires = DateTimeField(null=False)
 
     @classmethod
     def from_token(cls, token: OAuth2Token):
