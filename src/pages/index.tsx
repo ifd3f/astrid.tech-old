@@ -17,6 +17,7 @@ import {
 } from "../components/_index/index"
 import styles from "../components/_index/style.module.scss"
 import { HomepageSection } from "../components/_index/util"
+import "../scss/homepage.scss"
 
 export const pageQuery = graphql`
   query {

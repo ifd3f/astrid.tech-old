@@ -65,7 +65,7 @@ const ImageOfMyself = ({ image }: { image: any }) => (
 export function HeadingSection() {
   const data = useStaticQuery(graphql`
     query HeadingBgQuery {
-      avatar: file(relativePath: { eq: "avatar2.jpg" }) {
+      avatar: file(relativePath: { eq: "avatar.jpg" }) {
         childImageSharp {
           fluid(maxHeight: 500) {
             ...GatsbyImageSharpFluid_tracedSVG
@@ -78,21 +78,23 @@ export function HeadingSection() {
   const myself: any = data.avatar.childImageSharp.fluid
 
   return (
-    <HomepageHeader color="#F7A8B8">
-      <div className={homepageStyles.nameWrapper + " h-card"}>
-        <div className={homepageStyles.introductionGroup}>
-          <p className={homepageStyles.preTitle}>Hello, my name is</p>
-          <h1 className={homepageStyles.name + " p-name"}>Astrid Yu</h1>
-          <p className={homepageStyles.postTitle}>Software Developer</p>
+    <header className="homepage-header homepage-section">
+      <div className="inner">
+        <div className={homepageStyles.nameWrapper + " h-card"}>
+          <div className={homepageStyles.introductionGroup}>
+            <p className={homepageStyles.preTitle}>Hello, my name is</p>
+            <h1 className={homepageStyles.name + " p-name"}>Astrid Yu</h1>
+            <p className={homepageStyles.postTitle}>Software Developer</p>
+          </div>
+          <ImageOfMyself image={myself} />
         </div>
-        <ImageOfMyself image={myself} />
+        <p className={homepageStyles.skillBrag}>
+          An interactive portfolio made using{" "}
+          <Link to="/projects/astrid-tech">
+            React, Gatsby, and several other technologies
+          </Link>
+        </p>
       </div>
-      <p className={homepageStyles.skillBrag}>
-        An interactive portfolio made using{" "}
-        <Link to="/projects/astrid-tech">
-          React, Gatsby, and several other technologies
-        </Link>
-      </p>
-    </HomepageHeader>
+    </header>
   )
 }
