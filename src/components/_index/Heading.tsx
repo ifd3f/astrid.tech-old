@@ -79,22 +79,20 @@ export function HeadingSection() {
 
   return (
     <header className="homepage-header homepage-section">
-      <div className="inner">
-        <div className={homepageStyles.nameWrapper + " h-card"}>
-          <div className={homepageStyles.introductionGroup}>
-            <p className={homepageStyles.preTitle}>Hello, my name is</p>
-            <h1 className={homepageStyles.name + " p-name"}>Astrid Yu</h1>
-            <p className={homepageStyles.postTitle}>Software Developer</p>
-          </div>
-          <ImageOfMyself image={myself} />
+      <div className={homepageStyles.nameWrapper + " h-card"}>
+        <div className={homepageStyles.introductionGroup}>
+          <p className={homepageStyles.preTitle}>Hello, my name is</p>
+          <h1 className={homepageStyles.name + " p-name"}>Astrid Yu</h1>
+          <p className={homepageStyles.postTitle}>Software Developer</p>
         </div>
-        <p className={homepageStyles.skillBrag}>
-          An interactive portfolio made using{" "}
-          <Link to="/projects/astrid-tech">
-            React, Gatsby, and several other technologies
-          </Link>
-        </p>
+        <ImageOfMyself image={myself} />
       </div>
+      <p className={homepageStyles.skillBrag}>
+        An interactive portfolio made using{" "}
+        <Link to="/projects/astrid-tech">
+          React, Gatsby, and several other technologies
+        </Link>
+      </p>
     </header>
   )
 }

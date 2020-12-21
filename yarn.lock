@@ -7127,6 +7127,11 @@ follow-redirects@^1.0.0, follow-redirects@^1.10.0:
   resolved "https://registry.yarnpkg.com/follow-redirects/-/follow-redirects-1.13.0.tgz#b42e8d93a2a7eea5ed88633676d6597bc8e384db"
   integrity sha512-aq6gF1BEKje4a9i9+5jimNFIpq4Q1WiwBToeRK5NvZBd/TRsmW8BsJfOEGkr76TbOyPVD3OVDN910EcUNtRYEA==
 
+fontsource-gothic-a1@^3.1.5:
+  version "3.1.5"
+  resolved "https://registry.yarnpkg.com/fontsource-gothic-a1/-/fontsource-gothic-a1-3.1.5.tgz#0ce3b1bf6714061a317ba3d7fee0112d49a2db34"
+  integrity sha512-b2CdKuHJebG6eblWLg84y9cQKqyY5n9A/qxjeHzDP/Vkkynfkj5ZwPDK8vEB2dhjrVyyn+u/Wjohc1xdD9YWVA==
+
 for-in@^1.0.2:
   version "1.0.2"
   resolved "https://registry.yarnpkg.com/for-in/-/for-in-1.0.2.tgz#81068d295a8142ec0ac726c6e2200c30fb6d5e80"
@@ -16549,16 +16554,6 @@ typedarray@^0.0.6:
   version "0.0.6"
   resolved "https://registry.yarnpkg.com/typedarray/-/typedarray-0.0.6.tgz#867ac74e3864187b1d3d47d996a78ec5c8830777"
   integrity sha1-hnrHTjhkGHsdPUfZlqeOxciDB3c=
-
-typeface-comfortaa@^1.1.4:
-  version "1.1.13"
-  resolved "https://registry.yarnpkg.com/typeface-comfortaa/-/typeface-comfortaa-1.1.13.tgz#e347a169d481b0b6f1050c69ef0f4fd6c4c1f174"
-  integrity sha512-Eah/oSTZ5leNsoc7U8JUrMD+z5flmgs4hI0cYL1d1xgfZDKMuyRnw8nD2Lri43X0io7f0XeZM7ssQU6HqhpPtw==
-
-typeface-muli@^1.1.3:
-  version "1.1.13"
-  resolved "https://registry.yarnpkg.com/typeface-muli/-/typeface-muli-1.1.13.tgz#e68fa5a2e9467f0ba250b3795ada812033b8227e"
-  integrity sha512-FrbDCi7OKz6Mg8oK3bwAg3OTy3sGHXqb3ekSnOyHhvVCfSF/aiRTjv/KE5RJ1CfddhYDlBuTCQFNUfOOSlHObw==
 
 typescript@^3.8.3:
   version "3.9.7"
