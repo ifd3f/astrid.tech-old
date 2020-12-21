@@ -5,4 +5,4 @@ from django.db.models import UUIDField
 
 
 class User(AbstractUser):
-    uuid = UUIDField(primary_key=True, default=uuid4, editable=False)
+    id = UUIDField(primary_key=True, default=uuid4, editable=False)

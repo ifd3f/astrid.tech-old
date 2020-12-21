@@ -14,7 +14,6 @@ requests-oauthlib = "*"
 django = "*"
 oauthlib = "*"
 djangorestframework = "*"
-djangorestframework-jwt = "*"
 google-auth = "*"
 django-oauth-toolkit = "*"
 pillow = "*"
@@ -24,6 +23,7 @@ google-auth-httplib2 = "*"
 django-cors-headers = "*"
 django-structlog = "*"
 structlog = "*"
+djangorestframework-simplejwt = "*"
 
 [dev-packages]
 

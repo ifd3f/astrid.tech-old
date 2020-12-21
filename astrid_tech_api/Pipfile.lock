@@ -1,7 +1,7 @@
 {
     "_meta": {
         "hash": {
-            "sha256": "592cc28a9cd2dfd01e901b70b1fdedcb212f5e7c163272cea2f03b99f2674b5e"
+            "sha256": "f69db5378b8e43b483d425fe735b1697b4ae171fe2f8a0488ea4af99e0c22ef6"
         },
         "pipfile-spec": 6,
         "requires": {
@@ -221,13 +221,13 @@
             "index": "pypi",
             "version": "==3.12.2"
         },
-        "djangorestframework-jwt": {
+        "djangorestframework-simplejwt": {
             "hashes": [
-                "sha256:5efe33032f3a4518a300dc51a51c92145ad95fb6f4b272e5aa24701db67936a7",
-                "sha256:ab15dfbbe535eede8e2e53adaf52ef0cf018ee27dbfad10cbc4cbec2ab63d38c"
+                "sha256:7adc913ba0d2ed7f46e0b9bf6e86f9bd9248f1c4201722b732b8213e0ea66f9f",
+                "sha256:bd587700b6ab34a6c6b12d426cce4fa580d57ef1952ad4ba3b79707784619ed3"
             ],
             "index": "pypi",
-            "version": "==1.11.0"
+            "version": "==4.6.0"
         },
         "google-api-core": {
             "hashes": [
@@ -498,7 +498,7 @@
                 "sha256:30639c035cdb23534cd4aa2dd52c3bf48f06e5f4a941509c8bafd8ce11080259",
                 "sha256:8b74bedcbbbaca38ff6d7491d76f2b06b3592611af620f8426e82dddb04a5ced"
             ],
-            "markers": "python_version >= '2.7' and python_version not in '3.0, 3.1, 3.2'",
+            "markers": "python_version >= '2.7' and python_version not in '3.0, 3.1, 3.2, 3.3'",
             "version": "==1.15.0"
         },
         "sqlparse": {

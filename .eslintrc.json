@@ -2,7 +2,7 @@
   "rules": {
     "prettier/prettier": ["error"]
   },
-  "parser": "babel-eslint",
+  "parser": "@typescript-eslint/parser",
   "env": {
     "browser": true,
     "es6": true
@@ -21,6 +21,12 @@
     ],
     "linkComponents": ["Hyperlink", { "name": "Link", "linkAttribute": "to" }]
   },
-  "plugins": ["react", "prettier"],
-  "extends": ["prettier", "eslint:recommended", "plugin:react/recommended"]
+  "plugins": ["react", "prettier", "@typescript-eslint"],
+  "extends": [
+    "prettier",
+    "eslint:recommended",
+    "plugin:react/recommended",
+    "plugin:@typescript-eslint/eslint-recommended",
+    "plugin:@typescript-eslint/recommended"
+  ]
 }

@@ -2,6 +2,7 @@
 """Django's command-line utility for administrative tasks."""
 import os
 import sys
+from pathlib import Path
 
 import dotenv
 
@@ -9,6 +10,7 @@ import dotenv
 def main():
     """Run administrative tasks."""
     dotenv.load_dotenv()
+    Path('logs').mkdir(parents=True, exist_ok=True)
 
     os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'astrid_tech.settings')
     try:
