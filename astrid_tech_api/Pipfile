@@ -1,0 +1,31 @@
+[[source]]
+url = "https://pypi.org/simple"
+verify_ssl = true
+name = "pypi"
+
+[packages]
+django-rest-framework = "*"
+django-webmention = "*"
+channels = "*"
+python-dotenv = "*"
+pygithub = "*"
+requests = "*"
+requests-oauthlib = "*"
+django = "*"
+oauthlib = "*"
+djangorestframework = "*"
+djangorestframework-jwt = "*"
+google-auth = "*"
+django-oauth-toolkit = "*"
+pillow = "*"
+google-api-python-client = "*"
+google-auth-oauthlib = "*"
+google-auth-httplib2 = "*"
+django-cors-headers = "*"
+django-structlog = "*"
+structlog = "*"
+
+[dev-packages]
+
+[requires]
+python_version = "3.8"
