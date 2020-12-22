@@ -24,6 +24,7 @@ django-cors-headers = "*"
 django-structlog = "*"
 structlog = "*"
 djangorestframework-simplejwt = "*"
+python-logstash = "*"
 
 [dev-packages]
 

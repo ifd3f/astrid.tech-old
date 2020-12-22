@@ -1,5 +1,5 @@
 FROM python:3
-ENV PYTHONUNBUFFERED 1
+ENV PYTHONUNBUFFERED=1 DJANGO_SETTINGS_MODULE=astrid_tech.settings.prod
 WORKDIR /app
 
 COPY requirements.txt .
