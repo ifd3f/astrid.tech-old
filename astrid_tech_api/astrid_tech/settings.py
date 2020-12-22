@@ -17,7 +17,6 @@ import structlog
 
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/3.1/howto/deployment/checklist/
 
@@ -28,7 +27,6 @@ SECRET_KEY = '%ffncy2-l!jns867*ilhza9bzz7pt1c^032=afdp9qzzve%4iu'
 DEBUG = True
 
 ALLOWED_HOSTS = []
-
 
 # Application definition
 
@@ -56,6 +54,7 @@ MIDDLEWARE = [
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
+    'django_structlog.middlewares.RequestMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
@@ -80,7 +79,6 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'astrid_tech.wsgi.application'
 
-
 # Database
 # https://docs.djangoproject.com/en/3.1/ref/settings/#databases
 
@@ -90,7 +88,6 @@ DATABASES = {
         'NAME': BASE_DIR / 'db.sqlite3',
     }
 }
-
 
 # Password validation
 # https://docs.djangoproject.com/en/3.1/ref/settings/#auth-password-validators
@@ -124,7 +121,6 @@ USE_L10N = True
 
 USE_TZ = True
 
-
 REST_FRAMEWORK = {
     'DEFAULT_PERMISSION_CLASSES': [
         'rest_framework.permissions.DjangoModelPermissionsOrAnonReadOnly'
@@ -135,12 +131,21 @@ REST_FRAMEWORK = {
     ]
 }
 
-
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/3.1/howto/static-files/
 
 STATIC_URL = '/static/'
 
+# Logging
+
+timestamper = structlog.processors.TimeStamper(fmt="iso")
+
+pre_chain = [
+    # Add the log level and a timestamp to the event_dict if the log entry
+    # is not from structlog.
+    structlog.stdlib.add_log_level,
+    timestamper,
+]
 
 LOGGING = {
     "version": 1,
@@ -149,14 +154,17 @@ LOGGING = {
         "json_formatter": {
             "()": structlog.stdlib.ProcessorFormatter,
             "processor": structlog.processors.JSONRenderer(),
+            "foreign_pre_chain": pre_chain,
         },
         "plain_console": {
             "()": structlog.stdlib.ProcessorFormatter,
             "processor": structlog.dev.ConsoleRenderer(),
+            "foreign_pre_chain": pre_chain,
         },
         "key_value": {
             "()": structlog.stdlib.ProcessorFormatter,
             "processor": structlog.processors.KeyValueRenderer(key_order=['timestamp', 'level', 'event', 'logger']),
+            "foreign_pre_chain": pre_chain,
         },
     },
     "handlers": {
@@ -164,33 +172,25 @@ LOGGING = {
             "class": "logging.StreamHandler",
             "formatter": "plain_console",
         },
-        "json_file": {
-            "class": "logging.handlers.WatchedFileHandler",
-            "filename": "logs/json.log",
-            "formatter": "json_formatter",
-        },
-        "flat_line_file": {
-            "class": "logging.handlers.WatchedFileHandler",
-            "filename": "logs/flat_line.log",
+        "file": {
+            "class": "logging.handlers.TimedRotatingFileHandler",
+            'when': 'h',
+            "filename": "logs/output.log",
             "formatter": "key_value",
         },
     },
     "loggers": {
-        "django_structlog": {
-            "handlers": ["console", "flat_line_file", "json_file"],
-            "level": "INFO",
-        },
-        "django_structlog_demo_project": {
-            "handlers": ["console", "flat_line_file", "json_file"],
-            "level": "INFO",
-        },
+        "": {
+            "handlers": ["console", "file"],
+            "level": "DEBUG",
+        }
     }
 }
 
 structlog.configure(
     processors=[
         structlog.stdlib.filter_by_level,
-        structlog.processors.TimeStamper(fmt="iso"),
+        timestamper,
         structlog.stdlib.add_logger_name,
         structlog.stdlib.add_log_level,
         structlog.stdlib.PositionalArgumentsFormatter(),

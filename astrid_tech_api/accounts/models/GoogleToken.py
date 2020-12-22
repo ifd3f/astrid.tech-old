@@ -1,11 +1,15 @@
 from datetime import datetime, timedelta
+from typing import Dict
 
-from django.db.models import TextField, DateField, OneToOneField, CASCADE, DateTimeField, Model
+import structlog
+from django.db.models import TextField, OneToOneField, CASCADE, DateTimeField, Model
 from oauthlib.oauth2 import OAuth2Token
 from requests_oauthlib import OAuth2Session
 
 from accounts.google import get_secrets
 from accounts.models.IdentityBase import IdentityBase, TokenBase
+
+logger = structlog.get_logger(__name__)
 
 
 class GoogleAuthAttempt(Model):
@@ -64,8 +68,10 @@ class GoogleIdentity(IdentityBase):
     )
 
     @classmethod
-    def create(cls, token: GoogleToken):
-        profile = token.session.get('https://www.googleapis.com/oauth2/v1/userinfo').json()
-        return profile, GoogleIdentity(token=token, google_id=profile['id'], email=profile['email'], time_registered=datetime.now())
-
-
+    def create(cls, token: GoogleToken, profile: Dict[str, str]):
+        return GoogleIdentity(
+            token=token,
+            google_id=profile['id'],
+            email=profile['email'],
+            time_registered=datetime.now()
+        )
