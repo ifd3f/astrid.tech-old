@@ -62,7 +62,7 @@ export type BlogPost = Tagged & {
   __typename: "BlogPost"
   title: string
   description: string
-  date: Date
+  date: string
   slug: string
   thumbnail: FileSystemNode & {
     childImageSharp: any
