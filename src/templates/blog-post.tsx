@@ -1,6 +1,5 @@
 require(`katex/dist/katex.min.css`)
 import { graphql, Link, PageProps } from "gatsby"
-import { Disqus } from "gatsby-plugin-disqus"
 import React, { createContext, FC, useContext } from "react"
 import { FaCalendar } from "react-icons/fa"
 import { Container } from "reactstrap"
@@ -11,6 +10,7 @@ import {
   TagsGroup,
 } from "src/components/layout/longform-layout"
 import { getHSLString, getPersistentColor } from "src/util"
+import { CommentSection } from "../components/api/Comments"
 import Layout from "../components/layout/layout"
 import { BlogPost } from "../types/index"
 
@@ -137,7 +137,7 @@ const BlogPostTemplate: FC<PageProps<Data, Context>> = ({
         <Container>
           <section id="comments">
             <h2>Comments</h2>
-            <Disqus config={disqusConfig} />
+            <CommentSection />
           </section>
         </Container>
       </Layout>
