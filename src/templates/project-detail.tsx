@@ -1,5 +1,6 @@
 import { graphql, Link, PageProps } from "gatsby"
 import { Disqus } from "gatsby-plugin-disqus"
+import moment from "moment"
 import React, { createContext, FC, useContext } from "react"
 import {
   BsArrowLeft,
@@ -65,6 +66,7 @@ export const pageQuery = graphql`
           tagged {
             __typename
             ... on BlogPost {
+              date
               slug
               title
             }
@@ -131,15 +133,19 @@ const ProjectStatusGroup = () => {
 
 const BlogPostsGroup = () => {
   const { project } = useContext(ProjectContext)
-  const blogPosts = project.childProjectTag.childTag.tagged.filter(
+  const blogPosts = (project.childProjectTag.childTag.tagged.filter(
     item => item.__typename == "BlogPost"
-  ) as BlogPost[]
+  ) as BlogPost[]).sort(
+    (a, b) => new Date(b.date).getTime() - new Date(a.date).getTime()
+  )
 
   const list = (
     <ul>
       {blogPosts.map(post => (
         <li key={post.slug}>
-          <Link to={post.slug}>{post.title}</Link>
+          <Link to={post.slug}>
+            {moment(post.date).format("MMM YYYY")} - {post.title}
+          </Link>
         </li>
       ))}
     </ul>
