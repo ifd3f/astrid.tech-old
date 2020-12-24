@@ -27,6 +27,8 @@ djangorestframework-simplejwt = "*"
 python-logstash = "*"
 markdown = "*"
 bleach = "*"
+django-cached-field = "*"
+django-celery = "*"
 
 [dev-packages]
 

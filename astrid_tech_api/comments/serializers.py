@@ -10,6 +10,7 @@ class CommentSerializer(ModelSerializer):
         fields = [
             'id',
             'post',
+            'time_authored',
             'reply_parent',
             'author_email',
             'author_website',
@@ -17,7 +18,11 @@ class CommentSerializer(ModelSerializer):
             'content_md',
             'content_html',
         ]
-        read_only_fields = ['content_html', 'id']
+        read_only_fields = [
+            'content_html',
+            'id',
+            'time_authored'
+        ]
         extra_kwargs = {
             'author_email': {'write_only': True}
         }

@@ -1,7 +1,7 @@
 import bleach
 from django.core.validators import MinLengthValidator
 from django.db.models import Model, EmailField, URLField, CharField, ForeignKey, SET_NULL, CASCADE, BooleanField, \
-    GenericIPAddressField, TextField, DateField
+    GenericIPAddressField, TextField, DateField, DateTimeField
 from markdown import Markdown
 
 markdown = Markdown()
@@ -13,53 +13,96 @@ def validate_max_parents(count):
         if parent is None:
             return True
         return n > 0 and validator(parent, n - 1)
+
     return validator
 
 
-class BannedIP(Model):
-    ip_addr = GenericIPAddressField(null=False, primary_key=True)
-    reason = CharField(max_length=140)
+class BanList(Model):
+    class Meta:
+        abstract = True
+
+    reason = CharField(max_length=140, default='')
+    time_banned = DateTimeField(null=False, auto_now_add=True)
 
 
-class BannedEmail(Model):
-    email = EmailField(null=False)
-    reason = CharField(max_length=140)
+class BannedIP(BanList):
+    ip_addr = GenericIPAddressField(primary_key=True, null=False)
+
+    class Meta:
+        verbose_name = 'banned IP'
+
+    def __str__(self):
+        return f'{self.ip_addr} ({self.reason})'
+
+
+class BannedEmail(BanList):
+    email = EmailField(primary_key=True, null=False)
+
+    def __str__(self):
+        return f'{self.email} ({self.reason})'
+
+
+class BannedEmailDomain(BanList):
+    domain = TextField(primary_key=True, null=False)
+
+    def __str__(self):
+        return f'{self.domain} ({self.reason})'
 
 
 class Comment(Model):
     post = CharField(max_length=100, null=False, db_index=True)
-    ip_addr = GenericIPAddressField(null=False)
+    ip_addr = GenericIPAddressField(verbose_name='IP address', null=False)
     reply_parent = ForeignKey('Comment', null=True, on_delete=CASCADE, validators=[validate_max_parents],
-                              related_name='children')
+                              related_name='children', blank=True)
     notify_author = BooleanField(default=False)
 
-    authored_date = DateField(auto_now_add=True)
+    time_authored = DateTimeField(null=False, auto_now_add=True)
 
-    published = BooleanField(default=True)
+    mod_approved = BooleanField(default=True)
+    removed = BooleanField(default=False)
     locked = BooleanField(default=False)
 
-    author_website = URLField(null=True)
+    author_website = URLField(null=True, blank=True)
     author_email = EmailField(null=False)
-    author_name = CharField(max_length=32, null=True)
+    author_name = CharField(max_length=32, null=True, blank=True)
 
-    content_md = CharField(max_length=1000, null=False, validators=[MinLengthValidator(10)])
-    content_html = TextField(null=False, default='')
+    content_md = TextField(max_length=1000, null=False, validators=[MinLengthValidator(10)], blank=True)
+    content_html = TextField(null=False, default='', blank=True)
+
+    @property
+    def visible(self):
+        return self.mod_approved and not self.removed
 
     @property
     def can_reply_to(self):
-        return not self.locked and self.published
+        return self.visible and not self.locked
 
     def save(self, **kwargs):
-        if self.published:
-            self.content_html = bleach.clean(markdown.convert(self.content_md))
-        else:
+        if self.removed:
             self.content_html = '<p>[removed]</p>'
+        else:
+            self.content_html = bleach.clean(markdown.convert(self.content_md))
         super().save()
 
+    @property
+    def flags(self):
+        flags = []
+        if self.mod_approved:
+            flags.append('a')
+        if self.locked:
+            flags.append('l')
+        if self.removed:
+            flags.append('r')
+        return ''.join(flags)
+
     def __str__(self):
-        return f'Comment #{self.id} by {self.author_name} <{self.author_email}> (re:{self.post} on {self.authored_date})'
+        return f'#{self.id} [{self.flags}] re:{self.post} by {self.author_name} <{self.author_email}>'
 
 
 class Report(Model):
     target = ForeignKey(Comment, on_delete=CASCADE, null=False)
+    email = EmailField(null=True)
     reason = CharField(max_length=140)
+
+    def __str__(self):
+        return f'Report for #{self.target} ({self.reason})'

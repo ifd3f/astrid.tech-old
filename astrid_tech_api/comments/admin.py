@@ -15,16 +15,16 @@ class CommentAdmin(ModelAdmin):
 
     def lock_thread(self, request, queryset: QuerySet[Comment]):
         comments = []
-        stack = list(queryset)
+        stack = list(queryset.all())
         while len(stack) > 0:
             comment = stack.pop()
             comment.locked = True
             comments.append(comment)
 
-            for c in comment.children:
+            for c in comment.children.all():
                 stack.append(c)
 
-        Comment.objects.bulk_update(comments)
+        Comment.objects.bulk_update(comments, fields=['locked'])
     lock_thread.short_description = "Lock thread"
 
     def remove_comment(self, request, queryset: QuerySet[Comment]):
@@ -40,7 +40,7 @@ class CommentAdmin(ModelAdmin):
     ban_ip.short_description = "Ban author IP"
 
 
-admin.site.register(Comment)
+admin.site.register(Comment, CommentAdmin)
 admin.site.register(Report)
 admin.site.register(BannedEmail)
 admin.site.register(BannedIP)

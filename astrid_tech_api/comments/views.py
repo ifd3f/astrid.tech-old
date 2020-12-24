@@ -17,7 +17,7 @@ class CommentViewSet(ModelViewSet):
     permission_classes = [AllowAny]
 
     def get_queryset(self):
-        return Comment.objects.all()
+        return Comment.objects.filter(mod_approved=True)
 
     @action(detail=True, methods=['post'])
     def reply(self, request, pk=None):
