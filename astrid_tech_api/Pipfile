@@ -25,6 +25,8 @@ django-structlog = "*"
 structlog = "*"
 djangorestframework-simplejwt = "*"
 python-logstash = "*"
+markdown = "*"
+bleach = "*"
 
 [dev-packages]
 
