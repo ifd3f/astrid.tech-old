@@ -3,7 +3,7 @@ type: project
 
 title: QuadFrost 3D Printer System
 status: complete
-description: Making 3D Printers not only a noise complaint, but a light complaint too!
+description: Control system for my 3D printer enclosure's lights, filter, and LCD
 featured: true
 startDate: 2019-08-14
 endDate: 2019-08-18

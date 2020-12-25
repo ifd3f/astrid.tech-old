@@ -12,6 +12,8 @@ tags:
   - javascript
   - typescript
   - gatsby-js
+  - django
+  - python
   - html
   - css
   - sass
@@ -43,24 +45,35 @@ I made this site to showcase all the stuff I've made. I've tried to make the bro
 
 ## Technology Stack
 
-### The Code
+### Frontend
 
-- "Backend"
-  - Language: TypeScript
-  - Statically generated using [Gatsby](https://www.gatsbyjs.org/)
-- Frontend
-  - Language: TypeScript
-  - Sass
-  - React
-  - Bootstrap 4
+The frontend is statically generated using the following technologies:
 
-### Languages the content is written in
+- Gatsby.js
+- TypeScript
+- React
+- Sass
+- Bootstrap 4
+
+I'm using [GitHub Pages](https://github.com/plenglin/astrid.tech) to statically host the website. (Going to [plenglin.github.io](https://plenglin.github.io) takes you here!)
+
+### Content
+
+The content is in its own [Git submodule](https://github.com/Plenglin/astrid.tech-content). It is written in the following file formats:
 
 - Markdown
-- Jupyter notebooks for a few blog posts
-  - **I wrote a custom Gatsby plugin** that transforms the Jupyter notebooks into Markdown files, which theemselves get transformed into blog posts.
+- YAML
+- Jupyter notebooks for a few blog posts (I wrote a custom Gatsby plugin that transforms the Jupyter notebooks into Markdown files, which themselves get transformed into blog posts)
 
-### Deployment
+### CI/CD
 
-- [GitHub Pages](https://github.com/plenglin/astrid.tech) to statically host the website. (Going to [plenglin.github.io](https://plenglin.github.io) takes you here!)
-- [GitHub Actions](https://github.com/plenglin/astrid.tech/actions) to automatically build and publish the site on a push to the main branch.
+I'm using [Github Actions](https://github.com/plenglin/astrid.tech/actions) to automatically build and publish the site every time I push to the main branch.
+
+### (WIP) Backend
+
+The backend is being written in:
+
+- Python
+- Django
+
+I plan on deploying it as a Docker container on a [Contabo](https://contabo.com) VPS.
