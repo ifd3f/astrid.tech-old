@@ -16,11 +16,11 @@ const Stars: FC<StarsProps> = ({ stars }) => {
   const out: ReactNode[] = Array(5)
   var i = 0
   while (i < stars) {
-    out.push(<BsStarFill />)
+    out.push(<BsStarFill key={i} />)
     i++
   }
   while (i < 5) {
-    out.push(<BsStar />)
+    out.push(<BsStar key={i} />)
     i++
   }
 
@@ -60,7 +60,7 @@ const SkillCategoryView: FC<SkillCategoryViewProps> = ({
     {skills
       .sort(({ level: a }, { level: b }) => b - a)
       .map(({ level, tag }) => (
-        <SkillInfoDisplay level={level} tag={tag} />
+        <SkillInfoDisplay level={level} tag={tag} key={tag.slug} />
       ))}
   </Col>
 )
@@ -100,7 +100,7 @@ export function SkillsSection() {
       </div>
       <Masonry options={{ transitionDuration: 0 }}>
         {query.allSkillGroup.nodes.map(node => (
-          <SkillCategoryView category={node} />
+          <SkillCategoryView key={node.id} category={node} />
         ))}
       </Masonry>
     </HomepageSection>

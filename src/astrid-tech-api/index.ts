@@ -1,26 +1,43 @@
-import axios, { AxiosInstance } from "axios"
-import {
-  IAuthTokens,
-  TokenRefreshRequest,
-  useAuthTokenInterceptor,
-} from "axios-jwt"
+import axios, { AxiosInstance, AxiosResponse } from "axios"
+
+export type CommentForm = {
+  author_name?: string
+  author_email: string
+  author_website?: string
+  content_md: string
+  slug: string
+}
+
+export type CommentData = {
+  id: string
+  author_name?: string
+  author_email: string
+  author_website?: string
+  content_md: string
+  content_html: string
+  children: CommentData[]
+  slug: string
+}
 
 export class AstridTechAPI {
   private axios: AxiosInstance
 
-  constructor(
-    private readonly root: string,
-    private readonly auth: IAuthTokens
-  ) {
+  constructor(private readonly root: string) {
     this.axios = axios.create({ baseURL: root })
+  }
 
-    const requestRefresh: TokenRefreshRequest = async (
-      refreshToken: string
-    ): Promise<string> => {
-      return (
-        await this.axios.post("/api/token/refresh/", { token: refreshToken })
-      ).data.access_token
+  async createComment(
+    comment: CommentForm,
+    replyTo?: number
+  ): Promise<AxiosResponse<CommentData>> {
+    if (replyTo === undefined) {
+      return await this.axios.post("/api/comments/", comment)
     }
-    useAuthTokenInterceptor(axios, { requestRefresh })
+
+    return await this.axios.post(`/api/comments/${replyTo}/`, comment)
+  }
+
+  async getComments(slug: string): Promise<AxiosResponse<CommentData[]>> {
+    return await this.axios.get("/api/comments/", { params: { slug } })
   }
 }

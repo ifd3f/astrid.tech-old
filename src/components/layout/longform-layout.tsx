@@ -92,7 +92,9 @@ type StatusGroupProps = {
 
 export const StatusGroup: FC<StatusGroupProps> = ({ children }) => (
   <SidebarGroup>
-    <table style={{ width: "100%" }}>{children}</table>
+    <table style={{ width: "100%" }}>
+      <tbody>{children}</tbody>
+    </table>
   </SidebarGroup>
 )
 
