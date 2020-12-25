@@ -78,7 +78,7 @@ export const InfoRow: FC<InfoRowProps> = ({
 }) =>
   show ? (
     <tr>
-      <th>
+      <th style={{ minWidth: 180 }}>
         {icon ? <>{icon} </> : null}
         {name}
       </th>

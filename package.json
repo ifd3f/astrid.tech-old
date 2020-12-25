@@ -1,5 +1,6 @@
 {
   "name": "astrid.tech",
+  "engines" : { "node" : ">=0.14" },
   "homepage": "https://astrid.tech",
   "private": true,
   "description": "Personal Website of Astrid Yu",
