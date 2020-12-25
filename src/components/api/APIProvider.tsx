@@ -12,31 +12,31 @@ import { AstridTechAPI } from "../../astrid-tech-api/index"
 export type APIContextData = {
   login: (username: string, password: string) => Promise<void>
   logout: () => Promise<void>
-  api?: AstridTechAPI
+  api: AstridTechAPI
 }
 
 const APIContext = createContext(null as APIContextData)
 
 const API_SESSION_COOKIE = "astrid-tech-api-session"
+
+const tokenSettings = { path: "/", maxAge: 3600 * 24 * 30 }
+
 export type APIProviderProps = {
   root: string
   children: ReactNode
 }
 
-const tokenSettings = { path: "/", maxAge: 3600 * 24 * 30 }
-
 export const APIProvider: FC<APIProviderProps> = ({ root, children }) => {
-  const [api, setAPI] = useState<AstridTechAPI | undefined>(undefined)
+  const [api, setAPI] = useState<AstridTechAPI>(new AstridTechAPI(root))
   const [cookies, setCookie, removeCookie] = useCookies([API_SESSION_COOKIE])
 
   const login = async (username: string, password: string) => {
     const session = await apiLogin(root, username, password)
     setCookie(API_SESSION_COOKIE, session)
-    setAPI(new AstridTechAPI(root, session))
+    setAPI(new AstridTechAPI(root))
   }
 
   const logout = () => {
-    setAPI(undefined)
     removeCookie(API_SESSION_COOKIE)
     return Promise.resolve()
   }

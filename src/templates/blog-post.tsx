@@ -137,7 +137,7 @@ const BlogPostTemplate: FC<PageProps<Data, Context>> = ({
         <Container>
           <section id="comments">
             <h2>Comments</h2>
-            <CommentSection />
+            <CommentSection slug={post.slug} />
           </section>
         </Container>
       </Layout>

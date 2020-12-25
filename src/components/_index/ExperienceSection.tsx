@@ -84,7 +84,7 @@ const Article: FC<ArticleProps> = ({ experience, tagline: _tagline }) => {
       <div>
         <ul>
           {experience.highlights.map(h => (
-            <li>{h}</li>
+            <li key={h}>{h}</li>
           ))}
         </ul>
       </div>

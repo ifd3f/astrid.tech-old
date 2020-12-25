@@ -13,8 +13,12 @@ class CommentViewSet(ModelViewSet):
     serializer_class = CommentSerializer
     permission_classes = [AllowAny]
 
+    queryset = Comment.objects.all()
+
     def get_queryset(self):
-        return Comment.objects.filter(mod_approved=True)
+        queryset = self.queryset
+        query_set = queryset.filter(mod_approved=True).order_by('-time_authored')
+        return query_set
 
     # @action(detail=True, methods=['post'])
     # def reply(self, request, pk=None):

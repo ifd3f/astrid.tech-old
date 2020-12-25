@@ -1,6 +1,7 @@
 {
   "rules": {
-    "prettier/prettier": ["error"]
+    "prettier/prettier": ["error"],
+    "react/prop-types": ["never"]
   },
   "parser": "@typescript-eslint/parser",
   "env": {

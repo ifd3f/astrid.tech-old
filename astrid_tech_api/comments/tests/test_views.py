@@ -4,7 +4,7 @@ from comments.models import Comment, BannedIP
 from comments.tests.utils import setup_comment_tree
 
 comment_data = {
-    'post': '/foo',
+    'slug': '/foo',
     'author_email': 'test@example.com',
     'author_name': 'Tester',
     'content_md': 'test **foo** <script>bar</script>',
@@ -29,6 +29,7 @@ class CommentViewsTestCase(TestCase):
         self.assertEqual('Tester', comment.author_name)
         self.assertEqual('test@example.com', comment.author_email)
         self.assertEqual('1.2.3.4', comment.ip_addr)
+        self.assertEqual(0, comment.children.count())
         self.assertNotIn('<script>', comment.content_html)
 
     def test_can_reply_to_comment(self):
@@ -41,6 +42,7 @@ class CommentViewsTestCase(TestCase):
 
         comment = Comment.objects.get(pk=5)
         self.assertEqual(3, comment.reply_parent)
+        self.assertEqual(1, Comment.objects.get(pk=3).children.count())
 
     def test_banned_ip_cannot_post(self):
         BannedIP.objects.create(ip_addr='1.2.3.4', reason='testing purposes')

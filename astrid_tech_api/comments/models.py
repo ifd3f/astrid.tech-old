@@ -78,7 +78,10 @@ class Comment(Model):
         return self.visible and not self.locked
 
     def save(self, **kwargs):
-        self.content_html = bleach.clean(markdown.convert(self.content_md))
+        self.content_html = bleach.clean(
+            markdown.convert(self.content_md),
+            tags=['a', 'abbr', 'acronym', 'b', 'blockquote', 'code', 'em', 'i', 'li', 'ol', 'strong', 'ul', 'p', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6']
+        )
         super().save()
 
     @property

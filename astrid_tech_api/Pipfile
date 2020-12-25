@@ -29,6 +29,7 @@ markdown = "*"
 bleach = "*"
 django-cached-field = "*"
 django-celery = "*"
+djangorestframework-recursive = "*"
 
 [dev-packages]
 
