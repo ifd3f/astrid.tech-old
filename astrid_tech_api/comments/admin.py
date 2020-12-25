@@ -28,7 +28,7 @@ class CommentAdmin(ModelAdmin):
     lock_thread.short_description = "Lock thread"
 
     def remove_comment(self, request, queryset: QuerySet[Comment]):
-        queryset.update(published=False)
+        queryset.update(removed=True)
     remove_comment.short_description = "Remove comment (without deleting)"
 
     def ban_email(self, request, queryset: QuerySet[Comment]):
