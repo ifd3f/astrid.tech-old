@@ -1,6 +1,14 @@
 import moment from "moment"
 import React, { FC, useEffect, useState } from "react"
-import { Button, Col, Form, FormGroup, Input, Label } from "reactstrap"
+import {
+  Button,
+  Col,
+  Form,
+  FormGroup,
+  FormText,
+  Input,
+  Label,
+} from "reactstrap"
 import { CommentData } from "src/astrid-tech-api"
 import { changeEventSetter, useCookieState } from "../../util/boilerplate"
 import { useAPI } from "./APIProvider"
@@ -33,18 +41,57 @@ const CommentingForm: FC<CommentingFormProps> = ({
     cookieOptions
   )
 
+  const [bodyError, setBodyError] = useState<string | null>(null)
+  const [emailError, setEmailError] = useState<string | null>(null)
+  const [websiteError, setWebsiteError] = useState<string | null>(null)
+
   const { api } = useAPI()
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [body, setBody] = useState("")
 
+  const validate = () => {
+    let valid = true
+    if (!/\S+@\S+\.\S+/.test(email)) {
+      setEmailError("Enter a valid email address.")
+      valid = false
+    } else {
+      setEmailError(null)
+    }
+    if (!(10 <= body.length && body.length <= 1000)) {
+      setBodyError("Body length must be between 10 and 1000 characters.")
+      valid = false
+    } else {
+      setBodyError(null)
+    }
+    try {
+      if (website.length > 0) {
+        new URL(website)
+      }
+      setWebsiteError(null)
+    } catch (_) {
+      setWebsiteError("Enter a valid URL.")
+      valid = false
+    }
+    return valid
+  }
+
+  const applyBackendErrors = (response: any) => {
+    response?.author_email?.forEach(setEmailError)
+    response?.author_website?.forEach(setWebsiteError)
+    response?.content_md?.forEach(setBodyError)
+  }
+
   const submit = async () => {
     try {
+      if (!validate()) return
+      console.log("Submitting")
+
       setIsSubmitting(true)
       await api.createComment(
         {
           author_name: name.length > 0 ? name : null,
           author_email: email,
-          author_website: null,
+          author_website: website.length > 0 ? website : null,
           content_md: body,
           slug,
         },
@@ -53,7 +100,7 @@ const CommentingForm: FC<CommentingFormProps> = ({
       setBody("")
       onSuccessfullySubmitted()
     } catch (e) {
-      console.error(e)
+      applyBackendErrors(e.response.data)
     }
 
     setIsSubmitting(false)
@@ -92,6 +139,7 @@ const CommentingForm: FC<CommentingFormProps> = ({
             id="comment-email"
             placeholder="user@example.com"
           />
+          {emailError ? <FormText color="danger">{emailError}</FormText> : null}
         </Col>
       </FormGroup>
 
@@ -109,11 +157,16 @@ const CommentingForm: FC<CommentingFormProps> = ({
             id="comment-website"
             placeholder="my.cool.site"
           />
+          {websiteError ? (
+            <FormText color="danger">{websiteError}</FormText>
+          ) : null}
         </Col>
       </FormGroup>
 
       <FormGroup>
-        <Label for="comment-body">Comment (markdown supported)</Label>
+        <Label for="comment-body">
+          Comment ({1000 - body.length} chars left)
+        </Label>
         <Input
           disabled={isSubmitting}
           onChange={ev => setBody(ev.target.value)}
@@ -123,9 +176,11 @@ const CommentingForm: FC<CommentingFormProps> = ({
           id="comment-body"
           placeholder="Type your comment here..."
         />
+        <FormText>Markdown formatting is supported.</FormText>
+        {bodyError ? <FormText color="danger">{bodyError}</FormText> : null}
       </FormGroup>
 
-      <Button color="primary" onClick={submit}>
+      <Button disabled={isSubmitting} color="primary" onClick={submit}>
         Submit!
       </Button>
     </Form>

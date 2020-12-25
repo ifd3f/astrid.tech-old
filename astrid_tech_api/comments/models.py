@@ -62,8 +62,8 @@ class Comment(Model):
     removed = BooleanField(default=False)
     locked = BooleanField(default=False)
 
-    author_website = URLField(null=True, blank=True)
-    author_email = EmailField(null=False)
+    author_website = URLField(max_length=64, null=True, blank=True)
+    author_email = EmailField(max_length=64, null=False)
     author_name = CharField(max_length=32, null=True, blank=True)
 
     content_md = TextField(max_length=1000, null=False, validators=[MinLengthValidator(10)], blank=True)
