@@ -3,8 +3,6 @@ name: Build and Deploy
 on:
   push:
     branches:
-      - main
-      - dev
   workflow_dispatch: {}
 
 jobs:
@@ -15,6 +13,26 @@ jobs:
         uses: styfle/cancel-workflow-action@0.6.0
         with:
           access_token: ${{ secrets.GITHUB_TOKEN }}
+
+  test-backend:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+        with:
+          lfs: true
+
+      - name: Install requirements
+        working-directory: astrid_tech_api
+        run: pip install -r requirements.txt
+
+      - name: Run tests
+        working-directory: astrid_tech_api
+        run: ./manage.py test
+        env:
+          PYTHONUNBUFFERED: 1
+          DJANGO_SETTINGS_MODULE: astrid_tech.settings.dev
 
   deploy:
     runs-on: ubuntu-latest
