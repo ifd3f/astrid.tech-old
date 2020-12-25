@@ -1,24 +1,70 @@
-from django.contrib.admin import AdminSite
-from django.http import HttpRequest
 from django.test import TestCase
 
-from comments.admin import CommentAdmin
-from comments.models import Comment
+from comments.models import Comment, BannedIP
 from comments.tests.utils import setup_comment_tree
 
+comment_data = {
+    'post': '/foo',
+    'author_email': 'test@example.com',
+    'author_name': 'Tester',
+    'content_md': 'test **foo** <script>bar</script>',
+}
 
-class CommentAdminTestCase(TestCase):
+
+class CommentViewsTestCase(TestCase):
     def setUp(self):
         self.a, self.b, self.c, self.d = setup_comment_tree()
-        self.admin = CommentAdmin(Comment, AdminSite())
 
-    def test_lock_thread(self):
-        self.admin.lock_thread(HttpRequest(), Comment.objects.filter(pk=self.b.pk))
-        self.assertFalse(Comment.objects.get(pk=self.a.pk).locked)
-        self.assertTrue(Comment.objects.get(pk=self.b.pk).locked)
-        self.assertTrue(Comment.objects.get(pk=self.c.pk).locked)
-        self.assertTrue(Comment.objects.get(pk=self.d.pk).locked)
+    def test_can_create_comment(self):
+        response = self.client.post(
+            '/api/comments/',
+            comment_data,
+            REMOTE_ADDR='1.2.3.4',
+            format='json'
+        )
+        self.assertEqual(200, response.status_code)
 
-    def test_remove_comment(self):
-        self.admin.remove_comment(HttpRequest(), Comment.objects.filter(pk=self.a.pk))
-        self.assertTrue(Comment.objects.get(pk=self.a.pk).removed)
+        comment = Comment.objects.get(pk=5)
+        self.assertEqual('/foo', comment.post)
+        self.assertEqual('Tester', comment.author_name)
+        self.assertEqual('test@example.com', comment.author_email)
+        self.assertEqual('1.2.3.4', comment.ip_addr)
+        self.assertNotIn('<script>', comment.content_html)
+
+    def test_can_reply_to_comment(self):
+        response = self.client.post(
+            '/api/comments/3/reply/',
+            comment_data,
+            format='json'
+        )
+        self.assertEqual(200, response.status_code)
+
+        comment = Comment.objects.get(pk=5)
+        self.assertEqual(3, comment.reply_parent)
+
+    def test_banned_ip_cannot_post(self):
+        BannedIP.objects.create(ip_addr='1.2.3.4', reason='testing purposes')
+        response = self.client.post(
+            '/api/comments/',
+            comment_data,
+            REMOTE_ADDR='1.2.3.4',
+            format='json'
+        )
+        self.assertEqual(403, response.status_code)
+
+        self.assertEqual(4, Comment.objects.count())
+
+    def test_comment_containing_url_is_quarantined(self):
+        response = self.client.post(
+            '/api/comments/',
+            {
+                **comment_data,
+                'content_md': 'http://google.com might be a spam site'
+            },
+            REMOTE_ADDR='1.2.3.4',
+            format='json'
+        )
+        self.assertEqual(202, response.status_code)
+
+        comment = Comment.objects.get(pk=5)
+        self.assertFalse(comment.mod_approved)

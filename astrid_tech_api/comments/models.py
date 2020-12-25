@@ -78,10 +78,7 @@ class Comment(Model):
         return self.visible and not self.locked
 
     def save(self, **kwargs):
-        if self.removed:
-            self.content_html = '<p>[removed]</p>'
-        else:
-            self.content_html = bleach.clean(markdown.convert(self.content_md))
+        self.content_html = bleach.clean(markdown.convert(self.content_md))
         super().save()
 
     @property
