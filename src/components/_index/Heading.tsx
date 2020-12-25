@@ -65,7 +65,7 @@ const ImageOfMyself = ({ image }: { image: any }) => (
 export function HeadingSection() {
   const data = useStaticQuery(graphql`
     query HeadingBgQuery {
-      avatar: file(relativePath: { eq: "avatar2.jpg" }) {
+      avatar: file(relativePath: { eq: "avatar.jpg" }) {
         childImageSharp {
           fluid(maxHeight: 500) {
             ...GatsbyImageSharpFluid_tracedSVG
@@ -78,7 +78,7 @@ export function HeadingSection() {
   const myself: any = data.avatar.childImageSharp.fluid
 
   return (
-    <HomepageHeader color="#F7A8B8">
+    <header className="homepage-header homepage-section">
       <div className={homepageStyles.nameWrapper + " h-card"}>
         <div className={homepageStyles.introductionGroup}>
           <p className={homepageStyles.preTitle}>Hello, my name is</p>
@@ -93,6 +93,6 @@ export function HeadingSection() {
           React, Gatsby, and several other technologies
         </Link>
       </p>
-    </HomepageHeader>
+    </header>
   )
 }
