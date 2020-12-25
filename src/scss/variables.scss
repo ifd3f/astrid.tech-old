@@ -31,20 +31,26 @@ $green: #8bc34a !default;
 $teal: #009688 !default;
 $cyan: #00bcd4 !default;
 
-$navbar-bg: #502050;
-$navbar-dropdown-bg: #3a153a;
+$primary-main: #1a237e;
+$primary-light: #534bae;
+$primary-dark: #000051;
+$primary-text: white;
+$secondary-main: #ff6e40;
+$secondary-light: #ffa06d;
+$secondary-dark: #c53d13;
+$secondary-text: black;
 
 $heading-color: #141414;
 $text-color: #3d3d3d;
-$main-bg-color: #ffe0ce;
+$main-bg-color: #eee;
 $text-muted: #888888;
 
-$link-color: $indigo;
-$link-hover-color: $teal;
-$link-color-invert: $teal;
-$link-hover-color-invert: $lightblue;
+$link-color: $secondary-main;
+$link-hover-color: $secondary-light;
+$link-color-invert: $secondary-light;
+$link-hover-color-invert: $secondary-main;
 
-$footer-bg-color: #202030;
+$footer-bg-color: $primary-main;
 $body-bg: $footer-bg-color;
 
 html {

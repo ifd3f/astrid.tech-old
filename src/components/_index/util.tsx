@@ -1,9 +1,10 @@
-import React, { FC, ReactNode } from "react"
+import React, { CSSProperties, FC, ReactNode } from "react"
 import styles from "./style.module.scss"
 
 export type HomepageSectionProps = {
   children: ReactNode
-  style?: React.CSSProperties
+  style?: CSSProperties
+  color: string
 }
 
 export const HomepageSection: FC<HomepageSectionProps> = ({

@@ -1,16 +1,26 @@
-@import "../../scss/fonts.scss";
+@import "src/scss/fonts.scss";
 @import "src/scss/variables.scss";
 
 $dropdown-active-thickness: 5px;
 $navbar-active-thickness: 3px;
-$active-color: $cyan;
+
+$navbar-bg: $primary-dark;
+$navbar-dropdown-bg: $primary-main;
+
+$active-color: $secondary-light;
+$brand-color: $lightblue;
+$nav-link-color: white;
+$nav-link-active-color: $secondary-main;
+$nav-link-hover-color: $secondary-light;
+$burger-color: white;
+$burger-hover-color: $secondary-light;
 
 @mixin bottom-highlight-active($breakpoint) {
   @media only screen and (min-width: map-get($grid-breakpoints, $breakpoint)) {
     border-bottom: $navbar-active-thickness solid transparent;
     border-left: none;
     &.active {
-      border-bottom-color: $active-color;
+      border-bottom-color: $nav-link-active-color;
     }
   }
 }
@@ -26,9 +36,14 @@ $active-color: $cyan;
 
 .main-navbar {
   width: 100vw;
+
   .navbar-toggler {
-    border-color: #999999;
-    color: $pink;
+    border-color: $burger-color;
+    color: $burger-color;
+    &:hover {
+      border-color: $burger-hover-color;
+      color: $burger-hover-color;
+    }
   }
 
   .nav-link {
@@ -43,30 +58,31 @@ $active-color: $cyan;
   .nav-link {
     transition: color 0.1s ease-in;
     box-shadow: none;
-    color: $pink;
+    color: $nav-link-color;
     font-family: $headings-font-family;
     font-size: 16pt;
   }
 
-  .nav-link:hover,
   .nav-link.active {
-    color: white;
+    color: $nav-link-active-color;
+  }
+
+  .navbar-brand:hover,
+  .nav-link:hover {
+    color: $nav-link-hover-color;
   }
 
   .navbar-brand {
     box-shadow: none;
-    color: $lightblue;
+    color: $brand-color;
     font-family: $headings-font-family;
     font-size: 20pt;
-  }
-
-  .navbar-brand:hover {
-    color: white;
   }
 
   .navbar-separator {
     flex-grow: 1;
   }
+
   background-color: $navbar-bg;
   height: $navbar-height;
 }
