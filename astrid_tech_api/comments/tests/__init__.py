@@ -1,1 +1,1 @@
-from .test_comments import *
+from .test_admin import *

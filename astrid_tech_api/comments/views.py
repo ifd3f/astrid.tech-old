@@ -19,9 +19,9 @@ class CommentViewSet(ModelViewSet):
     def get_queryset(self):
         return Comment.objects.filter(mod_approved=True)
 
-    @action(detail=True, methods=['post'])
-    def reply(self, request, pk=None):
-        comment = self.get_object()
+    # @action(detail=True, methods=['post'])
+    # def reply(self, request, pk=None):
+    #     comment = self.get_object()
 
     def create(self, request, pk=None, *args, **kwargs):
         ser = CommentSerializer(data=request.data)

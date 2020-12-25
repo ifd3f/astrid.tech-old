@@ -4,33 +4,12 @@ from django.test import TestCase
 
 from comments.admin import CommentAdmin
 from comments.models import Comment
+from comments.tests.utils import setup_comment_tree
 
 
 class CommentAdminTestCase(TestCase):
     def setUp(self):
-        self.a = Comment.objects.create(
-            ip_addr='8.8.8.8',
-            locked=False,
-            content_md='test foo bar a'
-        )
-        self.b = Comment.objects.create(
-            ip_addr='8.8.8.8',
-            locked=False,
-            reply_parent=self.a,
-            content_md='test foo bar b'
-        )
-        self.c = Comment.objects.create(
-            ip_addr='8.8.8.8',
-            locked=False,
-            reply_parent=self.b,
-            content_md='test foo bar c'
-        )
-        self.d = Comment.objects.create(
-            ip_addr='8.8.8.8',
-            locked=False,
-            reply_parent=self.b,
-            content_md='test foo bar d'
-        )
+        self.a, self.b, self.c, self.d = setup_comment_tree()
         self.admin = CommentAdmin(Comment, AdminSite())
 
     def test_lock_thread(self):
