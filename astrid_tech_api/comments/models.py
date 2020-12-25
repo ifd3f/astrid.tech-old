@@ -50,7 +50,7 @@ class BannedEmailDomain(BanList):
 
 
 class Comment(Model):
-    post = CharField(max_length=100, null=False, db_index=True)
+    slug = CharField(max_length=100, null=False, db_index=True)
     ip_addr = GenericIPAddressField(verbose_name='IP address', null=False)
     reply_parent = ForeignKey('Comment', null=True, on_delete=CASCADE, validators=[validate_max_parents],
                               related_name='children', blank=True)
@@ -93,7 +93,7 @@ class Comment(Model):
         return ''.join(flags)
 
     def __str__(self):
-        return f'#{self.id} [{self.flags}] re:{self.post} by {self.author_name} <{self.author_email}>'
+        return f'#{self.id} [{self.flags}] re:{self.slug} by {self.author_name} <{self.author_email}>'
 
 
 class Report(Model):

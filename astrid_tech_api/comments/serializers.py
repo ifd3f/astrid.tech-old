@@ -9,7 +9,7 @@ class CommentSerializer(ModelSerializer):
         model = Comment
         fields = [
             'id',
-            'post',
+            'slug',
             'time_authored',
             'reply_parent',
             'author_email',

@@ -25,7 +25,7 @@ class CommentViewsTestCase(TestCase):
         self.assertEqual(200, response.status_code)
 
         comment = Comment.objects.get(pk=5)
-        self.assertEqual('/foo', comment.post)
+        self.assertEqual('/foo', comment.slug)
         self.assertEqual('Tester', comment.author_name)
         self.assertEqual('test@example.com', comment.author_email)
         self.assertEqual('1.2.3.4', comment.ip_addr)

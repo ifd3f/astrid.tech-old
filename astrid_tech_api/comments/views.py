@@ -1,5 +1,3 @@
-from django.core.management.utils import get_random_secret_key
-from rest_framework.decorators import action
 from rest_framework.permissions import AllowAny
 from rest_framework.response import Response
 from rest_framework.viewsets import ModelViewSet
@@ -7,7 +5,6 @@ from structlog import get_logger
 
 from comments.models import Comment
 from comments.serializers import CommentSerializer
-
 
 logger = get_logger(__name__)
 
