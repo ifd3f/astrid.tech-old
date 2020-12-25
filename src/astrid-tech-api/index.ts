@@ -1,15 +1,17 @@
 import axios, { AxiosInstance, AxiosResponse } from "axios"
 
 export type CommentForm = {
-  author_name?: string
+  author_name: string | null
   author_email: string
-  author_website?: string
+  author_website: string | null
   content_md: string
   slug: string
 }
 
 export type CommentData = {
   id: string
+  time_authored: string
+  reply_parent?: number
   author_name?: string
   author_email: string
   author_website?: string
