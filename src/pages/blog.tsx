@@ -1,13 +1,13 @@
 import { graphql, PageProps } from "gatsby"
 import React, { FC } from "react"
+import { FaRssSquare } from "react-icons/fa"
+import { Container } from "reactstrap"
+import { PageHeading } from "src/components/layout"
 import { PostBrief } from "../components/blog"
 import Layout from "../components/layout/layout"
 import SEO from "../components/seo"
-import { BlogPost } from "../types/index"
-import { Container } from "reactstrap"
 import styles from "../scss/blog.module.scss"
-import { PageHeading } from "src/components/layout"
-import { FaRssSquare } from "react-icons/fa"
+import { BlogPost } from "../types/index"
 
 type Data = {
   allBlogPost: {
@@ -49,7 +49,7 @@ const BlogIndex: FC<PageProps<Data>> = props => {
         </section>
         <section>
           {data.allBlogPost.edges.map(({ node: post }) => (
-            <PostBrief post={post} />
+            <PostBrief key={post.slug} post={post} />
           ))}
           <p className="text-center text-muted">(End of posts)</p>
         </section>
