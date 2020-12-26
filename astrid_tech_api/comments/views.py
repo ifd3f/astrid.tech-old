@@ -83,7 +83,7 @@ class CommentViewSet(ModelViewSet):
             }, 403)
 
         logger_.debug('Checking if message is suspicious')
-        suspicious = any((f(comment.content_md) for f in suspiscion_validators))
+        suspicious = any((f(comment) for f in suspiscion_validators))
         if suspicious:
             logger_.info('Marking message as suspicious')
             comment.mod_approved = False
