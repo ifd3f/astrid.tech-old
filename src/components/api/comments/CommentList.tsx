@@ -7,14 +7,11 @@ export type CommentListProps = {
   onSubmission?: () => void
 }
 
-export const CommentList: FC<CommentListProps> = ({
-  comments,
-  onSubmission = () => {},
-}) => {
+export const CommentList: FC<CommentListProps> = ({ comments }) => {
   return (
     <>
       {comments.map(c => (
-        <CommentNode key={c.id} comment={c} onSubmission={onSubmission} />
+        <CommentNode key={c.id} comment={c} />
       ))}
     </>
   )

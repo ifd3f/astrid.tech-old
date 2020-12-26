@@ -10,6 +10,7 @@ import {
 } from "reactstrap"
 import { changeEventSetter, useCookieState } from "src/util/boilerplate"
 import { useAPI } from "../APIProvider"
+import { useCommentData } from "./CommentDataProvider"
 
 export type CommentingFormProps = {
   slug: string
@@ -26,7 +27,6 @@ const cookieOptions = {
   sameSite: "strict" as "strict",
 }
 export const CommentingForm: FC<CommentingFormProps> = ({
-  slug,
   replyTo,
   onSuccessfullySubmitted = () => {},
 }) => {
@@ -38,6 +38,8 @@ export const CommentingForm: FC<CommentingFormProps> = ({
     [COMMENT_EMAIL_COOKIE, COMMENT_NAME_COOKIE, COMMENT_WEBSITE_COOKIE],
     cookieOptions
   )
+
+  const { slug } = useCommentData()
 
   const [bodyError, setBodyError] = useState<string | null>(null)
   const [emailError, setEmailError] = useState<string | null>(null)

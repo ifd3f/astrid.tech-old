@@ -4,21 +4,19 @@ import React, { FC, ReactNode, useState } from "react"
 import { FaFlag, FaLink, FaReply } from "react-icons/fa"
 import { Button } from "reactstrap"
 import { CommentData } from "src/astrid-tech-api"
+import { useCommentData } from "./CommentDataProvider"
 import { CommentingForm } from "./CommentingForm"
 import { CommentList } from "./CommentList"
 import { ReportingForm } from "./ReportingForm"
 
 type CommentNodeProps = {
   comment: CommentData
-  onSubmission?: () => void
 }
 
 type CommentState = "reply" | "report" | null
 
-export const CommentNode: FC<CommentNodeProps> = ({
-  comment,
-  onSubmission = () => {},
-}) => {
+export const CommentNode: FC<CommentNodeProps> = ({ comment }) => {
+  const { refreshComments } = useCommentData()
   const date = moment(comment.time_authored)
   const name = comment.author_name ?? "[anonymous]"
   const user = (
@@ -40,7 +38,7 @@ export const CommentNode: FC<CommentNodeProps> = ({
 
   const onSubmitted = () => {
     setActionState(null)
-    onSubmission()
+    refreshComments()
   }
 
   let form: ReactNode
