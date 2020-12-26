@@ -1,4 +1,5 @@
 from rest_framework.permissions import AllowAny
+from rest_framework.request import Request
 from rest_framework.response import Response
 from rest_framework.viewsets import ModelViewSet
 from structlog import get_logger
@@ -24,7 +25,14 @@ class CommentViewSet(ModelViewSet):
     # def reply(self, request, pk=None):
     #     comment = self.get_object()
 
-    def create(self, request, pk=None, *args, **kwargs):
+    def list(self, request: Request, *args, **kwargs):
+        slug_filter = request.query_params.get('slug')
+        queryset = self.queryset
+        if slug_filter is not None:
+            queryset = queryset.filter(slug=slug_filter)
+        return Response(CommentSerializer(queryset, many=True).data)
+
+    def create(self, request: Request, pk=None, *args, **kwargs):
         ser = CommentSerializer(data=request.data)
         ser.is_valid(raise_exception=True)
         comment_data = ser.validated_data

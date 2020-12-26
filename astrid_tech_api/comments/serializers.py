@@ -30,3 +30,9 @@ class CommentSerializer(ModelSerializer):
         extra_kwargs = {
             'author_email': {'write_only': True}
         }
+
+    def to_representation(self, instance: Comment):
+        result = super().to_representation(instance)
+        if instance.removed:
+            result['content_html'] = '<p>[removed]</p>'
+        return result

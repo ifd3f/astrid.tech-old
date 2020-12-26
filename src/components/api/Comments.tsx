@@ -194,15 +194,34 @@ type CommentNodeProps = {
 const CommentNode: FC<CommentNodeProps> = ({ comment }) => {
   const date = moment(comment.time_authored)
   const name = comment.author_name ?? "[anonymous]"
+  const user = (
+    <>
+      <strong>{name}</strong>
+      {comment.author_email ? `<${comment.author_email}>` : null}
+    </>
+  )
   return (
     <div>
-      <article>
-        <p>
-          <strong>{name}</strong> ({date.format("MMM DD YYYY")})
+      <hr />
+      <article className="comment">
+        <p className="header">
+          {comment.author_website ? (
+            <a href={comment.author_website}>{user}</a>
+          ) : (
+            user
+          )}{" "}
+          <span className="text-muted">
+            on {date.format("MMM DD, YYYY HH:mm:ss")}
+          </span>
         </p>
-        <div dangerouslySetInnerHTML={{ __html: comment.content_html }}></div>
+        <div
+          className="body"
+          dangerouslySetInnerHTML={{ __html: comment.content_html }}
+        ></div>
       </article>
-      <CommentList comments={comment.children} />
+      <div className="children">
+        <CommentList comments={comment.children} />
+      </div>
     </div>
   )
 }

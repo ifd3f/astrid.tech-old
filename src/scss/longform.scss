@@ -81,3 +81,41 @@
     padding-right: 5px;
   }
 }
+
+.comments {
+  font-size: 12pt;
+  p {
+    margin-bottom: 10px;
+  }
+
+  .comment {
+    .header {
+      font-size: 16pt;
+    }
+    .body {
+      padding-left: 15px;
+    }
+    .children {
+      padding-left: 15px;
+    }
+  }
+
+  h1 {
+    font-size: 15pt;
+  }
+  h2 {
+    font-size: 15pt;
+  }
+  h3 {
+    font-size: 14pt;
+  }
+  h4 {
+    font-size: 13pt;
+  }
+  h5 {
+    font-size: 12pt;
+  }
+  h6 {
+    font-size: 12pt;
+  }
+}

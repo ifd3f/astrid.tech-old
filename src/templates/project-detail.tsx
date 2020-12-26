@@ -1,5 +1,4 @@
 import { graphql, Link, PageProps } from "gatsby"
-import { Disqus } from "gatsby-plugin-disqus"
 import moment from "moment"
 import React, { createContext, FC, useContext } from "react"
 import {
@@ -10,6 +9,7 @@ import {
 } from "react-icons/bs"
 import { FaCalendar, FaGithub } from "react-icons/fa"
 import { Container } from "reactstrap"
+import { CommentSection } from "src/components/api/Comments"
 import {
   InfoRow,
   Layout,
@@ -249,7 +249,7 @@ const ProjectDetailTemplate: FC<PageProps<Data, Context>> = props => {
         <Container>
           <section id="comments">
             <h2>Comments</h2>
-            <Disqus config={disqusConfig} />
+            <CommentSection slug={project.slug} />
           </section>
         </Container>
       </Layout>
