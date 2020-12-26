@@ -63,7 +63,7 @@ export const CommentNode: FC<CommentNodeProps> = ({
     <div>
       <hr />
       <article className="comment" id={commentId}>
-        <p className="d-flex">
+        <div className="d-flex">
           <div className="header mr-auto">
             {comment.author_website ? (
               <a href={comment.author_website}>{user}</a>
@@ -104,7 +104,7 @@ export const CommentNode: FC<CommentNodeProps> = ({
               <FaLink title="link" /> Permalink
             </Button>
           </div>
-        </p>
+        </div>
         <div
           className="body"
           dangerouslySetInnerHTML={{ __html: comment.content_html }}
