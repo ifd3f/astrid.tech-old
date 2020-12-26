@@ -24,10 +24,10 @@ export const CommentSection: FC<CommentsSectionProps> = ({ slug }) => {
   return (
     <div className="comments">
       <CommentDataProvider slug={slug}>
-        <CommentingForm onSuccessfullySubmitted={fetchComments} />
+        <CommentingForm />
         {comments ? (
           comments.length > 0 ? (
-            <CommentList comments={comments} onSubmission={fetchComments} />
+            <CommentList comments={comments} />
           ) : (
             <p>No comments. Start the conversation!</p>
           )

@@ -15,7 +15,6 @@ import { useAPI } from "../APIProvider"
 import { useCommentData } from "./CommentDataProvider"
 
 export type CommentingFormProps = {
-  slug: string
   replyTo?: number
   onSuccessfullySubmitted?: () => {}
 }

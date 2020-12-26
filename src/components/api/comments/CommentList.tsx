@@ -4,13 +4,17 @@ import { CommentNode } from "./CommentNode"
 
 export type CommentListProps = {
   comments: CommentData[]
+  isReply?: boolean
 }
 
-export const CommentList: FC<CommentListProps> = ({ comments }) => {
+export const CommentList: FC<CommentListProps> = ({
+  comments,
+  isReply = false,
+}) => {
   return (
     <>
       {comments.map(c => (
-        <CommentNode key={c.id} comment={c} />
+        <CommentNode comment={c} isReply={isReply} />
       ))}
     </>
   )

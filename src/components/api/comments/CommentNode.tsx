@@ -11,11 +11,15 @@ import { ReportingForm } from "./ReportingForm"
 
 type CommentNodeProps = {
   comment: CommentData
+  isReply?: boolean
 }
 
 type CommentState = "reply" | "report" | null
 
-export const CommentNode: FC<CommentNodeProps> = ({ comment }) => {
+export const CommentNode: FC<CommentNodeProps> = ({
+  comment,
+  isReply = false,
+}) => {
   const { refreshComments } = useCommentData()
   const date = moment(comment.time_authored)
   const name = comment.author_name ?? "[anonymous]"
@@ -66,6 +70,7 @@ export const CommentNode: FC<CommentNodeProps> = ({ comment }) => {
               user
             )}{" "}
             <span className="text-muted">
+              {isReply ? "replied " : null}
               on {date.format("MMM DD, YYYY HH:mm:ss")}
             </span>
           </div>
@@ -105,7 +110,7 @@ export const CommentNode: FC<CommentNodeProps> = ({ comment }) => {
         />
         <div className="children">
           {form}
-          <CommentList comments={comment.children} />
+          <CommentList comments={comment.children} isReply />
         </div>
       </article>
     </div>
