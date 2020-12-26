@@ -56,11 +56,13 @@ jobs:
         run: git config --global user.email "astrid@astrid.tech" && git config --global user.name "Astrid A. Yu"
 
       - name: Get yarn cache directory path
+        working-directory: astrid_tech_frontend
         id: yarn-cache-dir-path
         run: echo "::set-output name=dir::$(yarn cache dir)"
 
       - name: Fetch yarn caches
         uses: actions/cache@v2
+        working-directory: astrid_tech_frontend
         id: yarn-cache # use this to check for `cache-hit` (`steps.yarn-cache.outputs.cache-hit != 'true'`)
         with:
           path: ${{ steps.yarn-cache-dir-path.outputs.dir }}
@@ -69,11 +71,14 @@ jobs:
             ${{ runner.os }}-yarn-
 
       - name: Yarn install
+        working-directory: astrid_tech_frontend
         run: yarn install
 
       - name: Build
+        working-directory: astrid_tech_frontend
         run: npm run build
 
       - name: Publish
+        working-directory: astrid_tech_frontend
         if: github.ref == 'refs/heads/main'
         run: npm run deploy

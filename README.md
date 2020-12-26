@@ -1,6 +1,6 @@
 # [astrid.tech](https://astrid.tech), My Personal Website
 
-![Deploy](https://github.com/Plenglin/astrid.tech/workflows/Deploy/badge.svg?branch=main)
+![Deployment status](https://github.com/Plenglin/astrid.tech/workflows/Deploy/badge.svg?branch=main)
 
 This website contains my blog, resume, and project portfolio. See the site live at [astrid.tech](https://astrid.tech)!
 
