@@ -3,7 +3,7 @@ from rest_framework.relations import ManyRelatedField
 from rest_framework.serializers import ModelSerializer
 from rest_framework_recursive.fields import RecursiveField
 
-from comments.models import Comment
+from comments.models import Comment, Report
 
 
 class CommentSerializer(ModelSerializer):
@@ -24,6 +24,7 @@ class CommentSerializer(ModelSerializer):
         read_only_fields = [
             'content_html',
             'id',
+            'reply_parent',
             'time_authored',
             'children'
         ]
@@ -36,3 +37,16 @@ class CommentSerializer(ModelSerializer):
         if instance.removed:
             result['content_html'] = '<p>[removed]</p>'
         return result
+
+
+class ReportSerializer(ModelSerializer):
+    class Meta:
+        model = Report
+        fields = [
+            'target',
+            'email',
+            'reason'
+        ]
+        read_only_fields = [
+            'target'
+        ]

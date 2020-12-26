@@ -3,7 +3,7 @@ import json
 from django.http import HttpResponse
 from django.test import TestCase
 
-from comments.models import Comment, BannedIP, BannedEmail, BannedEmailDomain
+from comments.models import Comment, BannedIP, BannedEmail, BannedEmailDomain, Report
 from comments.tests.utils import setup_comment_tree
 
 comment_data = {
@@ -47,6 +47,20 @@ class CommentViewsTestCase(TestCase):
         self.assertEqual(3, comment.reply_parent.pk)
         self.assertEqual(1, Comment.objects.get(pk=3).children.count())
 
+    def test_can_report_comment(self):
+        response = self.client.post(
+            '/api/comments/3/report/',
+            {
+                'reason': 'spam test',
+                'email': 'foo@example.com'
+            },
+            format='json'
+        )
+
+        self.assertEqual(200, response.status_code)
+        report = Report.objects.get(pk=1)
+        self.assertEqual(3, report.target.id)
+
     def test_comment_containing_url_is_quarantined(self):
         response = self.client.post(
             '/api/comments/',
@@ -67,7 +81,7 @@ class BanListTestCase(TestCase):
     def asserts(self, response):
         self.assertEqual(403, response.status_code)
         self.assertEqual(0, Comment.objects.count())
-        self.assertEqual({'reason': 'testing purposes'}, json.loads(response.content))
+        self.assertEqual({'error': 'ban', 'reason': 'testing purposes'}, json.loads(response.content))
 
     def test_banned_ip_cannot_post(self):
         BannedIP.objects.create(ip_addr='1.2.3.4', reason='testing purposes')

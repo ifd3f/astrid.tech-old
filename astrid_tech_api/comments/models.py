@@ -1,3 +1,7 @@
+import re
+from email.utils import parseaddr
+from typing import Optional
+
 import bleach
 from django.core.validators import MinLengthValidator
 from django.db.models import Model, EmailField, URLField, CharField, ForeignKey, SET_NULL, CASCADE, BooleanField, \
@@ -49,6 +53,11 @@ class BannedEmailDomain(BanList):
         return f'{self.domain} ({self.reason})'
 
 
+def get_email_domain(email_address):
+    _, domain = re.match(r'(.+)@(.+)', email_address).groups()
+    return domain
+
+
 class Comment(Model):
     slug = CharField(max_length=100, null=False, db_index=True)
     ip_addr = GenericIPAddressField(verbose_name='IP address', null=False)
@@ -76,6 +85,22 @@ class Comment(Model):
     @property
     def can_reply_to(self):
         return self.visible and not self.locked
+
+    @property
+    def ban_reason(self) -> Optional[str]:
+        ban_query = BannedIP.objects.filter(ip_addr=self.ip_addr)
+        if ban_query.exists():
+            return ban_query.get().reason
+
+        ban_query = BannedEmail.objects.filter(email=self.author_email)
+        if ban_query.exists():
+            return ban_query.get().reason
+
+        ban_query = BannedEmailDomain.objects.filter(domain=get_email_domain(self.author_email))
+        if ban_query.exists():
+            return ban_query.get().reason
+
+        return None
 
     def save(self, **kwargs):
         self.content_html = bleach.clean(

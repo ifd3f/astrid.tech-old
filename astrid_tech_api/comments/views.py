@@ -7,8 +7,8 @@ from rest_framework.response import Response
 from rest_framework.viewsets import ModelViewSet
 from structlog import get_logger
 
-from comments.models import Comment, BannedIP
-from comments.serializers import CommentSerializer
+from comments.models import Comment, BannedIP, Report
+from comments.serializers import CommentSerializer, ReportSerializer
 
 logger = get_logger(__name__)
 
@@ -31,7 +31,14 @@ class CommentViewSet(ModelViewSet):
 
     @action(detail=True, methods=['post'])
     def report(self, request, pk=None):
+        ser = ReportSerializer(data=request)
+        ser.is_valid(raise_exception=True)
+
         comment = self.get_object()
+        logger.trace('Creating report', comment=comment, data=ser.validated_data)
+
+        report = Report.objects.create(**ser.validated_data, target=comment)
+        return Response(ReportSerializer(report).data)
 
     def list(self, request: Request, *args, **kwargs):
         slug_filter = request.query_params.get('slug')
@@ -51,15 +58,21 @@ class CommentViewSet(ModelViewSet):
         else:
             ip = request.META.get('REMOTE_ADDR')
 
-        ban_query = BannedIP.objects.filter(ip_addr=ip)
-        if ban_query.exists():
-            ban: BannedIP = ban_query.get()
-            return Response({'reason': ban.reason}, status=403)
-
         ser = CommentSerializer(data=request.data)
         ser.is_valid(raise_exception=True)
-        comment_data = ser.validated_data
-        logger.debug('Creating comment', comment=comment_data, ip=ip)
 
-        comment = Comment.objects.create(**comment_data, ip_addr=ip, reply_parent=reply_parent)
+        comment_data = ser.validated_data
+        comment = Comment(**comment_data, ip_addr=ip, reply_parent=reply_parent)
+        logger.debug('Checking if author is banned', comment=comment)
+
+        reason = comment.ban_reason
+        if reason is not None:
+            logger.info('Banned author attempted to post', comment=comment, reason=reason)
+            return Response({
+                'error': 'ban',
+                'reason': reason
+            }, 403)
+
+        comment.save()
+
         return Response(CommentSerializer(comment).data)
