@@ -1,7 +1,16 @@
 {
   "folders": [
     {
-      "path": "."
+      "path": "astrid_tech_frontend",
+      "name": "Frontend"
+    },
+    {
+      "path": "astrid_tech_api",
+      "name": "API"
+    },
+    {
+      "path": ".",
+      "name": "Root"
     }
   ],
   "settings": {
