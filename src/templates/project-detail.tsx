@@ -9,7 +9,7 @@ import {
 } from "react-icons/bs"
 import { FaCalendar, FaGithub } from "react-icons/fa"
 import { Container } from "reactstrap"
-import { CommentSection } from "src/components/api/Comments"
+import { CommentSection } from "src/components/api/comments/CommentSection"
 import {
   InfoRow,
   Layout,

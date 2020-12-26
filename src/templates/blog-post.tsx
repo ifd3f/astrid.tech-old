@@ -10,7 +10,7 @@ import {
   TagsGroup,
 } from "src/components/layout/longform-layout"
 import { getHSLString, getPersistentColor } from "src/util"
-import { CommentSection } from "../components/api/Comments"
+import { CommentSection } from "../components/api/comments/CommentSection"
 import Layout from "../components/layout/layout"
 import { BlogPost } from "../types/index"
 
