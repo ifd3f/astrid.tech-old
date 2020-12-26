@@ -33,17 +33,17 @@ class CommentViewSet(ModelViewSet):
     serializer_class = CommentSerializer
     permission_classes = [AllowAny]
 
-    queryset = Comment.objects.all()
-
     def get_queryset(self):
-        queryset = self.queryset
-        query_set = queryset.filter(mod_approved=True, reply_parent=None).order_by('-time_authored')
-        return query_set
+        queryset = Comment.objects.all()\
+            .exclude(mod_approved=False)\
+            .exclude(reply_parent__isnull=True)\
+            .order_by('-time_authored')
+        return queryset
 
     @action(detail=True, methods=['post'])
     def reply(self, request, pk):
         logger.debug("Request to reply to comment", pk=pk)
-        comment = self.queryset.get(pk=pk)
+        comment = self.get_queryset().get(pk=pk)
         return CommentViewSet.create_from_request(request, comment)
 
     @action(detail=True, methods=['post'])
@@ -53,7 +53,7 @@ class CommentViewSet(ModelViewSet):
         ser = ReportSerializer(data=request.data)
         ser.is_valid(raise_exception=True)
 
-        comment = self.queryset.get(pk=pk)
+        comment = self.get_queryset().get(pk=pk)
         ip = get_request_ip(request)
         report = Report(**ser.validated_data, target=comment, ip_addr=ip)
         logger_ = logger.bind(comment=model_to_dict(comment), report=model_to_dict(report))
@@ -71,7 +71,7 @@ class CommentViewSet(ModelViewSet):
 
     def list(self, request: Request, *args, **kwargs):
         slug_filter = request.query_params.get('slug')
-        queryset = self.queryset
+        queryset = self.get_queryset()
         if slug_filter is not None:
             queryset = queryset.filter(slug=slug_filter)
         return Response(CommentSerializer(queryset, many=True).data)
@@ -96,13 +96,13 @@ class CommentViewSet(ModelViewSet):
             logger_.info('Banned author attempted to post', reason=reason)
             raise PermissionDenied(reason)
 
-        logger_.debug('Checking if message is suspicious')
-        suspicious = any((f(comment) for f in suspiscion_validators))
-        if suspicious:
-            logger_.info('Marking message as suspicious')
-            comment.mod_approved = False
+        # logger_.debug('Checking if message is suspicious')
+        # suspicious = any((f(comment) for f in suspiscion_validators))
+        # if suspicious:
+        #     logger_.info('Marking message as suspicious')
+        #     comment.mod_approved = False
 
         comment.save()
         logger_.info('Successfully created comment')
 
-        return Response(CommentSerializer(comment).data, 202 if suspicious else 200)
+        return Response(CommentSerializer(comment).data, 200)
