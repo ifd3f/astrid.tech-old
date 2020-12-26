@@ -1,3 +1,4 @@
+import { AxiosResponse } from "axios"
 import React, { FC, useState } from "react"
 import {
   Button,
@@ -7,6 +8,7 @@ import {
   FormText,
   Input,
   Label,
+  Row,
 } from "reactstrap"
 import { changeEventSetter, useCookieState } from "src/util/boilerplate"
 import { useAPI } from "../APIProvider"
@@ -44,6 +46,7 @@ export const CommentingForm: FC<CommentingFormProps> = ({
   const [bodyError, setBodyError] = useState<string | null>(null)
   const [emailError, setEmailError] = useState<string | null>(null)
   const [websiteError, setWebsiteError] = useState<string | null>(null)
+  const [generalError, setGeneralError] = useState<string | null>(null)
 
   const { api } = useAPI()
   const [isSubmitting, setIsSubmitting] = useState(false)
@@ -75,10 +78,14 @@ export const CommentingForm: FC<CommentingFormProps> = ({
     return valid
   }
 
-  const applyBackendErrors = (response: any) => {
-    response?.author_email?.forEach(setEmailError)
-    response?.author_website?.forEach(setWebsiteError)
-    response?.content_md?.forEach(setBodyError)
+  const applyBackendErrors = (response: AxiosResponse) => {
+    const data = response.data
+    if (response.status == 403) {
+      setGeneralError(`You are unauthorized to post: ${data.detail}`)
+    }
+    data?.author_email?.forEach(setEmailError)
+    data?.author_website?.forEach(setWebsiteError)
+    data?.content_md?.forEach(setBodyError)
   }
 
   const submit = async () => {
@@ -100,7 +107,7 @@ export const CommentingForm: FC<CommentingFormProps> = ({
       setBody("")
       onSuccessfullySubmitted()
     } catch (e) {
-      applyBackendErrors(e.response.data)
+      applyBackendErrors(e.response)
     }
 
     setIsSubmitting(false)
@@ -181,11 +188,16 @@ export const CommentingForm: FC<CommentingFormProps> = ({
           />
           <FormText>Markdown formatting is supported.</FormText>
           {bodyError ? <FormText color="danger">{bodyError}</FormText> : null}
+          {generalError ? (
+            <FormText color="danger">{generalError}</FormText>
+          ) : null}
         </FormGroup>
 
-        <Button disabled={isSubmitting} color="primary" onClick={submit}>
-          Submit!
-        </Button>
+        <Row>
+          <Button disabled={isSubmitting} color="primary" onClick={submit}>
+            Submit!
+          </Button>
+        </Row>
       </Form>
     </div>
   )

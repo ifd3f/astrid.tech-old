@@ -4,7 +4,6 @@ import { CommentNode } from "./CommentNode"
 
 export type CommentListProps = {
   comments: CommentData[]
-  onSubmission?: () => void
 }
 
 export const CommentList: FC<CommentListProps> = ({ comments }) => {

@@ -37,7 +37,7 @@ class CommentViewSet(ModelViewSet):
 
     def get_queryset(self):
         queryset = self.queryset
-        query_set = queryset.filter(mod_approved=True).order_by('-time_authored')
+        query_set = queryset.filter(mod_approved=True, reply_parent=None).order_by('-time_authored')
         return query_set
 
     @action(detail=True, methods=['post'])
@@ -59,7 +59,7 @@ class CommentViewSet(ModelViewSet):
         ban_reason = report.author_ban_reason
         if ban_reason is not None:
             logger_.info('Banned reporter attempted to report')
-            raise PermissionDenied(f'Banned for reason: {ban_reason}')
+            raise PermissionDenied(ban_reason)
 
         report.save()
         logger_.info("Successfully reported comment")
@@ -91,7 +91,7 @@ class CommentViewSet(ModelViewSet):
         reason = comment.ban_reason
         if reason is not None:
             logger_.info('Banned author attempted to post', reason=reason)
-            raise PermissionDenied(f'Banned for reason: {reason}')
+            raise PermissionDenied(reason)
 
         logger_.debug('Checking if message is suspicious')
         suspicious = any((f(comment) for f in suspiscion_validators))

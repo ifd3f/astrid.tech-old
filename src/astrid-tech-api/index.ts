@@ -36,11 +36,11 @@ export class AstridTechAPI {
       return await this.axios.post("/api/comments/", comment)
     }
 
-    return await this.axios.post(`/api/comments/${replyTo}/reply`, comment)
+    return await this.axios.post(`/api/comments/${replyTo}/reply/`, comment)
   }
 
   async reportComment(comment: number, reason: string, email?: string) {
-    return await this.axios.post(`/api/comments/${comment}/report`, {
+    return await this.axios.post(`/api/comments/${comment}/report/`, {
       reason,
       email,
     })
