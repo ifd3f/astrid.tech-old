@@ -6,7 +6,6 @@ name = "pypi"
 [packages]
 django-rest-framework = "*"
 django-webmention = "*"
-channels = "*"
 python-dotenv = "*"
 pygithub = "*"
 requests = "*"

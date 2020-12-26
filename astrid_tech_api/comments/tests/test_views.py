@@ -41,7 +41,7 @@ class CommentViewsTestCase(TestCase):
         self.assertEqual(200, response.status_code)
 
         comment = Comment.objects.get(pk=5)
-        self.assertEqual(3, comment.reply_parent)
+        self.assertEqual(3, comment.reply_parent.pk)
         self.assertEqual(1, Comment.objects.get(pk=3).children.count())
 
     def test_banned_ip_cannot_post(self):
