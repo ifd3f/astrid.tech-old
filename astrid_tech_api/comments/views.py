@@ -14,11 +14,18 @@ from comments.suspicious import too_many_newlines, contains_url
 
 logger = get_logger(__name__)
 
-
 suspiscion_validators = [
     too_many_newlines(20),
     contains_url
 ]
+
+
+def get_request_ip(request: Request):
+    x_forwarded_for = request.META.get('HTTP_X_FORWARDED_FOR')
+    if x_forwarded_for:
+        return x_forwarded_for.split(',')[0]
+    else:
+        return request.META.get('REMOTE_ADDR')
 
 
 class CommentViewSet(ModelViewSet):
@@ -39,13 +46,14 @@ class CommentViewSet(ModelViewSet):
 
     @action(detail=True, methods=['post'])
     def report(self, request, pk=None):
-        ser = ReportSerializer(data=request)
+        ser = ReportSerializer(data=request.data)
         ser.is_valid(raise_exception=True)
 
         comment = self.get_object()
-        logger.trace('Creating report', comment=comment, data=ser.validated_data)
+        ip = get_request_ip(request)
+        report = Report.objects.create(**ser.validated_data, target=comment, ip_addr=ip)
+        logger.info('Created report', comment=model_to_dict(comment), report=model_to_dict(report))
 
-        report = Report.objects.create(**ser.validated_data, target=comment)
         return Response(ReportSerializer(report).data)
 
     def list(self, request: Request, *args, **kwargs):
@@ -60,11 +68,7 @@ class CommentViewSet(ModelViewSet):
 
     @staticmethod
     def create_from_request(request: Request, reply_parent: Union[Comment, None] = None):
-        x_forwarded_for = request.META.get('HTTP_X_FORWARDED_FOR')
-        if x_forwarded_for:
-            ip = x_forwarded_for.split(',')[0]
-        else:
-            ip = request.META.get('REMOTE_ADDR')
+        ip = get_request_ip(request)
 
         ser = CommentSerializer(data=request.data)
         ser.is_valid(raise_exception=True)
