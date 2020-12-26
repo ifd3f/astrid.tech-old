@@ -18,6 +18,11 @@ class CommentViewsTestCase(TestCase):
     def setUp(self):
         self.a, self.b, self.c, self.d = setup_comment_tree()
 
+    def banned_comment_asserts(self, response):
+        self.assertEqual(403, response.status_code)
+        self.assertEqual(4, Comment.objects.count())
+        self.assertEqual({'detail': 'Banned for reason: testing purposes'}, json.loads(response.content))
+
     def test_can_create_comment(self):
         response = self.client.post(
             '/api/comments/',
@@ -58,8 +63,24 @@ class CommentViewsTestCase(TestCase):
         )
 
         self.assertEqual(200, response.status_code)
-        report = Report.objects.get(pk=1)
+        report = Report.objects.get()
         self.assertEqual(3, report.target.id)
+
+    def test_banned_ip_cannot_report_comment(self):
+        BannedIP.objects.create(ip_addr='1.2.3.4')
+
+        response = self.client.post(
+            '/api/comments/3/report/',
+            {
+                'reason': 'spam test',
+                'email': 'foo@example.com'
+            },
+            REMOTE_ADDR='1.2.3.4',
+            format='json'
+        )
+
+        self.assertEqual(403, response.status_code)
+        self.assertEqual(0, Report.objects.count())
 
     def test_comment_containing_url_is_quarantined(self):
         response = self.client.post(
@@ -76,13 +97,6 @@ class CommentViewsTestCase(TestCase):
         comment = Comment.objects.get(pk=5)
         self.assertFalse(comment.mod_approved)
 
-
-class BanListTestCase(TestCase):
-    def asserts(self, response):
-        self.assertEqual(403, response.status_code)
-        self.assertEqual(0, Comment.objects.count())
-        self.assertEqual({'error': 'ban', 'reason': 'testing purposes'}, json.loads(response.content))
-
     def test_banned_ip_cannot_post(self):
         BannedIP.objects.create(ip_addr='1.2.3.4', reason='testing purposes')
 
@@ -93,7 +107,7 @@ class BanListTestCase(TestCase):
             format='json'
         )
 
-        self.asserts(response)
+        self.banned_comment_asserts(response)
 
     def test_banned_email_cannot_post(self):
         BannedEmail.objects.create(email='spammer@gmail.com', reason='testing purposes')
@@ -108,7 +122,7 @@ class BanListTestCase(TestCase):
             format='json'
         )
 
-        self.asserts(response)
+        self.banned_comment_asserts(response)
 
     def test_banned_email_domain_cannot_post(self):
         BannedEmailDomain.objects.create(domain='evilsite.ru', reason='testing purposes')
@@ -123,4 +137,4 @@ class BanListTestCase(TestCase):
             format='json'
         )
 
-        self.asserts(response)
+        self.banned_comment_asserts(response)

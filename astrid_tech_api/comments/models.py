@@ -58,6 +58,24 @@ def get_email_domain(email_address):
     return domain
 
 
+def check_user_ban_reason(email, ip):
+    if ip is not None:
+        ban_query = BannedIP.objects.filter(ip_addr=ip)
+        if ban_query.exists():
+            return ban_query.get().reason
+
+    if email is not None:
+        ban_query = BannedEmail.objects.filter(email=email)
+        if ban_query.exists():
+            return ban_query.get().reason
+
+        ban_query = BannedEmailDomain.objects.filter(domain=get_email_domain(email))
+        if ban_query.exists():
+            return ban_query.get().reason
+
+    return None
+
+
 class Comment(Model):
     slug = CharField(max_length=100, null=False, db_index=True)
     ip_addr = GenericIPAddressField(verbose_name='IP address', null=False)
@@ -88,24 +106,13 @@ class Comment(Model):
 
     @property
     def ban_reason(self) -> Optional[str]:
-        ban_query = BannedIP.objects.filter(ip_addr=self.ip_addr)
-        if ban_query.exists():
-            return ban_query.get().reason
-
-        ban_query = BannedEmail.objects.filter(email=self.author_email)
-        if ban_query.exists():
-            return ban_query.get().reason
-
-        ban_query = BannedEmailDomain.objects.filter(domain=get_email_domain(self.author_email))
-        if ban_query.exists():
-            return ban_query.get().reason
-
-        return None
+        return check_user_ban_reason(self.author_email, self.ip_addr)
 
     def save(self, **kwargs):
         self.content_html = bleach.clean(
             markdown.convert(self.content_md),
-            tags=['a', 'abbr', 'acronym', 'b', 'blockquote', 'code', 'em', 'i', 'li', 'ol', 'strong', 'ul', 'p', 'h1', 'h2', 'h3', 'h4', 'h5', 'h6']
+            tags=['a', 'abbr', 'acronym', 'b', 'blockquote', 'code', 'em', 'i', 'li', 'ol', 'strong', 'ul', 'p', 'h1',
+                  'h2', 'h3', 'h4', 'h5', 'h6']
         )
         super().save()
 
@@ -129,6 +136,10 @@ class Report(Model):
     email = EmailField(null=True)
     reason = CharField(max_length=140)
     ip_addr = GenericIPAddressField(verbose_name='IP address', null=False)
+
+    @property
+    def author_ban_reason(self):
+        return check_user_ban_reason(None, self.ip_addr)
 
     def __str__(self):
         return f'Report for #{self.target} ({self.reason})'

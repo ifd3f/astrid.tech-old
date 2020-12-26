@@ -2,6 +2,7 @@ from typing import Union
 
 from django.forms import model_to_dict
 from rest_framework.decorators import action
+from rest_framework.exceptions import PermissionDenied
 from rest_framework.permissions import AllowAny
 from rest_framework.request import Request
 from rest_framework.response import Response
@@ -51,8 +52,17 @@ class CommentViewSet(ModelViewSet):
 
         comment = self.get_object()
         ip = get_request_ip(request)
-        report = Report.objects.create(**ser.validated_data, target=comment, ip_addr=ip)
-        logger.info('Created report', comment=model_to_dict(comment), report=model_to_dict(report))
+        report = Report(**ser.validated_data, target=comment, ip_addr=ip)
+        logger_ = logger.bind(comment=model_to_dict(comment), report=model_to_dict(report))
+
+        logger_.debug('Checking if reporter is banned')
+        ban_reason = report.author_ban_reason
+        if ban_reason is not None:
+            logger_.info('Banned reporter attempted to report')
+            raise PermissionDenied(f'Banned for reason: {ban_reason}')
+
+        report.save()
+        logger_.info("Successfully reported comment")
 
         return Response(ReportSerializer(report).data)
 
@@ -81,10 +91,7 @@ class CommentViewSet(ModelViewSet):
         reason = comment.ban_reason
         if reason is not None:
             logger_.info('Banned author attempted to post', reason=reason)
-            return Response({
-                'error': 'ban',
-                'reason': reason
-            }, 403)
+            raise PermissionDenied(f'Banned for reason: {reason}')
 
         logger_.debug('Checking if message is suspicious')
         suspicious = any((f(comment) for f in suspiscion_validators))
@@ -92,7 +99,7 @@ class CommentViewSet(ModelViewSet):
             logger_.info('Marking message as suspicious')
             comment.mod_approved = False
 
-        logger_.info('Successfully created comment')
         comment.save()
+        logger_.info('Successfully created comment')
 
         return Response(CommentSerializer(comment).data, 202 if suspicious else 200)
