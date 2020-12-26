@@ -1,5 +1,6 @@
 from typing import Union
 
+from django.forms import model_to_dict
 from rest_framework.decorators import action
 from rest_framework.permissions import AllowAny
 from rest_framework.request import Request
@@ -9,8 +10,15 @@ from structlog import get_logger
 
 from comments.models import Comment, BannedIP, Report
 from comments.serializers import CommentSerializer, ReportSerializer
+from comments.suspicious import too_many_newlines, contains_url
 
 logger = get_logger(__name__)
+
+
+suspiscion_validators = [
+    too_many_newlines(20),
+    contains_url
+]
 
 
 class CommentViewSet(ModelViewSet):
@@ -63,16 +71,24 @@ class CommentViewSet(ModelViewSet):
 
         comment_data = ser.validated_data
         comment = Comment(**comment_data, ip_addr=ip, reply_parent=reply_parent)
-        logger.debug('Checking if author is banned', comment=comment)
+        logger_ = logger.bind(comment=model_to_dict(comment))
 
+        logger_.debug('Checking if author is banned')
         reason = comment.ban_reason
         if reason is not None:
-            logger.info('Banned author attempted to post', comment=comment, reason=reason)
+            logger_.info('Banned author attempted to post', reason=reason)
             return Response({
                 'error': 'ban',
                 'reason': reason
             }, 403)
 
+        logger_.debug('Checking if message is suspicious')
+        suspicious = any((f(comment.content_md) for f in suspiscion_validators))
+        if suspicious:
+            logger_.info('Marking message as suspicious')
+            comment.mod_approved = False
+
+        logger_.info('Successfully created comment')
         comment.save()
 
-        return Response(CommentSerializer(comment).data)
+        return Response(CommentSerializer(comment).data, 202 if suspicious else 200)
