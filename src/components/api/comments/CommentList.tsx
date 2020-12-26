@@ -1,9 +1,9 @@
 import React, { FC } from "react"
-import { WrappedComment } from "./CommentFetching"
+import { CommentData } from "src/astrid-tech-api"
 import { CommentNode } from "./CommentNode"
 
 export type CommentListProps = {
-  comments: WrappedComment[]
+  comments: CommentData[]
   isReply?: boolean
 }
 

@@ -1,7 +1,6 @@
 import React, { FC } from "react"
 import { useAPI } from "../APIProvider"
 import { CommentDataProvider, useCommentData } from "./CommentDataProvider"
-import { wrap } from "./CommentFetching"
 import { CommentingForm } from "./CommentingForm"
 import { CommentList } from "./CommentList"
 
@@ -13,7 +12,7 @@ const TopLevelCommentList = () => {
   const { comments } = useCommentData()
   return comments != null ? (
     comments.length > 0 ? (
-      <CommentList comments={comments.map(wrap)} />
+      <CommentList comments={comments} />
     ) : (
       <p>No comments. Start the conversation!</p>
     )

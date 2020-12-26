@@ -3,25 +3,24 @@ import moment from "moment"
 import React, { FC, ReactNode, useState } from "react"
 import { FaFlag, FaLink, FaReply } from "react-icons/fa"
 import { Button } from "reactstrap"
+import { CommentData } from "src/astrid-tech-api"
 import { useCommentData } from "./CommentDataProvider"
-import { WrappedComment } from "./CommentFetching"
 import { CommentingForm } from "./CommentingForm"
 import { CommentList } from "./CommentList"
 import { ReportingForm } from "./ReportingForm"
 
 type CommentNodeProps = {
-  comment: WrappedComment
+  comment: CommentData
   isReply?: boolean
 }
 
 type CommentState = "reply" | "report" | null
 
 export const CommentNode: FC<CommentNodeProps> = ({
-  comment: wrapped,
+  comment,
   isReply = false,
 }) => {
   const { refreshComments } = useCommentData()
-  const { data: comment, wrappedChildren } = wrapped
 
   const date = moment(comment.time_authored)
   const name = comment.author_name ?? "[anonymous]"
@@ -112,7 +111,7 @@ export const CommentNode: FC<CommentNodeProps> = ({
         />
         <div className="children">
           {form}
-          <CommentList comments={wrappedChildren} isReply />
+          <CommentList comments={comment.children} isReply />
         </div>
       </article>
     </div>
