@@ -16,7 +16,7 @@ import { useCommentData } from "./CommentDataProvider"
 
 export type CommentingFormProps = {
   replyTo?: number
-  onSuccessfullySubmitted?: () => {}
+  onSubmitted?: () => void
 }
 
 const COMMENT_EMAIL_COOKIE = "comment-email"
@@ -29,7 +29,7 @@ const cookieOptions = {
 }
 export const CommentingForm: FC<CommentingFormProps> = ({
   replyTo,
-  onSuccessfullySubmitted = () => {},
+  onSubmitted = () => {},
 }) => {
   const [
     [name, setName],
@@ -104,7 +104,7 @@ export const CommentingForm: FC<CommentingFormProps> = ({
         replyTo
       )
       setBody("")
-      onSuccessfullySubmitted()
+      onSubmitted()
     } catch (e) {
       applyBackendErrors(e.response)
     }

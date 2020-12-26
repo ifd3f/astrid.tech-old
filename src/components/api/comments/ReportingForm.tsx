@@ -5,9 +5,13 @@ import { useCommentData } from "./CommentDataProvider"
 
 type ReportFormProps = {
   comment: number
+  onSubmitted?: () => void
 }
 
-export const ReportingForm: FC<ReportFormProps> = ({ comment }) => {
+export const ReportingForm: FC<ReportFormProps> = ({
+  comment,
+  onSubmitted = () => {},
+}) => {
   const [body, setBody] = useState("")
   const { api } = useAPI()
   const { refreshComments } = useCommentData()
@@ -29,6 +33,7 @@ export const ReportingForm: FC<ReportFormProps> = ({ comment }) => {
     }
 
     setIsSubmitting(false)
+    onSubmitted()
   }
 
   return (

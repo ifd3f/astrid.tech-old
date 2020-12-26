@@ -51,10 +51,10 @@ export const CommentNode: FC<CommentNodeProps> = ({
       form = null
       break
     case "reply":
-      form = <CommentingForm slug={comment.slug} replyTo={comment.id} />
+      form = <CommentingForm replyTo={comment.id} onSubmitted={onSubmitted} />
       break
     case "report":
-      form = <ReportingForm comment={comment.id} />
+      form = <ReportingForm comment={comment.id} onSubmitted={onSubmitted} />
       break
   }
 
