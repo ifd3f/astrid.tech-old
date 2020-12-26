@@ -1,6 +1,7 @@
+import { useLocation } from "@reach/router"
 import moment from "moment"
 import React, { FC, useEffect, useState } from "react"
-import { FaFlag, FaReply } from "react-icons/fa"
+import { FaFlag, FaLink, FaReply } from "react-icons/fa"
 import {
   Button,
   Col,
@@ -13,7 +14,6 @@ import {
 import { CommentData } from "src/astrid-tech-api"
 import { changeEventSetter, useCookieState } from "../../util/boilerplate"
 import { useAPI } from "./APIProvider"
-
 export type CommentingFormProps = {
   slug: string
   parent?: number
@@ -201,34 +201,49 @@ const CommentNode: FC<CommentNodeProps> = ({ comment }) => {
       {comment.author_email ? `<${comment.author_email}>` : null}
     </>
   )
+  const location = useLocation()
+  const commentId = `comment-${comment.id}`
+  const url = new URL(location.href)
+  url.hash = commentId
+
   return (
     <div>
       <hr />
-      <article className="comment">
-        <p className="header">
-          {comment.author_website ? (
-            <a href={comment.author_website}>{user}</a>
-          ) : (
-            user
-          )}{" "}
-          <span className="text-muted">
-            on {date.format("MMM DD, YYYY HH:mm:ss")}
-          </span>
+      <article className="comment" id={commentId}>
+        <p className="d-flex">
+          <div className="header mr-auto">
+            {comment.author_website ? (
+              <a href={comment.author_website}>{user}</a>
+            ) : (
+              user
+            )}{" "}
+            <span className="text-muted">
+              on {date.format("MMM DD, YYYY HH:mm:ss")}
+            </span>
+          </div>
+          <div className="">
+            <Button outline color="primary" size="sm" style={{ fontSize: 12 }}>
+              <FaReply title="reply" /> Reply
+            </Button>{" "}
+            <Button outline color="danger" size="sm" style={{ fontSize: 12 }}>
+              <FaFlag title="flag" /> Report
+            </Button>{" "}
+            <Button
+              href={url.href}
+              outline
+              color="info"
+              size="sm"
+              style={{ fontSize: 12 }}
+            >
+              <FaLink title="link" /> Permalink
+            </Button>
+          </div>
         </p>
         <div
           className="body"
           dangerouslySetInnerHTML={{ __html: comment.content_html }}
         />
-        <div className="actions">
-          <p>
-            <Button outline color="primary" size="sm" style={{ fontSize: 12 }}>
-              <FaReply title="reply" /> Reply
-            </Button>{" "}
-            <Button outline color="danger" size="sm" style={{ fontSize: 12 }}>
-              <FaFlag title="flag" /> Flag as inappropriate
-            </Button>
-          </p>
-        </div>
+        <div className="actions"></div>
       </article>
       <div className="children">
         <CommentList comments={comment.children} />
