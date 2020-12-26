@@ -103,6 +103,7 @@ class Report(Model):
     target = ForeignKey(Comment, on_delete=CASCADE, null=False)
     email = EmailField(null=True)
     reason = CharField(max_length=140)
+    ip_addr = GenericIPAddressField(verbose_name='IP address', null=False)
 
     def __str__(self):
         return f'Report for #{self.target} ({self.reason})'

@@ -9,7 +9,7 @@ export type CommentForm = {
 }
 
 export type CommentData = {
-  id: string
+  id: number
   time_authored: string
   reply_parent?: number
   author_name?: string
@@ -36,7 +36,14 @@ export class AstridTechAPI {
       return await this.axios.post("/api/comments/", comment)
     }
 
-    return await this.axios.post(`/api/comments/${replyTo}/`, comment)
+    return await this.axios.post(`/api/comments/${replyTo}/reply`, comment)
+  }
+
+  async reportComment(comment: number, reason: string, email?: string) {
+    return await this.axios.post(`/api/comments/${comment}/report`, {
+      reason,
+      email,
+    })
   }
 
   async getComments(slug: string): Promise<AxiosResponse<CommentData[]>> {
