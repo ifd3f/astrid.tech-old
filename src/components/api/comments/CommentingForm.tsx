@@ -104,13 +104,13 @@ export const CommentingForm: FC<CommentingFormProps> = ({
       )
       console.log("Created comment", comment)
       setBody("")
-      await refreshComments()
+      setIsSubmitting(false)
       onSubmitted()
+      await refreshComments()
     } catch (e) {
       applyBackendErrors(e.response)
+      setIsSubmitting(false)
     }
-
-    setIsSubmitting(false)
   }
 
   return (
