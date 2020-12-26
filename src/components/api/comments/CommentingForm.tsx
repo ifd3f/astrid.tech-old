@@ -27,6 +27,7 @@ const cookieOptions = {
   path: "/",
   sameSite: "strict" as "strict",
 }
+
 export const CommentingForm: FC<CommentingFormProps> = ({
   replyTo,
   onSubmitted = () => {},
@@ -40,7 +41,7 @@ export const CommentingForm: FC<CommentingFormProps> = ({
     cookieOptions
   )
 
-  const { slug } = useCommentData()
+  const { slug, refreshComments } = useCommentData()
 
   const [bodyError, setBodyError] = useState<string | null>(null)
   const [emailError, setEmailError] = useState<string | null>(null)
@@ -90,10 +91,8 @@ export const CommentingForm: FC<CommentingFormProps> = ({
   const submit = async () => {
     try {
       if (!validate()) return
-      console.log("Submitting")
-
       setIsSubmitting(true)
-      await api.createComment(
+      const comment = await api.createComment(
         {
           author_name: name.length > 0 ? name : null,
           author_email: email,
@@ -103,7 +102,9 @@ export const CommentingForm: FC<CommentingFormProps> = ({
         },
         replyTo
       )
+      console.log("Created comment", comment)
       setBody("")
+      await refreshComments()
       onSubmitted()
     } catch (e) {
       applyBackendErrors(e.response)

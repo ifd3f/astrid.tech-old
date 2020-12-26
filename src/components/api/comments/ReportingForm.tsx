@@ -1,7 +1,6 @@
 import React, { FC, useState } from "react"
 import { Button, Form, FormGroup, FormText, Input } from "reactstrap"
 import { useAPI } from "../APIProvider"
-import { useCommentData } from "./CommentDataProvider"
 
 type ReportFormProps = {
   comment: number
@@ -14,7 +13,6 @@ export const ReportingForm: FC<ReportFormProps> = ({
 }) => {
   const [body, setBody] = useState("")
   const { api } = useAPI()
-  const { refreshComments } = useCommentData()
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [bodyError, setBodyError] = useState<string | null>(null)
 
@@ -27,7 +25,6 @@ export const ReportingForm: FC<ReportFormProps> = ({
       setIsSubmitting(true)
       await api.reportComment(comment, body)
       setBody("")
-      refreshComments()
     } catch (e) {
       applyBackendErrors(e.response.data)
     }

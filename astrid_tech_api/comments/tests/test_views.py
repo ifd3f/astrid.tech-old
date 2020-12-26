@@ -21,7 +21,7 @@ class CommentViewsTestCase(TestCase):
     def banned_comment_asserts(self, response):
         self.assertEqual(403, response.status_code)
         self.assertEqual(4, Comment.objects.count())
-        self.assertEqual({'detail': 'Banned for reason: testing purposes'}, json.loads(response.content))
+        self.assertEqual({'detail': 'testing purposes'}, json.loads(response.content))
 
     def test_can_create_comment(self):
         response = self.client.post(

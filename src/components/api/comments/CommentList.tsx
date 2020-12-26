@@ -1,9 +1,9 @@
 import React, { FC } from "react"
-import { CommentData } from "src/astrid-tech-api"
+import { WrappedComment } from "./CommentFetching"
 import { CommentNode } from "./CommentNode"
 
 export type CommentListProps = {
-  comments: CommentData[]
+  comments: WrappedComment[]
   isReply?: boolean
 }
 
@@ -13,9 +13,9 @@ export const CommentList: FC<CommentListProps> = ({
 }) => {
   return (
     <>
-      {comments.map(c => (
-        <CommentNode comment={c} isReply={isReply} />
-      ))}
+      {comments.map((c, i) => {
+        return <CommentNode key={c.id} comment={c} isReply={isReply} />
+      })}
     </>
   )
 }

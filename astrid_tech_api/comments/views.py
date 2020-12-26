@@ -41,16 +41,19 @@ class CommentViewSet(ModelViewSet):
         return query_set
 
     @action(detail=True, methods=['post'])
-    def reply(self, request, pk=None):
-        comment = self.get_object()
+    def reply(self, request, pk):
+        logger.debug("Request to reply to comment", pk=pk)
+        comment = self.queryset.get(pk=pk)
         return CommentViewSet.create_from_request(request, comment)
 
     @action(detail=True, methods=['post'])
-    def report(self, request, pk=None):
+    def report(self, request, pk):
+        logger.debug("Request to report comment", pk=pk)
+
         ser = ReportSerializer(data=request.data)
         ser.is_valid(raise_exception=True)
 
-        comment = self.get_object()
+        comment = self.queryset.get(pk=pk)
         ip = get_request_ip(request)
         report = Report(**ser.validated_data, target=comment, ip_addr=ip)
         logger_ = logger.bind(comment=model_to_dict(comment), report=model_to_dict(report))

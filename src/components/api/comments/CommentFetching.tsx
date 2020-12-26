@@ -3,21 +3,18 @@ import { CommentData } from "src/astrid-tech-api"
 
 export type WrappedComment = {
   data: CommentData
-  totalChildren: number
+  id: string
   wrappedChildren: WrappedComment[]
 }
 
 export function wrap(comment: CommentData): WrappedComment {
   const wrappedChildren = comment.children.map(wrap)
-  const totalChildren =
-    wrappedChildren.reduce(
-      (count, comment) => count + comment.totalChildren,
-      0
-    ) + wrappedChildren.length
+  const id = wrappedChildren.map(c => c.id)
+  id.push(comment.id.toString())
 
   return {
     data: comment,
-    totalChildren,
+    id: id.join(" "),
     wrappedChildren,
   }
 }
