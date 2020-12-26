@@ -88,15 +88,19 @@
     margin-bottom: 10px;
   }
 
+  input {
+    font-size: 12pt;
+  }
+
   .comment {
     .header {
       font-size: 16pt;
     }
-    .body {
-      padding-left: 15px;
-    }
+    .body,
+    .actions,
     .children {
-      padding-left: 15px;
+      margin-left: 15px;
+      margin-left: 15px;
     }
   }
 

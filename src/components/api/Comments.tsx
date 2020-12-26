@@ -1,5 +1,6 @@
 import moment from "moment"
 import React, { FC, useEffect, useState } from "react"
+import { FaFlag, FaReply } from "react-icons/fa"
 import {
   Button,
   Col,
@@ -217,7 +218,17 @@ const CommentNode: FC<CommentNodeProps> = ({ comment }) => {
         <div
           className="body"
           dangerouslySetInnerHTML={{ __html: comment.content_html }}
-        ></div>
+        />
+        <div className="actions">
+          <p>
+            <Button outline color="primary" size="sm" style={{ fontSize: 12 }}>
+              <FaReply title="reply" /> Reply
+            </Button>{" "}
+            <Button outline color="danger" size="sm" style={{ fontSize: 12 }}>
+              <FaFlag title="flag" /> Flag as inappropriate
+            </Button>
+          </p>
+        </div>
       </article>
       <div className="children">
         <CommentList comments={comment.children} />
