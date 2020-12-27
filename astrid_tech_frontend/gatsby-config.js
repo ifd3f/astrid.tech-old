@@ -5,14 +5,15 @@ const fs = require("fs")
 
 const packageJson = JSON.parse(fs.readFileSync(`${__dirname}/package.json`))
 
-var apiRoot;
-if (process.env.ASTRID_TECH_API_ROOT) {
-  apiRoot = process.env.ASTRID_TECH_API_ROOT
-} else if (process.env.NODE_ENV == 'production') {
-  throw new Error("We are in production, but an API root was not specified!")
-} else {
-  apiRoot = 'http://localhost:8001/'
-  console.warn("No API root specified, defaulting to", apiRoot)
+function getAPIRoot() {
+  if (process.env.ASTRID_TECH_API_ROOT) {
+    return process.env.ASTRID_TECH_API_ROOT
+  } else if (process.env.NODE_ENV == 'production') {
+    throw new Error("We are in production, but ASTRID_TECH_API_ROOT was not specified!")
+  } else {
+    console.warn("No API root specified, defaulting to", apiRoot)
+    return 'http://localhost:8001/'
+  }
 }
 
 module.exports = {
@@ -22,7 +23,7 @@ module.exports = {
     version: packageJson.version,
     cookiePolicyVersion: "1",
     author: {
-      name: `Astrid A. Yu`,
+      name: `Astrid Yu`,
       pronouns: {
         subj: `she`,
         obj: `her`,
@@ -33,7 +34,7 @@ module.exports = {
     },
     description: packageJson.description,
     siteUrl: packageJson.homepage,
-    apiRoot,
+    apiRoot: getAPIRoot(),
     social: {
       twitter: `astralbijection`,
       github: `Plenglin`,
