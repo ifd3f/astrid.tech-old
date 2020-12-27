@@ -4,6 +4,7 @@ export type CommentForm = {
   author_name: string | null
   author_email: string
   author_website: string | null
+  reply_parent?: number
   content_md: string
   slug: string
 }
@@ -20,15 +21,17 @@ type CommentData = {
   slug: string
 }
 
+export type CommentAuthor = {
+  name: string
+  email: string
+  website: string
+}
+
 export type Comment = {
   id: number
   timeAuthored: Date
   children: Comment[]
-  author: {
-    name: string
-    email: string
-    website: string
-  }
+  author: CommentAuthor
   htmlContent: string
 }
 

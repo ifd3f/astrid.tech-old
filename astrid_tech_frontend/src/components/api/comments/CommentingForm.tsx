@@ -92,16 +92,14 @@ export const CommentingForm: FC<CommentingFormProps> = ({
     try {
       if (!validate()) return
       setIsSubmitting(true)
-      const comment = await api.createComment(
-        {
-          author_name: name.length > 0 ? name : null,
-          author_email: email,
-          author_website: website.length > 0 ? website : null,
-          content_md: body,
-          slug,
-        },
-        replyTo
-      )
+      const comment = await api.createComment({
+        author_name: name.length > 0 ? name : null,
+        author_email: email,
+        author_website: website.length > 0 ? website : null,
+        content_md: body,
+        reply_parent: replyTo,
+        slug,
+      })
       console.log("Created comment", comment)
       setBody("")
       setIsSubmitting(false)

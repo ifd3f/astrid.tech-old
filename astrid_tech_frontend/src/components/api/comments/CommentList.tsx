@@ -1,9 +1,9 @@
 import React, { FC } from "react"
-import { CommentData } from "src/astrid-tech-api"
+import { Comment } from "src/astrid-tech-api"
 import { CommentNode } from "./CommentNode"
 
 export type CommentListProps = {
-  comments: CommentData[]
+  comments: Comment[]
   isReply?: boolean
 }
 

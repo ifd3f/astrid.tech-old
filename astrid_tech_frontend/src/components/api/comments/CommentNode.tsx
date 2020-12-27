@@ -3,7 +3,7 @@ import moment from "moment"
 import React, { FC, ReactNode, useState } from "react"
 import { FaFlag, FaLink, FaReply } from "react-icons/fa"
 import { Button } from "reactstrap"
-import { Comment } from "src/astrid-tech-api"
+import { Comment, CommentAuthor } from "src/astrid-tech-api"
 import { useCommentData } from "./CommentDataProvider"
 import { CommentingForm } from "./CommentingForm"
 import { CommentList } from "./CommentList"
@@ -16,20 +16,23 @@ type CommentNodeProps = {
 
 type CommentState = "reply" | "report" | null
 
+const AuthorDisplay: FC<{ author: CommentAuthor }> = ({ author }) => {
+  const user = <strong>{author.name ?? "[anonymous]"}</strong>
+  return (
+    <>
+      {author.website ? <a href={author.website}>{user}</a> : user}
+      {author.email ? ` <${author.email}>` : null}
+    </>
+  )
+}
+
 export const CommentNode: FC<CommentNodeProps> = ({
   comment,
   isReply = false,
 }) => {
   const { refreshComments } = useCommentData()
 
-  const date = moment(comment.time_authored)
-  const name = comment.author_name ?? "[anonymous]"
-  const user = (
-    <>
-      <strong>{name}</strong>
-      {comment.author_email ? `<${comment.author_email}>` : null}
-    </>
-  )
+  const date = moment(comment.timeAuthored)
   const location = useLocation()
   const commentId = `comment-${comment.id}`
   const url = new URL(location.href)
@@ -65,11 +68,7 @@ export const CommentNode: FC<CommentNodeProps> = ({
       <article className="comment" id={commentId}>
         <div className="d-flex">
           <div className="header mr-auto">
-            {comment.author_website ? (
-              <a href={comment.author_website}>{user}</a>
-            ) : (
-              user
-            )}{" "}
+            <AuthorDisplay author={comment.author} />{" "}
             <span className="text-muted">
               {isReply ? "replied " : null}
               on {date.format("MMM DD, YYYY HH:mm:ss")}
@@ -107,7 +106,7 @@ export const CommentNode: FC<CommentNodeProps> = ({
         </div>
         <div
           className="body"
-          dangerouslySetInnerHTML={{ __html: comment.content_html }}
+          dangerouslySetInnerHTML={{ __html: comment.htmlContent }}
         />
         <div className="children">
           {form}
