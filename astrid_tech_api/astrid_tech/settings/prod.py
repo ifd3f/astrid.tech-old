@@ -10,6 +10,9 @@ ALLOWED_HOSTS = [
     "127.0.0.1"
 ]
 
+if os.getenv('ASTRID_TECH_API_HOST') is not None:
+    ALLOWED_HOSTS.append(os.getenv('ASTRID_TECH_API_HOST'))
+
 SECRET_KEY = os.getenv('SECRET_KEY')
 
 DATABASES = {
