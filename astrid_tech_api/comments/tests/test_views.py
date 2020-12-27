@@ -14,6 +14,10 @@ create_comment_data = {
 }
 
 
+def get_object_from_response(model, response):
+    return model.objects.get(id=json.loads(response.content)['id'])
+
+
 class CommentViewsTestCase(LiveServerTestCase):
     def setUp(self):
         self.a, self.b, self.c, self.d = setup_comment_tree()
@@ -60,7 +64,7 @@ class CommentViewsTestCase(LiveServerTestCase):
         )
 
         self.assertEqual(200, response.status_code)
-        comment = Comment.objects.get(pk=5)
+        comment = get_object_from_response(Comment, response)
         self.assertEqual('/test', comment.slug)
         self.assertEqual('Tester', comment.author_name)
         self.assertEqual('test@example.com', comment.author_email)
@@ -76,7 +80,7 @@ class CommentViewsTestCase(LiveServerTestCase):
         )
 
         self.assertEqual(200, response.status_code)
-        comment = Comment.objects.get(pk=5)
+        comment = get_object_from_response(Comment, response)
         self.assertEqual(3, comment.reply_parent.pk)
         self.assertEqual(1, Comment.objects.get(pk=3).children.count())
 

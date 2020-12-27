@@ -23,11 +23,6 @@ LOGGING = {
             "processor": structlog.dev.ConsoleRenderer(),
             "foreign_pre_chain": pre_chain,
         },
-        "key_value": {
-            "()": structlog.stdlib.ProcessorFormatter,
-            "processor": structlog.processors.KeyValueRenderer(key_order=['timestamp', 'level', 'event', 'logger']),
-            "foreign_pre_chain": pre_chain,
-        },
     },
     "handlers": {
         "console": {
@@ -38,7 +33,7 @@ LOGGING = {
             "class": "logging.handlers.TimedRotatingFileHandler",
             'when': 'h',
             "filename": "logs/output.log",
-            "formatter": "key_value",
+            "formatter": "json_formatter",
         },
     },
     "loggers": {

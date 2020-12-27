@@ -162,7 +162,13 @@ def configure_structlog():
     )
 
 
+def rename_event_key(_, __, ed):
+    ed["message"] = ed.pop("event")
+    return ed
+
+
 pre_chain = (
     structlog.stdlib.add_log_level,
     timestamper,
+    rename_event_key
 )
