@@ -1,0 +1,13 @@
+{
+  "version": "2.0.0",
+  "tasks": [
+    {
+      "type": "npm",
+      "script": "develop",
+      "problemMatcher": [],
+      "label": "npm: develop",
+      "detail": "npx gatsby clean && npx gatsby develop",
+      "path": "astrid_tech_frontend"
+    }
+  ]
+}
