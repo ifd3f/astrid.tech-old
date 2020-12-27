@@ -35,13 +35,20 @@ services:
   nginx:
     depends_on:
       - api
-    image: nginx:1.19
+    image: staticfloat/nginx-certbot:latest
     volumes:
-      - ./deployment/nginx:/etc/nginx/conf.d
+      - ./deployment/nginx:/etc/nginx/conf.d:ro
       - static_files:/www/static/
+    environment:
+      CERTBOT_EMAIL: astrid@astrid.tech
     ports:
       - "80:80"
+      - "443:443"
     restart: always
+    volumes:
+      - ./conf.d:/etc/nginx/user.conf.d:ro
+      - letsencrypt:/etc/letsencrypt
 
 volumes:
+  letsencrypt:
   static_files:
