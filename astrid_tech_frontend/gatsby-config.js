@@ -1,9 +1,19 @@
 require("source-map-support").install()
 require("ts-node").register()
-
+const assert = require('assert')
 const fs = require("fs")
 
 const packageJson = JSON.parse(fs.readFileSync(`${__dirname}/package.json`))
+
+var apiRoot;
+if (process.env.ASTRID_TECH_API_ROOT) {
+  apiRoot = process.env.ASTRID_TECH_API_ROOT
+} else if (process.env.NODE_ENV == 'production') {
+  throw new Error("We are in production, but an API root was not specified!")
+} else {
+  apiRoot = 'http://localhost:8001/'
+  console.warn("No API root specified, defaulting to", apiRoot)
+}
 
 module.exports = {
   siteMetadata: {
@@ -13,7 +23,6 @@ module.exports = {
     cookiePolicyVersion: "1",
     author: {
       name: `Astrid A. Yu`,
-      summary: `who likes to engineer awesome things`,
       pronouns: {
         subj: `she`,
         obj: `her`,
@@ -24,6 +33,7 @@ module.exports = {
     },
     description: packageJson.description,
     siteUrl: packageJson.homepage,
+    apiRoot,
     social: {
       twitter: `astralbijection`,
       github: `Plenglin`,

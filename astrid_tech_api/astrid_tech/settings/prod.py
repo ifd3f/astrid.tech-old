@@ -2,18 +2,21 @@ import os
 
 from .base import *
 
+DEBUG = False
+SECRET_KEY = os.getenv('SECRET_KEY')
+
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': 'astrid_tech_api',
-        'USER': os.getenv('DB_USERNAME'),
-        'PASSWORD': os.getenv('DB_PASSWORD'),
-        'HOST': os.getenv('DB_HOST'),
-        'PORT': os.getenv('DB_PORT'),
+        'NAME': os.getenv('POSTGRES_DB'),
+        'USER': os.getenv('POSTGRES_USER'),
+        'PASSWORD': os.getenv('POSTGRES_PASSWORD'),
+        'HOST': os.getenv('POSTGRES_HOST'),
+        'PORT': os.getenv('POSTGRES_PORT'),
     }
 }
 
-pre_chain += add_service_name('astrid_tech_api')
+pre_chain += (add_service_name('astrid_tech_api'),)
 
 LOGGING = {
     "version": 1,
@@ -36,17 +39,17 @@ LOGGING = {
             "formatter": "plain_console",
             "level": "INFO",
         },
-        "logstash": {
-            "class": "logstash.LogstashHandler",
-            "host": os.getenv('LOGSTASH_HOST'),
-            "port": os.getenv('LOGSTASH_PORT'),
-            "version": 1,
-            "level": "DEBUG",
-        }
+        # "logstash": {
+        #     "class": "logstash.LogstashHandler",
+        #     "host": os.getenv('LOGSTASH_HOST'),
+        #     "port": os.getenv('LOGSTASH_PORT'),
+        #     "version": 1,
+        #     "level": "DEBUG",
+        # }
     },
     "loggers": {
         "": {
-            "handlers": ["console", "file"],
+            "handlers": ["console"],
             "level": "DEBUG",
             'propagate': True,
         }

@@ -29,6 +29,8 @@ bleach = "*"
 django-cached-field = "*"
 django-celery = "*"
 djangorestframework-recursive = "*"
+psycopg2-binary = "*"
+gunicorn = "*"
 
 [dev-packages]
 

@@ -1,5 +1,7 @@
+import { graphql, useStaticQuery } from "gatsby"
 import React, { FC, ReactNode } from "react"
 import { CookiesProvider } from "react-cookie"
+import { Site } from "src/types"
 import { APIProvider } from "../api/APIProvider"
 import { BLMBanner } from "./blm"
 import { CookieNotification } from "./cookie-notification"
@@ -20,9 +22,19 @@ const Layout: FC<LayoutProps> = ({
   doNotExpandHeight = false,
   currentLocation,
 }) => {
+  const data: { site: Site } = useStaticQuery(graphql`
+    {
+      site {
+        siteMetadata {
+          siteUrl
+        }
+      }
+    }
+  `)
+
   return (
     <CookiesProvider>
-      <APIProvider root="http://localhost:8001">
+      <APIProvider root={data.site.siteMetadata.apiRoot}>
         <MainNavbar currentLocation={currentLocation} fixed />
         <div
           className={

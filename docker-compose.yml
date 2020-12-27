@@ -1,17 +1,26 @@
 version: "3.7"
 services:
-  frontend:
-    image: astrid_tech_frontend
-    build:
-      context: .
-      target: development
+  db:
+    image: postgres:13.1
+    env_file: .env.ci
     ports:
-      - "5000:5000"
-    volumes:
-      - ./gatsby-config:/build/gatsby-config.js
-      - ./gatsby-browser:/build/gatsby-browser.js
-      - ./static:/build/static/
-      - ./content:/build/content/
-      - ./assets:/build/assets/
-      - ./plugins:/build/plugins/
-      - ./src:/build/src/
+      - 5432:5432
+
+  api:
+    image: astridyu/astrid_tech_api
+    command: >
+      bash -c "
+        python3 manage.py migrate --database default &&
+        gunicorn astrid_tech.wsgi:application --bind 0.0.0.0:8001
+      "
+    depends_on:
+      - db
+    env_file:
+      - .env.ci
+    environment:
+      POSTGRES_HOST: db
+      POSTGRES_PORT: 5432
+    ports:
+      - 8001:8001
+    build:
+      context: ./astrid_tech_api
