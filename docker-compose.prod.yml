@@ -1,0 +1,23 @@
+version: "3.7"
+services:
+  db:
+    env_file:
+      - .env.ci
+    restart: always
+
+  api:
+    env_file:
+      - .env.ci
+    expose:
+      - "8001"
+    restart: always
+
+  nginx:
+    depends_on:
+      - api
+    image: nginx:1.19
+    volumes:
+      - ./deployment/nginx:/etc/nginx/conf.d
+    ports:
+      - "80:80"
+    restart: always
