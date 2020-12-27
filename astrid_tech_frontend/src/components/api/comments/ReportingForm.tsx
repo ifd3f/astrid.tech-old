@@ -1,3 +1,4 @@
+import { AxiosResponse } from "axios"
 import React, { FC, useState } from "react"
 import { Button, Form, FormGroup, FormText, Input } from "reactstrap"
 import { useAPI } from "../APIProvider"
@@ -16,8 +17,12 @@ export const ReportingForm: FC<ReportFormProps> = ({
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [bodyError, setBodyError] = useState<string | null>(null)
 
-  const applyBackendErrors = (response: any) => {
-    response?.content_md?.forEach(setBodyError)
+  const applyBackendErrors = (response?: AxiosResponse) => {
+    if (!response) {
+      setBodyError("A network error occured! Please try again later.")
+      return
+    }
+    response.data?.content_md?.forEach(setBodyError)
   }
 
   const submit = async () => {
@@ -26,7 +31,7 @@ export const ReportingForm: FC<ReportFormProps> = ({
       await api.reportComment(comment, body)
       setBody("")
     } catch (e) {
-      applyBackendErrors(e.response.data)
+      applyBackendErrors(e.response)
     }
 
     setIsSubmitting(false)

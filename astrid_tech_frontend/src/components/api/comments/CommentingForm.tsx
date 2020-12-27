@@ -78,7 +78,11 @@ export const CommentingForm: FC<CommentingFormProps> = ({
     return valid
   }
 
-  const applyBackendErrors = (response: AxiosResponse) => {
+  const applyBackendErrors = (response?: AxiosResponse) => {
+    if (!response) {
+      setGeneralError("A network error occured! Please try again later.")
+      return
+    }
     const data = response.data
     if (response.status == 403) {
       setGeneralError(`You are unauthorized to post: ${data.detail}`)
@@ -89,9 +93,10 @@ export const CommentingForm: FC<CommentingFormProps> = ({
   }
 
   const submit = async () => {
+    if (!validate()) return
+    setIsSubmitting(true)
+
     try {
-      if (!validate()) return
-      setIsSubmitting(true)
       const comment = await api.createComment({
         author_name: name.length > 0 ? name : null,
         author_email: email,
@@ -101,14 +106,15 @@ export const CommentingForm: FC<CommentingFormProps> = ({
         slug,
       })
       console.log("Created comment", comment)
-      setBody("")
-      setIsSubmitting(false)
-      onSubmitted()
-      await refreshComments()
     } catch (e) {
-      applyBackendErrors(e.response)
+      applyBackendErrors(e)
       setIsSubmitting(false)
+      return
     }
+    setBody("")
+    setIsSubmitting(false)
+    onSubmitted()
+    await refreshComments()
   }
 
   return (
