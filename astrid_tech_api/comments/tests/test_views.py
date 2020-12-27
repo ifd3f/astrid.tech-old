@@ -22,6 +22,12 @@ class CommentViewsTestCase(LiveServerTestCase):
     def setUp(self):
         self.a, self.b, self.c, self.d = setup_comment_tree()
 
+    def tearDown(self):
+        self.a.delete()
+        self.b.delete()
+        self.c.delete()
+        self.d.delete()
+
     def banned_comment_asserts(self, response):
         self.assertEqual(403, response.status_code)
         self.assertEqual(4, Comment.objects.count())
@@ -74,43 +80,32 @@ class CommentViewsTestCase(LiveServerTestCase):
 
     def test_can_reply_to_comment(self):
         response = self.client.post(
-            '/api/comments/3/reply/',
-            create_comment_data,
+            '/api/comments/',
+            {**create_comment_data, 'reply_parent': self.c.id},
             format='json'
         )
 
         self.assertEqual(200, response.status_code)
         comment = get_object_from_response(Comment, response)
-        self.assertEqual(3, comment.reply_parent.pk)
-        self.assertEqual(1, Comment.objects.get(pk=3).children.count())
+        self.assertIsNotNone(comment)
+        self.assertEqual(self.c.id, comment.reply_parent.id)
+        self.assertEqual(1, Comment.objects.get(id=self.c.id).children.count())
 
     def test_reply_normalizes_slug(self):
         response = self.client.post(
-            '/api/comments/3/reply/',
-            {**create_comment_data, 'slug': '/badslug'},
+            '/api/comments/',
+            {**create_comment_data, 'reply_parent': self.c.id, 'slug': '/badslug'},
             format='json'
         )
 
         self.assertEqual(200, response.status_code)
         data = json.loads(response.content)
-        self.assertEqual('/test', data['slug'])
-        self.assertEqual(5, Comment.objects.count())
-
-    def test_comment_cannot_override_fields(self):
-        response = self.client.post(
-            '/api/comments/3/reply/',
-            {**create_comment_data, 'slug': '/badslug'},
-            format='json'
-        )
-
-        self.assertEqual(200, response.status_code)
-        data = json.loads(response.content)
-        self.assertEqual('/test', data['slug'])
+        self.assertEqual(self.c.slug, data['slug'])
         self.assertEqual(5, Comment.objects.count())
 
     def test_can_report_comment(self):
         response = self.client.post(
-            '/api/comments/3/report/',
+            f'/api/comments/{self.c.id}/report/',
             {
                 'reason': 'spam test',
                 'email': 'foo@example.com'
@@ -120,13 +115,13 @@ class CommentViewsTestCase(LiveServerTestCase):
 
         self.assertEqual(200, response.status_code)
         report = Report.objects.get()
-        self.assertEqual(3, report.target.id)
+        self.assertEqual(self.c.id, report.target.id)
 
     def test_banned_ip_cannot_report_comment(self):
         BannedIP.objects.create(ip_addr='1.2.3.4')
 
         response = self.client.post(
-            '/api/comments/3/report/',
+            f'/api/comments/{self.c.id}/report/',
             {
                 'reason': 'spam test',
                 'email': 'foo@example.com'

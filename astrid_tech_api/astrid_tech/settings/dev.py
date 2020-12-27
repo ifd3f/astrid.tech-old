@@ -16,7 +16,7 @@ LOGGING = {
         "json_formatter": {
             "()": structlog.stdlib.ProcessorFormatter,
             "processor": structlog.processors.JSONRenderer(),
-            "foreign_pre_chain": pre_chain,
+            "foreign_pre_chain": pre_chain + (rename_event_key,),
         },
         "plain_console": {
             "()": structlog.stdlib.ProcessorFormatter,

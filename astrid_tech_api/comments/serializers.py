@@ -23,7 +23,6 @@ class CommentSerializer(ModelSerializer):
         read_only_fields = [
             'content_html',
             'id',
-            'reply_parent',
             'time_authored'
         ]
         extra_kwargs = {

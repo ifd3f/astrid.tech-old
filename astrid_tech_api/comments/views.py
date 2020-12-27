@@ -2,7 +2,7 @@ from typing import Union
 
 from django.forms import model_to_dict
 from rest_framework.decorators import action
-from rest_framework.exceptions import PermissionDenied
+from rest_framework.exceptions import PermissionDenied, ValidationError
 from rest_framework.permissions import AllowAny
 from rest_framework.request import Request
 from rest_framework.response import Response
@@ -40,13 +40,6 @@ class CommentViewSet(ModelViewSet):
         return queryset
 
     @action(detail=True, methods=['post'])
-    def reply(self, request, pk):
-        pk = int(pk)
-        logger.debug("Request to reply to comment", id=pk)
-        comment = self.get_queryset().get(id=pk)
-        return CommentViewSet.create_from_request(request, comment)
-
-    @action(detail=True, methods=['post'])
     def report(self, request, pk):
         logger.debug("Request to report comment", id=pk)
 
@@ -77,20 +70,18 @@ class CommentViewSet(ModelViewSet):
         return Response(CommentSerializer(queryset, many=True).data)
 
     def create(self, request: Request, pk=None, *args, **kwargs):
-        return CommentViewSet.create_from_request(request)
-
-    @staticmethod
-    def create_from_request(request: Request, reply_parent: Union[Comment, None] = None):
         ip = get_request_ip(request)
 
         ser = CommentSerializer(data=request.data)
         ser.is_valid(raise_exception=True)
-
         comment_data = ser.validated_data
-        comment = Comment(**comment_data, ip_addr=ip, reply_parent=reply_parent)
+        logger_ = logger.bind(request_data=comment_data)
+
+        comment = Comment(**comment_data, ip_addr=ip)
+
+        reply_parent = comment_data.get('reply_parent')
         if reply_parent is not None:
             comment.slug = reply_parent.slug
-        logger_ = logger.bind(comment=model_to_dict(comment))
 
         logger_.debug('Checking if author is banned')
         reason = comment.ban_reason

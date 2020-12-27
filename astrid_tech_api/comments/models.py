@@ -11,16 +11,6 @@ from markdown import Markdown
 markdown = Markdown()
 
 
-def validate_max_parents(count):
-    def validator(value, n=count - 1):
-        parent = value.reply_parent
-        if parent is None:
-            return True
-        return n > 0 and validator(parent, n - 1)
-
-    return validator
-
-
 class BanList(Model):
     class Meta:
         abstract = True
@@ -79,7 +69,7 @@ def check_user_ban_reason(email, ip):
 class Comment(Model):
     slug = CharField(max_length=100, null=False, db_index=True)
     ip_addr = GenericIPAddressField(verbose_name='IP address', null=False)
-    reply_parent = ForeignKey('Comment', null=True, on_delete=CASCADE, validators=[validate_max_parents],
+    reply_parent = ForeignKey('Comment', null=True, on_delete=CASCADE,
                               related_name='children', blank=True)
     notify_author = BooleanField(default=False)
 
