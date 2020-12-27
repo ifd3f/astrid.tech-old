@@ -3,15 +3,15 @@ services:
   db:
     image: postgres:13.1
     env_file:
-      - .env.ci
-    #volumes:
-    #  - ./data:/var/lib/postgresql/data
+      - .env.prod
+    volumes:
+      - ./data:/var/lib/postgresql/data
     restart: always
     expose:
       - "5432"
 
   api:
-    image: astridyu/astrid_tech_api
+    image: astridyu/astrid_tech_api:latest
     depends_on:
       - db
     command: >
@@ -21,7 +21,7 @@ services:
         gunicorn astrid_tech.wsgi:application --bind 0.0.0.0:8001
       "
     env_file:
-      - .env.ci
+      - .env.prod
     environment:
       POSTGRES_HOST: db
       POSTGRES_PORT: "5432"
