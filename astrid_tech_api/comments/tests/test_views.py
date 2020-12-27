@@ -13,9 +13,83 @@ create_comment_data = {
     'content_md': 'test **foo** <script>bar</script>',
 }
 
+def create_comment(**kwargs):
+    return Comment.objects.create(slug='/foo', ip_addr='1.2.3.4', author_email='test@example.com', **kwargs)
+
 
 def get_object_from_response(model, response):
     return model.objects.get(id=json.loads(response.content)['id'])
+
+
+class BanListTests(LiveServerTestCase):
+    def banned_comment_asserts(self, response):
+        self.assertEqual(403, response.status_code)
+        self.assertEqual(0, Comment.objects.count())
+        self.assertEqual({'detail': 'testing purposes'}, json.loads(response.content))
+
+    def test_banned_ip_cannot_post(self):
+        BannedIP.objects.create(ip_addr='1.2.3.4', reason='testing purposes')
+
+        response = self.client.post(
+            '/api/comments/',
+            create_comment_data,
+            REMOTE_ADDR='1.2.3.4',
+            format='json'
+        )
+
+        self.banned_comment_asserts(response)
+
+    def test_banned_email_cannot_post(self):
+        BannedEmail.objects.create(email='spammer@gmail.com', reason='testing purposes')
+
+        response = self.client.post(
+            '/api/comments/',
+            {
+                **create_comment_data,
+                'author_email': 'spammer@gmail.com'
+            },
+            REMOTE_ADDR='1.2.3.4',
+            format='json'
+        )
+
+        self.banned_comment_asserts(response)
+
+    def test_banned_email_domain_cannot_post(self):
+        BannedEmailDomain.objects.create(domain='evilsite.ru', reason='testing purposes')
+
+        response = self.client.post(
+            '/api/comments/',
+            {
+                **create_comment_data,
+                'author_email': 'spammer@evilsite.ru'
+            },
+            REMOTE_ADDR='1.2.3.4',
+            format='json'
+        )
+
+        self.banned_comment_asserts(response)
+
+    def test_banned_ip_cannot_report_comment(self):
+        comment = create_comment()
+        BannedIP.objects.create(ip_addr='1.2.3.4')
+
+        response = self.client.post(
+            f'/api/comments/{comment.id}/report/',
+            {
+                'reason': 'spam test',
+                'email': 'foo@example.com'
+            },
+            REMOTE_ADDR='1.2.3.4',
+            format='json'
+        )
+
+        self.assertEqual(403, response.status_code)
+        self.assertEqual(0, Report.objects.count())
+
+
+class ModeratedCommentTests(LiveServerTestCase):
+    def test_cannot_reply_to_locked_thread(self):
+        pass
 
 
 class CommentViewsTestCase(LiveServerTestCase):
@@ -28,13 +102,8 @@ class CommentViewsTestCase(LiveServerTestCase):
         self.c.delete()
         self.d.delete()
 
-    def banned_comment_asserts(self, response):
-        self.assertEqual(403, response.status_code)
-        self.assertEqual(4, Comment.objects.count())
-        self.assertEqual({'detail': 'testing purposes'}, json.loads(response.content))
-
     def test_can_filter_by_slug(self):
-        Comment.objects.create(slug='/foo', ip_addr='1.2.3.4', author_email='test@example.com')
+        create_comment()
 
         response1 = self.client.get('/api/comments/', {'slug': '/foo'})
         response2 = self.client.get('/api/comments/', {'slug': '/test'})
@@ -117,22 +186,6 @@ class CommentViewsTestCase(LiveServerTestCase):
         report = Report.objects.get()
         self.assertEqual(self.c.id, report.target.id)
 
-    def test_banned_ip_cannot_report_comment(self):
-        BannedIP.objects.create(ip_addr='1.2.3.4')
-
-        response = self.client.post(
-            f'/api/comments/{self.c.id}/report/',
-            {
-                'reason': 'spam test',
-                'email': 'foo@example.com'
-            },
-            REMOTE_ADDR='1.2.3.4',
-            format='json'
-        )
-
-        self.assertEqual(403, response.status_code)
-        self.assertEqual(0, Report.objects.count())
-
     @skip("Quarantine NYI on frontend")
     def test_comment_containing_url_is_quarantined(self):
         response = self.client.post(
@@ -148,45 +201,3 @@ class CommentViewsTestCase(LiveServerTestCase):
         self.assertEqual(202, response.status_code)
         comment = Comment.objects.get(pk=5)
         self.assertFalse(comment.mod_approved)
-
-    def test_banned_ip_cannot_post(self):
-        BannedIP.objects.create(ip_addr='1.2.3.4', reason='testing purposes')
-
-        response = self.client.post(
-            '/api/comments/',
-            create_comment_data,
-            REMOTE_ADDR='1.2.3.4',
-            format='json'
-        )
-
-        self.banned_comment_asserts(response)
-
-    def test_banned_email_cannot_post(self):
-        BannedEmail.objects.create(email='spammer@gmail.com', reason='testing purposes')
-
-        response = self.client.post(
-            '/api/comments/',
-            {
-                **create_comment_data,
-                'author_email': 'spammer@gmail.com'
-            },
-            REMOTE_ADDR='1.2.3.4',
-            format='json'
-        )
-
-        self.banned_comment_asserts(response)
-
-    def test_banned_email_domain_cannot_post(self):
-        BannedEmailDomain.objects.create(domain='evilsite.ru', reason='testing purposes')
-
-        response = self.client.post(
-            '/api/comments/',
-            {
-                **create_comment_data,
-                'author_email': 'spammer@evilsite.ru'
-            },
-            REMOTE_ADDR='1.2.3.4',
-            format='json'
-        )
-
-        self.banned_comment_asserts(response)
