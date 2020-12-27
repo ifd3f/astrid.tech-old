@@ -18,20 +18,17 @@ class CommentSerializer(ModelSerializer):
             'author_website',
             'author_name',
             'content_md',
-            'content_html',
-            'children'
+            'content_html'
         ]
         read_only_fields = [
             'content_html',
             'id',
             'reply_parent',
-            'time_authored',
-            'children'
+            'time_authored'
         ]
         extra_kwargs = {
             'author_email': {'write_only': True}
         }
-    children = RecursiveField(many=True, read_only=True)
 
     def to_representation(self, instance: Comment):
         result = super().to_representation(instance)

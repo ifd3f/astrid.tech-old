@@ -87,6 +87,8 @@ class CommentViewSet(ModelViewSet):
 
         comment_data = ser.validated_data
         comment = Comment(**comment_data, ip_addr=ip, reply_parent=reply_parent)
+        if reply_parent is not None:
+            comment.slug = reply_parent.slug
         logger_ = logger.bind(comment=model_to_dict(comment))
 
         logger_.debug('Checking if author is banned')
