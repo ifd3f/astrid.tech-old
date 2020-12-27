@@ -19,9 +19,9 @@ services:
       POSTGRES_PORT: 5432
       POSTGRES_DB: astrid_tech_api
     ports:
-      - 8001:8001
+      - 18001:18001
     build:
-      context: .
+      context: ./astrid_tech_api
     command: >
       bash -c "
         python3 manage.py migrate &&

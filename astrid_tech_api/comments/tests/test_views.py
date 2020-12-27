@@ -1,7 +1,7 @@
 import json
 from unittest import skip
 
-from django.test import TestCase
+from django.test import LiveServerTestCase
 
 from comments.models import Comment, BannedIP, BannedEmail, BannedEmailDomain, Report
 from comments.tests.utils import setup_comment_tree
@@ -14,7 +14,7 @@ create_comment_data = {
 }
 
 
-class CommentViewsTestCase(TestCase):
+class CommentViewsTestCase(LiveServerTestCase):
     def setUp(self):
         self.a, self.b, self.c, self.d = setup_comment_tree()
 
