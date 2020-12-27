@@ -53,10 +53,6 @@ jobs:
         working-directory: astrid_tech_frontend
         run: yarn install
 
-      - name: Set up content
-        working-directory: astrid_tech_frontend
-        run: cp -r ../content .
-
       - name: Build
         working-directory: astrid_tech_frontend
         run: npm run build
