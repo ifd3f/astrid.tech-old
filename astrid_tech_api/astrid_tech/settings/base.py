@@ -17,11 +17,11 @@ import structlog
 
 BASE_DIR = Path(__file__).resolve().parent.parent.parent
 
+STATIC_URL = '/static/'
+STATIC_ROOT = BASE_DIR / 'staticfiles'
+
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/3.1/howto/deployment/checklist/
-
-# SECURITY WARNING: keep the secret key used in production secret!
-SECRET_KEY = '%ffncy2-l!jns867*ilhza9bzz7pt1c^032=afdp9qzzve%4iu'
 
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True

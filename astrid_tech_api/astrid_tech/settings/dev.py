@@ -1,5 +1,7 @@
 from .base import *
 
+SECRET_KEY = '%ffncy2-l!jns867*ilhza9bzz7pt1c^032=afdp9qzzve%4iu'
+
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',

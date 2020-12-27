@@ -10,6 +10,7 @@ services:
     image: astridyu/astrid_tech_api
     command: >
       bash -c "
+        python3 manage.py collectstatic --noinput &&
         python3 manage.py migrate --database default &&
         gunicorn astrid_tech.wsgi:application --bind 0.0.0.0:8001
       "
@@ -22,5 +23,3 @@ services:
       POSTGRES_PORT: 5432
     ports:
       - 8001:8001
-    build:
-      context: ./astrid_tech_api

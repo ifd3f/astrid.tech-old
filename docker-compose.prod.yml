@@ -14,6 +14,7 @@ services:
       - "8001"
     volumes:
       - ./logs:/app/logs
+      - static_files:/app/staticfiles/
     restart: always
 
   nginx:
@@ -22,6 +23,10 @@ services:
     image: nginx:1.19
     volumes:
       - ./deployment/nginx:/etc/nginx/conf.d
+      - static_files:/www/static/
     ports:
       - "80:80"
     restart: always
+
+volumes:
+  static_files:
