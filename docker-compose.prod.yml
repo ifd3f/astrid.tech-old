@@ -3,6 +3,8 @@ services:
   db:
     env_file:
       - .env.ci
+    volumes:
+      - ./data:/var/lib/postgresql/data
     restart: always
 
   api:
@@ -10,6 +12,8 @@ services:
       - .env.ci
     expose:
       - "8001"
+    volumes:
+      - ./logs:/app/logs
     restart: always
 
   nginx:

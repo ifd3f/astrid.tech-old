@@ -47,7 +47,13 @@ LOGGING = {
         "console": {
             "class": "logging.StreamHandler",
             "formatter": "plain_console",
-            "level": "INFO",
+            "level": "DEBUG",
+        },
+        "file": {
+            "class": "logging.handlers.TimedRotatingFileHandler",
+            'when': 'h',
+            "filename": "logs/output.log",
+            "formatter": "json_formatter"
         },
         # "logstash": {
         #     "class": "logstash.LogstashHandler",
@@ -59,7 +65,7 @@ LOGGING = {
     },
     "loggers": {
         "": {
-            "handlers": ["console"],
+            "handlers": ["console", "file"],
             "level": "DEBUG",
             'propagate': True,
         }
