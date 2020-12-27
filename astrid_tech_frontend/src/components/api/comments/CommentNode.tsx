@@ -3,14 +3,14 @@ import moment from "moment"
 import React, { FC, ReactNode, useState } from "react"
 import { FaFlag, FaLink, FaReply } from "react-icons/fa"
 import { Button } from "reactstrap"
-import { CommentData } from "src/astrid-tech-api"
+import { Comment } from "src/astrid-tech-api"
 import { useCommentData } from "./CommentDataProvider"
 import { CommentingForm } from "./CommentingForm"
 import { CommentList } from "./CommentList"
 import { ReportingForm } from "./ReportingForm"
 
 type CommentNodeProps = {
-  comment: CommentData
+  comment: Comment
   isReply?: boolean
 }
 

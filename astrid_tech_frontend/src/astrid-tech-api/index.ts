@@ -8,7 +8,7 @@ export type CommentForm = {
   slug: string
 }
 
-export type CommentData = {
+type CommentData = {
   id: number
   time_authored: string
   reply_parent?: number
@@ -17,8 +17,19 @@ export type CommentData = {
   author_website?: string
   content_md: string
   content_html: string
-  children: CommentData[]
   slug: string
+}
+
+export type Comment = {
+  id: number
+  timeAuthored: Date
+  children: Comment[]
+  author: {
+    name: string
+    email: string
+    website: string
+  }
+  htmlContent: string
 }
 
 export class AstridTechAPI {
@@ -29,14 +40,9 @@ export class AstridTechAPI {
   }
 
   async createComment(
-    comment: CommentForm,
-    replyTo?: number
+    comment: CommentForm
   ): Promise<AxiosResponse<CommentData>> {
-    if (replyTo === undefined) {
-      return await this.axios.post("/api/comments/", comment)
-    }
-
-    return await this.axios.post(`/api/comments/${replyTo}/reply/`, comment)
+    return await this.axios.post(`/api/comments/`, comment)
   }
 
   async reportComment(comment: number, reason: string, email?: string) {
@@ -46,7 +52,40 @@ export class AstridTechAPI {
     })
   }
 
-  async getComments(slug: string): Promise<AxiosResponse<CommentData[]>> {
-    return await this.axios.get("/api/comments/", { params: { slug } })
+  async getComments(slug: string): Promise<Comment[]> {
+    const data = (await this.axios.get("/api/comments/", {
+      params: { slug },
+    })) as CommentData[]
+
+    const idToComment = new Map(
+      data.map(c => [
+        c.id,
+        {
+          id: c.id,
+          timeAuthored: new Date(c.time_authored),
+          children: [],
+          htmlContent: c.content_html,
+          author: {
+            name: c.author_name,
+            website: c.author_website,
+            email: c.author_email,
+          },
+        } as Comment,
+      ])
+    )
+
+    const output = []
+
+    for (let raw of data) {
+      const comment = idToComment.get(raw.id)!!
+      if (!raw.reply_parent) {
+        output.push(comment)
+        continue
+      }
+      const parent = idToComment.get(raw.reply_parent)!!
+      parent?.children.push(comment)
+    }
+
+    return [...idToComment.values()]
   }
 }

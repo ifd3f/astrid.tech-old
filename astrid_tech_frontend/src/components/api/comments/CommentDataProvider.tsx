@@ -6,12 +6,17 @@ import React, {
   useEffect,
   useState,
 } from "react"
-import { CommentData } from "src/astrid-tech-api"
+import { Comment } from "src/astrid-tech-api"
 import { useAPI } from "../APIProvider"
 
-type CommentDataContextData = {
-  comments: CommentData[] | null
-  isFetching: boolean
+export type CommentFetchState =
+  | { status: "initial"; comments: undefined }
+  | { status: "fetching"; comments?: Comment[] }
+  | { status: "success"; comments: Comment[] }
+  | { status: "failure"; reason?: string; comments?: Comment[] }
+
+export type CommentDataContextData = {
+  state: CommentFetchState
   slug: string
   refreshComments: () => Promise<void>
 }
@@ -28,20 +33,33 @@ export const CommentDataProvider: FC<CommentDataProviderProps> = ({
   children,
 }) => {
   const { api } = useAPI()
-  const [comments, setComments] = useState<CommentData[] | null>(null)
-  const [isFetching, setFetching] = useState(false)
+  const [fetchState, setFetchState] = useState<CommentFetchState>({
+    status: "initial",
+    comments: undefined,
+  })
 
   const fetchComments = async () => {
-    setFetching(true)
     console.log("Refreshing comments")
-    const response = await api.getComments(slug)
+    setFetchState({ status: "fetching", comments: fetchState.comments })
+
+    let response: Comment[] | undefined
+    try {
+      response = await api.getComments(slug)
+    } catch (e) {
+      console.error("Failure to retrieve comments", e)
+      setFetchState({
+        status: "failure",
+        comments: fetchState.comments,
+      })
+      return
+    }
+
     console.log("Got comments", response)
-    setComments(response.data)
-    setFetching(false)
+    setFetchState({ status: "success", comments: response })
   }
 
   const refreshComments = async () => {
-    if (isFetching) return
+    if (fetchState.status == "fetching") return
     await fetchComments()
   }
 
@@ -52,8 +70,7 @@ export const CommentDataProvider: FC<CommentDataProviderProps> = ({
   return (
     <CommentDataContext.Provider
       value={{
-        comments,
-        isFetching,
+        state: fetchState,
         slug,
         refreshComments,
       }}
