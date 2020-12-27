@@ -1,4 +1,5 @@
 import json
+from unittest import skip
 
 from django.http import HttpResponse
 from django.test import TestCase
@@ -82,6 +83,7 @@ class CommentViewsTestCase(TestCase):
         self.assertEqual(403, response.status_code)
         self.assertEqual(0, Report.objects.count())
 
+    @skip("Quarantine NYI on frontend")
     def test_comment_containing_url_is_quarantined(self):
         response = self.client.post(
             '/api/comments/',

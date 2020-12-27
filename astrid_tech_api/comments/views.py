@@ -36,7 +36,6 @@ class CommentViewSet(ModelViewSet):
     def get_queryset(self):
         queryset = Comment.objects.all()\
             .exclude(mod_approved=False)\
-            .exclude(reply_parent__isnull=True)\
             .order_by('-time_authored')
         return queryset
 
