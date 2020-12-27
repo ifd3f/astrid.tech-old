@@ -26,7 +26,7 @@ const Layout: FC<LayoutProps> = ({
     {
       site {
         siteMetadata {
-          siteUrl
+          apiRoot
         }
       }
     }

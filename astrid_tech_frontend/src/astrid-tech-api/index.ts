@@ -38,7 +38,7 @@ export type Comment = {
 export class AstridTechAPI {
   private axios: AxiosInstance
 
-  constructor(private readonly root: string) {
+  constructor(root: string) {
     this.axios = axios.create({ baseURL: root })
   }
 
@@ -56,9 +56,10 @@ export class AstridTechAPI {
   }
 
   async getComments(slug: string): Promise<Comment[]> {
-    const data = (await this.axios.get("/api/comments/", {
+    const response = await this.axios.get<CommentData[]>("/api/comments/", {
       params: { slug },
-    })) as CommentData[]
+    })
+    const data = response.data
 
     const idToComment = new Map(
       data.map(c => [
@@ -89,6 +90,6 @@ export class AstridTechAPI {
       parent?.children.push(comment)
     }
 
-    return [...idToComment.values()]
+    return output
   }
 }
