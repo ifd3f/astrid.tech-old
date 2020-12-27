@@ -9,14 +9,14 @@
       "request": "launch",
       "name": "Launch Firefox",
       "url": "http://localhost:8000",
-      "webRoot": "${workspaceFolder}"
+      "webRoot": "${workspaceFolder}/astrid_tech_frontend"
     },
     {
       "name": "Launch Chrome",
       "request": "launch",
       "type": "pwa-chrome",
       "url": "http://localhost:8000",
-      "webRoot": "${workspaceFolder}"
+      "webRoot": "${workspaceFolder}/astrid_tech_frontend"
     },
     {
       "type": "node",
@@ -28,7 +28,7 @@
       "console": "integratedTerminal",
       "internalConsoleOptions": "neverOpen",
       "sourceMaps": true,
-      "cwd": "${workspaceFolder}",
+      "cwd": "${workspaceFolder}/astrid_tech_frontend",
       "preLaunchTask": "npm: clean"
     },
     {
@@ -41,7 +41,7 @@
       "console": "integratedTerminal",
       "internalConsoleOptions": "neverOpen",
       "sourceMaps": true,
-      "cwd": "${workspaceFolder}",
+      "cwd": "${workspaceFolder}/astrid_tech_frontend",
       "preLaunchTask": "npm: clean"
     }
   ],
