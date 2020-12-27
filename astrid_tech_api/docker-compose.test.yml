@@ -21,7 +21,7 @@ services:
     ports:
       - 18001:18001
     build:
-      context: ./astrid_tech_api
+      context: .
     command: >
       bash -c "
         python3 manage.py migrate &&
