@@ -24,10 +24,14 @@
       "editor.quickSuggestions": false,
       "editor.tabSize": 4
     },
+    "[rust]": {
+      "editor.quickSuggestions": true,
+      "editor.tabSize": 4,
+      "editor.defaultFormatter": "rust-lang.rust"
+    },
     "editor.codeActionsOnSave": {
       "source.organizeImports": true,
-      "source.fixAll.eslint": true,
-      "source.fixAll.stylelint": true
+      "source.fixAll": true
     },
     "files.watcherExclude": {
       "**/.git/objects/**": true,
@@ -37,7 +41,6 @@
       ".public/**/*": true
     },
     "javascript.format.enable": false,
-    "editor.defaultFormatter": "esbenp.prettier-vscode",
     "editor.tabSize": 2
   }
 }
