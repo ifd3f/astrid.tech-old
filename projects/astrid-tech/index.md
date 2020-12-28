@@ -60,22 +60,24 @@ After having made a lot of personal projects, I realized that I had forgotten a 
 
 - **Frontend** - statically generated, optimized SPA
   - **Technologies**
-    - Gatsby.js
-    - TypeScript
-    - React
-    - Sass
-    - Bootstrap 4
+    - [Gatsby.js](https://www.gatsbyjs.com/)
+    - [TypeScript](https://www.typescriptlang.org/)
+    - [React.js](https://reactjs.org/)
+    - [Sass](https://sass-lang.com/)
+    - [Bootstrap 4](https://getbootstrap.com/)
   - **Deployment**
     - Github Actions
     - Github Pages
 - **Backend** - API-only backend (except for the admin panel)
   - **Technologies**
-    - Python
-    - Django
-    - Postgres
+    - [Python](https://www.python.org/)
+    - [Django](https://www.djangoproject.com/)
+    - [Django Rest Framework](https://www.django-rest-framework.org/)
+    - [Postgres](https://www.postgresql.org/)
   - **Deployment**
-    - Docker
-    - Docker Hub (with automated testing)
+    - [Docker](https://www.docker.com/)
+    - [Docker Hub](https://hub.docker.com/) (with automated testing)
+    - [Let's Encrypt SSL](https://letsencrypt.org/)
     - Docker Compose
 
 ## Frontend
