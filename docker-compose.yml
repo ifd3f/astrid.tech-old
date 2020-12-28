@@ -37,17 +37,15 @@ services:
       - api
     image: staticfloat/nginx-certbot:latest
     volumes:
-      - ./deployment/nginx:/etc/nginx/conf.d:ro
+      - ./deployment/nginx:/etc/nginx/user.conf.d:ro
       - static_files:/www/static/
-    environment:
-      CERTBOT_EMAIL: astrid@astrid.tech
-    ports:
-      - "80:80"
-      - "443:443"
-    restart: always
-    volumes:
-      - ./conf.d:/etc/nginx/user.conf.d:ro
       - letsencrypt:/etc/letsencrypt
+    environment:
+      CERTBOT_EMAIL: astridyu3.14@gmail.com
+    ports:
+      - "80:80/tcp"
+      - "443:443/tcp"
+    restart: unless-stopped
 
 volumes:
   letsencrypt:
