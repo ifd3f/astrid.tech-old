@@ -9,6 +9,10 @@
       "name": "API"
     },
     {
+      "path": "astrid_tech_cms",
+      "name": "CMS"
+    },
+    {
       "path": ".",
       "name": "Root"
     }
