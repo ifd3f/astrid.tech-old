@@ -1,6 +1,6 @@
 import { promises as fs } from "fs";
 import matter from "gray-matter";
-import { join } from "path";
+import path, { join, ParsedPath } from "path";
 import walk from "walk";
 import { BlogPost } from "../types/types";
 
@@ -24,17 +24,20 @@ export async function walkArr<T>(dir: string) {
   return out;
 }
 
-function getSlug(filename: string) {
-  const oldStyleMatch = filename.match(/\d{4}-\d{2}-\d{2}-(.+)\.md/);
+function getSlug(parsed: ParsedPath) {
+  const tailname =
+    parsed.name == "index" ? path.parse(parsed.dir).name : parsed.name;
+  const oldStyleMatch = tailname.match(/\d{4}-\d{2}-\d{2}-(.+)/);
   if (oldStyleMatch) {
-    return oldStyleMatch.groups!![1];
+    return oldStyleMatch[1];
   }
-  return filename.slice(0, -3);
+  return tailname.slice(0, -3);
 }
 
-async function loadBlogPost(root: string, filename: string): Promise<BlogPost> {
-  const slug = getSlug(filename);
-  const fileContents = await fs.readFile(join(root, filename));
+async function loadBlogPost(pathname: string): Promise<BlogPost> {
+  const parsed = path.parse(pathname);
+  const slug = getSlug(parsed);
+  const fileContents = await fs.readFile(pathname);
   const { data, content } = matter(fileContents);
 
   return {
@@ -43,7 +46,7 @@ async function loadBlogPost(root: string, filename: string): Promise<BlogPost> {
     title: data.title,
     content: content,
     date: new Date(data.date),
-    thumbnail: data.thumbnail ? join(root, data.thumbnail) : null,
+    thumbnail: data.thumbnail ? join(parsed.dir, data.thumbnail) : null,
     description: data.description,
   };
 }
@@ -51,6 +54,6 @@ async function loadBlogPost(root: string, filename: string): Promise<BlogPost> {
 export async function getBlogPosts() {
   const files = (await walkArr(join(contentDir, "blog")))
     .filter(({ root, stats }) => stats.isFile() && stats.name.endsWith(".md"))
-    .map(({ root, stats }) => loadBlogPost(root, stats.name));
+    .map(({ root, stats }) => loadBlogPost(join(root, stats.name)));
   return files;
 }
