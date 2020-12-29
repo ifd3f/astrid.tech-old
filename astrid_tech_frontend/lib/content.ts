@@ -36,6 +36,7 @@ async function loadBlogPost(root: string, filename: string): Promise<BlogPost> {
   const slug = getSlug(filename);
   const fileContents = await fs.readFile(join(root, filename));
   const { data, content } = matter(fileContents);
+
   return {
     tags: data.tags,
     slug,
