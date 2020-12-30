@@ -1,6 +1,6 @@
 import { promises as fs } from "fs";
 import matter from "gray-matter";
-import path, { join, ParsedPath } from "path";
+import path, { join, ParsedPath, relative } from "path";
 import { AssetDirObject } from "../lib/util";
 import { Project, ProjectStatus } from "../types/types";
 import { walkArr } from "./util";
@@ -37,7 +37,7 @@ export async function getProjects(
     .filter(({ stats }) => stats.isFile() && stats.name.endsWith(".md"))
     .map(({ root, stats }) =>
       loadProject(join(root, stats.name)).then((project) => ({
-        assetRoot: root,
+        assetRoot: relative(contentDir, root),
         object: project,
       }))
     );

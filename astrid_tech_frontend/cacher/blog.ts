@@ -1,6 +1,6 @@
 import { promises as fs } from "fs";
 import matter from "gray-matter";
-import path, { join, ParsedPath } from "path";
+import path, { join, ParsedPath, relative } from "path";
 import { BlogPost } from "../types/types";
 import { walkArr } from "./util";
 
@@ -45,7 +45,7 @@ export async function getBlogPosts(
       loadBlogPost(join(root, stats.name)).then(
         (post) =>
           ({
-            assetRoot: root,
+            assetRoot: relative(contentDir, root),
             post,
           } as BlogPostWithDir<Date>)
       )
