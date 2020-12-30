@@ -13,7 +13,7 @@ export const getStaticPaths: GetStaticPaths = async () => {
 };
 
 export const getStaticProps: GetStaticProps = async ({ params }) => {
-  const { object: project, assetRoot } = getProject(params!!.slug as string);
+  const project = getProject(params!!.slug as string);
 
   const content = await renderMarkdown(project.content);
 

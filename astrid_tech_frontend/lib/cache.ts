@@ -1,7 +1,5 @@
 import sqlite3 from "better-sqlite3";
-import { BlogPostWithDir } from "../cacher/blog";
-import { Project, ProjectMeta, ProjectStatus } from "../types/types";
-import { AssetDirObject } from "./util";
+import { BlogPost, Project, ProjectMeta, ProjectStatus } from "../types/types";
 
 function getConnection() {
   return sqlite3("content.sqlite3", {});
@@ -28,7 +26,7 @@ export function getBlogPostSlugs(): Path[] {
   });
 }
 
-export function getBlogPost(path: Path): BlogPostWithDir<string> {
+export function getBlogPost(path: Path): BlogPost<string> {
   const db = getConnection();
   const row = db
     .prepare(
@@ -49,15 +47,13 @@ export function getBlogPost(path: Path): BlogPostWithDir<string> {
     .all({ id });
   return {
     assetRoot,
-    post: {
-      title: title as string,
-      slug: slug as string,
-      date: date as string,
-      content: content as string,
-      description: description as string,
-      thumbnail: null,
-      tags: tags.map(({ tag }) => tag),
-    },
+    title: title as string,
+    slug: slug as string,
+    date: date as string,
+    content: content as string,
+    description: description as string,
+    thumbnail: null,
+    tags: tags.map(({ tag }) => tag),
   };
 }
 export function getProjectSlugs(): string[] {
@@ -68,7 +64,7 @@ export function getProjectSlugs(): string[] {
     .map(({ slug }) => slug);
 }
 
-export function getProject(slug: string): AssetDirObject<Project<string>> {
+export function getProject(slug: string): Project<string> {
   const db = getConnection();
   const {
     id,
@@ -107,23 +103,21 @@ export function getProject(slug: string): AssetDirObject<Project<string>> {
 
   return {
     assetRoot,
-    object: {
-      title: title as string,
-      status: status as ProjectStatus,
-      description: description as string,
-      slug: slug as string,
-      startDate: startDate as string,
-      endDate: endDate as string | null,
-      url: url as string,
-      source: JSON.parse(source) as string[],
-      content: content as string,
-      thumbnail: thumbnail as string,
-      tags: tags.map(({ tag }) => tag),
-    },
+    title: title as string,
+    status: status as ProjectStatus,
+    description: description as string,
+    slug: slug as string,
+    startDate: startDate as string,
+    endDate: endDate as string | null,
+    url: url as string,
+    source: JSON.parse(source) as string[],
+    content: content as string,
+    thumbnail: thumbnail as string,
+    tags: tags.map(({ tag }) => tag),
   };
 }
 
-export function getProjectMetas(): AssetDirObject<ProjectMeta<string>>[] {
+export function getProjectMetas(): ProjectMeta<string>[] {
   const db = getConnection();
   const projects = db
     .prepare(
@@ -145,7 +139,7 @@ export function getProjectMetas(): AssetDirObject<ProjectMeta<string>>[] {
 
   const tags = db.prepare(`SELECT fk_project, tag FROM project_tag`).all();
 
-  const idToProject = new Map<number, AssetDirObject<ProjectMeta<string>>>(
+  const idToProject = new Map<number, ProjectMeta<string>>(
     projects.map(
       ({
         id,
@@ -162,26 +156,24 @@ export function getProjectMetas(): AssetDirObject<ProjectMeta<string>>[] {
       }) => [
         id as number,
         {
-          assetRoot,
-          object: {
-            title: title as string,
-            status: status as ProjectStatus,
-            description: description as string,
-            slug: slug as string,
-            startDate: startDate as string,
-            endDate: endDate as string | null,
-            url: url as string,
-            source: JSON.parse(source) as string[],
-            thumbnail: thumbnail as string,
-            tags: [],
-          },
+          title: title as string,
+          assetRoot: assetRoot as string,
+          status: status as ProjectStatus,
+          description: description as string,
+          slug: slug as string,
+          startDate: startDate as string,
+          endDate: endDate as string | null,
+          url: url as string,
+          source: JSON.parse(source) as string[],
+          thumbnail: thumbnail as string,
+          tags: [],
         },
       ]
     )
   );
 
   for (const { fk_project, tag } of tags) {
-    idToProject.get(fk_project)!!.object.tags.push(tag as string);
+    idToProject.get(fk_project)!!.tags.push(tag as string);
   }
 
   return [...idToProject.values()];

@@ -20,7 +20,7 @@ export const getStaticPaths: GetStaticPaths = async () => {
 };
 
 export const getStaticProps: GetStaticProps = async ({ params }) => {
-  const { post, assetRoot } = getBlogPost(params!! as Path);
+  const post = getBlogPost(params!! as Path);
 
   const content = await renderMarkdown(post.content);
 

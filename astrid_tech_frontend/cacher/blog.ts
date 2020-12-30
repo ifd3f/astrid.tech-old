@@ -14,7 +14,7 @@ function getSlug(parsed: ParsedPath) {
   return tailname.slice(0, -3);
 }
 
-async function loadBlogPost(pathname: string): Promise<BlogPost> {
+async function loadBlogPost(pathname: string) {
   const parsed = path.parse(pathname);
   const slug = getSlug(parsed);
   const fileContents = await fs.readFile(pathname);
@@ -22,6 +22,7 @@ async function loadBlogPost(pathname: string): Promise<BlogPost> {
 
   return {
     tags: data.tags,
+    assetRoot: path.parse(pathname).dir,
     slug,
     title: data.title,
     content: content,
@@ -31,23 +32,18 @@ async function loadBlogPost(pathname: string): Promise<BlogPost> {
   };
 }
 
-export type BlogPostWithDir<DateType> = {
-  post: BlogPost<DateType>;
-  assetRoot: string;
-};
-
 export async function getBlogPosts(
   contentDir: string
-): Promise<Promise<BlogPostWithDir<Date>>[]> {
+): Promise<Promise<BlogPost<Date>>[]> {
   const files = (await walkArr(join(contentDir, "blog")))
     .filter(({ stats }) => stats.isFile() && stats.name.endsWith(".md"))
     .map(({ root, stats }) =>
       loadBlogPost(join(root, stats.name)).then(
         (post) =>
           ({
+            ...post,
             assetRoot: relative(contentDir, root),
-            post,
-          } as BlogPostWithDir<Date>)
+          } as BlogPost<Date>)
       )
     );
   return files;

@@ -1,7 +1,6 @@
 import { promises as fs } from "fs";
 import matter from "gray-matter";
 import path, { join, ParsedPath, relative } from "path";
-import { AssetDirObject } from "../lib/util";
 import { Project, ProjectStatus } from "../types/types";
 import { walkArr } from "./util";
 
@@ -9,7 +8,7 @@ function getSlug(parsed: ParsedPath) {
   return parsed.name == "index" ? path.parse(parsed.dir).name : parsed.name;
 }
 
-async function loadProject(pathname: string): Promise<Project> {
+async function loadProject(pathname: string) {
   const parsed = path.parse(pathname);
   const slug = getSlug(parsed);
   const fileContents = await fs.readFile(pathname);
@@ -32,13 +31,13 @@ async function loadProject(pathname: string): Promise<Project> {
 
 export async function getProjects(
   contentDir: string
-): Promise<Promise<AssetDirObject<Project<Date>>>[]> {
+): Promise<Promise<Project<Date>>[]> {
   const files = (await walkArr(join(contentDir, "projects")))
     .filter(({ stats }) => stats.isFile() && stats.name.endsWith(".md"))
     .map(({ root, stats }) =>
       loadProject(join(root, stats.name)).then((project) => ({
         assetRoot: relative(contentDir, root),
-        object: project,
+        ...project,
       }))
     );
   return files;

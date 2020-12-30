@@ -24,6 +24,7 @@ export type ProjectStatus = null | "early" | "wip" | "complete" | "scrapped";
 
 export type ProjectMeta<DateType = Date> = Tagged & {
   title: string;
+  assetRoot: string;
   status: ProjectStatus;
   startDate: DateType;
   endDate: DateType | null;
@@ -54,12 +55,16 @@ export function convertProjectToStringDate(project: Project<Date>) {
   };
 }
 
-export type BlogPost<DateType = Date> = Tagged & {
+export type BlogPostMeta<DateType = Date> = Tagged & {
   title: string;
+  assetRoot: string;
   description: string;
   date: DateType;
   slug: string;
   thumbnail: string | null;
+};
+
+export type BlogPost<DateType = Date> = BlogPostMeta<DateType> & {
   content: string;
 };
 

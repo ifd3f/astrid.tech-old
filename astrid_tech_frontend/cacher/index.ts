@@ -3,7 +3,7 @@ import { promises as fs } from "fs";
 import path from "path";
 import { convertProjectToStringDate } from "../types/types";
 import { copyAssets } from "./assets";
-import { BlogPostWithDir, getBlogPosts } from "./blog";
+import { getBlogPosts } from "./blog";
 import { getProjects } from "./projects";
 import { getLanguageTags, getUserTagOverrides } from "./tags";
 
@@ -33,37 +33,34 @@ async function buildBlogPostCache(db: Database) {
       @description, 
       @content)`
   );
-  const insertManyPosts = db.transaction((data: BlogPostWithDir<Date>[]) =>
-    data.map(({ assetRoot, post }) =>
-      insertPost.run({
-        assetRoot,
-        ...post,
-        date: post.date.toISOString(),
-        year: post.date.getFullYear(),
-        month: post.date.getMonth() + 1,
-        day: post.date.getDate() + 1,
-        ordinal: 0,
-      })
-    )
-  );
-
   const blogPosts = await Promise.all(await getBlogPosts(contentDir));
-  const ids = insertManyPosts(blogPosts).map((result, i) => ({
-    id: result.lastInsertRowid,
-    post: blogPosts[i].post,
-  }));
+  const ids = db
+    .transaction(() =>
+      blogPosts.map((post) =>
+        insertPost.run({
+          ...post,
+          date: post.date.toISOString(),
+          year: post.date.getFullYear(),
+          month: post.date.getMonth() + 1,
+          day: post.date.getDate() + 1,
+          ordinal: 0,
+        })
+      )
+    )()
+    .map((result, i) => ({
+      id: result.lastInsertRowid,
+      post: blogPosts[i],
+    }));
 
   const insertTag = db.prepare(
     "INSERT INTO blog_tag (fk_blog, tag) VALUES (@postId, @tag)"
   );
 
-  const insertManyTag = db.transaction((data: typeof ids) => {
-    data.map(({ id, post }) =>
+  db.transaction(() => {
+    ids.map(({ id, post }) =>
       post.tags.map((tag) => insertTag.run({ tag, postId: id }))
     );
-  });
-
-  insertManyTag(ids);
+  })();
 }
 
 async function buildTagOverrideTable(db: Database) {
@@ -116,11 +113,10 @@ async function buildProjectCache(db: Database) {
   const projects = await Promise.all(await getProjects(contentDir));
 
   const results = db.transaction(() =>
-    projects.map(({ assetRoot, object }) =>
+    projects.map((project) =>
       insertProject.run({
-        assetRoot,
-        ...convertProjectToStringDate(object),
-        sourceUrls: JSON.stringify(object.source),
+        ...convertProjectToStringDate(project),
+        sourceUrls: JSON.stringify(project.source),
       })
     )
   )();
@@ -130,8 +126,8 @@ async function buildProjectCache(db: Database) {
   );
 
   db.transaction(() => {
-    projects.forEach(({ object }, i) =>
-      object.tags.map((tag) =>
+    projects.forEach((project, i) =>
+      project.tags.map((tag) =>
         insertTag.run({ projectId: results[i].lastInsertRowid, tag })
       )
     );
