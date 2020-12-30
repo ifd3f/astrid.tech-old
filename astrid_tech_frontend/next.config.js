@@ -24,8 +24,18 @@ module.exports = {
         permanent: true,
       },
       {
+        source: "/blog",
+        destination: "/b",
+        permanent: true,
+      },
+      {
         source: "/tags/:slug",
         destination: "/t/:slug",
+        permanent: true,
+      },
+      {
+        source: "/tags",
+        destination: "/t",
         permanent: true,
       },
       oldBlogRedirect("2020-02-06-cal-poly-pride-center", "cp-pride-center"),

@@ -1,6 +1,6 @@
 import sqlite3 from "better-sqlite3";
 import { BlogPostWithDir } from "../cacher/blog";
-import { Project, ProjectStatus } from "../types/types";
+import { Project, ProjectMeta, ProjectStatus } from "../types/types";
 import { AssetDirObject } from "./util";
 
 function getConnection() {
@@ -121,4 +121,67 @@ export function getProject(slug: string): AssetDirObject<Project<string>> {
       tags: tags.map(({ tag }) => tag),
     },
   };
+}
+
+export function getProjectMetas(): AssetDirObject<ProjectMeta<string>>[] {
+  const db = getConnection();
+  const projects = db
+    .prepare(
+      `SELECT 
+        id, 
+        asset_root as assetRoot, 
+        title, 
+        status,
+        description, 
+        start_date as startDate, 
+        end_date as endDate,
+        url,
+        source_urls as source,
+        thumbnail_path as thumbnail
+      FROM project`
+    )
+    .all();
+
+  const tags = db.prepare(`SELECT fk_project, tag FROM project_tag`).all();
+
+  const idToProject = new Map<number, AssetDirObject<ProjectMeta<string>>>(
+    projects.map(
+      ({
+        id,
+        assetRoot,
+        title,
+        status,
+        description,
+        startDate,
+        slug,
+        endDate,
+        url,
+        source,
+        thumbnail,
+      }) => [
+        id as number,
+        {
+          assetRoot,
+          object: {
+            title: title as string,
+            status: status as ProjectStatus,
+            description: description as string,
+            slug: slug as string,
+            startDate: startDate as string,
+            endDate: endDate as string | null,
+            url: url as string,
+            source: JSON.parse(source) as string[],
+            thumbnail: thumbnail as string,
+            tags: tags.map(({ tag }) => tag),
+          },
+        },
+      ]
+    )
+  );
+
+  for (const { fk_project, tag } of tags) {
+    idToProject.get(fk_project)!!.object.tags.push(tag as string);
+  }
+
+  return [...idToProject.values()];
 }
