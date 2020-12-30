@@ -1,8 +1,10 @@
 import { promises as fs } from "fs";
 import matter from "gray-matter";
+import yaml from "js-yaml";
 import path, { join, ParsedPath } from "path";
 import walk from "walk";
-import { BlogPost } from "../types/types";
+import { BlogPost, Tag } from "../types/types";
+import { getContrastingTextColor } from "./util";
 
 const contentDir = join(process.cwd(), "content");
 
@@ -71,4 +73,22 @@ export async function getBlogPosts(): Promise<
       )
     );
   return files;
+}
+
+export async function getUserTagOverrides(): Promise<Tag[]> {
+  const file = await fs.readFile(join(contentDir, "tags/user-tags.yaml"));
+  const overrides = yaml.load(file.toString()) as {
+    backgroundColor: string;
+    color?: string;
+    tags: { slug: string; name: string }[];
+  }[];
+
+  return overrides.flatMap(({ color, backgroundColor, tags }) =>
+    tags.map(({ slug, name }) => ({
+      slug,
+      name,
+      backgroundColor,
+      color: color ?? getContrastingTextColor(backgroundColor),
+    }))
+  );
 }

@@ -28,9 +28,9 @@ export function getBlogPostSlugs(): Path[] {
 
 export function getBlogPost(path: Path): BlogPostWithDir<string> {
   const db = getConnection();
-  const { id, assetRoot, title, slug, date, content } = db
+  const { id, assetRoot, title, slug, date, content, description } = db
     .prepare(
-      `SELECT id, asset_root as assetRoot, thumbnail, title, slug, date, content
+      `SELECT id, asset_root as assetRoot, thumbnail, title, description, slug, date, content
       FROM blog_post
       WHERE @date = strftime('%Y %m %d', date) AND @slug = slug`
     )
@@ -45,10 +45,11 @@ export function getBlogPost(path: Path): BlogPostWithDir<string> {
   return {
     assetRoot,
     post: {
-      title,
-      slug,
-      date,
-      content,
+      title: title as string,
+      slug: slug as string,
+      date: date as string,
+      content: content as string,
+      description: description as string,
       tags: tags.map(({ tag }) => tag),
     },
   };

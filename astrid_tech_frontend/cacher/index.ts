@@ -1,12 +1,12 @@
 import sqlite3, { Database } from "better-sqlite3";
 import { promises as fs } from "fs";
 import path from "path";
-import { BlogPostWithDir, getBlogPosts } from "./content";
+import { BlogPostWithDir, getBlogPosts, getUserTagOverrides } from "./content";
 import { getLanguageTags } from "./languageTags";
 
 async function buildBlogPostCache(db: Database) {
   const insertPost = db.prepare(
-    "INSERT INTO blog_post(title, asset_root, slug, date, content) VALUES (@title, @assetRoot, @slug, @date, @content)"
+    "INSERT INTO blog_post(title, asset_root, slug, date, description, content) VALUES (@title, @assetRoot, @slug, @date, @description, @content)"
   );
   const insertManyPosts = db.transaction((data: BlogPostWithDir<Date>[]) =>
     data.map(({ assetRoot, post }) =>
@@ -38,11 +38,17 @@ async function buildBlogPostCache(db: Database) {
 }
 
 async function buildTagOverrideTable(db: Database) {
-  const tags = await getLanguageTags();
+  const [langTags, userTags] = await Promise.all([
+    getLanguageTags(),
+    getUserTagOverrides(),
+  ]);
   const insert = db.prepare(
     "INSERT INTO tag (slug, name, color, background_color) VALUES (@slug, @name, @color, @backgroundColor)"
   );
-  for (const tag of tags) {
+  for (const tag of langTags) {
+    insert.run(tag);
+  }
+  for (const tag of userTags) {
     insert.run(tag);
   }
 }
