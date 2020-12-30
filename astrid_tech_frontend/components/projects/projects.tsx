@@ -1,12 +1,5 @@
 import Fuse from "fuse.js";
-import React, {
-  ChangeEventHandler,
-  createContext,
-  FC,
-  ReactNode,
-  useContext,
-  useState,
-} from "react";
+import React, { ChangeEventHandler, FC, useContext, useState } from "react";
 import { BsCaretDown, BsCaretUp, BsX } from "react-icons/bs";
 import { FaInfoCircle } from "react-icons/fa";
 import {
@@ -22,29 +15,33 @@ import {
   Row,
   UncontrolledTooltip,
 } from "reactstrap";
-import { groupBy } from "../../lib/util";
+import { Project, ProjectMeta, Tag } from "../../types/types";
 import Layout, { PageHeading } from "../layout";
-import { ProjectCard } from "./project-card";
 import { TagBadge } from "../tags/tag";
-import { Tag, Project, ProjectMeta } from "../../types/types";
+import { useTagTable } from "../tags/TagTableProvider";
+import { ProjectCard } from "./project-card";
 import styles from "./projects.module.scss";
 import { Filterer, SearchContext } from "./search";
 
 type CountBadgeProps = {
-  tag: Tag;
+  tag: string | Tag;
   count: number;
 };
 
-const CountBadge: FC<CountBadgeProps> = ({ tag, count }) => (
-  <Badge
-    style={{
-      color: tag.backgroundColor,
-      backgroundColor: tag.color,
-    }}
-  >
-    {count}
-  </Badge>
-);
+const CountBadge: FC<CountBadgeProps> = ({ tag, count }) => {
+  const table = useTagTable();
+  const data = table.get(tag);
+  return (
+    <Badge
+      style={{
+        color: data.backgroundColor,
+        backgroundColor: data.color,
+      }}
+    >
+      {count}
+    </Badge>
+  );
+};
 
 const SelectableTagList: FC = () => {
   const { selectableTags, tagUsageCounts, addFilterTag } = useContext(
@@ -56,12 +53,12 @@ const SelectableTagList: FC = () => {
       {selectableTags.map((tag) => (
         <span
           className={styles.selectableTag}
-          onClick={() => addFilterTag(tag.slug)}
-          key={tag.slug}
+          onClick={() => addFilterTag(tag)}
+          key={tag}
         >
           <TagBadge tag={tag}>
             {" "}
-            <CountBadge tag={tag} count={tagUsageCounts.get(tag.slug)!} />
+            <CountBadge tag={tag} count={tagUsageCounts.get(tag)!} />
           </TagBadge>
         </span>
       ))}
@@ -78,12 +75,12 @@ const CurrentlyUsedTagList: FC = () => {
       {[...filterTags.values()].map((tag) => (
         <span
           className={styles.deletableTag}
-          onClick={() => removeFilterTag(tag.slug)}
-          key={tag.slug}
+          onClick={() => removeFilterTag(tag)}
+          key={tag}
         >
           <TagBadge tag={tag}>
             {" "}
-            <CountBadge tag={tag} count={tagUsageCounts.get(tag.slug)!} />
+            <CountBadge tag={tag} count={tagUsageCounts.get(tag)!} />
             <BsX />
           </TagBadge>
         </span>

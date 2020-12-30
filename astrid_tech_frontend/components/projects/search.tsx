@@ -1,6 +1,6 @@
 import Fuse from "fuse.js";
 import React, { createContext, FC, ReactNode, useState } from "react";
-import { Project, ProjectMeta, Tag } from "../../types/types";
+import { Project, ProjectMeta } from "../../types/types";
 
 function countTagUsages(projects: ProjectMeta[]) {
   const count = new Map<string, number>();
@@ -14,7 +14,7 @@ function countTagUsages(projects: ProjectMeta[]) {
 
 export type SearchContext = {
   tagUsageCounts: Map<string, number>;
-  selectableTags: Tag[];
+  selectableTags: string[];
   projects: ProjectMeta[];
 
   displayedProjects: ProjectMeta[];
@@ -23,7 +23,7 @@ export type SearchContext = {
   searchString: string;
   setSearchString: (searchString: string) => void;
 
-  filterTags: Tag[];
+  filterTags: string[];
   addFilterTag: (slug: string) => void;
   removeFilterTag: (slug: string) => void;
   clearFilterTags: () => void;
@@ -93,7 +93,7 @@ export const Filterer: FC<FiltererArgs> = ({ children, projects, fuse }) => {
   const slugToTag = new Map(orderedTags.map((tag) => [tag, tag]));
 
   const selectableTags = [...slugToTag.values()].filter(
-    (tag) => !filterTagsSet.has(tag.slug)
+    (tag) => !filterTagsSet.has(tag)
   );
 
   return (
@@ -101,7 +101,6 @@ export const Filterer: FC<FiltererArgs> = ({ children, projects, fuse }) => {
       value={{
         isSearching,
 
-        slugToTag,
         selectableTags,
         tagUsageCounts,
         projects,
@@ -111,7 +110,7 @@ export const Filterer: FC<FiltererArgs> = ({ children, projects, fuse }) => {
         searchString,
         setSearchString,
 
-        filterTags: filterTags.map((slug) => slugToTag.get(slug)!!),
+        filterTags,
         addFilterTag,
         removeFilterTag,
         clearFilterTags,

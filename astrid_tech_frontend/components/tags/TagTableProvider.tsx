@@ -13,22 +13,26 @@ export class TagTable {
     this.cache = new Map(data.map((t) => [t.slug, t]));
   }
 
-  get(slug: string): Tag {
-    const existing = this.cache.get(slug);
+  get(tag: Tag | string): Tag {
+    if (typeof tag != "string") {
+      return tag;
+    }
+
+    const existing = this.cache.get(tag);
     if (existing) return existing;
 
     const backgroundColor = getHSLString(
-      getPersistentColor(slug, RichColorTheme)
+      getPersistentColor(tag, RichColorTheme)
     );
     const color = getContrastingTextColor(backgroundColor);
-    const tag: Tag = {
-      name: slug,
+    const result: Tag = {
+      name: tag,
       color,
       backgroundColor,
-      slug,
+      slug: tag,
     };
-    this.cache.set(slug, tag);
-    return tag;
+    this.cache.set(tag, result);
+    return result;
   }
 }
 
