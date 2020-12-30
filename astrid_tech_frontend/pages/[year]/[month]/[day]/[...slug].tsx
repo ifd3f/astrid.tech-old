@@ -1,9 +1,8 @@
 import { GetStaticPaths, GetStaticProps, InferGetStaticPropsType } from "next";
 import { FC } from "react";
-import remark from "remark";
-import html from "remark-html";
 import BlogPostPage from "../../../../components/blog/blog";
 import { getBlogPost, getBlogPostSlugs, Path } from "../../../../lib/cache";
+import { renderMarkdown } from "../../../../lib/markdown";
 import { BlogPost } from "../../../../types/types";
 
 function pathToKey(path: Path) {
@@ -23,7 +22,7 @@ export const getStaticPaths: GetStaticPaths = async () => {
 export const getStaticProps: GetStaticProps = async ({ params }) => {
   const { post, assetRoot } = getBlogPost(params!! as Path);
 
-  const content = (await remark().use(html).process(post.content)).toString();
+  const content = await renderMarkdown(post.content);
 
   `select slug, tag from blog_post
   left join blog_tag

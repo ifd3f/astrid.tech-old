@@ -1,9 +1,8 @@
 import { GetStaticPaths, GetStaticProps, InferGetStaticPropsType } from "next";
 import { FC } from "react";
-import remark from "remark";
-import html from "remark-html";
 import ProjectDetailPage from "../../components/projects/project-detail";
 import { getProject, getProjectSlugs } from "../../lib/cache";
+import { renderMarkdown } from "../../lib/markdown";
 
 export const getStaticPaths: GetStaticPaths = async () => {
   console.log(getProjectSlugs());
@@ -16,9 +15,7 @@ export const getStaticPaths: GetStaticPaths = async () => {
 export const getStaticProps: GetStaticProps = async ({ params }) => {
   const { object: project, assetRoot } = getProject(params!!.slug as string);
 
-  const content = (
-    await remark().use(html).process(project.content)
-  ).toString();
+  const content = await renderMarkdown(project.content);
 
   return {
     props: { project: { ...project, content: content } },

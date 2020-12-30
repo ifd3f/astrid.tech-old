@@ -30,7 +30,7 @@ export function getBlogPostSlugs(): Path[] {
 
 export function getBlogPost(path: Path): BlogPostWithDir<string> {
   const db = getConnection();
-  const { id, assetRoot, title, slug, date, content, description } = db
+  const row = db
     .prepare(
       `SELECT id, asset_root as assetRoot, thumbnail, title, description, slug, date, content
       FROM blog_post
@@ -40,6 +40,7 @@ export function getBlogPost(path: Path): BlogPostWithDir<string> {
       date: `${path.year} ${path.month} ${path.day}`,
       slug: path.slug[0],
     });
+  const { id, assetRoot, title, slug, date, content, description } = row;
 
   const tags = db
     .prepare(`SELECT tag FROM blog_tag WHERE fk_blog = @id`)
