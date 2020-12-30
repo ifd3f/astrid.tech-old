@@ -7,7 +7,6 @@ export type Tag = {
   color: string;
   backgroundColor: string;
   slug: string;
-  tagged: Tagged[];
 };
 
 export type WorkExperience = Tagged & {

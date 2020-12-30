@@ -1,5 +1,5 @@
 CREATE TABLE tag (
-  code TEXT PRIMARY KEY NOT NULL,
+  slug TEXT PRIMARY KEY NOT NULL,
   name TEXT,
   color INTEGER,
   background_color INTEGER

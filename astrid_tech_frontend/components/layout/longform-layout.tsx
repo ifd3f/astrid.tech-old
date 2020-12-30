@@ -2,7 +2,7 @@ import React, { FC, PropsWithChildren, ReactNode } from "react";
 import { MdComment } from "react-icons/md";
 import { Col, Container, Row } from "reactstrap";
 import { Tag } from "../../types/types";
-import { TagList } from "../misc/tag";
+import { TagList } from "../tags/tag";
 import style from "./longform-layout.module.scss";
 import { PageHeading } from "./page-heading";
 
