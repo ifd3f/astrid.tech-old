@@ -1,8 +1,10 @@
 import sqlite3, { Database } from "better-sqlite3";
 import { promises as fs } from "fs";
 import path from "path";
-import { BlogPostWithDir, getBlogPosts, getUserTagOverrides } from "./content";
-import { getLanguageTags } from "./languageTags";
+import { BlogPostWithDir, getBlogPosts } from "./blog";
+import { getLanguageTags, getUserTagOverrides } from "./tags";
+
+const contentDir = path.join(process.cwd(), "content");
 
 async function buildBlogPostCache(db: Database) {
   const insertPost = db.prepare(
@@ -18,7 +20,7 @@ async function buildBlogPostCache(db: Database) {
     )
   );
 
-  const blogPosts = await Promise.all(await getBlogPosts());
+  const blogPosts = await Promise.all(await getBlogPosts(contentDir));
   const ids = insertManyPosts(blogPosts).map((result, i) => ({
     id: result.lastInsertRowid,
     post: blogPosts[i].post,
@@ -40,7 +42,7 @@ async function buildBlogPostCache(db: Database) {
 async function buildTagOverrideTable(db: Database) {
   const [langTags, userTags] = await Promise.all([
     getLanguageTags(),
-    getUserTagOverrides(),
+    getUserTagOverrides(contentDir),
   ]);
   const tags = langTags.concat(userTags);
   const insert = db.prepare(

@@ -1,30 +1,8 @@
 import { promises as fs } from "fs";
 import matter from "gray-matter";
-import yaml from "js-yaml";
 import path, { join, ParsedPath } from "path";
-import walk from "walk";
-import { BlogPost, Tag } from "../types/types";
-import { getContrastingTextColor } from "./util";
-
-const contentDir = join(process.cwd(), "content");
-
-export async function walkArr<T>(dir: string) {
-  const out: { root: string; stats: walk.WalkStats }[] = [];
-  await new Promise<void>((resolve, reject) => {
-    const walker = walk.walk(dir);
-    walker.on("file", async (root, stats, next) => {
-      out.push({ root, stats });
-      next();
-    });
-
-    walker.on("errors", (root, nodeStatsArray) =>
-      reject({ root, nodeStatsArray })
-    );
-
-    walker.on("end", resolve);
-  });
-  return out;
-}
+import { BlogPost } from "../types/types";
+import { walkArr } from "./util";
 
 function getSlug(parsed: ParsedPath) {
   const tailname =
@@ -58,9 +36,9 @@ export type BlogPostWithDir<DateType> = {
   assetRoot: string;
 };
 
-export async function getBlogPosts(): Promise<
-  Promise<BlogPostWithDir<Date>>[]
-> {
+export async function getBlogPosts(
+  contentDir: string
+): Promise<Promise<BlogPostWithDir<Date>>[]> {
   const files = (await walkArr(join(contentDir, "blog")))
     .filter(({ stats }) => stats.isFile() && stats.name.endsWith(".md"))
     .map(({ root, stats }) =>
@@ -73,22 +51,4 @@ export async function getBlogPosts(): Promise<
       )
     );
   return files;
-}
-
-export async function getUserTagOverrides(): Promise<Tag[]> {
-  const file = await fs.readFile(join(contentDir, "tags/user-tags.yaml"));
-  const overrides = yaml.load(file.toString()) as {
-    backgroundColor: string;
-    color?: string;
-    tags: { slug: string; name: string }[];
-  }[];
-
-  return overrides.flatMap(({ color, backgroundColor, tags }) =>
-    tags.map(({ slug, name }) => ({
-      slug,
-      name,
-      backgroundColor,
-      color: color ?? getContrastingTextColor(backgroundColor),
-    }))
-  );
 }

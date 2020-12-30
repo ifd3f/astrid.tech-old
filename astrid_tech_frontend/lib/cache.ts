@@ -1,5 +1,5 @@
 import sqlite3 from "better-sqlite3";
-import { BlogPostWithDir } from "../cacher/content";
+import { BlogPostWithDir } from "../cacher/blog";
 
 function getConnection() {
   return sqlite3("content.sqlite3", {});

@@ -1,7 +1,8 @@
 import { promises as fs } from "fs";
 import yaml from "js-yaml";
+import { join } from "path";
+import { getContrastingTextColor } from "../lib/util";
 import { Tag } from "../types/types";
-import { getContrastingTextColor } from "./util";
 
 type LinguistEntry = {
   color: string;
@@ -52,4 +53,22 @@ export async function getLanguageTags() {
   }
 
   return out;
+}
+
+export async function getUserTagOverrides(contentDir: string): Promise<Tag[]> {
+  const file = await fs.readFile(join(contentDir, "tags/user-tags.yaml"));
+  const overrides = yaml.load(file.toString()) as {
+    backgroundColor: string;
+    color?: string;
+    tags: { slug: string; name: string }[];
+  }[];
+
+  return overrides.flatMap(({ color, backgroundColor, tags }) =>
+    tags.map(({ slug, name }) => ({
+      slug,
+      name,
+      backgroundColor,
+      color: color ?? getContrastingTextColor(backgroundColor),
+    }))
+  );
 }

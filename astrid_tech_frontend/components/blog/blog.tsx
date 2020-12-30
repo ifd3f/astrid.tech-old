@@ -2,6 +2,7 @@ import { useRouter } from "next/router";
 import React, { createContext, FC, useContext } from "react";
 import { FaCalendar } from "react-icons/fa";
 import { Container } from "reactstrap";
+import { getHSLString, getPersistentColor } from "../../lib/util";
 import { BlogPost } from "../../types/types";
 import { CommentSection } from "../api/comments/CommentSection";
 import Layout from "../layout/layout";
@@ -11,7 +12,6 @@ import {
   StatusGroup,
   TagsGroup,
 } from "../layout/longform-layout";
-import { getHSLString, getPersistentColor } from "../util";
 
 type PostContextData = {
   post: BlogPost<string>;

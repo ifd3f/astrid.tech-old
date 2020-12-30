@@ -213,6 +213,11 @@
     "@types/react" "*"
     hoist-non-react-statics "^3.3.0"
 
+"@types/hsl-to-hex@^1.0.0":
+  version "1.0.0"
+  resolved "https://registry.yarnpkg.com/@types/hsl-to-hex/-/hsl-to-hex-1.0.0.tgz#31d73d564b576077cf562d2796711ec8364fe0d8"
+  integrity sha512-QJOVWDdZF9Dytbt+HdzXKygmK7BNm8fAb7XrLOVChTXIz7DfRbv+w6Xax/GFWpPtze+V2WeGJJn3M8MOOPglTg==
+
 "@types/integer@*":
   version "1.0.1"
   resolved "https://registry.yarnpkg.com/@types/integer/-/integer-1.0.1.tgz#025d87e30d97f539fcc6087372af7d3672ffbbe6"
@@ -295,6 +300,11 @@
   integrity sha512-8l2gr2OQ969ypa7hFOeKqtFoY70XkHxISV0pAwmQ2nm6CSPb1brmTmqJCGGrekCo+pAZyWlNXr+Kvo6L/1wijA==
   dependencies:
     "@types/node" "*"
+
+"@types/seedrandom@^2.4.28":
+  version "2.4.28"
+  resolved "https://registry.yarnpkg.com/@types/seedrandom/-/seedrandom-2.4.28.tgz#9ce8fa048c1e8c85cb71d7fe4d704e000226036f"
+  integrity sha512-SMA+fUwULwK7sd/ZJicUztiPs8F1yCPwF3O23Z9uQ32ME5Ha0NmDK9+QTsYE4O2tHXChzXomSWWeIhCnoN1LqA==
 
 "@types/unist@^2.0.0", "@types/unist@^2.0.2":
   version "2.0.3"

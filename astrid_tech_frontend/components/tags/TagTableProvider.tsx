@@ -1,7 +1,11 @@
 import { createContext, FC, ReactNode, useContext } from "react";
-import { getContrastingTextColor } from "../../cacher/util";
+import {
+  getContrastingTextColor,
+  getHSLString,
+  getPersistentColor,
+  RichColorTheme,
+} from "../../lib/util";
 import { Tag } from "../../types/types";
-import { getHSLString, getPersistentColor } from "../util";
 
 export class TagTable {
   private readonly cache: Map<string, Tag>;
@@ -13,7 +17,9 @@ export class TagTable {
     const existing = this.cache.get(slug);
     if (existing) return existing;
 
-    const backgroundColor = getHSLString(getPersistentColor(slug));
+    const backgroundColor = getHSLString(
+      getPersistentColor(slug, RichColorTheme)
+    );
     const color = getContrastingTextColor(backgroundColor);
     const tag: Tag = {
       name: slug,
