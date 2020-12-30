@@ -1,3 +1,4 @@
+import Link from "next/link";
 import React, { FC, ReactNode } from "react";
 import { Col, Container, Row } from "reactstrap";
 import style from "./footer.module.scss";
@@ -71,57 +72,34 @@ const AGPL: FC<{ logo: any }> = ({ logo }) => {
 };
 
 type SiteLinkProps = {
-  to: string;
+  href: string;
   children: ReactNode;
 };
 
-const SiteLink: FC<SiteLinkProps> = ({ to, children }) => (
+const SiteLink: FC<SiteLinkProps> = ({ href, children }) => (
   <Col xs={6} sm={4}>
-    <Link to={to}>{children}</Link>
+    <Link href={href}>{children}</Link>
   </Col>
 );
 
 const FooterSection = () => {
-  const result = useStaticQuery(graphql`
-    query GetFooterData {
-      site {
-        siteMetadata {
-          version
-        }
-      }
-      currentBuildDate {
-        currentDate
-      }
-      agplLogo: file(relativePath: { eq: "agpl.png" }) {
-        childImageSharp {
-          fixed(height: 40) {
-            ...GatsbyImageSharpFixed
-          }
-        }
-      }
-    }
-  `);
-
-  const version = result.site.siteMetadata.version;
-  const buildDate = result.currentBuildDate.currentDate;
-  const agplLogo = result.agplLogo.childImageSharp.fixed;
+  const version = "1";
 
   return (
     <footer className={style.footer}>
       <Container className="text-light small">
         <Col>
           <Row tag="nav">
-            <SiteLink to="/privacy">Privacy Policy</SiteLink>
-            <SiteLink to="/licenses">Open Source Licenses</SiteLink>
-            <SiteLink to="/about">About/Contact</SiteLink>
+            <SiteLink href="/privacy">Privacy Policy</SiteLink>
+            <SiteLink href="/licenses">Open Source Licenses</SiteLink>
+            <SiteLink href="/about">About/Contact</SiteLink>
           </Row>
         </Col>
         <Col>
-          <p>Website was last updated on {buildDate}.</p>
           <p>
             astrid.tech v{version} was created by Astrid Yu with a generous
             helping of <Tea /> and <Witch />. See the{" "}
-            <Link to="/projects/astrid-tech">
+            <Link href="/projects/astrid-tech">
               self-referential project page
             </Link>{" "}
             or see the code yourself on{" "}
@@ -132,9 +110,7 @@ const FooterSection = () => {
           <Col></Col>
         </Row>
         <Row>
-          <Col className="text-center">
-            <AGPL logo={agplLogo} />
-          </Col>
+          <Col className="text-center">{/*todo agpl*/}</Col>
           <Col className="text-center">
             <ContentLicense />
           </Col>

@@ -1,4 +1,3 @@
-import Link from "next/link";
 import React, { FC, ReactNode, useState } from "react";
 import { BsCaretLeftFill } from "react-icons/bs";
 import { Badge } from "reactstrap";
@@ -30,8 +29,6 @@ export const TagBadge: FC<TagBadgeProps> = ({
         backgroundColor: tag.backgroundColor,
         color: tag.color,
       }}
-      tag={link ? Link : undefined}
-      href={linkTo}
     >
       {tag.name}
       {children}
