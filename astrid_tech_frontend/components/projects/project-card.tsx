@@ -83,14 +83,18 @@ export const ProjectCard: FC<ProjectCardProps> = ({
         styles.projectCard
       )}
     >
-      <div className={styles.upper}>
+      <div className={classNames(styles.upper, "h-entry")}>
         <Link href={`/p/${project.slug}`}>
           <a style={{ color: "black" }}>
             <CardTitle>
-              <h3 className={styles.title}>{project.title}</h3>
+              <h3 className={classNames(styles.title, "p-name")}>
+                {project.title}
+              </h3>
             </CardTitle>
             <CardText>
-              <p className={styles.subtitle}>{project.description}</p>
+              <p className={classNames(styles.subtitle, "p-summary")}>
+                {project.description}
+              </p>
             </CardText>
           </a>
         </Link>

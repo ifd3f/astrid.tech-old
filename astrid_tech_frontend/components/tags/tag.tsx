@@ -1,3 +1,5 @@
+import classNames from "classnames";
+import Link from "next/link";
 import React, { FC, ReactNode, useState } from "react";
 import { BsCaretLeftFill } from "react-icons/bs";
 import { Badge } from "reactstrap";
@@ -20,20 +22,24 @@ export const TagBadge: FC<TagBadgeProps> = ({
     const table = useTagTable();
     tag = table.get(tag);
   }
-  const linkTo = tag.slug[0] == "/" ? tag.slug : "/tags/" + tag.slug;
+  const linkTo = tag.slug[0] == "/" ? tag.slug : "/t/" + tag.slug;
 
-  return (
+  const badge = (
     <Badge
-      className={style.tag}
+      className={classNames(style.tag, "p-category")}
+      tag={"a"}
       style={{
         backgroundColor: tag.backgroundColor,
         color: tag.color,
+        cursor: "pointer",
       }}
     >
       {tag.name}
       {children}
     </Badge>
   );
+
+  return link ? <Link href={linkTo}>{badge}</Link> : badge;
 };
 
 type TagListProps = {
