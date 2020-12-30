@@ -6,6 +6,6 @@ At [IndieWebCamp Create Day](https://events.indieweb.org/2020/12/indiewebcamp-cr
 - Implemented **oppressive moderator censorship options** such as removing comments and locking threads
 - Added form validation
 
-I also got some inspiration to start microblogging from [Sarah Hibner's and her change log](http://log.sarah-hibner.com/), which is what this thing is. To be honest, this isn't really a "micro" blog anymore, given its length, but we'll cut stuff down as it goes.
+I also got some inspiration to start microblogging from [Sarah Hibner and her change log](http://log.sarah-hibner.com/), which is what this thing is. To be honest, this isn't really a "micro" blog anymore, given its length, but we'll cut stuff down as it goes.
 
 As of this time of writing, there is nothing in place to display these logs, and they are just sitting inside my content repo.
