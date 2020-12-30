@@ -8,7 +8,7 @@ export async function copyAssets(
 ): Promise<void> {
   await fs.rm(outputDir, { force: true, recursive: true });
 
-  const files = (await walkArr(join(contentDir, "blog")))
+  const files = (await walkArr(contentDir))
     .filter(({ stats }) => stats.isFile() && !stats.name.endsWith(".md"))
     .map(({ root, stats }) =>
       (async () => {

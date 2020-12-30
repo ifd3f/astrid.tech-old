@@ -1,17 +1,19 @@
 @import "../../styles/variables.scss";
 
-.projectCard,
-.projectCard::before,
-.projectCard::after {
+.projectCard {
   -moz-transition: background-color 0.2s ease-in;
   -o-transition: background-color 0.2s ease-in;
   -webkit-transition: background-color 0.2s ease-in;
   transition: background-color 0.2s ease-in;
 
-  cursor: pointer;
   height: 240px;
-  border: 1px solid;
+
+  border: 3px solid white;
   border-radius: 20px;
+  &:hover {
+    border-color: $secondary-main;
+  }
+
   position: relative;
   background-color: white;
 }
@@ -21,9 +23,9 @@
 }
 
 .title {
-  padding: 3px;
   padding-top: 0;
   margin-bottom: 0;
+
   @each $size, $font-size in (xs: 15pt, sm: 19pt, md: 17pt, lg: 20pt) {
     @media only screen and (min-width: map-get($grid-breakpoints, $size)) {
       font-size: $font-size;

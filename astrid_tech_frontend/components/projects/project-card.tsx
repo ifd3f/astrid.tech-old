@@ -1,7 +1,15 @@
-import React, { FC, useRef } from "react";
-import { Badge, CardBody, UncontrolledTooltip } from "reactstrap";
+import classNames from "classnames";
+import Link from "next/link";
+import React, { CSSProperties, FC, useRef } from "react";
+import {
+  Badge,
+  CardBody,
+  CardText,
+  CardTitle,
+  UncontrolledTooltip,
+} from "reactstrap";
 import { getPersistentColor, PastelTheme } from "../../lib/util";
-import { Project } from "../../types/types";
+import { Project, ProjectMeta } from "../../types/types";
 import { TagList } from "../tags/tag";
 import styles from "./project.module.scss";
 
@@ -43,78 +51,49 @@ export const StatusBadge: FC<StatusBadgeProps> = ({ status }) => {
 };
 
 type ProjectCardProps = {
-  project: ProjectMeta;
+  project: ProjectMeta<Date>;
   hovered?: boolean;
-  onMouseEnter?: (project: Project) => void;
-  onMouseLeave?: (project: Project) => void;
 };
 
 export const ProjectCard: FC<ProjectCardProps> = ({
   project,
   hovered = false,
-  onMouseEnter: _onEnter,
-  onMouseLeave: _onLeave,
 }) => {
-  const className =
-    (hovered ? styles.hoveredProjectCard : "") + " " + styles.projectCard;
-  const onEnter = () => {
-    _onEnter && _onEnter(project);
-  };
+  const [h, s, v] = getPersistentColor(project.slug, PastelTheme);
+  const color = `hsl(${h}, ${s}%, ${v}%)`;
 
-  const onExit = () => {
-    _onLeave && _onLeave(project);
-  };
+  let style: CSSProperties = { backgroundColor: color };
+  if (project.thumbnail) {
+    style = {
+      ...style,
+      backgroundImage:
+        `linear-gradient(to bottom, hsla(${h}, 80%, 100%, 0.9), hsla(${h}, 80%, 80%, 0.9), rgba(0.6, 0.6, 0.6, 0.3)), ` +
+        `url(/_/${project.assetRoot}/${project.thumbnail})`,
+      backgroundRepeat: "no-repeat",
+      backgroundPosition: "center",
+      backgroundSize: "cover",
+    };
+  }
 
-  const onClickCard = (ev: React.MouseEvent<HTMLElement>) => {
-    if ((ev.target as any).tagName != "A") {
-      //navigate(project.slug, { replace: false });
-    }
-  };
-
-  const cardOuterProps = {
-    onClick: onClickCard,
-    onMouseEnter: onEnter,
-    onMouseLeave: onExit,
-    className: className,
-  };
-
-  const inner = (
-    <CardBody>
-      <h3 className={styles.title}>{project.title}</h3>
-      <p className={styles.subtitle}>{project.description}</p>
+  return (
+    <CardBody
+      style={style}
+      className={classNames(
+        hovered ? styles.hoveredProjectCard : "",
+        styles.projectCard
+      )}
+    >
+      <Link href={`/p/${project.slug}`}>
+        <a style={{ color: "black" }}>
+          <CardTitle>
+            <h3 className={styles.title}>{project.title}</h3>
+          </CardTitle>
+          <CardText>
+            <p className={styles.subtitle}>{project.description}</p>
+          </CardText>
+        </a>
+      </Link>
       <TagList tags={project.tags} limit={5} className={styles.tags} link />
     </CardBody>
   );
-
-  /*
-  const [h, s, v] = getPersistentColor(project.slug, PastelTheme);
-  if (project.thumbnail && project.thumbnail.childImageSharp) {
-    const stack = [
-      `linear-gradient(to bottom, hsla(${h}, 80%, 100%, 0.9), hsla(${h}, 80%, 80%, 0.9), rgba(0.6, 0.6, 0.6, 0.3))`,
-      (project.thumbnail as any).childImageSharp.fluid,
-    ];
-    return (
-      <BackgroundImage
-        fluid={stack}
-        {...cardOuterProps}
-        style={{
-          backgroundColor: "clear",
-        }}
-      >
-        {inner}
-      </BackgroundImage>
-    );
-  } else {
-    const color = `hsl(${h}, ${s}%, ${v}%)`;
-    return (
-      <div
-        {...cardOuterProps}
-        style={{ backgroundColor: color, borderColor: color }}
-      >
-        {inner}
-      </div>
-    );
-  }*/
-  // TODO
-  return <div>{project.slug}</div>;
 };
