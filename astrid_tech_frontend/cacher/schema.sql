@@ -20,6 +20,7 @@ CREATE TABLE blog_post (
   id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
   asset_root TEXT NOT NULL,
   title TEXT NOT NULL,
+  thumbnail TEXT,
   slug TEXT NOT NULL,
   date DATETIME NOT NULL,
   content TEXT NOT NULL
