@@ -1,0 +1,20 @@
+@import "./fonts.scss";
+@import "./variables.scss";
+@import "~bootstrap/scss/bootstrap";
+@import "./layout.scss";
+@import "./navbar.scss";
+
+.text-subtitle {
+  color: $text-muted;
+  text-decoration: italic;
+}
+
+.text-light a {
+  color: $link-color-invert;
+}
+
+.text-light a:hover {
+  color: $link-hover-color-invert;
+}
+
+@import "./longform.scss";

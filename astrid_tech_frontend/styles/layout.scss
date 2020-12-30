@@ -1,0 +1,11 @@
+@import "src/scss/variables.scss";
+
+.root-wrapper {
+  padding-top: $navbar-height;
+  position: relative;
+  background-color: $main-bg-color;
+}
+
+.root-wrapper.expanded-min-height {
+  min-height: 70vh;
+}
