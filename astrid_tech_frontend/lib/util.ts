@@ -74,7 +74,7 @@ export function getHSLString([h, s, l]: number[]) {
   return hslToHex(h, s, l) as string;
 }
 
-export function formatDateInterval(startDate: string, endDate?: string | null) {
+export function formatDateInterval(startDate: Date, endDate?: Date | null) {
   if (startDate == endDate) {
     return startDate;
   }

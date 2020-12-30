@@ -97,7 +97,7 @@ export const StatusGroup: FC<StatusGroupProps> = ({ children }) => (
 );
 
 type TagsGroupProps = {
-  tags: Tag[];
+  tags: (Tag | string)[];
 };
 
 export const TagsGroup: FC<TagsGroupProps> = ({ tags }) => {

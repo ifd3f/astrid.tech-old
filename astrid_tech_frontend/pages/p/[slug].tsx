@@ -2,6 +2,7 @@ import { GetStaticPaths, GetStaticProps, InferGetStaticPropsType } from "next";
 import { FC } from "react";
 import remark from "remark";
 import html from "remark-html";
+import ProjectDetailPage from "../../components/projects/project-detail";
 import { getProject, getProjectSlugs } from "../../lib/cache";
 
 export const getStaticPaths: GetStaticPaths = async () => {
@@ -27,7 +28,7 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
 const Page: FC<InferGetStaticPropsType<typeof getStaticProps>> = ({
   project,
 }) => {
-  return <p>{project.slug}</p>;
+  return <ProjectDetailPage project={project} />;
 };
 
 export default Page;
