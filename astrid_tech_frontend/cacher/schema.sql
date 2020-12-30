@@ -26,8 +26,14 @@ CREATE TABLE blog_post (
   thumbnail TEXT,
   slug TEXT NOT NULL,
   date DATETIME NOT NULL,
-  content TEXT NOT NULL
+  year INTEGER NOT NULL,
+  month INTEGER NOT NULL,
+  day INTEGER NOT NULL,
+  ordinal INTEGER NOT NULL,
+  content TEXT NOT NULL,
+  UNIQUE (year, month, day, ordinal)
 );
+CREATE INDEX idx_blog ON blog_post(year, month, day, ordinal);
 CREATE TABLE project_tag (
   id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
   fk_project INTEGER NOT NULL,

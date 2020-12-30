@@ -8,11 +8,11 @@ const prism = require("remark-prism");
 export async function renderMarkdown(md: string) {
   return (
     await remark()
-      .use(graphviz)
       .use(prism)
       .use(math)
       .use(smartypants)
       .use(html)
+      .use(graphviz)
       .process(md)
   ).toString() as string;
 }

@@ -21,8 +21,8 @@ export function getBlogPostSlugs(): Path[] {
     const date = new Date(dateStr);
     return {
       year: date.getFullYear().toString(),
-      month: (date.getMonth() + 1).toString(),
-      day: (date.getDate() + 1).toString(),
+      month: (date.getMonth() + 1).toString().padStart(2, "0"),
+      day: (date.getDate() + 1).toString().padStart(2, "0"),
       slug: [slug],
     };
   });
@@ -34,10 +34,12 @@ export function getBlogPost(path: Path): BlogPostWithDir<string> {
     .prepare(
       `SELECT id, asset_root as assetRoot, thumbnail, title, description, slug, date, content
       FROM blog_post
-      WHERE @date = strftime('%Y %m %d', date) AND @slug = slug`
+      WHERE year = @year AND month = @month AND day = @day AND slug = @slug`
     )
     .get({
-      date: `${path.year} ${path.month} ${path.day}`,
+      year: path.year,
+      month: path.month,
+      day: path.day,
       slug: path.slug[0],
     });
   const { id, assetRoot, title, slug, date, content, description } = row;

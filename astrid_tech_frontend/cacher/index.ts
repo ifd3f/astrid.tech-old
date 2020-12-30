@@ -10,7 +10,27 @@ const contentDir = path.join(process.cwd(), "content");
 
 async function buildBlogPostCache(db: Database) {
   const insertPost = db.prepare(
-    "INSERT INTO blog_post(title, asset_root, slug, date, description, content) VALUES (@title, @assetRoot, @slug, @date, @description, @content)"
+    `INSERT INTO blog_post(
+      title, 
+      asset_root, 
+      slug, 
+      date, 
+      year, 
+      month, 
+      day, 
+      ordinal,
+      description, 
+      content) 
+    VALUES (@title, 
+      @assetRoot, 
+      @slug, 
+      @date, 
+      @year, 
+      @month, 
+      @day, 
+      @ordinal,
+      @description, 
+      @content)`
   );
   const insertManyPosts = db.transaction((data: BlogPostWithDir<Date>[]) =>
     data.map(({ assetRoot, post }) =>
@@ -18,6 +38,10 @@ async function buildBlogPostCache(db: Database) {
         assetRoot,
         ...post,
         date: post.date.toISOString(),
+        year: post.date.getFullYear(),
+        month: post.date.getMonth() + 1,
+        day: post.date.getDate() + 1,
+        ordinal: 0,
       })
     )
   );
