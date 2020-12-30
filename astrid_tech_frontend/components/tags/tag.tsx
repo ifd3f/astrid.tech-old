@@ -4,9 +4,10 @@ import { BsCaretLeftFill } from "react-icons/bs";
 import { Badge } from "reactstrap";
 import { Tag } from "../../types/types";
 import style from "./tag.module.scss";
+import { useTagTable } from "./TagTableProvider";
 
 type TagBadgeProps = {
-  tag: Tag;
+  tag: Tag | string;
   link?: boolean;
   children?: ReactNode;
 };
@@ -16,6 +17,10 @@ export const TagBadge: FC<TagBadgeProps> = ({
   link = false,
   children,
 }) => {
+  if (typeof tag == "string") {
+    const table = useTagTable();
+    tag = table.get(tag);
+  }
   const linkTo = tag.slug[0] == "/" ? tag.slug : "/tags/" + tag.slug;
 
   return (
@@ -35,7 +40,7 @@ export const TagBadge: FC<TagBadgeProps> = ({
 };
 
 type TagListProps = {
-  tags: Tag[];
+  tags: (Tag | string)[];
   limit?: number;
   link?: boolean;
   className?: string;

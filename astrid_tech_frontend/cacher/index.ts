@@ -42,15 +42,19 @@ async function buildTagOverrideTable(db: Database) {
     getLanguageTags(),
     getUserTagOverrides(),
   ]);
+  const tags = langTags.concat(userTags);
   const insert = db.prepare(
     "INSERT INTO tag (slug, name, color, background_color) VALUES (@slug, @name, @color, @backgroundColor)"
   );
-  for (const tag of langTags) {
+  for (const tag of tags) {
     insert.run(tag);
   }
-  for (const tag of userTags) {
-    insert.run(tag);
-  }
+
+  await fs.writeFile(
+    path.join(process.cwd(), "data/tags.js"),
+    "/* This is an AUTO-GENERATED FILE. */\nmodule.exports=" +
+      JSON.stringify(tags)
+  );
 }
 
 async function main(dbUrl: string) {
