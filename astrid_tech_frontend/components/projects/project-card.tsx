@@ -67,7 +67,7 @@ export const ProjectCard: FC<ProjectCardProps> = ({
     style = {
       ...style,
       backgroundImage:
-        `linear-gradient(to bottom, hsla(${h}, 80%, 100%, 0.9), hsla(${h}, 80%, 80%, 0.9), rgba(0.6, 0.6, 0.6, 0.3)), ` +
+        `linear-gradient(to bottom, hsla(${h}, 80%, 80%, 1.0), hsla(${h}, 80%, 80%, 0.9), hsla(${h}, 80%, 80%, 0.6), rgba(0.6, 0.6, 0.6, 0.3)), ` +
         `url(/_/${project.assetRoot}/${project.thumbnail})`,
       backgroundRepeat: "no-repeat",
       backgroundPosition: "center",
@@ -79,21 +79,25 @@ export const ProjectCard: FC<ProjectCardProps> = ({
     <CardBody
       style={style}
       className={classNames(
-        hovered ? styles.hoveredProjectCard : "",
+        hovered ? styles.hoveredProjectCard : null,
         styles.projectCard
       )}
     >
-      <Link href={`/p/${project.slug}`}>
-        <a style={{ color: "black" }}>
-          <CardTitle>
-            <h3 className={styles.title}>{project.title}</h3>
-          </CardTitle>
-          <CardText>
-            <p className={styles.subtitle}>{project.description}</p>
-          </CardText>
-        </a>
-      </Link>
-      <TagList tags={project.tags} limit={5} className={styles.tags} link />
+      <div className={styles.upper}>
+        <Link href={`/p/${project.slug}`}>
+          <a style={{ color: "black" }}>
+            <CardTitle>
+              <h3 className={styles.title}>{project.title}</h3>
+            </CardTitle>
+            <CardText>
+              <p className={styles.subtitle}>{project.description}</p>
+            </CardText>
+          </a>
+        </Link>
+      </div>
+      <div className={styles.lower}>
+        <TagList tags={project.tags} limit={5} className={styles.tags} link />
+      </div>
     </CardBody>
   );
 };

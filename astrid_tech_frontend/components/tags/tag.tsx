@@ -61,7 +61,7 @@ export const TagList: FC<TagListProps> = ({
 
   const alt = isOpened
     ? "Close"
-    : "Click to show: " + excluded.map((tag) => tag.name).join(", ");
+    : "Click to show: " + excluded.map((tag) => tag).join(", ");
   const shownTags = isOpened ? tags : tags.slice(0, limit);
   const openBadgeText = isOpened ? (
     <BsCaretLeftFill />
@@ -81,7 +81,7 @@ export const TagList: FC<TagListProps> = ({
           <TagBadge key={tag.slug} tag={tag} link={link} />
         ))}{" "}
         {excluded.length > 0 ? (
-          <Badge title={alt} onClick={onClick}>
+          <Badge title={alt} onClick={onClick} style={{ cursor: "pointer" }}>
             {openBadgeText}
           </Badge>
         ) : null}

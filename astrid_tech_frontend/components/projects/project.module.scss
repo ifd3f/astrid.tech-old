@@ -16,6 +16,10 @@
 
   position: relative;
   background-color: white;
+
+  display: flex;
+  flex-flow: column;
+  justify-content: space-between;
 }
 
 .projectCard::before {
