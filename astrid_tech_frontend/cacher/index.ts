@@ -78,7 +78,7 @@ async function buildProjectCache(db: Database) {
     VALUES (
       @assetRoot,
       @title, 
-      @description
+      @description,
       @slug, 
       @startDate, 
       @endDate, 
@@ -123,6 +123,7 @@ async function main(dbUrl: string) {
   db.exec(initSchema);
 
   await buildBlogPostCache(db);
+  await buildProjectCache(db);
   await buildTagOverrideTable(db);
 }
 
