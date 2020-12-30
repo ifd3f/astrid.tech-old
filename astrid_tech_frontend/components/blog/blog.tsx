@@ -1,67 +1,32 @@
-require(`katex/dist/katex.min.css`);
-import { graphql } from "gatsby";
+import { useRouter } from "next/router";
 import React, { createContext, FC, useContext } from "react";
 import { FaCalendar } from "react-icons/fa";
 import { Container } from "reactstrap";
-import { LongformLayout, StatusGroup } from "src/components/layout";
+import { BlogPost } from "../../types/types";
+import { CommentSection } from "../api/comments/CommentSection";
+import Layout from "../layout/layout";
 import {
-  CommentsRow,
   InfoRow,
+  LongformLayout,
+  StatusGroup,
   TagsGroup,
-} from "src/components/layout/longform-layout";
-import { getHSLString, getPersistentColor } from "src/util";
-import { CommentSection } from "../components/api/comments/CommentSection";
-import Layout from "../components/layout/layout";
-import { BlogPost } from "../types/index";
-
-export const pageQuery = graphql`
-  query BlogPostBySlug($slug: String!) {
-    blogPost(slug: { eq: $slug }) {
-      description
-      source {
-        html
-      }
-      thumbnail {
-        childImageSharp {
-          fixed(width: 1200, height: 630, toFormat: PNG, cropFocus: CENTER) {
-            src
-          }
-        }
-      }
-      title
-      date(formatString: "YYYY MMMM DD")
-      slug
-      tags {
-        ...TagBadge
-      }
-    }
-  }
-`;
-
-type Data = {
-  blogPost: BlogPost;
-};
-
-type Context = {
-  previous: BlogPost;
-  next: BlogPost;
-};
+} from "../layout/longform-layout";
+import { getHSLString, getPersistentColor } from "../util";
 
 type PostContextData = {
-  post: BlogPost;
-  disqusConfig: any;
+  post: BlogPost<string>;
 };
 
 const ProjectContext = createContext<PostContextData>({} as PostContextData);
 
 const PostStatusGroup: FC = () => {
-  const { post, disqusConfig } = useContext(ProjectContext);
+  const { post } = useContext(ProjectContext);
   return (
     <StatusGroup>
       <InfoRow name="Date" icon={<FaCalendar />}>
         {post.date}
       </InfoRow>
-      <CommentsRow disqusConfig={disqusConfig} />
+      {/* TODO add comment count */}
     </StatusGroup>
   );
 };
@@ -69,15 +34,11 @@ const PostStatusGroup: FC = () => {
 export type BlogPostPageProps = { post: BlogPost<string> };
 
 export const BlogPostPage: FC<BlogPostPageProps> = ({ post }) => {
-  const url = `${location.origin}${post.slug}`;
-  const disqusConfig = {
-    url,
-    identifier: post.slug,
-    title: post.title,
-  };
+  const router = useRouter();
+  const url = ""; // TODO `${router.}${post.slug}`;
 
   return (
-    <ProjectContext.Provider value={{ post, disqusConfig }}>
+    <ProjectContext.Provider value={{ post }}>
       <Layout currentLocation="blog">
         <LongformLayout
           title={post.title}
@@ -95,7 +56,7 @@ export const BlogPostPage: FC<BlogPostPageProps> = ({ post }) => {
         >
           <article
             className="longform"
-            dangerouslySetInnerHTML={{ __html: post.source.html }}
+            dangerouslySetInnerHTML={{ __html: post.content }}
           />
         </LongformLayout>
         <Container>

@@ -21,7 +21,7 @@ const Layout: FC<LayoutProps> = ({
 }) => {
   return (
     <CookiesProvider>
-      <APIProvider root={process.env.ASTRID_TECH_API_ROOT}>
+      <APIProvider root={process.env.ASTRID_TECH_API_ROOT ?? "localhost:8001"}>
         <MainNavbar currentLocation={currentLocation} fixed />
         <div
           className={

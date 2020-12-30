@@ -1,24 +1,22 @@
-import { graphql, Link, useStaticQuery } from "gatsby"
-import Img from "gatsby-image"
-import React, { FC, ReactNode } from "react"
-import { Col, Container, Row } from "reactstrap"
-import style from "./footer.module.scss"
+import React, { FC, ReactNode } from "react";
+import { Col, Container, Row } from "reactstrap";
+import style from "./footer.module.scss";
 
 export const Tea = () => {
   return (
     <span title="tea" aria-label="tea" role="img">
       ☕
     </span>
-  )
-}
+  );
+};
 
 export const Witch = () => {
   return (
     <span title="witchcraft" aria-label="witchcraft" role="img">
       🧙‍
     </span>
-  )
-}
+  );
+};
 
 const ContentLicense = () => (
   <p>
@@ -52,7 +50,7 @@ const ContentLicense = () => (
     </a>
     .
   </p>
-)
+);
 
 const AGPL: FC<{ logo: any }> = ({ logo }) => {
   return (
@@ -69,19 +67,19 @@ const AGPL: FC<{ logo: any }> = ({ logo }) => {
         .{" "}
       </p>
     </>
-  )
-}
+  );
+};
 
 type SiteLinkProps = {
-  to: string
-  children: ReactNode
-}
+  to: string;
+  children: ReactNode;
+};
 
 const SiteLink: FC<SiteLinkProps> = ({ to, children }) => (
   <Col xs={6} sm={4}>
     <Link to={to}>{children}</Link>
   </Col>
-)
+);
 
 const FooterSection = () => {
   const result = useStaticQuery(graphql`
@@ -102,11 +100,11 @@ const FooterSection = () => {
         }
       }
     }
-  `)
+  `);
 
-  const version = result.site.siteMetadata.version
-  const buildDate = result.currentBuildDate.currentDate
-  const agplLogo = result.agplLogo.childImageSharp.fixed
+  const version = result.site.siteMetadata.version;
+  const buildDate = result.currentBuildDate.currentDate;
+  const agplLogo = result.agplLogo.childImageSharp.fixed;
 
   return (
     <footer className={style.footer}>
@@ -143,7 +141,7 @@ const FooterSection = () => {
         </Row>
       </Container>
     </footer>
-  )
-}
+  );
+};
 
-export default FooterSection
+export default FooterSection;

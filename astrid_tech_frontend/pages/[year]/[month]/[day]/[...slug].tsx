@@ -2,6 +2,7 @@ import { GetStaticPaths, GetStaticProps, InferGetStaticPropsType } from "next";
 import { FC } from "react";
 import remark from "remark";
 import html from "remark-html";
+import BlogPostPage from "../../../../components/blog/blog";
 import { getBlogPost, getBlogPostSlugs, Path } from "../../../../lib/cache";
 import { BlogPost } from "../../../../types/types";
 
@@ -31,7 +32,7 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
 
 const Post: FC<InferGetStaticPropsType<typeof getStaticProps>> = ({ post }) => {
   const p = post as BlogPost<string>;
-  return <p>{p.content}</p>;
+  return <BlogPostPage post={p} />;
 };
 
 export default Post;

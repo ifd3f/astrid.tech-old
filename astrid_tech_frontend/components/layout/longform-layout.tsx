@@ -1,24 +1,22 @@
-import { CommentCount } from "gatsby-plugin-disqus"
-import React, { FC, PropsWithChildren, ReactNode } from "react"
-import { MdComment } from "react-icons/md"
-import { Col, Container, Row } from "reactstrap"
-import { Tag } from "src/types"
-import SEO from "../seo"
-import { TagList } from "../tag"
-import style from "./longform-layout.module.scss"
-import { PageHeading } from "./page-heading"
+import React, { FC, PropsWithChildren, ReactNode } from "react";
+import { MdComment } from "react-icons/md";
+import { Col, Container, Row } from "reactstrap";
+import { Tag } from "../../types/types";
+import { TagList } from "../misc/tag";
+import style from "./longform-layout.module.scss";
+import { PageHeading } from "./page-heading";
 
 type LongformLayoutProps = {
-  title: string
-  description: ReactNode
-  descriptionRaw: string
-  headingColor: string
-  above?: ReactNode
-  thumbnail?: string
-  sidebar: ReactNode
-  children: ReactNode
-  url?: string
-}
+  title: string;
+  description: ReactNode;
+  descriptionRaw: string;
+  headingColor: string;
+  above?: ReactNode;
+  thumbnail?: string;
+  sidebar: ReactNode;
+  children: ReactNode;
+  url?: string;
+};
 
 export const LongformLayout: FC<LongformLayoutProps> = ({
   title,
@@ -33,12 +31,12 @@ export const LongformLayout: FC<LongformLayoutProps> = ({
 }) => {
   return (
     <>
-      <SEO
+      {/* TODO use <SEO
         canonicalUrl={url}
         title={title!}
         description={descriptionRaw}
         image={thumbnail}
-      />
+      /> */}
       <PageHeading
         above={above}
         title={title}
@@ -56,19 +54,19 @@ export const LongformLayout: FC<LongformLayoutProps> = ({
         </Row>
       </Container>
     </>
-  )
-}
+  );
+};
 
 export const SidebarGroup: FC<PropsWithChildren<{}>> = ({ children }) => (
   <div className={style.sidebarGroup}>{children}</div>
-)
+);
 
 type InfoRowProps = {
-  name: string
-  icon?: ReactNode
-  show?: any
-  children: ReactNode
-}
+  name: string;
+  icon?: ReactNode;
+  show?: any;
+  children: ReactNode;
+};
 
 export const InfoRow: FC<InfoRowProps> = ({
   name,
@@ -84,11 +82,11 @@ export const InfoRow: FC<InfoRowProps> = ({
       </th>
       <td className={style.statusData}>{children}</td>
     </tr>
-  ) : null
+  ) : null;
 
 type StatusGroupProps = {
-  children: ReactNode
-}
+  children: ReactNode;
+};
 
 export const StatusGroup: FC<StatusGroupProps> = ({ children }) => (
   <SidebarGroup>
@@ -96,11 +94,11 @@ export const StatusGroup: FC<StatusGroupProps> = ({ children }) => (
       <tbody>{children}</tbody>
     </table>
   </SidebarGroup>
-)
+);
 
 type TagsGroupProps = {
-  tags: Tag[]
-}
+  tags: Tag[];
+};
 
 export const TagsGroup: FC<TagsGroupProps> = ({ tags }) => {
   return (
@@ -108,15 +106,13 @@ export const TagsGroup: FC<TagsGroupProps> = ({ tags }) => {
       <h2>Tags</h2>
       <TagList tags={tags} link />
     </SidebarGroup>
-  )
-}
+  );
+};
 
-export const CommentsRow = ({ disqusConfig }: { disqusConfig: any }) => {
+export const CommentsRow = ({ count }: { count: number }) => {
   return (
     <InfoRow name="Comments" icon={<MdComment />}>
-      <a href="#comments">
-        <CommentCount config={disqusConfig} />
-      </a>
+      <a href="#comments">{count}</a>
     </InfoRow>
-  )
-}
+  );
+};

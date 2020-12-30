@@ -1,15 +1,12 @@
-import React, { FC, useEffect, useState } from "react"
-import { useCookies } from "react-cookie"
-import { Button, Container } from "reactstrap"
-import { useStaticQuery } from "gatsby"
-import { graphql } from "gatsby"
-import { Site } from "src/types"
+import React, { FC, useEffect, useState } from "react";
+import { useCookies } from "react-cookie";
+import { Button, Container } from "reactstrap";
 
-const COOKIE_NAME = "cookie-policy-notification"
+const COOKIE_NAME = "cookie-policy-notification";
 
 type CookieNotificationDisplayProps = {
-  onAcceptTerms: () => void
-}
+  onAcceptTerms: () => void;
+};
 
 const CookieNotificationObject: FC<CookieNotificationDisplayProps> = ({
   onAcceptTerms,
@@ -38,34 +35,25 @@ const CookieNotificationObject: FC<CookieNotificationDisplayProps> = ({
       </Button>
     </Container>
   </div>
-)
+);
 
 export const CookieNotification = () => {
-  const [cookies, setCookie] = useCookies([COOKIE_NAME])
-  const data: { site: Site } = useStaticQuery(graphql`
-    {
-      site {
-        siteMetadata {
-          cookiePolicyVersion
-        }
-      }
-    }
-  `)
-  const [isSSR, setIsSSR] = useState(true)
-  const { cookiePolicyVersion } = data.site.siteMetadata
+  const [cookies, setCookie] = useCookies([COOKIE_NAME]);
+  const [isSSR, setIsSSR] = useState(true);
+  const cookiePolicyVersion = 1; // TODO change this
 
   useEffect(() => {
-    setIsSSR(false)
-  }, [isSSR])
+    setIsSSR(false);
+  }, [isSSR]);
 
   const onAcceptTerms = () => {
     setCookie(COOKIE_NAME, cookiePolicyVersion, {
       path: "/",
       maxAge: 365 * 24 * 3600,
-    })
-  }
+    });
+  };
 
   return isSSR || cookies[COOKIE_NAME] == cookiePolicyVersion ? null : (
     <CookieNotificationObject onAcceptTerms={onAcceptTerms} />
-  )
-}
+  );
+};

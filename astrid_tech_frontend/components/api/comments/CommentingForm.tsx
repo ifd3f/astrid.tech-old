@@ -1,5 +1,5 @@
-import { AxiosResponse } from "axios"
-import React, { FC, useState } from "react"
+import { AxiosResponse } from "axios";
+import React, { FC, useState } from "react";
 import {
   Button,
   Col,
@@ -9,24 +9,24 @@ import {
   Input,
   Label,
   Row,
-} from "reactstrap"
-import { changeEventSetter, useCookieState } from "src/util/boilerplate"
-import { useAPI } from "../APIProvider"
-import { useCommentData } from "./CommentDataProvider"
+} from "reactstrap";
+import { changeEventSetter, useCookieState } from "../../util/boilerplate";
+import { useAPI } from "../APIProvider";
+import { useCommentData } from "./CommentDataProvider";
 
 export type CommentingFormProps = {
-  replyTo?: number
-  onSubmitted?: () => void
-}
+  replyTo?: number;
+  onSubmitted?: () => void;
+};
 
-const COMMENT_EMAIL_COOKIE = "comment-email"
-const COMMENT_NAME_COOKIE = "comment-name"
-const COMMENT_WEBSITE_COOKIE = "comment-website"
+const COMMENT_EMAIL_COOKIE = "comment-email";
+const COMMENT_NAME_COOKIE = "comment-name";
+const COMMENT_WEBSITE_COOKIE = "comment-website";
 const cookieOptions = {
   maxAge: 30 * 24 * 3600,
   path: "/",
   sameSite: "strict" as "strict",
-}
+};
 
 export const CommentingForm: FC<CommentingFormProps> = ({
   replyTo,
@@ -39,62 +39,62 @@ export const CommentingForm: FC<CommentingFormProps> = ({
   ] = useCookieState(
     [COMMENT_EMAIL_COOKIE, COMMENT_NAME_COOKIE, COMMENT_WEBSITE_COOKIE],
     cookieOptions
-  )
+  );
 
-  const { slug, refreshComments } = useCommentData()
+  const { slug, refreshComments } = useCommentData();
 
-  const [bodyError, setBodyError] = useState<string | null>(null)
-  const [emailError, setEmailError] = useState<string | null>(null)
-  const [websiteError, setWebsiteError] = useState<string | null>(null)
-  const [generalError, setGeneralError] = useState<string | null>(null)
+  const [bodyError, setBodyError] = useState<string | null>(null);
+  const [emailError, setEmailError] = useState<string | null>(null);
+  const [websiteError, setWebsiteError] = useState<string | null>(null);
+  const [generalError, setGeneralError] = useState<string | null>(null);
 
-  const { api } = useAPI()
-  const [isSubmitting, setIsSubmitting] = useState(false)
-  const [body, setBody] = useState("")
+  const { api } = useAPI();
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [body, setBody] = useState("");
 
   const validate = () => {
-    let valid = true
+    let valid = true;
     if (!/\S+@\S+\.\S+/.test(email)) {
-      setEmailError("Enter a valid email address.")
-      valid = false
+      setEmailError("Enter a valid email address.");
+      valid = false;
     } else {
-      setEmailError(null)
+      setEmailError(null);
     }
     if (!(10 <= body.length && body.length <= 1000)) {
-      setBodyError("Body length must be between 10 and 1000 characters.")
-      valid = false
+      setBodyError("Body length must be between 10 and 1000 characters.");
+      valid = false;
     } else {
-      setBodyError(null)
+      setBodyError(null);
     }
     try {
       if (website.length > 0) {
-        new URL(website)
+        new URL(website);
       }
-      setWebsiteError(null)
+      setWebsiteError(null);
     } catch (_) {
-      setWebsiteError("Enter a valid URL.")
-      valid = false
+      setWebsiteError("Enter a valid URL.");
+      valid = false;
     }
-    return valid
-  }
+    return valid;
+  };
 
   const applyBackendErrors = (response?: AxiosResponse) => {
     if (!response) {
-      setGeneralError("A network error occured! Please try again later.")
-      return
+      setGeneralError("A network error occured! Please try again later.");
+      return;
     }
-    const data = response.data
+    const data = response.data;
     if (response.status == 403) {
-      setGeneralError(`You are unauthorized to post: ${data.detail}`)
+      setGeneralError(`You are unauthorized to post: ${data.detail}`);
     }
-    data?.author_email?.forEach(setEmailError)
-    data?.author_website?.forEach(setWebsiteError)
-    data?.content_md?.forEach(setBodyError)
-  }
+    data?.author_email?.forEach(setEmailError);
+    data?.author_website?.forEach(setWebsiteError);
+    data?.content_md?.forEach(setBodyError);
+  };
 
   const submit = async () => {
-    if (!validate()) return
-    setIsSubmitting(true)
+    if (!validate()) return;
+    setIsSubmitting(true);
 
     try {
       const comment = await api.createComment({
@@ -104,18 +104,18 @@ export const CommentingForm: FC<CommentingFormProps> = ({
         content_md: body,
         reply_parent: replyTo,
         slug,
-      })
-      console.log("Created comment", comment)
+      });
+      console.log("Created comment", comment);
     } catch (e) {
-      applyBackendErrors(e)
-      setIsSubmitting(false)
-      return
+      applyBackendErrors(e);
+      setIsSubmitting(false);
+      return;
     }
-    setBody("")
-    setIsSubmitting(false)
-    onSubmitted()
-    await refreshComments()
-  }
+    setBody("");
+    setIsSubmitting(false);
+    onSubmitted();
+    await refreshComments();
+  };
 
   return (
     <div>
@@ -183,7 +183,7 @@ export const CommentingForm: FC<CommentingFormProps> = ({
           </Label>
           <Input
             disabled={isSubmitting}
-            onChange={ev => setBody(ev.target.value)}
+            onChange={(ev) => setBody(ev.target.value)}
             type="textarea"
             name="body"
             value={body}
@@ -204,5 +204,5 @@ export const CommentingForm: FC<CommentingFormProps> = ({
         </Row>
       </Form>
     </div>
-  )
-}
+  );
+};

@@ -1,42 +1,42 @@
-import { AxiosResponse } from "axios"
-import React, { FC, useState } from "react"
-import { Button, Form, FormGroup, FormText, Input } from "reactstrap"
-import { useAPI } from "../APIProvider"
+import React, { FC, useState } from "react";
+import { Button, Form, FormGroup, FormText, Input } from "reactstrap";
+import { AxiosResponse } from "../../../lib/astrid-tech-api/node_modules/axios";
+import { useAPI } from "../APIProvider";
 
 type ReportFormProps = {
-  comment: number
-  onSubmitted?: () => void
-}
+  comment: number;
+  onSubmitted?: () => void;
+};
 
 export const ReportingForm: FC<ReportFormProps> = ({
   comment,
   onSubmitted = () => {},
 }) => {
-  const [body, setBody] = useState("")
-  const { api } = useAPI()
-  const [isSubmitting, setIsSubmitting] = useState(false)
-  const [bodyError, setBodyError] = useState<string | null>(null)
+  const [body, setBody] = useState("");
+  const { api } = useAPI();
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [bodyError, setBodyError] = useState<string | null>(null);
 
   const applyBackendErrors = (response?: AxiosResponse) => {
     if (!response) {
-      setBodyError("A network error occured! Please try again later.")
-      return
+      setBodyError("A network error occured! Please try again later.");
+      return;
     }
-    response.data?.content_md?.forEach(setBodyError)
-  }
+    response.data?.content_md?.forEach(setBodyError);
+  };
 
   const submit = async () => {
     try {
-      setIsSubmitting(true)
-      await api.reportComment(comment, body)
-      setBody("")
+      setIsSubmitting(true);
+      await api.reportComment(comment, body);
+      setBody("");
     } catch (e) {
-      applyBackendErrors(e.response)
+      applyBackendErrors(e.response);
     }
 
-    setIsSubmitting(false)
-    onSubmitted()
-  }
+    setIsSubmitting(false);
+    onSubmitted();
+  };
 
   return (
     <Form>
@@ -44,7 +44,7 @@ export const ReportingForm: FC<ReportFormProps> = ({
         <Input
           maxLength={140}
           disabled={isSubmitting}
-          onChange={ev => setBody(ev.target.value)}
+          onChange={(ev) => setBody(ev.target.value)}
           type="textarea"
           name="body"
           value={body}
@@ -59,5 +59,5 @@ export const ReportingForm: FC<ReportFormProps> = ({
         Submit!
       </Button>
     </Form>
-  )
-}
+  );
+};
