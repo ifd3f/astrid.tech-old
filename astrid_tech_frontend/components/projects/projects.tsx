@@ -222,10 +222,11 @@ export const ProjectCardsView: FC = () => {
   );
 };
 
-export const ProjectsIndex: FC<{ projects: ProjectMeta[]; fuseIndex: any }> = ({
-  projects,
-  fuseIndex,
-}) => {
+export const ProjectsIndex: FC<{
+  projects: ProjectMeta[];
+  fuseIndex: any;
+  fuseKeys: string[];
+}> = ({ projects, fuseIndex }) => {
   const index = Fuse.parseIndex<ProjectMeta>(fuseIndex);
   const fuse = new Fuse<ProjectMeta>(
     projects,

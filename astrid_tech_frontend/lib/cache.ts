@@ -128,7 +128,8 @@ export function getProjectMetas(): AssetDirObject<ProjectMeta<string>>[] {
   const projects = db
     .prepare(
       `SELECT 
-        id, 
+        id,
+        slug,
         asset_root as assetRoot, 
         title, 
         status,
@@ -148,12 +149,12 @@ export function getProjectMetas(): AssetDirObject<ProjectMeta<string>>[] {
     projects.map(
       ({
         id,
+        slug,
         assetRoot,
         title,
         status,
         description,
         startDate,
-        slug,
         endDate,
         url,
         source,
@@ -172,7 +173,7 @@ export function getProjectMetas(): AssetDirObject<ProjectMeta<string>>[] {
             url: url as string,
             source: JSON.parse(source) as string[],
             thumbnail: thumbnail as string,
-            tags: tags.map(({ tag }) => tag),
+            tags: [],
           },
         },
       ]
