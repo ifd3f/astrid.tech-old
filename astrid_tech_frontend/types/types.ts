@@ -22,7 +22,7 @@ export type WorkExperience = Tagged & {
 
 export type ProjectStatus = null | "early" | "wip" | "complete" | "scrapped";
 
-export type Project<DateType = Date> = Tagged & {
+export type ProjectMeta<DateType = Date> = Tagged & {
   title: string;
   status: ProjectStatus;
   startDate: DateType;
@@ -31,8 +31,11 @@ export type Project<DateType = Date> = Tagged & {
   url: string;
   source: string[];
   thumbnail: string;
-  content: string;
   description: null | string;
+};
+
+export type Project<DateType = Date> = ProjectMeta<DateType> & {
+  content: string;
 };
 
 export function convertProjectToObjectDate(project: Project<string>) {
