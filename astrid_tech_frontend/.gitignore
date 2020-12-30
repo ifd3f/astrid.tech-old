@@ -35,3 +35,4 @@ yarn-error.log*
 
 # Content cache
 content.sqlite3
+public/_/*

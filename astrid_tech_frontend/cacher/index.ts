@@ -2,6 +2,7 @@ import sqlite3, { Database } from "better-sqlite3";
 import { promises as fs } from "fs";
 import path from "path";
 import { convertProjectToStringDate } from "../types/types";
+import { copyAssets } from "./assets";
 import { BlogPostWithDir, getBlogPosts } from "./blog";
 import { getProjects } from "./projects";
 import { getLanguageTags, getUserTagOverrides } from "./tags";
@@ -146,6 +147,7 @@ async function main(dbUrl: string) {
   ).toString();
   db.exec(initSchema);
 
+  await copyAssets(contentDir, path.join(__dirname, "../public/_/"));
   await buildBlogPostCache(db);
   await buildProjectCache(db);
   await buildTagOverrideTable(db);
