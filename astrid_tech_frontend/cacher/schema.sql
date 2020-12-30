@@ -6,13 +6,15 @@ CREATE TABLE tag (
 );
 CREATE TABLE project (
   id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
+  asset_root TEXT NOT NULL,
   title TEXT NOT NULL,
+  description TEXT NOT NULL,
   slug TEXT NOT NULL,
   start_date DATETIME NOT NULL,
   end_date DATETIME,
   url TEXT,
   status TEXT,
-  source_url TEXT,
+  source_urls TEXT,
   thumbnail_path TEXT,
   content TEXT NOT NULL
 );

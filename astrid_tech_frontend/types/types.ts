@@ -20,27 +20,36 @@ export type WorkExperience = Tagged & {
   summary?: string;
 };
 
-export type Project = Tagged & {
-  __typename: "Project";
+export type ProjectStatus = null | "early" | "wip" | "complete" | "scrapped";
+
+export type Project<DateType = Date> = Tagged & {
   title: string;
-  status: null | "early" | "wip" | "complete" | "scrapped";
-  featured: boolean;
-  startDate: string;
-  endDate: string | null;
+  status: ProjectStatus;
+  startDate: DateType;
+  endDate: DateType | null;
   slug: string;
   url: string;
   source: string[];
-  thumbnail: File;
+  thumbnail: string;
   content: string;
-  description?: string;
-  childProjectTag: { childTag: Tag };
-  highlights?: string[];
-  keywords?: string[];
-  internal: {
-    content: string;
-    description: string;
-  };
+  description: null | string;
 };
+
+export function convertProjectToObjectDate(project: Project<string>) {
+  return {
+    ...project,
+    startDate: new Date(project.startDate),
+    endDate: project.endDate ? new Date(project.endDate) : null,
+  };
+}
+
+export function convertProjectToStringDate(project: Project<Date>) {
+  return {
+    ...project,
+    startDate: project.startDate.toISOString(),
+    endDate: project.endDate ? project.endDate.toISOString() : null,
+  };
+}
 
 export type BlogPost<DateType = Date> = Tagged & {
   title: string;
@@ -50,6 +59,20 @@ export type BlogPost<DateType = Date> = Tagged & {
   thumbnail: string | null;
   content: string;
 };
+
+export function convertBlogPostToObjectDate(post: BlogPost<string>) {
+  return {
+    ...post,
+    date: new Date(post.date),
+  };
+}
+
+export function convertBlogPostToStringDate(post: BlogPost<Date>) {
+  return {
+    ...post,
+    date: post.date.toISOString(),
+  };
+}
 
 export type Course = Tagged & {
   name: string;

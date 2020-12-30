@@ -80,3 +80,8 @@ export function formatDateInterval(startDate: string, endDate?: string | null) {
   }
   return endDate ? `${startDate} to ${endDate}` : `${startDate} to now`;
 }
+
+export type AssetDirObject<T> = {
+  assetRoot: string;
+  object: T;
+};

@@ -1,7 +1,9 @@
 import sqlite3, { Database } from "better-sqlite3";
 import { promises as fs } from "fs";
 import path from "path";
+import { convertProjectToStringDate } from "../types/types";
 import { BlogPostWithDir, getBlogPosts } from "./blog";
+import { getProjects } from "./projects";
 import { getLanguageTags, getUserTagOverrides } from "./tags";
 
 const contentDir = path.join(process.cwd(), "content");
@@ -57,6 +59,58 @@ async function buildTagOverrideTable(db: Database) {
     "/* This is an AUTO-GENERATED FILE. */\nmodule.exports=" +
       JSON.stringify(tags)
   );
+}
+
+async function buildProjectCache(db: Database) {
+  const insertProject = db.prepare(
+    `INSERT INTO project(
+      asset_root, 
+      title, 
+      description,
+      slug, 
+      start_date, 
+      end_date,
+      url,
+      status,
+      source_urls,
+      thumbnail_path, 
+      content) 
+    VALUES (
+      @assetRoot,
+      @title, 
+      @description
+      @slug, 
+      @startDate, 
+      @endDate, 
+      @url,
+      @status,
+      @sourceUrls,
+      @thumbnail,
+      @content)`
+  );
+  const projects = await Promise.all(await getProjects(contentDir));
+
+  const results = db.transaction(() =>
+    projects.map(({ assetRoot, object }) =>
+      insertProject.run({
+        assetRoot,
+        ...convertProjectToStringDate(object),
+        sourceUrls: JSON.stringify(object.source),
+      })
+    )
+  )();
+
+  const insertTag = db.prepare(
+    "INSERT INTO project_tag (fk_project, tag) VALUES (@projectId, @tag)"
+  );
+
+  db.transaction(() => {
+    projects.forEach(({ object }, i) =>
+      object.tags.map((tag) =>
+        insertTag.run({ projectId: results[i].lastInsertRowid, tag })
+      )
+    );
+  })();
 }
 
 async function main(dbUrl: string) {
