@@ -1,5 +1,7 @@
 import { GetStaticPaths, GetStaticProps, InferGetStaticPropsType } from "next";
 import { FC } from "react";
+import remark from "remark";
+import html from "remark-html";
 import { getBlogPost, getBlogPostSlugs, Path } from "../../../../lib/cache";
 import { BlogPost } from "../../../../types/types";
 
@@ -18,10 +20,12 @@ export const getStaticPaths: GetStaticPaths = async () => {
 };
 
 export const getStaticProps: GetStaticProps = async ({ params }) => {
-  const post = getBlogPost(params!! as Path);
-  console.log(post);
+  const { post, assetRoot } = getBlogPost(params!! as Path);
+
+  const content = (await remark().use(html).process(post.content)).toString();
+
   return {
-    props: { post },
+    props: { post: { ...post, content: content } },
   };
 };
 
