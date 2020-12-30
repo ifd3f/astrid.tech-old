@@ -9,11 +9,14 @@
     "typecheck": "tsc"
   },
   "dependencies": {
+    "@fontsource/gothic-a1": "^4.0.1",
     "async-redis": "^1.1.7",
     "axios": "^0.21.1",
     "better-sqlite3": "^7.1.2",
+    "bootstrap": "4",
     "classnames": "2.2.6",
     "date-fns": "2.10.0",
+    "firacode": "^5.2.0",
     "gray-matter": "4.0.2",
     "hsl-to-hex": "^1.0.0",
     "js-yaml": "^3.14.1",

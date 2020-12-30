@@ -1,8 +1,6 @@
 @import "./fonts.scss";
 @import "./variables.scss";
 @import "~bootstrap/scss/bootstrap";
-@import "./layout.scss";
-@import "./navbar.scss";
 
 .text-subtitle {
   color: $text-muted;
@@ -18,3 +16,5 @@
 }
 
 @import "./longform.scss";
+@import "./layout.scss";
+@import "./navbar.scss";
