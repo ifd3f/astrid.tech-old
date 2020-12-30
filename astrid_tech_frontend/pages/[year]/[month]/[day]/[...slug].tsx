@@ -1,7 +1,7 @@
 import AsyncRedis from "async-redis";
 import { GetStaticPaths, GetStaticProps, InferGetStaticPropsType } from "next";
 import { FC } from "react";
-import { getBlogPosts } from "../../../../lib/content";
+import { getBlogPosts } from "../../../../cacher/content";
 import { BlogPost } from "../../../../types/types";
 
 type Path = { year: string; month: string; day: string; slug: string[] };

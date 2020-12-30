@@ -51,9 +51,24 @@ async function loadBlogPost(pathname: string): Promise<BlogPost> {
   };
 }
 
-export async function getBlogPosts() {
+export type BlogPostWithDir<DateType> = {
+  post: BlogPost<DateType>;
+  assetRoot: string;
+};
+
+export async function getBlogPosts(): Promise<
+  Promise<BlogPostWithDir<Date>>[]
+> {
   const files = (await walkArr(join(contentDir, "blog")))
-    .filter(({ root, stats }) => stats.isFile() && stats.name.endsWith(".md"))
-    .map(({ root, stats }) => loadBlogPost(join(root, stats.name)));
+    .filter(({ stats }) => stats.isFile() && stats.name.endsWith(".md"))
+    .map(({ root, stats }) =>
+      loadBlogPost(join(root, stats.name)).then(
+        (post) =>
+          ({
+            assetRoot: root,
+            post,
+          } as BlogPostWithDir<Date>)
+      )
+    );
   return files;
 }
