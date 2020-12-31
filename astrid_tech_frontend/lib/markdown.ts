@@ -14,12 +14,13 @@ const oembed = require("remark-oembed");
 const markdown = require("remark-parse");
 const unified = require("unified");
 const slug = require("remark-slug");
+const gfm = require("remark-gfm");
 const urls = require("rehype-urls");
 
 export async function renderMarkdown(md: string, assetRoot: string) {
   function convertRelative(url: URL) {
     if (url.hostname != null) return url;
-    return join(assetRoot, url.pathname);
+    return join("/_", assetRoot, url.pathname);
   }
 
   const out = await unified()
@@ -27,6 +28,7 @@ export async function renderMarkdown(md: string, assetRoot: string) {
     .use(slug)
     .use(graphviz)
     .use(oembed)
+    .use(gfm)
     .use(unwrapImages)
     .use(smartypants)
     .use(math)

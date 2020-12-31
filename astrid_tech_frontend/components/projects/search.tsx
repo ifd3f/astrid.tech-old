@@ -96,6 +96,8 @@ export const Filterer: FC<FiltererArgs> = ({ children, projects, fuse }) => {
     (tag) => !filterTagsSet.has(tag)
   );
 
+  // TODO make this change the URL with query
+
   return (
     <SearchContext.Provider
       value={{
