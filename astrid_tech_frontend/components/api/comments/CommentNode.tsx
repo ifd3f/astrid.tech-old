@@ -1,4 +1,4 @@
-import moment from "moment";
+import { format } from "date-fns";
 import { useRouter } from "next/router";
 import React, { FC, ReactNode, useState } from "react";
 import { FaFlag, FaLink, FaReply } from "react-icons/fa";
@@ -32,7 +32,7 @@ export const CommentNode: FC<CommentNodeProps> = ({
 }) => {
   const { refreshComments } = useCommentData();
 
-  const date = moment(comment.timeAuthored);
+  const date = format(comment.timeAuthored, "d MMM yyyy");
   const router = useRouter();
   const commentId = `comment-${comment.id}`;
   const url = new URL(router.route);

@@ -1,4 +1,4 @@
-import moment from "moment";
+import { format } from "date-fns";
 import Link from "next/link";
 import React, { FC } from "react";
 import { Row } from "reactstrap";
@@ -12,7 +12,7 @@ type PostProps = {
 };
 
 export const PostBrief: FC<PostProps> = ({ post }) => {
-  const dateString = moment(post.date).format("DD MMMM YYYY");
+  const dateString = format(post.date, "d MMMM yyyy");
   const url = blogSlugToString(getBlogSlug(post));
 
   return (

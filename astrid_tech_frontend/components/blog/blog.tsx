@@ -1,3 +1,4 @@
+import { format } from "date-fns";
 import { useRouter } from "next/router";
 import React, { createContext, FC, useContext } from "react";
 import { FaCalendar } from "react-icons/fa";
@@ -16,24 +17,25 @@ import {
 import SEO from "../seo";
 
 type PostContextData = {
-  post: BlogPost<string>;
+  post: BlogPost<Date>;
 };
 
 const ProjectContext = createContext<PostContextData>({} as PostContextData);
 
 const PostStatusGroup: FC = () => {
   const { post } = useContext(ProjectContext);
+  const date = format(post.date, "d MMM yyyy");
   return (
     <StatusGroup>
       <InfoRow name="Date" icon={<FaCalendar />}>
-        {post.date}
+        {date}
       </InfoRow>
       {/* TODO add comment count */}
     </StatusGroup>
   );
 };
 
-export type BlogPostPageProps = { post: BlogPost<string> };
+export type BlogPostPageProps = { post: BlogPost<Date> };
 
 export const BlogPostPage: FC<BlogPostPageProps> = ({ post }) => {
   const router = useRouter();

@@ -3,7 +3,7 @@ import { FC } from "react";
 import BlogPostPage from "../../../../components/blog/blog";
 import { getBlogPost, getBlogPostSlugs, Path } from "../../../../lib/cache";
 import { renderMarkdown } from "../../../../lib/markdown";
-import { BlogPost } from "../../../../types/types";
+import { BlogPost, convertBlogPostToObjectDate } from "../../../../types/types";
 
 function pathToKey(path: Path) {
   const joined = path.slug.join(" ");
@@ -38,7 +38,9 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
 
 const Post: FC<InferGetStaticPropsType<typeof getStaticProps>> = ({ post }) => {
   const p = post as BlogPost<string>;
-  return <BlogPostPage post={p} />;
+  return (
+    <BlogPostPage post={convertBlogPostToObjectDate(p) as BlogPost<Date>} />
+  );
 };
 
 export default Post;
