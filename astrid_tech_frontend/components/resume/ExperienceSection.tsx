@@ -98,38 +98,9 @@ type QueryData = {
 };
 
 export function ExperienceSection() {
-  const query: QueryData = useStaticQuery(graphql`
-    fragment ExperienceSectionFragment on Work {
-      startDate(formatString: "YYYY-MM")
-      endDate(formatString: "YYYY-MM")
-      highlights
-      id
-      location
-      organization
-      position
-      tags {
-        ...TagBadge
-      }
-      summary
-      website
-      slug
-    }
-    query WorkQuery {
-      microvu: work(slug: { eq: "/work/micro-vu/" }) {
-        ...ExperienceSectionFragment
-      }
-      fabtime: work(slug: { eq: "/work/fabtime/" }) {
-        ...ExperienceSectionFragment
-      }
-      ironPanthers: work(slug: { eq: "/work/iron-panthers/" }) {
-        ...ExperienceSectionFragment
-      }
-    }
-  `);
-
   return (
     <HomepageSection color="#ddf2c4">
-      <h2 className={style.sectionHeading}>Work Experience</h2>
+      {/* TODO <h2 className={style.sectionHeading}>Work Experience</h2>
       <hr />
       <Article experience={query.microvu} />
       <hr />
@@ -139,6 +110,7 @@ export function ExperienceSection() {
         experience={query.ironPanthers}
         tagline={<IronPanthersTagline />}
       />
+      */}
     </HomepageSection>
   );
 }

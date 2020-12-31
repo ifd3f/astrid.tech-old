@@ -1,6 +1,6 @@
 import React from "react";
-import { Card, CardDeck, CardText, CardTitle } from "reactstrap";
-import { Course } from "../../../types/types";
+import { Card, CardText, CardTitle } from "reactstrap";
+import { Course } from "../../types/types";
 import { TagList } from "../tags/tag";
 import { HomepageSection } from "./util";
 
@@ -27,14 +27,7 @@ export function EducationSection() {
   return (
     <HomepageSection style={{ color: "white", backgroundColor: "#154734" }}>
       <h2 className="section-heading">Education</h2>
-      <div>
-        <div className="float-right" style={{ paddingLeft: 15 }}>
-          <img
-            height="140"
-            src={result.wordmark.publicURL}
-            alt="Cal Poly Logo"
-          />
-        </div>
+      {/*<div>
         <h3>California Polytechnic State University</h3>
         <p>BSc. Computer Science 2023 / GPA 3.91</p>
 
@@ -51,7 +44,7 @@ export function EducationSection() {
           <CourseCard course={result.csc348} />
           <CourseCard course={result.cpe357} />
         </CardDeck>
-      </div>
+      </div>*/}
     </HomepageSection>
   );
 }

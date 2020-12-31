@@ -24,7 +24,7 @@ export function ElevatorSection() {
     <HomepageSection color="#f2f2f2">
       <Row>
         <BigIcon upper={<>9 years</>}>of experience programming</BigIcon>
-        <BigIcon upper={<>{query.allProject.pageInfo.totalCount} projects</>}>
+        <BigIcon upper={<>21 projects</> /*TODO*/}>
           tracked on this website
         </BigIcon>
         <BigIcon upper={<FaDiceD20 />}>Likes D&D</BigIcon>

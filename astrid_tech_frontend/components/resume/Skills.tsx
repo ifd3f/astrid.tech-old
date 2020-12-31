@@ -1,6 +1,6 @@
+import Link from "next/link";
 import React, { FC, ReactNode } from "react";
 import { BsStar, BsStarFill } from "react-icons/bs";
-import Masonry from "react-masonry-component";
 import { Col } from "reactstrap";
 import { SkillGroup, Tag } from "../../types/types";
 import styleSkills from "./skills.module.scss";
@@ -33,7 +33,7 @@ type SkillInfoDisplayProps = {
 
 const SkillInfoDisplay: FC<SkillInfoDisplayProps> = ({ tag, level }) => {
   return (
-    <Link to={`/tags/${tag.slug}`}>
+    <Link href={`/tags/${tag.slug}`}>
       <div
         className={styleSkills.skillRow}
         style={{ backgroundColor: tag.backgroundColor, color: tag.color }}
@@ -71,37 +71,17 @@ type QueryData = {
 };
 
 export function SkillsSection() {
-  const query: QueryData = useStaticQuery(graphql`
-    query GetFeaturedSkills {
-      allSkillGroup {
-        nodes {
-          id
-          name
-          skills {
-            level
-            tag {
-              color
-              name
-              slug
-              backgroundColor
-            }
-          }
-        }
-      }
-    }
-  `);
-
   return (
     <HomepageSection style={{ backgroundColor: "#55cdfc" }}>
       <div className={style.sectionHeading}>
         <h2>Skills</h2>
         <p>Click on a tag to see related projects and blog posts!</p>
       </div>
-      <Masonry options={{ transitionDuration: 0 }}>
+      {/* <Masonry options={{ transitionDuration: 0 }}>
         {query.allSkillGroup.nodes.map((node) => (
           <SkillCategoryView key={node.id} category={node} />
         ))}
-      </Masonry>
+        </Masonry>*/}
     </HomepageSection>
   );
 }
