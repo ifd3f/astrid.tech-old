@@ -7,7 +7,7 @@ description: A 1D cellular automata implemented on a Basys 3 board for CPE 133 f
 startDate: 2020-02-20
 endDate: 2020-03-05
 tags:
-  - /education/cal-poly/cpe-133/
+  - school:cal-poly=cpe-133
   - verilog
   - fpga
   - hdl
@@ -15,7 +15,7 @@ tags:
 url: null
 source:
   - https://github.com/Plenglin/Basys3-1D-Cellular-Automata
-thumbnail: './basys3.jpeg'
+thumbnail: "./basys3.jpeg"
 ---
 
 This is the report I submitted for the final project, transcribed into Markdown by hand, transformed into HTML by the static site generator, and rendered into pixels by your browser for your eyes to see.

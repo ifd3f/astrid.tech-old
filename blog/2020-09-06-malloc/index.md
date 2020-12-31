@@ -4,7 +4,7 @@ date: 2020-09-06
 description: Technically it's second-best-in-class, but it's still speedy!
 tags:
   - /projects/fast-malloc-357/
-  - /education/cal-poly/cpe-357/
+  - school:cal-poly=cpe-357
   - c
   - school
 ---

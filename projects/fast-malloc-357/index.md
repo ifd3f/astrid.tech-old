@@ -9,7 +9,7 @@ startDate: 2020-07-01
 endDate: 2020-07-30
 tags:
   - c
-  - /education/cal-poly/cpe-357/
+  - school:cal-poly=cpe-357
 url: null
 source:
   - "mailto:hi@astrid.tech"

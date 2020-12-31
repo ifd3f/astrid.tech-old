@@ -9,7 +9,7 @@ tags:
   - glsl
   - cpp
   - simulation
-  - /education/cal-poly/csc-572/
+  - school:cal-poly=csc-572
 url: null
 source:
   - https://github.com/Plenglin/572-Planet-Collisions/

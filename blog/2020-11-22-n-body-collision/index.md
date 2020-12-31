@@ -6,7 +6,7 @@ tags:
   - notes
   - math
   - physics
-  - /education/cal-poly/csc-572/
+  - school:cal-poly=csc-572
   - /projects/planet-collision-572/
 ---
 
