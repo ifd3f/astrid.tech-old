@@ -9,6 +9,7 @@ import {
 } from "react-icons/bs";
 import { FaCalendar, FaGithub } from "react-icons/fa";
 import { Container } from "reactstrap";
+import { ProjectLink } from "../../lib/cache";
 import {
   formatDateInterval,
   getHSLString,
@@ -21,17 +22,14 @@ import {
   InfoRow,
   Layout,
   LongformLayout,
+  SidebarGroup,
   StatusGroup,
   TagsGroup,
 } from "../layout";
 import style from "./project-detail.module.scss";
 
-type Data = {
-  project: Project;
-};
-
-type Context = {
-  id: string;
+type UsesProject = {
+  project: Project<Date>;
 };
 
 function SourceCodeURLDisplay({ url }: { url: string }) {
@@ -102,30 +100,14 @@ const BlogPostsGroup = () => {
 };
 */
 
-/*
-const RelatedProjectsGroup = () => {
-  const { project } = useContext(ProjectContext);
-
-  const neighborNodes: BipartiteNode<Tag, Project>[] = project.tags.map(
-    (tag) => ({
-      id: tag.slug,
-      neighbors: tag.tagged.map((project) => ({
-        id: project.slug,
-        neighbors: [],
-        value: project as Project,
-      })),
-      value: tag,
-    })
-  );
-  const orderedProjects = orderByResistorSimilarity(neighborNodes).filter(
-    (other) => ![undefined, project.slug].includes(other.value.slug)
-  );
-
+const RelatedProjectsGroup: FC<{ similar: ProjectLink[] }> = ({ similar }) => {
   const list = (
     <ul>
-      {orderedProjects.slice(0, 5).map(({ value: project }) => (
-        <li key={project.slug}>
-          <Link to={project.slug}>{project.title}</Link>
+      {similar.map(({ slug, title }) => (
+        <li key={slug}>
+          <Link href={slug}>
+            <a href={title}>{title}</a>
+          </Link>
         </li>
       ))}
     </ul>
@@ -134,10 +116,10 @@ const RelatedProjectsGroup = () => {
   return (
     <SidebarGroup>
       <h2>Similar Projects</h2>
-      {orderedProjects.length == 0 ? <p>N/A</p> : list}
+      {similar.length == 0 ? <p>N/A</p> : list}
     </SidebarGroup>
   );
-};*/
+};
 
 type ProjectContextData = {
   project: Project;
@@ -147,11 +129,11 @@ const ProjectContext = createContext<ProjectContextData>(
   {} as ProjectContextData
 );
 
-export type ProjectDetailProps = {
-  project: Project<Date>;
+export type ProjectDetailProps = UsesProject & {
+  similar: ProjectLink[];
 };
 
-const ProjectDetailPage: FC<ProjectDetailProps> = ({ project }) => {
+const ProjectDetailPage: FC<ProjectDetailProps> = ({ project, similar }) => {
   const url = join(process.env.ROOT!!, "projects", project.slug);
   /*
   const thumbnail = data.project.thumbnail
@@ -179,7 +161,8 @@ const ProjectDetailPage: FC<ProjectDetailProps> = ({ project }) => {
             <>
               <ProjectStatusGroup />
               <TagsGroup tags={project.tags} />
-              {/* TODO <BlogPostsGroup /> <RelatedProjectsGroup /> */}
+              {/* TODO <BlogPostsGroup /> */}
+              <RelatedProjectsGroup similar={similar} />
             </>
           }
         >
