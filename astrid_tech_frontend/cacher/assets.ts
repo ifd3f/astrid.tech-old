@@ -10,12 +10,19 @@ export async function copyAssets(
   await fs.rm(outputDir, { force: true, recursive: true });
 
   const files = (await walkArr(contentDir))
-    .filter(({ stats }) => stats.isFile() && !stats.name.endsWith(".md"))
+    .filter(
+      ({ stats }) =>
+        stats.isFile() &&
+        !stats.name.endsWith(".md") &&
+        !stats.name.endsWith(".yaml")
+    )
     .map(({ root, stats }) =>
       (async () => {
         const src = join(root, stats.name);
         const relative = path.relative(contentDir, src);
-        const dest = join(outputDir, relative);
+        const dest = relative.startsWith("blog/")
+          ? join(outputDir, relative.substring(5))
+          : join(outputDir, relative);
 
         await fs.mkdir(path.parse(dest).dir, {
           recursive: true,
