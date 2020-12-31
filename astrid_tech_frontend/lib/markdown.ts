@@ -9,6 +9,7 @@ const remark2rehype = require("remark-rehype");
 const html = require("rehype-stringify");
 const katex = require("rehype-katex");
 const footnotes = require("remark-footnotes");
+const raw = require("rehype-raw");
 const oembed = require("remark-oembed");
 const markdown = require("remark-parse");
 const unified = require("unified");
@@ -24,18 +25,19 @@ export async function renderMarkdown(md: string, assetRoot: string) {
   const out = await unified()
     .use(markdown)
     .use(slug)
-    .use(oembed)
     .use(graphviz)
+    .use(oembed)
     .use(unwrapImages)
     .use(smartypants)
     .use(math)
     .use(prism)
     .use(footnotes)
-    .use(remark2rehype)
+    .use(remark2rehype, { allowDangerousHtml: true })
+    .use(raw)
     .use(urls, convertRelative)
     .use(katex)
     .use(picture)
-    .use(html)
+    .use(html, { sanitize: false })
     .process(md);
   return out.contents as string;
 }

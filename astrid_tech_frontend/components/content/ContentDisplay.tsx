@@ -8,10 +8,14 @@ const processor = unified()
   .use(rehype, { fragment: true })
   .use(rehype2react, {
     createElement: React.createElement,
+    allowDangerousHtml: true,
     components: { img: ContentImage },
   });
 
 export const ContentDisplay: FC<{ children: string }> = ({ children }) => {
-  const result = processor.processSync(children).result as ReactElement;
-  return result;
+  return (
+    <article className="longform">
+      {processor.processSync(children).result as ReactElement}
+    </article>
+  );
 };

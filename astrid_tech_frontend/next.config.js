@@ -11,6 +11,9 @@ function oldBlogRedirect(oldSlug, newSlug) {
 }
 
 module.exports = {
+  images: {
+    domains: ["i.ytimg.com"],
+  },
   async redirects() {
     return [
       {

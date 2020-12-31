@@ -15,6 +15,7 @@ import {
 } from "../../lib/util";
 import { Project } from "../../types/types";
 import { CommentSection } from "../api/comments/CommentSection";
+import { ContentDisplay } from "../content/ContentDisplay";
 import {
   InfoRow,
   Layout,
@@ -180,10 +181,7 @@ const ProjectDetailPage: FC<ProjectDetailProps> = ({ project }) => {
             </>
           }
         >
-          <article
-            className="longform"
-            dangerouslySetInnerHTML={{ __html: project.content!! }}
-          />
+          <ContentDisplay>{project.content}</ContentDisplay>
         </LongformLayout>
         <Container>
           <section id="comments">

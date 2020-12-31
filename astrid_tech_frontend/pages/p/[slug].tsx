@@ -15,7 +15,7 @@ export const getStaticPaths: GetStaticPaths = async () => {
 export const getStaticProps: GetStaticProps = async ({ params }) => {
   const project = getProject(params!!.slug as string);
 
-  const content = await renderMarkdown(project.content);
+  const content = await renderMarkdown(project.content, project.assetRoot);
 
   return {
     props: { project: { ...project, content: content } },

@@ -1,14 +1,11 @@
 import Image from "next/image";
-import React, { FC } from "react";
+import React, { ComponentProps, FC } from "react";
 
-export const ContentImage: FC<{ src: string; alt: string }> = ({
-  src,
-  alt,
-}) => {
+export const ContentImage: FC<ComponentProps<"img">> = ({ src, alt }) => {
   return (
     <a href={src}>
       <Image
-        src={src}
+        src={src!!}
         alt={alt}
         width={1200}
         height={800}
