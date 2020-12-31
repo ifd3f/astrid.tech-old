@@ -1,10 +1,11 @@
+import fs from "fs";
 import { join } from "path";
 import remark from "remark";
 import { truncateKeepWords } from "./util";
 const smartypants = require("@silvenon/remark-smartypants");
 const graphviz = require("remark-graphviz");
 const math = require("remark-math");
-const prism = require("remark-prism");
+const highlight = require("remark-highlight.js");
 const unwrapImages = require("remark-unwrap-images");
 const picture = require("rehype-picture");
 const remark2rehype = require("remark-rehype");
@@ -21,10 +22,20 @@ const urls = require("rehype-urls");
 const excerpt = require("remark-excerpt");
 const strip = require("strip-markdown");
 
+const publicRoot = join(process.cwd(), "public");
+
 export async function renderMarkdown(md: string, assetRoot: string) {
-  function convertRelative(url: URL) {
-    if (url.hostname == null && url.pathname != null) {
-      return join("/_", assetRoot, url.pathname);
+  function convertRelativeFileRef(url: URL) {
+    if (
+      url.hostname == null &&
+      url.pathname != null &&
+      url.pathname[0] != "/"
+    ) {
+      const newPath = join("/_", assetRoot, url.pathname);
+      const expectedFile = join(publicRoot, newPath);
+      if (fs.existsSync(expectedFile) && fs.statSync(expectedFile).isFile()) {
+        return newPath;
+      }
     }
     return url;
   }
@@ -38,11 +49,11 @@ export async function renderMarkdown(md: string, assetRoot: string) {
     .use(unwrapImages)
     .use(smartypants)
     .use(math)
-    //.use(prism)
+    .use(highlight, { exclude: "dot" })
     .use(footnotes)
     .use(remark2rehype, { allowDangerousHtml: true })
     .use(raw)
-    .use(urls, convertRelative)
+    .use(urls, convertRelativeFileRef)
     .use(katex)
     .use(picture)
     .use(html, { sanitize: false })
