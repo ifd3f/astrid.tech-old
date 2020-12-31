@@ -10,6 +10,7 @@
   },
   "dependencies": {
     "@fontsource/gothic-a1": "^4.0.1",
+    "@fontsource/work-sans": "^4.0.1",
     "@silvenon/remark-smartypants": "^1.0.0",
     "async-redis": "^1.1.7",
     "axios": "^0.21.1",
@@ -31,6 +32,7 @@
     "react-icons": "^4.1.0",
     "react-markdown": "^5.0.3",
     "reactstrap": "^8.8.1",
+    "rehype-dom-stringify": "^2.0.1",
     "rehype-katex": "^4.0.0",
     "rehype-picture": "^3.0.0",
     "rehype-react": "^6.1.0",

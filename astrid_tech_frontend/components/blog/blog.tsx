@@ -5,6 +5,7 @@ import { Container } from "reactstrap";
 import { getHSLString, getPersistentColor } from "../../lib/util";
 import { BlogPost } from "../../types/types";
 import { CommentSection } from "../api/comments/CommentSection";
+import { ContentDisplay } from "../content";
 import Layout from "../layout/layout";
 import {
   InfoRow,
@@ -54,10 +55,9 @@ export const BlogPostPage: FC<BlogPostPageProps> = ({ post }) => {
           }
           above={null}
         >
-          <article
-            className="longform"
-            dangerouslySetInnerHTML={{ __html: post.content }}
-          />
+          <article className="longform">
+            <ContentDisplay>{post.content}</ContentDisplay>
+          </article>
         </LongformLayout>
         <Container>
           <section id="comments">

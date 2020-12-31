@@ -100,6 +100,11 @@
   resolved "https://registry.yarnpkg.com/@fontsource/gothic-a1/-/gothic-a1-4.0.1.tgz#2eb70bb6d277c21d9bff77c2c076d85e3835da15"
   integrity sha512-275ptvROHHfkbptMJrY8ynzD/HGAVoaV2ilrINFZyUee0MG2jLSGcd/Gen0+7ShBSLQeXKFytKwopmXZT82uRw==
 
+"@fontsource/work-sans@^4.0.1":
+  version "4.0.1"
+  resolved "https://registry.yarnpkg.com/@fontsource/work-sans/-/work-sans-4.0.1.tgz#565960ad5bf18a67c9e3075928bc63a33f62eed7"
+  integrity sha512-jkm1Tua2L7Repx3xV3det3X0od2NkI7ya7FAGMIqj5NOhDDA8Id61hfEOwu5Px/EJkwPXKSnOEUWbzAk1nWNjA==
+
 "@fullhuman/postcss-purgecss@^2.1.2":
   version "2.3.0"
   resolved "https://registry.yarnpkg.com/@fullhuman/postcss-purgecss/-/postcss-purgecss-2.3.0.tgz#50a954757ec78696615d3e118e3fee2d9291882e"
@@ -2819,6 +2824,14 @@ hast-util-select@^4.0.0:
     unist-util-visit "^2.0.0"
     zwitch "^1.0.0"
 
+hast-util-to-dom@^2.0.1:
+  version "2.0.6"
+  resolved "https://registry.yarnpkg.com/hast-util-to-dom/-/hast-util-to-dom-2.0.6.tgz#b3f8b040529921d5dda098828dd3b2d80e456a81"
+  integrity sha512-rQ5Bu71whciB9imQUO6V6O25VR3I1H0Ah5ztwicWCQ6JBn7RjytcfIouEgUShXLxmjxkhErNHBwMAHSoScwqlg==
+  dependencies:
+    property-information "^5.1.0"
+    web-namespaces "^1.1.3"
+
 hast-util-to-html@^6.0.0:
   version "6.1.0"
   resolved "https://registry.yarnpkg.com/hast-util-to-html/-/hast-util-to-html-6.1.0.tgz#86bcd19c3bd46af456984f8f34db16298c2b10b0"
@@ -5087,7 +5100,7 @@ prop-types@15.7.2, prop-types@^15.5.8, prop-types@^15.6.1, prop-types@^15.6.2, p
     object-assign "^4.1.1"
     react-is "^16.8.1"
 
-property-information@^5.0.0, property-information@^5.2.0, property-information@^5.3.0:
+property-information@^5.0.0, property-information@^5.1.0, property-information@^5.2.0, property-information@^5.3.0:
   version "5.6.0"
   resolved "https://registry.yarnpkg.com/property-information/-/property-information-5.6.0.tgz#61675545fb23002f245c6540ec46077d4da3ed69"
   integrity sha512-YUHSPk+A30YPv+0Qf8i9Mbfe/C0hdPXk1s1jPVToV8pk8BQtpw10ct89Eo7OWkutrwqvT0eicAxlOg3dOAu8JA==
@@ -5414,6 +5427,15 @@ regexp.prototype.flags@^1.2.0:
   dependencies:
     define-properties "^1.1.3"
     es-abstract "^1.17.0-next.1"
+
+rehype-dom-stringify@^2.0.1:
+  version "2.0.1"
+  resolved "https://registry.yarnpkg.com/rehype-dom-stringify/-/rehype-dom-stringify-2.0.1.tgz#6e43517778ccd87128fd38d13f50bb9958d6e803"
+  integrity sha512-MiABypOaG6JCd8l4COOa8l7485FXSWrvdbTcEBCItgJ0Y8c7zRVJutM+Q+wnHZmUEKjdQm9ZXU7a03FFNKwwTw==
+  dependencies:
+    hast-util-to-dom "^2.0.1"
+    web-namespaces "^1.0.0"
+    xtend "^4.0.1"
 
 rehype-katex@^4.0.0:
   version "4.0.0"
@@ -7030,7 +7052,7 @@ watchpack@^1.7.4:
     chokidar "^3.4.1"
     watchpack-chokidar2 "^2.0.1"
 
-web-namespaces@^1.0.0:
+web-namespaces@^1.0.0, web-namespaces@^1.1.3:
   version "1.1.4"
   resolved "https://registry.yarnpkg.com/web-namespaces/-/web-namespaces-1.1.4.tgz#bc98a3de60dadd7faefc403d1076d529f5e030ec"
   integrity sha512-wYxSGajtmoP4WxfejAPIr4l0fVh+jeMXZb08wNc0tMg6xsfZXj3cECqIK0G7ZAqUq0PP8WlMDtaOGVBTAWztNw==
