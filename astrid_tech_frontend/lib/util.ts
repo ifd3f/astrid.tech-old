@@ -1,6 +1,7 @@
 import crypto from "crypto";
 import hslToHex from "hsl-to-hex";
 import seedrandom from "seedrandom";
+import { Path } from "./cache";
 
 export function getContrastingTextColor(backgroundColor: string): string {
   const [, r, g, b] = backgroundColor
@@ -79,4 +80,17 @@ export function formatDateInterval(startDate: Date, endDate?: Date | null) {
     return startDate;
   }
   return endDate ? `${startDate} to ${endDate}` : `${startDate} to now`;
+}
+
+export function getBlogSlug({ date, slug }: { date: Date; slug: string }) {
+  return {
+    year: date.getFullYear().toString(),
+    month: (date.getMonth() + 1).toString().padStart(2, "0"),
+    day: (date.getDate() + 1).toString().padStart(2, "0"),
+    slug: [slug],
+  };
+}
+
+export function blogSlugToString(path: Path) {
+  return `/${path.year}/${path.month}/${path.day}/${path.slug}`;
 }

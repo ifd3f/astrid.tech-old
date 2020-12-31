@@ -1,4 +1,5 @@
 import { BlogPost, BlogPostMeta } from "../../types/types";
+import { getBlogSlug } from "../util";
 import { getConnection } from "./util";
 
 export type Path = { year: string; month: string; day: string; slug: string[] };
@@ -11,15 +12,12 @@ export function getBlogPostSlugs(): Path[] {
     dateStr: string;
     slug: string;
   }[];
-  return results.map(({ dateStr, slug }) => {
-    const date = new Date(dateStr);
-    return {
-      year: date.getFullYear().toString(),
-      month: (date.getMonth() + 1).toString().padStart(2, "0"),
-      day: (date.getDate() + 1).toString().padStart(2, "0"),
-      slug: [slug],
-    };
-  });
+  return results.map((post) =>
+    getBlogSlug({
+      date: new Date(post.dateStr),
+      slug: post.slug,
+    })
+  );
 }
 
 export function getBlogPost(path: Path): BlogPost<string> {

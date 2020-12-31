@@ -68,14 +68,14 @@ export type BlogPost<DateType = Date> = BlogPostMeta<DateType> & {
   content: string;
 };
 
-export function convertBlogPostToObjectDate(post: BlogPost<string>) {
+export function convertBlogPostToObjectDate(post: BlogPostMeta<string>) {
   return {
     ...post,
     date: new Date(post.date),
   };
 }
 
-export function convertBlogPostToStringDate(post: BlogPost<Date>) {
+export function convertBlogPostToStringDate(post: BlogPostMeta<Date>) {
   return {
     ...post,
     date: post.date.toISOString(),

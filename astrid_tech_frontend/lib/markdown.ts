@@ -19,7 +19,7 @@ const urls = require("rehype-urls");
 
 export async function renderMarkdown(md: string, assetRoot: string) {
   function convertRelative(url: URL) {
-    if (url.hostname != null) return url;
+    if (url.hostname == null || url.pathname == null) return url;
     return join("/_", assetRoot, url.pathname);
   }
 
