@@ -51,7 +51,7 @@ const MainNavbar: FC<MainNavbarProps> = ({ currentLocation, fixed }) => {
         {isOpen ? <BsArrowsCollapse /> : <GiHamburger />}
       </NavbarToggler>
       <Collapse isOpen={isOpen} navbar>
-        <GNavLink to="/p" active={currentLocation == "projects"}>
+        <GNavLink to="/projects" active={currentLocation == "projects"}>
           Projects
         </GNavLink>
         <GNavLink to="/b" active={currentLocation == "blog"}>

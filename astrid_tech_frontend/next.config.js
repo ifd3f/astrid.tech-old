@@ -22,11 +22,6 @@ module.exports = {
         permanent: true,
       },
       {
-        source: "/projects",
-        destination: "/p",
-        permanent: true,
-      },
-      {
         source: "/blog",
         destination: "/b",
         permanent: true,
