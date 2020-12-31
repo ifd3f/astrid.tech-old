@@ -1,36 +1,35 @@
-import { graphql, Link, useStaticQuery } from "gatsby"
-import React, { FC, ReactNode } from "react"
-import { BsStar, BsStarFill } from "react-icons/bs"
-import Masonry from "react-masonry-component"
-import { Col } from "reactstrap"
-import { SkillGroup, Tag } from "../../types/index"
-import styleSkills from "./skills.module.scss"
-import style from "./style.module.scss"
-import { HomepageSection } from "./util"
+import React, { FC, ReactNode } from "react";
+import { BsStar, BsStarFill } from "react-icons/bs";
+import Masonry from "react-masonry-component";
+import { Col } from "reactstrap";
+import { SkillGroup, Tag } from "../../types/types";
+import styleSkills from "./skills.module.scss";
+import style from "./style.module.scss";
+import { HomepageSection } from "./util";
 
 type StarsProps = {
-  stars: number
-}
+  stars: number;
+};
 
 const Stars: FC<StarsProps> = ({ stars }) => {
-  const out: ReactNode[] = Array(5)
-  var i = 0
+  const out: ReactNode[] = Array(5);
+  var i = 0;
   while (i < stars) {
-    out.push(<BsStarFill key={i} />)
-    i++
+    out.push(<BsStarFill key={i} />);
+    i++;
   }
   while (i < 5) {
-    out.push(<BsStar key={i} />)
-    i++
+    out.push(<BsStar key={i} />);
+    i++;
   }
 
-  return <>{out}</>
-}
+  return <>{out}</>;
+};
 
 type SkillInfoDisplayProps = {
-  tag: Tag
-  level: number
-}
+  tag: Tag;
+  level: number;
+};
 
 const SkillInfoDisplay: FC<SkillInfoDisplayProps> = ({ tag, level }) => {
   return (
@@ -45,12 +44,12 @@ const SkillInfoDisplay: FC<SkillInfoDisplayProps> = ({ tag, level }) => {
         </p>
       </div>
     </Link>
-  )
-}
+  );
+};
 
 type SkillCategoryViewProps = {
-  category: SkillGroup
-}
+  category: SkillGroup;
+};
 
 const SkillCategoryView: FC<SkillCategoryViewProps> = ({
   category: { name, skills },
@@ -63,13 +62,13 @@ const SkillCategoryView: FC<SkillCategoryViewProps> = ({
         <SkillInfoDisplay level={level} tag={tag} key={tag.slug} />
       ))}
   </Col>
-)
+);
 
 type QueryData = {
   allSkillGroup: {
-    nodes: SkillGroup[]
-  }
-}
+    nodes: SkillGroup[];
+  };
+};
 
 export function SkillsSection() {
   const query: QueryData = useStaticQuery(graphql`
@@ -90,7 +89,7 @@ export function SkillsSection() {
         }
       }
     }
-  `)
+  `);
 
   return (
     <HomepageSection style={{ backgroundColor: "#55cdfc" }}>
@@ -99,10 +98,10 @@ export function SkillsSection() {
         <p>Click on a tag to see related projects and blog posts!</p>
       </div>
       <Masonry options={{ transitionDuration: 0 }}>
-        {query.allSkillGroup.nodes.map(node => (
+        {query.allSkillGroup.nodes.map((node) => (
           <SkillCategoryView key={node.id} category={node} />
         ))}
       </Masonry>
     </HomepageSection>
-  )
+  );
 }

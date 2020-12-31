@@ -1,17 +1,16 @@
-import { graphql, Link, useStaticQuery } from "gatsby"
-import React from "react"
-import { Col, Container, Row } from "reactstrap"
-import { ProjectCard } from "src/components/project"
-import { Project } from "../../types"
-import { HomepageSection } from "./util"
+import React from "react";
+import { Col, Container, Row } from "reactstrap";
+import { Project } from "../../types/types";
+import { ProjectCard } from "../projects/project-card";
+import { HomepageSection } from "./util";
 
 type QueryData = {
   allProject: {
     edges: {
-      node: Project
-    }[]
-  }
-}
+      node: Project;
+    }[];
+  };
+};
 
 export function ProjectsSection() {
   const result: QueryData = useStaticQuery(graphql`
@@ -36,7 +35,7 @@ export function ProjectsSection() {
         }
       }
     }
-  `)
+  `);
 
   return (
     <HomepageSection style={{ backgroundColor: "#f0d0b6" }}>
@@ -54,5 +53,5 @@ export function ProjectsSection() {
         </Row>
       </Container>
     </HomepageSection>
-  )
+  );
 }

@@ -1,11 +1,10 @@
-import { graphql, useStaticQuery } from "gatsby"
-import React, { FC, ReactNode } from "react"
-import { FaTrophy } from "react-icons/fa"
-import { Badge } from "reactstrap"
-import { TagList } from "src/components/tag"
-import { WorkExperience } from "../../types/index"
-import style from "./style.module.scss"
-import { HomepageSection } from "./util"
+import React, { FC, ReactNode } from "react";
+import { FaTrophy } from "react-icons/fa";
+import { Badge } from "reactstrap";
+import { WorkExperience } from "../../types/types";
+import { TagList } from "../tags/tag";
+import style from "./style.module.scss";
+import { HomepageSection } from "./util";
 
 const IronPanthersTagline = () => {
   return (
@@ -40,27 +39,27 @@ const IronPanthersTagline = () => {
         FTC #7316
       </Badge>
     </p>
-  )
-}
+  );
+};
 type ArticleProps = {
-  experience: WorkExperience
-  tagline?: ReactNode
-}
+  experience: WorkExperience;
+  tagline?: ReactNode;
+};
 
 const Article: FC<ArticleProps> = ({ experience, tagline: _tagline }) => {
-  let tagline: ReactNode
+  let tagline: ReactNode;
   if (_tagline != null) {
-    tagline = _tagline
+    tagline = _tagline;
   } else if (experience.summary) {
-    tagline = <p>{experience.summary}</p>
+    tagline = <p>{experience.summary}</p>;
   } else {
-    tagline = null
+    tagline = null;
   }
 
   const durationText =
     experience.endDate == null
       ? experience.startDate
-      : `${experience.startDate} to ${experience.endDate}`
+      : `${experience.startDate} to ${experience.endDate}`;
 
   return (
     <article>
@@ -83,20 +82,20 @@ const Article: FC<ArticleProps> = ({ experience, tagline: _tagline }) => {
 
       <div>
         <ul>
-          {experience.highlights.map(h => (
+          {experience.highlights.map((h) => (
             <li key={h}>{h}</li>
           ))}
         </ul>
       </div>
     </article>
-  )
-}
+  );
+};
 
 type QueryData = {
-  fabtime: WorkExperience
-  microvu: WorkExperience
-  ironPanthers: WorkExperience
-}
+  fabtime: WorkExperience;
+  microvu: WorkExperience;
+  ironPanthers: WorkExperience;
+};
 
 export function ExperienceSection() {
   const query: QueryData = useStaticQuery(graphql`
@@ -126,7 +125,7 @@ export function ExperienceSection() {
         ...ExperienceSectionFragment
       }
     }
-  `)
+  `);
 
   return (
     <HomepageSection color="#ddf2c4">
@@ -141,5 +140,5 @@ export function ExperienceSection() {
         tagline={<IronPanthersTagline />}
       />
     </HomepageSection>
-  )
+  );
 }
