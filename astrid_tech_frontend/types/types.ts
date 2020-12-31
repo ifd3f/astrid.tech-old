@@ -62,6 +62,7 @@ export type BlogPostMeta<DateType = Date> = Tagged & {
   date: DateType;
   slug: string;
   thumbnail: string | null;
+  excerpt?: string;
 };
 
 export type BlogPost<DateType = Date> = BlogPostMeta<DateType> & {

@@ -94,3 +94,14 @@ export function getBlogSlug({ date, slug }: { date: Date; slug: string }) {
 export function blogSlugToString(path: Path) {
   return `/${path.year}/${path.month}/${path.day}/${path.slug}`;
 }
+
+export function truncateKeepWords(text: string, maxChars: number) {
+  if (text.length < maxChars) return "";
+
+  for (let cutoff = maxChars; cutoff > 0; cutoff--) {
+    if (text.charAt(cutoff) == " ") {
+      return text.substr(0, cutoff);
+    }
+  }
+  return "";
+}

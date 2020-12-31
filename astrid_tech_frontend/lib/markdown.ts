@@ -1,5 +1,7 @@
-const smartypants = require("@silvenon/remark-smartypants");
 import { join } from "path";
+import remark from "remark";
+import { truncateKeepWords } from "./util";
+const smartypants = require("@silvenon/remark-smartypants");
 const graphviz = require("remark-graphviz");
 const math = require("remark-math");
 const prism = require("remark-prism");
@@ -16,6 +18,8 @@ const unified = require("unified");
 const slug = require("remark-slug");
 const gfm = require("remark-gfm");
 const urls = require("rehype-urls");
+const excerpt = require("remark-excerpt");
+const strip = require("strip-markdown");
 
 export async function renderMarkdown(md: string, assetRoot: string) {
   function convertRelative(url: URL) {
@@ -41,5 +45,12 @@ export async function renderMarkdown(md: string, assetRoot: string) {
     .use(picture)
     .use(html, { sanitize: false })
     .process(md);
-  return out.contents as string;
+  return out.toString() as string;
+}
+
+export async function getMarkdownExcerpt(md: string, maxChars: number) {
+  const text = (
+    await remark().use(excerpt).use(strip).process(md)
+  ).toString() as string;
+  return truncateKeepWords(text, maxChars) + "\u2026";
 }
