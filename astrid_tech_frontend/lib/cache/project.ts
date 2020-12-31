@@ -78,7 +78,11 @@ export function getProjectMetas(): ProjectMeta<string>[] {
         url,
         source_urls as source,
         thumbnail_path as thumbnail
-      FROM project`
+      FROM project
+      ORDER BY 
+        end_date DESC NULLS FIRST, 
+        slug ASC
+      `
     )
     .all();
 

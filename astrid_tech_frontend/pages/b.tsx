@@ -11,8 +11,7 @@ import styles from "../styles/blog.module.scss";
 import { convertBlogPostToObjectDate } from "../types/types";
 
 export const getStaticProps = async () => {
-  const posts = await getBlogPostMetas(150);
-  console.log(posts);
+  const posts = await getBlogPostMetas(120);
   return {
     props: { posts },
   };

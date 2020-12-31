@@ -69,7 +69,8 @@ export async function getBlogPostMetas(
         slug, 
         date, 
         content
-      FROM blog_post`
+      FROM blog_post
+      ORDER BY date DESC`
     )
     .all();
 
