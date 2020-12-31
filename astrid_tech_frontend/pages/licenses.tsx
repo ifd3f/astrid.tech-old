@@ -1,8 +1,9 @@
 import { InferGetStaticPropsType } from "next";
 import React, { FC } from "react";
 import { BsCircleFill } from "react-icons/bs";
+import Masonry from "react-masonry-component";
 import { PieChart } from "react-minimal-pie-chart";
-import { Container } from "reactstrap";
+import { Col, Container, Row } from "reactstrap";
 import spdxLicenseList from "spdx-license-list";
 import Layout from "../components/layout/layout";
 import SEO from "../components/seo";
@@ -15,7 +16,7 @@ import { getHSLString, getPersistentColor, RichColorTheme } from "../lib/util";
 
 const LicenseSection: FC<LicenseWithLibraries> = ({ libraries, license }) => (
   <section>
-    <h2>
+    <h2 id={license.name}>
       {license.url ? <a href={license.url}>{license.name}</a> : license.name}
     </h2>
     <p>{libraries.length} dependencies use this license.</p>
@@ -59,20 +60,32 @@ const LicensesChart: FC<LicensesChartProps> = ({ licenses }) => {
   data.push(other);
 
   return (
-    <section>
-      <PieChart data={data} />
-      <div>
+    <Row tag="section">
+      <Col xs="12" lg="6">
+        <picture style={{ display: "flex", justifyContent: "space-around" }}>
+          <PieChart data={data} style={{ maxWidth: 600, maxHeight: 600 }} />
+        </picture>
+      </Col>
+      <Col>
         <h3>Legend</h3>
         <ul>
-          {data.map(({ title, color, value, url }) => (
-            <li>
-              <BsCircleFill style={{ color }} />{" "}
-              {url ? <a href={url}>{title}</a> : title} ({value})
-            </li>
-          ))}
+          {data.map(({ title, color, value, url }) =>
+            url ? (
+              <li>
+                <BsCircleFill style={{ color }} /> {title} (
+                <a href={`#${title}`}>{value} dependencies</a> |{" "}
+                <a href={url}>more info</a>)
+              </li>
+            ) : (
+              <li>
+                <BsCircleFill style={{ color }} /> {title} ({value}{" "}
+                dependencies)
+              </li>
+            )
+          )}
         </ul>
-      </div>
-    </section>
+      </Col>
+    </Row>
   );
 };
 
@@ -91,7 +104,6 @@ export async function getStaticProps() {
     license: spdxLicenseList[name] ?? { name, isInvalidSPDX: true },
     libraries: licenseUsageCounts.get(name)!!,
   }));
-  console.log(licenses[0]);
 
   return {
     props: {
@@ -114,17 +126,26 @@ const Licenses: FC<InferGetStaticPropsType<typeof getStaticProps>> = ({
         description="Legal crap for the libraries my website uses"
       />
       <Container>
-        <h1>Open-Source Licenses</h1>
-        <p>
-          astrid.tech is licensed under{" "}
-          <a href={thisLicense.url}>{thisLicense.name}</a>. It also uses{" "}
-          {libraryCount} NPM dependencies, which use {licenses.length} unique
-          licensing configurations.
-        </p>
-        <LicensesChart licenses={licenses} />
-        {licenses.map((licenses) => (
-          <LicenseSection {...licenses} />
-        ))}
+        <article>
+          <h1>Open-Source Licenses</h1>
+          <p>
+            astrid.tech is licensed under{" "}
+            <strong>
+              <a href={thisLicense.url}>{thisLicense.name}</a>
+            </strong>
+            . It uses <strong>{libraryCount}</strong> NPM dependencies, which
+            use <strong>{licenses.length}</strong> unique licensing
+            configurations.
+          </p>
+          <LicensesChart licenses={licenses} />
+          <Masonry options={{ transitionDuration: 0 }}>
+            {licenses.map((licenses) => (
+              <Col sm="6">
+                <LicenseSection {...licenses} />
+              </Col>
+            ))}
+          </Masonry>
+        </article>
       </Container>
     </Layout>
   );
