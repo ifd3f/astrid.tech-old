@@ -1,6 +1,6 @@
+import { AxiosResponse } from "axios";
 import React, { FC, useState } from "react";
 import { Button, Form, FormGroup, FormText, Input } from "reactstrap";
-import { AxiosResponse } from "../../../lib/astrid-tech-api/node_modules/axios";
 import { useAPI } from "../APIProvider";
 
 type ReportFormProps = {
