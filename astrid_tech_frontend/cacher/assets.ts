@@ -6,6 +6,7 @@ export async function copyAssets(
   contentDir: string,
   outputDir: string
 ): Promise<void> {
+  console.log("Copying assets");
   await fs.rm(outputDir, { force: true, recursive: true });
 
   const files = (await walkArr(contentDir))

@@ -1,11 +1,13 @@
+import { InferGetStaticPropsType } from "next";
 import React, { FC } from "react";
 import { BsCircleFill } from "react-icons/bs";
 import { PieChart } from "react-minimal-pie-chart";
 import { Container } from "reactstrap";
 import spdxLicenseList from "spdx-license-list";
-import { getHSLString, getPersistentColor, RichColorTheme } from "src/util";
 import Layout from "../components/layout/layout";
 import SEO from "../components/seo";
+import { getLicenseData } from "../lib/licenses";
+import { getHSLString, getPersistentColor, RichColorTheme } from "../lib/util";
 
 type SPDX = {
   name: string;
@@ -87,7 +89,14 @@ const LicensesChart: FC<LicensesChartProps> = ({ licenses }) => {
   );
 };
 
-const Licenses: FC<{}> = (props) => {
+export async function getStaticProps() {
+  await getLicenseData();
+  return { props: {} };
+}
+
+const Licenses: FC<InferGetStaticPropsType<typeof getStaticProps>> = (
+  props
+) => {
   const libraries = data.allSoftwareLicenseLibrary.edges.map(
     ({ node }) => node
   );

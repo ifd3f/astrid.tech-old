@@ -1,6 +1,6 @@
 {
-  "name": "blog-starter-typescript",
-  "version": "1.0.0",
+  "name": "astrid-tech-frontend",
+  "version": "2.0.0",
   "scripts": {
     "dev": "next",
     "build": "next build",
@@ -25,8 +25,8 @@
     "hsl-to-hex": "^1.0.0",
     "js-yaml": "^3.14.1",
     "katex": "^0.12.0",
-    "license-checker": "^25.0.1",
     "next": "latest",
+    "npm-license-crawler": "^0.2.1",
     "react": "^16.13.0",
     "react-cookie": "^4.0.3",
     "react-dom": "^16.13.0",
@@ -84,5 +84,5 @@
     "tailwindcss": "^1.4.0",
     "ts-node": "^9.1.1"
   },
-  "license": "MIT"
+  "license": "AGPL-3.0-only"
 }

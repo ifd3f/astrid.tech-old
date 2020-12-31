@@ -10,7 +10,7 @@ const processor = unified()
     createElement: React.createElement,
     allowDangerousHtml: true,
     components: { img: ContentImage },
-  });
+  } as any);
 
 export const ContentDisplay: FC<{ children: string }> = ({ children }) => {
   return (

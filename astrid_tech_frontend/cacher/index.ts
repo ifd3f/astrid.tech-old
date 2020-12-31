@@ -4,12 +4,15 @@ import path from "path";
 import { convertProjectToStringDate } from "../types/types";
 import { copyAssets } from "./assets";
 import { getBlogPosts } from "./blog";
+import { generateLicenses } from "./licenses";
 import { getProjects } from "./projects";
 import { getLanguageTags, getUserTagOverrides } from "./tags";
 
 const contentDir = path.join(process.cwd(), "content");
 
 async function buildBlogPostCache(db: Database) {
+  console.log("Building blog post cache");
+
   const insertPost = db.prepare(
     `INSERT INTO blog_post(
       title, 
@@ -64,6 +67,8 @@ async function buildBlogPostCache(db: Database) {
 }
 
 async function buildTagOverrideTable(db: Database) {
+  console.log("Building tag override table");
+
   const [langTags, userTags] = await Promise.all([
     getLanguageTags(),
     getUserTagOverrides(contentDir),
@@ -84,6 +89,8 @@ async function buildTagOverrideTable(db: Database) {
 }
 
 async function buildProjectCache(db: Database) {
+  console.log("Building project cache");
+
   const insertProject = db.prepare(
     `INSERT INTO project(
       asset_root, 
@@ -147,6 +154,7 @@ async function main(dbUrl: string) {
   await buildBlogPostCache(db);
   await buildProjectCache(db);
   await buildTagOverrideTable(db);
+  await generateLicenses("data/licenses.json");
 }
 
 main("content.sqlite3");

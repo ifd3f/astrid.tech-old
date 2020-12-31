@@ -71,7 +71,7 @@ export const CommentNode: FC<CommentNodeProps> = ({
             <AuthorDisplay author={comment.author} />{" "}
             <span className="text-muted">
               {isReply ? "replied " : null}
-              on {date.format("MMM DD, YYYY HH:mm:ss")}
+              on {date}
             </span>
           </div>
           <div className="">
