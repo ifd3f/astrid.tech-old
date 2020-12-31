@@ -42,9 +42,11 @@ const MainNavbar: FC<MainNavbarProps> = ({ currentLocation, fixed }) => {
       fixed={fixed ? "top" : undefined}
       expand="md"
     >
-      <NavbarBrand tag={Link} href="/" activeClassName="active">
-        astrid.tech
-      </NavbarBrand>
+      <Link href="/">
+        <NavbarBrand tag="a" href="/" activeClassName="active">
+          astrid.tech
+        </NavbarBrand>
+      </Link>
       <NavbarToggler onClick={toggleIsOpen}>
         {isOpen ? <BsArrowsCollapse /> : <GiHamburger />}
       </NavbarToggler>
