@@ -1,4 +1,5 @@
 import { GetStaticPaths, GetStaticProps, InferGetStaticPropsType } from "next";
+import { join } from "path";
 import { FC } from "react";
 import BlogPostPage from "../../../../components/blog/blog";
 import { getBlogPost, getBlogPostSlugs, Path } from "../../../../lib/cache";
@@ -22,7 +23,10 @@ export const getStaticPaths: GetStaticPaths = async () => {
 export const getStaticProps: GetStaticProps = async ({ params }) => {
   const post = getBlogPost(params!! as Path);
 
-  const content = await renderMarkdown(post.content);
+  const content = await renderMarkdown(
+    post.content,
+    join("/_", post.assetRoot)
+  );
 
   `select slug, tag from blog_post
   left join blog_tag
