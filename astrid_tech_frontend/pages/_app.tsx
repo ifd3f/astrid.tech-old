@@ -1,9 +1,10 @@
-import "@fontsource/gothic-a1";
+import "@fontsource/ibm-plex-sans";
+import "@fontsource/red-hat-display";
 import "firacode";
+import "katex/dist/katex.min.css";
 import { AppProps } from "next/app";
 import React from "react";
 import { TagTableProvider } from "../components/tags/TagTableProvider";
-//require(`katex/dist/katex.min.css`);
 import tags from "../data/tags";
 import "../styles/custom.scss";
 

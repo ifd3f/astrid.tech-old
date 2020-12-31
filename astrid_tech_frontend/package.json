@@ -9,8 +9,8 @@
     "typecheck": "tsc"
   },
   "dependencies": {
-    "@fontsource/gothic-a1": "^4.0.1",
-    "@fontsource/work-sans": "^4.0.1",
+    "@fontsource/ibm-plex-sans": "^4.0.1",
+    "@fontsource/red-hat-display": "^4.0.1",
     "@silvenon/remark-smartypants": "^1.0.0",
     "async-redis": "^1.1.7",
     "axios": "^0.21.1",

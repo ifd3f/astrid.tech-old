@@ -95,10 +95,25 @@
   resolved "https://registry.yarnpkg.com/@csstools/convert-colors/-/convert-colors-1.4.0.tgz#ad495dc41b12e75d588c6db8b9834f08fa131eb7"
   integrity sha512-5a6wqoJV/xEdbRNKVo6I4hO3VjyDq//8q2f9I6PBAvMesJHFauXDorcNCsr9RzvsZnaWi5NYCcfyqP1QeFHFbw==
 
+"@fontsource/dm-sans@^4.0.1":
+  version "4.0.1"
+  resolved "https://registry.yarnpkg.com/@fontsource/dm-sans/-/dm-sans-4.0.1.tgz#019ccad8ed5125ab79270f9e34b3a4ce9ab9c969"
+  integrity sha512-eipU381q/aj9NDahYIZWiR1onmwFNMGZCN+KBkdDrqJN+WiUqEqBhaVcqFXiK1N9+7SGbjSFzlTz6M/qYQKVBQ==
+
 "@fontsource/gothic-a1@^4.0.1":
   version "4.0.1"
   resolved "https://registry.yarnpkg.com/@fontsource/gothic-a1/-/gothic-a1-4.0.1.tgz#2eb70bb6d277c21d9bff77c2c076d85e3835da15"
   integrity sha512-275ptvROHHfkbptMJrY8ynzD/HGAVoaV2ilrINFZyUee0MG2jLSGcd/Gen0+7ShBSLQeXKFytKwopmXZT82uRw==
+
+"@fontsource/ibm-plex-sans@^4.0.1":
+  version "4.0.1"
+  resolved "https://registry.yarnpkg.com/@fontsource/ibm-plex-sans/-/ibm-plex-sans-4.0.1.tgz#31b1c02ac598a1af4f2c44b15f6ecaa737a719e3"
+  integrity sha512-TkrY9xHRNu6R5ZyAh1Yp+NiXJhCqOJJ6c87T4keEa+pSF6OSjqnP66/Istdot8HEYiWelQYKOf0MI/3OyZ6mfA==
+
+"@fontsource/red-hat-display@^4.0.1":
+  version "4.0.1"
+  resolved "https://registry.yarnpkg.com/@fontsource/red-hat-display/-/red-hat-display-4.0.1.tgz#d0c71c574b89c60f6cfeed81412f2670506a94be"
+  integrity sha512-JVUGoQdh2xf1tDW+JUpGkGwIEe76+6cryBs3RgW4shYM1JwZDnNkO9iomRx/JQ8rttapF4L7alpq+pfMmu2Jyw==
 
 "@fontsource/work-sans@^4.0.1":
   version "4.0.1"
