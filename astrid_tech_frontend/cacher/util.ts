@@ -17,3 +17,10 @@ export async function walkArr<T>(dir: string) {
   });
   return out;
 }
+
+export function serializeJS(data: any, msg?: string) {
+  return `/* This is an AUTO-GENERATED FILE. ${msg ?? ""} */
+/* eslint-disable */
+// prettier-ignore
+module.exports=${JSON.stringify(data)}`;
+}

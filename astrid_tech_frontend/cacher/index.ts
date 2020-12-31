@@ -8,11 +8,12 @@ import {
   RichColorTheme,
 } from "../lib/util";
 import { convertProjectToStringDate, Tag } from "../types/types";
-import { copyAssets } from "./assets";
+import { copyAssets, mapData } from "./assets";
 import { getBlogPosts } from "./blog";
 import { generateLicenses } from "./licenses";
 import { getProjects } from "./projects";
 import { getLanguageTags, getUserTagOverrides } from "./tags";
+import { serializeJS } from "./util";
 
 const contentDir = path.join(process.cwd(), "content");
 
@@ -137,8 +138,7 @@ async function exportTagOverrideData(db: Database, dest: string) {
 
   await fs.writeFile(
     path.join(process.cwd(), "data/tags.js"),
-    "/* This is an AUTO-GENERATED FILE. */\nmodule.exports=" +
-      JSON.stringify(tags)
+    serializeJS(tags)
   );
 }
 
@@ -206,6 +206,7 @@ async function main(dbUrl: string) {
   db.exec(initSchema);
 
   await copyAssets(contentDir, path.join(__dirname, "../public/_/"));
+  await mapData(contentDir, path.join(dataDir, "objs"));
 
   await buildBlogPostCache(db);
   await buildProjectCache(db);
