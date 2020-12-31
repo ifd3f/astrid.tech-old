@@ -21,7 +21,7 @@ module.exports = {
     return [
       {
         source: "/blog",
-        destination: "/b",
+        destination: "/latest",
         permanent: true,
       },
       {
@@ -37,15 +37,15 @@ module.exports = {
       oldBlogRedirect("2020-02-06-cal-poly-pride-center", "cp-pride-center"),
       oldBlogRedirect("2020-06-07-hello-world"),
       oldBlogRedirect("2020-06-08-cs-major"),
-      oldBlogRedirect("2020-06-18-frequency-shifting"),
-      oldBlogRedirect("2020-07-10-website-release"),
-      oldBlogRedirect("2020-07-26-new-gatsby-config"),
+      oldBlogRedirect("2020-06-18-frequency-shifting", "freq-shift"),
+      oldBlogRedirect("2020-07-10-website-release", "site-release"),
+      oldBlogRedirect("2020-07-26-new-gatsby-config", "gatsby-backend"),
       oldBlogRedirect("2020-09-06-malloc"),
-      oldBlogRedirect("2020-09-15-latex-note-taking"),
+      oldBlogRedirect("2020-09-15-latex-note-taking", "latex"),
       oldBlogRedirect("2020-10-17-astrid-tech-v1"),
       oldBlogRedirect("2020-11-14-kombucha"),
       oldBlogRedirect("2020-11-22-n-body-collision"),
-      oldBlogRedirect("2020-12-20-adding-a-backend"),
+      oldBlogRedirect("2020-12-20-adding-a-backend", "backend"),
     ];
   },
 };
