@@ -1,3 +1,4 @@
+import Image from "next/image";
 import Link from "next/link";
 import React, { FC, ReactNode } from "react";
 import { Col, Container, Row } from "reactstrap";
@@ -53,11 +54,17 @@ const ContentLicense = () => (
   </p>
 );
 
-const AGPL: FC<{ logo: any }> = ({ logo }) => {
+const AGPL: FC = () => {
   return (
     <>
       <a href="https://www.gnu.org/licenses/agpl-3.0.en.html">
-        <Img fixed={logo} alt="GNU Affero General Public License" />
+        <Image
+          alt="GNU Affero General Public License"
+          width={100}
+          height={40}
+          objectFit="contain"
+          src="/agpl.png"
+        />
       </a>
       <p>
         <a href="https://github.com/plenglin/astrid.tech">
@@ -110,7 +117,9 @@ const FooterSection = () => {
           <Col></Col>
         </Row>
         <Row>
-          <Col className="text-center">{/*todo agpl*/}</Col>
+          <Col className="text-center">
+            <AGPL />
+          </Col>
           <Col className="text-center">
             <ContentLicense />
           </Col>
