@@ -1,14 +1,23 @@
 import Link from "next/link";
 import React, { FC, ReactNode } from "react";
 import { BsStar, BsStarFill } from "react-icons/bs";
+import Masonry from "react-masonry-component";
 import { Col } from "reactstrap";
-import { SkillGroup, Tag } from "../../types/types";
+import { useTagTable } from "../tags/TagTableProvider";
 import styleSkills from "./skills.module.scss";
 import style from "./style.module.scss";
 import { HomepageSection } from "./util";
 
 type StarsProps = {
   stars: number;
+};
+
+export type SkillGroup = {
+  name: string;
+  skills: {
+    level: number;
+    slug: string;
+  }[];
 };
 
 const Stars: FC<StarsProps> = ({ stars }) => {
@@ -27,13 +36,15 @@ const Stars: FC<StarsProps> = ({ stars }) => {
 };
 
 type SkillInfoDisplayProps = {
-  tag: Tag;
+  slug: string;
   level: number;
 };
 
-const SkillInfoDisplay: FC<SkillInfoDisplayProps> = ({ tag, level }) => {
+const SkillInfoDisplay: FC<SkillInfoDisplayProps> = ({ slug, level }) => {
+  const tags = useTagTable();
+  const tag = tags.get(slug);
   return (
-    <Link href={`/tags/${tag.slug}`}>
+    <Link href={`/t/${tag.slug}`}>
       <div
         className={styleSkills.skillRow}
         style={{ backgroundColor: tag.backgroundColor, color: tag.color }}
@@ -58,30 +69,25 @@ const SkillCategoryView: FC<SkillCategoryViewProps> = ({
     <h3>{name}</h3>
     {skills
       .sort(({ level: a }, { level: b }) => b - a)
-      .map(({ level, tag }) => (
-        <SkillInfoDisplay level={level} tag={tag} key={tag.slug} />
+      .map(({ level, slug }) => (
+        <SkillInfoDisplay level={level} slug={slug} key={slug} />
       ))}
   </Col>
 );
 
-type QueryData = {
-  allSkillGroup: {
-    nodes: SkillGroup[];
-  };
-};
-
 export function SkillsSection() {
+  const skills = require("../../data/objs/misc/skills") as SkillGroup[];
   return (
     <HomepageSection style={{ backgroundColor: "#55cdfc" }}>
       <div className={style.sectionHeading}>
         <h2>Skills</h2>
         <p>Click on a tag to see related projects and blog posts!</p>
       </div>
-      {/* <Masonry options={{ transitionDuration: 0 }}>
-        {query.allSkillGroup.nodes.map((node) => (
-          <SkillCategoryView key={node.id} category={node} />
+      <Masonry options={{ transitionDuration: 0 }}>
+        {skills.map((group) => (
+          <SkillCategoryView key={group.name} category={group} />
         ))}
-        </Masonry>*/}
+      </Masonry>
     </HomepageSection>
   );
 }

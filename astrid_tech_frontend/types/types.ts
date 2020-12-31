@@ -101,11 +101,3 @@ export type Education = {
   courses: Course[];
   gpa: number;
 };
-
-export type SkillGroup = {
-  name: string;
-  skills: {
-    level: number;
-    tag: Tag;
-  }[];
-};
