@@ -1,7 +1,13 @@
 import sqlite3, { Database } from "better-sqlite3";
 import { promises as fs } from "fs";
 import path from "path";
-import { convertProjectToStringDate } from "../types/types";
+import {
+  getContrastingTextColor,
+  getHSLString,
+  getPersistentColor,
+  RichColorTheme,
+} from "../lib/util";
+import { convertProjectToStringDate, Tag } from "../types/types";
 import { copyAssets } from "./assets";
 import { getBlogPosts } from "./blog";
 import { generateLicenses } from "./licenses";
@@ -66,20 +72,68 @@ async function buildBlogPostCache(db: Database) {
   })();
 }
 
+function insertTags(db: Database, tags: Tag[]) {
+  const insert = db.prepare(
+    "INSERT INTO tag (slug, name, color, background_color) VALUES (@slug, @name, @color, @backgroundColor)"
+  );
+
+  db.transaction(() => {
+    for (const tag of tags) {
+      insert.run(tag);
+    }
+  })();
+}
+
 async function buildTagOverrideTable(db: Database) {
-  console.log("Building tag override table");
+  console.log("Building language and user tag override tables");
 
   const [langTags, userTags] = await Promise.all([
     getLanguageTags(),
     getUserTagOverrides(contentDir),
   ]);
-  const tags = langTags.concat(userTags);
-  const insert = db.prepare(
-    "INSERT INTO tag (slug, name, color, background_color) VALUES (@slug, @name, @color, @backgroundColor)"
+
+  insertTags(db, langTags);
+  insertTags(db, userTags);
+}
+
+async function buildProjectTagOverrideTable(db: Database) {
+  console.log("Building project tag override tables");
+
+  const projects = db.prepare("SELECT slug, title FROM project").all();
+
+  insertTags(
+    db,
+    projects.map(({ slug, title }) => {
+      const backgroundColor = getHSLString(
+        getPersistentColor(slug, RichColorTheme)
+      );
+      return {
+        slug: `/projects/${slug}/`,
+        name: title,
+        backgroundColor,
+        color: getContrastingTextColor(backgroundColor),
+      };
+    })
   );
-  for (const tag of tags) {
-    insert.run(tag);
-  }
+}
+
+async function exportTagOverrideData(db: Database, dest: string) {
+  console.log("Exporting tag overrides to file");
+  const tags = db
+    .prepare(
+      "SELECT slug, name, color, background_color AS backgroundColor FROM tag"
+    )
+    .all()
+    .map((tag) => {
+      const backgroundColor =
+        tag.backgroundColor ?? getHSLString(getPersistentColor(tag.slug));
+      return {
+        slug: tag.slug,
+        name: tag.name ?? tag.slug,
+        backgroundColor,
+        color: tag.color ?? getContrastingTextColor(backgroundColor),
+      } as Tag;
+    });
 
   await fs.writeFile(
     path.join(process.cwd(), "data/tags.js"),
@@ -144,6 +198,7 @@ async function buildProjectCache(db: Database) {
 async function main(dbUrl: string) {
   await fs.rm(dbUrl);
 
+  const dataDir = path.join(__dirname, "../data");
   const db = sqlite3(dbUrl, {});
   const initSchema = (
     await fs.readFile(path.join(__dirname, "schema.sql"))
@@ -151,10 +206,14 @@ async function main(dbUrl: string) {
   db.exec(initSchema);
 
   await copyAssets(contentDir, path.join(__dirname, "../public/_/"));
+
   await buildBlogPostCache(db);
   await buildProjectCache(db);
   await buildTagOverrideTable(db);
-  await generateLicenses("data/licenses.json");
+  await buildProjectTagOverrideTable(db);
+
+  await exportTagOverrideData(db, path.join(dataDir, "tags.js"));
+  await generateLicenses(path.join(dataDir, "licenses.json"));
 }
 
 main("content.sqlite3");
