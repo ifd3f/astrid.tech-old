@@ -23,20 +23,22 @@ const strip = require("strip-markdown");
 
 export async function renderMarkdown(md: string, assetRoot: string) {
   function convertRelative(url: URL) {
-    if (url.hostname == null || url.pathname == null) return url;
-    return join("/_", assetRoot, url.pathname);
+    if (url.hostname == null && url.pathname != null) {
+      return join("/_", assetRoot, url.pathname);
+    }
+    return url;
   }
 
   const out = await unified()
     .use(markdown)
-    .use(slug)
     .use(graphviz)
+    .use(slug)
     .use(oembed)
     .use(gfm)
     .use(unwrapImages)
     .use(smartypants)
     .use(math)
-    .use(prism)
+    //.use(prism)
     .use(footnotes)
     .use(remark2rehype, { allowDangerousHtml: true })
     .use(raw)

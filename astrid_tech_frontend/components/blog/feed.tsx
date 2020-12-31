@@ -1,7 +1,7 @@
 import moment from "moment";
 import Link from "next/link";
 import React, { FC } from "react";
-import { Col, Row } from "reactstrap";
+import { Row } from "reactstrap";
 import { blogSlugToString, getBlogSlug } from "../../lib/util";
 import style from "../../styles/blog.module.scss";
 import { BlogPostMeta } from "../../types/types";
@@ -18,19 +18,19 @@ export const PostBrief: FC<PostProps> = ({ post }) => {
   return (
     <Link href={url}>
       <article className={style.brief}>
-        <Row className="col">
-          <Col sm={8}>
+        <Row>
+          <div className="col-12 col-sm-8 col-md-7">
             <h3>{post.title}</h3>
-            <div>{post.description}</div>
-          </Col>
-          <Col sm={4}>
+            <p>{post.description}</p>
+            <p className="text-muted">{post.excerpt}</p>
+          </div>
+          <div className="col col-sm-4 col-md-5">
             <p className={`text-muted ${style.date}`}>{dateString}</p>
-            <TagList tags={post.tags} link limit={5} />
-          </Col>
+            <p>
+              <TagList tags={post.tags} link limit={5} />
+            </p>
+          </div>
         </Row>
-        <Col>
-          <p className="text-muted">{post.excerpt}</p>
-        </Col>
       </article>
     </Link>
   );
