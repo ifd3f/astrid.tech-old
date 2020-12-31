@@ -17,6 +17,7 @@ import {
 } from "reactstrap";
 import { Project, ProjectMeta, Tag } from "../../types/types";
 import Layout, { PageHeading } from "../layout";
+import SEO from "../seo";
 import { TagBadge } from "../tags/tag";
 import { useTagTable } from "../tags/TagTableProvider";
 import { ProjectCard } from "./project-card";
@@ -240,7 +241,7 @@ export const ProjectsIndex: FC<{
 
   return (
     <Layout currentLocation="projects">
-      {/*<SEO title={title} description={description} /> TODO*/}
+      <SEO title={title} description={description} />
       <PageHeading title={title} description={description} bgColor="#3baddd" />
       <main>
         <Filterer projects={projects} fuse={fuse}>

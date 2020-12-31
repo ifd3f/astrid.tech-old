@@ -13,6 +13,7 @@ import {
   StatusGroup,
   TagsGroup,
 } from "../layout/longform-layout";
+import SEO from "../seo";
 
 type PostContextData = {
   post: BlogPost<string>;
@@ -40,6 +41,7 @@ export const BlogPostPage: FC<BlogPostPageProps> = ({ post }) => {
 
   return (
     <ProjectContext.Provider value={{ post }}>
+      <SEO title={post.title} description={post.description} />
       <Layout currentLocation="blog">
         <LongformLayout
           title={post.title}
