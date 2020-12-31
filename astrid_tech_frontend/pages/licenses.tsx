@@ -6,25 +6,12 @@ import { Container } from "reactstrap";
 import spdxLicenseList from "spdx-license-list";
 import Layout from "../components/layout/layout";
 import SEO from "../components/seo";
-import { getLicenseData } from "../lib/licenses";
+import {
+  getLicenseData,
+  LicenseWithLibraries,
+  SoftwareLicenseLibrary,
+} from "../lib/licenses";
 import { getHSLString, getPersistentColor, RichColorTheme } from "../lib/util";
-
-type SPDX = {
-  name: string;
-  url: string;
-  isInvalidSPDX?: boolean;
-};
-
-type SoftwareLicenseLibrary = {
-  license: string;
-  name: string;
-  url: string;
-};
-
-type LicenseWithLibraries = {
-  license: SPDX;
-  libraries: SoftwareLicenseLibrary[];
-};
 
 const LicenseSection: FC<LicenseWithLibraries> = ({ libraries, license }) => (
   <section>
@@ -90,16 +77,7 @@ const LicensesChart: FC<LicensesChartProps> = ({ licenses }) => {
 };
 
 export async function getStaticProps() {
-  await getLicenseData();
-  return { props: {} };
-}
-
-const Licenses: FC<InferGetStaticPropsType<typeof getStaticProps>> = (
-  props
-) => {
-  const libraries = data.allSoftwareLicenseLibrary.edges.map(
-    ({ node }) => node
-  );
+  const libraries = await getLicenseData();
   const licenseUsageCounts = new Map<string, SoftwareLicenseLibrary[]>();
 
   for (const library of libraries) {
@@ -113,7 +91,20 @@ const Licenses: FC<InferGetStaticPropsType<typeof getStaticProps>> = (
     license: spdxLicenseList[name] ?? { name, isInvalidSPDX: true },
     libraries: licenseUsageCounts.get(name)!!,
   }));
+  console.log(licenses[0]);
 
+  return {
+    props: {
+      licenses,
+      libraryCount: libraries.length,
+    },
+  };
+}
+
+const Licenses: FC<InferGetStaticPropsType<typeof getStaticProps>> = ({
+  licenses,
+  libraryCount,
+}) => {
   const thisLicense = spdxLicenseList["AGPL-3.0"];
 
   return (
@@ -127,8 +118,8 @@ const Licenses: FC<InferGetStaticPropsType<typeof getStaticProps>> = (
         <p>
           astrid.tech is licensed under{" "}
           <a href={thisLicense.url}>{thisLicense.name}</a>. It also uses{" "}
-          {libraries.length} NPM dependencies, which use {licenses.length}{" "}
-          unique licensing configurations.
+          {libraryCount} NPM dependencies, which use {licenses.length} unique
+          licensing configurations.
         </p>
         <LicensesChart licenses={licenses} />
         {licenses.map((licenses) => (
