@@ -20,9 +20,11 @@ export const PostBrief: FC<PostProps> = ({ post }) => {
       <article className={style.brief}>
         <Row>
           <div className="col-12 col-sm-8 col-md-7">
-            <h3>{post.title}</h3>
-            <p>{post.description}</p>
-            <p className="text-muted">{post.excerpt}</p>
+            <a href={url}>
+              <h3>{post.title}</h3>
+              <p>{post.description}</p>
+              <p className="text-muted">{post.excerpt}</p>
+            </a>
           </div>
           <div className="col col-sm-4 col-md-5">
             <p className={`text-muted ${style.date}`}>{dateString}</p>

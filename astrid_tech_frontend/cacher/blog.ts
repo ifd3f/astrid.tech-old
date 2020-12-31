@@ -7,11 +7,12 @@ import { walkArr } from "./util";
 function getSlug(parsed: ParsedPath) {
   const tailname =
     parsed.name == "index" ? path.parse(parsed.dir).name : parsed.name;
+  console.log(tailname);
   const oldStyleMatch = tailname.match(/\d{4}-\d{2}-\d{2}-(.+)/);
   if (oldStyleMatch) {
     return oldStyleMatch[1];
   }
-  return tailname.slice(0, -3);
+  return tailname;
 }
 
 async function loadBlogPost(pathname: string) {
@@ -35,14 +36,20 @@ async function loadBlogPost(pathname: string) {
 export async function getBlogPosts(
   contentDir: string
 ): Promise<Promise<BlogPost<Date>>[]> {
-  const files = (await walkArr(join(contentDir, "blog")))
-    .filter(({ stats }) => stats.isFile() && stats.name.endsWith(".md"))
+  const searchRoot = join(contentDir, "blog");
+  const files = (await walkArr(searchRoot))
+    .filter(
+      ({ stats }) =>
+        stats.isFile() &&
+        stats.name.endsWith(".md") &&
+        !stats.name.endsWith(".note.md")
+    )
     .map(({ root, stats }) =>
       loadBlogPost(join(root, stats.name)).then(
         (post) =>
           ({
             ...post,
-            assetRoot: relative(contentDir, root),
+            assetRoot: relative(searchRoot, root),
           } as BlogPost<Date>)
       )
     );
