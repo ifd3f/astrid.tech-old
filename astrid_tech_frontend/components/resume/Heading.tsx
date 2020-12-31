@@ -58,7 +58,13 @@ interface IconInfoDisplayProps {
 
 const ImageOfMyself = () => (
   <div className={homepageStyles.imageSelf + " u-photo"}>
-    <Image src="/avatar" width={500} height={500} />
+    <Image
+      src="/avatar.jpg"
+      alt="Astrid Yu"
+      width={200}
+      height={200}
+      layout="responsive"
+    />
   </div>
 );
 

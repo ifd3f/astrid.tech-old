@@ -13,30 +13,6 @@ type QueryData = {
 };
 
 export function ProjectsSection() {
-  const result: QueryData = useStaticQuery(graphql`
-    query GetFeaturedProjects {
-      allProject(
-        sort: { fields: [endDate], order: DESC }
-        filter: {
-          slug: {
-            in: [
-              "/project/inventree/"
-              "/project/astrid-tech/"
-              "/project/hairnet/"
-              "/project/collision-zone/"
-            ]
-          }
-        }
-      ) {
-        edges {
-          node {
-            ...ProjectCard
-          }
-        }
-      }
-    }
-  `);
-
   return (
     <HomepageSection style={{ backgroundColor: "#f0d0b6" }}>
       <div className="">
