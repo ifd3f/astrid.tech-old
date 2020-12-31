@@ -14,13 +14,11 @@ module.exports = {
   images: {
     domains: ["i.ytimg.com"],
   },
+  env: {
+    ROOT: "https://astrid.tech/",
+  },
   async redirects() {
     return [
-      {
-        source: "/projects/:slug",
-        destination: "/p/:slug",
-        permanent: true,
-      },
       {
         source: "/blog",
         destination: "/b",

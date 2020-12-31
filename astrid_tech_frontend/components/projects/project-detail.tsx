@@ -1,4 +1,5 @@
 import Link from "next/link";
+import { join } from "path";
 import React, { createContext, FC, useContext } from "react";
 import {
   BsArrowLeft,
@@ -46,11 +47,11 @@ function SourceCodeURLDisplay({ url }: { url: string }) {
 }
 
 const ProjectStatusGroup = () => {
-  const { project, disqusConfig } = useContext(ProjectContext);
+  const { project } = useContext(ProjectContext);
   return (
     <StatusGroup>
       <InfoRow name="Date" icon={<FaCalendar />}>
-        {formatDateInterval(project.startDate, project.endDate)}
+        {formatDateInterval("d MMM yyyy", project.startDate, project.endDate)}
       </InfoRow>
       {project.url ? (
         <InfoRow name="URL" icon={<BsLink />}>
@@ -151,7 +152,7 @@ export type ProjectDetailProps = {
 };
 
 const ProjectDetailPage: FC<ProjectDetailProps> = ({ project }) => {
-  //const url = `${location.origin}${project.slug}`;
+  const url = join(process.env.ROOT!!, "projects", project.slug);
   /*
   const thumbnail = data.project.thumbnail
     ? `${location.origin}${data.project.thumbnail.childImageSharp.fixed.src}`
@@ -173,6 +174,7 @@ const ProjectDetailPage: FC<ProjectDetailProps> = ({ project }) => {
             </Link>
           }
           thumbnail={undefined /* TODO */}
+          url={url}
           sidebar={
             <>
               <ProjectStatusGroup />

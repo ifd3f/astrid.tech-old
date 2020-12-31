@@ -23,6 +23,7 @@ export type WorkExperience = Tagged & {
 export type ProjectStatus = null | "early" | "wip" | "complete" | "scrapped";
 
 export type ProjectMeta<DateType = Date> = Tagged & {
+  id?: number;
   title: string;
   assetRoot: string;
   status: ProjectStatus;

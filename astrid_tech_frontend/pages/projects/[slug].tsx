@@ -3,6 +3,7 @@ import { FC } from "react";
 import ProjectDetailPage from "../../components/projects/project-detail";
 import { getProject, getProjectSlugs } from "../../lib/cache";
 import { renderMarkdown } from "../../lib/markdown";
+import { convertProjectToObjectDate, Project } from "../../types/types";
 
 export const getStaticPaths: GetStaticPaths = async () => {
   console.log(getProjectSlugs());
@@ -25,7 +26,11 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
 const Page: FC<InferGetStaticPropsType<typeof getStaticProps>> = ({
   project,
 }) => {
-  return <ProjectDetailPage project={project} />;
+  return (
+    <ProjectDetailPage
+      project={convertProjectToObjectDate(project) as Project<Date>}
+    />
+  );
 };
 
 export default Page;

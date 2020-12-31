@@ -24,13 +24,6 @@ export const getStaticProps: GetStaticProps = async ({ params }) => {
 
   const content = await renderMarkdown(post.content, post.assetRoot);
 
-  `select slug, tag from blog_post
-  left join blog_tag
-  on blog_post.id = blog_tag.fk_blog
-  where tag in (select tag from blog_tag 
-  where blog_tag.fk_blog = (select id from blog_post where slug = 'astrid-tech-v1'))
-  `; // TODO do something with this
-
   return {
     props: { post: { ...post, content: content } },
   };

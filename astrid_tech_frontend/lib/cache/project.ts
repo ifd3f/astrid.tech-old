@@ -48,6 +48,7 @@ export function getProject(slug: string): Project<string> {
 
   return {
     assetRoot,
+    id: id,
     title: title as string,
     status: status as ProjectStatus,
     description: description as string,
@@ -60,6 +61,16 @@ export function getProject(slug: string): Project<string> {
     thumbnail: thumbnail as string,
     tags: tags.map(({ tag }) => tag),
   };
+}
+
+export function getSimilarProjects(id: number) {
+  `select slug, sum(t3.score) from project
+  left join project_tag as t2
+	on project.id = t2.fk_project
+  left join (select 1.0 / count(fk_project) as score, tag from project_tag group by tag) as t3
+	on t3.tag = t2.tag
+  where project.id != 1 and t2.tag in (select tag from project_tag where project_tag.fk_project = 1)
+group by slug`; // TODO do something with this
 }
 
 export function getProjectMetas(): ProjectMeta<string>[] {

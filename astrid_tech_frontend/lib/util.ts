@@ -1,4 +1,5 @@
 import crypto from "crypto";
+import { format } from "date-fns";
 import hslToHex from "hsl-to-hex";
 import seedrandom from "seedrandom";
 import { Path } from "./cache";
@@ -75,11 +76,18 @@ export function getHSLString([h, s, l]: number[]) {
   return hslToHex(h, s, l) as string;
 }
 
-export function formatDateInterval(startDate: Date, endDate?: Date | null) {
+export function formatDateInterval(
+  formatStyle: string,
+  startDate: Date,
+  endDate?: Date | null
+) {
+  const startStr = format(startDate, formatStyle);
   if (startDate == endDate) {
-    return startDate;
+    return startStr;
   }
-  return endDate ? `${startDate} to ${endDate}` : `${startDate} to now`;
+  return endDate
+    ? `${startStr} to ${format(endDate, formatStyle)}`
+    : `${startStr} to now`;
 }
 
 export function getBlogSlug({ date, slug }: { date: Date; slug: string }) {

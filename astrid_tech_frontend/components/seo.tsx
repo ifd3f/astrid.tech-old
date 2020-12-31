@@ -2,7 +2,7 @@ import Head from "next/head";
 import React, { FC } from "react";
 
 interface SEOProps {
-  description?: string;
+  description?: string | null;
   lang?: string;
   meta?: any[];
   image?: string;
@@ -12,7 +12,7 @@ interface SEOProps {
 }
 
 const SEO: FC<SEOProps> = ({
-  description = "",
+  description,
   lang = "en",
   meta = [],
   origin = "https://astrid.tech",
