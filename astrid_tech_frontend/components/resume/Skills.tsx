@@ -15,7 +15,6 @@ type StarsProps = {
 export type SkillGroup = {
   name: string;
   skills: {
-    level: number;
     slug: string;
   }[];
 };
@@ -37,10 +36,9 @@ const Stars: FC<StarsProps> = ({ stars }) => {
 
 type SkillInfoDisplayProps = {
   slug: string;
-  level: number;
 };
 
-const SkillInfoDisplay: FC<SkillInfoDisplayProps> = ({ slug, level }) => {
+const SkillInfoDisplay: FC<SkillInfoDisplayProps> = ({ slug }) => {
   const tag = useTagTable().get(slug);
   return (
     <ALink href={`/t/${tag.slug}`}>
@@ -49,9 +47,6 @@ const SkillInfoDisplay: FC<SkillInfoDisplayProps> = ({ slug, level }) => {
         style={{ backgroundColor: tag.backgroundColor, color: tag.color }}
       >
         <p className={styleSkills.tagName}>{tag.name}</p>
-        <p className={styleSkills.tagStars}>
-          <Stars stars={level} />
-        </p>
       </div>
     </ALink>
   );
@@ -66,11 +61,9 @@ const SkillCategoryView: FC<SkillCategoryViewProps> = ({
 }) => (
   <Col xs="12" sm="6" lg="4">
     <h3>{name}</h3>
-    {skills
-      .sort(({ level: a }, { level: b }) => b - a)
-      .map(({ level, slug }) => (
-        <SkillInfoDisplay level={level} slug={slug} key={slug} />
-      ))}
+    {skills.map(({ slug }) => (
+      <SkillInfoDisplay slug={slug} key={slug} />
+    ))}
   </Col>
 );
 
