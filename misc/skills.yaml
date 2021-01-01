@@ -1,28 +1,31 @@
-- name: Programming Languages
+- name: Backend
   skills:
-    - slug: java
     - slug: python
+    - slug: cpp
+    - slug: java
     - slug: kotlin
     - slug: sql
+    - slug: node-js
     - slug: csharp
-    - slug: cpp
     - slug: django
     - slug: scala
-      link: false
-    - slug: node-js
 
 - name: Frontend
   skills:
     - slug: javascript
     - slug: css
     - slug: html
-    - slug: typescript
     - slug: react-js
-    - slug: sass
+    - slug: typescript
     - slug: gatsby-js
     - slug: next-js
+    - slug: bootstrap-css
+    - slug: material-ui
+    - slug: responsive-design
+    - slug: jquery
+    - slug: sass
 
-- name: Data Science
+- name: Machine Learning
   skills:
     - slug: opencv
     - slug: scikit-learn

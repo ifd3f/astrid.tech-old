@@ -4,10 +4,18 @@
       name: Frontend
     - slug: react-js
       name: React
-    - slug: jquery
-      name: jQuery
+    - slug: responsive-design
+      name: Responsive Design
+
+- backgroundColor: "#563D7C"
+  tags:
     - slug: bootstrap-css
       name: Bootstrap
+
+- backgroundColor: "#1976D2"
+  tags:
+    - slug: material-ui
+      name: Material UI
 
 - backgroundColor: "#4a7aad"
   tags:
@@ -213,5 +221,18 @@
   tags:
     - slug: numpy
       name: Numpy
+
+- backgroundColor: "#EB7325"
+  tags:
     - slug: jupyter
       name: Jupyter
+
+- backgroundColor: "#0868AC"
+  tags:
+    - slug: jquery
+      name: jQuery
+
+- backgroundColor: "#01D9A3"
+  tags:
+    - slug: puppeteer-js
+      name: Puppeteer.js
