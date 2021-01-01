@@ -41,7 +41,7 @@
 }
 
 .name {
-  @each $size, $font-size in (xs: 4rem, sm: 4.5rem, lg: 7rem) {
+  @each $size, $font-size in (xs: 3.8rem, sm: 4.5rem, lg: 6.8rem) {
     @media only screen and (min-width: map-get($grid-breakpoints, $size)) {
       font-size: $font-size;
     }
