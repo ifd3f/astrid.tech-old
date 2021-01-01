@@ -8,8 +8,6 @@
       name: jQuery
     - slug: bootstrap-css
       name: Bootstrap
-    - slug: gatsby-js
-      name: Gatsby.js
 
 - backgroundColor: "#4a7aad"
   tags:
@@ -32,10 +30,6 @@
       name: Image Processing
     - slug: anaconda
       name: Anaconda
-    - slug: pandas
-      name: Pandas
-    - slug: numpy
-      name: NumPy
 
 - backgroundColor: "#525569"
   tags:
@@ -44,7 +38,7 @@
     - slug: sql-server
       name: SQL Server
     - slug: postgres
-      name: PostgreSQL
+      name: Postgres
     - slug: mysql
       name: MySQL
 
@@ -159,3 +153,65 @@
   tags:
     - slug: sql
       name: SQL
+
+- backgroundColor: "#663399"
+  tags:
+    - slug: gatsby-js
+      name: Gatsby.js
+
+- backgroundColor: "#FFFFFF"
+  tags:
+    - slug: next-js
+      name: Next.js
+
+- backgroundColor: "#D10000"
+  tags:
+    - slug: keras
+      name: Keras
+
+- backgroundColor: "#000000"
+  color: "#FFFFFF"
+  tags:
+    - slug: linux
+      name: Linux
+    - slug: beautiful-soup
+      name: Beautiful Soup
+
+- backgroundColor: "#2391E6"
+  tags:
+    - slug: docker
+      name: Docker
+    - slug: docker-hub
+      name: Docker Hub
+    - slug: ci-cd
+      name: CI/CD
+
+- backgroundColor: "#222E3C"
+  color: "#F79400"
+  tags:
+    - slug: aws
+      name: AWS
+
+- backgroundColor: "#F79400"
+  tags:
+    - slug: gcloud
+      name: Google Cloud
+
+- backgroundColor: "#FFFFFF"
+  color: "#11557C"
+  tags:
+    - slug: matplotlib
+      name: Matplotlib
+
+- backgroundColor: "#0B0153"
+  color: "#FFCB00"
+  tags:
+    - slug: pandas
+      name: Pandas
+
+- backgroundColor: "#3D84C6"
+  tags:
+    - slug: numpy
+      name: Numpy
+    - slug: jupyter
+      name: Jupyter
