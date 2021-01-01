@@ -1,6 +1,5 @@
 import "@fontsource/ibm-plex-sans";
-import "@fontsource/red-hat-display";
-import "firacode";
+import "@fontsource/roboto-mono";
 import "highlight.js/styles/monokai.css";
 import "katex/dist/katex.min.css";
 import { AppProps } from "next/app";

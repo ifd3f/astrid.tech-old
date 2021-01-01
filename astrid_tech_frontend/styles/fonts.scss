@@ -1,4 +1,6 @@
-$font-family-sans-serif: "IBM Plex Sans", "Helvetica Neue", "Arial", sans-serif;
-$headings-font-family: "Red Hat Display", "Helvetica Neue", "Arial", sans-serif;
+$font-family-sans-serif: "IBM Plex Sans", sans-serif;
+$font-family-serif: "Merriweather", serif;
+$font-family-monospace: "Roboto Mono", monospace;
+
+$headings-font-family: $font-family-monospace;
 $font-family-base: $font-family-sans-serif;
-$font-family-monospace: "Fira Code", monospace;

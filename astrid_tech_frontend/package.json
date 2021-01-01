@@ -10,7 +10,8 @@
   },
   "dependencies": {
     "@fontsource/ibm-plex-sans": "^4.0.1",
-    "@fontsource/red-hat-display": "^4.0.1",
+    "@fontsource/merriweather": "^4.1.0",
+    "@fontsource/roboto-mono": "^4.1.0",
     "@silvenon/remark-smartypants": "^1.0.0",
     "async-redis": "^1.1.7",
     "axios": "^0.21.1",
@@ -18,7 +19,6 @@
     "bootstrap": "4",
     "classnames": "^2.2.6",
     "date-fns": "^2.16.1",
-    "firacode": "^5.2.0",
     "fuse.js": "^6.4.4",
     "gray-matter": "4.0.2",
     "highlight.js": "^10.5.0",

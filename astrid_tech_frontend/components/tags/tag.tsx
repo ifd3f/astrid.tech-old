@@ -1,9 +1,9 @@
 import classNames from "classnames";
-import Link from "next/link";
 import React, { FC, ReactNode, useState } from "react";
 import { BsCaretLeftFill } from "react-icons/bs";
 import { Badge } from "reactstrap";
 import { Tag } from "../../types/types";
+import { ALink } from "../util/boilerplate";
 import style from "./tag.module.scss";
 import { useTagTable } from "./TagTableProvider";
 
@@ -27,7 +27,6 @@ export const TagBadge: FC<TagBadgeProps> = ({
   const badge = (
     <Badge
       className={classNames(style.tag, "p-category")}
-      tag={"a"}
       style={{
         backgroundColor: tag.backgroundColor,
         color: tag.color,
@@ -39,7 +38,7 @@ export const TagBadge: FC<TagBadgeProps> = ({
     </Badge>
   );
 
-  return link ? <Link href={linkTo}>{badge}</Link> : badge;
+  return link ? <ALink href={linkTo}>{badge}</ALink> : badge;
 };
 
 type TagListProps = {

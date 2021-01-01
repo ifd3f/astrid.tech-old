@@ -18,9 +18,12 @@
   padding-left: 20px;
   padding-right: 20px;
 }
+
 .nameWrapper {
   display: flex;
   width: 100%;
+  padding-left: 20px;
+  padding-right: 20px;
   flex-direction: row;
   align-items: center;
   justify-content: center;
@@ -38,7 +41,7 @@
 }
 
 .name {
-  @each $size, $font-size in (xs: 50pt, sm: 75pt, lg: 100pt) {
+  @each $size, $font-size in (xs: 4rem, sm: 4.5rem, lg: 7rem) {
     @media only screen and (min-width: map-get($grid-breakpoints, $size)) {
       font-size: $font-size;
     }

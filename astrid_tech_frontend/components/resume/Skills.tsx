@@ -1,9 +1,9 @@
-import Link from "next/link";
 import React, { FC, ReactNode } from "react";
 import { BsStar, BsStarFill } from "react-icons/bs";
 import Masonry from "react-masonry-component";
 import { Col } from "reactstrap";
 import { useTagTable } from "../tags/TagTableProvider";
+import { ALink } from "../util/boilerplate";
 import styleSkills from "./skills.module.scss";
 import style from "./style.module.scss";
 import { HomepageSection } from "./util";
@@ -41,10 +41,9 @@ type SkillInfoDisplayProps = {
 };
 
 const SkillInfoDisplay: FC<SkillInfoDisplayProps> = ({ slug, level }) => {
-  const tags = useTagTable();
-  const tag = tags.get(slug);
+  const tag = useTagTable().get(slug);
   return (
-    <Link href={`/t/${tag.slug}`}>
+    <ALink href={`/t/${tag.slug}`}>
       <div
         className={styleSkills.skillRow}
         style={{ backgroundColor: tag.backgroundColor, color: tag.color }}
@@ -54,7 +53,7 @@ const SkillInfoDisplay: FC<SkillInfoDisplayProps> = ({ slug, level }) => {
           <Stars stars={level} />
         </p>
       </div>
-    </Link>
+    </ALink>
   );
 };
 

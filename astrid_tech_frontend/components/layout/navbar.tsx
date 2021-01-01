@@ -1,9 +1,9 @@
+import classNames from "classnames";
 import Link from "next/link";
 import React, { FC, ReactNode, useState } from "react";
 import { BsArrowsCollapse } from "react-icons/bs";
 import { GiHamburger } from "react-icons/gi";
 import { Collapse, Navbar, NavbarBrand, NavbarToggler } from "reactstrap";
-import { Site } from "src/types";
 
 export type NavBarLinks = "brand" | "projects" | "blog" | "about";
 
@@ -16,7 +16,9 @@ type NavLinkProps = {
 const GNavLink: FC<NavLinkProps> = ({ to, children, active }) => {
   return (
     <Link href={to}>
-      <a className={`nav-link ` + (active ? "active" : "")}>{children}</a>
+      <a className={classNames("nav-link", active ? "active" : null)}>
+        {children}
+      </a>
     </Link>
   );
 };
@@ -26,10 +28,6 @@ const NavbarSeparator = () => <div className="navbar-separator" />;
 type MainNavbarProps = {
   currentLocation?: NavBarLinks;
   fixed?: boolean;
-};
-
-type QueryData = {
-  site: Site;
 };
 
 const MainNavbar: FC<MainNavbarProps> = ({ currentLocation, fixed }) => {
@@ -43,7 +41,15 @@ const MainNavbar: FC<MainNavbarProps> = ({ currentLocation, fixed }) => {
       expand="md"
     >
       <Link href="/">
-        <NavbarBrand tag="a" href="/" activeClassName="active">
+        <NavbarBrand
+          tag="a"
+          href="/"
+          activeClassName="active"
+          className={classNames(
+            "nav-link",
+            currentLocation == "brand" ? "active" : null
+          )}
+        >
           astrid.tech
         </NavbarBrand>
       </Link>
@@ -54,7 +60,7 @@ const MainNavbar: FC<MainNavbarProps> = ({ currentLocation, fixed }) => {
         <GNavLink to="/projects" active={currentLocation == "projects"}>
           Projects
         </GNavLink>
-        <GNavLink to="/b" active={currentLocation == "blog"}>
+        <GNavLink to="/latest" active={currentLocation == "blog"}>
           Blog
         </GNavLink>
         <NavbarSeparator />

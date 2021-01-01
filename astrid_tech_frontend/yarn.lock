@@ -100,10 +100,15 @@
   resolved "https://registry.yarnpkg.com/@fontsource/ibm-plex-sans/-/ibm-plex-sans-4.0.1.tgz#31b1c02ac598a1af4f2c44b15f6ecaa737a719e3"
   integrity sha512-TkrY9xHRNu6R5ZyAh1Yp+NiXJhCqOJJ6c87T4keEa+pSF6OSjqnP66/Istdot8HEYiWelQYKOf0MI/3OyZ6mfA==
 
-"@fontsource/red-hat-display@^4.0.1":
-  version "4.0.1"
-  resolved "https://registry.yarnpkg.com/@fontsource/red-hat-display/-/red-hat-display-4.0.1.tgz#d0c71c574b89c60f6cfeed81412f2670506a94be"
-  integrity sha512-JVUGoQdh2xf1tDW+JUpGkGwIEe76+6cryBs3RgW4shYM1JwZDnNkO9iomRx/JQ8rttapF4L7alpq+pfMmu2Jyw==
+"@fontsource/merriweather@^4.1.0":
+  version "4.1.0"
+  resolved "https://registry.yarnpkg.com/@fontsource/merriweather/-/merriweather-4.1.0.tgz#3345e98d38a65e048a8be4d8b69b16939ed61caa"
+  integrity sha512-0uuiwRAZj1B0fXfBnVGFS8ZDnATF1vAqd2EGKPwb0OHc7XVU9j0AvHPGZ+QEZl+0YFJ7Ydc1MUHbKX34DVitJg==
+
+"@fontsource/roboto-mono@^4.1.0":
+  version "4.1.0"
+  resolved "https://registry.yarnpkg.com/@fontsource/roboto-mono/-/roboto-mono-4.1.0.tgz#83aac6cce6849d0d943861e21c1b31d7b6dfd724"
+  integrity sha512-KVq0xzjoNLd1EQHNPcL+j8EbPaZoYmXvwZt/0GzZPH578f8CcLvSNm8Yl0IVf6Clvhl3/Svb6sslkbkt+SCmtA==
 
 "@fullhuman/postcss-purgecss@^2.1.2":
   version "2.3.0"
@@ -2501,11 +2506,6 @@ find-up@^4.0.0:
   dependencies:
     locate-path "^5.0.0"
     path-exists "^4.0.0"
-
-firacode@^5.2.0:
-  version "5.2.0"
-  resolved "https://registry.yarnpkg.com/firacode/-/firacode-5.2.0.tgz#2eab5b4f59e3197d5e84f15a25485a88f0cd3180"
-  integrity sha512-Q1SO7vibzYcT+KaohGK0ypGS58zLtO2o2UuiLvngTEhBbHQoZmZ4DAiugj0MNNpeM4jG9gM9NyusVDM3MxYP7A==
 
 fizzy-ui-utils@^2.0.0:
   version "2.0.7"
