@@ -1,7 +1,8 @@
+import Fuse from "fuse.js";
 import { InferGetStaticPropsType } from "next";
+import { useRouter } from "next/router";
 import React, { FC, useEffect, useState } from "react";
 import { Container } from "reactstrap";
-import StringSimilarity from "string-similarity";
 import Layout from "../components/layout";
 import SEO from "../components/seo";
 import { getStaticPaths as projectPaths } from "./projects/[slug]";
@@ -20,51 +21,60 @@ async function getAllPaths() {
 
 export const getStaticProps = async () => {
   const paths = await getAllPaths();
+  const index = Fuse.createIndex(["."], paths).toJSON();
 
-  return { props: { paths } };
+  return { props: { paths, index } };
 };
 
 const NotFoundPageContents: FC<{ suggestions: string[]; bugsURL: string }> = ({
   suggestions,
   bugsURL,
-}) => (
-  <div>
-    <p style={{ fontSize: 20 }}>
-      Perhaps you meant to go to{" "}
-      <strong>
-        <a href={suggestions[0]}>{suggestions[0]}</a>
-      </strong>
-      ? Or, maybe one of...
-    </p>
-    <ul>
-      {suggestions.slice(1, 8).map((path) => (
-        <li key={path}>
-          <a href={path}>{path}</a>
-        </li>
-      ))}
-    </ul>
-    <p>
-      Maybe I brought you here on accident! In that event, please{" "}
-      <a href={bugsURL}>file a bug report on my GitHub issues page</a> and I
-      will fix it as soon as possible!
-    </p>
-  </div>
-);
+}) => {
+  const [first, ...rest] = suggestions;
+  return (
+    <div>
+      <p style={{ fontSize: 20 }}>
+        Perhaps you meant to go to{" "}
+        <strong>
+          <a href={first}>{first}</a>
+        </strong>
+        ? Or, maybe one of...
+      </p>
+      <ul>
+        {rest.map((path) => (
+          <li key={path}>
+            <a href={path}>{path}</a>
+          </li>
+        ))}
+      </ul>
+      <p>
+        Maybe I brought you here on accident! In that event, please{" "}
+        <a href={bugsURL}>file a bug report on my GitHub issues page</a> and I
+        will fix it as soon as possible!
+      </p>
+    </div>
+  );
+};
 
 const NotFoundPage: FC<InferGetStaticPropsType<typeof getStaticProps>> = ({
   paths,
+  index,
 }) => {
   const [suggestions, setSuggestions] = useState(null as string[] | null);
+  const router = useRouter();
 
   useEffect(() => {
-    const results = StringSimilarity.findBestMatch(location.pathname, paths);
-    setSuggestions(
-      results.ratings
-        .sort((a, b) => b.rating - a.rating)
-        .map((result) => result.target)
-        .slice(1, 8)
+    const fuse = new Fuse(
+      paths,
+      {
+        threshold: 1,
+        findAllMatches: true,
+      },
+      Fuse.parseIndex(index)
     );
-  }, [suggestions]);
+    const results = fuse.search(router.asPath);
+    setSuggestions(results.slice(0, 8).map((x) => x.item));
+  }, [router.asPath]);
 
   return (
     <Layout>
