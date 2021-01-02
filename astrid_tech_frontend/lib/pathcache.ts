@@ -15,9 +15,8 @@ export function wrappedStaticPaths(
 
         const redis = new AsyncRedis();
         if (await redis.exists(key)) {
-          const result = ((await redis.get(key)) as unknown) as string;
-          console.log(result);
-          return JSON.parse(result);
+          const json = ((await redis.get(key)) as unknown) as string;
+          return JSON.parse(json);
         }
 
         const result = await getStaticPaths(ctx);
