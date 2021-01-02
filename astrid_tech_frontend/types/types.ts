@@ -1,4 +1,5 @@
-export type Tagged = {
+export type Tagged<TypeID = undefined> = {
+  type?: TypeID;
   tags: string[];
 };
 
@@ -9,7 +10,7 @@ export type Tag = {
   slug: string;
 };
 
-export type WorkExperience = Tagged & {
+export type WorkExperience = Tagged<"w"> & {
   organization: string;
   position: string;
   location: string;
@@ -22,8 +23,9 @@ export type WorkExperience = Tagged & {
 
 export type ProjectStatus = null | "early" | "wip" | "complete" | "scrapped";
 
-export type ProjectMeta<DateType = Date> = Tagged & {
+export type ProjectMeta<DateType = Date> = Tagged<"p"> & {
   id?: number;
+  excerpt?: string;
   title: string;
   assetRoot: string;
   status: ProjectStatus;
@@ -40,7 +42,9 @@ export type Project<DateType = Date> = ProjectMeta<DateType> & {
   content: string;
 };
 
-export function convertProjectToObjectDate(project: Project<string>) {
+export function convertProjectToObjectDate<T>(
+  project: ProjectMeta<string> & T
+): ProjectMeta<Date> & T {
   return {
     ...project,
     startDate: new Date(project.startDate),
@@ -48,7 +52,9 @@ export function convertProjectToObjectDate(project: Project<string>) {
   };
 }
 
-export function convertProjectToStringDate(project: Project<Date>) {
+export function convertProjectToStringDate<T>(
+  project: ProjectMeta<Date> & T
+): ProjectMeta<string> & T {
   return {
     ...project,
     startDate: project.startDate.toISOString(),
@@ -56,7 +62,7 @@ export function convertProjectToStringDate(project: Project<Date>) {
   };
 }
 
-export type BlogPostMeta<DateType = Date> = Tagged & {
+export type BlogPostMeta<DateType = Date> = Tagged<"b"> & {
   title: string;
   assetRoot: string;
   description: string;
@@ -70,19 +76,25 @@ export type BlogPost<DateType = Date> = BlogPostMeta<DateType> & {
   content: string;
 };
 
-export function convertBlogPostToObjectDate(post: BlogPostMeta<string>) {
+export function convertBlogPostToObjectDate<T>(
+  post: BlogPostMeta<string> & T
+): BlogPostMeta<Date> & T {
   return {
     ...post,
     date: new Date(post.date),
   };
 }
 
-export function convertBlogPostToStringDate(post: BlogPostMeta<Date>) {
+export function convertBlogPostToStringDate<T>(
+  post: BlogPostMeta<Date> & T
+): BlogPostMeta<string> & T {
   return {
     ...post,
     date: post.date.toISOString(),
   };
 }
+
+export type SiteObject = ProjectMeta<string> | BlogPostMeta<string>;
 
 export type Course = Tagged & {
   name: string;

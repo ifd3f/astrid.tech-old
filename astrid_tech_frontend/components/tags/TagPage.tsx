@@ -1,5 +1,3 @@
-/*
-
 import { format } from "date-fns";
 import Link from "next/link";
 import React, { FC } from "react";
@@ -11,39 +9,33 @@ import {
   CardFooter,
   CardHeader,
   Col,
-  Container
+  Container,
 } from "reactstrap";
 import {
   blogSlugToString,
   formatDateInterval,
-  getBlogSlug
+  getBlogSlug,
 } from "../../lib/util";
-import { BlogPost, Project } from "../../types/types";
+import {
+  BlogPostMeta,
+  convertBlogPostToObjectDate,
+  convertProjectToObjectDate,
+  ProjectMeta,
+  SiteObject,
+} from "../../types/types";
 import Layout from "../layout/layout";
 import SEO from "../seo";
+import { ALink } from "../util/boilerplate";
 import { TagBadge, TagList } from "./tag";
 import style from "./tag.module.scss";
-
-type SiteObject<T, TypeString> = T & {
-  sortDate: Date;
-  __typename: TypeString;
-};
-
-type SiteObjectUnion =
-  | SiteObject<Project, "Project">
-  | SiteObject<BlogPost, "BlogPost">;
-
-type Context = {
-  id: string;
-};
-
-type SiteObjectDisplayProps = {
-  object: SiteObjectUnion;
-};
+import { useTagTable } from "./TagTableProvider";
 
 const dateClassName = `text-muted ${style.date}`;
 
-const BlogPostDisplay: FC<{ post: BlogPost }> = ({ post }) => {
+const BlogPostDisplay: FC<{ post: BlogPostMeta<string> }> = ({
+  post: _post,
+}) => {
+  const post = convertBlogPostToObjectDate(_post);
   const slug = blogSlugToString(getBlogSlug(post));
   return (
     <Card>
@@ -57,7 +49,7 @@ const BlogPostDisplay: FC<{ post: BlogPost }> = ({ post }) => {
           </CardHeader>
           <CardBody>
             <div className="lead">{post.description}</div>
-            <small className="text-muted">{post.excerpt}</small>
+            <small className="text-muted">{post.excerpt!!}</small>
           </CardBody>
         </a>
       </Link>
@@ -68,23 +60,25 @@ const BlogPostDisplay: FC<{ post: BlogPost }> = ({ post }) => {
   );
 };
 
-const ProjectDisplay: FC<{ project: Project }> = ({ project }) => {
+const ProjectDisplay: FC<{ project: ProjectMeta<string> }> = ({ project }) => {
+  const startDate = new Date(project.startDate);
+  const endDate = project.endDate ? new Date(project.endDate) : undefined;
   return (
     <Card>
-      <Link className={style.cardLink} to={project.slug}>
+      <ALink className={style.cardLink} href={project.slug}>
         <CardHeader>
           <h5>
             {project.title} <Badge color="primary">Project</Badge>
           </h5>
           <p className={dateClassName}>
-            {formatDateInterval(project.startDate, project.endDate)}
+            {formatDateInterval("d MMM yyyy", startDate, endDate)}
           </p>
         </CardHeader>
         <CardBody>
-          <p className="lead">{project.internal.description} </p>
-          <small className="text-muted">{project.markdown.excerpt}</small>
+          <p className="lead">{project.description} </p>
+          <small className="text-muted">{project.excerpt!!}</small>
         </CardBody>
-      </Link>
+      </ALink>
       <CardFooter>
         <TagList tags={project.tags} limit={7} link />
       </CardFooter>
@@ -92,20 +86,38 @@ const ProjectDisplay: FC<{ project: Project }> = ({ project }) => {
   );
 };
 
+type SiteObjectDisplayProps = {
+  object: SiteObject;
+};
+
 const SiteObjectDisplay: FC<SiteObjectDisplayProps> = ({ object }) => {
-  switch (object.__typename) {
-    case "BlogPost":
-      return <BlogPostDisplay post={object} />;
-    case "Project":
-      return <ProjectDisplay project={object} />;
+  switch (object.type) {
+    case "b":
+      return (
+        <BlogPostDisplay
+          post={convertBlogPostToObjectDate(object as BlogPostMeta<string>)}
+        />
+      );
+    case "p":
+      return (
+        <ProjectDisplay
+          project={convertProjectToObjectDate(object as ProjectMeta<string>)}
+        />
+      );
+    default:
+      console.error("Empty type for object", object);
+      throw new Error("Empty type");
   }
 };
 
 export type TagPageProps = {
-  objects: 
-}
+  slug: string;
+  related: string[];
+  objects: SiteObject[];
+};
 
-const TagDetailTemplate: FC<{}> = ({ data }) => {
+const TagDetailTemplate: FC<TagPageProps> = ({ slug, related, objects }) => {
+  const tag = useTagTable().get(slug);
   return (
     <Layout>
       <SEO title={tag.name!} description={`Items related to ${tag.name}`} />
@@ -118,7 +130,7 @@ const TagDetailTemplate: FC<{}> = ({ data }) => {
         <section>
           <h4>Similar Tags</h4>
           <p>
-            <TagList tags={relatedTags} link />
+            <TagList tags={related} link />
           </p>
         </section>
 
@@ -141,4 +153,3 @@ const TagDetailTemplate: FC<{}> = ({ data }) => {
 };
 
 export default TagDetailTemplate;
-*/
