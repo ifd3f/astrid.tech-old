@@ -140,8 +140,8 @@ const TagDetailTemplate: FC<TagPageProps> = ({ slug, related, objects }) => {
               transitionDuration: 0,
             }}
           >
-            {objects.map((object) => (
-              <Col xs="12" md="6" lg="4" style={{ paddingBottom: 30 }}>
+            {objects.map((object, i) => (
+              <Col xs="12" md="6" lg="4" key={i} style={{ paddingBottom: 30 }}>
                 <SiteObjectDisplay object={object} />
               </Col>
             ))}

@@ -8,6 +8,7 @@ export type Tag = {
   color: string;
   backgroundColor: string;
   slug: string;
+  count?: number;
 };
 
 export type WorkExperience = Tagged<"w"> & {

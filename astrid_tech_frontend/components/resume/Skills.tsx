@@ -39,16 +39,18 @@ type SkillInfoDisplayProps = {
 
 const SkillInfoDisplay: FC<SkillInfoDisplayProps> = ({ slug }) => {
   const tag = useTagTable().get(slug);
-  return (
-    <ALink href={`/t/${tag.slug}`}>
-      <div
-        className={styleSkills.skillRow}
-        style={{ backgroundColor: tag.backgroundColor, color: tag.color }}
-      >
-        <p className={styleSkills.tagName}>{tag.name}</p>
-      </div>
-    </ALink>
+  const link = !!tag.count;
+  const inner = (
+    <div
+      className={styleSkills.skillRow}
+      style={{ backgroundColor: tag.backgroundColor, color: tag.color }}
+    >
+      <p className={styleSkills.tagName}>
+        {link ? <strong>{tag.name}</strong> : tag.name}
+      </p>
+    </div>
   );
+  return link ? <ALink href={`/t/${tag.slug}`}>{inner}</ALink> : inner;
 };
 
 type SkillCategoryViewProps = {
@@ -88,7 +90,7 @@ export function SkillsSection() {
       </div>
       <Row options={{ transitionDuration: 0 }}>
         {skills.map((group) => (
-          <Col xs="6" sm="4" lg="3">
+          <Col key={group.name} xs="6" sm="4" lg="3">
             <SkillCategoryView key={group.name} category={group} />
           </Col>
         ))}

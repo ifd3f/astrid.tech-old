@@ -38,7 +38,7 @@ export const TagBadge: FC<TagBadgeProps> = ({
     </Badge>
   );
 
-  return link ? <ALink href={linkTo}>{badge}</ALink> : badge;
+  return link && tag.count ? <ALink href={linkTo}>{badge}</ALink> : badge;
 };
 
 type TagListProps = {

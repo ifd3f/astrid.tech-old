@@ -122,7 +122,15 @@ async function exportTagOverrideData(db: Database, dest: string) {
   console.log("Exporting tag overrides to file");
   const tags = db
     .prepare(
-      "SELECT slug, name, color, background_color AS backgroundColor FROM tag"
+      `SELECT t1.slug, IFNULL(t2.c, 0) as count, name, color, background_color AS backgroundColor FROM tag AS t1
+      LEFT JOIN (
+        SELECT tag as slug, SUM(count) AS c FROM (
+          SELECT tag, COUNT(fk_project) AS count FROM project_tag GROUP BY tag UNION ALL
+          SELECT tag, COUNT(fk_blog) AS count FROM blog_tag GROUP BY tag
+        )
+        GROUP BY tag
+      ) AS t2
+      ON t1.slug = t2.slug`
     )
     .all()
     .map((tag) => {
@@ -132,6 +140,7 @@ async function exportTagOverrideData(db: Database, dest: string) {
         slug: tag.slug,
         name: tag.name ?? tag.slug,
         backgroundColor,
+        count: tag.count,
         color: tag.color ?? getContrastingTextColor(backgroundColor),
       } as Tag;
     });
