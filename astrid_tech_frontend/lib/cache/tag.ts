@@ -1,6 +1,7 @@
-import { BlogPost, Project } from "../../types/types";
-import { rowToBlogPost } from "./blog";
-import { rowToProject } from "./project";
+import { SiteObject } from "../../types/types";
+import { excerptify } from "../markdown";
+import { getBlogPosts } from "./blog";
+import { getProjects } from "./project";
 import { getConnection } from "./util";
 
 export function getTags(): string[] {
@@ -16,31 +17,23 @@ export function getTags(): string[] {
   return results.map(({ tag }) => tag as string);
 }
 
-export function getTagged(tag: string): (BlogPost<string> | Project<string>)[] {
-  const db = getConnection();
-  const results = db
-    .prepare(
-      `SELECT 'p' AS type, project.id as id, project.assetRoot as string, project.title AS title, NULL as date, start_date, end_date, content
-      FROM project_tag
-      LEFT JOIN project
-        ON fk_project = project.id
-      WHERE tag = @tag
-      UNION 
-        SELECT 'b' AS type, blog_post.id as id, blog_post.assetRoot as string, blog_post.title, date, NULL, NULL, content
-        FROM blog_tag
-        LEFT JOIN blog_post
-          ON fk_blog = blog_post.id
-        WHERE tag = @tag`
-    )
-    .all({ tag });
+export async function getTagged(
+  tag: string,
+  excerptChars: number
+): Promise<SiteObject[]> {
+  const [projects, posts] = await Promise.all([
+    Promise.all(
+      getProjects()
+        .map((x) => ({ type: "p", ...x }))
+        .map(excerptify(excerptChars))
+    ),
+    Promise.all(
+      getBlogPosts()
+        .map((x) => ({ type: "b", ...x }))
+        .map(excerptify(excerptChars))
+    ),
+  ]);
+  const objects = (projects as SiteObject[]).concat(posts as SiteObject[]);
 
-  return results.map((object) => {
-    switch (object.type) {
-      case "b":
-        return rowToBlogPost(object, []);
-      case "p":
-        return rowToProject(object, []);
-    }
-    throw new Error();
-  });
+  return objects.filter((x) => x.tags.includes(tag));
 }

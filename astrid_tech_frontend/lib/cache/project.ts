@@ -7,7 +7,7 @@ export function rowToProjectMeta(
 ): ProjectMeta<string> {
   return {
     ...row,
-    source: row.JSON.parse(row.source) as string[],
+    source: JSON.parse(row.source!!) as string[],
     thumbnail: row.thumbnail as string,
     tags,
   };
@@ -83,7 +83,7 @@ export function getSimilarProjects(id: number): ProjectLink[] {
   }));
 }
 
-export function getProjectMetas(): ProjectMeta<string>[] {
+export function getProjects(): Project<string>[] {
   const db = getConnection();
   const projects = db
     .prepare(
@@ -98,8 +98,9 @@ export function getProjectMetas(): ProjectMeta<string>[] {
         end_date as endDate,
         url,
         source_urls as source,
-        thumbnail_path as thumbnail
-      FROM project
+        thumbnail_path as thumbnail,
+        content
+      FROM project 
       ORDER BY 
         end_date DESC NULLS FIRST, 
         slug ASC
@@ -109,7 +110,7 @@ export function getProjectMetas(): ProjectMeta<string>[] {
 
   const tags = db.prepare(`SELECT fk_project, tag FROM project_tag`).all();
 
-  const idToProject = new Map<number, ProjectMeta<string>>(
+  const idToProject = new Map<number, Project<string>>(
     projects.map((row) => [row.id as number, rowToProject(row, [])])
   );
 

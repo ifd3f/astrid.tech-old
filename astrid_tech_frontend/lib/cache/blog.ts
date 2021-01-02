@@ -1,5 +1,4 @@
 import { BlogPost, BlogPostMeta } from "../../types/types";
-import { getMarkdownExcerpt } from "../markdown";
 import { getBlogSlug } from "../util";
 import { getConnection } from "./util";
 
@@ -66,9 +65,7 @@ export function getBlogPost(path: Path): BlogPost<string> {
   return rowToBlogPost(row, tags);
 }
 
-export async function getBlogPostMetas(
-  excerptMaxChars: number
-): Promise<BlogPostMeta<string>[]> {
+export function getBlogPosts(): BlogPost<string>[] {
   const db = getConnection();
   const rows = db
     .prepare(
@@ -88,22 +85,18 @@ export async function getBlogPostMetas(
 
   const tags = db.prepare(`SELECT fk_blog, tag FROM blog_tag`).all();
 
-  const kvs = await Promise.all(
-    rows.map((row) =>
-      (async () =>
+  const idToPost = new Map(
+    rows.map(
+      (row) =>
         [
           row.id,
           {
             ...row,
-            content: null,
-            excerpt: await getMarkdownExcerpt(row.content, excerptMaxChars),
             tags: [],
           },
-        ] as [number, BlogPostMeta<string>])()
+        ] as [number, BlogPost<string>]
     )
   );
-
-  const idToPost = new Map(kvs);
 
   for (const { fk_blog, tag } of tags) {
     idToPost.get(fk_blog)!!.tags.push(tag as string);
