@@ -1,6 +1,4 @@
 import React, { FC, ReactNode } from "react";
-import { CookiesProvider } from "react-cookie";
-import { APIProvider } from "../api/APIProvider";
 import { BLMBanner } from "./blm";
 import { CookieNotification } from "./cookie-notification";
 import FooterSection from "./footer";
@@ -20,21 +18,17 @@ const Layout: FC<LayoutProps> = ({
   currentLocation,
 }) => {
   return (
-    <CookiesProvider>
-      <APIProvider root={process.env.ASTRID_TECH_API_ROOT ?? "localhost:8001"}>
-        <MainNavbar currentLocation={currentLocation} fixed />
-        <div
-          className={
-            "root-wrapper" + (doNotExpandHeight ? "" : " expand-height")
-          }
-        >
-          <BLMBanner />
-          {children}
-        </div>
-        {showFooter ? <FooterSection /> : null}
-        <CookieNotification />
-      </APIProvider>
-    </CookiesProvider>
+    <>
+      <MainNavbar currentLocation={currentLocation} fixed />
+      <div
+        className={"root-wrapper" + (doNotExpandHeight ? "" : " expand-height")}
+      >
+        <BLMBanner />
+        {children}
+      </div>
+      {showFooter ? <FooterSection /> : null}
+      <CookieNotification />
+    </>
   );
 };
 
