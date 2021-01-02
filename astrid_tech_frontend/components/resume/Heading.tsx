@@ -65,10 +65,10 @@ export function HeadingSection() {
         <ImageOfMyself />
       </div>
       <p className={homepageStyles.skillBrag}>
-        An interactive portfolio made using{" "}
+        Made using{" "}
         <Link href="/projects/astrid-tech">
           <a href="/projects/astrid-tech">
-            React, Gatsby, and several other technologies
+            Next.js, Django, and several other technologies
           </a>
         </Link>
       </p>

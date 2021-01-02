@@ -1,6 +1,7 @@
 import React, { FC, ReactNode } from "react";
-import { BsStar, BsStarFill } from "react-icons/bs";
-import { Col, Row } from "reactstrap";
+import { BsCaretRightFill, BsStar, BsStarFill } from "react-icons/bs";
+import Masonry from "react-masonry-component";
+import { Col } from "reactstrap";
 import { useTagTable } from "../tags/TagTableProvider";
 import { ALink } from "../util/boilerplate";
 import styleSkills from "./skills.module.scss";
@@ -46,7 +47,7 @@ const SkillInfoDisplay: FC<SkillInfoDisplayProps> = ({ slug }) => {
       style={{ backgroundColor: tag.backgroundColor, color: tag.color }}
     >
       <p className={styleSkills.tagName}>
-        {link ? <strong>{tag.name}</strong> : tag.name}
+        {tag.name} {link ? <BsCaretRightFill name="caret" /> : null}
       </p>
     </div>
   );
@@ -84,17 +85,17 @@ export function SkillsSection() {
       <div className={style.sectionHeading}>
         <h2>Skills</h2>
         <p>
-          Click on <strong>bolded</strong> tags to see related projects and blog
-          posts!
+          Click on tags with <BsCaretRightFill name="caret" /> to see related
+          projects and blog posts!
         </p>
       </div>
-      <Row options={{ transitionDuration: 0 }}>
+      <Masonry options={{ transitionDuration: 0 }}>
         {skills.map((group) => (
           <Col key={group.name} xs="6" sm="4" lg="3">
             <SkillCategoryView key={group.name} category={group} />
           </Col>
         ))}
-      </Row>
+      </Masonry>
     </HomepageSection>
   );
 }
