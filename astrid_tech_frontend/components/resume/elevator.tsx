@@ -21,7 +21,7 @@ function BigIcon({
 
 export function ElevatorSection() {
   return (
-    <HomepageSection color="#f2f2f2">
+    <HomepageSection>
       <Row>
         <BigIcon upper={<>9 years</>}>of experience programming</BigIcon>
         <BigIcon upper={<>21 projects</> /*TODO*/}>

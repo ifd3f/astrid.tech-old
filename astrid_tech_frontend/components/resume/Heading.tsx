@@ -2,24 +2,9 @@ import Image from "next/image";
 import Link from "next/link";
 import React, { FC, ReactNode } from "react";
 import homepageStyles from "./heading.module.scss";
-import styles from "./style.module.scss";
-import { HomepageSectionProps } from "./util";
 
 const APPX_BEGAN_PROGRAMMING = new Date("2013-02-01");
 const APPX_BEGAN_HARDWARE = new Date("2015-12-15");
-
-const HomepageHeader: FC<HomepageSectionProps> = ({ children, color }) => {
-  return (
-    <header
-      className={homepageStyles.homepageHeader}
-      style={{
-        backgroundColor: color,
-      }}
-    >
-      <div className={styles.sectionContent}>{children}</div>
-    </header>
-  );
-};
 
 type YearsSinceProps = {
   date: Date;

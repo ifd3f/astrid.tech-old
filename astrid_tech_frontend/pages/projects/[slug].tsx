@@ -7,7 +7,6 @@ import { renderMarkdown } from "../../lib/markdown";
 import { convertProjectToObjectDate, Project } from "../../types/types";
 
 export const getStaticPaths: GetStaticPaths = async () => {
-  console.log(getProjectSlugs());
   return {
     paths: getProjectSlugs().map((slug) => ({ params: { slug } })),
     fallback: false,

@@ -99,7 +99,7 @@ type QueryData = {
 
 export function ExperienceSection() {
   return (
-    <HomepageSection color="#ddf2c4">
+    <HomepageSection>
       {/* TODO <h2 className={style.sectionHeading}>Work Experience</h2>
       <hr />
       <Article experience={query.microvu} />

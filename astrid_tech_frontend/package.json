@@ -15,6 +15,7 @@
     "@silvenon/remark-smartypants": "^1.0.0",
     "async-redis": "^1.1.7",
     "axios": "^0.21.1",
+    "axios-jwt": "^1.2.0",
     "better-sqlite3": "^7.1.2",
     "bootstrap": "4",
     "classnames": "^2.2.6",

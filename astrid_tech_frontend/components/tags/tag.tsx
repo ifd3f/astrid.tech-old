@@ -42,7 +42,7 @@ export const TagBadge: FC<TagBadgeProps> = ({
 };
 
 type TagListProps = {
-  tags: (Tag | string)[];
+  tags: string[];
   limit?: number;
   link?: boolean;
   className?: string;
@@ -83,7 +83,7 @@ export const TagList: FC<TagListProps> = ({
         }}
       >
         {shownTags.map((tag) => (
-          <TagBadge key={tag.slug} tag={tag} link={link} />
+          <TagBadge key={tag} tag={tag} link={link} />
         ))}{" "}
         {excluded.length > 0 ? (
           <Badge title={alt} onClick={onClick} style={{ cursor: "pointer" }}>

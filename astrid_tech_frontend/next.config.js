@@ -10,12 +10,26 @@ function oldBlogRedirect(oldSlug, newSlug) {
   };
 }
 
+function getAPIRoot() {
+  if (process.env.ASTRID_TECH_API_ROOT) {
+    return process.env.ASTRID_TECH_API_ROOT;
+  } else if (process.env.NODE_ENV == "production") {
+    throw new Error(
+      "We are in production, but ASTRID_TECH_API_ROOT was not specified!"
+    );
+  } else {
+    console.warn("No API root specified, defaulting to", apiRoot);
+    return "http://localhost:8001/";
+  }
+}
+
 module.exports = {
   images: {
     domains: ["i.ytimg.com"],
   },
   env: {
     publicRoot: "https://astrid.tech/",
+    apiRoot: getAPIRoot(),
   },
   async redirects() {
     return [

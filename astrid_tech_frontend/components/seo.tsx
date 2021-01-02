@@ -79,7 +79,7 @@ const SEO: FC<SEOProps> = ({
       <title>{title} | astrid.tech</title>
 
       {metas.map((props) => (
-        <meta {...props} />
+        <meta key={props.property ?? props.name} {...props} />
       ))}
 
       <link

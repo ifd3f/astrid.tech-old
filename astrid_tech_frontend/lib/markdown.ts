@@ -33,7 +33,6 @@ export async function renderMarkdown(md: string, assetRoot: string) {
     ) {
       const newPath = join("/_", assetRoot, url.pathname);
       const expectedFile = join(publicRoot, newPath);
-      console.log(newPath, expectedFile);
       if (fs.existsSync(expectedFile) && fs.statSync(expectedFile).isFile()) {
         return newPath;
       }
