@@ -15,15 +15,14 @@
     - slug: javascript
     - slug: css
     - slug: html
+    - slug: sass
     - slug: react-js
     - slug: typescript
     - slug: gatsby-js
     - slug: next-js
     - slug: bootstrap-css
     - slug: material-ui
-    - slug: responsive-design
     - slug: jquery
-    - slug: sass
 
 - name: Machine Learning
   skills:
