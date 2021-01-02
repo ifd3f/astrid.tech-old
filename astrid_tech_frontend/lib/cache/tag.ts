@@ -17,6 +17,19 @@ export function getTags(): string[] {
   return results.map(({ tag }) => tag as string);
 }
 
+function getSortKey(object: SiteObject): number {
+  switch (object.type) {
+    case "b":
+      return new Date(object.date).getTime();
+    case "p":
+      const now = new Date().getTime();
+      return object.endDate
+        ? (now + new Date(object.endDate).getTime()) / 2
+        : now;
+  }
+  throw new Error("Unsupported type");
+}
+
 export async function getTagged(
   tag: string,
   excerptChars: number
@@ -35,5 +48,9 @@ export async function getTagged(
   ]);
   const objects = (projects as SiteObject[]).concat(posts as SiteObject[]);
 
-  return objects.filter((x) => x.tags.includes(tag));
+  return objects
+    .filter((x) => x.tags.includes(tag))
+    .sort((a, b) => {
+      return getSortKey(b) - getSortKey(a);
+    });
 }

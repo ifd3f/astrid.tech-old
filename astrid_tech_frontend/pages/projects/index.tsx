@@ -6,7 +6,7 @@ import { getProjects } from "../../lib/cache";
 import { withoutContent } from "../../lib/markdown";
 
 export const getStaticProps: GetStaticProps = async () => {
-  const projects = getProjects({}).map(withoutContent);
+  const projects = getProjects().map(withoutContent);
 
   const keys = [
     "title",

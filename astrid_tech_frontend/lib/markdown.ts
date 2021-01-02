@@ -69,7 +69,7 @@ export async function getMarkdownExcerpt(md: string, maxChars: number) {
   return truncateKeepWords(text, maxChars) + "\u2026";
 }
 
-export async function withoutContent<T>(object: { content: string } & T) {
+export function withoutContent<T>(object: { content: string } & T) {
   const out = {
     ...object,
   } as { content?: string } & T;
@@ -77,13 +77,10 @@ export async function withoutContent<T>(object: { content: string } & T) {
   return out as { content: never } & T;
 }
 
-export const excerptify = (maxChars: number) =>
-  maxChars > 0
-    ? async <T>(
-        object: { content: string } & T
-      ): Promise<{ content: never; excerpt?: string } & T> =>
-        withoutContent({
-          ...object,
-          excerpt: await getMarkdownExcerpt(object.content, maxChars),
-        })
-    : withoutContent;
+export const excerptify = (maxChars: number) => async <T>(
+  object: { content: string } & T
+): Promise<{ excerpt?: string } & T> =>
+  withoutContent({
+    ...object,
+    excerpt: await getMarkdownExcerpt(object.content, maxChars),
+  });

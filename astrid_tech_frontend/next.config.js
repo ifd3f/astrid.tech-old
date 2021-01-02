@@ -15,7 +15,7 @@ module.exports = {
     domains: ["i.ytimg.com"],
   },
   env: {
-    ROOT: "https://astrid.tech/",
+    publicRoot: "https://astrid.tech/",
   },
   async redirects() {
     return [

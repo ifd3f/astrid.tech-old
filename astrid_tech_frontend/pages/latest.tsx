@@ -6,12 +6,15 @@ import { PostBrief } from "../components/blog/feed";
 import { PageHeading } from "../components/layout";
 import Layout from "../components/layout/layout";
 import SEO from "../components/seo";
-import { getBlogPostMetas } from "../lib/cache";
+import { getBlogPosts } from "../lib/cache";
+import { excerptify } from "../lib/markdown";
 import styles from "../styles/blog.module.scss";
 import { convertBlogPostToObjectDate } from "../types/types";
 
 export const getStaticProps = async () => {
-  const posts = await getBlogPostMetas(120);
+  const posts = await Promise.all(
+    getBlogPosts().map(excerptify(120))
+  );
   return {
     props: { posts },
   };

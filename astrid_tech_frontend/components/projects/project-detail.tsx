@@ -134,7 +134,7 @@ export type ProjectDetailProps = UsesProject & {
 };
 
 const ProjectDetailPage: FC<ProjectDetailProps> = ({ project, similar }) => {
-  const url = join(process.env.ROOT!!, "projects", project.slug);
+  const url = join(process.env.publicRoot!, "projects", project.slug);
   /*
   const thumbnail = data.project.thumbnail
     ? `${location.origin}${data.project.thumbnail.childImageSharp.fixed.src}`

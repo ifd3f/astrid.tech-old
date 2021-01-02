@@ -34,6 +34,7 @@ export function getProject(slug: string): Project<string> {
     .prepare(
       `SELECT 
         id, 
+        slug,
         asset_root as assetRoot, 
         title, 
         status,
