@@ -68,3 +68,15 @@ export async function getMarkdownExcerpt(md: string, maxChars: number) {
   ).toString() as string;
   return truncateKeepWords(text, maxChars) + "\u2026";
 }
+
+export async function excerptify<T>(
+  maxChars: number,
+  object: { content: string } & T
+): Promise<{ content: never; excerpt: string } & T> {
+  const out = {
+    ...object,
+    excerpt: await getMarkdownExcerpt(object.content, maxChars),
+  } as { content?: string; excerpt: string } & T;
+  delete out.content;
+  return out as { content: never; excerpt: string } & T;
+}

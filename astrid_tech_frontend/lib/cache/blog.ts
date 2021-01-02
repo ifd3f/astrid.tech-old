@@ -5,6 +5,21 @@ import { getConnection } from "./util";
 
 export type Path = { year: string; month: string; day: string; slug: string[] };
 
+export function rowToBlogMeta(row: any, tags: string[]): BlogPostMeta<string> {
+  return {
+    ...row,
+    thumbnail: null,
+    tags,
+  };
+}
+
+export function rowToBlogPost(row: any, tags: string[]): BlogPost<string> {
+  return {
+    ...rowToBlogMeta(row, tags),
+    content: row.content as string,
+  };
+}
+
 export function getBlogPostSlugs(): Path[] {
   const db = getConnection();
   const results = db
@@ -46,12 +61,9 @@ export function getBlogPost(path: Path): BlogPost<string> {
 
   const tags = db
     .prepare(`SELECT tag FROM blog_tag WHERE fk_blog = @id`)
-    .all({ id: row.id });
-  return {
-    ...row,
-    thumbnail: null,
-    tags: tags.map(({ tag }) => tag),
-  };
+    .all({ id: row.id })
+    .map(({ tag }) => tag);
+  return rowToBlogPost(row, tags);
 }
 
 export async function getBlogPostMetas(

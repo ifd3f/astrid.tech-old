@@ -1,5 +1,24 @@
-import { Project, ProjectMeta, ProjectStatus } from "../../types/types";
+import { Project, ProjectMeta } from "../../types/types";
 import { getConnection } from "./util";
+
+export function rowToProjectMeta(
+  row: any,
+  tags: string[]
+): ProjectMeta<string> {
+  return {
+    ...row,
+    source: row.JSON.parse(row.source) as string[],
+    thumbnail: row.thumbnail as string,
+    tags,
+  };
+}
+
+export function rowToProject(row: any, tags: string[]): Project<string> {
+  return {
+    ...rowToProjectMeta(row, tags),
+    content: row.content as string,
+  };
+}
 
 export function getProjectSlugs(): string[] {
   const db = getConnection();
@@ -11,19 +30,7 @@ export function getProjectSlugs(): string[] {
 
 export function getProject(slug: string): Project<string> {
   const db = getConnection();
-  const {
-    id,
-    assetRoot,
-    title,
-    status,
-    description,
-    startDate,
-    endDate,
-    url,
-    source,
-    thumbnail,
-    content,
-  } = db
+  const project = db
     .prepare(
       `SELECT 
         id, 
@@ -44,23 +51,10 @@ export function getProject(slug: string): Project<string> {
 
   const tags = db
     .prepare(`SELECT tag FROM project_tag WHERE fk_project = @id`)
-    .all({ id });
+    .all({ id: project.id })
+    .map((r) => r.tag);
 
-  return {
-    assetRoot,
-    id: id,
-    title: title as string,
-    status: status as ProjectStatus,
-    description: description as string,
-    slug: slug as string,
-    startDate: startDate as string,
-    endDate: endDate as string | null,
-    url: url as string,
-    source: JSON.parse(source) as string[],
-    content: content as string,
-    thumbnail: thumbnail as string,
-    tags: tags.map(({ tag }) => tag),
-  };
+  return rowToProject(project, tags);
 }
 
 export type ProjectLink = {
@@ -116,36 +110,7 @@ export function getProjectMetas(): ProjectMeta<string>[] {
   const tags = db.prepare(`SELECT fk_project, tag FROM project_tag`).all();
 
   const idToProject = new Map<number, ProjectMeta<string>>(
-    projects.map(
-      ({
-        id,
-        slug,
-        assetRoot,
-        title,
-        status,
-        description,
-        startDate,
-        endDate,
-        url,
-        source,
-        thumbnail,
-      }) => [
-        id as number,
-        {
-          title: title as string,
-          assetRoot: assetRoot as string,
-          status: status as ProjectStatus,
-          description: description as string,
-          slug: slug as string,
-          startDate: startDate as string,
-          endDate: endDate as string | null,
-          url: url as string,
-          source: JSON.parse(source) as string[],
-          thumbnail: thumbnail as string,
-          tags: [],
-        },
-      ]
-    )
+    projects.map((row) => [row.id as number, rowToProject(row, [])])
   );
 
   for (const { fk_project, tag } of tags) {
