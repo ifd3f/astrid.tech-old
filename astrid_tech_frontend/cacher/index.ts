@@ -196,7 +196,7 @@ async function buildProjectCache(db: Database) {
 }
 
 async function main(dbUrl: string) {
-  await fs.rm(dbUrl);
+  await fs.rm(dbUrl, { force: true });
 
   const dataDir = path.join(__dirname, "../data");
   const db = sqlite3(dbUrl, {});
@@ -217,4 +217,6 @@ async function main(dbUrl: string) {
   await generateLicenses(path.join(dataDir, "licenses.json"));
 }
 
-main("content.sqlite3");
+main("content.sqlite3").catch((e) => {
+  throw e;
+});
