@@ -3,6 +3,19 @@ import { rowToBlogPost } from "./blog";
 import { rowToProject } from "./project";
 import { getConnection } from "./util";
 
+export function getTags(): string[] {
+  const db = getConnection();
+  const results = db
+    .prepare(
+      `SELECT DISTINCT tag FROM project_tag
+      UNION
+      SELECT DISTINCT tag from blog_tag`
+    )
+    .all();
+
+  return results.map(({ tag }) => tag as string);
+}
+
 export function getTagged(tag: string): (BlogPost<string> | Project<string>)[] {
   const db = getConnection();
   const results = db
