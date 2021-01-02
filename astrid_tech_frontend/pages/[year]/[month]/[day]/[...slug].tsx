@@ -1,23 +1,23 @@
-import { GetStaticPaths, GetStaticProps, InferGetStaticPropsType } from "next";
+import { GetStaticProps, InferGetStaticPropsType } from "next";
 import { FC } from "react";
 import BlogPostPage from "../../../../components/blog/blog";
 import { getBlogPost, getBlogPostSlugs, Path } from "../../../../lib/cache";
 import { renderMarkdown } from "../../../../lib/markdown";
+import { wrappedStaticPaths } from "../../../../lib/pathcache";
 import { BlogPost, convertBlogPostToObjectDate } from "../../../../types/types";
 
-function pathToKey(path: Path) {
-  const joined = path.slug.join(" ");
-  return `${path.year}${path.month}${path.day}${joined}`;
-}
-
-export const getStaticPaths: GetStaticPaths = async () => {
-  return {
-    paths: getBlogPostSlugs().map((params) => ({
-      params,
-    })),
-    fallback: false,
-  };
-};
+export const getStaticPaths = wrappedStaticPaths(
+  __filename,
+  async () => {
+    return {
+      paths: getBlogPostSlugs().map((params) => ({
+        params,
+      })),
+      fallback: false,
+    };
+  },
+  ({ year, month, day, slug }: Path) => `/${year}/${month}/${day}/${slug[0]}`
+);
 
 export const getStaticProps: GetStaticProps = async ({ params }) => {
   const post = getBlogPost(params!! as Path);
