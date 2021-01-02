@@ -1,17 +1,23 @@
-import { GetStaticPaths, GetStaticProps, InferGetStaticPropsType } from "next";
+import { GetStaticProps, InferGetStaticPropsType } from "next";
+import path from "path";
 import { FC } from "react";
 import ProjectDetailPage from "../../components/projects/project-detail";
 import { getProject, getProjectSlugs } from "../../lib/cache";
 import { getSimilarProjects } from "../../lib/cache/project";
 import { renderMarkdown } from "../../lib/markdown";
+import { wrappedStaticPaths } from "../../lib/pathcache";
 import { convertProjectToObjectDate, Project } from "../../types/types";
 
-export const getStaticPaths: GetStaticPaths = async () => {
-  return {
-    paths: getProjectSlugs().map((slug) => ({ params: { slug } })),
-    fallback: false,
-  };
-};
+export const getStaticPaths = wrappedStaticPaths(
+  path.join(__dirname, __filename),
+  async () => {
+    return {
+      paths: getProjectSlugs().map((slug) => ({ params: { slug } })),
+      fallback: false,
+    };
+  },
+  ({ slug }) => `/projects/${slug}`
+);
 
 export const getStaticProps: GetStaticProps = async ({ params }) => {
   const project = getProject(params!!.slug as string);

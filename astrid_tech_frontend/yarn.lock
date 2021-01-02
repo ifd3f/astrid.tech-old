@@ -402,6 +402,11 @@
   resolved "https://registry.yarnpkg.com/@types/seedrandom/-/seedrandom-2.4.28.tgz#9ce8fa048c1e8c85cb71d7fe4d704e000226036f"
   integrity sha512-SMA+fUwULwK7sd/ZJicUztiPs8F1yCPwF3O23Z9uQ32ME5Ha0NmDK9+QTsYE4O2tHXChzXomSWWeIhCnoN1LqA==
 
+"@types/string-similarity@^4.0.0":
+  version "4.0.0"
+  resolved "https://registry.yarnpkg.com/@types/string-similarity/-/string-similarity-4.0.0.tgz#8cc03d5d1baad2b74530fe6c7d849d5768d391ad"
+  integrity sha512-dMS4S07fbtY1AILG/RhuwmptmzK1Ql8scmAebOTJ/8iBtK/KI17NwGwKzu1uipjj8Kk+3mfPxum56kKZE93mzQ==
+
 "@types/unist@*", "@types/unist@^2.0.0", "@types/unist@^2.0.2", "@types/unist@^2.0.3":
   version "2.0.3"
   resolved "https://registry.yarnpkg.com/@types/unist/-/unist-2.0.3.tgz#9c088679876f374eb5983f150d4787aa6fb32d7e"
@@ -6963,6 +6968,11 @@ string-hash@1.1.3:
   version "1.1.3"
   resolved "https://registry.yarnpkg.com/string-hash/-/string-hash-1.1.3.tgz#e8aafc0ac1855b4666929ed7dd1275df5d6c811b"
   integrity sha1-6Kr8CsGFW0Zmkp7X3RJ1311sgRs=
+
+string-similarity@^4.0.3:
+  version "4.0.3"
+  resolved "https://registry.yarnpkg.com/string-similarity/-/string-similarity-4.0.3.tgz#ef52d6fc59c8a0fc93b6307fbbc08cc6e18cde21"
+  integrity sha512-QEwJzNFCqq+5AGImk5z4vbsEPTN/+gtyKfXBVLBcbPBRPNganZGfQnIuf9yJ+GiwSnD65sT8xrw/uwU1Q1WmfQ==
 
 string-width@^1.0.1:
   version "1.0.2"
