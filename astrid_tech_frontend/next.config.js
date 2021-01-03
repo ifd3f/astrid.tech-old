@@ -26,7 +26,7 @@ function getAPIRoot() {
 
 module.exports = {
   images: {
-    domains: ["i.ytimg.com"],
+    domains: ["i.imgur.com"],
   },
   env: {
     publicRoot: "https://astrid.tech/",

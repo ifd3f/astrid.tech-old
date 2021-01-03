@@ -7,7 +7,7 @@ import {
   BsLink,
   BsQuestionCircle,
 } from "react-icons/bs";
-import { FaCalendar, FaGithub } from "react-icons/fa";
+import { FaCalendar, FaEnvelope, FaGithub } from "react-icons/fa";
 import { Container } from "reactstrap";
 import { ProjectLink } from "../../lib/cache";
 import {
@@ -26,6 +26,7 @@ import {
   StatusGroup,
   TagsGroup,
 } from "../layout";
+import { StatusBadge } from "./project-card";
 import style from "./project-detail.module.scss";
 
 type UsesProject = {
@@ -37,7 +38,15 @@ function SourceCodeURLDisplay({ url }: { url: string }) {
   if (info.hostname.endsWith("github.com")) {
     return (
       <a href={url}>
-        <FaGithub title="GitHub" />
+        <FaGithub title="GitHub" /> Github
+      </a>
+    );
+  }
+  console.log(info);
+  if (info.protocol == "mailto:") {
+    return (
+      <a href={url}>
+        <FaEnvelope /> {info.pathname}
       </a>
     );
   }
@@ -64,9 +73,8 @@ const ProjectStatusGroup = () => {
         ))}
       </InfoRow>
       <InfoRow name="Status" icon={<BsQuestionCircle />}>
-        {/* TODO Insert status here */}
+        <StatusBadge status={project.status} />
       </InfoRow>
-      {/* TODO Insert comment count here */}
     </StatusGroup>
   );
 };
