@@ -1,4 +1,3 @@
-import Image from "next/image";
 import Link from "next/link";
 import React, { FC, ReactNode } from "react";
 import homepageStyles from "./heading.module.scss";
@@ -43,12 +42,9 @@ interface IconInfoDisplayProps {
 
 const ImageOfMyself = () => (
   <div className={homepageStyles.imageSelf + " u-photo"}>
-    <Image
-      src="/avatar.jpg"
+    <img
+      src={require("public/avatar.jpg?resize&sizes[]=300")}
       alt="Astrid Yu"
-      width={200}
-      height={200}
-      layout="responsive"
     />
   </div>
 );

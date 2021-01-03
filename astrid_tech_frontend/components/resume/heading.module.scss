@@ -72,9 +72,10 @@
 
 .imageSelf {
   margin-left: 20px;
-  min-width: 300px;
   img {
     border-radius: 150px;
+    width: 300px;
+    height: 300px;
   }
 }
 

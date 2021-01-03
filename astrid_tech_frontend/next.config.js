@@ -1,5 +1,6 @@
 const { getEnv } = require("./lib/jsenvutil");
-const AsyncRedis = require("async-redis");
+const withPlugins = require("next-compose-plugins");
+const optimizedImages = require("next-optimized-images");
 
 function oldBlogRedirect(oldSlug, newSlug) {
   const [, year, month, day, slug] = oldSlug.match(
@@ -13,10 +14,7 @@ function oldBlogRedirect(oldSlug, newSlug) {
   };
 }
 
-module.exports = {
-  images: {
-    domains: ["i.imgur.com"],
-  },
+module.exports = withPlugins([[optimizedImages, {}]], {
   env: {
     publicRoot: "https://astrid.tech/",
     apiRoot: getEnv("ASTRID_TECH_API_ROOT", "http://localhost:8001"),
@@ -52,4 +50,4 @@ module.exports = {
       oldBlogRedirect("2020-12-20-adding-a-backend", "backend"),
     ];
   },
-};
+});

@@ -1,4 +1,3 @@
-import Image from "next/image";
 import Link from "next/link";
 import React, { FC, ReactNode } from "react";
 import { Col, Container, Row } from "reactstrap";
@@ -58,12 +57,11 @@ const AGPL: FC = () => {
   return (
     <>
       <a href="https://www.gnu.org/licenses/agpl-3.0.en.html">
-        <Image
+        <img
           alt="GNU Affero General Public License"
           width={100}
           height={40}
-          objectFit="contain"
-          src="/agpl.png"
+          src={require("public/agpl.png")}
         />
       </a>
       <p>

@@ -1,4 +1,3 @@
-import Image from "next/image";
 import React, { ComponentProps, FC } from "react";
 
 export const ContentImage: FC<ComponentProps<"img">> = (props) => {
@@ -7,19 +6,11 @@ export const ContentImage: FC<ComponentProps<"img">> = (props) => {
   try {
     url = new URL(src!);
   } catch (e) {
-    return <img {...props} />;
+    return <img {...props} src={require(src!)} />;
   }
-  if (url.hostname == "i.ytimg.com") return <img {...props} />;
   return (
     <a href={src}>
-      <Image
-        src={src!!}
-        alt={alt}
-        width={1200}
-        height={800}
-        layout="responsive"
-        objectFit="contain"
-      />
+      <img src={src!} alt={alt} width={1200} height={800} />
     </a>
   );
 };

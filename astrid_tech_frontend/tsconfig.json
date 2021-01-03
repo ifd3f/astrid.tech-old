@@ -4,6 +4,7 @@
     "module": "commonjs",
     "jsx": "preserve",
     "strict": true,
+    "baseUrl": ".",
     "esModuleInterop": true,
     "skipLibCheck": true,
     "forceConsistentCasingInFileNames": true,
