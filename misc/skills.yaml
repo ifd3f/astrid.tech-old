@@ -24,7 +24,7 @@
     - slug: material-ui
     - slug: jquery
 
-- name: Machine Learning
+- name: ML/Data
   skills:
     - slug: opencv
     - slug: scikit-learn

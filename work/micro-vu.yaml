@@ -3,15 +3,14 @@ organization: Micro-Vu Corp.
 position: Software Intern
 location: Windsor, CA, USA
 website: https://www.microvu.com/
-summary: Metrology devices for measuring dimensions of mechanical parts
 startDate: 2020-06-22
-endDate: null
+endDate: 2020-12-18
 highlights:
-  - Designed and implemented UI elements in WPF for intuitiveness and usability.
+  - Implemented components of InSpec 3, a program built on C# .NET and WPF that integrates with high-precision optical measuring machines.
+  - Led the design and implementation of the Reporting component, which produces user-friendly measurement reports using Scriban HTML templates.
+  - Refactored sections of the codebase for maintainability.
+  - Designed UI elements for intuitiveness, usability, and extensibility.
   - Researched efficient optimization algorithms for circle-circle geometric tolerance fitting.
-  - Built the foundations for the Reporting and Data Access components, which are extensible frameworks that allow users to extract raw data from InSpec 3.
-  - Assisted the full-time engineers with refactoring large sections of the C# codebase.
-
 tags:
   - csharp
   - wpf
