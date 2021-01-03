@@ -1,3 +1,4 @@
+import { format } from "date-fns";
 import React, { FC, ReactNode } from "react";
 import { FaTrophy } from "react-icons/fa";
 import { Badge } from "reactstrap";
@@ -56,10 +57,11 @@ const Article: FC<ArticleProps> = ({ experience, tagline: _tagline }) => {
     tagline = null;
   }
 
+  const start = format(new Date(experience.startDate), "MMM yyyy");
   const durationText =
     experience.endDate == null
-      ? experience.startDate
-      : `${experience.startDate} to ${experience.endDate}`;
+      ? start
+      : `${start} to ${format(new Date(experience.endDate), "MMM yyyy")}`;
 
   return (
     <article>
@@ -73,7 +75,6 @@ const Article: FC<ArticleProps> = ({ experience, tagline: _tagline }) => {
             <p className={style.durationTitle}>{durationText}</p>
           </div>
         </div>
-        {tagline}
       </div>
 
       <div>
@@ -91,26 +92,17 @@ const Article: FC<ArticleProps> = ({ experience, tagline: _tagline }) => {
   );
 };
 
-type QueryData = {
-  fabtime: WorkExperience;
-  microvu: WorkExperience;
-  ironPanthers: WorkExperience;
-};
-
 export function ExperienceSection() {
+  const ft = require("../../data/objs/work/fabtime");
+  const mv = require("../../data/objs/work/micro-vu");
+
   return (
     <HomepageSection>
-      {/* TODO <h2 className={style.sectionHeading}>Work Experience</h2>
+      <h2 className={style.sectionHeading}>Experience</h2>
       <hr />
-      <Article experience={query.microvu} />
+      <Article experience={mv} />
       <hr />
-      <Article experience={query.fabtime} />
-      <hr />
-      <Article
-        experience={query.ironPanthers}
-        tagline={<IronPanthersTagline />}
-      />
-      */}
+      <Article experience={ft} />
     </HomepageSection>
   );
 }

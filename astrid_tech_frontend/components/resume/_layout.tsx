@@ -1,22 +1,21 @@
-import React, { CSSProperties, FC, ReactNode } from "react"
-import { Col, Container, Row } from "reactstrap"
-import stylesheet from "./layout.module.scss"
+import React, { CSSProperties, FC, ReactNode } from "react";
+import { Col, Container, Row } from "reactstrap";
 
 export const HomepageSection: FC<{
-  children: ReactNode
-  tag?: string
-  className?: string
-  style?: CSSProperties
+  children: ReactNode;
+  tag?: string;
+  className?: string;
+  style?: CSSProperties;
 }> = ({ children, tag = "section", style, className = "" }) => {
   return React.createElement(
     tag,
     {
-      className: stylesheet.pageSection + " " + className,
+      className,
       style,
     },
     children
-  )
-}
+  );
+};
 
 export const Heading = () => {
   return (
@@ -30,5 +29,5 @@ export const Heading = () => {
         </Row>
       </Container>
     </HomepageSection>
-  )
-}
+  );
+};
