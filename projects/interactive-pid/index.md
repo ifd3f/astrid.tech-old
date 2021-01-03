@@ -13,5 +13,5 @@ tags:
   - website
 url: https://plenglin.github.io/Interactive-PID/
 source: [https://github.com/Plenglin/Interactive-PID]
-thumbnail: null
+thumbnail: ./chart.png
 ---

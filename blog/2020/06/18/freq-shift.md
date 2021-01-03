@@ -8,6 +8,8 @@ tags:
   - python
   - jupyter
   - fpgas
+  - numpy
+  - matplotlib
   - dsp
   - math
   - scikit-learn

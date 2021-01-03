@@ -11,6 +11,8 @@ tags:
   - image-processing
   - python
   - data-science
+  - opencv
+  - keras
 keywords:
   - TensorFlow
   - Python

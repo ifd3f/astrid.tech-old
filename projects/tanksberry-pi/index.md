@@ -24,7 +24,7 @@ thumbnail: ./thumbnail.jpg
 
 Jesus Christ, I don't know what the hell I was thinking with this one.
 
-https://www.youtube.com/watch?v=RDCPD6-U2Ko
+<iframe width="560" height="315" src="https://www.youtube.com/embed/RDCPD6-U2Ko" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
 
 CAD Model of the Turret
 

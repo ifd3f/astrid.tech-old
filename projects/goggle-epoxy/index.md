@@ -22,7 +22,7 @@ tags:
   - ssd1306
 url: null
 source: [https://github.com/Plenglin/Goggle-Epoxy]
-thumbnail: null
+thumbnail: ./circuitry.jpg
 ---
 
 ![The circuitry.](./circuitry.jpg)

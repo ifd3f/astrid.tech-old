@@ -11,6 +11,7 @@ tags:
   - simulation
   - school:cal-poly=csc-572
 url: null
+thumbnail: ./thumbnail.png
 source:
   - https://github.com/Plenglin/572-Planet-Collisions/
 ---
@@ -21,7 +22,7 @@ Our project is a simulation of an asteroid impacting the Earth. We were inspired
 
 ## Results
 
-https://youtu.be/4lHT7ixTdS0
+<iframe width="560" height="315" src="https://www.youtube.com/embed/4lHT7ixTdS0" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
 
 After the first collision, there are 552 particles being simulated at:
 
