@@ -36,3 +36,5 @@ yarn-error.log*
 # Content cache
 content.sqlite3
 public/_/*
+
+./docker

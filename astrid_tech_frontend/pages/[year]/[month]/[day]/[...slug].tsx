@@ -9,8 +9,9 @@ import { BlogPost, convertBlogPostToObjectDate } from "../../../../types/types";
 export const getStaticPaths = wrappedStaticPaths(
   __filename,
   async () => {
+    const slugs = getBlogPostSlugs();
     return {
-      paths: getBlogPostSlugs().map((params) => ({
+      paths: slugs.map((params) => ({
         params,
       })),
       fallback: false,

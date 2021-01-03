@@ -1,3 +1,6 @@
+const { getEnv } = require("./lib/jsenvutil");
+const AsyncRedis = require("async-redis");
+
 function oldBlogRedirect(oldSlug, newSlug) {
   const [, year, month, day, slug] = oldSlug.match(
     /(\d{4})-(\d{2})-(\d{2})-(.+)/
@@ -10,27 +13,13 @@ function oldBlogRedirect(oldSlug, newSlug) {
   };
 }
 
-function getAPIRoot() {
-  if (process.env.ASTRID_TECH_API_ROOT) {
-    return process.env.ASTRID_TECH_API_ROOT;
-  } else if (process.env.NODE_ENV == "production") {
-    throw new Error(
-      "We are in production, but ASTRID_TECH_API_ROOT was not specified!"
-    );
-  } else {
-    const apiRoot = "http://localhost:8001/";
-    console.warn("No API root specified, defaulting to", apiRoot);
-    return apiRoot;
-  }
-}
-
 module.exports = {
   images: {
     domains: ["i.imgur.com"],
   },
   env: {
     publicRoot: "https://astrid.tech/",
-    apiRoot: getAPIRoot(),
+    apiRoot: getEnv("ASTRID_TECH_API_ROOT", "http://localhost:8001"),
   },
   async redirects() {
     return [
