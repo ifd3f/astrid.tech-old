@@ -3,7 +3,7 @@ from django.shortcuts import render
 
 
 # Create your views here.
-from analytics.models import Resource, Tracker, Hit
+from analytics.models import Resource, Hit
 
 
 def get_media(request, filename):
@@ -11,9 +11,6 @@ def get_media(request, filename):
 
     resource = Resource.objects.get(name=filename)
     response = HttpResponse(resource.file, content_type='image/png')
-    if track_id is None:
-        return response
-    tracker, _ = Tracker.objects.get_or_create(file=resource, track_id=track_id)
-    Hit.create_from_request(tracker, request).save()
+    Hit.create_from_request(resource, track_id, request).save()
 
     return response

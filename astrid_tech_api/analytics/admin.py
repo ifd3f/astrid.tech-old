@@ -1,7 +1,7 @@
 from django.contrib import admin
 
-from analytics.models import Resource, Tracker, Hit
+from analytics.models import Resource, Hit, NamedTracker
 
 admin.site.register(Resource)
-admin.site.register(Tracker)
+admin.site.register(NamedTracker)
 admin.site.register(Hit)
