@@ -11,8 +11,9 @@ function getAPIRoot() {
   } else if (process.env.NODE_ENV == 'production') {
     throw new Error("We are in production, but ASTRID_TECH_API_ROOT was not specified!")
   } else {
+    apiRoot = 'http://localhost:8001/'
     console.warn("No API root specified, defaulting to", apiRoot)
-    return 'http://localhost:8001/'
+    return apiRoot
   }
 }
 

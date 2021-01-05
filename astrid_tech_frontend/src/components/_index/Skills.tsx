@@ -40,9 +40,6 @@ const SkillInfoDisplay: FC<SkillInfoDisplayProps> = ({ tag, level }) => {
         style={{ backgroundColor: tag.backgroundColor, color: tag.color }}
       >
         <p className={styleSkills.tagName}>{tag.name}</p>
-        <p className={styleSkills.tagStars}>
-          <Stars stars={level} />
-        </p>
       </div>
     </Link>
   )
