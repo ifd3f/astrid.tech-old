@@ -1,5 +1,13 @@
-from django.db.models import FileField, ForeignKey, SET_NULL, CharField, TextField, GenericIPAddressField, \
-    CASCADE, Model, DateTimeField
+from django.db.models import FileField, ForeignKey, SET_NULL, CharField, GenericIPAddressField, \
+    Model, DateTimeField
+
+
+class TruncatingCharField(CharField):
+    def get_prep_value(self, value):
+        value = super(TruncatingCharField, self).get_prep_value(value)
+        if value:
+            return value[:self.max_length]
+        return value
 
 
 class Resource(Model):
@@ -30,16 +38,16 @@ class NamedTracker(Model):
 
 class Hit(Model):
     file = ForeignKey(Resource, on_delete=SET_NULL, null=True)
-    track_id = CharField(max_length=8, null=True, blank=True)
+    track_id = TruncatingCharField(max_length=8, null=True, blank=True)
     time = DateTimeField(auto_now_add=True)
 
-    x_forwarded_for = CharField(max_length=128, null=True)
+    x_forwarded_for = TruncatingCharField(max_length=128, null=True)
     remote_addr = GenericIPAddressField(null=True)
-    remote_host = CharField(max_length=64, null=True)
-    host = CharField(max_length=64, null=True)
-    referer = CharField(max_length=64, null=True)
-    language = CharField(max_length=32, null=True)
-    user_agent = CharField(max_length=64, null=True)
+    remote_host = TruncatingCharField(max_length=256, null=True)
+    host = TruncatingCharField(max_length=256, null=True)
+    referer = TruncatingCharField(max_length=256, null=True)
+    language = TruncatingCharField(max_length=32, null=True)
+    user_agent = TruncatingCharField(max_length=128, null=True)
 
     @property
     def tracker_name(self):
