@@ -30,10 +30,12 @@ class NamedTracker(Model):
 
     @classmethod
     def get_name(cls, file, track_id):
-        entry = NamedTracker.objects.get(file=file, track_id=track_id)
-        if entry is None:
+        try:
+            entry = NamedTracker.objects.get(file=file, track_id=track_id)
+            return entry.display_name
+        except NamedTracker.DoesNotExist:
             return f'{file}?t={track_id}'
-        return entry.display_name
+
 
 
 class Hit(Model):
