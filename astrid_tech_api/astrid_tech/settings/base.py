@@ -19,6 +19,7 @@ BASE_DIR = Path(__file__).resolve().parent.parent.parent
 
 STATIC_URL = '/static/'
 STATIC_ROOT = BASE_DIR / 'staticfiles'
+MEDIA_ROOT = BASE_DIR / 'media'
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/3.1/howto/deployment/checklist/
@@ -47,8 +48,7 @@ INSTALLED_APPS = [
     'comments',
     'analytics',
     'accounts',
-    'api',
-    'analytics'
+    'api'
 ]
 
 MIDDLEWARE = [
@@ -128,11 +128,6 @@ REST_FRAMEWORK = {
         'oauth2_provider.contrib.rest_framework.OAuth2Authentication',
     ]
 }
-
-# Static files (CSS, JavaScript, Images)
-# https://docs.djangoproject.com/en/3.1/howto/static-files/
-
-STATIC_URL = '/static/'
 
 timestamper = structlog.processors.TimeStamper(fmt="iso")
 
