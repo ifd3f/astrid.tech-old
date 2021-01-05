@@ -14,6 +14,9 @@ class Resource(Model):
     file = FileField()
     name = CharField(max_length=32, null=False, primary_key=True, blank=False)
 
+    def __str__(self):
+        return self.name
+
 
 class NamedTracker(Model):
     file = ForeignKey(Resource, on_delete=SET_NULL, null=True)
@@ -30,11 +33,12 @@ class NamedTracker(Model):
 
     @classmethod
     def get_name(cls, file, track_id):
+        resource = Resource.objects.get(pk=file.pk)
         try:
-            entry = NamedTracker.objects.get(file=file, track_id=track_id)
+            entry = NamedTracker.objects.get(file=resource, track_id=track_id)
             return entry.display_name
         except NamedTracker.DoesNotExist:
-            return f'{file}?t={track_id}'
+            return f'{resource.name}?t={track_id}'
 
 
 
