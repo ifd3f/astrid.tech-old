@@ -1,5 +1,5 @@
 from django.apps import AppConfig
 
 
-class AnalyticsConfig(AppConfig):
+class ConfirmerConfig(AppConfig):
     name = 'analytics'

@@ -11,6 +11,7 @@ router.register(r'comments', CommentViewSet, basename='comments')
 
 urlpatterns = [
     path('admin/', admin.site.urls),
+    path('assets/', include('analytics.urls')),
     path('accounts/', include('django.contrib.auth.urls')),
     path('o/', include('oauth2_provider.urls', namespace='oauth2_provider')),
     path('auth/', include('accounts.urls')),

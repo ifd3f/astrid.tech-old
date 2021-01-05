@@ -1,3 +1,7 @@
 from django.contrib import admin
 
-# Register your models here.
+from analytics.models import Resource, Tracker, Hit
+
+admin.site.register(Resource)
+admin.site.register(Tracker)
+admin.site.register(Hit)
