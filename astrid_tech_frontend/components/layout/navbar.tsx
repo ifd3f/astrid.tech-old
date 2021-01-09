@@ -44,7 +44,6 @@ const MainNavbar: FC<MainNavbarProps> = ({ currentLocation, fixed }) => {
         <NavbarBrand
           tag="a"
           href="/"
-          activeClassName="active"
           className={classNames(
             "nav-link",
             currentLocation == "brand" ? "active" : null

@@ -38,3 +38,4 @@ content.sqlite3
 public/_/*
 
 ./docker
+./out
