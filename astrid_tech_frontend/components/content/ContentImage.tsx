@@ -8,7 +8,8 @@ export const ContentImage: FC<ComponentProps<"img">> = (props) => {
     url = new URL(src!);
   } catch (e) {
     const ext = path.extname(src!);
-    if (![".jpg", ".jpeg", ".png", ".webp", ".gif"].includes(ext)) return null;
+    if (![".jpg", ".jpeg", ".png", ".webp", ".gif"].includes(ext))
+      return <img {...props} />;
 
     const srcSet = require("../../public" +
       src! +

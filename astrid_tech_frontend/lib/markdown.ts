@@ -1,6 +1,7 @@
 import fs from "fs";
 import { join } from "path";
 import remark from "remark";
+import VFile from "vfile";
 import { truncateKeepWords } from "./util";
 const smartypants = require("@silvenon/remark-smartypants");
 const graphviz = require("remark-graphviz");
@@ -40,6 +41,9 @@ export async function renderMarkdown(md: string, assetRoot: string) {
     return url;
   }
 
+  const vfile = VFile(md);
+  vfile.data = { destinationDir: join("./public/_", assetRoot) };
+
   const out = await unified()
     .use(markdown)
     .use(graphviz)
@@ -57,7 +61,9 @@ export async function renderMarkdown(md: string, assetRoot: string) {
     .use(katex)
     .use(picture)
     .use(html, { sanitize: false })
-    .process(md);
+    .process(vfile);
+
+  console.log(out);
   return out.toString() as string;
 }
 
