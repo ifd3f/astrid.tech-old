@@ -10,7 +10,6 @@ import { ExperienceSection } from "./ExperienceSection";
 import { HeadingSection } from "./Heading";
 import { SkillsSection } from "./Skills";
 import styles from "./style.module.scss";
-import { TestmoninalSection } from "./Testimonials";
 import { HomepageSection } from "./_layout";
 
 export const Page = ({}) => {
@@ -22,11 +21,12 @@ export const Page = ({}) => {
       />
       <div className={styles.homepageContainer}>
         <HeadingSection />
+        {/*<TestmoninalSection />*/}
         <SkillsSection />
-        <TestmoninalSection />
         <ExperienceSection />
+        {/*<ProjectsSection />*/}
         <HomepageSection style={{ backgroundColor: "white" }}>
-          <h2>Ways to get in touch with me</h2>
+          <h2>Get in touch with me!</h2>
           <hr />
           <Row className="text-center" style={{ fontSize: "16pt" }}>
             <Col xs="12" md="6" lg="3">

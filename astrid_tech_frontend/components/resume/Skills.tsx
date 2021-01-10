@@ -62,16 +62,7 @@ const SkillCategoryView: FC<SkillCategoryViewProps> = ({
   category: { name, skills },
 }) => (
   <>
-    <div
-      style={{
-        height: 80,
-        display: "flex",
-        flexDirection: "column",
-        justifyContent: "end",
-      }}
-    >
-      <h3>{name}</h3>
-    </div>
+    <h3>{name}</h3>
     {skills.map(({ slug }) => (
       <SkillInfoDisplay slug={slug} key={slug} />
     ))}

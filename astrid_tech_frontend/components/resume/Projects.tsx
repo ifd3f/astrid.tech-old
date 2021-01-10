@@ -1,33 +1,45 @@
 import React from "react";
-import { Container, Row } from "reactstrap";
-import { Project } from "../../types/types";
+import {
+  Button,
+  Card,
+  CardImg,
+  CardImgOverlay,
+  CardText,
+  CardTitle,
+  Col,
+  Container,
+  Row
+} from "reactstrap";
 import { ALink } from "../util/boilerplate";
 import { HomepageSection } from "./util";
 
-type QueryData = {
-  allProject: {
-    edges: {
-      node: Project;
-    }[];
-  };
+const ProjectCard = () => {
+  return (
+    <Card inverse>
+      <CardImg width="300px" src={"/_/projects/astrid-tech/hero.png"} />
+      <CardImgOverlay>
+        <CardTitle tag="h5">Card</CardTitle>
+        <CardText>Stuff</CardText>
+        <Button>Do</Button>
+      </CardImgOverlay>
+    </Card>
+  );
 };
 
 export function ProjectsSection() {
   return (
-    <HomepageSection style={{ backgroundColor: "#f0d0b6" }}>
+    <HomepageSection>
       <div className="">
-        <h2>Featured Projects</h2>
-        <ALink href="/projects">See more</ALink>
+        <h2>Interesting Projects</h2>
       </div>
       <Container fluid className="projectShowcase">
         <Row>
-          {/*result.allProject.edges.map(({ node: project }) => (
-            <Col key={project.slug} lg={4}>
-              <ProjectCard project={project} />
-            </Col>
-          ))*/}
+          <Col>
+            <ProjectCard />
+          </Col>
         </Row>
       </Container>
+      <ALink href="/projects">See more</ALink>
     </HomepageSection>
   );
 }

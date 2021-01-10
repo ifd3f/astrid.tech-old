@@ -118,6 +118,8 @@ async function buildProjectTagOverrideTable(db: Database) {
   );
 }
 
+async function exportProjectData(db: Database, dest: string) {}
+
 async function exportTagOverrideData(db: Database, dest: string) {
   console.log("Exporting tag overrides to file");
   const tags = db

@@ -98,7 +98,7 @@ export function ExperienceSection() {
 
   return (
     <HomepageSection>
-      <h2 className={style.sectionHeading}>Experience</h2>
+      <h2 className={style.sectionHeading}>Work Experience</h2>
       <hr />
       <Article experience={mv} />
       <hr />
