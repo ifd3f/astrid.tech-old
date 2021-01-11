@@ -51,7 +51,7 @@ LOGGING = {
         },
         "file": {
             "class": "logging.handlers.TimedRotatingFileHandler",
-            'when': 'h',
+            'when': 'D',
             "filename": "logs/output.log",
             "formatter": "json_formatter"
         },
