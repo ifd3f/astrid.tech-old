@@ -1,0 +1,67 @@
+// https://getbootstrap.com/docs/4.5/getting-started/theming/
+
+$xs: 0;
+$sm: 576px;
+$md: 768px;
+$lg: 992px;
+$xl: 1200px;
+
+$grid-breakpoints: (
+  xs: $xs,
+  sm: $sm,
+  md: $md,
+  lg: $lg,
+  xl: $xl,
+);
+
+$white: #fff !default;
+$gray-100: #f8f9fa !default;
+$gray-200: #e9ecef !default;
+$gray-300: #dee2e6 !default;
+$gray-400: #ced4da !default;
+$gray-500: #adb5bd !default;
+$gray-600: #868e96 !default;
+$gray-700: #495057 !default;
+$gray-800: #343a40 !default;
+$gray-900: #212529 !default;
+$black: #000 !default;
+
+$lightblue: #55cdfc !default;
+$indigo: #3f51b5 !default;
+$purple: #673ab7 !default;
+$pink: #f7a8b8 !default;
+$red: #f44336 !default;
+$orange: #ff5722 !default;
+$yellow: #ffab00 !default;
+$green: #8bc34a !default;
+$teal: #009688 !default;
+$cyan: #00bcd4 !default;
+
+$primary-main: #1a237e;
+$primary-light: #534bae;
+$primary-dark: #000051;
+$primary-text: white;
+$secondary-main: #ff6e40;
+$secondary-light: #ffa06d;
+$secondary-dark: #c53d13;
+$secondary-text: black;
+
+$heading-color: #141414;
+$text-color: #3d3d3d;
+$main-bg-color: white;
+$text-muted: #888888;
+
+$link-color: $secondary-main;
+$link-hover-color: $secondary-light;
+$link-color-invert: $secondary-light;
+$link-hover-color-invert: $secondary-main;
+
+$footer-bg-color: $primary-main;
+$body-bg: $footer-bg-color;
+
+$footer-height: 360px;
+
+$navbar-height: 70px;
+@media only screen and (min-width: map-get($grid-breakpoints, md)) {
+  $navbar-height: 55px;
+}

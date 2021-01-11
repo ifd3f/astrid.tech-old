@@ -1,0 +1,13 @@
+@import "../../styles/variables.scss";
+@import "../../styles/fonts.scss";
+
+.testimonial {
+  blockquote {
+    font-family: $font-family-serif;
+    font-size: 1.3rem;
+    font-style: italic;
+    footer {
+      font-style: normal;
+    }
+  }
+}

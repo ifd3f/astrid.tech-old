@@ -1,0 +1,40 @@
+@import "../../styles/variables.scss";
+
+.homepageContainer {
+  margin: 0px;
+
+  section {
+    padding-top: 30px;
+    padding-bottom: 30px;
+
+    $paddings: (
+      xs: 30px 30px,
+      lg: 80px 50px,
+    );
+
+    @each $size, $pads in $paddings {
+      @media only screen and (min-width: map-get($grid-breakpoints, $size)) {
+        padding-left: nth($pads, 1);
+        padding-right: nth($pads, 2);
+      }
+    }
+  }
+
+  .sectionContent {
+    max-width: 1200px;
+    height: auto;
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  h2 {
+    font-size: 40pt;
+  }
+
+  .textBlock {
+    max-width: 400px;
+    p {
+      font-size: 14pt;
+    }
+  }
+}
