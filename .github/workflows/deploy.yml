@@ -70,7 +70,7 @@ jobs:
           REPOSITORY_NAME: Plenglin/staging.astrid.tech
           SINGLE_COMMIT: true
           BRANCH: main
-          FOLDER: public
+          FOLDER: astrid_tech_frontend/out
           CLEAN: true
 
       - name: Deploy to Production
@@ -83,5 +83,5 @@ jobs:
           REPOSITORY_NAME: Plenglin/plenglin.github.io
           SINGLE_COMMIT: true
           BRANCH: main
-          FOLDER: public
+          FOLDER: astrid_tech_frontend/out
           CLEAN: true
