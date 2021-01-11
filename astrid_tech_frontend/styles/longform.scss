@@ -1,0 +1,136 @@
+@import "./variables.scss";
+
+.longform {
+  $factor: 1.12;
+  $h6-size: 1rem;
+  $h5-size: $factor * $h6-size;
+  $h4-size: $factor * $h5-size;
+  $h3-size: $factor * $h4-size;
+  $h2-size: $factor * $h3-size;
+  $h1-size: $factor * $h2-size;
+
+  @media only screen and (min-width: map-get($grid-breakpoints, md)) {
+    $factor: 1.2;
+    $h6-size: $factor;
+  }
+
+  img {
+    width: 100%;
+    text-align: center;
+  }
+
+  h1,
+  h2,
+  h3 {
+    font-weight: bold;
+  }
+
+  h3,
+  h4 {
+    color: $gray-700;
+  }
+
+  h5,
+  h6 {
+    color: $text-muted;
+  }
+
+  h1 {
+    font-size: $h1-size;
+  }
+  h2 {
+    font-size: $h2-size;
+    margin-top: 25px;
+    margin-bottom: 15px;
+  }
+  h3 {
+    font-size: $h3-size;
+    margin-top: 20px;
+    margin-bottom: 10px;
+  }
+  h4 {
+    font-size: $h4-size;
+  }
+  h5 {
+    font-size: $h5-size;
+  }
+  h6 {
+    font-size: $h6-size;
+  }
+  p {
+    font-size: 1rem;
+    line-height: 150%;
+  }
+
+  li {
+    font-size: 1rem;
+    line-height: 1.4rem;
+    &,
+    & p {
+      margin-top: 0px;
+      margin-bottom: 5px;
+    }
+  }
+
+  table {
+    min-width: 95%;
+    margin-left: 2px;
+    margin-bottom: 10px;
+  }
+
+  td {
+    border: 1px solid $text-color;
+    padding-top: 3px;
+    padding-bottom: 3px;
+    padding-left: 5px;
+    padding-right: 5px;
+  }
+
+  blockquote {
+    margin-left: 20px;
+    padding-left: 10px;
+    border-left: 10px lightgray solid;
+    background-color: whitesmoke;
+  }
+}
+
+.comments {
+  font-size: 12pt;
+  p {
+    margin-bottom: 10px;
+  }
+
+  input {
+    font-size: 12pt;
+  }
+
+  .comment {
+    .header {
+      font-size: 16pt;
+    }
+    .body,
+    .actions,
+    .children {
+      margin-left: 15px;
+    }
+  }
+
+  h1 {
+    font-size: 15pt;
+  }
+  h2 {
+    font-size: 15pt;
+  }
+  h3 {
+    font-size: 14pt;
+  }
+  h4 {
+    font-size: 13pt;
+  }
+  h5 {
+    font-size: 12pt;
+  }
+  h6 {
+    font-size: 12pt;
+  }
+}

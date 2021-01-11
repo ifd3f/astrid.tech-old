@@ -3,10 +3,10 @@
   "tasks": [
     {
       "type": "npm",
-      "script": "develop",
+      "script": "dev",
       "problemMatcher": [],
-      "label": "npm: develop",
-      "detail": "npx gatsby clean && npx gatsby develop",
+      "label": "npm: dev",
+      "detail": "npx next dev",
       "path": "astrid_tech_frontend"
     }
   ]

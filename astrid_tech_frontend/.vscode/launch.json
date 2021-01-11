@@ -21,34 +21,32 @@
     {
       "type": "node",
       "request": "launch",
-      "name": "Gatsby develop",
-      "program": "${workspaceFolder}/node_modules/.bin/gatsby",
-      "args": ["develop"],
+      "name": "Next develop",
+      "program": "${workspaceFolder}/node_modules/.bin/next",
+      "args": ["dev"],
       "restart": true,
       "console": "integratedTerminal",
       "internalConsoleOptions": "neverOpen",
       "sourceMaps": true,
-      "cwd": "${workspaceFolder}/astrid_tech_frontend",
-      "preLaunchTask": "npm: clean"
+      "cwd": "${workspaceFolder}/astrid_tech_frontend"
     },
     {
       "type": "node",
       "request": "launch",
-      "name": "Gatsby build",
-      "program": "${workspaceFolder}/node_modules/.bin/gatsby",
+      "name": "Next build",
+      "program": "${workspaceFolder}/node_modules/.bin/next",
       "args": ["build"],
       "restart": true,
       "console": "integratedTerminal",
       "internalConsoleOptions": "neverOpen",
       "sourceMaps": true,
-      "cwd": "${workspaceFolder}/astrid_tech_frontend",
-      "preLaunchTask": "npm: clean"
+      "cwd": "${workspaceFolder}/astrid_tech_frontend"
     }
   ],
   "compounds": [
     {
       "name": "ALL the develops",
-      "configurations": ["Launch Firefox", "Gatsby develop"]
+      "configurations": ["Launch Firefox", "Next develop"]
     }
   ]
 }

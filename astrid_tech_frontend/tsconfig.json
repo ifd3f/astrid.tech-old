@@ -1,20 +1,21 @@
 {
   "compilerOptions": {
-    "jsx": "react",
-    "target": "es2016",
+    "target": "es5",
+    "module": "commonjs",
+    "jsx": "preserve",
+    "strict": true,
+    "baseUrl": ".",
+    "esModuleInterop": true,
+    "skipLibCheck": true,
+    "forceConsistentCasingInFileNames": true,
     "lib": ["dom", "dom.iterable", "esnext"],
     "allowJs": true,
-    "skipLibCheck": true,
-    "esModuleInterop": true,
-    "allowSyntheticDefaultImports": true,
-    "strict": true,
-    "forceConsistentCasingInFileNames": true,
-    "module": "commonjs",
+    "noEmit": true,
     "moduleResolution": "node",
     "resolveJsonModule": true,
-    "noEmit": true,
     "isolatedModules": true,
-    "baseUrl": "./"
+    "downlevelIteration": true
   },
-  "include": ["src", "plugins"]
+  "exclude": ["node_modules"],
+  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx"]
 }
