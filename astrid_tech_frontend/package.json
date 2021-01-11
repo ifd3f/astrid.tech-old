@@ -3,6 +3,7 @@
   "version": "2.0.0",
   "scripts": {
     "dev": "next",
+    "test": "ts-mocha -p tsconfig.json **/*.test.ts",
     "build": "next build && next export",
     "start": "next start",
     "cache": "npx ts-node cacher/index.ts --project node.tsconfig.json",
@@ -83,6 +84,7 @@
     "@types/hsl-to-hex": "^1.0.0",
     "@types/jest": "^25.2.2",
     "@types/js-yaml": "^3.12.5",
+    "@types/mocha": "^8.2.0",
     "@types/node": "^14.0.1",
     "@types/react": "^16.9.35",
     "@types/react-dom": "^16.9.8",
@@ -90,8 +92,10 @@
     "@types/unist": "^2.0.3",
     "@types/uuid": "^8.3.0",
     "@types/walk": "^2.3.0",
+    "mocha": "^8.2.1",
     "postcss-preset-env": "^6.7.0",
     "tailwindcss": "^1.4.0",
+    "ts-mocha": "^8.0.0",
     "ts-node": "^9.1.1"
   },
   "license": "AGPL-3.0-only"
