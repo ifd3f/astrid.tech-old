@@ -64,7 +64,7 @@ jobs:
         uses: JamesIves/github-pages-deploy-action@3.7.1
         if: github.ref == 'refs/heads/dev'
         with:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          SSH: true
           GIT_CONFIG_NAME: Astrid Yu
           GIT_CONFIG_EMAIL: astrid@astrid.tech
           REPOSITORY_NAME: Plenglin/staging.astrid.tech
@@ -77,7 +77,7 @@ jobs:
         uses: JamesIves/github-pages-deploy-action@3.7.1
         if: github.ref == 'refs/heads/main'
         with:
-          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+          SSH: true
           GIT_CONFIG_NAME: Astrid Yu
           GIT_CONFIG_EMAIL: astrid@astrid.tech
           REPOSITORY_NAME: Plenglin/plenglin.github.io
