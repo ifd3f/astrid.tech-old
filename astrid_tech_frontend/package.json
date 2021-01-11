@@ -7,7 +7,7 @@
     "build": "next build && next export",
     "start": "next start",
     "cache": "npx ts-node cacher/index.ts --project node.tsconfig.json",
-    "deploy": "gh-pages -r \"git@github.com:Plenglin/plenglin.github.io.git\" -b master -d out -f",
+    "deploy": "npx gh-pages -r \"git@github.com:Plenglin/plenglin.github.io.git\" -b master -d out -f",
     "typecheck": "tsc"
   },
   "dependencies": {
@@ -92,6 +92,7 @@
     "@types/unist": "^2.0.3",
     "@types/uuid": "^8.3.0",
     "@types/walk": "^2.3.0",
+    "gh-pages": "^3.1.0",
     "mocha": "^8.2.1",
     "postcss-preset-env": "^6.7.0",
     "tailwindcss": "^1.4.0",
