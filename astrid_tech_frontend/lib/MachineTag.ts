@@ -24,7 +24,7 @@ export class MachineTag {
   }
 
   set tag(tag: string) {
-    const match = isMachineTag(tag);
+    const match = tag.match(REGEX);
     if (match) {
       [, this.namespace, this.predicate, this.value] = match;
       this.value = this.value ?? null;
@@ -34,6 +34,10 @@ export class MachineTag {
   }
 }
 
-export function isMachineTag(tag: string) {
-  return tag.match(tag);
+export function parseMachineTagOrNull(tag: string): MachineTag | null {
+  try {
+    return new MachineTag(tag);
+  } catch (e) {
+    return null;
+  }
 }

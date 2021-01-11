@@ -1,4 +1,5 @@
 import { createContext, FC, ReactNode, useContext } from "react";
+import { parseMachineTagOrNull } from "../../lib/MachineTag";
 import {
   getContrastingTextColor,
   getHSLString,
@@ -25,8 +26,22 @@ export class TagTable {
       getPersistentColor(tag, RichColorTheme)
     );
     const color = getContrastingTextColor(backgroundColor);
+
+    var name = tag;
+
+    const machineTag = parseMachineTagOrNull(tag);
+    if (machineTag) {
+      switch (machineTag.namespace) {
+        case "school":
+          switch (machineTag.predicate) {
+            case "cal-poly":
+              name = machineTag.value!.replace("-", " ").toUpperCase();
+          }
+      }
+    }
+
     const result: Tag = {
-      name: tag,
+      name,
       color,
       backgroundColor,
       slug: tag,
