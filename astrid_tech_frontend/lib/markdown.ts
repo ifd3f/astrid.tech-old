@@ -63,7 +63,6 @@ export async function renderMarkdown(md: string, assetRoot: string) {
     .use(html, { sanitize: false })
     .process(vfile);
 
-  console.log(out);
   return out.toString() as string;
 }
 

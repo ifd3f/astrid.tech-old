@@ -92,9 +92,9 @@ export function formatDateInterval(
 
 export function getBlogSlug({ date, slug }: { date: Date; slug: string }) {
   return {
-    year: date.getFullYear().toString(),
-    month: (date.getMonth() + 1).toString().padStart(2, "0"),
-    day: (date.getDate() + 1).toString().padStart(2, "0"),
+    year: date.getUTCFullYear().toString(),
+    month: (date.getUTCMonth() + 1).toString().padStart(2, "0"),
+    day: date.getUTCDate().toString().padStart(2, "0"),
     slug: [slug],
   };
 }

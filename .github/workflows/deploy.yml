@@ -63,6 +63,12 @@ jobs:
           ASTRID_TECH_API_ROOT: https://api.astrid.tech/
         run: npm run build
 
+      - name: Upload Static Site Build
+        uses: actions/upload-artifact@v2
+        with:
+          name: static-site-build
+          path: astrid_tech_frontend/out
+
       - name: Publish
         working-directory: astrid_tech_frontend
         if: github.ref == 'refs/heads/main'

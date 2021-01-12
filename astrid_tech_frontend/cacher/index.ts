@@ -50,9 +50,9 @@ async function buildBlogPostCache(db: Database) {
         insertPost.run({
           ...post,
           date: post.date.toISOString(),
-          year: post.date.getFullYear(),
-          month: post.date.getMonth() + 1,
-          day: post.date.getDate() + 1,
+          year: post.date.getUTCFullYear(),
+          month: post.date.getUTCMonth() + 1,
+          day: post.date.getUTCDate(),
           ordinal: 0,
         })
       )

@@ -42,7 +42,6 @@ function SourceCodeURLDisplay({ url }: { url: string }) {
       </a>
     );
   }
-  console.log(info);
   if (info.protocol == "mailto:") {
     return (
       <a href={url}>
