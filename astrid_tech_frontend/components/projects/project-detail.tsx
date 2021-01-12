@@ -141,7 +141,8 @@ export type ProjectDetailProps = UsesProject & {
 };
 
 const ProjectDetailPage: FC<ProjectDetailProps> = ({ project, similar }) => {
-  const url = join(process.env.publicRoot!, "projects", project.slug);
+  const slug = join("projects", project.slug);
+  const url = join(process.env.publicRoot!, slug);
   /*
   const thumbnail = data.project.thumbnail
     ? `${location.origin}${data.project.thumbnail.childImageSharp.fixed.src}`
@@ -154,7 +155,7 @@ const ProjectDetailPage: FC<ProjectDetailProps> = ({ project, similar }) => {
           title={project.title}
           description={project.description}
           descriptionRaw={project.description ?? "A project made by Astrid Yu"}
-          headingColor={getHSLString(getPersistentColor(project.slug))}
+          headingColor={getHSLString(getPersistentColor(slug))}
           above={
             <Link href="/p">
               <a className={style.backToProjects}>
@@ -178,7 +179,7 @@ const ProjectDetailPage: FC<ProjectDetailProps> = ({ project, similar }) => {
         <Container>
           <section id="comments">
             <h2>Comments</h2>
-            <CommentSection slug={project.slug} />
+            <CommentSection slug={slug} />
           </section>
         </Container>
       </Layout>

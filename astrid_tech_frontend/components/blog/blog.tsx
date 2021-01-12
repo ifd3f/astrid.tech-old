@@ -1,9 +1,14 @@
 import { format } from "date-fns";
-import { useRouter } from "next/router";
+import { join } from "path";
 import React, { createContext, FC, useContext } from "react";
 import { FaCalendar } from "react-icons/fa";
 import { Container } from "reactstrap";
-import { getHSLString, getPersistentColor } from "../../lib/util";
+import {
+  blogSlugToString,
+  getBlogSlug,
+  getHSLString,
+  getPersistentColor,
+} from "../../lib/util";
 import { BlogPost } from "../../types/types";
 import { CommentSection } from "../api/comments/CommentSection";
 import { ContentDisplay } from "../content";
@@ -38,8 +43,8 @@ const PostStatusGroup: FC = () => {
 export type BlogPostPageProps = { post: BlogPost<Date> };
 
 export const BlogPostPage: FC<BlogPostPageProps> = ({ post }) => {
-  const router = useRouter();
-  const url = ""; // TODO `${router.}${post.slug}`;
+  const slug = blogSlugToString(getBlogSlug(post));
+  const url = join(process.env.publicRoot!, slug);
 
   return (
     <ProjectContext.Provider value={{ post }}>
@@ -50,7 +55,7 @@ export const BlogPostPage: FC<BlogPostPageProps> = ({ post }) => {
           url={url}
           description={post.description}
           descriptionRaw={post.description}
-          headingColor={getHSLString(getPersistentColor(post.slug))}
+          headingColor={getHSLString(getPersistentColor(slug))}
           sidebar={
             <>
               <PostStatusGroup />
@@ -66,7 +71,7 @@ export const BlogPostPage: FC<BlogPostPageProps> = ({ post }) => {
         <Container>
           <section id="comments">
             <h2>Comments</h2>
-            <CommentSection slug={post.slug} />
+            <CommentSection slug={slug} />
           </section>
         </Container>
       </Layout>
