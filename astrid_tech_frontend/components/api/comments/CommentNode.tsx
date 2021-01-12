@@ -35,7 +35,7 @@ export const CommentNode: FC<CommentNodeProps> = ({
   const date = format(comment.timeAuthored, "d MMM yyyy");
   const router = useRouter();
   const commentId = `comment-${comment.id}`;
-  const url = new URL(router.route);
+  const url = new URL(window.location.href);
   url.hash = commentId;
 
   const [actionState, setActionState] = useState<CommentState>(null);
