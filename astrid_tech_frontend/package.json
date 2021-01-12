@@ -7,7 +7,7 @@
     "build": "next build && next export",
     "start": "next start",
     "cache": "npx ts-node cacher/index.ts --project node.tsconfig.json",
-    "deploy": "npx gh-pages -r \"git@github.com:Plenglin/plenglin.github.io.git\" -b master -d out -f",
+    "deploy": "npx gh-pages -t true -r \"git@github.com:Plenglin/plenglin.github.io.git\" -b master -d out -f",
     "typecheck": "tsc"
   },
   "dependencies": {
