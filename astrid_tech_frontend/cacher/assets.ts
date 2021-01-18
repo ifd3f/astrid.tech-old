@@ -55,7 +55,7 @@ export async function mapData(
       (async () => {
         const { src, dest } = await resolver(join(root, stats.name));
         const jsDest = dest.slice(0, -5) + ".js";
-        const data = yaml.safeLoad((await fs.readFile(src)).toString());
+        const data = yaml.load((await fs.readFile(src)).toString());
         await fs.writeFile(
           jsDest,
           serializeJS(data, `Source file was at ${src}`)
