@@ -1,6 +1,6 @@
 ---
 title: A Kubernetes cluster but it's only made of used computers
-date: 2021-01-18 07:49:00-08:00
+date: 2021-01-20 22:14:00-08:00
 description: 16-year-old me would be proud
 tags:
   - kubernetes
