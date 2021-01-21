@@ -23,7 +23,7 @@ On my VPS, I'm running several dockerized self-hosted apps right now, including:
 - [Keycloak](https://www.keycloak.org/), which I haven't figured out how to use for authentication yet
 - [DokuWiki](https://www.dokuwiki.org/dokuwiki), on [wiki.dnd.astrid.tech](https://wiki.dnd.astrid.tech), for keeping track of the D&D campaign I'm running and possibly future ones too
 
-These are all configured with the [IaC repo here](https://github.com/plenglin/astrid.tech-deployment).
+These are all configured with the [IaC repo here](https://github.com/plenglin/astrid.tech-deployment). The last commit before I published this article was [commit 56e26b](https://github.com/Plenglin/astrid.tech-deployment/tree/56e26b678b5c14026da32e920f4804554fcdcf9e).
 
 ## Organization
 
