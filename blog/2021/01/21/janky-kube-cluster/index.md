@@ -53,4 +53,4 @@ So that I don't have to physically pull the machines onto my desk and use a USB 
 
 At first, I tried setting up OpenSUSE Kubic, which is a distro with k8s preinstalled for you. Then, I learned about K3OS, and installed that instead because, once again, I'm rather resource starved. While I was doing that, I was trying to set up Proxmox on `deskrap`, but the USB installer kept crashing. Maybe that machine is just too old/shitty for a modern hypervisor.
 
-Now, as I'm writing this blog post, I'm trying to figure out how to move the elasticsearch data off of `cracktop`, which is the last node I have not attempted to install Proxmox on yet. I will say one thing, though: DevOps is _stressful_.
+Now, as I'm writing this blog post, I'm trying to figure out how to move the elasticsearch data off of `cracktop`, which is the last node I have not attempted to install Proxmox on yet. I will say one thing, though: DevOps is _frustrating_. So much YAML-staring and hoping and praying things will work. I can only hope and pray at this point that the end result will be something I can be happy about.
