@@ -41,7 +41,8 @@ export async function getBlogPosts(
       ({ stats }) =>
         stats.isFile() &&
         stats.name.endsWith(".md") &&
-        !stats.name.endsWith(".note.md")
+        !stats.name.endsWith(".note.md") &&
+        !stats.name.endsWith(".recipe.md")
     )
     .map(({ root, stats }) =>
       loadBlogPost(join(root, stats.name)).then(
