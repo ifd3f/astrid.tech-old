@@ -1,9 +1,9 @@
 ---
 title: Bigfloat
-status: wip
+status: complete
 description: A high-performance, high-precision 80-bit float library
 startDate: 2020-09-01
-endDate: null
+endDate: 2020-12-14
 tags:
   - school:cal-poly=csc-400
   - computer-science

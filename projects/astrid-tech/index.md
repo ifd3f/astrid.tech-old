@@ -6,7 +6,7 @@ status: complete
 featured: true
 description: This very website
 startDate: 2020-03-01
-endDate: null
+endDate: 2020-12-31
 tags:
   - react-js
   - typescript
@@ -82,7 +82,7 @@ After having made a lot of personal projects, I realized that I had forgotten a 
 
 ## Frontend
 
-I use Gatsby to statically generate the website. However, [I am considering moving off of it to Next.js](https://astrid.tech/blog/2020-12-20-adding-a-backend/#replacing-gatsby). 
+I use Gatsby to statically generate the website. However, [I am considering moving off of it to Next.js](https://astrid.tech/blog/2020-12-20-adding-a-backend/#replacing-gatsby).
 
 The static site is hosted via [Github Pages](https://github.com/plenglin/astrid.tech) to statically host the website. (Going to [plenglin.github.io](https://plenglin.github.io) takes you here!)
 
@@ -100,13 +100,14 @@ I've tried to make the browsing experience as user-friendly and inclusive as pos
 
 Currently, the backend's only functionality is to serve and receive possibly anonymous comments.
 
-I have pointed [Docker Hub](https://hub.docker.com/repository/docker/astridyu/astrid_tech_api) at my repo to build, test, and release a new `:latest` image on every push to main. 
+I have pointed [Docker Hub](https://hub.docker.com/repository/docker/astridyu/astrid_tech_api) at my repo to build, test, and release a new `:latest` image on every push to main.
 
 It is deployed as a Docker container on a [Contabo](https://contabo.com) VPS located in Missouri for about \$8/mo. See [the `docker-compose.yml`](https://github.com/Plenglin/astrid.tech/blob/main/docker-compose.yml) for deployment details. I will soon set up [Watchtower](https://github.com/containrrr/watchtower) to automatically pull the image, so that the only thing I need to do with deployment is push to `main`.
 
 ## Content
 
 The content is in its own [Git submodule](https://github.com/Plenglin/astrid.tech-content) as a set of raw files that get aggregated and compiled on each frontend build. It is written in the following file formats:
-  - Markdown
-  - YAML
-  - Jupyter notebooks for a few blog posts (I wrote a custom Gatsby plugin that auto-transforms the Jupyter notebooks into Markdown files)
+
+- Markdown
+- YAML
+- Jupyter notebooks for a few blog posts (I wrote a custom Gatsby plugin that auto-transforms the Jupyter notebooks into Markdown files)

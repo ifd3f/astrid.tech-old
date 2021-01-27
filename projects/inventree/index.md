@@ -5,7 +5,7 @@ title: Inventree
 status: wip
 description: An inventory tracker to keep track of all the things I have
 startDate: 2020-01-01
-endDate: null
+endDate: 2020-03-01
 tags:
   - react-js
   - javascript
