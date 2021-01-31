@@ -48,7 +48,8 @@ INSTALLED_APPS = [
     'comments',
     'analytics',
     'accounts',
-    'api'
+    'api',
+    'printer3d'
 ]
 
 MIDDLEWARE = [

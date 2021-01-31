@@ -1,15 +1,12 @@
-from django.db.models import Model, DateTimeField, CharField, ImageField, ForeignKey, CASCADE, SET_NULL, FloatField
+from django.db.models import Model, DateTimeField, CharField, ImageField, ForeignKey, CASCADE, SET_NULL, FloatField, \
+    BooleanField
 
 
 class Printer(Model):
-    name = CharField(50)
-    progress = FloatField()
-    status = CharField(32)
-    current = ForeignKey("PrinterImage", on_delete=SET_NULL)
-
-
-class PrinterImage(Model):
-    printer = ForeignKey(Printer, on_delete=CASCADE)
-    timestamp = DateTimeField()
-    image = ImageField()
+    name = CharField(max_length=50, null=False, blank=False)
+    progress = FloatField(default=0.0, null=False, blank=True)
+    status = CharField(max_length=32, null=False, blank=True)
+    send_enabled = BooleanField(default=False, null=False)
+    image_timestamp = DateTimeField(null=True, blank=True)
+    image = ImageField(null=True, blank=True)
 

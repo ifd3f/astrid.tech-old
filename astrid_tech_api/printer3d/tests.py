@@ -1,3 +1,8 @@
 from django.test import TestCase
 
-# Create your tests here.
+from printer3d.models import Printer
+
+
+class CommentViewsTestCase(TestCase):
+    def setUp(self):
+        self.printer = Printer()
