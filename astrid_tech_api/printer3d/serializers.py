@@ -11,8 +11,11 @@ class PrinterSerializer(ModelSerializer):
             'name',
             'progress',
             'status',
-            'image_timestamp',
             'image'
+        ]
+
+        read_only_fields = [
+            'image_timestamp',
         ]
 
 
