@@ -1,7 +1,4 @@
-from rest_framework.fields import CharField, ListField
-from rest_framework.relations import ManyRelatedField
 from rest_framework.serializers import ModelSerializer
-from rest_framework_recursive.fields import RecursiveField
 
 from comments.models import Comment, Report
 
