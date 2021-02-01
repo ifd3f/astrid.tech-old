@@ -1,15 +1,16 @@
-from django.test import TestCase
+from datetime import datetime, timedelta
 from pathlib import Path
 
-from rest_framework.test import APIRequestFactory
+from django.test import TestCase
+from django.test.client import encode_multipart
+from rest_framework.test import APITestCase
 
 from printer3d.models import Printer
-from printer3d.views import PrinterViewSet
 
-TEST_IMG = Path(__file__).parent / "img.png"
+TEST_IMG = Path(__file__).parent / "img.jpg"
 
 
-class PrinterTestCase(TestCase):
+class PrinterTestCase(APITestCase):
     def setUp(self):
         self.printer = Printer.objects.create(
             name="Example Printer",
@@ -26,10 +27,14 @@ class PrinterTestCase(TestCase):
         self.assertEqual(response.status_code, 200)
 
     def test_can_upload_image(self):
-        with TEST_IMG.open() as file:
-            response = self.client.post(
-                f"/api/3dprinter/{self.printer.pk}/image/",
-                {'file': file},
-                content_type='image/png'
+        with TEST_IMG.open('rb') as file:
+            response = self.client.patch(
+                f"/api/3dprinter/{self.printer.pk}",
+                {"image": file},
+                format="multipart"
             )
+
         self.assertEqual(response.status_code, 200)
+        printer = Printer.objects.get(pk=self.printer.pk)
+        self.assertIsNotNone(printer.image)
+

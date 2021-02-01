@@ -8,7 +8,7 @@ from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
 from comments.views import CommentViewSet
 from printer3d.views import PrinterViewSet
 
-router = DefaultRouter()
+router = DefaultRouter(trailing_slash=False)
 router.register(r'comments', CommentViewSet, basename='comments')
 router.register(r'3dprinter', PrinterViewSet, basename='3dprinter')
 

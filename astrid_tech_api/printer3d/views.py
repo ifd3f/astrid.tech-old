@@ -23,14 +23,18 @@ class PrinterViewSet(ListModelMixin, UpdateModelMixin, RetrieveModelMixin, Gener
     def get_queryset(self):
         return Printer.objects.all()
 
-    @action(detail=True, methods=['put'], parser_classes=[FileUploadParser])
+    @action(detail=True, methods=['get', 'put'], parser_classes=[MultiPartParser], url_path="image.jpg")
     def image(self, request: Request, pk, filename=None):
         logger_ = logger.bind(id=pk, filename=filename)
-        logger_.info("Submission of an image")
         logger_.debug("Checking for existing 3D printer")
         printer = self.get_queryset().get(pk=pk)
         if printer is None:
             raise NotFound(pk)
+
+        if request.method == 'GET':
+            return Response(printer.image)
+
+        logger_.info("Submission of an image")
 
         image = request.data['file']
         if image is None:
