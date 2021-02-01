@@ -1,10 +1,7 @@
-from datetime import datetime, timedelta
 from pathlib import Path
 
 from django.contrib.auth import get_user_model
 from django.contrib.auth.models import Permission
-from django.test import TestCase
-from django.test.client import encode_multipart
 from rest_framework.test import APITestCase
 
 from printer3d.models import Printer
@@ -28,14 +25,14 @@ class PrinterTestCase(APITestCase):
 
     def test_can_list_printers(self):
         response = self.client.get(
-            f"/api/3dprinter"
+            f"/api/3dprinter/"
         )
         self.assertEqual(response.status_code, 200)
 
     def test_anon_cannot_upload_image(self):
         with TEST_IMG.open('rb') as file:
             response = self.client.patch(
-                f"/api/3dprinter/{self.printer.pk}",
+                f"/api/3dprinter/{self.printer.pk}/",
                 {"image": file},
                 format="multipart"
             )
@@ -46,7 +43,7 @@ class PrinterTestCase(APITestCase):
         with TEST_IMG.open('rb') as file:
             self.client.force_authenticate(user=self.disallowed_user)
             response = self.client.patch(
-                f"/api/3dprinter/{self.printer.pk}",
+                f"/api/3dprinter/{self.printer.pk}/",
                 {"image": file},
                 format="multipart"
             )
@@ -57,7 +54,7 @@ class PrinterTestCase(APITestCase):
         with TEST_IMG.open('rb') as file:
             self.client.force_authenticate(user=self.allowed_user)
             response = self.client.patch(
-                f"/api/3dprinter/{self.printer.pk}",
+                f"/api/3dprinter/{self.printer.pk}/",
                 {"image": file},
                 format="multipart"
             )
