@@ -4,8 +4,8 @@ import structlog
 from rest_framework.decorators import action
 from rest_framework.exceptions import NotFound
 from rest_framework.mixins import ListModelMixin, RetrieveModelMixin, UpdateModelMixin
-from rest_framework.parsers import MultiPartParser, FileUploadParser, FormParser
-from rest_framework.permissions import AllowAny
+from rest_framework.parsers import MultiPartParser
+from rest_framework.permissions import DjangoModelPermissionsOrAnonReadOnly
 from rest_framework.request import Request
 from rest_framework.response import Response
 from rest_framework.viewsets import GenericViewSet
@@ -18,7 +18,7 @@ logger = structlog.get_logger(__name__)
 
 class PrinterViewSet(ListModelMixin, UpdateModelMixin, RetrieveModelMixin, GenericViewSet):
     serializer_class = PrinterSerializer
-    permission_classes = [AllowAny]
+    permission_classes = [DjangoModelPermissionsOrAnonReadOnly]
 
     def get_queryset(self):
         return Printer.objects.all()
