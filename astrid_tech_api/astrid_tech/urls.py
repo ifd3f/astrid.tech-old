@@ -20,5 +20,6 @@ urlpatterns = [
     path('auth/', include('accounts.urls')),
     path('api/token', TokenObtainPairView.as_view()),
     path('api/token/refresh', TokenRefreshView.as_view()),
-    path('api/', include(router.urls))
+    path('3dprinter/', include('printer3d.urls')),
+    path('api/', include(router.urls)),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

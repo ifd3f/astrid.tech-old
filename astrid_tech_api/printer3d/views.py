@@ -1,6 +1,7 @@
 from datetime import datetime
 
 import structlog
+from django.shortcuts import redirect
 from rest_framework.decorators import action
 from rest_framework.exceptions import NotFound
 from rest_framework.mixins import ListModelMixin, RetrieveModelMixin, UpdateModelMixin
@@ -14,6 +15,13 @@ from printer3d.models import Printer
 from printer3d.serializers import PrinterSerializer
 
 logger = structlog.get_logger(__name__)
+
+
+def get_printer_image(request, pk):
+    logger_ = logger.bind(pk=pk)
+    logger_.info("Retrieving printer image")
+    printer = Printer.objects.get(pk=pk)
+    return redirect(printer.image.url)
 
 
 class PrinterViewSet(ListModelMixin, UpdateModelMixin, RetrieveModelMixin, GenericViewSet):
