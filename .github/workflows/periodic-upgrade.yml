@@ -54,11 +54,11 @@ jobs:
           python -m pip install --upgrade pipenv wheel
 
       - name: Run pipenv update
-        run: pipenv update
+        run: python -m pipenv update
         working-directory: astrid_tech_backend
 
       - name: Write to requirements.txt
-        run: pipenv lock --requirements > requirements.txt
+        run: python -m pipenv lock --requirements > requirements.txt
         working-directory: astrid_tech_backend
 
       - name: Push changes
