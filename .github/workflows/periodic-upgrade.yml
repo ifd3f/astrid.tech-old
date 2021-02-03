@@ -44,6 +44,15 @@ jobs:
           lfs: true
           submodules: true
 
+      - name: Setup Python
+        uses: actions/setup-python@v2
+        with:
+          python-version: "3.7"
+
+      - name: Install pipenv
+        run: |
+          python -m pip install --upgrade pipenv wheel
+
       - name: Run pipenv update
         run: pipenv update
         working-directory: astrid_tech_backend
