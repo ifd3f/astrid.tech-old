@@ -1,4 +1,4 @@
-FROM python:3
+FROM python:3.9-slim
 ENV PYTHONUNBUFFERED=1 DJANGO_SETTINGS_MODULE=astrid_tech.settings.prod
 WORKDIR /app
 
