@@ -35,7 +35,11 @@ yarn-error.log*
 
 # Content cache
 content.sqlite3
+content.sqlite3-journal
 public/_/*
+public/rss.xml
+public/atom.xml
+public/feed.json
 
 ./docker
 ./out

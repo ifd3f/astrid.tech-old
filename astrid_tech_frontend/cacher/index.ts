@@ -12,6 +12,7 @@ import { copyAssets, mapData } from "./assets";
 import { getBlogPosts } from "./blog";
 import { generateLicenses } from "./licenses";
 import { getProjects } from "./projects";
+import { buildRSSFeed } from "./rss";
 import { getLanguageTags, getUserTagOverrides } from "./tags";
 import { serializeJS } from "./util";
 
@@ -219,13 +220,18 @@ async function main(dbUrl: string) {
   await copyAssets(contentDir, path.join(__dirname, "../public/_/"));
   await mapData(contentDir, path.join(dataDir, "objs"));
 
-  await buildBlogPostCache(db);
-  await buildProjectCache(db);
-  await buildTagOverrideTable(db);
-  await buildProjectTagOverrideTable(db);
+  await Promise.all([
+    buildBlogPostCache(db),
+    buildProjectCache(db),
+    buildTagOverrideTable(db),
+    buildProjectTagOverrideTable(db),
+  ]);
 
-  await exportTagOverrideData(db, path.join(dataDir, "tags.js"));
-  await generateLicenses(path.join(dataDir, "licenses.json"));
+  await Promise.all([
+    exportTagOverrideData(db, path.join(dataDir, "tags.js")),
+    generateLicenses(path.join(dataDir, "licenses.json")),
+    buildRSSFeed(path.join(__dirname, "../public")),
+  ]);
 }
 
 main("content.sqlite3").catch((e) => {
