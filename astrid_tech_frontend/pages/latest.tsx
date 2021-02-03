@@ -12,9 +12,7 @@ import styles from "../styles/blog.module.scss";
 import { convertBlogPostToObjectDate } from "../types/types";
 
 export const getStaticProps = async () => {
-  const posts = await Promise.all(
-    getBlogPosts().map(excerptify(120))
-  );
+  const posts = await Promise.all(getBlogPosts().map(excerptify(120)));
   return {
     props: { posts },
   };
@@ -33,7 +31,7 @@ const Page: FC<InferGetStaticPropsType<typeof getStaticProps>> = ({
         <section>
           <p className="text-right">
             <a href="https://astrid.tech/rss.xml">
-              <FaRssSquare title="Subscribe to the Blog!" />
+              <FaRssSquare title="astrid.tech RSS" />
             </a>
           </p>
         </section>

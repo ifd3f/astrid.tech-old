@@ -83,10 +83,22 @@ const SEO: FC<SEOProps> = ({
       ))}
 
       <link
-        title="Astrid Yu's Blog"
+        title="astrid.tech RSS"
         rel="alternate"
         type="application/rss+xml"
         href="https://astrid.tech/rss.xml"
+      />
+      <link
+        title="astrid.tech Atom"
+        rel="alternate"
+        type="application/atom+xml"
+        href="https://astrid.tech/atom.xml"
+      />
+      <link
+        title="astrid.tech JSON feed"
+        rel="alternate"
+        type="application/feed+json"
+        href="https://astrid.tech/feed.json"
       />
 
       {/* Web login */}
