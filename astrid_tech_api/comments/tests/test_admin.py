@@ -1,13 +1,13 @@
 from django.contrib.admin import AdminSite
 from django.http import HttpRequest
-from django.test import LiveServerTestCase
+from rest_framework.test import APITestCase
 
 from comments.admin import CommentAdmin
 from comments.models import Comment
 from comments.tests.utils import setup_comment_tree
 
 
-class CommentAdminTestCase(LiveServerTestCase):
+class CommentAdminTestCase(APITestCase):
     def setUp(self):
         self.a, self.b, self.c, self.d = setup_comment_tree()
         self.admin = CommentAdmin(Comment, AdminSite())

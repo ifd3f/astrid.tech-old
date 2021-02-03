@@ -1,7 +1,7 @@
 import json
 from unittest import skip
 
-from django.test import LiveServerTestCase
+from rest_framework.test import APITestCase
 
 from comments.models import Comment, BannedIP, BannedEmail, BannedEmailDomain, Report
 from comments.tests.utils import setup_comment_tree
@@ -13,6 +13,7 @@ create_comment_data = {
     'content_md': 'test **foo** <script>bar</script>',
 }
 
+
 def create_comment(**kwargs):
     return Comment.objects.create(slug='/foo', ip_addr='1.2.3.4', author_email='test@example.com', **kwargs)
 
@@ -21,7 +22,7 @@ def get_object_from_response(model, response):
     return model.objects.get(id=json.loads(response.content)['id'])
 
 
-class BanListTests(LiveServerTestCase):
+class BanListTests(APITestCase):
     def banned_comment_asserts(self, response):
         self.assertEqual(403, response.status_code)
         self.assertEqual(0, Comment.objects.count())
@@ -87,12 +88,12 @@ class BanListTests(LiveServerTestCase):
         self.assertEqual(0, Report.objects.count())
 
 
-class ModeratedCommentTests(LiveServerTestCase):
+class ModeratedCommentTests(APITestCase):
     def test_cannot_reply_to_locked_thread(self):
         pass
 
 
-class CommentViewsTestCase(LiveServerTestCase):
+class CommentViewsTestCase(APITestCase):
     def setUp(self):
         self.a, self.b, self.c, self.d = setup_comment_tree()
 
