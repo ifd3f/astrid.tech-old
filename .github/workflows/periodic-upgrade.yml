@@ -1,0 +1,26 @@
+name: Periodic Upgrade
+
+on:
+  schedule:
+    - cron: "0 0 * * 5"
+  workflow_dispatch:
+
+jobs:
+  upgrade-dependencies:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+        with:
+          lfs: true
+          submodules: true
+
+      - name: Run yarn-upgrade-all
+        run: npx yarn-upgrade-all
+        working-directory: astrid_tech_frontend
+
+      - name: Push upgrades
+        uses: actions-js/push@master
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
