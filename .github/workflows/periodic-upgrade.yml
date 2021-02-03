@@ -6,7 +6,35 @@ on:
   workflow_dispatch:
 
 jobs:
-  upgrade-dependencies:
+  upgrade-yarn:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+        with:
+          lfs: false
+          submodules: false
+
+      - name: Run yarn-upgrade-all
+        run: npx yarn-upgrade-all
+        working-directory: astrid_tech_frontend
+
+      - name: Push changes
+        uses: actions-js/push@master
+        with:
+          github_token: ${{ secrets.GITHUB_TOKEN }}
+          message: "chore: Automatic NPM upgrades for ${date}"
+          branch: auto-upgrade/npm
+          force: true
+
+      - name: Create Pull Request
+        uses: peter-evans/create-pull-request@v3
+        with:
+          branch: auto-upgrade/npm
+          base: main
+
+  upgrade-pip:
     runs-on: ubuntu-latest
 
     steps:
@@ -16,13 +44,24 @@ jobs:
           lfs: true
           submodules: true
 
-      - name: Run yarn-upgrade-all
-        run: npx yarn-upgrade-all
-        working-directory: astrid_tech_frontend
+      - name: Run pipenv update
+        run: pipenv update
+        working-directory: astrid_tech_backend
 
-      - name: Push upgrades
+      - name: Write to requirements.txt
+        run: pipenv lock --requirements > requirements.txt
+        working-directory: astrid_tech_backend
+
+      - name: Push changes
         uses: actions-js/push@master
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
-          message: "chore: Automatic upgrades for ${date}"
-          branch: main
+          message: "chore: Automatic pip upgrades for ${date}"
+          branch: auto-upgrade/pip
+          force: true
+
+      - name: Create Pull Request
+        uses: peter-evans/create-pull-request@v3
+        with:
+          branch: auto-upgrade/pip
+          base: main
