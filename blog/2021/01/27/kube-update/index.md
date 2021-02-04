@@ -3,7 +3,7 @@ title: Miscellaneous Cluster Updates
 date: 2021-01-26 22:29:00-08:00
 description: Solution LF Problem
 tags:
-  - /projects/hyposcale-cluster
+  - /projects/hyposcale-cluster/
   - kubernetes
   - docker
   - server
