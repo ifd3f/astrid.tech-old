@@ -11,9 +11,8 @@ export const ContentImage: FC<ComponentProps<"img">> = (props) => {
     if (![".jpg", ".jpeg", ".png", ".webp", ".gif"].includes(ext))
       return <img {...props} />;
 
-    const srcSet = require("../../public" +
-      src! +
-      "?resize&sizes[]=300&sizes[]=500&sizes[]=800");
+    const imgPath = path.join("../../public", src!)
+    const srcSet = require(imgPath + "?resize&sizes[]=300&sizes[]=500&sizes[]=800");
     return <img {...props} srcSet={srcSet.srcSet} src={srcSet.src} />;
   }
   return (
