@@ -12,7 +12,9 @@ tags:
 
 A 7-node server cluster would be terrible to monitor if you had to SSH and `top` every individual node. Thankfully, that's where Grafana and Prometheus come in to save the day.
 
-![Resist... the... urge... to... make... "Look at this graph"... references...](./everything-dashboard.png)
+<!-- excerpt -->
+
+![What my Grafana dashboard currently looks like. Resist... the... urge... to... make... "Look at this graph"... references...](./everything-dashboard.png)
 
 ## Deploying my monitoring and redeploying my logging
 
@@ -77,7 +79,7 @@ Metrics data is slightly different.
 
 This is it! I'm finally running _something_ on this godforsaken cluster!
 
-At the last [IndieWeb Homebrew Website Club](https://indieweb.org/Homebrew_Website_Club) I attended, someone suggested to me that I could somehow have a live feed of my 3D printer. Although I can't have a _live_ feed because I have a slow internet connection, I can take a picture every few minutes and upload it to my server.
+At the last [IndieWeb Homebrew Website Club (HWC)](https://indieweb.org/Homebrew_Website_Club) I attended, someone suggested to me that I could somehow have a live feed of my 3D printer. Although I can't have a _live_ feed because I have a slow internet connection, I can take a picture every few minutes and upload it to my server.
 
 So, I added a new endpoint to my API server, then wrote a [small script](https://github.com/Plenglin/printer_image_snapper) that does exactly that. It scrapes data from my OctoPrint instance's API, snaps a picture from the exposed MJPG-streamer endpoint, and sends a PATCH request to my API server with all the information. I [Dockerized it](https://hub.docker.com/repository/docker/astridyu/printer_image_snapper) using `python3.9-alpine` for minimum image size, and created a CronJob for my cluster that runs the script every 10 minutes:[^1]
 
@@ -147,9 +149,9 @@ I continued debugging my script that afternoon, checking for, well, honestly, I 
 
 ![what the actual fuck](long-build-times.png)
 
-I did eventually get the script working. For now, the image is the second image [here](https://astrid.tech/projects/quadfrost-leds/), but I will make a dedicated page for it eventually. Then, after demoing it during the HWC meeting, I remembered: there was one Elasticsearch pod that was always crashing because it kept going OOM on my mom's old laptop, wasn't it?
+I did eventually get the script working (see the second image [here](https://astrid.tech/projects/quadfrost-leds/) for now, but I will make a dedicated page for it eventually).
 
-So, I added a new graph to my dashboard called "Poorly-Terminated Containers." It's a heatmap of container terminations that aren't because of `Completed`.
+Then, after demoing my printer images it during the HWC meeting, I remembered: there was one Elasticsearch pod that was always crashing because it kept going OOM on my mom's old laptop, wasn't it? So, I added a new graph to my dashboard called "Poorly-Terminated Containers." It's a heatmap of container terminations that aren't because of `Completed`.
 
 ![It's like a shitty spectrogram!](poorly-terminated-containers.png)
 
@@ -157,10 +159,10 @@ According to this graph, my printer paparazza stopped crashing halfway through t
 
 ![It's a crash spectrogram!](correlation-time.png)
 
-And sure enough, every one of these crashes seems to correspond with a drop in memory usage.
+And sure enough, every one of these crashes seems to correspond with that 1GB drop in memory usage.
 
-Yeah, it's Elasticsearch being too damn big.
+Yeah, it's Elasticsearch being too damn big and getting killed for it.
 
 ## What now?
 
-I tried tweaking Elasticsearch a bit, maybe running it on my Raspberry Pis instead, but I wasn't able to really do much. So, I shut it down and freed up 2.5 GB of memory across my entire cluster, which is 1/3 of what I use in total. Given that my cluster is composed of very small and low-powered devices, I don't think Elasticsearch is a very good option for me. I mean, it alone I'll have to look into more lightweight logging systems.
+I tried tweaking Elasticsearch a bit, maybe running it on my Raspberry Pis instead, but I wasn't able to really do much. So, I shut it down and freed up 2.5 GB of memory across my entire cluster, which is 1/3 of what I use in total. Given that my cluster is composed of very small and low-powered devices, I don't think Elasticsearch is a very good option for me. I'll have to look into more lightweight logging systems. I've heard Loki is a good option, and there is a Fluentd plugin for it.
