@@ -34,7 +34,7 @@
     color: $black;
   }
 
-  @each $size, $font-size in (xs: 40pt, sm: 60pt, lg: 70pt) {
+  @each $size, $font-size in (xs: 35pt, sm: 40pt, lg: 50pt) {
     @media only screen and (min-width: map-get($grid-breakpoints, $size)) {
       h1 {
         font-size: $font-size;
