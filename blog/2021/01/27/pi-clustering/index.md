@@ -1,15 +1,12 @@
 ---
-title: Miscellaneous Cluster Updates
+title: Adding Pi's to a cluster
 date: 2021-01-26 22:29:00-08:00
-description: Solution LF Problem
+description: Zerg-rushing server workloads
 tags:
   - /projects/hyposcale-cluster/
   - kubernetes
-  - docker
-  - server
   - devops
-  - elk
-  - proxmox
+  - raspberry-pi
 ---
 
 Look at all of these single-board computers lying around. What are they even doing? _Literally nothing._ Let's put them to good use.
