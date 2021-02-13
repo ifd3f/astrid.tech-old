@@ -22,6 +22,7 @@ const gfm = require("remark-gfm");
 const urls = require("rehype-urls");
 const excerpt = require("remark-excerpt");
 const strip = require("strip-markdown");
+const emoji = require("remark-emoji");
 
 const publicRoot = join(process.cwd(), "public");
 
@@ -49,6 +50,7 @@ export async function renderMarkdown(md: string, assetRoot: string) {
     .use(graphviz)
     .use(slug)
     .use(oembed)
+    .use(emoji)
     .use(gfm)
     .use(unwrapImages)
     .use(smartypants)

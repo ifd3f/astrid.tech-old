@@ -40,6 +40,16 @@ module.exports = withPlugins(
           permanent: true,
         },
         {
+          source: "/projects/hyposcale-cluster/",
+          destination: "/projects/plebscale/",
+          permanent: true,
+        },
+        {
+          source: "/2020/01/27/kube-update/",
+          destination: "/2020/01/27/pi-clustering/",
+          permanent: true,
+        },
+        {
           source: "/tags/:slug",
           destination: "/t/:slug",
           permanent: true,
