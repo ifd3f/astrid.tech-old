@@ -3,7 +3,7 @@ title: Declaratively Provision Databases and Submit Credentials to Kubernetes us
 date: 2021-02-13 12:10:50-08:00
 description: DATABASES! I didn't say it, I DECLARED it!
 tags:
-  - /projects/hyposcale-cluster/
+  - /projects/plebscale/
   - terraform
   - mysql
   - proxmox
@@ -13,7 +13,7 @@ tags:
 
 Firefly III is a budget management app that I'm trying to self-host. Being a budget management app, it would hold every single monetary transaction I make, which is obviously somewhat sensitive. As such, I'm running it on my local cluster instead of on a public cloud instance that also hosts my website backend.
 
-## Provisioning the node manually, unfortunately
+## Provisioning the server manually
 
 Firefly uses MySQL as its database backend, so I've spun up an LXC container built from TurnKeyLinux's excellent MySQL container image through Proxmox.
 
@@ -23,9 +23,9 @@ Firefly uses MySQL as its database backend, so I've spun up an LXC container bui
 
 Unfortunately, I didn't automate this step; I just manually provisioned it through the web UI like a pleb. However, I will try to automate it using Terraform for my Postgres database, possibly in a later blog post.
 
-## Provisioning the database automatically, luckily
+## Provisioning the database automatically
 
-With the whole Infrastructure as Code thing I'm doing, I wrote a short Terraform configuration that:
+However, once I had that out of the way, I wrote a short Terraform configuration that:
 
 1. Provisions a MySQL database
 2. Provisions a user with an automatically-generated password
@@ -154,7 +154,7 @@ but this doesn't seem to work. I ended up running the Terraform script to provis
 
 ### Giving Kubernetes the Passwords
 
-There is one final step that is specific to Firefly III that we must do. Firefly III encrypts its database with a 32-character key, so we need to generate that. I could have done this outside of Terraform, but oh well.
+There is one final step that is specific to Firefly III that we must do. Firefly III encrypts its database with a 32-character key, so we need to generate that. I could have done this outside of Terraform, but I thought it would be more convenient to do it inside.
 
 ```hcl
 resource "random_password" "firefly_key" {
@@ -325,4 +325,4 @@ After applying this manifest and its associated service and ingress, everything 
 
 ## What next?
 
-While this solution is much nicer and more automated than creating the database manually in a GUI or SQL script, this isn't the most secure way to provision a user. I heard that Hashicorp Vault can actually generate new passwords specifically for one app on the fly.
+While this solution is much nicer and more automated than creating the database manually in a GUI or SQL script, this isn't the most secure way to provision a user. I heard that Hashicorp Vault can actually generate new passwords specifically for one app on the fly, and I might explore that later.

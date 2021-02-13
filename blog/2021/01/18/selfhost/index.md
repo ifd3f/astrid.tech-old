@@ -4,7 +4,6 @@ date: 2021-01-18 07:49:00-08:00
 description: >
   "But it works on my computer!" "Then we'll ship your computer."
 tags:
-  - /projects/hyposcale-cluster/
   - docker
   - server
   - devops

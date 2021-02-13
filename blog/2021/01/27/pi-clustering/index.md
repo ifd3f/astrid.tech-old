@@ -3,7 +3,7 @@ title: Adding Pi's to a cluster
 date: 2021-01-26 22:29:00-08:00
 description: Zerg-rushing server workloads
 tags:
-  - /projects/hyposcale-cluster/
+  - /projects/plebscale/
   - kubernetes
   - devops
   - raspberry-pi
