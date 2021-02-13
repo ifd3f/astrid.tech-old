@@ -4,9 +4,10 @@
   "scripts": {
     "dev": "next",
     "test": "ts-mocha -p tsconfig.json **/*.test.ts",
+    "prebuild": "npx ts-node cacher/index.ts --project node.tsconfig.json",
     "build": "next build && next export",
+    "postbuild": "./post-build.sh",
     "start": "next start",
-    "cache": "npx ts-node cacher/index.ts --project node.tsconfig.json",
     "deploy": "npx gh-pages -t true -r \"git@github.com:Plenglin/plenglin.github.io.git\" -b master -d out -f",
     "typecheck": "tsc"
   },

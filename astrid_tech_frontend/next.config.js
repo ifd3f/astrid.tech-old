@@ -32,6 +32,11 @@ module.exports = withPlugins(
       publicRoot: "https://astrid.tech/",
       apiRoot: getEnv("ASTRID_TECH_API_ROOT", "http://localhost:8001"),
     },
+    exportPathMap() {
+      return {
+        "/404": { page: "/404" }
+      }
+    },
     async redirects() {
       return [
         {

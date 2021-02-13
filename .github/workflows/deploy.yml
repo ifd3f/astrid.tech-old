@@ -53,10 +53,6 @@ jobs:
         working-directory: astrid_tech_frontend
         run: yarn install
 
-      - name: Generate caches
-        working-directory: astrid_tech_frontend
-        run: npm run cache
-
       - name: Build
         working-directory: astrid_tech_frontend
         env:

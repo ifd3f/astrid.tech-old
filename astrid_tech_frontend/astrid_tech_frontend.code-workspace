@@ -3,5 +3,16 @@
 		{
 			"path": "."
 		}
-	]
+	],
+	"settings": {
+		"sqltools.connections": [
+			{
+				"previewLimit": 50,
+				"driver": "SQLite",
+				"database": "${workspaceFolder:astrid_tech_frontend}/content.sqlite3",
+				"name": "Assets"
+			}
+		],
+		"sqltools.useNodeRuntime": true
+	}
 }
