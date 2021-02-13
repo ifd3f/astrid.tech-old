@@ -6,7 +6,7 @@ import { truncateKeepWords } from "./util";
 const smartypants = require("@silvenon/remark-smartypants");
 const graphviz = require("remark-graphviz");
 const math = require("remark-math");
-const highlight = require("remark-highlight.js");
+const prism = require("remark-prism");
 const unwrapImages = require("remark-unwrap-images");
 const picture = require("rehype-picture");
 const remark2rehype = require("remark-rehype");
@@ -55,7 +55,7 @@ export async function renderMarkdown(md: string, assetRoot: string) {
     .use(unwrapImages)
     .use(smartypants)
     .use(math)
-    .use(highlight, { exclude: "dot" })
+    .use(prism, { exclude: "dot" })
     .use(footnotes)
     .use(remark2rehype, { allowDangerousHtml: true })
     .use(raw)
@@ -72,7 +72,7 @@ export async function getMarkdownExcerpt(md: string, maxChars: number) {
   const text = (
     await remark().use(excerpt).use(strip).process(md)
   ).toString() as string;
-  return truncateKeepWords(text, maxChars) + "\u2026";
+  return truncateKeepWords(text, maxChars) + "\u2026";  // ellipsis
 }
 
 export function withoutContent<T>(object: { content: string } & T) {

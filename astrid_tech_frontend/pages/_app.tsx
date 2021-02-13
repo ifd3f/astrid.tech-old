@@ -1,6 +1,6 @@
 import "@fontsource/ibm-plex-sans";
 import "@fontsource/roboto-mono";
-import "highlight.js/styles/monokai.css";
+import "prismjs/themes/prism-tomorrow.css";
 import "katex/dist/katex.min.css";
 import { AppProps } from "next/app";
 import React from "react";
