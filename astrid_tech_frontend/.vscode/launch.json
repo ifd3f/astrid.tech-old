@@ -8,14 +8,20 @@
       "type": "firefox",
       "request": "launch",
       "name": "Launch Firefox",
-      "url": "http://localhost:8000",
-      "webRoot": "${workspaceFolder}/astrid_tech_frontend"
+      "url": "http://localhost:3000",
+      "webRoot": "${workspaceFolder}/astrid_tech_frontend",
+      "pathMappings": [
+        {
+          "url": "webpack://_n_e/components",
+          "path": "${workspaceFolder}/components"
+        }
+      ]
     },
     {
       "name": "Launch Chrome",
       "request": "launch",
       "type": "pwa-chrome",
-      "url": "http://localhost:8000",
+      "url": "http://localhost:3000",
       "webRoot": "${workspaceFolder}/astrid_tech_frontend"
     },
     {

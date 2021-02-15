@@ -1,6 +1,8 @@
+import SEO from "components/seo";
 import Link from "next/link";
 import { join } from "path";
 import React, { createContext, FC, useContext } from "react";
+import path from "path";
 import {
   BsArrowLeft,
   BsCodeSlash,
@@ -28,6 +30,7 @@ import {
 } from "../layout";
 import { StatusBadge } from "./project-card";
 import style from "./project-detail.module.scss";
+import { resolveAssetURL } from "../../lib/cache/assets";
 
 type UsesProject = {
   project: Project<Date>;
@@ -143,10 +146,14 @@ export type ProjectDetailProps = UsesProject & {
 const ProjectDetailPage: FC<ProjectDetailProps> = ({ project, similar }) => {
   const slug = join("projects", project.slug);
   const url = join(process.env.publicRoot!, slug);
-  /*
-  const thumbnail = data.project.thumbnail
-    ? `${location.origin}${data.project.thumbnail.childImageSharp.fixed.src}`
-    : undefined;*/
+  const thumbnail = project.thumbnail
+    ? path.join(
+        "https://astrid.tech",
+        resolveAssetURL(project.assetRoot, project.thumbnail)
+      )
+    : undefined;
+
+  console.log("pdp thumb=", thumbnail);
 
   return (
     <ProjectContext.Provider value={{ project }}>
@@ -154,6 +161,7 @@ const ProjectDetailPage: FC<ProjectDetailProps> = ({ project, similar }) => {
         <LongformLayout
           title={project.title}
           description={project.description}
+          thumbnail={thumbnail}
           descriptionRaw={project.description ?? "A project made by Astrid Yu"}
           headingColor={getHSLString(getPersistentColor(slug))}
           above={
@@ -163,7 +171,6 @@ const ProjectDetailPage: FC<ProjectDetailProps> = ({ project, similar }) => {
               </a>
             </Link>
           }
-          thumbnail={undefined /* TODO */}
           url={url}
           sidebar={
             <>

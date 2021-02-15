@@ -4,10 +4,10 @@
     {
       "type": "npm",
       "script": "dev",
-      "problemMatcher": [],
       "label": "npm: dev",
       "detail": "npx next dev",
-      "path": "astrid_tech_frontend"
+      "path": "astrid_tech_frontend",
+      "problemMatcher": []
     }
   ]
 }
