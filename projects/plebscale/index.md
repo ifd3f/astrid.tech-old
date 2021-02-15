@@ -16,14 +16,16 @@ tags:
 url: null
 source:
   - https://github.com/Plenglin/astrid.tech-deployment
-thumbnail: /_/2021/01/27/kube-update/nodezzz.jpeg
+thumbnail: /2021/01/27/pi-clustering/nodezzz.jpeg
 ---
 
 This project is an internal cloud that is scaled enough to meet the demands of a single pleb like me.
 
 ## Goals of this project
 
-- Learn how to use industry-standard Infrastructure as Code (IaC) tools used in professional DevOps places.
+- Learn how to use industry-standard DevOps tools
+- Try to adhere to Infrastructure as Code (IaC)
+- Give these old devices an actual use
 
 ## Technology Stack
 
