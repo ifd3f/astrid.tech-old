@@ -61,7 +61,7 @@ Contacts keep track of an internal state to improve the stability of low-relativ
 
 #### 3. Contact Solving
 
-I describe this step in detail in [this blog post](https://astrid.tech/blog/2020-11-22-n-body-collision/).
+I describe this step in detail in [this blog post](https://astrid.tech/2020/11/22/n-body-collision).
 
 #### 4. Integration
 
@@ -71,10 +71,10 @@ Position is integrated with
 
 $$s_{k+1} = v \cdot \Delta t + s_k$$
 
-where \(s\) is position, \(v\) is velocity, and \(\Delta t\) is the time step.
+where $s$ is position, $v$ is velocity, and $\Delta t$ is the time step.
 
-Rotation is stored in a matrix \(\Theta\) to avoid gimbal lock. Angular velocity is a vector \(\omega\) which is in the direction that the axis the object is rotating around using the right-hand rule, scaled to the speed in radians per second.
+Rotation is stored in a matrix $\Theta$ to avoid gimbal lock. Angular velocity is a vector $\omega$ which is in the direction that the axis the object is rotating around using the right-hand rule, scaled to the speed in radians per second.
 
-Suppose \(M\) is the matrix representing a rotation of \(|\omega|\cdot \Delta t\) around \(\omega\). Thus, we integrate rotation with
+Suppose $M$ is the matrix representing a rotation of $|\omega|\cdot \Delta t$ around $\omega$. Thus, we integrate rotation with
 
 $$\Theta_{k+1} = M \cdot \Theta_k$$

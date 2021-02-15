@@ -5,7 +5,7 @@ title: HasCAS
 status: early
 description: Theoretical Computer Algebra System
 startDate: 2020-03-01
-endDate: null
+endDate: 2020-11-16
 tags:
   - haskell
   - abstract-syntax-trees
