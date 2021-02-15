@@ -165,7 +165,7 @@ const ProjectDetailPage: FC<ProjectDetailProps> = ({ project, similar }) => {
           descriptionRaw={project.description ?? "A project made by Astrid Yu"}
           headingColor={getHSLString(getPersistentColor(slug))}
           above={
-            <Link href="/p">
+            <Link href="/projects/">
               <a className={style.backToProjects}>
                 <BsArrowLeft /> Back to Projects
               </a>
