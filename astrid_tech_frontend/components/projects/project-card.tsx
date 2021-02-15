@@ -1,4 +1,5 @@
 import classNames from "classnames";
+import { resolveAssetURL } from "lib/cache/assets";
 import Link from "next/link";
 import React, { CSSProperties, FC, useRef } from "react";
 import {
@@ -68,7 +69,7 @@ export const ProjectCard: FC<ProjectCardProps> = ({
       ...style,
       backgroundImage:
         `linear-gradient(to bottom, hsla(${h}, 80%, 80%, 1.0), hsla(${h}, 80%, 80%, 0.9), hsla(${h}, 80%, 80%, 0.6), rgba(0.6, 0.6, 0.6, 0.3)), ` +
-        `url(/_/${project.assetRoot}/${project.thumbnail})`,
+        `url(${resolveAssetURL(project.assetRoot, project.thumbnail)})`,
       backgroundRepeat: "no-repeat",
       backgroundPosition: "center",
       backgroundSize: "cover",
