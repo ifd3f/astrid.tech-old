@@ -1,0 +1,11 @@
+[package]
+name = "aay_tw_shortener"
+version = "0.1.0"
+authors = ["Astrid Yu <astrid@astrid.tech>"]
+edition = "2018"
+description = "A link shortener."
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[dependencies]
+rocket = "0.4.7"
