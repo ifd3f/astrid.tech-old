@@ -17,6 +17,9 @@ import { getLanguageTags, getUserTagOverrides } from "./tags";
 import { serializeJS } from "./util";
 
 const contentDir = path.join(process.cwd(), "content");
+const TAGS_D_TS = `import { Tag } from "../lib/cache";
+declare const tags: Tag[];
+export default tags;`;
 
 async function buildBlogPostCache(db: Database) {
   console.log("Building blog post cache");
@@ -152,6 +155,8 @@ async function exportTagOverrideData(db: Database, dest: string) {
     path.join(process.cwd(), "data/tags.js"),
     serializeJS(tags)
   );
+
+  await fs.writeFile(path.join(process.cwd(), "data/tags.d.ts"), TAGS_D_TS);
 }
 
 async function buildProjectCache(db: Database) {

@@ -43,3 +43,5 @@ public/feed.json
 
 ./docker
 ./out
+
+/data
