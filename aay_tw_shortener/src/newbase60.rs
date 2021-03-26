@@ -32,7 +32,7 @@ pub fn sxg_to_num(s: &str) -> Option<u128> {
             'm'..='z' => c as u8 - b'm' + 46,
             'I' | 'l' => 1, // typo capital I, lowercase l to 1
             'O' => 0,       // error correct typo capital O to 0
-            _ => continue,  // Skip noise
+            _ => continue,  // skip invalid chars
         };
         n = match n.checked_mul(60).and_then(|x| x.checked_add(digit as u128)) {
             Some(x) => x,
@@ -71,7 +71,18 @@ fn test_num_to_sxg(input: u128, expected: &str) {
 #[case(",", Some(0))]
 #[case("🥺", Some(0))]
 #[case("sadfui9fasjf", Some(1908097676891172549880))]
-#[case("this is a very long string that will overflow the buffer", None)]
+#[case(
+    "this is a very long string that will overflow the multiplication buffer",
+    None
+)]
 fn test_sxg_to_num(input: &str, expected: Option<u128>) {
     assert_eq!(sxg_to_num(input), expected)
+}
+
+#[cfg(test)]
+fn test_round_trip_n_s_n() {
+    for n in 0..63832 as u128 {
+        let s = num_to_sxg(n);
+        assert_eq!(sxg_to_num(s.as_str()), Some(n))
+    }
 }
