@@ -11,3 +11,4 @@ publish = false
 dotenv = "0.15.0"
 rocket = "0.4.7"
 rocket_codegen = "0.4.7"
+rstest = "0.7.0"
