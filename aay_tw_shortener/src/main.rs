@@ -4,6 +4,7 @@
 extern crate dotenv;
 #[macro_use]
 extern crate rocket;
+extern crate newbase60;
 
 use std::env;
 
@@ -16,7 +17,6 @@ use rocket::{Response, State};
 use mapper::expand_shortcode;
 
 mod mapper;
-mod newbase60;
 
 struct TargetURL {
     url: String,

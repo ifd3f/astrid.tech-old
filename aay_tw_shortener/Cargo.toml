@@ -10,6 +10,7 @@ publish = false
 [dependencies]
 chrono = "0.4.19"
 dotenv = "0.15.0"
+newbase60 = "0.1.0"
 rocket = "0.4.7"
 rocket_codegen = "0.4.7"
 rstest = "0.7.0"
