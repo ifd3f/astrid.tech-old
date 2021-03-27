@@ -83,47 +83,40 @@ pub fn expand_shortcode(shortcode: &str) -> Result<String, ShortCodeParseError> 
     Ok(parsed.expand())
 }
 
-#[test]
-fn parses_blog() {
-    let code = ShortCode::parse("b4MY").unwrap();
-    assert_eq!(code, Blog(2012, 12, 18))
-}
+#[cfg(test)]
+mod tests {
+    use crate::mapper::*;
+    use rstest::rstest;
 
-#[test]
-fn parses_text() {
-    let code = ShortCode::parse("t4MYA").unwrap();
-    assert_eq!(code, Text(2012, 12, 18, 10))
-}
+    #[rstest(input, expected)]
+    #[case("pfoob", Project("foob"))]
+    #[case("t4MYA", Text(2012, 12, 18, 10))]
+    #[case("b4MY", Blog(2012, 12, 18))]
+    fn parses_codes(input: &str, expected: ShortCode) {
+        let code = ShortCode::parse(input).unwrap();
+        assert_eq!(code, expected)
+    }
 
-#[test]
-fn expands_blog() {
-    let code = Blog(2021, 3, 28);
-    assert_eq!(code.expand(), "2021/03/28/".to_string())
-}
+    #[rstest(code, expected)]
+    #[case(Blog(2021, 3, 28), "2021/03/28/")]
+    #[case(Text(2021, 3, 28, 9), "2021/03/28/9/")]
+    #[case(Project("masdf"), "projects/masdf/")]
+    fn expands_codes(code: ShortCode, expected: &str) {
+        assert_eq!(code.expand(), expected.to_string())
+    }
 
-#[test]
-fn expands_text() {
-    let code = Text(2021, 3, 28, 9);
-    assert_eq!(code.expand(), "2021/03/28/9/".to_string())
-}
+    #[test]
+    fn does_not_parse_empty_codes() {
+        assert_eq!(ShortCode::parse(""), Err(EmptyString))
+    }
 
-#[test]
-fn expands_project() {
-    let code = Project("asdf");
-    assert_eq!(code.expand(), "projects/asdf/".to_string())
-}
+    #[test]
+    fn does_not_parse_long_codes() {
+        assert_eq!(ShortCode::parse("sfd8977f879978sdf}"), Err(TooLong))
+    }
 
-#[test]
-fn does_not_parse_empty_codes() {
-    assert_eq!(ShortCode::parse(""), Err(EmptyString))
-}
-
-#[test]
-fn does_not_parse_long_codes() {
-    assert_eq!(ShortCode::parse("sfd8977f879978sdf}"), Err(TooLong))
-}
-
-#[test]
-fn does_not_parse_unsupported_types() {
-    assert_eq!(ShortCode::parse("f32"), Err(UnsupportedType))
+    #[test]
+    fn does_not_parse_unsupported_types() {
+        assert_eq!(ShortCode::parse("f32"), Err(UnsupportedType))
+    }
 }
