@@ -16,7 +16,7 @@ Now that I think of it, this actually isn't too bad of an idea. By the time I fi
 
 Since I was a very very small human, like maybe 10 or so, I loved building and making things and using cool tech to make cool projects. However, it wasn't until maybe I was 15 or 16 that I was actually competent enough to make cool stuff.
 
-Between then and now, I've done a ton of projects. Some were software, some were electronic, some were mechanical, and many were a combination of all 3. You can see the path of chaos and unfinished projects I left on my [GitHub](https://github.com/Plenglin?tab=repositories). But the problem is, **I always ended up getting halfway through and losing interest.** Also, I've ended up making so many projects, that **I've actually forgotten about most of them!**
+Between then and now, I've done a ton of projects. Some were software, some were electronic, some were mechanical, and many were a combination of all 3. You can see the path of chaos and unfinished projects I left on my [GitHub](https://github.com/astralbijection?tab=repositories). But the problem is, **I always ended up getting halfway through and losing interest.** Also, I've ended up making so many projects, that **I've actually forgotten about most of them!**
 
 ## So why a personal website?
 

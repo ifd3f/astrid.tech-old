@@ -20,7 +20,7 @@ tags:
   - circuit-design
 url: null
 source:
-  - https://github.com/Plenglin/QuadFrost
+  - https://github.com/astralbijection/QuadFrost
 thumbnail: ./3dp-colors.webp
 ---
 

@@ -20,7 +20,7 @@ keywords:
   - Computer Vision
 url: null
 featured: true
-source: [https://github.com/Plenglin/Hair-Net]
+source: [https://github.com/astralbijection/Hair-Net]
 thumbnail: ./thumbnail.png
 highlights:
   - Designed and trained a convolutional neural network using Python and Tensorflow.
@@ -51,7 +51,7 @@ In terms of architecture, it's a lot like an autoencoder. See the following grap
 
 ## Improving results with synthetic data
 
-There were many issues encountered in some of the earlier trained networks, but they were easily solved by training on a synthetic dataset generated from my training data. [`util.py`](https://github.com/Plenglin/Hair-Net/blob/master/util.py) contains most of the code used to do this.
+There were many issues encountered in some of the earlier trained networks, but they were easily solved by training on a synthetic dataset generated from my training data. [`util.py`](https://github.com/astralbijection/Hair-Net/blob/master/util.py) contains most of the code used to do this.
 
 - **Sometimes the neural network would detect a person in an image of a wall, a _false positive_** - I took some random images without people's faces in them and added them to the dataset as features, with a blank target.
 - **If the person wasn't in the center of the camera, there would be less accuracy** - I randomly scaled and translated training features, and applied the same operation to their associated targets. I tried rotating the images at some point, but found that to be a bit difficult to implement at the time.

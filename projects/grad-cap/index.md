@@ -13,7 +13,7 @@ tags:
   - servo
   - fusion-360
 url: null
-source: [https://github.com/Plenglin/Articulated-Tassel]
+source: [https://github.com/astralbijection/Articulated-Tassel]
 thumbnail: ./td-thumb.jpg
 ---
 

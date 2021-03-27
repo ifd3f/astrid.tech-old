@@ -11,7 +11,7 @@ tags:
   - abstract-syntax-trees
   - math
   - metamathematics
-source: [https://github.com/Plenglin/HasCAS]
+source: [https://github.com/astralbijection/HasCAS]
 thumbnail: ./thumbnail.png
 ---
 

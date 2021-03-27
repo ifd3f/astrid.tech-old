@@ -81,7 +81,7 @@ This is it! I'm finally running _something_ on this godforsaken cluster!
 
 At the last [IndieWeb Homebrew Website Club (HWC)](https://indieweb.org/Homebrew_Website_Club) I attended, someone suggested to me that I could somehow have a live feed of my 3D printer. Although I can't have a _live_ feed because I have a slow internet connection, I can take a picture every few minutes and upload it to my server.
 
-So, I added a new endpoint to my API server, then wrote a [small script](https://github.com/Plenglin/printer_image_snapper) that does exactly that. It scrapes data from my OctoPrint instance's API, snaps a picture from the exposed MJPG-streamer endpoint, and sends a PATCH request to my API server with all the information. I [Dockerized it](https://hub.docker.com/repository/docker/astridyu/printer_image_snapper) using `python3.9-alpine` for minimum image size, and created a CronJob for my cluster that runs the script every 10 minutes:[^1]
+So, I added a new endpoint to my API server, then wrote a [small script](https://github.com/astralbijection/printer_image_snapper) that does exactly that. It scrapes data from my OctoPrint instance's API, snaps a picture from the exposed MJPG-streamer endpoint, and sends a PATCH request to my API server with all the information. I [Dockerized it](https://hub.docker.com/repository/docker/astridyu/printer_image_snapper) using `python3.9-alpine` for minimum image size, and created a CronJob for my cluster that runs the script every 10 minutes:[^1]
 
 [^1]: Yes, I know this can be run on a normal server with a normal cronjob. I just wanted to try something new and give my cluster a purpose, okay?
 

@@ -34,7 +34,7 @@ In version 0.2, I will make mostly infrastructural changes to my website, but I 
 
 - Going along with the portfolio page, I will also improve on the project detail pages as well, hopefully integrating it with the outer portfolio page.
 
-- And finally, as always, bugfixes when I find them. Or, when _you_ find them and report them to [the issues page](https://github.com/Plenglin/astrid.tech/issues).
+- And finally, as always, bugfixes when I find them. Or, when _you_ find them and report them to [the issues page](https://github.com/astralbijection/astrid.tech/issues).
 
 ## Conclusion
 

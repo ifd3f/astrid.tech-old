@@ -14,7 +14,7 @@ tags:
   - client-server
   - cross-platform
 url: null
-source: [https://github.com/Plenglin/Scouting-App-old]
+source: [https://github.com/astralbijection/Scouting-App-old]
 thumbnail: null
 ---
 

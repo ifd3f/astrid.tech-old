@@ -28,7 +28,7 @@ keywords:
   - Sass
 url: https://astrid.tech
 source:
-  - https://github.com/Plenglin/astrid.tech
+  - https://github.com/astralbijection/astrid.tech
 thumbnail: ./thumbnail.png
 highlights:
   - Utilized Gatsby to statically generate the website from raw YAML and Markdown files.
@@ -84,9 +84,9 @@ After having made a lot of personal projects, I realized that I had forgotten a 
 
 I use Gatsby to statically generate the website. However, [I am considering moving off of it to Next.js](https://astrid.tech/blog/2020-12-20-adding-a-backend/#replacing-gatsby).
 
-The static site is hosted via [Github Pages](https://github.com/plenglin/astrid.tech) to statically host the website. (Going to [plenglin.github.io](https://plenglin.github.io) takes you here!)
+The static site is hosted via [Github Pages](https://github.com/astralbijection/astrid.tech) to statically host the website. (Going to [astralbijection.github.io](https://astralbijection.github.io) takes you here!)
 
-There is a [Github Actions](https://github.com/plenglin/astrid.tech/actions) workflow that automatically builds on every push to verify that my code compiles. Additionally, if there was a push to the `main` branch, it will publish the build output to the [plenglin.github.io](https://github.com/Plenglin/plenglin.github.io) repo.
+There is a [Github Actions](https://github.com/astralbijection/astrid.tech/actions) workflow that automatically builds on every push to verify that my code compiles. Additionally, if there was a push to the `main` branch, it will publish the build output to the [astralbijection.github.io](https://github.com/astralbijection/astralbijection.github.io) repo.
 
 ### UX design methodology
 
@@ -102,11 +102,11 @@ Currently, the backend's only functionality is to serve and receive possibly ano
 
 I have pointed [Docker Hub](https://hub.docker.com/repository/docker/astridyu/astrid_tech_api) at my repo to build, test, and release a new `:latest` image on every push to main.
 
-It is deployed as a Docker container on a [Contabo](https://contabo.com) VPS located in Missouri for about \$8/mo. See [the `docker-compose.yml`](https://github.com/Plenglin/astrid.tech/blob/main/docker-compose.yml) for deployment details. I will soon set up [Watchtower](https://github.com/containrrr/watchtower) to automatically pull the image, so that the only thing I need to do with deployment is push to `main`.
+It is deployed as a Docker container on a [Contabo](https://contabo.com) VPS located in Missouri for about \$8/mo. See [the `docker-compose.yml`](https://github.com/astralbijection/astrid.tech/blob/main/docker-compose.yml) for deployment details. I will soon set up [Watchtower](https://github.com/containrrr/watchtower) to automatically pull the image, so that the only thing I need to do with deployment is push to `main`.
 
 ## Content
 
-The content is in its own [Git submodule](https://github.com/Plenglin/astrid.tech-content) as a set of raw files that get aggregated and compiled on each frontend build. It is written in the following file formats:
+The content is in its own [Git submodule](https://github.com/astralbijection/astrid.tech-content) as a set of raw files that get aggregated and compiled on each frontend build. It is written in the following file formats:
 
 - Markdown
 - YAML

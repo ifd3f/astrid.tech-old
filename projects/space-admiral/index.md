@@ -12,7 +12,7 @@ tags:
   - java
   - kd-tree
 url: null
-source: [https://github.com/Plenglin/Space-Admiral]
+source: [https://github.com/astralbijection/Space-Admiral]
 thumbnail: null
 ---
 

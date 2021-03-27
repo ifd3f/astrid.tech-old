@@ -12,7 +12,7 @@ tags:
   - proxmox
 ---
 
-In [my last post](/2021/01/18/selfhost/) had 7 things I wanted to do. Well, here's a summary of everything I did so far. The [IaC repo is here](https://github.com/plenglin/astrid.tech-deployment) and the last commit before I published this article was [d18736](https://github.com/Plenglin/astrid.tech-deployment/tree/d18736ae4cf926c177488a07565521328ba09aee).
+In [my last post](/2021/01/18/selfhost/) had 7 things I wanted to do. Well, here's a summary of everything I did so far. The [IaC repo is here](https://github.com/astralbijection/astrid.tech-deployment) and the last commit before I published this article was [d18736](https://github.com/astralbijection/astrid.tech-deployment/tree/d18736ae4cf926c177488a07565521328ba09aee).
 
 EDIT: It has come to my attention that I'm missing a picture. Anyways, here's what the cluster looks like.
 

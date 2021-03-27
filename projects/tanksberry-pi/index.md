@@ -18,7 +18,7 @@ tags:
   - bootstrap-css
   - websockets
   - javascript
-source: [https://github.com/Plenglin/tanksberry-pi]
+source: [https://github.com/astralbijection/tanksberry-pi]
 thumbnail: ./thumbnail.jpg
 ---
 

@@ -11,7 +11,7 @@ tags:
   - html
   - css
   - website
-url: https://plenglin.github.io/Interactive-PID/
-source: [https://github.com/Plenglin/Interactive-PID]
+url: https://astralbijection.github.io/Interactive-PID/
+source: [https://github.com/astralbijection/Interactive-PID]
 thumbnail: ./chart.png
 ---

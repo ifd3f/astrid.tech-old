@@ -15,7 +15,7 @@ tags:
   - upcycling
 url: null
 source:
-  - https://github.com/Plenglin/astrid.tech-deployment
+  - https://github.com/astralbijection/astrid.tech-deployment
 thumbnail: /2021/01/27/pi-clustering/nodezzz.jpeg
 ---
 

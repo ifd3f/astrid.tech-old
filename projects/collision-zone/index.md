@@ -29,7 +29,7 @@ keywords:
   - Websockets
 url: https://collision.zone
 source:
-  - https://github.com/Plenglin/collision-zone
+  - https://github.com/astralbijection/collision-zone
 thumbnail: ./thumbnail.gif
 highlights:
   - Built an efficient, single-instance game server in C++ and a matchmaking server in Node.js to ensure the app is scalable.
@@ -84,9 +84,9 @@ The general high-level flow is as follows:
 2. The client begins matchmaking. The matchmaking server puts them in the matchmaking queue.
 3. When there is an open instance server, the matchmaking server gives the client that instance server's player socket, and the client connects to that socket and starts playing.
 
-During gameplay, the instance server's sockets use a custom binary protocol to send game updates in order to reduce bandwidth as much as humanly possible. See [this document](https://github.com/Plenglin/collision-zone/blob/main/GameProtocol.md) for its specification.
+During gameplay, the instance server's sockets use a custom binary protocol to send game updates in order to reduce bandwidth as much as humanly possible. See [this document](https://github.com/astralbijection/collision-zone/blob/main/GameProtocol.md) for its specification.
 
 ## Fun facts!
 
-- The initial prototype was created during [HSHacks III](https://github.com/Plenglin/HSHacks-III) back in 2017 under the name of "High Octane Elastic Snowploughs." The backend was a Flask site serving a Socket.IO connection, and the frontend drew everything using a basic Canvas API,
+- The initial prototype was created during [HSHacks III](https://github.com/astralbijection/HSHacks-III) back in 2017 under the name of "High Octane Elastic Snowploughs." The backend was a Flask site serving a Socket.IO connection, and the frontend drew everything using a basic Canvas API,
 - After the hackathon, there were many incomplete rewrites of the project in various languages, including Java and more Python, until eventually I did it again in 2019 using this current stack.

@@ -24,7 +24,7 @@ keywords:
   - Signal Processing
   - Circuit Design
 url: null
-source: [https://github.com/Plenglin/segwaybot]
+source: [https://github.com/astralbijection/segwaybot]
 thumbnail: ./thumbnail.png
 ---
 

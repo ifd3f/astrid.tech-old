@@ -14,7 +14,7 @@ tags:
   - ux-design
   - game-design
 url: null
-source: [https://github.com/Plenglin/Quest-Of-Con]
+source: [https://github.com/astralbijection/Quest-Of-Con]
 thumbnail: ./game-screenshot.png
 ---
 
