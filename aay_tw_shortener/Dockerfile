@@ -6,11 +6,11 @@ RUN apt-get update && apt-get install -y libssl-dev pkg-config
 
 # Create project directory for downloading dependencies
 WORKDIR /
-RUN USER=root cargo new --bin aay-tw
+RUN USER=root cargo new --bin app --name aay-tw
 
 # Install dependencies
-WORKDIR /aay-tw
-COPY ./Cargo.toml ./Cargo.toml
+WORKDIR /app
+COPY ./Cargo.toml .
 RUN cargo build --release
 
 # Build the app
@@ -27,7 +27,7 @@ RUN useradd -ms /bin/bash shorty
 
 # Prepare the binary
 WORKDIR /app
-COPY --from=builder /aay-tw/target/release/aay-tw /usr/local/bin
+COPY --from=builder /app/target/release/aay-tw /usr/local/bin
 
 # Run as the user for security
 USER shorty
