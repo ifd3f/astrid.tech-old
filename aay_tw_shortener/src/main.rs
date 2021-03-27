@@ -1,10 +1,11 @@
-#![feature(proc_macro_hygiene, decl_macro)]
+#![feature(decl_macro)]
+#![feature(proc_macro_hygiene)]
 #![feature(in_band_lifetimes)]
 
 extern crate dotenv;
+extern crate newbase60;
 #[macro_use]
 extern crate rocket;
-extern crate newbase60;
 
 use std::env;
 
@@ -16,6 +17,7 @@ use rocket::{Response, State};
 
 use mapper::expand_shortcode;
 
+mod follow_redirect;
 mod mapper;
 
 struct TargetURL {
