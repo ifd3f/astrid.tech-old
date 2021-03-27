@@ -19,6 +19,9 @@ ADD . ./
 RUN rm ./target/release/deps/aay_tw*
 RUN cargo build --release
 
+# Default runner for builder (for debugging only)
+CMD cargo run --release
+
 ### Create a runner image with only the binary
 FROM debian:buster-slim as runner
 
@@ -29,6 +32,6 @@ RUN useradd -ms /bin/bash shorty
 WORKDIR /app
 COPY --from=builder /app/target/release/aay-tw /usr/local/bin
 
-# Run as the user for security
+# Run as non-root user for security
 USER shorty
 CMD aay-tw
