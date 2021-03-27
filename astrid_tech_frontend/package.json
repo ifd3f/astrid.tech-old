@@ -1,6 +1,11 @@
 {
   "name": "astrid-tech-frontend",
   "version": "2.0.0",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/astralbijection/astrid.tech.git",
+    "directory": "astrid_tech_frontend"
+  },
   "scripts": {
     "dev": "next",
     "test": "ts-mocha -p tsconfig.json **/*.test.ts",
