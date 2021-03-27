@@ -8,7 +8,7 @@
     "build": "next build && next export",
     "postbuild": "./post-build.sh",
     "start": "next start",
-    "deploy": "npx gh-pages -t true -r \"git@github.com:Plenglin/plenglin.github.io.git\" -b master -d out -f",
+    "deploy": "npx gh-pages -t true -r \"git@github.com:astralbijection/astralbijection.github.io.git\" -b master -d out -f",
     "typecheck": "tsc"
   },
   "dependencies": {

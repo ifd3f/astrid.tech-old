@@ -65,7 +65,7 @@ const AGPL: FC = () => {
         />
       </a>
       <p>
-        <a href="https://github.com/plenglin/astrid.tech">
+        <a href="https://github.com/astralbijection/astrid.tech">
           The source code of astrid.tech
         </a>{" "}
         is licensed under the{" "}
@@ -108,7 +108,7 @@ const FooterSection = () => {
               self-referential project page
             </Link>{" "}
             or see the code yourself on{" "}
-            <a href="https://github.com/Plenglin/astrid.tech">GitHub</a>.
+            <a href="https://github.com/astralbijection/astrid.tech">GitHub</a>.
           </p>
         </Col>
         <Row>

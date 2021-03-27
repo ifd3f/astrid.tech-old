@@ -65,7 +65,7 @@ const About: FC<{}> = (props) => {
               </a>
             </li>
             <li>
-              <a href="https://github.com/Plenglin">
+              <a href="https://github.com/astralbijection">
                 <GoMarkGithub title="GitHub" /> Follow me on GitHub
               </a>
             </li>

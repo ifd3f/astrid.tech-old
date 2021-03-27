@@ -102,7 +102,7 @@ const SEO: FC<SEOProps> = ({
       />
 
       {/* Web login */}
-      <link href="https://github.com/Plenglin" rel="me authn" />
+      <link href="https://github.com/astralbijection" rel="me authn" />
       <link href="mailto:astrid@astrid.tech" rel="me" />
     </Head>
   );
