@@ -1,13 +1,7 @@
-import Head from "next/head";
+import Redirect from "components/Redirect";
 import { GetStaticProps, InferGetStaticPropsType } from "next";
 import React, { FC } from "react";
-import BlogPostPage from "../../components/blog/blog";
-import { getBlogPost, getBlogPostSlugs, Path } from "../../lib/cache";
-import { renderMarkdown } from "../../lib/markdown";
-import { wrappedStaticPaths } from "../../lib/pathcache";
-import { BlogPost, convertBlogPostToObjectDate } from "../../types/types";
-import Layout from "components/layout";
-import { Container } from "next/app";
+import { getBlogPostSlugs, Path } from "../../lib/cache";
 
 function pathToOldSlug(path: Path) {
   const {
@@ -45,7 +39,7 @@ export const getStaticPaths = async () => {
 
     fallback: false,
   };
-};
+}; 
 
 export const getStaticProps: GetStaticProps = async ({ params }) => {
   return {
@@ -60,18 +54,7 @@ const Post: FC<InferGetStaticPropsType<typeof getStaticProps>> = ({ path }) => {
     day,
     slug: [slug],
   } = path;
-  const destination = `/${year}/${month}/${day}/${slug}`;
-  return (
-    <div>
-      <Head>
-        <meta httpEquiv="refresh" content={`0;url=${destination}`} />
-      </Head>
-      <p>
-        This content has moved. If you haven't been redirected, please click{" "}
-        <a href={destination}>here</a>.
-      </p>
-    </div>
-  );
+  return <Redirect destination={`/${year}/${month}/${day}/${slug}`} />;
 };
 
 export default Post;
