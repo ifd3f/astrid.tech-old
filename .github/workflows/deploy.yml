@@ -61,15 +61,12 @@ jobs:
 
       - name: Zip output
         working-directory: astrid_tech_frontend
-        run: zip -r ../static-site.zip out
+        run: zip -r ../site.zip out
 
-      - name: Upload Static Site
-        uses: actions/upload-artifact@v2
+      - name: Release
+        uses: softprops/action-gh-release@v1
+        if: github.ref == 'refs/heads/ci'
         with:
-          name: static-site
-          path: static-site.zip
-
-      - name: Publish
-        working-directory: astrid_tech_frontend
-        if: github.ref == 'refs/heads/main'
-        run: npm run deploy
+          files: site.zip
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}

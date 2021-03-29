@@ -41,7 +41,6 @@ public/rss.xml
 public/atom.xml
 public/feed.json
 
-./docker
-./out
+/out
 
 /data
