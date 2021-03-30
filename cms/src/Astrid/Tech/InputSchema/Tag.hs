@@ -1,4 +1,8 @@
-module Astrid.Tech.InputSchema.Tag () where
+module Astrid.Tech.InputSchema.Tag
+  ( TagOverrideSheet,
+    ColorGroup,
+  )
+where
 
 import Data.Aeson
 import GHC.Generics
@@ -21,3 +25,7 @@ data ColorGroup = ColorGroup
 instance FromJSON ColorGroup
 
 type TagOverrideSheet = [ColorGroup]
+
+-- readTagOverrideSheet :: FilePath -> IO TagOverrideSheet
+
+-- readTagOverrideSheetDirectory :: FilePath -> IO TagOverrideSheet

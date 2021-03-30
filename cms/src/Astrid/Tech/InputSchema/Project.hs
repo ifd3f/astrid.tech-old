@@ -1,10 +1,16 @@
-module Astrid.Tech.InputSchema.Project (Project, ProjectStatus, ProjectMeta) where
+module Astrid.Tech.InputSchema.Project
+  ( Project,
+    ProjectStatus,
+    ProjectMeta,
+  )
+where
 
+import Astrid.Tech.InputSchema.Page
 import Data.Aeson
 import Data.Time.Clock
 import GHC.Generics
 
-data ProjectStatus = None | Early | WIP | Complete | Scrapped deriving (Show, Generic)
+data ProjectStatus = NoStatus | Early | WIP | Complete | Scrapped deriving (Show, Generic)
 
 instance FromJSON ProjectStatus where
   parseJSON value =
@@ -13,26 +19,33 @@ instance FromJSON ProjectStatus where
       String "wip" -> return WIP
       String "complete" -> return Complete
       String "scrapped" -> return Scrapped
-      Null -> return None
+      Null -> return NoStatus
       _ -> invalid
     where
       invalid = fail "string is not one of known enum values"
 
 data ProjectMeta = ProjectMeta
   { title :: String,
-    assetRoot :: String,
     status :: ProjectStatus,
     startDate :: UTCTime,
     endDate :: Maybe UTCTime,
-    slug :: String,
-    url :: String,
-    source :: [String],
+    url :: Maybe String,
+    source :: Maybe [String],
     tags :: [String],
-    thumbnail :: String,
+    thumbnail :: Maybe String,
     description :: Maybe String
   }
   deriving (Generic)
 
 instance FromJSON ProjectMeta
 
-data Project = Project ProjectMeta String
+data Project = Project
+  { meta :: ProjectMeta,
+    slug :: String,
+    assetRoot :: String,
+    rootPage :: Page,
+    children :: [Page]
+  }
+
+-- parseProject :: FilePath -> IO Project
+-- parseProject directory =

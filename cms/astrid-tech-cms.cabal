@@ -30,6 +30,7 @@ library
       Astrid.Tech.CacheSchema
       Astrid.Tech.InputSchema.Blog
       Astrid.Tech.InputSchema.Content
+      Astrid.Tech.InputSchema.Page
       Astrid.Tech.InputSchema.Project
       Astrid.Tech.InputSchema.Tag
       Lib

@@ -1,20 +1,30 @@
-module Astrid.Tech.InputSchema.Blog (BlogPost, BlogPostMeta) where
+module Astrid.Tech.InputSchema.Blog
+  ( BlogPost,
+    BlogPostMeta,
+  )
+where
 
+import Astrid.Tech.InputSchema.Page
 import Data.Aeson
 import Data.Time.Clock
 import GHC.Generics
 
 data BlogPostMeta = BlogPostMeta
   { title :: String,
-    assetRoot :: String,
     description :: String,
     date :: UTCTime,
-    slug :: String,
     thumbnail :: Maybe String,
-    excerpt :: Maybe String
+    tags :: [String]
   }
   deriving (Generic)
 
 instance FromJSON BlogPostMeta
 
-data BlogPost = BlogPost BlogPostMeta String
+data BlogPost = BlogPost
+  { slug :: String,
+    assetRoot :: String,
+    meta :: BlogPostMeta,
+    page :: Page
+  }
+
+-- parseBlogPost :: FilePath -> IO BlogPost
