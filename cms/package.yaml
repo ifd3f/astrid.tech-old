@@ -22,12 +22,19 @@ description: Please see the README on GitHub at <https://github.com/astralbiject
 dependencies:
   - base >= 4.7 && < 5
   - servant
+  - frontmatter
+  - aeson
+  - time
 
 library:
   source-dirs: src
 
+default-extensions:
+  - DeriveGeneric
+  - OverloadedStrings
+
 executables:
-  cms-exe:
+  astrid-tech-cms-exe:
     main: Main.hs
     source-dirs: app
     ghc-options:
@@ -38,7 +45,7 @@ executables:
       - astrid-tech-cms
 
 tests:
-  cms-test:
+  astrid-tech-cms-test:
     main: Spec.hs
     source-dirs: test
     ghc-options:
