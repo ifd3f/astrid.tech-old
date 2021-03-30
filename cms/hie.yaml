@@ -1,0 +1,13 @@
+cradle:
+  cabal:
+    - path: "src"
+      component: "lib:cms"
+
+    - path: "app/Main.hs"
+      component: "cms:exe:cms-exe"
+
+    - path: "app/Paths_cms.hs"
+      component: "cms:exe:cms-exe"
+
+    - path: "test"
+      component: "cms:test:cms-test"
