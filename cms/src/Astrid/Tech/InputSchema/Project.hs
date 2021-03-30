@@ -1,4 +1,4 @@
-module Astrid.Tech.InputSchema.Project () where
+module Astrid.Tech.InputSchema.Project (Project, ProjectStatus, ProjectMeta) where
 
 import Data.Aeson
 import Data.Time.Clock
@@ -34,3 +34,5 @@ data ProjectMeta = ProjectMeta
   deriving (Generic)
 
 instance FromJSON ProjectMeta
+
+data Project = Project ProjectMeta String

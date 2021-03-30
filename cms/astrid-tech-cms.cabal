@@ -29,7 +29,9 @@ library
   exposed-modules:
       Astrid.Tech.CacheSchema
       Astrid.Tech.InputSchema.Blog
+      Astrid.Tech.InputSchema.Content
       Astrid.Tech.InputSchema.Project
+      Astrid.Tech.InputSchema.Tag
       Lib
   other-modules:
       Paths_astrid_tech_cms

@@ -1,4 +1,4 @@
-module Astrid.Tech.InputSchema.Blog () where
+module Astrid.Tech.InputSchema.Blog (BlogPost, BlogPostMeta) where
 
 import Data.Aeson
 import Data.Time.Clock
@@ -16,3 +16,5 @@ data BlogPostMeta = BlogPostMeta
   deriving (Generic)
 
 instance FromJSON BlogPostMeta
+
+data BlogPost = BlogPost BlogPostMeta String
