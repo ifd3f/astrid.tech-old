@@ -37,7 +37,5 @@ spec :: Spec
 spec = do
   describe "Page.parsePage" $ do
     it "parses markdown" $ do
-      let parsed = parsePage "directory" "someslug.md" markdownWithFrontMatter
-       in case parsed of
-            Just (fm :: ExampleFrontMatter, page) -> fm `shouldBe` ExampleFrontMatter {a = "boat", b = 31}
-            x -> error $ show x
+      let (fm :: ExampleFrontMatter, page) = parsePage "directory" "someslug.md" markdownWithFrontMatter
+       in fm `shouldBe` ExampleFrontMatter {a = "boat", b = 31}

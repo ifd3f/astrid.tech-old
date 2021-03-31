@@ -88,7 +88,7 @@ getProject directory = do
   indexFileName <- findIndex directory
   contents <- ByteString.readFile (directory </> indexFileName)
   case parsePage directory indexFileName contents of
-    Just (meta, page) ->
+    (meta, page) ->
       return
         Project
           { meta = meta,
@@ -97,4 +97,3 @@ getProject directory = do
             rootPage = page,
             children = []
           }
-    Nothing -> throw MetaParseFailure

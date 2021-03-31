@@ -1,22 +1,25 @@
 module Astrid.Tech.InputSchema.Page
   ( Page,
-    PageFormat (MarkdownFormat, JupyterFormat),
+    PageFormat (..),
     detectFormatFromExtension,
     parsePage,
   )
 where
 
+import Control.Exception (Exception, throw)
 import Data.Aeson (FromJSON)
 import Data.ByteString
 import Data.Frontmatter (IResult (Done), parseYamlFrontmatter)
+import System.FilePath (takeExtension)
 
 data PageFormat = MarkdownFormat | JupyterFormat deriving (Show, Eq)
 
-detectFormatFromExtension :: String -> Maybe PageFormat
+-- | Returns a 'PageFormat', or the extension if error.
+detectFormatFromExtension :: String -> Either String PageFormat
 detectFormatFromExtension ext = case ext of
-  "md" -> Just MarkdownFormat
-  "ipynb" -> Just JupyterFormat
-  _ -> Nothing
+  ".md" -> Right MarkdownFormat
+  ".ipynb" -> Right JupyterFormat
+  _ -> Left ext
 
 data Page = Page
   { content :: ByteString,
@@ -25,10 +28,14 @@ data Page = Page
   }
   deriving (Show, Eq)
 
-parsePage :: FromJSON a => FilePath -> FilePath -> ByteString -> Maybe (a, Page)
-parsePage directory name contents =
-  case detectFormatFromExtension name of
-    Just MarkdownFormat ->
+data PageParseError = UnsupportedFormat String | ParseYamlError deriving (Show, Eq)
+
+instance Exception PageParseError
+
+parsePage :: FromJSON a => FilePath -> FilePath -> ByteString -> (a, Page)
+parsePage directory filename contents =
+  case detectFormatFromExtension $ takeExtension filename of
+    Right MarkdownFormat ->
       case parseYamlFrontmatter contents of
         Done rest front ->
           let page =
@@ -37,7 +44,7 @@ parsePage directory name contents =
                     format = MarkdownFormat,
                     directory = directory
                   }
-           in Just (front, page)
-        _ -> Nothing
-    Just JupyterFormat -> error "Not yet implemented"
-    Nothing -> Nothing
+           in (front, page)
+        _ -> throw ParseYamlError
+    Right JupyterFormat -> error "Not yet implemented"
+    Left ext -> throw $ UnsupportedFormat ext
