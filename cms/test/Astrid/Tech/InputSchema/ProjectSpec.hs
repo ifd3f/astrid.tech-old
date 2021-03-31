@@ -11,7 +11,7 @@ import Test.QuickCheck
 
 spec :: Spec
 spec = do
-  describe "Project.findIndex" $ do
+  describe "findIndex" $ do
     it "returns error when no index" $ do
       findIndex "resources/test/findIndex/no" `shouldThrow` (== NoIndex)
 

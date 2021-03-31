@@ -7,7 +7,7 @@ module Astrid.Tech.InputSchema.Project
   )
 where
 
-import Astrid.Tech.InputSchema.Page (Page, detectFormatFromExtension, parsePage)
+import Astrid.Tech.InputSchema.Page (Page, PageParseError, PageParseResult, detectFormatFromExtension, parsePage)
 import Control.Exception (Exception, IOException, handle, throw)
 import Control.Monad.IO.Class (MonadIO (liftIO))
 import Control.Monad.Trans.Except
@@ -69,7 +69,7 @@ data ProjectParseError
   | MultipleIndex
   | FileReadError
   | UnsupportedIndexFormat
-  | MetaParseFailure
+  | MetaParseFailure PageParseError
   deriving (Show, Eq)
 
 instance Exception ProjectParseError
@@ -88,7 +88,7 @@ getProject directory = do
   indexFileName <- findIndex directory
   contents <- ByteString.readFile (directory </> indexFileName)
   case parsePage directory indexFileName contents of
-    (meta, page) ->
+    Right (meta, page) ->
       return
         Project
           { meta = meta,
@@ -97,3 +97,4 @@ getProject directory = do
             rootPage = page,
             children = []
           }
+    Left err -> throw $ MetaParseFailure err
