@@ -47,9 +47,11 @@ library
       aeson
     , base >=4.7 && <5
     , bytestring
+    , containers
     , directory
     , filepath
     , frontmatter
+    , parallel-io
     , servant
     , text
     , time
@@ -73,9 +75,11 @@ executable astrid-tech-cms-exe
     , astrid-tech-cms
     , base >=4.7 && <5
     , bytestring
+    , containers
     , directory
     , filepath
     , frontmatter
+    , parallel-io
     , servant
     , text
     , time
@@ -103,10 +107,12 @@ test-suite astrid-tech-cms-test
     , astrid-tech-cms
     , base >=4.7 && <5
     , bytestring
+    , containers
     , directory
     , filepath
     , frontmatter
     , hspec
+    , parallel-io
     , raw-strings-qq
     , servant
     , text

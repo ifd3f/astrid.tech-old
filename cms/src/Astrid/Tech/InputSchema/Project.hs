@@ -3,21 +3,28 @@ module Astrid.Tech.InputSchema.Project
     ProjectStatus (..),
     ProjectMeta (..),
     ProjectParseError (..),
+    ProjectDirectoryScanException (..),
+    ProjectSlug,
     getProject,
+    scanProjectDir,
   )
 where
 
 import Astrid.Tech.InputSchema.Page (Page, PageParseError, PageParseResult, detectFormatFromExtension, findIndex, parsePage)
+import Control.Concurrent.ParallelIO (parallelE, parallel_)
 import Control.Exception (Exception, IOException, handle, throw)
+import Control.Exception.Base (SomeException (SomeException))
 import Control.Monad.IO.Class (MonadIO (liftIO))
 import Data.Aeson (FromJSON (parseJSON), Value (Null, String))
 import qualified Data.ByteString as ByteString
+import Data.Either (partitionEithers)
 import Data.Frontmatter (IResult (Done), parseYamlFrontmatter)
+import Data.Map (Map)
+import qualified Data.Map as Map
 import Data.Time (Day)
 import GHC.Generics (Generic)
 import System.Directory (listDirectory)
-import System.FilePath (takeBaseName, takeExtension, takeFileName)
-import System.FilePath.Posix ((</>))
+import System.FilePath (takeBaseName, takeExtension, takeFileName, (</>))
 
 data ProjectStatus
   = NoStatus
@@ -56,8 +63,8 @@ instance FromJSON ProjectMeta
 
 data Project = Project
   { meta :: ProjectMeta,
-    slug :: String,
-    assetRoot :: String,
+    slug :: ProjectSlug,
+    assetRoot :: FilePath,
     rootPage :: Page,
     children :: [Page]
   }
@@ -85,3 +92,22 @@ getProject directory = do
             children = []
           }
     Left err -> throw $ MetaParseFailure err
+
+newtype ProjectDirectoryScanException
+  = FailedProjects [SomeException]
+  deriving (Show)
+
+instance Exception ProjectDirectoryScanException
+
+scanProjectDir :: FilePath -> IO (Map ProjectSlug Project)
+scanProjectDir projectsRoot = do
+  children <- listDirectory projectsRoot
+  let tasks = map (getProject . (projectsRoot </>)) children
+  projects <- parallelE tasks
+
+  results <- case partitionEithers projects of
+    ([], success) -> return success
+    (failed, _) -> throw $ FailedProjects failed
+
+  let projectsMap = Map.fromList (map (\project -> (slug project, project)) results)
+  return projectsMap

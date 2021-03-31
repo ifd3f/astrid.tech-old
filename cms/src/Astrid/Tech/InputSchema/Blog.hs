@@ -5,6 +5,7 @@ module Astrid.Tech.InputSchema.Blog
 where
 
 import Astrid.Tech.InputSchema.Page (Page)
+import Astrid.Tech.Slug (DatedSlug (DatedSlug))
 import Data.Aeson (FromJSON)
 import Data.Time (Day)
 import GHC.Generics (Generic)
@@ -21,8 +22,8 @@ data BlogPostMeta = BlogPostMeta
 instance FromJSON BlogPostMeta
 
 data BlogPost = BlogPost
-  { slug :: String,
-    assetRoot :: String,
+  { slug :: DatedSlug,
+    assetRoot :: FilePath,
     meta :: BlogPostMeta,
     page :: Page
   }

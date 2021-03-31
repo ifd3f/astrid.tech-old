@@ -6,11 +6,25 @@ where
 import qualified Astrid.Tech.InputSchema.Blog as Blog
 import qualified Astrid.Tech.InputSchema.Project as Project
 import qualified Astrid.Tech.InputSchema.Tag as Tag
+import Control.Concurrent.ParallelIO (parallelE)
+import Control.Concurrent.ParallelIO.Global (parallel_)
+import Data.Map (Map)
+import qualified Data.Map as Map
+import System.FilePath ((</>))
 
 data InputContent = InputContent
   { blogs :: [Blog.BlogPost],
-    projects :: [Project.Project],
+    projects :: Map Project.ProjectSlug Project.Project,
     tagOverrides :: [Tag.TagOverrideSheet]
   }
 
--- getInputContent :: FilePath -> IO Project
+scanContentDir contentRootDir =
+  let getProjects = Project.scanProjectDir $ contentRootDir </> "projects"
+   in do
+        projects <- getProjects
+        return
+          InputContent
+            { blogs = [],
+              projects = projects,
+              tagOverrides = []
+            }
