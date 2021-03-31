@@ -4,15 +4,15 @@ module Astrid.Tech.InputSchema.Blog
   )
 where
 
-import Astrid.Tech.InputSchema.Page
-import Data.Aeson
-import Data.Time.Clock
-import GHC.Generics
+import Astrid.Tech.InputSchema.Page (Page)
+import Data.Aeson (FromJSON)
+import Data.Time (Day)
+import GHC.Generics (Generic)
 
 data BlogPostMeta = BlogPostMeta
   { title :: String,
     description :: String,
-    date :: UTCTime,
+    date :: Day,
     thumbnail :: Maybe String,
     tags :: [String]
   }

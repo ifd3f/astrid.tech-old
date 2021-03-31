@@ -1,22 +1,21 @@
 module Astrid.Tech.InputSchema.Project
-  ( Project,
-    ProjectStatus,
-    ProjectMeta,
-    ProjectParseError (NoIndex, MultipleIndex),
+  ( Project (..),
+    ProjectStatus (..),
+    ProjectMeta (..),
+    ProjectParseError (..),
     findIndex,
+    getProject,
   )
 where
 
 import Astrid.Tech.InputSchema.Page (Page, PageParseError, PageParseResult, detectFormatFromExtension, parsePage)
 import Control.Exception (Exception, IOException, handle, throw)
 import Control.Monad.IO.Class (MonadIO (liftIO))
-import Control.Monad.Trans.Except
 import Data.Aeson (FromJSON (parseJSON), Value (Null, String))
 import qualified Data.ByteString as ByteString
 import Data.Frontmatter (IResult (Done), parseYamlFrontmatter)
-import Data.Time.Clock (UTCTime)
+import Data.Time (Day)
 import GHC.Generics (Generic)
-import GHC.IO.Exception
 import System.Directory (listDirectory)
 import System.FilePath (takeBaseName, takeExtension, takeFileName)
 import System.FilePath.Posix ((</>))
@@ -44,8 +43,8 @@ instance FromJSON ProjectStatus where
 data ProjectMeta = ProjectMeta
   { title :: String,
     status :: ProjectStatus,
-    startDate :: UTCTime,
-    endDate :: Maybe UTCTime,
+    startDate :: Day,
+    endDate :: Maybe Day,
     url :: Maybe String,
     source :: Maybe [String],
     tags :: [String],

@@ -4,7 +4,6 @@ module Astrid.Tech.InputSchema.ProjectSpec
 where
 
 import Astrid.Tech.InputSchema.Project
-import Control.Exception (evaluate)
 import Control.Monad.IO.Class (MonadIO (liftIO))
 import Test.Hspec
 import Test.QuickCheck
@@ -21,3 +20,8 @@ spec = do
     it "returns path for only index" $ do
       x <- liftIO $ findIndex "resources/test/findIndex/one"
       x `shouldBe` "index.md"
+
+  describe "getProject" $ do
+    it "returns project for valid project" $ do
+      x <- liftIO $ getProject "resources/test/projects/collision-zone"
+      slug x `shouldBe` "collision-zone"

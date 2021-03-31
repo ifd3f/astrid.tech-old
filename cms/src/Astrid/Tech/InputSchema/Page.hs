@@ -11,7 +11,7 @@ where
 import Control.Exception (Exception, throw)
 import Data.Aeson (FromJSON)
 import Data.ByteString
-import Data.Frontmatter (IResult (Done), parseYamlFrontmatter)
+import Data.Frontmatter (IResult (Done, Fail, Partial), parseYamlFrontmatter)
 import Data.Text (Text)
 import Data.Text.Encoding (decodeUtf8)
 import System.FilePath (takeExtension)
@@ -34,7 +34,8 @@ data Page = Page
 
 data PageParseError
   = UnsupportedFormat String
-  | ParseYamlError
+  | ParseYamlFail String
+  | UnexpectedEOF
   deriving (Show, Eq)
 
 type PageParseResult a = Either PageParseError (a, Page)
@@ -52,6 +53,7 @@ parsePage directory filename contents =
                     directory = directory
                   }
            in Right (front, page)
-        _ -> Left ParseYamlError
+        Fail _ _ desc -> Left $ ParseYamlFail desc
+        Partial _ -> Left UnexpectedEOF
     Right JupyterFormat -> error "Not yet implemented"
     Left ext -> Left $ UnsupportedFormat ext
