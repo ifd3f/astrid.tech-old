@@ -24,3 +24,7 @@ spec = do
     it "throws MetaParseFailure for metaless file" $ do
       getProject "resources/test/projects/metaless"
         `shouldThrow` (\case MetaParseFailure _ -> True; _ -> False)
+
+    it "throws MetaParseFailure for file with non-conformant meta" $
+      getProject "resources/test/projects/bad-meta"
+        `shouldThrow` (\case MetaParseFailure _ -> True; _ -> False)
