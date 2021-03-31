@@ -1,13 +1,13 @@
 cradle:
   cabal:
     - path: "src"
-      component: "lib:cms"
+      component: "lib:astrid-tech-cms"
 
     - path: "app/Main.hs"
-      component: "cms:exe:cms-exe"
+      component: "astrid-tech-cms:exe:astrid-tech-cms-exe"
 
-    - path: "app/Paths_cms.hs"
-      component: "cms:exe:cms-exe"
+    - path: "app/Paths_astrid_tech_cms.hs"
+      component: "astrid-tech-cms:exe:astrid-tech-cms-exe"
 
     - path: "test"
-      component: "cms:test:cms-test"
+      component: "astrid-tech-cms:test:astrid-tech-cms-test"

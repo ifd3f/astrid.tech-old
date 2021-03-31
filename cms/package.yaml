@@ -21,6 +21,7 @@ description: Please see the README on GitHub at <https://github.com/astralbiject
 
 default-extensions:
   - DeriveGeneric
+  - LambdaCase
   - OverloadedStrings
 
 dependencies:
@@ -28,7 +29,10 @@ dependencies:
   - servant
   - frontmatter
   - aeson
+  - filepath
+  - transformers
   - time
+  - directory
 
 library:
   source-dirs: src
@@ -54,3 +58,5 @@ tests:
       - -with-rtsopts=-N
     dependencies:
       - astrid-tech-cms
+      - hspec
+      - QuickCheck

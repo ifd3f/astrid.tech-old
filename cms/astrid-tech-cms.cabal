@@ -40,13 +40,17 @@ library
       src
   default-extensions:
       DeriveGeneric
+      LambdaCase
       OverloadedStrings
   build-depends:
       aeson
     , base >=4.7 && <5
+    , directory
+    , filepath
     , frontmatter
     , servant
     , time
+    , transformers
   default-language: Haskell2010
 
 executable astrid-tech-cms-exe
@@ -57,34 +61,44 @@ executable astrid-tech-cms-exe
       app
   default-extensions:
       DeriveGeneric
+      LambdaCase
       OverloadedStrings
   ghc-options: -threaded -rtsopts -with-rtsopts=-N
   build-depends:
       aeson
     , astrid-tech-cms
     , base >=4.7 && <5
+    , directory
+    , filepath
     , frontmatter
     , servant
     , time
+    , transformers
   default-language: Haskell2010
 
 test-suite astrid-tech-cms-test
   type: exitcode-stdio-1.0
   main-is: Spec.hs
   other-modules:
-      Astrid.Tech.Test.FileSource
+      Astrid.Tech.InputSchema.ProjectSpec
       Paths_astrid_tech_cms
   hs-source-dirs:
       test
   default-extensions:
       DeriveGeneric
+      LambdaCase
       OverloadedStrings
   ghc-options: -threaded -rtsopts -with-rtsopts=-N
   build-depends:
-      aeson
+      QuickCheck
+    , aeson
     , astrid-tech-cms
     , base >=4.7 && <5
+    , directory
+    , filepath
     , frontmatter
+    , hspec
     , servant
     , time
+    , transformers
   default-language: Haskell2010

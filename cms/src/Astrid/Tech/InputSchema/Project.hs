@@ -2,15 +2,29 @@ module Astrid.Tech.InputSchema.Project
   ( Project,
     ProjectStatus,
     ProjectMeta,
+    ProjectParseError (NoIndex, MultipleIndex),
+    findIndex,
   )
 where
 
-import Astrid.Tech.InputSchema.Page
-import Data.Aeson
-import Data.Time.Clock
-import GHC.Generics
+import Astrid.Tech.InputSchema.Page (Page)
+import Control.Exception (IOException, handle, throw)
+import Control.Monad.Trans.Except
+import Data.Aeson (FromJSON (parseJSON), Value (Null, String))
+import Data.Time.Clock (UTCTime)
+import GHC.Generics (Generic)
+import GHC.IO.Exception
+import System.Directory (listDirectory)
+import System.FilePath (takeBaseName)
+import System.FilePath.Posix
 
-data ProjectStatus = NoStatus | Early | WIP | Complete | Scrapped deriving (Show, Generic)
+data ProjectStatus
+  = NoStatus
+  | Early
+  | WIP
+  | Complete
+  | Scrapped
+  deriving (Show, Generic, Eq)
 
 instance FromJSON ProjectStatus where
   parseJSON value =
@@ -47,5 +61,17 @@ data Project = Project
     children :: [Page]
   }
 
--- parseProject :: FilePath -> IO Project
--- parseProject directory =
+data ProjectParseError
+  = NoIndex
+  | MultipleIndex
+  deriving (Show, Eq)
+
+findIndex :: FilePath -> IO (Either ProjectParseError FilePath)
+findIndex directory = do
+  paths <- listDirectory directory
+  return
+    ( case filter (\path -> takeBaseName path == "index") paths of
+        [index] -> Right index
+        [] -> Left NoIndex
+        _ -> Left MultipleIndex
+    )
