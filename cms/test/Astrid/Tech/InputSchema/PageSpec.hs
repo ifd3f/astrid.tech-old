@@ -41,6 +41,17 @@ expectedMarkdownContent = "\n# Title of my post\n"
 
 spec :: Spec
 spec = do
+  describe "findIndex" $ do
+    it "throws NoIndex when no index" $ do
+      findIndex "resources/test/findIndex/no" `shouldThrow` (== NoIndex)
+
+    it "throws MultipleIndex when multiple index" $ do
+      findIndex "resources/test/findIndex/many" `shouldThrow` (== MultipleIndex)
+
+    it "returns path for only index" $ do
+      x <- liftIO $ findIndex "resources/test/findIndex/one"
+      x `shouldBe` "index.md"
+
   describe "detectFormatFromExtension" $ do
     it "returns the extension for unsupported extensions" $
       detectFormatFromExtension ".exe" `shouldBe` Left ".exe"

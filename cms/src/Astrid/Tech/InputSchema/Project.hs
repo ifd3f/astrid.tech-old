@@ -3,12 +3,11 @@ module Astrid.Tech.InputSchema.Project
     ProjectStatus (..),
     ProjectMeta (..),
     ProjectParseError (..),
-    findIndex,
     getProject,
   )
 where
 
-import Astrid.Tech.InputSchema.Page (Page, PageParseError, PageParseResult, detectFormatFromExtension, parsePage)
+import Astrid.Tech.InputSchema.Page (Page, PageParseError, PageParseResult, detectFormatFromExtension, findIndex, parsePage)
 import Control.Exception (Exception, IOException, handle, throw)
 import Control.Monad.IO.Class (MonadIO (liftIO))
 import Data.Aeson (FromJSON (parseJSON), Value (Null, String))
@@ -64,23 +63,12 @@ data Project = Project
   }
 
 data ProjectParseError
-  = NoIndex
-  | MultipleIndex
-  | FileReadError
+  = FileReadError
   | UnsupportedIndexFormat
   | MetaParseFailure PageParseError
   deriving (Show, Eq)
 
 instance Exception ProjectParseError
-
-findIndex :: FilePath -> IO FilePath
-findIndex directory = do
-  paths <- listDirectory directory
-  ( case filter (\path -> takeBaseName path == "index") paths of
-      [index] -> return index
-      [] -> throw NoIndex
-      _ -> throw MultipleIndex
-    )
 
 getProject :: FilePath -> IO Project
 getProject directory = do

@@ -3,18 +3,21 @@ module Astrid.Tech.InputSchema.Page
     PageFormat (..),
     PageParseError (..),
     PageParseResult,
+    FindIndexException (..),
     detectFormatFromExtension,
     parsePage,
+    findIndex,
   )
 where
 
 import Control.Exception (Exception, throw)
 import Data.Aeson (FromJSON)
-import Data.ByteString
+import Data.ByteString (ByteString)
 import Data.Frontmatter (IResult (Done, Fail, Partial), parseYamlFrontmatter)
 import Data.Text (Text)
 import Data.Text.Encoding (decodeUtf8)
-import System.FilePath (takeExtension)
+import System.Directory (listDirectory)
+import System.FilePath (takeBaseName, takeExtension)
 
 data PageFormat = MarkdownFormat | JupyterFormat deriving (Show, Eq)
 
@@ -57,3 +60,17 @@ parsePage directory filename contents =
         Partial _ -> Left UnexpectedEOF
     Right JupyterFormat -> error "Not yet implemented"
     Left ext -> Left $ UnsupportedFormat ext
+
+data FindIndexException = NoIndex | MultipleIndex
+  deriving (Show, Eq)
+
+instance Exception FindIndexException
+
+findIndex :: FilePath -> IO FilePath
+findIndex directory = do
+  paths <- listDirectory directory
+  ( case filter (\path -> takeBaseName path == "index") paths of
+      [index] -> return index
+      [] -> throw NoIndex
+      _ -> throw MultipleIndex
+    )
