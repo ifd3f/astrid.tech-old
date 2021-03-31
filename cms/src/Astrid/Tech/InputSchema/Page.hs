@@ -1,6 +1,6 @@
 module Astrid.Tech.InputSchema.Page
   ( Page,
-    PageFormat,
+    PageFormat (MarkdownFormat, JupyterFormat),
     detectFormatFromExtension,
     parsePage,
   )
@@ -10,7 +10,7 @@ import Data.Aeson (FromJSON)
 import Data.ByteString
 import Data.Frontmatter (IResult (Done), parseYamlFrontmatter)
 
-data PageFormat = MarkdownFormat | JupyterFormat
+data PageFormat = MarkdownFormat | JupyterFormat deriving (Show, Eq)
 
 detectFormatFromExtension :: String -> Maybe PageFormat
 detectFormatFromExtension ext = case ext of
@@ -23,9 +23,10 @@ data Page = Page
     format :: PageFormat,
     directory :: String
   }
+  deriving (Show, Eq)
 
-parsePage :: FromJSON a => PageFormat -> FilePath -> FilePath -> ByteString -> Maybe (a, Page)
-parsePage format directory name contents =
+parsePage :: FromJSON a => FilePath -> FilePath -> ByteString -> Maybe (a, Page)
+parsePage directory name contents =
   case detectFormatFromExtension name of
     Just MarkdownFormat ->
       case parseYamlFrontmatter contents of

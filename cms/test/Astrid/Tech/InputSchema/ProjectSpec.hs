@@ -13,13 +13,11 @@ spec :: Spec
 spec = do
   describe "Project.findIndex" $ do
     it "returns error when no index" $ do
-      x <- liftIO $ findIndex "resources/test/findIndex/no"
-      x `shouldBe` Left NoIndex
+      findIndex "resources/test/findIndex/no" `shouldThrow` (== NoIndex)
 
     it "returns error when multiple index" $ do
-      x <- liftIO $ findIndex "resources/test/findIndex/many"
-      x `shouldBe` Left MultipleIndex
+      findIndex "resources/test/findIndex/many" `shouldThrow` (== MultipleIndex)
 
     it "returns path for only index" $ do
       x <- liftIO $ findIndex "resources/test/findIndex/one"
-      x `shouldBe` Right "index.md"
+      x `shouldBe` "index.md"

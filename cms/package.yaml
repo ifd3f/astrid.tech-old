@@ -23,6 +23,7 @@ default-extensions:
   - DeriveGeneric
   - LambdaCase
   - OverloadedStrings
+  - ScopedTypeVariables
 
 dependencies:
   - base >= 4.7 && < 5
@@ -61,3 +62,4 @@ tests:
       - astrid-tech-cms
       - hspec
       - QuickCheck
+      - raw-strings-qq

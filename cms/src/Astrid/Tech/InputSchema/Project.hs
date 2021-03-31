@@ -77,22 +77,17 @@ instance Exception ProjectParseError
 findIndex :: FilePath -> IO FilePath
 findIndex directory = do
   paths <- listDirectory directory
-  return
-    ( case filter (\path -> takeBaseName path == "index") paths of
-        [index] -> index
-        [] -> throw NoIndex
-        _ -> throw MultipleIndex
+  ( case filter (\path -> takeBaseName path == "index") paths of
+      [index] -> return index
+      [] -> throw NoIndex
+      _ -> throw MultipleIndex
     )
 
+getProject :: FilePath -> IO Project
 getProject directory = do
   indexFileName <- findIndex directory
-  format <-
-    ( case detectFormatFromExtension $ takeExtension indexFileName of
-        Just x -> return x
-        Nothing -> throw UnsupportedIndexFormat
-      )
   contents <- ByteString.readFile (directory </> indexFileName)
-  case parsePage format directory indexFileName contents of
+  case parsePage directory indexFileName contents of
     Just (meta, page) ->
       return
         Project
