@@ -7,16 +7,19 @@ module Astrid.Tech.InputSchema.Project
   )
 where
 
-import Astrid.Tech.InputSchema.Page (Page)
-import Control.Exception (IOException, handle, throw)
+import Astrid.Tech.InputSchema.Page (Page, detectFormatFromExtension, parsePage)
+import Control.Exception (Exception, IOException, handle, throw)
+import Control.Monad.IO.Class (MonadIO (liftIO))
 import Control.Monad.Trans.Except
 import Data.Aeson (FromJSON (parseJSON), Value (Null, String))
+import qualified Data.ByteString as ByteString
+import Data.Frontmatter (IResult (Done), parseYamlFrontmatter)
 import Data.Time.Clock (UTCTime)
 import GHC.Generics (Generic)
 import GHC.IO.Exception
 import System.Directory (listDirectory)
-import System.FilePath (takeBaseName)
-import System.FilePath.Posix
+import System.FilePath (takeBaseName, takeExtension, takeFileName)
+import System.FilePath.Posix ((</>))
 
 data ProjectStatus
   = NoStatus
@@ -49,7 +52,7 @@ data ProjectMeta = ProjectMeta
     thumbnail :: Maybe String,
     description :: Maybe String
   }
-  deriving (Generic)
+  deriving (Generic, Show, Eq)
 
 instance FromJSON ProjectMeta
 
@@ -64,14 +67,39 @@ data Project = Project
 data ProjectParseError
   = NoIndex
   | MultipleIndex
+  | FileReadError
+  | UnsupportedIndexFormat
+  | MetaParseFailure
   deriving (Show, Eq)
 
-findIndex :: FilePath -> IO (Either ProjectParseError FilePath)
+instance Exception ProjectParseError
+
+findIndex :: FilePath -> IO FilePath
 findIndex directory = do
   paths <- listDirectory directory
   return
     ( case filter (\path -> takeBaseName path == "index") paths of
-        [index] -> Right index
-        [] -> Left NoIndex
-        _ -> Left MultipleIndex
+        [index] -> index
+        [] -> throw NoIndex
+        _ -> throw MultipleIndex
     )
+
+getProject directory = do
+  indexFileName <- findIndex directory
+  format <-
+    ( case detectFormatFromExtension $ takeExtension indexFileName of
+        Just x -> return x
+        Nothing -> throw UnsupportedIndexFormat
+      )
+  contents <- ByteString.readFile (directory </> indexFileName)
+  case parsePage format directory indexFileName contents of
+    Just (meta, page) ->
+      return
+        Project
+          { meta = meta,
+            slug = takeFileName directory,
+            assetRoot = directory,
+            rootPage = page,
+            children = []
+          }
+    Nothing -> throw MetaParseFailure

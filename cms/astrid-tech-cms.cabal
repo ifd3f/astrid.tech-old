@@ -45,6 +45,7 @@ library
   build-depends:
       aeson
     , base >=4.7 && <5
+    , bytestring
     , directory
     , filepath
     , frontmatter
@@ -68,6 +69,7 @@ executable astrid-tech-cms-exe
       aeson
     , astrid-tech-cms
     , base >=4.7 && <5
+    , bytestring
     , directory
     , filepath
     , frontmatter
@@ -94,6 +96,7 @@ test-suite astrid-tech-cms-test
     , aeson
     , astrid-tech-cms
     , base >=4.7 && <5
+    , bytestring
     , directory
     , filepath
     , frontmatter
