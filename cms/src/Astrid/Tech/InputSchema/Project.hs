@@ -46,7 +46,7 @@ data ProjectMeta = ProjectMeta
     startDate :: Day,
     endDate :: Maybe Day,
     url :: Maybe String,
-    source :: Maybe [String],
+    source :: [String],
     tags :: [String],
     thumbnail :: Maybe String,
     description :: Maybe String

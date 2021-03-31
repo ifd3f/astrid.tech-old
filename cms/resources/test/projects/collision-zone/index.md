@@ -6,7 +6,7 @@ status: complete
 featured: true
 description: IO game where you crash trucks into each other
 startDate: 2019-06-01
-endDate: 2019-08-30
+endDate: null
 tags:
   - javascript
   - typescript
