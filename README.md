@@ -8,3 +8,4 @@ This website contains my blog, resume, and project portfolio. See the site live 
 - Submit a [new issue](https://github.com/plenglin/astrid.tech/issues/new)
 - See the backend's Docker image (`astridyu/astrid_tech_api`) on [Docker Hub](https://hub.docker.com/repository/docker/astridyu/astrid_tech_api)
 - See the link shortener's Docker image (`astridyu/aay_tw_shortener`) on [Docker Hub](https://hub.docker.com/repository/docker/astridyu/aay_tw_shortener)
+- The [GitHub Pages repo](https://github.com/astralbijection/astralbijection.github.io) for the static builds
