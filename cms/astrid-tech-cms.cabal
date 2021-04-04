@@ -95,6 +95,7 @@ test-suite astrid-tech-cms-test
   type: exitcode-stdio-1.0
   main-is: Spec.hs
   other-modules:
+      Astrid.Tech.InputSchema.BlogSpec
       Astrid.Tech.InputSchema.PageSpec
       Astrid.Tech.InputSchema.ProjectSpec
       Paths_astrid_tech_cms

@@ -70,10 +70,8 @@ data Project = Project
     children :: [Page]
   }
 
-data ProjectParseError
-  = FileReadError
-  | UnsupportedIndexFormat
-  | MetaParseFailure PageParseError
+newtype ProjectParseError
+  = MetaParseFailure PageParseError
   deriving (Show, Eq)
 
 instance Exception ProjectParseError

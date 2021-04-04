@@ -12,7 +12,7 @@ data DatedSlug = DatedSlug
   { year :: Integer,
     month :: Int,
     day :: Int,
-    ord :: Int,
+    ordinal :: Int,
     shortName :: String
   }
   deriving (Eq)
