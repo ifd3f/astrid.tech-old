@@ -19,9 +19,9 @@ data InputContent = InputContent
   }
 
 scanContentDir contentRootDir =
-  let getProjects = Project.scanProjectDir $ contentRootDir </> "projects"
+  let readProjects = Project.readProjectDir $ contentRootDir </> "projects"
    in do
-        projects <- getProjects
+        projects <- readProjects
         return
           InputContent
             { blogs = [],

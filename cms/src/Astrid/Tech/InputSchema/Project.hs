@@ -5,8 +5,8 @@ module Astrid.Tech.InputSchema.Project
     ProjectParseError (..),
     ProjectDirectoryScanException (..),
     ProjectSlug,
-    getProject,
-    scanProjectDir,
+    readProject,
+    readProjectDir,
   )
 where
 
@@ -76,8 +76,8 @@ newtype ProjectParseError
 
 instance Exception ProjectParseError
 
-getProject :: FilePath -> IO Project
-getProject directory = do
+readProject :: FilePath -> IO Project
+readProject directory = do
   (indexPath, name) <- findIndex directory
   contents <- ByteString.readFile indexPath
   case parsePage directory indexPath contents of
@@ -98,10 +98,10 @@ newtype ProjectDirectoryScanException
 
 instance Exception ProjectDirectoryScanException
 
-scanProjectDir :: FilePath -> IO (Map ProjectSlug Project)
-scanProjectDir projectsRoot = do
+readProjectDir :: FilePath -> IO (Map ProjectSlug Project)
+readProjectDir projectsRoot = do
   children <- listDirectory projectsRoot
-  let tasks = map (getProject . (projectsRoot </>)) children
+  let tasks = map (readProject . (projectsRoot </>)) children
   projects <- parallelE tasks
 
   results <- case partitionEithers projects of

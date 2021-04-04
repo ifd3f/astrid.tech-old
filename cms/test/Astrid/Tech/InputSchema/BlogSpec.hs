@@ -12,8 +12,8 @@ import Test.QuickCheck
 
 spec :: Spec
 spec = do
-  describe "getProject" $ do
-    it "returns blog for valid blog" $ do
+  describe "readBlog" $ do
+    it "returns valid blog" $ do
       blog <- liftIO $ readBlogPost 32 "resources/test/blog-posts/site-release"
 
       slug blog

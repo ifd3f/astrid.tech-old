@@ -11,9 +11,9 @@ import Test.QuickCheck
 
 spec :: Spec
 spec = do
-  describe "getProject" $ do
+  describe "readProject" $ do
     it "returns project for valid project" $ do
-      project <- liftIO $ getProject "resources/test/projects/collision-zone"
+      project <- liftIO $ readProject "resources/test/projects/collision-zone"
       slug project `shouldBe` "collision-zone"
 
       let pMeta = meta project
@@ -22,9 +22,9 @@ spec = do
       status pMeta `shouldBe` Complete
 
     it "throws MetaParseFailure for metaless file" $ do
-      getProject "resources/test/projects/metaless"
+      readProject "resources/test/projects/metaless"
         `shouldThrow` (\case MetaParseFailure _ -> True)
 
     it "throws MetaParseFailure for file with non-conformant meta" $
-      getProject "resources/test/projects/bad-meta"
+      readProject "resources/test/projects/bad-meta"
         `shouldThrow` (\case MetaParseFailure _ -> True)
