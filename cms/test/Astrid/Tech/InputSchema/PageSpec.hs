@@ -53,6 +53,11 @@ spec = do
       path `shouldBe` "resources/test/findIndex/one/index.md"
       name `shouldBe` "one"
 
+    it "returns path for bare file" $ do
+      (path, name) <- liftIO $ findIndex "resources/test/findIndex/this-file.md"
+      path `shouldBe` "resources/test/findIndex/this-file.md"
+      name `shouldBe` "this-file"
+
   describe "detectFormatFromExtension" $ do
     it "returns the extension for unsupported extensions" $
       detectFormatFromExtension ".exe" `shouldBe` Left ".exe"
