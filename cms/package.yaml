@@ -27,8 +27,10 @@ default-extensions:
 
 dependencies:
   - base >= 4.7 && < 5
+  - newbase60 >= 0.1 && < 0.2
   - servant
   - frontmatter
+  - system-fileio
   - aeson
   - filepath
   - parallel-io

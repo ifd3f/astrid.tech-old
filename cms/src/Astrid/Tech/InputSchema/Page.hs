@@ -16,8 +16,8 @@ import Data.ByteString (ByteString)
 import Data.Frontmatter (IResult (Done, Fail, Partial), parseYamlFrontmatter)
 import Data.Text (Text)
 import Data.Text.Encoding (decodeUtf8)
-import System.Directory (listDirectory)
-import System.FilePath (takeBaseName, takeExtension)
+import System.Directory (doesDirectoryExist, doesFileExist, listDirectory)
+import System.FilePath (takeBaseName, takeExtension, takeFileName, (</>))
 
 data PageFormat = MarkdownFormat | JupyterFormat deriving (Show, Eq)
 
@@ -61,16 +61,30 @@ parsePage directory filename contents =
     Right JupyterFormat -> error "Not yet implemented"
     Left ext -> Left $ UnsupportedFormat ext
 
-data FindIndexException = NoIndex | MultipleIndex
+data FindIndexException = NoIndex | MultipleIndex | NotFileOrDirectory
   deriving (Show, Eq)
 
 instance Exception FindIndexException
 
-findIndex :: FilePath -> IO FilePath
-findIndex directory = do
-  paths <- listDirectory directory
-  ( case filter (\path -> takeBaseName path == "index") paths of
-      [index] -> return index
-      [] -> throw NoIndex
-      _ -> throw MultipleIndex
-    )
+-- | Finds the unique file named `index`, ignoring extensions. Additionally,
+-- returns the name, or the directory's name. Throws errors if
+-- there is no index or more than one index.
+findIndex :: FilePath -> IO (FilePath, String)
+findIndex path = do
+  isDirectory <- doesDirectoryExist path
+  isFile <- doesFileExist path
+  let result
+        | isDirectory = do
+          index <- findFromDirectory path
+          return (index, takeFileName path)
+        | isFile = return (path, takeBaseName $ takeFileName path)
+        | otherwise = throw NotFileOrDirectory
+  result
+  where
+    findFromDirectory path = do
+      paths <- listDirectory path
+      ( case filter (\path -> takeBaseName path == "index") paths of
+          [index] -> return $ path </> index
+          [] -> throw NoIndex
+          _ -> throw MultipleIndex
+        )

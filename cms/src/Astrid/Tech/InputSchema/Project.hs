@@ -11,6 +11,7 @@ module Astrid.Tech.InputSchema.Project
 where
 
 import Astrid.Tech.InputSchema.Page (Page, PageParseError, PageParseResult, detectFormatFromExtension, findIndex, parsePage)
+import Astrid.Tech.Slug (ProjectSlug)
 import Control.Concurrent.ParallelIO (parallelE, parallel_)
 import Control.Exception (Exception, IOException, handle, throw)
 import Control.Exception.Base (SomeException (SomeException))
@@ -79,14 +80,14 @@ instance Exception ProjectParseError
 
 getProject :: FilePath -> IO Project
 getProject directory = do
-  indexFileName <- findIndex directory
-  contents <- ByteString.readFile (directory </> indexFileName)
-  case parsePage directory indexFileName contents of
+  (indexPath, name) <- findIndex directory
+  contents <- ByteString.readFile indexPath
+  case parsePage directory indexPath contents of
     Right (meta, page) ->
       return
         Project
           { meta = meta,
-            slug = takeFileName directory,
+            slug = name,
             assetRoot = directory,
             rootPage = page,
             children = []

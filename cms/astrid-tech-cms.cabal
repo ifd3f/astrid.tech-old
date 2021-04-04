@@ -33,6 +33,7 @@ library
       Astrid.Tech.InputSchema.Page
       Astrid.Tech.InputSchema.Project
       Astrid.Tech.InputSchema.Tag
+      Astrid.Tech.Slug
       Lib
   other-modules:
       Paths_astrid_tech_cms
@@ -51,8 +52,10 @@ library
     , directory
     , filepath
     , frontmatter
+    , newbase60 ==0.1.*
     , parallel-io
     , servant
+    , system-fileio
     , text
     , time
     , transformers
@@ -79,8 +82,10 @@ executable astrid-tech-cms-exe
     , directory
     , filepath
     , frontmatter
+    , newbase60 ==0.1.*
     , parallel-io
     , servant
+    , system-fileio
     , text
     , time
     , transformers
@@ -112,9 +117,11 @@ test-suite astrid-tech-cms-test
     , filepath
     , frontmatter
     , hspec
+    , newbase60 ==0.1.*
     , parallel-io
     , raw-strings-qq
     , servant
+    , system-fileio
     , text
     , time
     , transformers

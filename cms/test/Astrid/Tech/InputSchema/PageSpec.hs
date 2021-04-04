@@ -49,8 +49,9 @@ spec = do
       findIndex "resources/test/findIndex/many" `shouldThrow` (== MultipleIndex)
 
     it "returns path for only index" $ do
-      x <- liftIO $ findIndex "resources/test/findIndex/one"
-      x `shouldBe` "index.md"
+      (path, name) <- liftIO $ findIndex "resources/test/findIndex/one"
+      path `shouldBe` "resources/test/findIndex/one/index.md"
+      name `shouldBe` "one"
 
   describe "detectFormatFromExtension" $ do
     it "returns the extension for unsupported extensions" $

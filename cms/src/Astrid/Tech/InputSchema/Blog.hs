@@ -27,5 +27,3 @@ data BlogPost = BlogPost
     meta :: BlogPostMeta,
     page :: Page
   }
-
--- parseBlogPost :: FilePath -> IO BlogPost
