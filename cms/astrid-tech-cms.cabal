@@ -50,6 +50,7 @@ library
     , bytestring
     , containers
     , directory
+    , directory-tree
     , filepath
     , frontmatter
     , newbase60 ==0.1.*
@@ -80,6 +81,7 @@ executable astrid-tech-cms-exe
     , bytestring
     , containers
     , directory
+    , directory-tree
     , filepath
     , frontmatter
     , newbase60 ==0.1.*
@@ -115,6 +117,7 @@ test-suite astrid-tech-cms-test
     , bytestring
     , containers
     , directory
+    , directory-tree
     , filepath
     , frontmatter
     , hspec

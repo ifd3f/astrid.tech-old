@@ -40,6 +40,7 @@ dependencies:
   - bytestring
   - text
   - directory
+  - directory-tree
 
 library:
   source-dirs: src
