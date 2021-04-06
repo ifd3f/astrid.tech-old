@@ -15,7 +15,7 @@ import qualified Data.ByteString as ByteString
 import Data.Maybe (catMaybes)
 import Data.Time (Day, UTCTime (utctDay), ZonedTime (zonedTimeToLocalTime), toGregorian, zonedTimeToUTC)
 import GHC.Generics (Generic)
-import System.Directory.Tree
+import System.Directory.Tree (DirTree (Dir), FileName)
 import qualified System.Directory.Tree as DT
 import System.FilePath ((</>))
 import Text.Read (readMaybe)
@@ -71,47 +71,50 @@ readBlogPost ordinal tree = case P.findAndParseIndex tree of
 
 data ScanPostsException
   = MultiplePosts [FilePath]
-  | EmptyDay
-  deriving (Show)
-
-instance Exception ScanPostsException
+  | BadYear String
+  | BadMonth String
+  | BadDay String
+  | BadPost BlogParseException
+  deriving (Show, Eq)
 
 newtype InvalidPath = InvalidPath String
 
-parseTree :: String -> DirTree ByteString.ByteString -> [Either FilePath BlogPost]
+type BlogTreeResult = [Either ScanPostsException BlogPost]
+
+parseTree :: String -> DirTree ByteString.ByteString -> BlogTreeResult
 parseTree anchor tree =
   let yearDir = \case
         Dir yearDirName contents ->
           case readMaybe yearDirName :: Maybe Integer of
             Just y -> concatMap (monthDir y) contents
-        other -> [Left $ name other]
+        other -> [Left $ BadYear $ DT.name other]
 
+      monthDir :: Integer -> DirTree ByteString.ByteString -> BlogTreeResult
       monthDir year = \case
         Dir monthDirName contents ->
           if length monthDirName /= 2
-            then [Left $ show year </> monthDirName]
+            then [Left $ BadMonth monthDirName]
             else case readMaybe monthDirName :: Maybe Int of
               Just m -> concatMap (dayDir year m) contents
 
-      dayDir :: Integer -> Int -> DirTree ByteString.ByteString
+      readBlogE post = case readBlogPost 0 post of
+        Left err -> Left $ BadPost err
+        Right post -> Right post
+
+      dayDir :: Integer -> Int -> DirTree ByteString.ByteString -> BlogTreeResult
       dayDir year month = \case
         Dir dayDirName contents -> case readMaybe dayDirName :: Maybe Int of
           Just d -> case contents of
             [] -> []
-            [single] ->
-              let dir = show year </> show month </> show d
-                  singleName = name single
-                  path = dir </> singleName
-               in [Right $ parseBlogPost dir single 0 singleName $ contents single]
-            ordinals -> concatMap (ordinalDir year month d) contents
+            [single] -> [readBlogE single] -- If there is a single child, then this is the only post today
+            ordinals ->
+              -- If there is more than one child, then attempt to parse with ordinals
+              concatMap (ordinalDir year month d) contents
 
       ordinalDir year month day = \case
         Dir dayDirName contents -> case readMaybe dayDirName :: Maybe Int of
           Just d -> case contents of
             [] -> []
-            [single] ->
-              let dir = show year </> show month </> show d
-                  path = dir </> name single
-               in [Right $ parseBlogPost path]
+            [single] -> [readBlogE single]
             ordinals -> concatMap (ordinalDir year month d) contents
-   in year $ contents tree
+   in concatMap yearDir (DT.contents tree)
