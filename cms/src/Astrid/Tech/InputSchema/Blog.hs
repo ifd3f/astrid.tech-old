@@ -2,6 +2,7 @@ module Astrid.Tech.InputSchema.Blog
   ( BlogPost (..),
     BlogPostMeta (..),
     readBlogPost,
+    readBlogDir,
   )
 where
 
@@ -81,8 +82,8 @@ newtype InvalidPath = InvalidPath String
 
 type BlogTreeResult = [Either ScanPostsException BlogPost]
 
-parseTree :: String -> DirTree ByteString.ByteString -> BlogTreeResult
-parseTree anchor tree =
+readBlogDir :: DirTree ByteString.ByteString -> BlogTreeResult
+readBlogDir tree =
   let yearDir = \case
         Dir yearDirName contents ->
           case readMaybe yearDirName :: Maybe Integer of
