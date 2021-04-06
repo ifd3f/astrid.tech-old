@@ -4,6 +4,8 @@ module Astrid.Tech.InputSchema.Page
     PageFormat (..),
     PageParseException (..),
     FindIndexException (..),
+    FindAndParseIndexException (..),
+    findAndParseIndex,
     detectFormatFromExtension,
     parseRawPage,
     findIndex,
@@ -82,6 +84,7 @@ data FindIndexException = NoIndex | MultipleIndex | TreeError FileName IOExcepti
 -- only child with basename index represents this path.
 findIndex :: DirTree ByteString -> Either FindIndexException RawPage
 findIndex path = case path of
+  Failed name err -> Left $ TreeError name err
   File fileName content ->
     -- If it is a file, return that file
     Right $
@@ -105,4 +108,15 @@ findIndex path = case path of
               contents = content
             }
       _ -> Left MultipleIndex -- If there are many, error
-  Failed name err -> Left $ TreeError name err
+
+data FindAndParseIndexException
+  = MissingIndex FindIndexException
+  | ParseIndex PageParseException
+  deriving (Show, Eq)
+
+findAndParseIndex :: FromJSON a => DirTree ByteString -> Either FindAndParseIndexException (RawPage, a, Page)
+findAndParseIndex tree = case findIndex tree of
+  Left err -> Left $ MissingIndex err
+  Right rawPage -> case parseRawPage rawPage of
+    Left err -> Left $ ParseIndex err
+    Right (meta, page) -> Right (rawPage, meta, page)

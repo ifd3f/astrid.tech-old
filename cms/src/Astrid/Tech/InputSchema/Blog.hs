@@ -1,12 +1,11 @@
 module Astrid.Tech.InputSchema.Blog
   ( BlogPost (..),
     BlogPostMeta (..),
-    BlogPostReadException (..),
     readBlogPost,
   )
 where
 
-import Astrid.Tech.InputSchema.Page (Page, PageParseException, findIndex, parseRawPage)
+import qualified Astrid.Tech.InputSchema.Page as P
 import Astrid.Tech.Slug (DatedSlug (DatedSlug, day, month, ordinal, shortName, year))
 import Control.Concurrent.ParallelIO (parallel)
 import Control.Exception (SomeException, throw)
@@ -17,6 +16,7 @@ import Data.Maybe (catMaybes)
 import Data.Time (Day, UTCTime (utctDay), ZonedTime (zonedTimeToLocalTime), toGregorian, zonedTimeToUTC)
 import GHC.Generics (Generic)
 import System.Directory.Tree
+import qualified System.Directory.Tree as DT
 import System.FilePath ((</>))
 import Text.Read (readMaybe)
 
@@ -47,33 +47,27 @@ generateSlug ordinal shortName meta =
 data BlogPost = BlogPost
   { slug :: DatedSlug,
     meta :: BlogPostMeta,
-    page :: Page
+    page :: P.Page
   }
 
-data BlogPostReadException
-  = BlogPostMetaParseException PageParseException
-  | InconsistentDayException ((Integer, Int, Int), Day)
-  deriving (Show)
+data BlogParseException
+  = UnexpectedFileStructure FileName P.FindAndParseIndexException
+  | InconsistentDayException FileName ((Integer, Int, Int), Day)
+  deriving (Show, Eq)
 
-instance Exception BlogPostReadException
-
-parseBlogPost :: Monad m => FilePath -> FilePath -> Int -> [Char] -> ByteString.ByteString -> m BlogPost
-parseBlogPost directory file ordinal name contents = case parseRawPage directory file contents of
-  Right (meta, page) ->
-    return $
-      let slug = generateSlug ordinal name meta
+readBlogPost :: Int -> DirTree ByteString.ByteString -> Either BlogParseException BlogPost
+readBlogPost ordinal tree = case P.findAndParseIndex tree of
+  Left err -> Left $ UnexpectedFileStructure fileName err
+  Right (rawPage, meta, page) ->
+    Right $
+      let slug = generateSlug ordinal (P.name rawPage) meta
        in BlogPost
             { meta = meta,
               page = page,
               slug = slug
             }
-  Left err -> throw $ BlogPostMetaParseException err
-
-readBlogPost :: Int -> FilePath -> IO BlogPost
-readBlogPost ordinal path = do
-  (indexPath, name) <- findIndex path
-  contents <- ByteString.readFile indexPath
-  parseBlogPost path indexPath ordinal name contents
+  where
+    fileName = DT.name tree
 
 data ScanPostsException
   = MultiplePosts [FilePath]

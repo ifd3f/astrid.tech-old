@@ -10,7 +10,6 @@ module Astrid.Tech.InputSchema.Project
   )
 where
 
-import Astrid.Tech.InputSchema.Page (FindIndexException, Page, PageParseException, RawPage, detectFormatFromExtension, findIndex, parseRawPage)
 import qualified Astrid.Tech.InputSchema.Page as P
 import Astrid.Tech.Slug (ProjectSlug)
 import Control.Concurrent.ParallelIO (parallelE, parallel_)
@@ -69,29 +68,26 @@ data Project = Project
   { meta :: ProjectMeta,
     shortName :: ProjectSlug,
     assetRoot :: FilePath,
-    rootPage :: Page,
-    children :: [Page]
+    rootPage :: P.Page,
+    children :: [P.Page]
   }
 
 data ProjectParseException
-  = PageParseFailure FileName PageParseException
-  | NoProjectIndex FileName FindIndexException
+  = UnexpectedFileStructure FileName P.FindAndParseIndexException
   deriving (Show, Eq)
 
 readProject :: DirTree ByteString.ByteString -> Either ProjectParseException Project
-readProject tree = case findIndex tree of
-  Left err -> Left $ NoProjectIndex (DT.name tree) err
-  Right rawPage -> case parseRawPage rawPage of
-    Left err -> Left $ PageParseFailure (DT.name tree) err
-    Right (meta, page) ->
-      Right $
-        Project
-          { meta = meta,
-            shortName = P.name rawPage,
-            assetRoot = P.assetRoot rawPage,
-            rootPage = page,
-            children = []
-          }
+readProject tree = case P.findAndParseIndex tree of
+  Left err -> Left $ UnexpectedFileStructure (DT.name tree) err
+  Right (rawPage, meta, page) ->
+    Right $
+      Project
+        { meta = meta,
+          shortName = P.name rawPage,
+          assetRoot = P.assetRoot rawPage,
+          rootPage = page,
+          children = []
+        }
 
 newtype ProjectDirectoryScanException
   = FailedProjects [ProjectParseException]
