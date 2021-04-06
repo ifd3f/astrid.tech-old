@@ -6,17 +6,19 @@ module Astrid.Tech.InputSchema.Blog
   )
 where
 
-import Astrid.Tech.InputSchema.Page (Page, PageParseError, findIndex, parsePage)
+import Astrid.Tech.InputSchema.Page (Page, PageParseException, findIndex, parseRawPage)
 import Astrid.Tech.Slug (DatedSlug (DatedSlug, day, month, ordinal, shortName, year))
 import Control.Concurrent.ParallelIO (parallel)
 import Control.Exception (SomeException, throw)
 import Control.Exception.Base (Exception)
 import Data.Aeson (FromJSON)
 import qualified Data.ByteString as ByteString
+import Data.Maybe (catMaybes)
 import Data.Time (Day, UTCTime (utctDay), ZonedTime (zonedTimeToLocalTime), toGregorian, zonedTimeToUTC)
 import GHC.Generics (Generic)
-import System.Directory (listDirectory)
 import System.Directory.Tree
+import System.FilePath ((</>))
+import Text.Read (readMaybe)
 
 data BlogPostMeta = BlogPostMeta
   { title :: String,
@@ -49,14 +51,14 @@ data BlogPost = BlogPost
   }
 
 data BlogPostReadException
-  = BlogPostMetaParseException PageParseError
+  = BlogPostMetaParseException PageParseException
   | InconsistentDayException ((Integer, Int, Int), Day)
   deriving (Show)
 
 instance Exception BlogPostReadException
 
 parseBlogPost :: Monad m => FilePath -> FilePath -> Int -> [Char] -> ByteString.ByteString -> m BlogPost
-parseBlogPost directory file ordinal name contents = case parsePage directory file contents of
+parseBlogPost directory file ordinal name contents = case parseRawPage directory file contents of
   Right (meta, page) ->
     return $
       let slug = generateSlug ordinal name meta
@@ -79,3 +81,43 @@ data ScanPostsException
   deriving (Show)
 
 instance Exception ScanPostsException
+
+newtype InvalidPath = InvalidPath String
+
+parseTree :: String -> DirTree ByteString.ByteString -> [Either FilePath BlogPost]
+parseTree anchor tree =
+  let yearDir = \case
+        Dir yearDirName contents ->
+          case readMaybe yearDirName :: Maybe Integer of
+            Just y -> concatMap (monthDir y) contents
+        other -> [Left $ name other]
+
+      monthDir year = \case
+        Dir monthDirName contents ->
+          if length monthDirName /= 2
+            then [Left $ show year </> monthDirName]
+            else case readMaybe monthDirName :: Maybe Int of
+              Just m -> concatMap (dayDir year m) contents
+
+      dayDir :: Integer -> Int -> DirTree ByteString.ByteString
+      dayDir year month = \case
+        Dir dayDirName contents -> case readMaybe dayDirName :: Maybe Int of
+          Just d -> case contents of
+            [] -> []
+            [single] ->
+              let dir = show year </> show month </> show d
+                  singleName = name single
+                  path = dir </> singleName
+               in [Right $ parseBlogPost dir single 0 singleName $ contents single]
+            ordinals -> concatMap (ordinalDir year month d) contents
+
+      ordinalDir year month day = \case
+        Dir dayDirName contents -> case readMaybe dayDirName :: Maybe Int of
+          Just d -> case contents of
+            [] -> []
+            [single] ->
+              let dir = show year </> show month </> show d
+                  path = dir </> name single
+               in [Right $ parseBlogPost path]
+            ordinals -> concatMap (ordinalDir year month d) contents
+   in year $ contents tree

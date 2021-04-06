@@ -2,7 +2,7 @@ module Astrid.Tech.InputSchema.Project
   ( Project (..),
     ProjectStatus (..),
     ProjectMeta (..),
-    ProjectParseError (..),
+    ProjectParseException (..),
     ProjectDirectoryScanException (..),
     ProjectSlug,
     readProject,
@@ -10,7 +10,8 @@ module Astrid.Tech.InputSchema.Project
   )
 where
 
-import Astrid.Tech.InputSchema.Page (Page, PageParseError, PageParseResult, detectFormatFromExtension, findIndex, parsePage)
+import Astrid.Tech.InputSchema.Page (FindIndexException, Page, PageParseException, RawPage, detectFormatFromExtension, findIndex, parseRawPage)
+import qualified Astrid.Tech.InputSchema.Page as P
 import Astrid.Tech.Slug (ProjectSlug)
 import Control.Concurrent.ParallelIO (parallelE, parallel_)
 import Control.Exception (Exception, IOException, handle, throw)
@@ -25,6 +26,8 @@ import qualified Data.Map as Map
 import Data.Time (Day)
 import GHC.Generics (Generic)
 import System.Directory (listDirectory)
+import System.Directory.Tree (DirTree (Dir), FileName)
+import qualified System.Directory.Tree as DT
 import System.FilePath (takeBaseName, takeExtension, takeFileName, (</>))
 
 data ProjectStatus
@@ -64,49 +67,40 @@ instance FromJSON ProjectMeta
 
 data Project = Project
   { meta :: ProjectMeta,
-    slug :: ProjectSlug,
+    shortName :: ProjectSlug,
     assetRoot :: FilePath,
     rootPage :: Page,
     children :: [Page]
   }
 
-newtype ProjectParseError
-  = MetaParseFailure PageParseError
+data ProjectParseException
+  = PageParseFailure FileName PageParseException
+  | NoProjectIndex FileName FindIndexException
   deriving (Show, Eq)
 
-instance Exception ProjectParseError
-
-readProject :: FilePath -> IO Project
-readProject directory = do
-  (indexPath, name) <- findIndex directory
-  contents <- ByteString.readFile indexPath
-  case parsePage directory indexPath contents of
+readProject :: DirTree ByteString.ByteString -> Either ProjectParseException Project
+readProject tree = case findIndex tree of
+  Left err -> Left $ NoProjectIndex (DT.name tree) err
+  Right rawPage -> case parseRawPage rawPage of
+    Left err -> Left $ PageParseFailure (DT.name tree) err
     Right (meta, page) ->
-      return
+      Right $
         Project
           { meta = meta,
-            slug = name,
-            assetRoot = directory,
+            shortName = P.name rawPage,
+            assetRoot = P.assetRoot rawPage,
             rootPage = page,
             children = []
           }
-    Left err -> throw $ MetaParseFailure err
 
 newtype ProjectDirectoryScanException
-  = FailedProjects [SomeException]
+  = FailedProjects [ProjectParseException]
   deriving (Show)
 
-instance Exception ProjectDirectoryScanException
-
-readProjectDir :: FilePath -> IO (Map ProjectSlug Project)
-readProjectDir projectsRoot = do
-  children <- listDirectory projectsRoot
-  let tasks = map (readProject . (projectsRoot </>)) children
-  projects <- parallelE tasks
-
-  results <- case partitionEithers projects of
-    ([], success) -> return success
-    (failed, _) -> throw $ FailedProjects failed
-
-  let projectsMap = Map.fromList (map (\project -> (slug project, project)) results)
-  return projectsMap
+readProjectDir :: DirTree ByteString.ByteString -> Either ProjectDirectoryScanException (Map ProjectSlug Project)
+readProjectDir projectsRoot = case projectsRoot of
+  Dir name children ->
+    let projects = map readProject children
+     in case partitionEithers projects of
+          ([], successful) -> Right $ Map.fromList (map (\project -> (shortName project, project)) successful)
+          (failed, _) -> Left $ FailedProjects failed
