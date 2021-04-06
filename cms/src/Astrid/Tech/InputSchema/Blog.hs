@@ -8,17 +8,21 @@ where
 
 import qualified Astrid.Tech.InputSchema.Page as P
 import Astrid.Tech.Slug (DatedSlug (DatedSlug, day, month, ordinal, shortName, year))
-import Control.Concurrent.ParallelIO (parallel)
-import Control.Exception (SomeException, throw)
-import Control.Exception.Base (Exception)
 import Data.Aeson (FromJSON)
 import qualified Data.ByteString as ByteString
-import Data.Maybe (catMaybes)
-import Data.Time (Day, UTCTime (utctDay), ZonedTime (zonedTimeToLocalTime), toGregorian, zonedTimeToUTC)
+import Data.Either.Combinators
+import Data.Either.Validation (Validation (Failure, Success))
+import Data.Functor (($>))
+import Data.Time
+  ( Day,
+    UTCTime (utctDay),
+    ZonedTime,
+    toGregorian,
+    zonedTimeToUTC,
+  )
 import GHC.Generics (Generic)
-import System.Directory.Tree (DirTree (Dir), FileName)
+import System.Directory.Tree (AnchoredDirTree, DirTree (Dir), FileName)
 import qualified System.Directory.Tree as DT
-import System.FilePath ((</>))
 import Text.Read (readMaybe)
 
 data BlogPostMeta = BlogPostMeta
@@ -33,16 +37,15 @@ data BlogPostMeta = BlogPostMeta
 instance FromJSON BlogPostMeta
 
 generateSlug :: Int -> String -> BlogPostMeta -> DatedSlug
-generateSlug ordinal shortName meta =
-  let utcTime = zonedTimeToUTC $ date meta
-      day = utctDay utcTime
-      (y, m, d) = toGregorian day
+generateSlug withOrdinal withShortName withMeta =
+  let utcTime = zonedTimeToUTC $ date withMeta
+      (y, m, d) = toGregorian $ utctDay utcTime
    in DatedSlug
         { year = y,
           month = m,
           day = d,
-          ordinal = ordinal,
-          shortName = shortName
+          ordinal = withOrdinal,
+          shortName = withShortName
         }
 
 data BlogPost = BlogPost
@@ -52,70 +55,80 @@ data BlogPost = BlogPost
   }
 
 data BlogParseException
-  = UnexpectedFileStructure FileName P.FindAndParseIndexException
+  = UnexpectedFileStructure FileName P.PageException
   | InconsistentDayException FileName ((Integer, Int, Int), Day)
   deriving (Show, Eq)
 
 readBlogPost :: Int -> DirTree ByteString.ByteString -> Either BlogParseException BlogPost
-readBlogPost ordinal tree = case P.findAndParseIndex tree of
-  Left err -> Left $ UnexpectedFileStructure fileName err
-  Right (rawPage, meta, page) ->
-    Right $
-      let slug = generateSlug ordinal (P.name rawPage) meta
-       in BlogPost
-            { meta = meta,
-              page = page,
-              slug = slug
+readBlogPost withOrdinal tree =
+  mapLeft
+    (UnexpectedFileStructure fileName)
+    ( do
+        (rawPage, parsedMeta, parsedPage) <- P.findAndParseIndex tree
+        let newSlug = generateSlug withOrdinal (P.name rawPage) parsedMeta
+        Right $
+          BlogPost
+            { meta = parsedMeta,
+              page = parsedPage,
+              slug = newSlug
             }
+    )
   where
     fileName = DT.name tree
 
 data ScanPostsException
   = MultiplePosts [FilePath]
-  | BadYear String
-  | BadMonth String
-  | BadDay String
+  | BadDir FilePath
   | BadPost BlogParseException
   deriving (Show, Eq)
 
-newtype InvalidPath = InvalidPath String
-
-type BlogTreeResult = [Either ScanPostsException BlogPost]
-
-readBlogDir :: DirTree ByteString.ByteString -> BlogTreeResult
+readBlogDir :: DirTree ByteString.ByteString -> [Either ScanPostsException BlogPost]
 readBlogDir tree =
-  let yearDir = \case
-        Dir yearDirName contents ->
-          case readMaybe yearDirName :: Maybe Integer of
-            Just y -> concatMap (monthDir y) contents
-        other -> [Left $ BadYear $ DT.name other]
+  let validateIsDir (Dir name contents) = Right (name, contents)
+      validateIsDir node = Left $ BadDir $ DT.name node
 
-      monthDir :: Integer -> DirTree ByteString.ByteString -> BlogTreeResult
-      monthDir year = \case
-        Dir monthDirName contents ->
-          if length monthDirName /= 2
-            then [Left $ BadMonth monthDirName]
-            else case readMaybe monthDirName :: Maybe Int of
-              Just m -> concatMap (dayDir year m) contents
+      validateIsType name =
+        case readMaybe name of
+          Just x -> Right x
+          Nothing -> Left $ BadDir name
 
-      readBlogE post = case readBlogPost 0 post of
-        Left err -> Left $ BadPost err
-        Right post -> Right post
+      validateIsLength expectedLength name =
+        if length name == expectedLength
+          then Right ()
+          else Left $ BadDir name
 
-      dayDir :: Integer -> Int -> DirTree ByteString.ByteString -> BlogTreeResult
-      dayDir year month = \case
-        Dir dayDirName contents -> case readMaybe dayDirName :: Maybe Int of
-          Just d -> case contents of
-            [] -> []
-            [single] -> [readBlogE single] -- If there is a single child, then this is the only post today
-            ordinals ->
-              -- If there is more than one child, then attempt to parse with ordinals
-              concatMap (ordinalDir year month d) contents
+      liftErrorToList (Left x) = [Left x]
+      liftErrorToList (Right xs) = xs
 
-      ordinalDir year month day = \case
-        Dir dayDirName contents -> case readMaybe dayDirName :: Maybe Int of
-          Just d -> case contents of
-            [] -> []
-            [single] -> [readBlogE single]
-            ordinals -> concatMap (ordinalDir year month d) contents
-   in concatMap yearDir (DT.contents tree)
+      validateYear yDir = liftErrorToList $ do
+        (name, contents) <- validateIsDir yDir
+        _ :: Integer <- validateIsType name
+        return $ concatMap validateMonth contents
+
+      validateMonth mDir = liftErrorToList $ do
+        (name, contents) <- validateIsDir mDir
+        _ :: Int <- validateIsType name
+        _ <- validateIsLength 2 name
+        return $ concatMap validateDay contents
+
+      validateDay dDir = liftErrorToList $ do
+        (name, contents) <- validateIsDir dDir
+        _ :: Integer <- validateIsType name
+        _ <- validateIsLength 2 name
+        case contents of
+          [] -> Left $ BadDir $ DT.name dDir
+          [single] -> Right [mapLeft BadPost $ readBlogPost 0 single]
+          many -> Right $ concatMap validateOrdinal many
+
+      validateOrdinal oDir = liftErrorToList $ do
+        (name, contents) <- validateIsDir oDir
+        _ :: Integer <- validateIsType name
+        case contents of
+          [] -> badDir
+          [single] -> return [mapLeft BadPost $ readBlogPost 0 single]
+          _ -> badDir
+        where
+          badDir = Left $ BadDir $ DT.name oDir
+   in liftErrorToList $ do
+        (_, contents) <- validateIsDir tree
+        return $ concatMap validateYear contents

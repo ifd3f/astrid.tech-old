@@ -2,8 +2,6 @@ module Astrid.Tech.InputSchema.Project
   ( Project (..),
     ProjectStatus (..),
     ProjectMeta (..),
-    ProjectParseException (..),
-    ProjectDirectoryScanException (..),
     ProjectSlug,
     readProject,
     readProjectDir,
@@ -12,22 +10,13 @@ where
 
 import qualified Astrid.Tech.InputSchema.Page as P
 import Astrid.Tech.Slug (ProjectSlug)
-import Control.Concurrent.ParallelIO (parallelE, parallel_)
-import Control.Exception (Exception, IOException, handle, throw)
-import Control.Exception.Base (SomeException (SomeException))
-import Control.Monad.IO.Class (MonadIO (liftIO))
+import Control.Exception (IOException)
 import Data.Aeson (FromJSON (parseJSON), Value (Null, String))
 import qualified Data.ByteString as ByteString
-import Data.Either (partitionEithers)
-import Data.Frontmatter (IResult (Done), parseYamlFrontmatter)
-import Data.Map (Map)
-import qualified Data.Map as Map
 import Data.Time (Day)
+import Data.Validation (Validation (Failure, Success), fromEither, toEither)
 import GHC.Generics (Generic)
-import System.Directory (listDirectory)
-import System.Directory.Tree (DirTree (Dir), FileName)
-import qualified System.Directory.Tree as DT
-import System.FilePath (takeBaseName, takeExtension, takeFileName, (</>))
+import System.Directory.Tree (DirTree (Dir, Failed, File), FileName)
 
 data ProjectStatus
   = NoStatus
@@ -72,31 +61,25 @@ data Project = Project
     children :: [P.Page]
   }
 
-data ProjectParseException
-  = UnexpectedFileStructure FileName P.FindAndParseIndexException
-  deriving (Show, Eq)
+readProject :: DirTree ByteString.ByteString -> Either P.PageException Project
+readProject tree = do
+  (rawPage, parsedMeta, page) <- P.findAndParseIndex tree
+  Right $
+    Project
+      { meta = parsedMeta,
+        shortName = P.name rawPage,
+        assetRoot = P.assetRoot rawPage,
+        rootPage = page,
+        children = []
+      }
 
-readProject :: DirTree ByteString.ByteString -> Either ProjectParseException Project
-readProject tree = case P.findAndParseIndex tree of
-  Left err -> Left $ UnexpectedFileStructure (DT.name tree) err
-  Right (rawPage, meta, page) ->
-    Right $
-      Project
-        { meta = meta,
-          shortName = P.name rawPage,
-          assetRoot = P.assetRoot rawPage,
-          rootPage = page,
-          children = []
-        }
-
-newtype ProjectDirectoryScanException
-  = FailedProjects [ProjectParseException]
+data ProjectDirException
+  = NotADirectory FileName
+  | ReadError FileName IOException
   deriving (Show)
 
-readProjectDir :: DirTree ByteString.ByteString -> Either ProjectDirectoryScanException (Map ProjectSlug Project)
+readProjectDir :: DirTree ByteString.ByteString -> Validation ProjectDirException [Validation P.PageException Project]
 readProjectDir projectsRoot = case projectsRoot of
-  Dir name children ->
-    let projects = map readProject children
-     in case partitionEithers projects of
-          ([], successful) -> Right $ Map.fromList (map (\project -> (shortName project, project)) successful)
-          (failed, _) -> Left $ FailedProjects failed
+  Dir _ dirChildren -> Success $ map (fromEither . readProject) dirChildren
+  File name _ -> Failure $ NotADirectory name
+  Failed name err -> Failure $ ReadError name err

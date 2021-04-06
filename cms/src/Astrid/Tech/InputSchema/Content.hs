@@ -6,8 +6,6 @@ where
 import qualified Astrid.Tech.InputSchema.Blog as Blog
 import qualified Astrid.Tech.InputSchema.Project as Project
 import qualified Astrid.Tech.InputSchema.Tag as Tag
-import Control.Concurrent.ParallelIO (parallelE)
-import Control.Concurrent.ParallelIO.Global (parallel_)
 import qualified Data.ByteString as BS
 import Data.Map (Map)
 import qualified Data.Map as Map

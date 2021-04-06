@@ -2,9 +2,7 @@ module Astrid.Tech.InputSchema.Page
   ( Page (..),
     RawPage (..),
     PageFormat (..),
-    PageParseException (..),
-    FindIndexException (..),
-    FindAndParseIndexException (..),
+    PageException (..),
     findAndParseIndex,
     detectFormatFromExtension,
     parseRawPage,
@@ -12,25 +10,24 @@ module Astrid.Tech.InputSchema.Page
   )
 where
 
-import Control.Exception (Exception, IOException, throw)
+import Control.Exception (IOException)
 import Data.Aeson (FromJSON)
 import Data.ByteString (ByteString)
 import Data.Frontmatter (IResult (Done, Fail, Partial), parseYamlFrontmatter)
 import Data.Text (Text)
 import Data.Text.Encoding (decodeUtf8)
-import System.Directory (doesDirectoryExist, doesFileExist, listDirectory)
 import System.Directory.Tree (DirTree (Dir, Failed, File), FileName)
 import qualified System.Directory.Tree as DT
-import System.FilePath (takeBaseName, takeExtension, takeFileName, (</>))
+import System.FilePath (takeBaseName, takeFileName, (</>))
 
 data PageFormat = MarkdownFormat | JupyterFormat deriving (Show, Eq)
 
 -- | Returns a 'PageFormat' based on the extension, or the extension if error.
-detectFormatFromExtension :: String -> Either String PageFormat
+detectFormatFromExtension :: String -> Maybe PageFormat
 detectFormatFromExtension ext = case ext of
-  ".md" -> Right MarkdownFormat
-  ".ipynb" -> Right JupyterFormat
-  _ -> Left ext
+  ".md" -> Just MarkdownFormat
+  ".ipynb" -> Just JupyterFormat
+  _ -> Nothing
 
 data Page = Page
   { content :: Text,
@@ -39,23 +36,28 @@ data Page = Page
   }
   deriving (Show, Eq)
 
-data PageParseException
+data PageException
   = UnsupportedFormat String
-  | ParseYamlFail String
+  | NoIndex
+  | MultipleIndex
+  | TreeError FileName IOException
+  | ParseYamlFail
   | UnexpectedEOF
   deriving (Show, Eq)
 
-parseMarkdownPage :: FromJSON a => FilePath -> ByteString -> Either PageParseException (a, Page)
-parseMarkdownPage directory contents =
-  case parseYamlFrontmatter contents of
+parseMarkdownPage :: FromJSON a => FilePath -> ByteString -> Either PageException (a, Page)
+parseMarkdownPage withDirectory document =
+  case parseYamlFrontmatter document of
     Done rest front ->
       let page =
             Page
               { content = decodeUtf8 rest,
                 format = MarkdownFormat,
-                directory = directory
+                directory = withDirectory
               }
        in Right (front, page)
+    Partial _ -> Left UnexpectedEOF
+    Fail {} -> Left ParseYamlFail
 
 data RawPage = RawPage
   { name :: String,
@@ -64,59 +66,50 @@ data RawPage = RawPage
     contents :: ByteString
   }
 
-withParentDir :: FilePath -> RawPage -> RawPage
-withParentDir parent rp =
-  rp
-    { assetRoot = parent </> assetRoot rp,
-      file = parent </> file rp
-    }
-
-parseRawPage :: FromJSON a => RawPage -> Either PageParseException (a, Page)
-parseRawPage rp = case detectFormatFromExtension $ file rp of
-  Right MarkdownFormat -> parseMarkdownPage (assetRoot rp) (contents rp)
-  Right JupyterFormat -> error "Not yet implemented"
-  Left ext -> Left $ UnsupportedFormat ext
-
-data FindIndexException = NoIndex | MultipleIndex | TreeError FileName IOException
-  deriving (Show, Eq)
+parseRawPage :: FromJSON a => RawPage -> Either PageException (a, Page)
+parseRawPage rp =
+  let ext = file rp
+   in case detectFormatFromExtension ext of
+        Just MarkdownFormat -> parseMarkdownPage (assetRoot rp) (contents rp)
+        Just JupyterFormat -> error "Not yet implemented"
+        Nothing -> Left $ UnsupportedFormat ext
 
 -- | Finds the file representing this path. If this is a directory, its
 -- only child with basename index represents this path.
-findIndex :: DirTree ByteString -> Either FindIndexException RawPage
+findIndex :: DirTree ByteString -> Either PageException RawPage
 findIndex path = case path of
-  Failed name err -> Left $ TreeError name err
-  File fileName content ->
+  Failed fileName err -> Left $ TreeError fileName err
+  File fileName fileContent ->
     -- If it is a file, return that file
     Right $
       RawPage
         { name = takeBaseName $ takeFileName fileName,
           assetRoot = ".",
-          contents = content,
+          contents = fileContent,
           file = fileName
         }
-  Dir dirName contents ->
+  Dir dirName children ->
     -- Of the files with basename "index" ...
-    case filter (\node -> takeBaseName (DT.name node) == "index") contents of
+    case filter (\node -> takeBaseName (DT.name node) == "index") children of
       [] -> Left NoIndex -- If there are none, error
-      [File fileName content] ->
+      [File fileName fileContent] ->
         -- If there is exactly one, return
         Right $
           RawPage
             { name = fileName,
               assetRoot = dirName,
               file = dirName </> fileName,
-              contents = content
+              contents = fileContent
             }
       _ -> Left MultipleIndex -- If there are many, error
 
-data FindAndParseIndexException
-  = MissingIndex FindIndexException
-  | ParseIndex PageParseException
-  deriving (Show, Eq)
-
-findAndParseIndex :: FromJSON a => DirTree ByteString -> Either FindAndParseIndexException (RawPage, a, Page)
-findAndParseIndex tree = case findIndex tree of
-  Left err -> Left $ MissingIndex err
-  Right rawPage -> case parseRawPage rawPage of
-    Left err -> Left $ ParseIndex err
-    Right (meta, page) -> Right (rawPage, meta, page)
+-- case findIndex tree of
+--   Left err -> Left $ MissingIndex err
+--   Right rawPage -> case parseRawPage rawPage of
+--     Left err -> Left $ ParseIndex err
+--     Right (meta, page) -> Right (rawPage, meta, page)
+findAndParseIndex :: FromJSON a => DirTree ByteString -> Either PageException (RawPage, a, Page)
+findAndParseIndex tree = do
+  rawPage <- findIndex tree
+  (meta, page) <- parseRawPage rawPage
+  return (rawPage, meta, page)

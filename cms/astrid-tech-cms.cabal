@@ -44,6 +44,7 @@ library
       LambdaCase
       OverloadedStrings
       ScopedTypeVariables
+  ghc-options: -Wall -Wcompat -Wincomplete-record-updates -Wincomplete-uni-patterns -Wredundant-constraints
   build-depends:
       aeson
     , base >=4.7 && <5
@@ -51,15 +52,16 @@ library
     , containers
     , directory
     , directory-tree
+    , either
     , filepath
     , frontmatter
     , newbase60 ==0.1.*
-    , parallel-io
     , servant
     , system-fileio
     , text
     , time
     , transformers
+    , validation
   default-language: Haskell2010
 
 executable astrid-tech-cms-exe
@@ -73,7 +75,7 @@ executable astrid-tech-cms-exe
       LambdaCase
       OverloadedStrings
       ScopedTypeVariables
-  ghc-options: -threaded -rtsopts -with-rtsopts=-N
+  ghc-options: -Wall -Wcompat -Wincomplete-record-updates -Wincomplete-uni-patterns -Wredundant-constraints -threaded -rtsopts -with-rtsopts=-N
   build-depends:
       aeson
     , astrid-tech-cms
@@ -82,15 +84,16 @@ executable astrid-tech-cms-exe
     , containers
     , directory
     , directory-tree
+    , either
     , filepath
     , frontmatter
     , newbase60 ==0.1.*
-    , parallel-io
     , servant
     , system-fileio
     , text
     , time
     , transformers
+    , validation
   default-language: Haskell2010
 
 test-suite astrid-tech-cms-test
@@ -108,7 +111,7 @@ test-suite astrid-tech-cms-test
       LambdaCase
       OverloadedStrings
       ScopedTypeVariables
-  ghc-options: -threaded -rtsopts -with-rtsopts=-N
+  ghc-options: -Wall -Wcompat -Wincomplete-record-updates -Wincomplete-uni-patterns -Wredundant-constraints -threaded -rtsopts -with-rtsopts=-N
   build-depends:
       QuickCheck
     , aeson
@@ -118,15 +121,16 @@ test-suite astrid-tech-cms-test
     , containers
     , directory
     , directory-tree
+    , either
     , filepath
     , frontmatter
     , hspec
     , newbase60 ==0.1.*
-    , parallel-io
     , raw-strings-qq
     , servant
     , system-fileio
     , text
     , time
     , transformers
+    , validation
   default-language: Haskell2010
