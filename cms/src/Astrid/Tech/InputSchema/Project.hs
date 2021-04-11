@@ -10,11 +10,10 @@ where
 
 import qualified Astrid.Tech.InputSchema.Page as P
 import Astrid.Tech.Slug (ProjectSlug)
-import Control.Exception (IOException)
+import Control.Exception (Exception, IOException)
 import Data.Aeson (FromJSON (parseJSON), Value (Null, String))
 import qualified Data.ByteString as ByteString
 import Data.Time (Day)
-import Data.Validation (Validation (Failure, Success), fromEither, toEither)
 import GHC.Generics (Generic)
 import System.Directory.Tree (DirTree (Dir, Failed, File), FileName)
 
@@ -60,6 +59,7 @@ data Project = Project
     rootPage :: P.Page,
     children :: [P.Page]
   }
+  deriving (Show, Eq)
 
 readProject :: DirTree ByteString.ByteString -> Either P.PageException Project
 readProject tree = do
@@ -76,10 +76,12 @@ readProject tree = do
 data ProjectDirException
   = NotADirectory FileName
   | ReadError FileName IOException
-  deriving (Show)
+  deriving (Show, Eq)
 
-readProjectDir :: DirTree ByteString.ByteString -> Validation ProjectDirException [Validation P.PageException Project]
+instance Exception ProjectDirException
+
+readProjectDir :: DirTree ByteString.ByteString -> Either ProjectDirException [Either P.PageException Project]
 readProjectDir projectsRoot = case projectsRoot of
-  Dir _ dirChildren -> Success $ map (fromEither . readProject) dirChildren
-  File name _ -> Failure $ NotADirectory name
-  Failed name err -> Failure $ ReadError name err
+  Dir _ dirChildren -> Right $ map readProject dirChildren
+  File name _ -> Left $ NotADirectory name
+  Failed name err -> Left $ ReadError name err

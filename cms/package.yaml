@@ -77,3 +77,4 @@ tests:
       - hspec
       - QuickCheck
       - raw-strings-qq
+      - mtl

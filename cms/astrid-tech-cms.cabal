@@ -29,10 +29,10 @@ library
   exposed-modules:
       Astrid.Tech.CacheSchema
       Astrid.Tech.InputSchema.Blog
-      Astrid.Tech.InputSchema.Content
       Astrid.Tech.InputSchema.Page
       Astrid.Tech.InputSchema.Project
       Astrid.Tech.InputSchema.Tag
+      Astrid.Tech.InputSchema.Util
       Astrid.Tech.Slug
       Lib
   other-modules:
@@ -103,6 +103,7 @@ test-suite astrid-tech-cms-test
       Astrid.Tech.InputSchema.BlogSpec
       Astrid.Tech.InputSchema.PageSpec
       Astrid.Tech.InputSchema.ProjectSpec
+      Astrid.Tech.InputSchema.TestUtil
       Paths_astrid_tech_cms
   hs-source-dirs:
       test
@@ -125,6 +126,7 @@ test-suite astrid-tech-cms-test
     , filepath
     , frontmatter
     , hspec
+    , mtl
     , newbase60 ==0.1.*
     , raw-strings-qq
     , servant

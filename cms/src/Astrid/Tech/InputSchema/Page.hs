@@ -10,7 +10,7 @@ module Astrid.Tech.InputSchema.Page
   )
 where
 
-import Control.Exception (IOException)
+import Control.Exception (Exception, IOException)
 import Data.Aeson (FromJSON)
 import Data.ByteString (ByteString)
 import Data.Frontmatter (IResult (Done, Fail, Partial), parseYamlFrontmatter)
@@ -45,6 +45,8 @@ data PageException
   | UnexpectedEOF
   deriving (Show, Eq)
 
+instance Exception PageException
+
 parseMarkdownPage :: FromJSON a => FilePath -> ByteString -> Either PageException (a, Page)
 parseMarkdownPage withDirectory document =
   case parseYamlFrontmatter document of
@@ -65,6 +67,7 @@ data RawPage = RawPage
     file :: FilePath,
     contents :: ByteString
   }
+  deriving (Eq, Show)
 
 parseRawPage :: FromJSON a => RawPage -> Either PageException (a, Page)
 parseRawPage rp =

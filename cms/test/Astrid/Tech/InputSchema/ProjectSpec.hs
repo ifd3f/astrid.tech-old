@@ -3,18 +3,20 @@ module Astrid.Tech.InputSchema.ProjectSpec
   )
 where
 
+import Astrid.Tech.InputSchema.Page (PageException (ParseYamlFail))
 import Astrid.Tech.InputSchema.Project
-import Control.Monad.IO.Class (MonadIO (liftIO))
+import Astrid.Tech.InputSchema.Util (readDirTreeBS)
+import Control.Exception (throw)
 import Data.Time.Calendar
 import Test.Hspec
-import Test.QuickCheck
 
 spec :: Spec
 spec = do
   describe "readProject" $ do
     it "returns project for valid project" $ do
-      project <- liftIO $ readProject "resources/test/projects/collision-zone"
-      slug project `shouldBe` "collision-zone"
+      tree <- readDirTreeBS "resources/test/projects/collision-zone"
+      project <- either throw pure $ readProject tree
+      shortName project `shouldBe` "collision-zone"
 
       let pMeta = meta project
       showGregorian (startDate pMeta) `shouldBe` "2019-06-01"
@@ -22,9 +24,9 @@ spec = do
       status pMeta `shouldBe` Complete
 
     it "throws MetaParseFailure for metaless file" $ do
-      readProject "resources/test/projects/metaless"
-        `shouldThrow` (\case MetaParseFailure _ -> True)
+      tree <- readDirTreeBS "resources/test/projects/metaless"
+      readProject tree `shouldBe` Left ParseYamlFail
 
-    it "throws MetaParseFailure for file with non-conformant meta" $
-      readProject "resources/test/projects/bad-meta"
-        `shouldThrow` (\case MetaParseFailure _ -> True)
+    it "throws MetaParseFailure for file with non-conformant meta" $ do
+      tree <- readDirTreeBS "resources/test/projects/bad-meta"
+      readProject tree `shouldBe` Left ParseYamlFail

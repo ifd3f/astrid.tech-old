@@ -8,11 +8,10 @@ where
 
 import qualified Astrid.Tech.InputSchema.Page as P
 import Astrid.Tech.Slug (DatedSlug (DatedSlug, day, month, ordinal, shortName, year))
+import Control.Exception (Exception)
 import Data.Aeson (FromJSON)
 import qualified Data.ByteString as ByteString
 import Data.Either.Combinators
-import Data.Either.Validation (Validation (Failure, Success))
-import Data.Functor (($>))
 import Data.Time
   ( Day,
     UTCTime (utctDay),
@@ -21,7 +20,7 @@ import Data.Time
     zonedTimeToUTC,
   )
 import GHC.Generics (Generic)
-import System.Directory.Tree (AnchoredDirTree, DirTree (Dir), FileName)
+import System.Directory.Tree (DirTree (Dir), FileName)
 import qualified System.Directory.Tree as DT
 import Text.Read (readMaybe)
 
@@ -59,6 +58,8 @@ data BlogParseException
   | InconsistentDayException FileName ((Integer, Int, Int), Day)
   deriving (Show, Eq)
 
+instance Exception BlogParseException
+
 readBlogPost :: Int -> DirTree ByteString.ByteString -> Either BlogParseException BlogPost
 readBlogPost withOrdinal tree =
   mapLeft
@@ -81,6 +82,8 @@ data ScanPostsException
   | BadDir FilePath
   | BadPost BlogParseException
   deriving (Show, Eq)
+
+instance Exception ScanPostsException
 
 readBlogDir :: DirTree ByteString.ByteString -> [Either ScanPostsException BlogPost]
 readBlogDir tree =

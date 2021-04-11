@@ -4,12 +4,14 @@ module Astrid.Tech.InputSchema.BlogSpec
 where
 
 import Astrid.Tech.InputSchema.Blog
-import Astrid.Tech.Slug
-import Control.Monad.IO.Class (MonadIO (liftIO))
-import Data.Time.Calendar
+import Astrid.Tech.InputSchema.TestUtil (rootResourcesPath)
+import Astrid.Tech.InputSchema.Util (readDirectoryBS)
+import Astrid.Tech.Slug ( DatedSlug(..) )
+import qualified System.Directory.Tree as DT
+import System.FilePath ((</>))
 import Test.Hspec
-import Test.QuickCheck
 
+expectedSlug :: DatedSlug
 expectedSlug =
   DatedSlug
     { year = 2020,
@@ -19,21 +21,34 @@ expectedSlug =
       shortName = "site-release"
     }
 
+resources :: FilePath
+resources = rootResourcesPath </> "blog-posts"
+
 spec :: Spec
 spec = do
   describe "readBlog" $ do
     it "returns valid blog for index-style" $ do
-      blog <- liftIO $ readBlogPost 32 "resources/test/blog-posts/site-release"
+      tree <- readDirectoryBS $ resources </> "site-release"
+
+      let blog =
+            ( case readBlogPost 32 (DT.dirTree tree) of
+                Right b -> b
+                Left err -> error $ show err
+            )
 
       slug blog `shouldBe` expectedSlug
-
       let meta' = meta blog
       title meta' `shouldBe` "Finally live!"
 
     it "returns valid blog for bare file" $ do
-      blog <- liftIO $ readBlogPost 32 "resources/test/blog-posts/site-release.md"
+      tree <- readDirectoryBS $ resources </> "site-release.md"
+
+      let blog =
+            ( case readBlogPost 32 (DT.dirTree tree) of
+                Right b -> b
+                Left err -> error $ show err
+            )
 
       slug blog `shouldBe` expectedSlug
-
       let meta' = meta blog
       title meta' `shouldBe` "Finally live!"
