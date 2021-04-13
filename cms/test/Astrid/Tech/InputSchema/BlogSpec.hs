@@ -6,7 +6,8 @@ where
 import Astrid.Tech.InputSchema.Blog
 import Astrid.Tech.InputSchema.TestUtil (rootResourcesPath)
 import Astrid.Tech.InputSchema.Util (readDirectoryBS)
-import Astrid.Tech.Slug ( DatedSlug(..) )
+import Astrid.Tech.Slug (DatedSlug (..))
+import Control.Exception (throwIO)
 import qualified System.Directory.Tree as DT
 import System.FilePath ((</>))
 import Test.Hspec
@@ -30,11 +31,7 @@ spec = do
     it "returns valid blog for index-style" $ do
       tree <- readDirectoryBS $ resources </> "site-release"
 
-      let blog =
-            ( case readBlogPost 32 (DT.dirTree tree) of
-                Right b -> b
-                Left err -> error $ show err
-            )
+      blog <- either throwIO pure $ readBlogPost 32 (DT.dirTree tree)
 
       slug blog `shouldBe` expectedSlug
       let meta' = meta blog

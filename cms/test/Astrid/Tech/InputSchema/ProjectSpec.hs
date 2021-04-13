@@ -6,8 +6,8 @@ where
 import Astrid.Tech.InputSchema.Page (PageException (ParseYamlFail))
 import Astrid.Tech.InputSchema.Project
 import Astrid.Tech.InputSchema.Util (readDirTreeBS)
-import Control.Exception (throw)
-import Data.Time.Calendar
+import Control.Exception (throwIO)
+import Data.Time.Calendar ( showGregorian )
 import Test.Hspec
 
 spec :: Spec
@@ -15,7 +15,7 @@ spec = do
   describe "readProject" $ do
     it "returns project for valid project" $ do
       tree <- readDirTreeBS "resources/test/projects/collision-zone"
-      project <- either throw pure $ readProject tree
+      project <- either throwIO pure $ readProject tree
       shortName project `shouldBe` "collision-zone"
 
       let pMeta = meta project

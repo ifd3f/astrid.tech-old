@@ -18,7 +18,7 @@ import Data.Text (Text)
 import Data.Text.Encoding (decodeUtf8)
 import System.Directory.Tree (DirTree (Dir, Failed, File), FileName)
 import qualified System.Directory.Tree as DT
-import System.FilePath (takeBaseName, takeFileName, (</>))
+import System.FilePath (takeBaseName, takeExtension, takeFileName, (</>))
 
 data PageFormat = MarkdownFormat | JupyterFormat deriving (Show, Eq)
 
@@ -71,7 +71,7 @@ data RawPage = RawPage
 
 parseRawPage :: FromJSON a => RawPage -> Either PageException (a, Page)
 parseRawPage rp =
-  let ext = file rp
+  let ext = takeExtension $ file rp
    in case detectFormatFromExtension ext of
         Just MarkdownFormat -> parseMarkdownPage (assetRoot rp) (contents rp)
         Just JupyterFormat -> error "Not yet implemented"
