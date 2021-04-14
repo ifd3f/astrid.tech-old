@@ -1,3 +1,4 @@
+.git/
 test-resources/
 .next/
 .vscode/
@@ -6,3 +7,4 @@ data/
 out/
 *.sqlite3
 *.log
+public/_/
