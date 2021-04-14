@@ -19,14 +19,6 @@ jobs:
       - name: Checkout LFS objects
         run: git lfs checkout
 
-      - name: Import private key
-        uses: webfactory/ssh-agent@v0.4.1
-        with:
-          ssh-private-key: ${{secrets.PRIVATE_KEY}}
-
-      - name: Set Git credentials
-        run: git config --global user.email "astrid@astrid.tech" && git config --global user.name "Astrid A. Yu"
-
       - name: Get yarn cache directory path
         working-directory: astrid_tech_frontend
         id: yarn-cache-dir-path
@@ -51,7 +43,7 @@ jobs:
 
       - name: Attach example content to content location
         working-directory: astrid_tech_frontend
-        run: mount --bind test-resources/content/2020-sample content
+        run: ln -snf test-resources/content/2020-sample content
 
       - name: Smoke test for test content
         working-directory: astrid_tech_frontend
