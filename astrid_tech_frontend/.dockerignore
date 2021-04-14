@@ -1,0 +1,8 @@
+test-resources/
+.next/
+.vscode/
+node_modules/
+data/
+out/
+*.sqlite3
+*.log

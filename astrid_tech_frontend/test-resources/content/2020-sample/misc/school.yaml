@@ -1,0 +1,71 @@
+- slug: cal-poly
+  name: California Polytechnic State University
+  degree: BSc Computer Science
+  gpa: 3.91
+  startDate: 2019-09-14
+  endDate: 2023-06-11
+  courses:
+    - name: Computer Graphics (graduate-level)
+      number: CSC 572
+      description: Studied advanced applications of OpenGL shaders. Perform fast physics simulations using compute shaders.
+      date: 2020-09-01
+      tags:
+        - opengl
+        - linear-algebra
+        - high-performance-computing
+        - computer-science
+    - name: Special Problems for Undergraduates
+      number: CSC 400
+      description: Researched ways to optimize software floating-point number operations. See the linked bigfloat project for details.
+      date: 2020-09-01
+      tags:
+        - floating-point
+        - high-performance-computing
+        - /projects/bigfloat
+    - name: Systems Programming
+      number: CPE 357
+      description: Wrote C programs using low-level Unix calls. Additionally, I designed a malloc() implementation that was second-fastest in the class.
+      date: 2020-06-01
+      tags:
+        - c
+        - cpp
+        - linux
+        - /projects/fast-malloc-357
+    - name: Computer Architecture and Assembly Language
+      number: CPE 233
+      description: Studied concepts in discrete math and theoretical computer science. I utilized functional programming concepts for my final assignment.
+      date: 2020-04-01
+      tags:
+        - risc-v
+        - fpgas
+        - systemverilog
+        - computer-engineering
+    - name: Discrete Structures
+      number: CSC 348
+      date: 2020-04-01
+      description: Studied fundamental topics related to discrete math and computer science, including proofs, set theory, and algorithms.
+      tags:
+        - math
+        - computer-science
+    - name: Digital Design
+      number: CPE 133
+      description: Worked with SystemVerilog to create simple digital circuits on a Artix-7 FPGA.
+      date: 2020-01-01
+      tags:
+        - fpgas
+        - systemverilog
+        - computer-engineering
+    - name: Data Structures
+      number: CSC 202
+      description: null
+      date: 2019-09-01
+      tags:
+        - python
+        - computer-science
+    - name: Linear Analysis
+      number: MATH 244
+      description: null
+      date: 2019-09-01
+      tags:
+        - math
+        - linear-algebra

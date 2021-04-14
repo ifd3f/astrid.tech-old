@@ -51,7 +51,7 @@ jobs:
 
       - name: Attach example content to content location
         working-directory: astrid_tech_frontend
-        run: mount --bind example-content content
+        run: mount --bind test-resources/content/2020-sample content
 
       - name: Smoke test for test content
         working-directory: astrid_tech_frontend
