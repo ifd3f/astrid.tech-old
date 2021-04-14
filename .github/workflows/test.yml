@@ -1,19 +1,11 @@
-name: Build and Deploy
+name: Build and Test
 
 on:
   push:
-    branches: []
+  pull_request:
   workflow_dispatch:
 
 jobs:
-  cancel-previous:
-    runs-on: ubuntu-latest
-    steps:
-      - name: Cancel Previous Runs
-        uses: styfle/cancel-workflow-action@0.6.0
-        with:
-          access_token: ${{ secrets.GITHUB_TOKEN }}
-
   deploy:
     runs-on: ubuntu-latest
 
@@ -53,23 +45,16 @@ jobs:
         working-directory: astrid_tech_frontend
         run: yarn install
 
-      - name: Build
+      - name: Test
+        working-directory: astrid_tech_frontend
+        run: npm run test
+
+      - name: Attach example content to content location
+        working-directory: astrid_tech_frontend
+        run: mount --bind example-content content
+
+      - name: Smoke test for test content
         working-directory: astrid_tech_frontend
         env:
           ASTRID_TECH_API_ROOT: https://api.astrid.tech/
         run: npm run build
-
-      - name: Zip output
-        working-directory: astrid_tech_frontend
-        run: zip -r ../static-site.zip out
-
-      - name: Upload Static Site
-        uses: actions/upload-artifact@v2
-        with:
-          name: static-site
-          path: static-site.zip
-
-      - name: Publish
-        working-directory: astrid_tech_frontend
-        if: github.ref == 'refs/heads/main'
-        run: npm run deploy
