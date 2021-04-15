@@ -1,0 +1,19 @@
+{
+   "type": "sqlite",
+   "database": "data/content.sqlite3",
+   "logging": true,
+   "entities": [
+      "lib/entity/**/*.ts"
+   ],
+   "migrations": [
+      "lib/migration/**/*.ts"
+   ],
+   "subscribers": [
+      "lib/subscriber/**/*.ts"
+   ],
+   "cli": {
+      "entitiesDir": "lib/entity",
+      "migrationsDir": "lib/migration",
+      "subscribersDir": "lib/subscriber"
+   }
+}
