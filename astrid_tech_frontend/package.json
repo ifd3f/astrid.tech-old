@@ -9,7 +9,7 @@
    "scripts": {
       "dev": "next",
       "test": "ts-mocha -p tsconfig.json **/*.test.ts",
-      "prebuild": "npx ts-node cacher/index.ts --project node.tsconfig.json",
+      "prebuild": "npx ts-node cacher/index.ts",
       "build": "next build && next export",
       "postbuild": "./post-build.sh",
       "start": "ts-node src/index.ts",

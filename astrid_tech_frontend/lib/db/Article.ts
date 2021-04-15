@@ -1,4 +1,10 @@
-import { Entity, PrimaryGeneratedColumn, Column, JoinTable } from "typeorm";
+import {
+  Entity,
+  PrimaryGeneratedColumn,
+  Column,
+  OneToOne,
+  JoinColumn,
+} from "typeorm";
 import { Page } from "./Page";
 import { TimeSlug } from "./TimeSlug";
 
@@ -7,10 +13,12 @@ export class Article {
   @PrimaryGeneratedColumn()
   id!: number;
 
-  @Column({ nullable: false, unique: true })
+  @OneToOne((type) => Page)
+  @JoinColumn()
   page!: Page;
 
-  @Column({ nullable: false })
+  @OneToOne((type) => TimeSlug)
+  @JoinColumn()
   slug!: TimeSlug;
 
   @Column({ nullable: false })

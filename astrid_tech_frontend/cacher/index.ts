@@ -7,6 +7,7 @@ import {
   getPersistentColor,
   RichColorTheme,
 } from "../lib/util";
+import { createConnection } from "../lib/db/index";
 import { convertProjectToStringDate, Tag } from "../types/types";
 import { copyAssets, mapData } from "./assets";
 import { getBlogPosts } from "./blog";
@@ -16,9 +17,12 @@ import { buildRSSFeed } from "./rss";
 import { getLanguageTags, getUserTagOverrides } from "./tags";
 import { serializeJS } from "./util";
 
+/*
 const contentDir = path.join(process.cwd(), "content");
 const TAGS_D_TS = `import { Tag } from "../lib/cache";
-declare const tags: Tag[];
+declare const tags:import { createConnection } from '../lib/db/index';
+ Tag[];import { createConnection } from 'typeorm';
+
 export default tags;`;
 
 async function buildBlogPostCache(db: Database) {
@@ -211,34 +215,11 @@ async function buildProjectCache(db: Database) {
     );
   })();
 }
-
-async function main(dbUrl: string) {
-  await fs.rm(dbUrl, { force: true });
-
-  const dataDir = path.join(__dirname, "../data");
-  const db = sqlite3(dbUrl, {});
-  const initSchema = (
-    await fs.readFile(path.join(__dirname, "schema.sql"))
-  ).toString();
-  db.exec(initSchema);
-
-  await copyAssets(contentDir, path.join(__dirname, "../public/_/"));
-  await mapData(contentDir, path.join(dataDir, "objs"));
-
-  await Promise.all([
-    buildBlogPostCache(db),
-    buildProjectCache(db),
-    buildTagOverrideTable(db),
-    buildProjectTagOverrideTable(db),
-  ]);
-
-  await Promise.all([
-    exportTagOverrideData(db, path.join(dataDir, "tags.js")),
-    generateLicenses(path.join(dataDir, "licenses.json")),
-    buildRSSFeed(path.join(__dirname, "../public")),
-  ]);
+*/
+async function main() {
+  const connection = createConnection();
 }
 
-main("content.sqlite3").catch((e) => {
+main().catch((e) => {
   throw e;
 });

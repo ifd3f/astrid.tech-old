@@ -1,4 +1,4 @@
-import { Entity, PrimaryGeneratedColumn, Column, JoinTable } from "typeorm";
+import { Entity, PrimaryGeneratedColumn, Column, JoinTable, OneToMany } from "typeorm";
 
 @Entity()
 export class Tag {

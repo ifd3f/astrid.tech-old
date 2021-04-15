@@ -1,4 +1,10 @@
-import { Entity, PrimaryGeneratedColumn, Column, JoinTable } from "typeorm";
+import {
+  Entity,
+  PrimaryGeneratedColumn,
+  Column,
+  OneToOne,
+  JoinColumn,
+} from "typeorm";
 import { Page } from "./Page";
 import { TimeSlug } from "./TimeSlug";
 
@@ -7,11 +13,9 @@ export class Project {
   @PrimaryGeneratedColumn()
   id!: number;
 
-  @Column({ nullable: false, unique: true })
+  @OneToOne((type) => Page)
+  @JoinColumn()
   page!: Page;
-
-  @Column({ nullable: false })
-  slug!: TimeSlug;
 
   @Column({ nullable: false })
   startDate!: Date;
