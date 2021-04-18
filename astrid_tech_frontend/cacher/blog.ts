@@ -55,3 +55,59 @@ export async function getBlogPosts(
     );
   return files;
 }
+
+async function buildBlogPostCache(db: Database) {
+  console.log("Building blog post cache");
+
+  const insertPost = db.prepare(
+    `INSERT INTO blog_post(
+      title, 
+      asset_root, 
+      slug, 
+      date, 
+      year, 
+      month, 
+      day, 
+      ordinal,
+      description, 
+      content) 
+    VALUES (@title, 
+      @assetRoot, 
+      @slug, 
+      @date, 
+      @year, 
+      @month, 
+      @day, 
+      @ordinal,
+      @description, 
+      @content)`
+  );
+  const blogPosts = await Promise.all(await getBlogPosts(contentDir));
+  const ids = db
+    .transaction(() =>
+      blogPosts.map((post) =>
+        insertPost.run({
+          ...post,
+          date: post.date.toISOString(),
+          year: post.date.getUTCFullYear(),
+          month: post.date.getUTCMonth() + 1,
+          day: post.date.getUTCDate(),
+          ordinal: 0,
+        })
+      )
+    )()
+    .map((result, i) => ({
+      id: result.lastInsertRowid,
+      post: blogPosts[i],
+    }));
+
+  const insertTag = db.prepare(
+    "INSERT INTO blog_tag (fk_blog, tag) VALUES (@postId, @tag)"
+  );
+
+  db.transaction(() => {
+    ids.map(({ id, post }) =>
+      post.tags.map((tag) => insertTag.run({ tag, postId: id }))
+    );
+  })();
+}

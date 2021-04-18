@@ -5,6 +5,4 @@ export { Tag } from "./Tag";
 export { TimeSlug } from "./TimeSlug";
 export { Note } from "./Note";
 //export { Recipe } from "./Recipe";
-import createCacheConnection from "./connection";
-
-export const createConnection = createCacheConnection;
+export { createCacheConnection } from "./connection";

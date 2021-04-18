@@ -11,20 +11,19 @@ import { TimeSlug } from "./TimeSlug";
 @Entity()
 export class Project {
   @PrimaryGeneratedColumn()
-  id!: number;
-
-  @OneToOne((type) => Page)
-  @JoinColumn()
-  page!: Page;
+  id?: number;
 
   @Column()
-  status!: string;
+  shortName!: string;
+
+  @Column({ nullable: true })
+  status?: string;
 
   @Column({ nullable: false })
   startDate!: Date;
 
-  @Column()
-  endDate!: Date;
+  @Column({ nullable: true })
+  endDate?: Date;
 
   @Column()
   description!: string;
@@ -34,4 +33,8 @@ export class Project {
 
   @Column("simple-array")
   url!: string[];
+
+  @OneToOne((type) => Page)
+  @JoinColumn()
+  page!: Page;
 }

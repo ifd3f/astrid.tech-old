@@ -10,7 +10,7 @@ import { Tag } from "./Tag";
 @Entity("Page")
 export class Page {
   @PrimaryGeneratedColumn()
-  id!: number;
+  id?: number;
 
   @Column()
   date!: Date;

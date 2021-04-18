@@ -6,7 +6,7 @@ import { Tag } from "./Tag";
 import { TimeSlug } from "./TimeSlug";
 import { Note } from "./Note";
 
-export default function createCacheConnection() {
+export function createCacheConnection() {
   return createConnection({
     type: "sqlite",
     database: "data/content.sqlite3",
