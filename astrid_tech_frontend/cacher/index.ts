@@ -1,12 +1,11 @@
-import rimraf from "rimraf";
 import path from "path";
-import { createConnection } from "../lib/db/index";
+import { createConnection } from "../lib/db";
+import { clearCaches } from "./util";
 
 const contentDir = path.join(process.cwd(), "content");
 
 async function main() {
-  const dataDir = path.join(__dirname, "../data");
-  rimraf(dataDir, console.error);
+  clearCaches();
 
   const connection = await createConnection();
 

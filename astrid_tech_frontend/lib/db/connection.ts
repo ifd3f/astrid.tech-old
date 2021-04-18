@@ -16,7 +16,7 @@ export async function createCacheConnection() {
   return await createConnection({
     type: "sqlite",
     database: "data/content.sqlite3",
-    logging: true,
+    logging: false,
     synchronize: true,
     entities: [Project, Article, Note, Page, Tag, TimeSlug],
   });

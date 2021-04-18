@@ -3,7 +3,7 @@ import {
   PrimaryGeneratedColumn,
   Column,
   ManyToMany,
-  JoinColumn,
+  JoinTable,
 } from "typeorm";
 import { Tag } from "./Tag";
 
@@ -34,6 +34,6 @@ export class Page {
   objectType!: string;
 
   @ManyToMany((type) => Tag)
-  @JoinColumn()
+  @JoinTable()
   tags!: Tag[];
 }

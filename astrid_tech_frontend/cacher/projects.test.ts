@@ -1,43 +1,55 @@
-import { createCacheConnection } from "../lib/db/index";
 import { buildProjectCache, loadProject } from "./projects";
-import { getResource } from "./test-utils";
+import { cleanUpCache, getResource, setUpCache, useCache } from "./test-util";
 import { getConnection } from "typeorm";
-import { Tag } from "../lib/db";
+import { createCacheConnection, Tag } from "../lib/db";
 import { expect, assert } from "chai";
 
-before(async () => {
-  await createCacheConnection();
-});
-
-describe("loadProject", () => {
-  it("should parse a valid project file", async () => {
-    const conn = getConnection();
-
-    const result = await loadProject({
-      conn,
-      assetRoot: "/foo/bar/spam",
-      pathname: getResource(
-        "content/2020-sample/projects/astrid-tech/index.md"
-      ),
-    });
-
-    expect(result.shortName).equal("astrid-tech");
-    const newTag = await conn
-      .getRepository(Tag)
-      .findOne({ shortName: "react-js" });
-    assert(newTag, "no tag was generated");
+describe("Project Loading", async () => {
+  before(async () => {
+    await createCacheConnection();
   });
-});
 
-describe("buildProjectCache", () => {
-  it("should build cache for project files", async () => {
-    const conn = getConnection();
+  beforeEach(async () => {
+    await setUpCache();
+  });
 
-    await buildProjectCache(conn, getResource("content/2020-sample"));
+  afterEach(async () => {
+    await cleanUpCache();
+  });
 
-    const newTag = await conn
-      .getRepository(Tag)
-      .findOne({ shortName: "react-js" });
-    assert(newTag, "no tag was generated");
+  after(async () => {
+    await getConnection().close();
+  });
+
+  describe("loadProject", () => {
+    it("should parse a valid project file", async () => {
+      const conn = getConnection();
+
+      const result = await loadProject({
+        conn,
+        assetRoot: "/foo/bar/spam",
+        pathname: getResource(
+          "content/2020-sample/projects/astrid-tech/index.md"
+        ),
+      });
+
+      expect(result.shortName).equal("astrid-tech");
+      const newTag = await conn
+        .getRepository(Tag)
+        .findOne({ shortName: "react-js" });
+      assert(newTag, "no tag was generated");
+    });
+  });
+
+  describe("buildProjectCache", () => {
+    it("should build cache for project files", async () => {
+      const conn = getConnection();
+
+      await buildProjectCache(conn, getResource("content/2020-sample"));
+      const newTag = await conn
+        .getRepository(Tag)
+        .findOne({ shortName: "react-js" });
+      assert(newTag, "no tag was generated");
+    });
   });
 });

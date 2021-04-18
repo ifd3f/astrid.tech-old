@@ -29,35 +29,39 @@ export async function loadProject({
     data.tags.map((shortName: string) => db.getOrCreateTag(conn, shortName))
   );
 
-  const page: db.Page = {
-    title: data.title,
-    thumbnail: data.thumbnail,
-    contentMarkdown: content,
-    date: startDate,
-    pathname: `/projects/${shortName}`,
-    assetRoot: assetRoot,
-    tags,
-    objectType: "project",
-  };
+  const pageRepo = conn.getRepository(db.Page);
+  const page = await pageRepo.save(
+    pageRepo.create({
+      title: data.title,
+      thumbnail: data.thumbnail,
+      contentMarkdown: content,
+      date: startDate,
+      pathname: `/projects/${shortName}`,
+      assetRoot: assetRoot,
+      tags,
+      objectType: "project",
+    })
+  );
 
-  return {
-    shortName,
-    status: data.status as ProjectStatus,
-    startDate: startDate,
-    endDate: data.endDate ? new Date(data.endDate) : undefined,
-    page: page,
-    url: data.url ?? [],
-    source: data.source ? data.source : [],
-    description: data.description,
-  };
+  const projectsRepo = conn.getRepository(db.Project);
+  return projectsRepo.save(
+    projectsRepo.create({
+      shortName,
+      status: data.status as ProjectStatus,
+      startDate: startDate,
+      endDate: data.endDate ? new Date(data.endDate) : undefined,
+      page: page,
+      url: data.url ?? [],
+      source: data.source ? data.source : [],
+      description: data.description,
+    })
+  );
 }
 
-export async function getProjects(
-  conn: Connection,
-  contentDir: string
-): Promise<db.Project[]> {
+export async function buildProjectCache(conn: Connection, contentDir: string) {
   const dirs = await walkArr(join(contentDir, "projects"));
-  return Promise.all(
+
+  const projects = await Promise.all(
     dirs
       .filter(({ stats }) => stats.isFile() && stats.name.endsWith(".md"))
       .map(({ root, stats }) =>
@@ -68,13 +72,11 @@ export async function getProjects(
         })
       )
   );
-}
 
-export async function buildProjectCache(conn: Connection, contentDir: string) {
-  console.log("Building project cache");
-
-  const repo = conn.getRepository(db.Project);
-  const ormObjects = repo.create(await getProjects(conn, contentDir));
-
-  repo.save(ormObjects);
+  await Promise.all(
+    projects.map(
+      async (project) =>
+        await db.getOrCreateTag(conn, `project:${project.shortName}`)
+    )
+  );
 }

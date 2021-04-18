@@ -13,11 +13,11 @@ export class Article {
   @PrimaryGeneratedColumn()
   id!: number;
 
-  @OneToOne((type) => Page)
+  @OneToOne((type) => Page, { onDelete: "CASCADE" })
   @JoinColumn()
   page!: Page;
 
-  @OneToOne((type) => TimeSlug)
+  @OneToOne((type) => TimeSlug, { onDelete: "CASCADE" })
   @JoinColumn()
   slug!: TimeSlug;
 

@@ -1,4 +1,6 @@
 import walk from "walk";
+import path from "path";
+import rimraf from "rimraf";
 
 export async function walkArr<T>(dir: string) {
   const out: { root: string; stats: walk.WalkStats }[] = [];
@@ -23,4 +25,9 @@ export function serializeJS(data: any, msg?: string) {
 /* eslint-disable */
 // prettier-ignore
 module.exports=${JSON.stringify(data)}`;
+}
+
+export function clearCaches() {
+  const dataDir = path.join(__dirname, "../data");
+  rimraf(dataDir, console.error);
 }

@@ -34,7 +34,7 @@ export class Project {
   @Column("simple-array")
   url!: string[];
 
-  @OneToOne((type) => Page)
+  @OneToOne((type) => Page, { onDelete: "CASCADE" })
   @JoinColumn()
   page!: Page;
 }
