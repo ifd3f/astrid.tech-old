@@ -22,7 +22,12 @@ export type WorkExperience = Tagged<"w"> & {
   summary?: string;
 };
 
-export type ProjectStatus = null | "early" | "wip" | "complete" | "scrapped";
+export type ProjectStatus =
+  | undefined
+  | "early"
+  | "wip"
+  | "complete"
+  | "scrapped";
 
 export type ProjectMeta<DateType = Date> = Tagged<"p"> & {
   id?: number;

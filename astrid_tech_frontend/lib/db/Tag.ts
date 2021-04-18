@@ -1,6 +1,14 @@
-import { Entity, PrimaryGeneratedColumn, Column, JoinTable, OneToMany } from "typeorm";
+import {
+  Entity,
+  PrimaryGeneratedColumn,
+  Column,
+  JoinTable,
+  OneToMany,
+  Unique,
+} from "typeorm";
 
 @Entity()
+@Unique(["name"])
 export class Tag {
   @PrimaryGeneratedColumn()
   id!: number;

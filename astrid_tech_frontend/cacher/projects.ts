@@ -37,11 +37,11 @@ export async function loadProject({
 
   return {
     shortName,
-    status: data.status ? (data.status as ProjectStatus) : null,
+    status: data.status as ProjectStatus,
     startDate: startDate,
-    endDate: data.endDate ? new Date(data.endDate) : null,
+    endDate: data.endDate ? new Date(data.endDate) : undefined,
     page: page,
-    url: data.url,
+    url: data.url ?? [],
     source: data.source ? data.source : [],
     description: data.description,
   };
