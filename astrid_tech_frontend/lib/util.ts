@@ -2,7 +2,7 @@ import crypto from "crypto";
 import { format } from "date-fns";
 import hslToHex from "hsl-to-hex";
 import seedrandom from "seedrandom";
-import { Path } from "./cache";
+import { TimeSlug } from "./db/TimeSlug";
 
 export function getContrastingTextColor(backgroundColor: string): string {
   const [, r, g, b] = backgroundColor
@@ -97,10 +97,6 @@ export function getBlogSlug({ date, slug }: { date: Date; slug: string }) {
     day: date.getUTCDate().toString().padStart(2, "0"),
     slug: [slug],
   };
-}
-
-export function blogSlugToString(path: Path) {
-  return `/${path.year}/${path.month}/${path.day}/${path.slug}`;
 }
 
 export function truncateKeepWords(text: string, maxChars: number) {

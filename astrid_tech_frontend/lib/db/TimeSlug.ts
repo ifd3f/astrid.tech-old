@@ -26,3 +26,7 @@ export class TimeSlug {
   @Column({ nullable: true })
   objectType!: string;
 }
+
+export function timeSlugToString(path: TimeSlug) {
+  return `/${path.year}/${path.month}/${path.day}/${path.ordinal}/${path.shortName}`;
+}

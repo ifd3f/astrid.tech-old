@@ -11,9 +11,11 @@ function getShortName(parsed: ParsedPath) {
 }
 
 export async function loadProject({
+  conn,
   assetRoot,
   pathname,
 }: {
+  conn: Connection;
   assetRoot: string;
   pathname: string;
 }): Promise<db.Project> {
@@ -23,6 +25,9 @@ export async function loadProject({
   const { data, content } = matter(fileContents);
 
   const startDate = new Date(data.startDate);
+  const tags: db.Tag[] = await Promise.all(
+    data.tags.map((shortName: string) => db.getOrCreateTag(conn, shortName))
+  );
 
   const page: db.Page = {
     title: data.title,
@@ -31,7 +36,7 @@ export async function loadProject({
     date: startDate,
     pathname: `/projects/${shortName}`,
     assetRoot: assetRoot,
-    tags: data.tags,
+    tags,
     objectType: "project",
   };
 
@@ -47,13 +52,17 @@ export async function loadProject({
   };
 }
 
-export async function getProjects(contentDir: string): Promise<db.Project[]> {
+export async function getProjects(
+  conn: Connection,
+  contentDir: string
+): Promise<db.Project[]> {
   const dirs = await walkArr(join(contentDir, "projects"));
   return Promise.all(
     dirs
       .filter(({ stats }) => stats.isFile() && stats.name.endsWith(".md"))
       .map(({ root, stats }) =>
         loadProject({
+          conn,
           pathname: join(root, stats.name),
           assetRoot: relative(contentDir, root),
         })
@@ -61,15 +70,11 @@ export async function getProjects(contentDir: string): Promise<db.Project[]> {
   );
 }
 
-export async function buildProjectCache(contentDir: string, conn: Connection) {
+export async function buildProjectCache(conn: Connection, contentDir: string) {
   console.log("Building project cache");
 
-  const projects = await getProjects(contentDir);
+  const repo = conn.getRepository(db.Project);
+  const ormObjects = repo.create(await getProjects(conn, contentDir));
 
-  await conn
-    .createQueryBuilder()
-    .insert()
-    .into(db.Project)
-    .values(projects)
-    .execute();
+  repo.save(ormObjects);
 }

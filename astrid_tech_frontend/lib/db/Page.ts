@@ -35,5 +35,5 @@ export class Page {
 
   @ManyToMany((type) => Tag)
   @JoinColumn()
-  tags!: Tag;
+  tags!: Tag[];
 }
