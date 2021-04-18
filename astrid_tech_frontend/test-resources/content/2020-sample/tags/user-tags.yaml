@@ -1,0 +1,238 @@
+- backgroundColor: "#31b8f7"
+  tags:
+    - slug: frontend
+      name: Frontend
+    - slug: react-js
+      name: React
+    - slug: responsive-design
+      name: Responsive Design
+
+- backgroundColor: "#563D7C"
+  tags:
+    - slug: bootstrap-css
+      name: Bootstrap
+
+- backgroundColor: "#1976D2"
+  tags:
+    - slug: material-ui
+      name: Material UI
+
+- backgroundColor: "#4a7aad"
+  tags:
+    - slug: backend
+      name: Backend
+    - slug: django
+      name: Django
+    - slug: asp-classic
+      name: ASP Classic
+    - slug: asp-net-core
+      name: ASP.NET Core
+    - slug: socket-io
+      name: Socket.IO
+
+- backgroundColor: "#e631f7"
+  tags:
+    - slug: data-science
+      name: Data Science
+    - slug: image-processing
+      name: Image Processing
+    - slug: anaconda
+      name: Anaconda
+
+- backgroundColor: "#525569"
+  tags:
+    - slug: database
+      name: Database
+    - slug: sql-server
+      name: SQL Server
+    - slug: postgres
+      name: Postgres
+    - slug: mysql
+      name: MySQL
+
+- backgroundColor: "#ff0066"
+  tags:
+    - slug: pure-fp
+      name: Pure Functional Programming
+    - slug: abstract-syntax-trees
+      name: Abstract Syntax Trees
+    - slug: kd-tree
+      name: k-d Trees
+    - slug: control-systems
+      name: Control Systems
+    - slug: math
+      name: Math
+    - slug: metamathematics
+      name: Metamathematics
+
+- backgroundColor: "#e0c91f"
+  tags:
+    - slug: chatbots
+      name: Chatbots
+    - slug: augmented-reality
+      name: Augmented Reality
+    - slug: ux-design
+      name: UX Design
+    - slug: robotics
+      name: Robotics
+    - slug: websockets
+      name: Websockets
+    - slug: 3d-printing
+      name: 3D Printing
+    - slug: resin-casting
+      name: Resin Casting
+    - slug: mechanical-engineering
+      name: Mechanical Engineering
+
+- backgroundColor: "#05befc"
+  tags:
+    - slug: electrical-engineering
+      name: Electrical Engineering
+    - slug: microcontrollers
+      name: Microcontrollers
+    - slug: internet-of-things
+      name: Internet of Things
+    - slug: circuit-design
+      name: Circuit Design
+    - slug: sensor-fusion
+      name: Sensor Fusion
+
+- backgroundColor: "#3DDC84"
+  tags:
+    - slug: android
+      name: Android
+
+- backgroundColor: "#62AEB2"
+  tags:
+    - slug: arduino
+      name: Arduino
+
+- backgroundColor: "#3B5998"
+  tags:
+    - slug: bluetooth
+      name: Bluetooth
+
+- backgroundColor: "#C51A4A"
+  tags:
+    - slug: raspberry-pi
+      name: Raspberry Pi
+
+- backgroundColor: "#3C873A"
+  tags:
+    - slug: node-js
+      name: Node.js
+
+- backgroundColor: "#222c37"
+  tags:
+    - slug: unity
+      name: Unity
+
+- backgroundColor: "#CC6699"
+  tags:
+    - slug: sass
+      name: Sass
+
+- backgroundColor: "#f89939"
+  tags:
+    - slug: scikit-learn
+      name: Scikit-Learn
+
+- backgroundColor: "#FFA800"
+  tags:
+    - slug: tensorflow
+      name: TensorFlow
+
+- backgroundColor: "#0000FF"
+  tags:
+    - slug: opencv
+      name: OpenCV
+
+- backgroundColor: "#B52E31"
+  tags:
+    - slug: angular-js
+      name: Angular.js
+
+- backgroundColor: "#00A4EF"
+  tags:
+    - slug: wpf
+      name: WPF
+
+- backgroundColor: "#00A4EF"
+  tags:
+    - slug: sql
+      name: SQL
+
+- backgroundColor: "#663399"
+  tags:
+    - slug: gatsby-js
+      name: Gatsby.js
+
+- backgroundColor: "#FFFFFF"
+  tags:
+    - slug: next-js
+      name: Next.js
+
+- backgroundColor: "#D10000"
+  tags:
+    - slug: keras
+      name: Keras
+
+- backgroundColor: "#000000"
+  color: "#FFFFFF"
+  tags:
+    - slug: linux
+      name: Linux
+    - slug: beautiful-soup
+      name: Beautiful Soup
+
+- backgroundColor: "#2391E6"
+  tags:
+    - slug: docker
+      name: Docker
+    - slug: docker-hub
+      name: Docker Hub
+    - slug: ci-cd
+      name: CI/CD
+
+- backgroundColor: "#222E3C"
+  color: "#F79400"
+  tags:
+    - slug: aws
+      name: AWS
+
+- backgroundColor: "#F79400"
+  tags:
+    - slug: gcloud
+      name: Google Cloud
+
+- backgroundColor: "#FFFFFF"
+  color: "#11557C"
+  tags:
+    - slug: matplotlib
+      name: Matplotlib
+
+- backgroundColor: "#0B0153"
+  color: "#FFCB00"
+  tags:
+    - slug: pandas
+      name: Pandas
+
+- backgroundColor: "#3D84C6"
+  tags:
+    - slug: numpy
+      name: Numpy
+
+- backgroundColor: "#EB7325"
+  tags:
+    - slug: jupyter
+      name: Jupyter
+
+- backgroundColor: "#0868AC"
+  tags:
+    - slug: jquery
+      name: jQuery
+
+- backgroundColor: "#01D9A3"
+  tags:
+    - slug: puppeteer-js
+      name: Puppeteer.js
