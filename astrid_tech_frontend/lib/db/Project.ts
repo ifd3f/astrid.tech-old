@@ -17,9 +17,21 @@ export class Project {
   @JoinColumn()
   page!: Page;
 
+  @Column()
+  status!: string;
+
   @Column({ nullable: false })
   startDate!: Date;
 
   @Column()
   endDate!: Date;
+
+  @Column()
+  description!: string;
+
+  @Column("simple-array")
+  source!: string[];
+
+  @Column("simple-array")
+  url!: string[];
 }

@@ -1,4 +1,11 @@
-import { Entity, PrimaryGeneratedColumn, Column } from "typeorm";
+import {
+  Entity,
+  PrimaryGeneratedColumn,
+  Column,
+  ManyToMany,
+  JoinColumn,
+} from "typeorm";
+import { Tag } from "./Tag";
 
 @Entity("Page")
 export class Page {
@@ -9,7 +16,10 @@ export class Page {
   date!: Date;
 
   @Column()
-  slug!: string;
+  pathname!: string;
+
+  @Column()
+  assetRoot!: string;
 
   @Column()
   title!: string;
@@ -18,5 +28,12 @@ export class Page {
   thumbnail!: string;
 
   @Column()
-  content!: string;
+  contentMarkdown!: string;
+
+  @Column()
+  objectType!: string;
+
+  @ManyToMany((type) => Tag)
+  @JoinColumn()
+  tags!: Tag;
 }

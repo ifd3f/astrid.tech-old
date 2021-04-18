@@ -1,4 +1,4 @@
-import { Entity, PrimaryGeneratedColumn, Column, JoinTable } from "typeorm";
+import { Entity, PrimaryGeneratedColumn, Column } from "typeorm";
 
 @Entity()
 export class TimeSlug {
@@ -8,21 +8,21 @@ export class TimeSlug {
   @Column({ nullable: false })
   date!: Date;
 
-  @Column()
+  @Column({ nullable: false })
   year!: number;
 
-  @Column()
+  @Column({ nullable: false })
   month!: number;
 
-  @Column()
+  @Column({ nullable: false })
   day!: number;
 
-  @Column()
+  @Column({ nullable: false })
   ordinal!: number;
 
-  @Column()
+  @Column({ nullable: false })
   shortName!: string;
 
-  @Column()
+  @Column({ nullable: true })
   objectType!: string;
 }

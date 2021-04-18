@@ -1,22 +1,6 @@
-import sqlite3, { Database } from "better-sqlite3";
-import { promises as fs } from "fs";
+import rimraf from "rimraf";
 import path from "path";
-import {
-  getContrastingTextColor,
-  getHSLString,
-  getPersistentColor,
-  RichColorTheme,
-} from "../lib/util";
 import { createConnection } from "../lib/db/index";
-import { convertProjectToStringDate, Tag } from "../types/types";
-import { copyAssets, mapData } from "./assets";
-import { getBlogPosts } from "./blog";
-import { generateLicenses } from "./licenses";
-import { getProjects } from "./projects";
-import { buildRSSFeed } from "./rss";
-import { getLanguageTags, getUserTagOverrides } from "./tags";
-import { serializeJS } from "./util";
-
 /*
 const contentDir = path.join(process.cwd(), "content");
 const TAGS_D_TS = `import { Tag } from "../lib/cache";
@@ -217,7 +201,12 @@ async function buildProjectCache(db: Database) {
 }
 */
 async function main() {
-  const connection = createConnection();
+  const dataDir = path.join(__dirname, "../data");
+  rimraf(dataDir, console.error);
+  
+  const connection = await createConnection();
+
+  await connection.close();
 }
 
 main().catch((e) => {

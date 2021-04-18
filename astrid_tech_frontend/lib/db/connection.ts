@@ -4,6 +4,7 @@ import { Article } from "./Article";
 import { Page } from "./Page";
 import { Tag } from "./Tag";
 import { TimeSlug } from "./TimeSlug";
+import { Note } from "./Note";
 
 export default function createCacheConnection() {
   return createConnection({
@@ -11,6 +12,6 @@ export default function createCacheConnection() {
     database: "data/content.sqlite3",
     logging: true,
     synchronize: true,
-    entities: [Project, Article, Page, Tag, TimeSlug],
+    entities: [Project, Article, Note, Page, Tag, TimeSlug],
   });
 }
