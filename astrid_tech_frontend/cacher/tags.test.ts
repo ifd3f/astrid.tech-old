@@ -1,8 +1,13 @@
-import { cleanUpCache, getResource, setUpCache } from "./test-util";
+import {
+  assertTagExists,
+  cleanUpCache,
+  getResource,
+  setUpCache,
+} from "./test-util";
 import { getConnection } from "typeorm";
 import { createCacheConnection, Tag } from "../lib/db";
 import { assert } from "chai";
-import { loadLanguageTags, loadTags, readUserTagFile } from "./tags";
+import { readLanguageTags, loadTags, readUserTagFile } from "./tags";
 
 describe("Tag Import", async () => {
   before(async () => {
@@ -21,9 +26,9 @@ describe("Tag Import", async () => {
     await getConnection().close();
   });
 
-  describe("loadLanguageTags", () => {
+  describe("readLanguageTags", () => {
     it("should work", async () => {
-      const result = await loadLanguageTags();
+      const result = await readLanguageTags();
 
       assert(result.find((x) => x.shortName == "cpp"));
       assert(result.find((x) => x.shortName == "tsv"));
@@ -49,12 +54,13 @@ describe("Tag Import", async () => {
         getResource("content/2020-sample/tags")
       );
 
-      assert(result.find((x) => x.shortName == "aws"));
-      assert(result.find((x) => x.shortName == "jupyter"));
-      assert(result.find((x) => x.shortName == "material-ui"));
-      assert(conn.getRepository(Tag).findOne({ shortName: "backend" }));
-      assert(conn.getRepository(Tag).findOne({ shortName: "numpy" }));
-      assert(conn.getRepository(Tag).findOne({ shortName: "gcloud" }));
+      const repo = conn.getRepository(Tag);
+      await assertTagExists(conn, "aws");
+      await assertTagExists(conn, "jupyter");
+      await assertTagExists(conn, "material-ui");
+      await assertTagExists(conn, "backend");
+      await assertTagExists(conn, "gcloud");
+      await assertTagExists(conn, "numpy");
     });
   });
 });

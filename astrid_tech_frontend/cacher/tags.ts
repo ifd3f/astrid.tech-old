@@ -25,7 +25,7 @@ function getTagSlug(name: string): string {
   return SLUG_OVERRIDE.get(lower) || lower.replace(" ", "-");
 }
 
-export async function loadLanguageTags(): Promise<Tag[]> {
+export async function readLanguageTags(): Promise<Tag[]> {
   const langs = yaml.load(
     await fs.readFile(`${__dirname}/languages.yml`, {
       encoding: "utf-8",
@@ -75,7 +75,7 @@ export async function readUserTagFile(userTagFile: string): Promise<Tag[]> {
 export async function loadTags(
   conn: Connection,
   userTagsDir: string
-): Promise<Tag[]> {
+): Promise<void> {
   console.log("Building language and user tag override tables");
 
   const ls: string[] = await fs.readdir(userTagsDir);
@@ -83,11 +83,17 @@ export async function loadTags(
   const tasks = ls.map((subdir) =>
     readUserTagFile(path.join(userTagsDir, subdir))
   );
-  tasks.push(loadLanguageTags());
+  tasks.push(readLanguageTags());
 
   const tags = (await Promise.all(tasks)).flat();
 
-  return conn.getRepository(Tag).save(tags);
+  await conn
+    .createQueryBuilder()
+    .insert()
+    .into(Tag)
+    .values(tags)
+    .onConflict(`("shortName") DO NOTHING`)
+    .execute();
 }
 
 /*

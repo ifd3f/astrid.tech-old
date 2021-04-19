@@ -38,8 +38,7 @@ export function useCache() {
 }
 
 export async function assertTagExists(conn: Connection, shortName: string) {
-  assert(
-    await conn.getRepository(Tag).findOne({ shortName }),
-    `tag ${shortName} was generated`
-  );
+  const found = await conn.getRepository(Tag).findOne({ shortName });
+  assert(found, `tag ${shortName} was generated`);
+  return found;
 }
