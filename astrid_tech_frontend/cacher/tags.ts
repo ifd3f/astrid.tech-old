@@ -1,8 +1,9 @@
 import { promises as fs } from "fs";
+import path from "path";
 import yaml from "js-yaml";
-import { join } from "path";
+import { fillTagValues, Tag } from "../lib/db";
 import { getContrastingTextColor } from "../lib/util";
-import { Tag } from "../types/types";
+import { Connection } from "typeorm";
 
 type LinguistEntry = {
   color: string;
@@ -24,7 +25,7 @@ function getTagSlug(name: string): string {
   return SLUG_OVERRIDE.get(lower) || lower.replace(" ", "-");
 }
 
-export async function getLanguageTags() {
+export async function loadLanguageTags(): Promise<Tag[]> {
   const langs = yaml.load(
     await fs.readFile(`${__dirname}/languages.yml`, {
       encoding: "utf-8",
@@ -40,23 +41,21 @@ export async function getLanguageTags() {
     }
 
     const lang = langs[key];
-    if (!lang.color) {
-      continue;
-    }
-    const color = getContrastingTextColor(lang.color);
-    out.push({
-      name: key,
-      slug: getTagSlug(key),
-      color,
+
+    const tag = fillTagValues({
+      title: key,
+      shortName: getTagSlug(key),
       backgroundColor: lang.color,
     });
+
+    out.push(tag);
   }
 
   return out;
 }
 
-export async function getUserTagOverrides(contentDir: string): Promise<Tag[]> {
-  const file = await fs.readFile(join(contentDir, "tags/user-tags.yaml"));
+export async function readUserTagFile(userTagFile: string): Promise<Tag[]> {
+  const file = await fs.readFile(userTagFile);
   const overrides = yaml.load(file.toString()) as {
     backgroundColor: string;
     color?: string;
@@ -65,59 +64,31 @@ export async function getUserTagOverrides(contentDir: string): Promise<Tag[]> {
 
   return overrides.flatMap(({ color, backgroundColor, tags }) =>
     tags.map(({ slug, name }) => ({
-      slug,
-      name,
+      shortName: slug,
+      title: name,
       backgroundColor,
       color: color ?? getContrastingTextColor(backgroundColor),
     }))
   );
 }
 
-
-function insertTags(db: Database, tags: Tag[]) {
-  const insert = db.prepare(
-    "INSERT INTO tag (slug, name, color, background_color) VALUES (@slug, @name, @color, @backgroundColor)"
-  );
-
-  db.transaction(() => {
-    for (const tag of tags) {
-      insert.run(tag);
-    }
-  })();
-}
-
-async function buildTagOverrideTable(db: Database) {
+export async function loadTags(
+  conn: Connection,
+  userTagsDir: string
+): Promise<Tag[]> {
   console.log("Building language and user tag override tables");
 
-  const [langTags, userTags] = await Promise.all([
-    getLanguageTags(),
-    getUserTagOverrides(contentDir),
-  ]);
+  const ls: string[] = await fs.readdir(userTagsDir);
 
-  insertTags(db, langTags);
-  insertTags(db, userTags);
-}
-
-async function buildProjectTagOverrideTable(db: Database) {
-  console.log("Building project tag override tables");
-
-  const projects = db.prepare("SELECT slug, title FROM project").all();
-
-  insertTags(
-    db,
-    projects.map(({ slug, title }) => {
-      const backgroundColor = getHSLString(
-        getPersistentColor(slug, RichColorTheme)
-      );
-      return {
-        slug: `/projects/${slug}/`,
-        name: title,
-        backgroundColor,
-        color: getContrastingTextColor(backgroundColor),
-      };
-    })
+  const tasks = ls.map((subdir) =>
+    readUserTagFile(path.join(userTagsDir, subdir))
   );
+  tasks.push(loadLanguageTags());
+
+  return (await Promise.all(tasks)).flat();
 }
+
+/*
 async function exportTagOverrideData(db: Database, dest: string) {
   console.log("Exporting tag overrides to file");
   const tags = db
@@ -152,3 +123,4 @@ async function exportTagOverrideData(db: Database, dest: string) {
 
   await fs.writeFile(path.join(process.cwd(), "data/tags.d.ts"), TAGS_D_TS);
 }
+*/

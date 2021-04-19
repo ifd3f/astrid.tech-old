@@ -1,0 +1,15 @@
+- backgroundColor: "#0B0153"
+  color: "#FFCB00"
+  tags:
+    - slug: pandas
+      name: Pandas
+
+- backgroundColor: "#3D84C6"
+  tags:
+    - slug: numpy
+      name: Numpy
+
+- backgroundColor: "#EB7325"
+  tags:
+    - slug: jupyter
+      name: Jupyter

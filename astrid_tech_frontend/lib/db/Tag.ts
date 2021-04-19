@@ -61,6 +61,5 @@ export async function getOrCreateTag(conn: Connection, shortName: string) {
     return result;
   }
 
-  const tag = repo.create(fillTagValues({ shortName }));
-  return await repo.save(tag);
+  return await repo.save(fillTagValues({ shortName }));
 }

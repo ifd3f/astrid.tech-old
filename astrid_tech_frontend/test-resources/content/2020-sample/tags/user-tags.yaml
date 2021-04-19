@@ -194,38 +194,11 @@
     - slug: ci-cd
       name: CI/CD
 
-- backgroundColor: "#222E3C"
-  color: "#F79400"
-  tags:
-    - slug: aws
-      name: AWS
-
-- backgroundColor: "#F79400"
-  tags:
-    - slug: gcloud
-      name: Google Cloud
-
 - backgroundColor: "#FFFFFF"
   color: "#11557C"
   tags:
     - slug: matplotlib
       name: Matplotlib
-
-- backgroundColor: "#0B0153"
-  color: "#FFCB00"
-  tags:
-    - slug: pandas
-      name: Pandas
-
-- backgroundColor: "#3D84C6"
-  tags:
-    - slug: numpy
-      name: Numpy
-
-- backgroundColor: "#EB7325"
-  tags:
-    - slug: jupyter
-      name: Jupyter
 
 - backgroundColor: "#0868AC"
   tags:

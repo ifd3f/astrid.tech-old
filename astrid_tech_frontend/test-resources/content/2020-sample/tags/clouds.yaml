@@ -1,0 +1,10 @@
+- backgroundColor: "#222E3C"
+  color: "#F79400"
+  tags:
+    - slug: aws
+      name: AWS
+
+- backgroundColor: "#F79400"
+  tags:
+    - slug: gcloud
+      name: Google Cloud
