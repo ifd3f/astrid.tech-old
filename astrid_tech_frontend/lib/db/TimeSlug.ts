@@ -3,7 +3,7 @@ import { Entity, PrimaryGeneratedColumn, Column } from "typeorm";
 @Entity()
 export class TimeSlug {
   @PrimaryGeneratedColumn()
-  id!: number;
+  id?: number;
 
   @Column({ nullable: false })
   date!: Date;
@@ -23,8 +23,30 @@ export class TimeSlug {
   @Column({ nullable: false })
   shortName!: string;
 
-  @Column({ nullable: true })
+  @Column({ nullable: false })
   objectType!: string;
+
+  static create({
+    date,
+    ordinal,
+    objectType,
+    shortName,
+  }: {
+    date: Date;
+    ordinal: number;
+    objectType: string;
+    shortName: string;
+  }): TimeSlug {
+    return {
+      date,
+      objectType,
+      year: date.getUTCFullYear(),
+      month: date.getUTCMonth() + 1,
+      day: date.getUTCDate(),
+      ordinal,
+      shortName,
+    };
+  }
 }
 
 export function timeSlugToString(path: TimeSlug) {

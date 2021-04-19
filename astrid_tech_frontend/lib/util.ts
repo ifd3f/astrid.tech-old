@@ -90,15 +90,6 @@ export function formatDateInterval(
     : `${startStr} to now`;
 }
 
-export function getBlogSlug({ date, slug }: { date: Date; slug: string }) {
-  return {
-    year: date.getUTCFullYear().toString(),
-    month: (date.getUTCMonth() + 1).toString().padStart(2, "0"),
-    day: date.getUTCDate().toString().padStart(2, "0"),
-    slug: [slug],
-  };
-}
-
 export function truncateKeepWords(text: string, maxChars: number) {
   if (text.length < maxChars) return "";
 

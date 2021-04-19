@@ -1,6 +1,8 @@
 import walk from "walk";
 import path from "path";
 import rimraf from "rimraf";
+import * as db from "../lib/db";
+import { Connection } from "typeorm";
 
 export async function walkArr<T>(dir: string) {
   const out: { root: string; stats: walk.WalkStats }[] = [];
@@ -30,4 +32,10 @@ module.exports=${JSON.stringify(data)}`;
 export function clearCaches() {
   const dataDir = path.join(__dirname, "../data");
   rimraf(dataDir, console.error);
+}
+
+export function loadTagList(conn: Connection, tags: string[]): Promise<db.Tag[]> {
+  return Promise.all(
+    tags.map((shortName: string) => db.getOrCreateTag(conn, shortName))
+  );
 }

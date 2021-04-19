@@ -24,7 +24,7 @@ export class Page {
   @Column()
   title!: string;
 
-  @Column()
+  @Column({ nullable: true })
   thumbnail!: string;
 
   @Column()

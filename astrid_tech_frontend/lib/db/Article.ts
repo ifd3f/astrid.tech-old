@@ -20,7 +20,4 @@ export class Article {
   @OneToOne((type) => TimeSlug, { onDelete: "CASCADE" })
   @JoinColumn()
   slug!: TimeSlug;
-
-  @Column({ nullable: false })
-  date!: Date;
 }

@@ -4,7 +4,7 @@ import { getConnection } from "typeorm";
 import { createCacheConnection, Tag } from "../lib/db";
 import { expect, assert } from "chai";
 
-describe("Project Loading", async () => {
+describe("Project Import", async () => {
   before(async () => {
     await createCacheConnection();
   });

@@ -3,7 +3,7 @@ import matter from "gray-matter";
 import path, { join, ParsedPath, relative } from "path";
 import { Connection } from "typeorm";
 import { Project, ProjectStatus } from "../types/types";
-import { walkArr } from "./util";
+import { loadTagList, walkArr } from "./util";
 import * as db from "../lib/db";
 
 function getShortName(parsed: ParsedPath) {
@@ -25,37 +25,31 @@ export async function loadProject({
   const { data, content } = matter(fileContents);
 
   const startDate = new Date(data.startDate);
-  const tags: db.Tag[] = await Promise.all(
-    data.tags.map((shortName: string) => db.getOrCreateTag(conn, shortName))
-  );
+  const tags: db.Tag[] = await loadTagList(conn, data.tags);
 
   const pageRepo = conn.getRepository(db.Page);
-  const page = await pageRepo.save(
-    pageRepo.create({
-      title: data.title,
-      thumbnail: data.thumbnail,
-      contentMarkdown: content,
-      date: startDate,
-      pathname: `/projects/${shortName}`,
-      assetRoot: assetRoot,
-      tags,
-      objectType: "project",
-    })
-  );
+  const page = await pageRepo.save({
+    title: data.title,
+    thumbnail: data.thumbnail,
+    contentMarkdown: content,
+    date: startDate,
+    pathname: `/projects/${shortName}`,
+    assetRoot: assetRoot,
+    tags,
+    objectType: "project",
+  });
 
   const projectsRepo = conn.getRepository(db.Project);
-  return projectsRepo.save(
-    projectsRepo.create({
-      shortName,
-      status: data.status as ProjectStatus,
-      startDate: startDate,
-      endDate: data.endDate ? new Date(data.endDate) : undefined,
-      page: page,
-      url: data.url ?? [],
-      source: data.source ? data.source : [],
-      description: data.description,
-    })
-  );
+  return projectsRepo.save({
+    shortName,
+    status: data.status as ProjectStatus,
+    startDate: startDate,
+    endDate: data.endDate ? new Date(data.endDate) : undefined,
+    page: page,
+    url: data.url ?? [],
+    source: data.source ? data.source : [],
+    description: data.description,
+  });
 }
 
 export async function buildProjectCache(conn: Connection, contentDir: string) {
