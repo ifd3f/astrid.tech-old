@@ -30,8 +30,8 @@ describe("Tag Import", async () => {
     });
   });
 
-  describe("buildProjectCache", () => {
-    it("should build cache for project files", async () => {
+  describe("readUserTagFile", () => {
+    it("should read valid YAML files", async () => {
       const result = await readUserTagFile(
         getResource("content/2020-sample/tags/clouds.yaml")
       );
@@ -40,8 +40,8 @@ describe("Tag Import", async () => {
     });
   });
 
-  describe("buildProjectCache", () => {
-    it("should build cache for project files", async () => {
+  describe("loadTags", () => {
+    it("should load tags from directory", async () => {
       const conn = getConnection();
 
       const result = await loadTags(

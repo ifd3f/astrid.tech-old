@@ -25,9 +25,6 @@ export class Project {
   @Column({ nullable: true })
   endDate?: Date;
 
-  @Column()
-  description!: string;
-
   @Column("simple-array")
   source!: string[];
 

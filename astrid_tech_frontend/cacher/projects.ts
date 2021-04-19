@@ -30,6 +30,7 @@ export async function loadProject({
   const pageRepo = conn.getRepository(db.Page);
   const page = await pageRepo.save({
     title: data.title,
+    description: data.description,
     thumbnail: data.thumbnail,
     contentMarkdown: content,
     date: startDate,
@@ -39,8 +40,9 @@ export async function loadProject({
     objectType: "project",
   });
 
-  const projectsRepo = conn.getRepository(db.Project);
-  return projectsRepo.save({
+  await db.getOrCreateTag(conn, { shortName: `project:${shortName}` });
+
+  return conn.getRepository(db.Project).save({
     shortName,
     status: data.status as ProjectStatus,
     startDate: startDate,
@@ -48,14 +50,13 @@ export async function loadProject({
     page: page,
     url: data.url ?? [],
     source: data.source ? data.source : [],
-    description: data.description,
   });
 }
 
 export async function buildProjectCache(conn: Connection, contentDir: string) {
   const dirs = await walkArr(join(contentDir, "projects"));
 
-  const projects = await Promise.all(
+  await Promise.all(
     dirs
       .filter(({ stats }) => stats.isFile() && stats.name.endsWith(".md"))
       .map(({ root, stats }) =>
@@ -65,12 +66,5 @@ export async function buildProjectCache(conn: Connection, contentDir: string) {
           assetRoot: relative(contentDir, root),
         })
       )
-  );
-
-  await Promise.all(
-    projects.map(
-      async (project) =>
-        await db.getOrCreateTag(conn, `project:${project.shortName}`)
-    )
   );
 }

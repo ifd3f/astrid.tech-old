@@ -30,17 +30,19 @@ export class Tag {
   color!: string;
 }
 
+type TagPrototype = {
+  shortName: string;
+  title?: string;
+  backgroundColor?: string;
+  color?: string;
+};
+
 export function fillTagValues({
   shortName,
   title,
   backgroundColor,
   color,
-}: {
-  shortName: string;
-  title?: string;
-  backgroundColor?: string;
-  color?: string;
-}): Tag {
+}: TagPrototype): Tag {
   const title_ = title ?? shortName;
   const backgroundColor_ =
     backgroundColor ?? getHSLString(getPersistentColor(shortName));
@@ -54,12 +56,15 @@ export function fillTagValues({
   };
 }
 
-export async function getOrCreateTag(conn: Connection, shortName: string) {
+export async function getOrCreateTag(
+  conn: Connection,
+  prototype: TagPrototype
+) {
   const repo = conn.getRepository(Tag);
-  const result = await repo.findOne({ shortName });
+  const result = await repo.findOne(prototype);
   if (result) {
     return result;
   }
 
-  return await repo.save(fillTagValues({ shortName }));
+  return await repo.save(fillTagValues(prototype));
 }

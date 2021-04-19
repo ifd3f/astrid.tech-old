@@ -1,13 +1,11 @@
 import { Feed } from "feed";
 import { promises as fs } from "fs";
-import { getBlogPosts } from "../lib/cache";
 import path from "path";
-import { BlogPost } from "../types/types";
-import { blogSlugToString, getBlogSlug } from "../lib/util";
 import { convertBlogPostToObjectDate } from "../types/types";
-import { excerptify } from "../lib/markdown";
+import { Connection } from "typeorm";
+import { Page } from "lib/db";
 
-async function createRSSFeed(hostname: string, posts: BlogPost[]) {
+async function createRSSFeed(conn: Connection, hostname: string) {
   const root = `https://${hostname}`;
   const author = {
     name: "Astrid Yu",
@@ -33,21 +31,24 @@ async function createRSSFeed(hostname: string, posts: BlogPost[]) {
 
   feed.addCategory("Technology");
 
-  (await Promise.all(posts.slice(0, 10).map(excerptify(300)))).map(
-    async (post) => {
-      const url = root + blogSlugToString(getBlogSlug(post));
-      feed.addItem({
-        title: post.title,
-        id: url,
-        link: url,
-        date: post.date,
-        description: post.description,
-        content: post.excerpt,
-        author: [author],
-        category: post.tags.map((t) => ({ name: t })),
-      });
-    }
-  );
+  (
+    await conn.getRepository(Page).find({
+      order: { date: "DESC" },
+    })
+  ).map((post) => {
+    const url = root + post.pathname;
+    return feed.addItem({
+      title: post.title,
+      id: url,
+      link: url,
+      date: post.date,
+      description: post.description,
+      content: post.contentMarkdown,
+      author: [author],
+      image: post.thumbnail,
+      category: post.tags.map((t) => ({ name: t.shortName })),
+    });
+  });
 
   return feed;
 }
@@ -60,9 +61,8 @@ async function writeFeedData(assetRoot: string, feed: Feed) {
   ]);
 }
 
-export async function buildRSSFeed(assetRoot: string) {
+export async function buildRSSFeed(conn: Connection, assetRoot: string) {
   console.log("Building RSS, Atom, and JSON feeds");
-  const posts = getBlogPosts().map((p) => convertBlogPostToObjectDate(p));
-  const feed = await createRSSFeed("astrid.tech", posts);
+  const feed = await createRSSFeed(conn, "astrid.tech");
   await writeFeedData(assetRoot, feed);
 }

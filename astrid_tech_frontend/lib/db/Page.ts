@@ -25,7 +25,10 @@ export class Page {
   title!: string;
 
   @Column({ nullable: true })
-  thumbnail!: string;
+  thumbnail?: string;
+
+  @Column({ nullable: true })
+  description?: string;
 
   @Column()
   contentMarkdown!: string;

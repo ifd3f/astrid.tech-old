@@ -51,6 +51,7 @@ export async function loadArticle({
     title: data.title,
     thumbnail: data.thumbnail,
     contentMarkdown: content,
+    description: data.description,
     date,
     pathname: db.timeSlugToString(timeSlug),
     assetRoot: assetRoot,

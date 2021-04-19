@@ -1,5 +1,11 @@
 import { buildProjectCache, loadProject } from "./projects";
-import { cleanUpCache, getResource, setUpCache, useCache } from "./test-util";
+import {
+  assertTagExists,
+  cleanUpCache,
+  getResource,
+  setUpCache,
+  useCache,
+} from "./test-util";
 import { getConnection } from "typeorm";
 import { createCacheConnection, Tag } from "../lib/db";
 import { expect, assert } from "chai";
@@ -34,10 +40,6 @@ describe("Project Import", async () => {
       });
 
       expect(result.shortName).equal("astrid-tech");
-      const newTag = await conn
-        .getRepository(Tag)
-        .findOne({ shortName: "react-js" });
-      assert(newTag, "no tag was generated");
     });
   });
 
@@ -46,10 +48,7 @@ describe("Project Import", async () => {
       const conn = getConnection();
 
       await buildProjectCache(conn, getResource("content/2020-sample"));
-      const newTag = await conn
-        .getRepository(Tag)
-        .findOne({ shortName: "react-js" });
-      assert(newTag, "no tag was generated");
+      await assertTagExists(conn, "react-js");
     });
   });
 });

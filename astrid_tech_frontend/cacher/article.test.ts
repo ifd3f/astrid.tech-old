@@ -1,4 +1,9 @@
-import { cleanUpCache, getResource, setUpCache, useCache } from "./test-util";
+import {
+  assertTagExists,
+  cleanUpCache,
+  getResource,
+  setUpCache,
+} from "./test-util";
 import { getConnection } from "typeorm";
 import { createCacheConnection, Tag } from "../lib/db";
 import { expect, assert } from "chai";
@@ -72,10 +77,7 @@ describe("Article Import", async () => {
       });
 
       expect(result.slug.shortName).equal("hello-world");
-      const newTag = await conn
-        .getRepository(Tag)
-        .findOne({ shortName: "react-js" });
-      assert(newTag, "no tag was generated");
+      await assertTagExists(conn, "react-js");
     });
   });
 
@@ -84,10 +86,7 @@ describe("Article Import", async () => {
       const conn = getConnection();
 
       await buildProjectCache(conn, getResource("content/2020-sample"));
-      const newTag = await conn
-        .getRepository(Tag)
-        .findOne({ shortName: "react-js" });
-      assert(newTag, "no tag was generated");
+      await assertTagExists(conn, "react-js");
     });
   });
 });

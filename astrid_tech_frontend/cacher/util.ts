@@ -34,8 +34,11 @@ export function clearCaches() {
   rimraf(dataDir, console.error);
 }
 
-export function loadTagList(conn: Connection, tags: string[]): Promise<db.Tag[]> {
+export function loadTagList(
+  conn: Connection,
+  tags: string[]
+): Promise<db.Tag[]> {
   return Promise.all(
-    tags.map((shortName: string) => db.getOrCreateTag(conn, shortName))
+    tags.map((shortName: string) => db.getOrCreateTag(conn, { shortName }))
   );
 }

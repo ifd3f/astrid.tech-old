@@ -1,7 +1,8 @@
-import { createCacheConnection } from "../lib/db";
+import { createCacheConnection, Tag } from "../lib/db";
 import path from "path";
-import { getConnection } from "typeorm";
+import { Connection, getConnection } from "typeorm";
 import { clearCaches } from "./util";
+import { assert } from "chai";
 
 export function getResource(subpath: string) {
   return path.join(__dirname, "../test-resources", subpath);
@@ -34,4 +35,11 @@ export function useCache() {
   afterEach(async () => {
     await cleanUpCache();
   });
+}
+
+export async function assertTagExists(conn: Connection, shortName: string) {
+  assert(
+    await conn.getRepository(Tag).findOne({ shortName }),
+    `tag ${shortName} was generated`
+  );
 }

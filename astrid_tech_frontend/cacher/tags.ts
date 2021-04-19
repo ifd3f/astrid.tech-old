@@ -85,7 +85,9 @@ export async function loadTags(
   );
   tasks.push(loadLanguageTags());
 
-  return (await Promise.all(tasks)).flat();
+  const tags = (await Promise.all(tasks)).flat();
+
+  return conn.getRepository(Tag).save(tags);
 }
 
 /*
