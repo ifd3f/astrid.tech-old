@@ -1,14 +1,18 @@
+mod markdown;
+mod cms_types;
+
 use std::fs::read_to_string;
 
 use comrak::{Arena, ComrakOptions, format_html, parse_document};
-use serde::{Serialize, Deserialize};
-use gray_matter::matter::Matter;
+use comrak::nodes::AstNode;
 use gray_matter::engine::yaml::YAML;
+use gray_matter::matter::Matter;
+use serde::{Deserialize, Serialize};
 
 #[derive(Serialize, Deserialize, Debug)]
 struct SomeFrontMatter {
     description: String,
-    title: String
+    title: String,
 }
 
 fn main() {
@@ -27,6 +31,8 @@ fn main() {
     format_html(root, &ComrakOptions::default(), &mut s).unwrap();
 
     let written = String::from_utf8(s).unwrap();
+
+    println!("{:#?}", root);
 
     println!("{:?}\n{}", yaml.data, written);
 }
