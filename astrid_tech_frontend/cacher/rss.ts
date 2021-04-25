@@ -1,9 +1,40 @@
-import { Feed } from "feed";
+import { Feed, Item } from "feed";
 import { promises as fs } from "fs";
 import path from "path";
-import { convertBlogPostToObjectDate } from "../types/types";
 import { Connection } from "typeorm";
-import { Page } from "lib/db";
+import { Article, Note, Page } from "../lib/db";
+
+function articleAsRSS(author: any, root: string, article: Article): Item {
+  const post = article.page;
+  const url = root + post.pathname;
+  return {
+    title: post.title,
+    id: url,
+    link: url,
+    date: post.date,
+    description: post.description,
+    content: post.contentMarkdown,
+    author: [author],
+    image: post.thumbnail,
+    category: post.tags.map((t) => ({ name: t.shortName })),
+  };
+}
+
+function noteAsRSS(author: any, root: string, note: Note): Item {
+  const post = note.page;
+  const url = root + post.pathname;
+  return {
+    title: post.title,
+    id: url,
+    link: url,
+    date: post.date,
+    description: post.description,
+    content: post.contentMarkdown,
+    author: [author],
+    image: post.thumbnail,
+    category: post.tags.map((t) => ({ name: t.shortName })),
+  };
+}
 
 async function createRSSFeed(conn: Connection, hostname: string) {
   const root = `https://${hostname}`;
@@ -31,24 +62,21 @@ async function createRSSFeed(conn: Connection, hostname: string) {
 
   feed.addCategory("Technology");
 
-  (
-    await conn.getRepository(Page).find({
-      order: { date: "DESC" },
-    })
-  ).map((post) => {
-    const url = root + post.pathname;
-    return feed.addItem({
-      title: post.title,
-      id: url,
-      link: url,
-      date: post.date,
-      description: post.description,
-      content: post.contentMarkdown,
-      author: [author],
-      image: post.thumbnail,
-      category: post.tags.map((t) => ({ name: t.shortName })),
-    });
-  });
+  const getArticlesTask = conn
+    .getRepository(Article)
+    .find()
+    .then((articles) =>
+      articles.map((article) => articleAsRSS(author, root, article))
+    );
+
+  const getNotesTask = conn
+    .getRepository(Note)
+    .find()
+    .then((notes) => notes.map((note) => noteAsRSS(author, root, note)));
+
+  const items = (await Promise.all([getArticlesTask, getNotesTask])).flat();
+
+  items.forEach(feed.addItem);
 
   return feed;
 }

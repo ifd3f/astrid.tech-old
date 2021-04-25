@@ -1,14 +1,16 @@
 import path from "path";
+import fs from "fs-extra";
 import { createCacheConnection } from "../lib/db";
 import { buildArticleCache } from "./article";
 import { buildProjectCache } from "./projects";
 import { loadTags } from "./tags";
-import { clearCaches } from "./util";
+import { deleteObjects } from "./util";
 
 const contentDir = path.join(process.cwd(), "content");
 
 async function main() {
-  clearCaches();
+  await deleteObjects();
+  await fs.mkdir(contentDir);
 
   const connection = await createCacheConnection();
 

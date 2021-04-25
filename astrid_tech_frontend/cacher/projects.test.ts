@@ -4,7 +4,6 @@ import {
   cleanUpCache,
   getResource,
   setUpCache,
-  useCache,
 } from "./test-util";
 import { getConnection } from "typeorm";
 import { createCacheConnection, Tag } from "../lib/db";

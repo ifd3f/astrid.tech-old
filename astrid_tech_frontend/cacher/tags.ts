@@ -1,4 +1,4 @@
-import { promises as fs } from "fs";
+import fs from "fs-extra";
 import path from "path";
 import yaml from "js-yaml";
 import { fillTagValues, Tag } from "../lib/db";

@@ -1,10 +1,4 @@
-import {
-  Entity,
-  PrimaryGeneratedColumn,
-  Column,
-  OneToOne,
-  JoinColumn,
-} from "typeorm";
+import { Entity, PrimaryGeneratedColumn, OneToOne, JoinColumn } from "typeorm";
 import { Page } from "./Page";
 import { TimeSlug } from "./TimeSlug";
 
@@ -13,11 +7,11 @@ export class Article {
   @PrimaryGeneratedColumn()
   id!: number;
 
-  @OneToOne((type) => Page, { onDelete: "CASCADE" })
-  @JoinColumn()
-  page!: Page;
-
   @OneToOne((type) => TimeSlug, { onDelete: "CASCADE" })
   @JoinColumn()
   slug!: TimeSlug;
+
+  @OneToOne((type) => Page, { onDelete: "CASCADE" })
+  @JoinColumn()
+  page!: Page;
 }

@@ -1,10 +1,5 @@
-import {
-  Entity,
-  PrimaryGeneratedColumn,
-  Column,
-  OneToOne,
-  JoinColumn,
-} from "typeorm";
+import { Entity, PrimaryGeneratedColumn, OneToOne, JoinColumn } from "typeorm";
+import { Page } from "./Page";
 import { TimeSlug } from "./TimeSlug";
 
 @Entity()
@@ -12,13 +7,11 @@ export class Note {
   @PrimaryGeneratedColumn()
   id!: number;
 
-  @Column({ nullable: false })
-  contentMarkdown!: String;
-
   @OneToOne((type) => TimeSlug)
   @JoinColumn()
   slug!: TimeSlug;
 
-  @Column({ nullable: false })
-  date!: Date;
+  @OneToOne((type) => Page, { onDelete: "CASCADE" })
+  @JoinColumn()
+  page!: Page;
 }

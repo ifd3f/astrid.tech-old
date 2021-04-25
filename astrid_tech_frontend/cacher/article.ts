@@ -1,4 +1,4 @@
-import { promises as fs } from "fs";
+import fs from "fs-extra";
 import matter from "gray-matter";
 import path, { join, ParsedPath, relative } from "path";
 import { Connection } from "typeorm";
