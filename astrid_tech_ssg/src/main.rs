@@ -1,5 +1,6 @@
 mod markdown;
-mod cms_types;
+mod input_types;
+mod md_util;
 
 use std::fs::read_to_string;
 
