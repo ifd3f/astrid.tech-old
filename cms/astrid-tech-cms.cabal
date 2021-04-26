@@ -29,10 +29,13 @@ library
   exposed-modules:
       Astrid.Tech.CacheSchema
       Astrid.Tech.InputSchema.Article
+      Astrid.Tech.InputSchema.Note
       Astrid.Tech.InputSchema.Page
       Astrid.Tech.InputSchema.Project
       Astrid.Tech.InputSchema.Tag
+      Astrid.Tech.InputSchema.Timestream
       Astrid.Tech.InputSchema.Util
+      Astrid.Tech.MessageError
       Astrid.Tech.Slug
       Lib
   other-modules:
@@ -55,6 +58,7 @@ library
     , either
     , filepath
     , frontmatter
+    , lens
     , newbase60 ==0.1.*
     , servant
     , system-fileio
@@ -87,6 +91,7 @@ executable astrid-tech-cms-exe
     , either
     , filepath
     , frontmatter
+    , lens
     , newbase60 ==0.1.*
     , servant
     , system-fileio
@@ -126,6 +131,7 @@ test-suite astrid-tech-cms-test
     , filepath
     , frontmatter
     , hspec
+    , lens
     , mtl
     , newbase60 ==0.1.*
     , raw-strings-qq

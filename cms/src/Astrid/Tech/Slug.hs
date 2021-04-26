@@ -4,7 +4,6 @@ module Astrid.Tech.Slug
   )
 where
 
-import Data.List (intercalate)
 import Data.Time
 import Text.Printf (printf)
 
@@ -16,6 +15,9 @@ data DatedSlug = DatedSlug
     shortName :: String
   }
   deriving (Eq)
+
+instance Ord DatedSlug where
+  compare a b = compare (year a, month a, day a, ordinal a) (year b, month b, day b, ordinal b)
 
 getDay :: DatedSlug -> Day
 getDay (DatedSlug y m d _ _) = fromGregorian y m d

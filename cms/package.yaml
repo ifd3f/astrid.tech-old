@@ -41,6 +41,7 @@ dependencies:
   - directory
   - directory-tree
   - either
+  - lens
   - validation
 
 ghc-options:
