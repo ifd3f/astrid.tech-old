@@ -1,9 +1,9 @@
-module Astrid.Tech.InputSchema.BlogSpec
+module Astrid.Tech.InputSchema.ArticleSpec
   ( spec,
   )
 where
 
-import Astrid.Tech.InputSchema.Blog
+import Astrid.Tech.InputSchema.Article
 import Astrid.Tech.InputSchema.TestUtil (rootResourcesPath)
 import Astrid.Tech.InputSchema.Util (readDirectoryBS)
 import Astrid.Tech.Slug (DatedSlug (..))

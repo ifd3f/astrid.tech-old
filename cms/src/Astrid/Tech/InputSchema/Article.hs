@@ -1,6 +1,6 @@
-module Astrid.Tech.InputSchema.Blog
-  ( BlogPost (..),
-    BlogPostMeta (..),
+module Astrid.Tech.InputSchema.Article
+  ( Article (..),
+    ArticleMeta (..),
     readBlogPost,
     readBlogDir,
   )
@@ -24,7 +24,7 @@ import System.Directory.Tree (DirTree (Dir), FileName)
 import qualified System.Directory.Tree as DT
 import Text.Read (readMaybe)
 
-data BlogPostMeta = BlogPostMeta
+data ArticleMeta = ArticleMeta
   { title :: String,
     description :: String,
     date :: ZonedTime,
@@ -33,9 +33,9 @@ data BlogPostMeta = BlogPostMeta
   }
   deriving (Generic)
 
-instance FromJSON BlogPostMeta
+instance FromJSON ArticleMeta
 
-generateSlug :: Int -> String -> BlogPostMeta -> DatedSlug
+generateSlug :: Int -> String -> ArticleMeta -> DatedSlug
 generateSlug withOrdinal withShortName withMeta =
   let utcTime = zonedTimeToUTC $ date withMeta
       (y, m, d) = toGregorian $ utctDay utcTime
@@ -47,9 +47,9 @@ generateSlug withOrdinal withShortName withMeta =
           shortName = withShortName
         }
 
-data BlogPost = BlogPost
+data Article = Article
   { slug :: DatedSlug,
-    meta :: BlogPostMeta,
+    meta :: ArticleMeta,
     page :: P.Page
   }
 
@@ -60,7 +60,7 @@ data BlogParseException
 
 instance Exception BlogParseException
 
-readBlogPost :: Int -> DirTree ByteString.ByteString -> Either BlogParseException BlogPost
+readBlogPost :: Int -> DirTree ByteString.ByteString -> Either BlogParseException Article
 readBlogPost withOrdinal tree =
   mapLeft
     (UnexpectedFileStructure fileName)
@@ -68,7 +68,7 @@ readBlogPost withOrdinal tree =
         (rawPage, parsedMeta, parsedPage) <- P.findAndParseIndex tree
         let newSlug = generateSlug withOrdinal (P.name rawPage) parsedMeta
         Right $
-          BlogPost
+          Article
             { meta = parsedMeta,
               page = parsedPage,
               slug = newSlug
@@ -85,7 +85,7 @@ data ScanPostsException
 
 instance Exception ScanPostsException
 
-readBlogDir :: DirTree ByteString.ByteString -> [Either ScanPostsException BlogPost]
+readBlogDir :: DirTree ByteString.ByteString -> [Either ScanPostsException Article]
 readBlogDir tree =
   let validateIsDir (Dir name contents) = Right (name, contents)
       validateIsDir node = Left $ BadDir $ DT.name node

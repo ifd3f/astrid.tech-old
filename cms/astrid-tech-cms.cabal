@@ -28,7 +28,7 @@ source-repository head
 library
   exposed-modules:
       Astrid.Tech.CacheSchema
-      Astrid.Tech.InputSchema.Blog
+      Astrid.Tech.InputSchema.Article
       Astrid.Tech.InputSchema.Page
       Astrid.Tech.InputSchema.Project
       Astrid.Tech.InputSchema.Tag
@@ -100,7 +100,7 @@ test-suite astrid-tech-cms-test
   type: exitcode-stdio-1.0
   main-is: Spec.hs
   other-modules:
-      Astrid.Tech.InputSchema.BlogSpec
+      Astrid.Tech.InputSchema.ArticleSpec
       Astrid.Tech.InputSchema.PageSpec
       Astrid.Tech.InputSchema.ProjectSpec
       Astrid.Tech.InputSchema.TestUtil
