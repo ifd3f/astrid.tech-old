@@ -35,7 +35,6 @@ library
       Astrid.Tech.InputSchema.Tag
       Astrid.Tech.InputSchema.Timestream
       Astrid.Tech.InputSchema.Util
-      Astrid.Tech.MessageError
       Astrid.Tech.Slug
       Lib
   other-modules:
@@ -109,6 +108,7 @@ test-suite astrid-tech-cms-test
       Astrid.Tech.InputSchema.PageSpec
       Astrid.Tech.InputSchema.ProjectSpec
       Astrid.Tech.InputSchema.TestUtil
+      Astrid.Tech.InputSchema.TimestreamSpec
       Paths_astrid_tech_cms
   hs-source-dirs:
       test
