@@ -1,5 +1,9 @@
-module Astrid.Tech.InputSchema.Timestream (Timestream (..)) where
+{-# LANGUAGE RankNTypes #-}
+{-# LANGUAGE TemplateHaskell #-}
 
+module Astrid.Tech.InputSchema.Timestream (Timestream (..), readTimestream) where
+
+import Control.Lens (Lens')
 import Data.Either (partitionEithers)
 import Data.Either.Combinators (mapRight)
 import qualified Data.Map as Map
@@ -10,31 +14,40 @@ import System.FilePath ((</>))
 import Text.Read (readMaybe)
 
 data Timestream e d m y = Timestream
-  { years :: Map.Map Integer (Year e d m y)
+  { _years :: Map.Map Integer (Year e d m y)
   }
+
+makeLenses ''Timestream
 
 data Year e d m y = Year
-  { months :: Map.Map Integer (Month e d m),
-    yearObjects :: [y]
+  { _months :: Map.Map Integer (Month e d m),
+    _yearObjects :: [y]
   }
+
+makeLenses ''Year
 
 data Month e d m = Month
-  { days :: Map.Map Int (Day e d),
-    monthObjects :: [m]
+  { _days :: Map.Map Int (Day e d),
+    _monthObjects :: [m]
   }
+
+makeLenses ''Month
 
 data Day e d = Day
-  { entries :: Map.Map Int e,
-    dayObjects :: [d]
+  { _entries :: Map.Map Int e,
+    _dayObjects :: [d]
   }
 
+makeLenses ''Day
+
+liftMultiError :: ([b1] -> b2) -> FilePath -> [Either [FilePath] b1] -> Either [FilePath] b2
 liftMultiError f anchor subDirs = case partitionEithers subDirs of
   ([], successes) -> Right $ f successes
   (errors, _) -> Left $ map (anchor </>) (concat errors)
 
 -- | A dreadful horror show of a function that abstracts away several things.
 -- |
--- | First argument constructs the parent object from its child directories and its list of index children if it has any.
+-- | First argument constructs the parent object from a map of key to child directory, and its list of index children if it has any.
 -- | Second argument constructs the child objects, or errors with a list of failing files.
 -- | Third argument is the root of the directory to read.
 readNumericDir ::
@@ -73,3 +86,24 @@ readMonth = readNumericDir Month readDay
 
 readYear :: AnchoredDirTree a -> Either [FilePath] (Year (AnchoredDirTree a) (AnchoredDirTree a) (AnchoredDirTree a) (AnchoredDirTree a))
 readYear = readNumericDir Year readMonth
+
+readTimestream :: AnchoredDirTree a -> Either [FilePath] (Timestream (AnchoredDirTree a) (AnchoredDirTree a) (AnchoredDirTree a) (AnchoredDirTree a))
+readTimestream (anchor :/ dir) = case dir of
+  Dir _ children ->
+    let subDirs =
+          mapMaybe
+            ( \childDir -> do
+                let dirName = DT.name childDir
+                key :: Integer <- readMaybe dirName
+                let anchoredChildDir = (anchor </> dirName) :/ childDir
+                pure $ mapRight (\childObj -> (key, childObj)) $ readYear anchoredChildDir
+            )
+            children
+     in case partitionEithers subDirs of
+          ([], successes) ->
+            Right $
+              Timestream
+                { _years = Map.fromList successes
+                }
+          (errors, _) -> Left $ map (anchor </>) (concat errors)
+  invalid -> Left $ [anchor </> DT.name invalid]
