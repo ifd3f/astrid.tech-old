@@ -37,6 +37,7 @@ library
       Astrid.Tech.InputSchema.Util
       Astrid.Tech.Slug
       Lib
+      System.Directory.Tree.From
   other-modules:
       Paths_astrid_tech_cms
   hs-source-dirs:

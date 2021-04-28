@@ -2,53 +2,50 @@
 {-# LANGUAGE TemplateHaskell #-}
 
 module Astrid.Tech.InputSchema.Timestream
-  ( Timestream (..),
-    Year (..),
-    Month (..),
-    Day (..),
+  ( TimeDirectory (..),
+    objects,
+    children,
+    Timestream,
+    Year,
+    Month,
+    Day,
   )
 where
 
 import Control.Lens.TH (makeLenses)
 import qualified Data.Map as Map
-import Data.Maybe (mapMaybe, maybeToList)
+import Data.Maybe (mapMaybe)
 import System.Directory.Tree (AnchoredDirTree ((:/)), DirTree (Dir))
 import qualified System.Directory.Tree as DT
+import System.Directory.Tree.From
 import System.FilePath ((</>))
 import Text.Read (readMaybe)
 
-data TimeFolder o k v = TimeFolder
+data TimeDirectory o k v = TimeDirectory
   { _objects :: [o],
     _children :: Map.Map k v
-  }
+  } deriving (Show, Eq)
 
-makeLenses ''TimeFolder
+makeLenses ''TimeDirectory
 
-type Day d e = TimeFolder d Int e
+type Day d e = TimeDirectory d Int e
 
-type Month m d e = TimeFolder m Int (Day d e)
+type Month m d e = TimeDirectory m Int (Day d e)
 
-type Year y m d e = TimeFolder y Int (Month m d e)
+type Year y m d e = TimeDirectory y Int (Month m d e)
 
-type Timestream y m d e = TimeFolder () Integer (Year y m d e)
+type Timestream y m d e = TimeDirectory () Integer (Year y m d e)
 
-instance Functor (TimeFolder o k) where
+instance Functor (TimeDirectory o k) where
   fmap f day = day {_children = fmap f (_children day)}
 
-class FromDirectory dt e a where
-  constructFromDir :: DT.AnchoredDirTree dt -> Either e a
-
-instance FromDirectory dt () (DT.AnchoredDirTree dt) where
-  constructFromDir dt = Right dt
-
-data TimeDirectoryConstructionError ce = ChildConstructionError [ce] | InvalidName FilePath | InvalidIndexFolder
+data TimeDirectoryConstructionError = NonDirectoryError FilePath
 
 instance
   (Ord k, Read k, FromDirectory dt ce v, FromDirectory dt ce o) =>
-  FromDirectory dt (TimeDirectoryConstructionError ce) (TimeFolder (Either ce o) k (Either ce v))
+  FromDirectory dt TimeDirectoryConstructionError (TimeDirectory (Either ce o) k (Either ce v))
   where
   constructFromDir (anchor :/ dir) = case dir of
-    invalid -> Left (InvalidName $ anchor </> DT.name invalid)
     Dir _ childDirs ->
       let validChildDirs =
             mapMaybe
@@ -61,15 +58,14 @@ instance
 
           constructChildResults :: [(k, Either ce v)] = map (fmap constructFromDir) validChildDirs
 
-          indexChildDirs = do
-            indexDir <- maybeToList $ DT.dropTo "index" (anchor :/ dir)
-            case DT.dirTree indexDir of
+          indexChildDirs = map constructFromDir $ case DT.dropTo "index" (anchor :/ dir) of
+            Nothing -> []
+            Just indexDir -> case DT.dirTree indexDir of
               Dir dirName indexContents -> map ((anchor </> dirName) :/) indexContents
               _ -> []
-
-          constructIndexResults :: [Either ce o] = map constructFromDir indexChildDirs
        in Right $
-            TimeFolder
+            TimeDirectory
               { _children = (Map.fromList constructChildResults),
-                _objects = constructIndexResults
+                _objects = indexChildDirs
               }
+    nonDir -> Left (NonDirectoryError $ anchor </> DT.name nonDir)
