@@ -118,5 +118,6 @@
     <orderEntry type="library" name="split-0.2.3.4" level="project" />
     <orderEntry type="library" name="vector-algorithms-0.8.0.4" level="project" />
     <orderEntry type="library" name="void-0.7.3" level="project" />
+    <orderEntry type="library" name="either-unwrap-1.1" level="project" />
   </component>
 </module>

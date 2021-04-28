@@ -1,9 +1,26 @@
 {-# LANGUAGE RankNTypes #-}
 {-# LANGUAGE TemplateHaskell #-}
 
-module Astrid.Tech.InputSchema.Timestream (Timestream (..), readTimestream) where
+module Astrid.Tech.InputSchema.Timestream
+  ( Timestream (..),
+    Year (..),
+    Month (..),
+    Day (..),
+    entries,
+    dayObjects,
+    days,
+    monthObjects,
+    months,
+    yearObjects,
+    years,
+    readTimestream,
+    readYear,
+    readMonth,
+    readDay,
+  )
+where
 
-import Control.Lens (Lens')
+import Control.Lens.TH (makeLenses)
 import Data.Either (partitionEithers)
 import Data.Either.Combinators (mapRight)
 import qualified Data.Map as Map
@@ -13,18 +30,12 @@ import qualified System.Directory.Tree as DT
 import System.FilePath ((</>))
 import Text.Read (readMaybe)
 
-data Timestream e d m y = Timestream
-  { _years :: Map.Map Integer (Year e d m y)
+data Day e d = Day
+  { _entries :: Map.Map Int e,
+    _dayObjects :: [d]
   }
 
-makeLenses ''Timestream
-
-data Year e d m y = Year
-  { _months :: Map.Map Integer (Month e d m),
-    _yearObjects :: [y]
-  }
-
-makeLenses ''Year
+makeLenses ''Day
 
 data Month e d m = Month
   { _days :: Map.Map Int (Day e d),
@@ -33,12 +44,18 @@ data Month e d m = Month
 
 makeLenses ''Month
 
-data Day e d = Day
-  { _entries :: Map.Map Int e,
-    _dayObjects :: [d]
+data Year e d m y = Year
+  { _months :: Map.Map Integer (Month e d m),
+    _yearObjects :: [y]
   }
 
-makeLenses ''Day
+makeLenses ''Year
+
+data Timestream e d m y = Timestream
+  { _years :: Map.Map Integer (Year e d m y)
+  }
+
+makeLenses ''Timestream
 
 liftMultiError :: ([b1] -> b2) -> FilePath -> [Either [FilePath] b1] -> Either [FilePath] b2
 liftMultiError f anchor subDirs = case partitionEithers subDirs of

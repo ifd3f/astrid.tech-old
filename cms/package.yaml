@@ -79,3 +79,4 @@ tests:
       - QuickCheck
       - raw-strings-qq
       - mtl
+      - either-unwrap
