@@ -6,23 +6,10 @@ module Astrid.Tech.InputSchema.Timestream
     Year (..),
     Month (..),
     Day (..),
-    entries,
-    dayObjects,
-    days,
-    monthObjects,
-    months,
-    yearObjects,
-    years,
-    readTimestream,
-    readYear,
-    readMonth,
-    readDay,
   )
 where
 
 import Control.Lens.TH (makeLenses)
-import Data.Either (partitionEithers)
-import Data.Either.Combinators (mapRight)
 import qualified Data.Map as Map
 import Data.Maybe (mapMaybe, maybeToList)
 import System.Directory.Tree (AnchoredDirTree ((:/)), DirTree (Dir))
@@ -30,97 +17,59 @@ import qualified System.Directory.Tree as DT
 import System.FilePath ((</>))
 import Text.Read (readMaybe)
 
-data Day e d = Day
-  { _entries :: Map.Map Int e,
-    _dayObjects :: [d]
+data TimeFolder o k v = TimeFolder
+  { _objects :: [o],
+    _children :: Map.Map k v
   }
 
-makeLenses ''Day
+makeLenses ''TimeFolder
 
-data Month e d m = Month
-  { _days :: Map.Map Int (Day e d),
-    _monthObjects :: [m]
-  }
+type Day d e = TimeFolder d Int e
 
-makeLenses ''Month
+type Month m d e = TimeFolder m Int (Day d e)
 
-data Year e d m y = Year
-  { _months :: Map.Map Integer (Month e d m),
-    _yearObjects :: [y]
-  }
+type Year y m d e = TimeFolder y Int (Month m d e)
 
-makeLenses ''Year
+type Timestream y m d e = TimeFolder () Integer (Year y m d e)
 
-data Timestream e d m y = Timestream
-  { _years :: Map.Map Integer (Year e d m y)
-  }
+instance Functor (TimeFolder o k) where
+  fmap f day = day {_children = fmap f (_children day)}
 
-makeLenses ''Timestream
+class FromDirectory dt e a where
+  constructFromDir :: DT.AnchoredDirTree dt -> Either e a
 
-liftMultiError :: ([b1] -> b2) -> FilePath -> [Either [FilePath] b1] -> Either [FilePath] b2
-liftMultiError f anchor subDirs = case partitionEithers subDirs of
-  ([], successes) -> Right $ f successes
-  (errors, _) -> Left $ map (anchor </>) (concat errors)
+instance FromDirectory dt () (DT.AnchoredDirTree dt) where
+  constructFromDir dt = Right dt
 
--- | A dreadful horror show of a function that abstracts away several things.
--- |
--- | First argument constructs the parent object from a map of key to child directory, and its list of index children if it has any.
--- | Second argument constructs the child objects, or errors with a list of failing files.
--- | Third argument is the root of the directory to read.
-readNumericDir ::
-  (Ord k, Read k) =>
-  (Map.Map k child -> [AnchoredDirTree dt] -> r) ->
-  (AnchoredDirTree dt -> Either [FilePath] child) ->
-  AnchoredDirTree dt ->
-  Either [FilePath] r
-readNumericDir constructParent fChildren (anchor :/ dir) = case dir of
-  Dir _ children ->
-    let subDirs =
-          mapMaybe
-            ( \childDir -> do
-                let dirName = DT.name childDir
-                key <- readMaybe dirName
-                let anchoredChildDir = (anchor </> dirName) :/ childDir
-                pure $ mapRight (\childObj -> (key, childObj)) $ fChildren anchoredChildDir
-            )
-            children
+data TimeDirectoryConstructionError ce = ChildConstructionError [ce] | InvalidName FilePath | InvalidIndexFolder
 
-        indexObjects = do
-          indexDir <- maybeToList $ DT.dropTo "index" (anchor :/ dir)
-          case DT.dirTree indexDir of
-            Dir dirName indexContents -> map ((anchor </> dirName) :/) indexContents
-            _ -> []
-     in case partitionEithers subDirs of
-          ([], successes) -> Right $ constructParent (Map.fromList successes) indexObjects
-          (errors, _) -> Left $ map (anchor </>) (concat errors)
-  invalid -> Left $ [anchor </> DT.name invalid]
+instance
+  (Ord k, Read k, FromDirectory dt ce v, FromDirectory dt ce o) =>
+  FromDirectory dt (TimeDirectoryConstructionError ce) (TimeFolder (Either ce o) k (Either ce v))
+  where
+  constructFromDir (anchor :/ dir) = case dir of
+    invalid -> Left (InvalidName $ anchor </> DT.name invalid)
+    Dir _ childDirs ->
+      let validChildDirs =
+            mapMaybe
+              ( \childDir -> do
+                  let dirName = DT.name childDir
+                  key :: k <- readMaybe dirName
+                  pure (key, (anchor </> dirName) :/ childDir)
+              )
+              childDirs
 
-readDay :: AnchoredDirTree a -> Either [FilePath] (Day (AnchoredDirTree a) (AnchoredDirTree a))
-readDay = readNumericDir Day Right
+          constructChildResults :: [(k, Either ce v)] = map (fmap constructFromDir) validChildDirs
 
-readMonth :: AnchoredDirTree a -> Either [FilePath] (Month (AnchoredDirTree a) (AnchoredDirTree a) (AnchoredDirTree a))
-readMonth = readNumericDir Month readDay
+          indexChildDirs = do
+            indexDir <- maybeToList $ DT.dropTo "index" (anchor :/ dir)
+            case DT.dirTree indexDir of
+              Dir dirName indexContents -> map ((anchor </> dirName) :/) indexContents
+              _ -> []
 
-readYear :: AnchoredDirTree a -> Either [FilePath] (Year (AnchoredDirTree a) (AnchoredDirTree a) (AnchoredDirTree a) (AnchoredDirTree a))
-readYear = readNumericDir Year readMonth
-
-readTimestream :: AnchoredDirTree a -> Either [FilePath] (Timestream (AnchoredDirTree a) (AnchoredDirTree a) (AnchoredDirTree a) (AnchoredDirTree a))
-readTimestream (anchor :/ dir) = case dir of
-  Dir _ children ->
-    let subDirs =
-          mapMaybe
-            ( \childDir -> do
-                let dirName = DT.name childDir
-                key :: Integer <- readMaybe dirName
-                let anchoredChildDir = (anchor </> dirName) :/ childDir
-                pure $ mapRight (\childObj -> (key, childObj)) $ readYear anchoredChildDir
-            )
-            children
-     in case partitionEithers subDirs of
-          ([], successes) ->
-            Right $
-              Timestream
-                { _years = Map.fromList successes
-                }
-          (errors, _) -> Left $ map (anchor </>) (concat errors)
-  invalid -> Left $ [anchor </> DT.name invalid]
+          constructIndexResults :: [Either ce o] = map constructFromDir indexChildDirs
+       in Right $
+            TimeFolder
+              { _children = (Map.fromList constructChildResults),
+                _objects = constructIndexResults
+              }

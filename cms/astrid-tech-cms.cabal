@@ -46,6 +46,8 @@ library
       LambdaCase
       OverloadedStrings
       ScopedTypeVariables
+      MultiParamTypeClasses
+      FlexibleInstances
   ghc-options: -Wall -Wcompat -Wincomplete-record-updates -Wincomplete-uni-patterns -Wredundant-constraints
   build-depends:
       aeson
@@ -78,6 +80,8 @@ executable astrid-tech-cms-exe
       LambdaCase
       OverloadedStrings
       ScopedTypeVariables
+      MultiParamTypeClasses
+      FlexibleInstances
   ghc-options: -Wall -Wcompat -Wincomplete-record-updates -Wincomplete-uni-patterns -Wredundant-constraints -threaded -rtsopts -with-rtsopts=-N
   build-depends:
       aeson
@@ -117,6 +121,8 @@ test-suite astrid-tech-cms-test
       LambdaCase
       OverloadedStrings
       ScopedTypeVariables
+      MultiParamTypeClasses
+      FlexibleInstances
   ghc-options: -Wall -Wcompat -Wincomplete-record-updates -Wincomplete-uni-patterns -Wredundant-constraints -threaded -rtsopts -with-rtsopts=-N
   build-depends:
       QuickCheck

@@ -24,6 +24,8 @@ default-extensions:
   - LambdaCase
   - OverloadedStrings
   - ScopedTypeVariables
+  - MultiParamTypeClasses
+  - FlexibleInstances
 
 dependencies:
   - base >= 4.7 && < 5
