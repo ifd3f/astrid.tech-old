@@ -44,7 +44,8 @@ dependencies:
   - directory-tree
   - either
   - lens
-  - validation
+  - prettyprinter
+  - prettyprinter-ansi-terminal
 
 ghc-options:
   - -Wall

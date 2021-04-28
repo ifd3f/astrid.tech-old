@@ -28,6 +28,7 @@ source-repository head
 library
   exposed-modules:
       Astrid.Tech.CacheSchema
+      Astrid.Tech.CLI
       Astrid.Tech.InputSchema.Article
       Astrid.Tech.InputSchema.Note
       Astrid.Tech.InputSchema.Page
@@ -62,12 +63,13 @@ library
     , frontmatter
     , lens
     , newbase60 ==0.1.*
+    , prettyprinter
+    , prettyprinter-ansi-terminal
     , servant
     , system-fileio
     , text
     , time
     , transformers
-    , validation
   default-language: Haskell2010
 
 executable astrid-tech-cms-exe
@@ -97,12 +99,13 @@ executable astrid-tech-cms-exe
     , frontmatter
     , lens
     , newbase60 ==0.1.*
+    , prettyprinter
+    , prettyprinter-ansi-terminal
     , servant
     , system-fileio
     , text
     , time
     , transformers
-    , validation
   default-language: Haskell2010
 
 test-suite astrid-tech-cms-test
@@ -142,11 +145,12 @@ test-suite astrid-tech-cms-test
     , lens
     , mtl
     , newbase60 ==0.1.*
+    , prettyprinter
+    , prettyprinter-ansi-terminal
     , raw-strings-qq
     , servant
     , system-fileio
     , text
     , time
     , transformers
-    , validation
   default-language: Haskell2010

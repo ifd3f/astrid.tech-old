@@ -5,6 +5,7 @@ module Astrid.Tech.InputSchema.Timestream
   ( TimeDirectory (..),
     objects,
     children,
+    ErrorTimeDirectory,
     Timestream,
     Year,
     Month,
@@ -12,9 +13,11 @@ module Astrid.Tech.InputSchema.Timestream
   )
 where
 
+import qualified Astrid.Tech.PrintStyle as PS
 import Control.Lens.TH (makeLenses)
 import qualified Data.Map as Map
 import Data.Maybe (mapMaybe)
+import Prettyprinter (Pretty (..), annotate)
 import System.Directory.Tree (AnchoredDirTree ((:/)), DirTree (Dir))
 import qualified System.Directory.Tree as DT
 import System.Directory.Tree.From
@@ -24,9 +27,12 @@ import Text.Read (readMaybe)
 data TimeDirectory o k v = TimeDirectory
   { _objects :: [o],
     _children :: Map.Map k v
-  } deriving (Show, Eq)
+  }
+  deriving (Show, Eq)
 
 makeLenses ''TimeDirectory
+
+type ErrorTimeDirectory ce o k v = TimeDirectory (Either ce o) k (Either ce v)
 
 type Day d e = TimeDirectory d Int e
 
@@ -39,11 +45,11 @@ type Timestream y m d e = TimeDirectory () Integer (Year y m d e)
 instance Functor (TimeDirectory o k) where
   fmap f day = day {_children = fmap f (_children day)}
 
-data TimeDirectoryConstructionError = NonDirectoryError FilePath
+data TimeDirectoryConstructionError = NonDirectoryError FilePath deriving (Show, Eq)
 
 instance
   (Ord k, Read k, FromDirectory dt ce v, FromDirectory dt ce o) =>
-  FromDirectory dt TimeDirectoryConstructionError (TimeDirectory (Either ce o) k (Either ce v))
+  FromDirectory dt TimeDirectoryConstructionError (ErrorTimeDirectory ce o k v)
   where
   constructFromDir (anchor :/ dir) = case dir of
     Dir _ childDirs ->
@@ -69,3 +75,7 @@ instance
                 _objects = indexChildDirs
               }
     nonDir -> Left (NonDirectoryError $ anchor </> DT.name nonDir)
+
+instance Pretty TimeDirectoryConstructionError where
+  pretty (NonDirectoryError path) = pretty (path ++ " is not a directory")
+
