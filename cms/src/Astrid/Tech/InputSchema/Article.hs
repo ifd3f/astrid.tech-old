@@ -23,6 +23,7 @@ import GHC.Generics (Generic)
 import System.Directory.Tree (DirTree (Dir), FileName)
 import qualified System.Directory.Tree as DT
 import Text.Read (readMaybe)
+import System.Directory.Tree.From
 
 data ArticleMeta = ArticleMeta
   { title :: String,
@@ -59,6 +60,9 @@ data BlogParseException
   deriving (Show, Eq)
 
 instance Exception BlogParseException
+
+instance FromDirectory ByteString.ByteString BlogParseException Article where
+  constructFromDir 
 
 readBlogPost :: Int -> DirTree ByteString.ByteString -> Either BlogParseException Article
 readBlogPost withOrdinal tree =

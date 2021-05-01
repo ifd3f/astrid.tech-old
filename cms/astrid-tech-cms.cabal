@@ -27,6 +27,7 @@ source-repository head
 
 library
   exposed-modules:
+      Astrid.Tech.Build
       Astrid.Tech.CacheSchema
       Astrid.Tech.CLI
       Astrid.Tech.InputSchema.Article
@@ -37,6 +38,9 @@ library
       Astrid.Tech.InputSchema.Timestream
       Astrid.Tech.InputSchema.Util
       Astrid.Tech.Slug
+      Astrid.Tech.Sync.Engine
+      Astrid.Tech.Sync.Mastodon
+      Astrid.Tech.Sync.Twitter
       Lib
       System.Directory.Tree.From
   other-modules:
@@ -63,6 +67,7 @@ library
     , frontmatter
     , lens
     , newbase60 ==0.1.*
+    , optparse-applicative
     , prettyprinter
     , prettyprinter-ansi-terminal
     , servant
@@ -99,6 +104,7 @@ executable astrid-tech-cms-exe
     , frontmatter
     , lens
     , newbase60 ==0.1.*
+    , optparse-applicative
     , prettyprinter
     , prettyprinter-ansi-terminal
     , servant
@@ -145,6 +151,7 @@ test-suite astrid-tech-cms-test
     , lens
     , mtl
     , newbase60 ==0.1.*
+    , optparse-applicative
     , prettyprinter
     , prettyprinter-ansi-terminal
     , raw-strings-qq

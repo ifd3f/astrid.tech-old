@@ -46,6 +46,7 @@ dependencies:
   - lens
   - prettyprinter
   - prettyprinter-ansi-terminal
+  - optparse-applicative
 
 ghc-options:
   - -Wall

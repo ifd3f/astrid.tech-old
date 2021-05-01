@@ -13,11 +13,9 @@ module Astrid.Tech.InputSchema.Timestream
   )
 where
 
-import qualified Astrid.Tech.PrintStyle as PS
 import Control.Lens.TH (makeLenses)
 import qualified Data.Map as Map
 import Data.Maybe (mapMaybe)
-import Prettyprinter (Pretty (..), annotate)
 import System.Directory.Tree (AnchoredDirTree ((:/)), DirTree (Dir))
 import qualified System.Directory.Tree as DT
 import System.Directory.Tree.From
@@ -75,7 +73,4 @@ instance
                 _objects = indexChildDirs
               }
     nonDir -> Left (NonDirectoryError $ anchor </> DT.name nonDir)
-
-instance Pretty TimeDirectoryConstructionError where
-  pretty (NonDirectoryError path) = pretty (path ++ " is not a directory")
 
