@@ -1,0 +1,8 @@
+[workspace]
+
+members = [
+    "at_shortener",
+    "at_loader",
+    "at_objects",
+    "at_web"
+]

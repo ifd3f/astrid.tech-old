@@ -1,7 +1,0 @@
-.cache/
-logs/
-secrets/
-.git/
-media/
-.env
-db.sqlite3
