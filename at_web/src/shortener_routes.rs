@@ -10,15 +10,13 @@ extern crate rocket;
 use std::env;
 
 use dotenv::dotenv;
-use rocket::http::{RawStr, Status};
-use rocket::response::status::NotFound;
-use rocket::response::Redirect;
 use rocket::{Response, State};
+use rocket::http::{RawStr, Status};
+use rocket::response::Redirect;
+use rocket::response::status::NotFound;
 
 use mapper::expand_shortcode;
-
-mod follow_redirect;
-mod mapper;
+use crate::mapper::expand_shortcode;
 
 struct TargetURL {
     url: String,
@@ -39,20 +37,4 @@ fn lengthen(target_url: State<TargetURL>, code: &RawStr) -> Result<Redirect, Sta
     let uri = format!("{}/{}", target_url.url, expanded);
 
     Ok(Redirect::to(uri))
-}
-
-fn main() {
-    dotenv().ok();
-
-    let target_url = TargetURL {
-        url: match env::var("TARGET_URL") {
-            Ok(url) => url,
-            _ => "https://astrid.tech".to_string(),
-        },
-    };
-
-    rocket::ignite()
-        .manage(target_url)
-        .mount("/", routes![index, lengthen])
-        .launch();
 }

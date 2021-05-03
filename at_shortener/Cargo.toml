@@ -1,24 +1,14 @@
 [package]
-name = "aay-tw"
+name = "at_shortener"
 version = "0.1.0"
 authors = ["Astrid Yu <astrid@astrid.tech>"]
 edition = "2018"
-description = "A link shortener."
-publish = false
-homepage = "https://aay.tw/pa"
-repository = "https://github.com/astralbijection/astrid.tech.git"
-
-[[bin]]
-name = "aay-tw"
-path = "src/main.rs"
 
 [dependencies]
 chrono = "0.4.19"
 dotenv = "0.15.0"
 newbase60 = "0.1.0"
 reqwest = "0.11.2"
-rocket = "0.4.7"
-rocket_codegen = "0.4.7"
 scraper = "0.12.0"
 
 [dev-dependencies]

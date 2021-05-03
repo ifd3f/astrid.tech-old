@@ -1,7 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <module type="CPP_MODULE" version="4">
   <component name="NewModuleRootManager">
-    <content url="file://$MODULE_DIR$" />
+    <content url="file://$MODULE_DIR$">
+      <sourceFolder url="file://$MODULE_DIR$/at_loader/src" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/at_objects/src" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/at_shortene/src" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/at_shortener/src" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/at_web/src" isTestSource="false" />
+      <excludeFolder url="file://$MODULE_DIR$/target" />
+    </content>
     <orderEntry type="inheritedJdk" />
     <orderEntry type="sourceFolder" forTests="false" />
   </component>
