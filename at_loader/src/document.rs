@@ -6,9 +6,6 @@ use std::path::{Path, PathBuf};
 
 use yaml_rust::ScanError;
 
-use crate::document::DocumentLoadError::{AmbiguousIndex, InvalidPath, NoIndex};
-use crate::document::DocumentType::{Jupyter, Markdown};
-
 /// Everything that could possibly go wrong if you were to load a document.
 pub enum DocumentLoadError {
     InvalidPath(PathBuf),
@@ -58,10 +55,9 @@ pub struct Document<T> {
 impl<T: for<'de> serde::Deserialize<'de>> Document<T> {
     /// Directly load a markdown file.
     fn load_markdown(
-        short_name: String,
-        path: &Path,
+        parts: DocumentParts
     ) -> DocumentResult<Document<T>> {
-        let data = fs::read_to_string(path)?;
+        let data = fs::read_to_string(parts.main_file.clone())?;
         let (opt_fm, content) = frontmatter::parse_and_find_content(data.as_str())?;
 
         let meta = opt_fm
@@ -71,8 +67,15 @@ impl<T: for<'de> serde::Deserialize<'de>> Document<T> {
             })
             .map_or(Ok(None), |e| e.map(Some))?;
 
+        let meta = match (meta, parts.meta) {
+            (None, None) => Ok(None),
+            (Some(m), None) => Ok(Some(m)),
+            (None, Some(p)) => panic!("Detached meta NYI"),
+            (_, Some(p)) => Err(DocumentLoadError::AmbiguousMeta(vec![parts.main_file, p]))
+        }?;
+
         Ok(Document {
-            short_name: short_name.to_string(),
+            short_name: parts.short_name,
             doctype: DocumentType::Markdown,
             meta,
             content: content.to_string(),
@@ -88,17 +91,14 @@ impl<T: for<'de> serde::Deserialize<'de>> Document<T> {
             .and_then(|s| s.to_str());
 
         let doctype = match ext {
-            Some("md") => Ok(Markdown),
-            Some("ipynb") => Ok(Jupyter),
+            Some("md") => Ok(DocumentType::Markdown),
+            Some("ipynb") => Ok(DocumentType::Jupyter),
             Some(ext) => Err(DocumentLoadError::UnknownDocumentType(ext.to_string())),
             None => Err(DocumentLoadError::UnknownDocumentType("".to_string()))
         }?;
 
         match doctype {
-            Markdown => Self::load_markdown(
-                parts.short_name,
-                parts.main_file.as_ref(),
-            ),
+            Markdown => Self::load_markdown(parts),
             Jupyter => panic!("Not yet implemented!")
         }
     }
@@ -116,7 +116,7 @@ impl DocumentParts {
             .and_then(|s| s.to_str())
             .map_or(
                 Err(DocumentLoadError::InvalidPath(PathBuf::from(path))),
-                |s| Ok(s.to_string())
+                |s| Ok(s.to_string()),
             )?;
 
         let index = {
@@ -146,7 +146,7 @@ impl DocumentParts {
     fn load_from_file(path: &Path) -> DocumentResult<DocumentParts> {
         let short_name = path.file_stem()
             .and_then(|s| s.to_str())
-            .map_or(Err(InvalidPath(PathBuf::from(path))), |s| Ok(s.to_string()))?;
+            .map_or(Err(DocumentLoadError::InvalidPath(PathBuf::from(path))), |s| Ok(s.to_string()))?;
         Ok(DocumentParts {
             short_name,
             main_file: PathBuf::from(path),
