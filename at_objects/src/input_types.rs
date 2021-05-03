@@ -6,7 +6,7 @@ use crate::input_types::ProjectStatus::NoStatus;
 
 #[derive(Serialize, Deserialize, Debug)]
 #[serde(rename_all = "camelCase")]
-struct ArticleMeta {
+pub struct ArticleMeta {
     title: String,
     description: String,
     date: DateTime<Utc>,
@@ -15,7 +15,7 @@ struct ArticleMeta {
 }
 
 #[derive(Serialize, Deserialize, Debug)]
-enum ProjectStatus {
+pub enum ProjectStatus {
     NoStatus,
     Early,
     WIP,
@@ -29,7 +29,7 @@ impl Default for ProjectStatus {
 
 #[derive(Serialize, Deserialize, Debug)]
 #[serde(rename_all = "camelCase")]
-struct ProjectMeta {
+pub struct ProjectMeta {
     title: String,
     status: ProjectStatus,
     start_date: NaiveDate,
@@ -43,14 +43,14 @@ struct ProjectMeta {
 
 #[derive(Serialize, Deserialize, Debug)]
 #[serde(rename_all = "camelCase")]
-struct TagOverrideTargets {
+pub struct TagOverrideTargets {
     slug: String,
     name: String,
 }
 
 #[derive(Serialize, Deserialize, Debug)]
 #[serde(rename_all = "camelCase")]
-struct TagOverride {
+pub struct TagOverride {
     background_color: String,
     color: String,
     tags: Vec<TagOverrideTargets>,
