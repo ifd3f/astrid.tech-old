@@ -1,5 +1,4 @@
 use std::ffi::OsStr;
-/// Provides utilities for loading generic documents.
 use std::fs;
 use std::fs::{File, metadata};
 use std::io;
@@ -10,6 +9,7 @@ use yaml_rust::ScanError;
 use crate::document::DocumentLoadError::{AmbiguousIndex, InvalidPath, NoIndex};
 use crate::document::DocumentType::{Jupyter, Markdown};
 
+/// Everything that could possibly go wrong if you were to load a document.
 pub enum DocumentLoadError {
     InvalidPath(PathBuf),
     NotAFileOrDirectory(PathBuf),
@@ -23,7 +23,7 @@ pub enum DocumentLoadError {
     YAMLScanError(yaml_rust::scanner::ScanError),
 }
 
-type DocumentResult<T> = Result<T, DocumentLoadError>;
+pub type DocumentResult<T> = Result<T, DocumentLoadError>;
 
 impl From<io::Error> for DocumentLoadError {
     fn from(e: io::Error) -> DocumentLoadError {
@@ -57,7 +57,7 @@ pub struct Document<T> {
 
 impl<T: for<'de> serde::Deserialize<'de>> Document<T> {
     /// Directly load a markdown file.
-    pub fn load_markdown(
+    fn load_markdown(
         short_name: String,
         path: &Path,
     ) -> DocumentResult<Document<T>> {
@@ -70,28 +70,19 @@ impl<T: for<'de> serde::Deserialize<'de>> Document<T> {
                 serde_yaml::from_str::<T>(str)
             })
             .map_or(Ok(None), |e| e.map(Some))?;
-        Ok(
-            Document {
-                short_name: short_name.to_string(),
-                doctype: DocumentType::Markdown,
-                meta,
-                content: content.to_string(),
-            }
-        )
+
+        Ok(Document {
+            short_name: short_name.to_string(),
+            doctype: DocumentType::Markdown,
+            meta,
+            content: content.to_string(),
+        })
     }
 
     /// Load the document at this path.
     pub fn load(
         path: &Path) -> DocumentResult<Document<T>> {
-        let fs_meta = fs::metadata(path)?;
-
-        let parts = (if fs_meta.is_dir() {
-            DetectedDocumentParts::load_from_folder(path)
-        } else if fs_meta.is_file() {
-            DetectedDocumentParts::load_from_file(path)
-        } else {
-            Err(DocumentLoadError::NotAFileOrDirectory(PathBuf::from(path)))
-        })?;
+        let parts = DocumentParts::load(path)?;
 
         let ext = parts.main_file.extension()
             .and_then(|s| s.to_str());
@@ -113,19 +104,20 @@ impl<T: for<'de> serde::Deserialize<'de>> Document<T> {
     }
 }
 
-struct DetectedDocumentParts {
+pub struct DocumentParts {
     short_name: String,
     main_file: PathBuf,
     meta: Option<PathBuf>,
 }
 
-impl DetectedDocumentParts {
-    fn load_from_folder(path: &Path) -> DocumentResult<DetectedDocumentParts> {
+impl DocumentParts {
+    fn load_from_folder(path: &Path) -> DocumentResult<DocumentParts> {
         let short_name = path.file_name()
             .and_then(|s| s.to_str())
-            .map_or(Err(DocumentLoadError::InvalidPath(PathBuf::from(path))), |s| Ok(s.to_string()));
-
-        let short_name = short_name?;
+            .map_or(
+                Err(DocumentLoadError::InvalidPath(PathBuf::from(path))),
+                |s| Ok(s.to_string())
+            )?;
 
         let index = {
             let mut candidates = find_file_with_stem(OsStr::new("index"), path)?;
@@ -144,22 +136,34 @@ impl DetectedDocumentParts {
             }
         }?;
 
-        Ok(DetectedDocumentParts {
+        Ok(DocumentParts {
             short_name,
             main_file: index,
             meta,
         })
     }
 
-    fn load_from_file(path: &Path) -> DocumentResult<DetectedDocumentParts> {
+    fn load_from_file(path: &Path) -> DocumentResult<DocumentParts> {
         let short_name = path.file_stem()
             .and_then(|s| s.to_str())
             .map_or(Err(InvalidPath(PathBuf::from(path))), |s| Ok(s.to_string()))?;
-        Ok(DetectedDocumentParts {
+        Ok(DocumentParts {
             short_name,
             main_file: PathBuf::from(path),
             meta: None,
         })
+    }
+
+    pub fn load(path: &Path) -> DocumentResult<DocumentParts> {
+        let fs_meta = fs::metadata(path)?;
+
+        if fs_meta.is_dir() {
+            DocumentParts::load_from_folder(path)
+        } else if fs_meta.is_file() {
+            DocumentParts::load_from_file(path)
+        } else {
+            Err(DocumentLoadError::NotAFileOrDirectory(PathBuf::from(path)))
+        }
     }
 }
 
