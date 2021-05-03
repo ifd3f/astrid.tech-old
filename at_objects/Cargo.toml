@@ -1,13 +1,9 @@
 [package]
-name = "astrid_tech_ssg"
+name = "at_objects"
 version = "0.1.0"
 authors = ["Astrid Yu <astrid@astrid.tech>"]
 edition = "2018"
 
 [dependencies]
 chrono = { version = "0.4.19", features = ["serde"] }
-comrak = "0.10.0"
-derive_from = "0.1.1"
-gray_matter = "0.1.0"
 serde = { version = "1.0.125", features = ["derive"] }
-serde_yaml = "0.8.17"

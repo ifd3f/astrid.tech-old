@@ -9,6 +9,9 @@ name = "aay-tw"
 path = "src/main.rs"
 
 [dependencies]
+at_objects = { path = "../at_objects" }
+at_loader = { path = "../at_loader" }
+at_shortener = { path = "../at_shortener" }
 chrono = "0.4.19"
 dotenv = "0.15.0"
 newbase60 = "0.1.0"

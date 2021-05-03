@@ -1,5 +1,5 @@
 [package]
-name = "astrid_tech_cms"
+name = "at_loader"
 version = "0.1.0"
 authors = ["Astrid Yu <astrid@astrid.tech>"]
 edition = "2018"

@@ -1,2 +1,2 @@
-mod input_types;
+pub mod input_types;
 
