@@ -1,30 +1,28 @@
-use std::path::Path;
 use std::fs::File;
 use std::io::Read;
-use crate::markdown::{load_markdown, MarkdownLoadError};
-use at_objects::input_types::ArticleMeta;
+use std::path::Path;
+
 use pandoc::PandocOption;
 
-pub struct Article {
+use at_objects::input_types::ArticleMeta;
 
-}
+use crate::document::DocumentLoadError;
+
+pub struct Article {}
 
 pub enum ArticleReadError {
-    Markdown(MarkdownLoadError),
-    NoMeta
+    DocumentLoad(DocumentLoadError),
+    NoMeta,
 }
 
-impl From<MarkdownLoadError> for ArticleReadError {
-    fn from(e: MarkdownLoadError) -> Self {
-        MarkdownLoadError(e)
+impl From<DocumentLoadError> for ArticleReadError {
+    fn from(e: DocumentLoadError) -> Self {
+        ArticleReadError::DocumentLoad(e)
     }
 }
 
 impl Article {
-    pub fn read(path: &str) {
-        let mut pandoc = pandoc::new();
-        pandoc.add_option(PandocOption::O)
-    }
+    pub fn read(path: &str) {}
 }
 
 #[cfg(test)]
@@ -34,6 +32,5 @@ mod test {
     #[test]
     fn read_article() {
         let path = get_resources_path("blog-posts/site-release.md");
-
     }
 }
