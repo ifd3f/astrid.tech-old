@@ -4,8 +4,11 @@ use std::fs::{File, metadata};
 use std::io;
 use std::path::{Path, PathBuf};
 
-use yaml_rust::ScanError;
+use gray_matter::engine::yaml::YAML;
+use gray_matter::matter::Matter;
+use gray_matter::value::pod::Pod;
 use serde::de::Error;
+use yaml_rust::ScanError;
 
 /// Everything that could possibly go wrong if you were to load a document.
 #[derive(Debug)]
@@ -18,8 +21,7 @@ pub enum DocumentLoadError {
     UnknownDocumentType(String),
     UnknownMetaType(String),
     IOError(io::Error),
-    YAMLSyntaxError(serde_yaml::Error),
-    YAMLScanError(yaml_rust::scanner::ScanError),
+    SerdeError(serde_json::error::Error),
 }
 
 pub type DocumentResult<T> = Result<T, DocumentLoadError>;
@@ -30,15 +32,9 @@ impl From<io::Error> for DocumentLoadError {
     }
 }
 
-impl From<serde_yaml::Error> for DocumentLoadError {
-    fn from(e: serde_yaml::Error) -> DocumentLoadError {
-        DocumentLoadError::YAMLSyntaxError(e)
-    }
-}
-
-impl From<yaml_rust::scanner::ScanError> for DocumentLoadError {
-    fn from(e: ScanError) -> Self {
-        DocumentLoadError::YAMLScanError(e)
+impl From<serde_json::error::Error> for DocumentLoadError {
+    fn from(e: serde_json::error::Error) -> Self {
+        DocumentLoadError::SerdeError(e)
     }
 }
 
@@ -59,15 +55,14 @@ impl<T: for<'de> serde::Deserialize<'de>> Document<T> {
     fn load_markdown(
         parts: DocumentParts
     ) -> DocumentResult<Document<T>> {
-        let data = fs::read_to_string(parts.main_file.clone())?;
-        let (opt_fm, content) = frontmatter::parse_and_find_content(data.as_str())?;
+        let matter = Matter::<YAML>::new();
+        let file_contents = fs::read_to_string(parts.main_file.clone())?;
+        let parsed_matter = matter.matter(file_contents);
 
-        let meta = opt_fm
-            .map(|yaml| {
-                let str = yaml.into_string().unwrap();
-                serde_yaml::from_str::<T>(str.as_str())
-            })
-            .map_or(Ok(None), |e| e.map(Some))?;
+        let meta: Option<T> = match parsed_matter.data {
+            Pod::Null => None,
+            p => Some(p.deserialize()?)
+        };
 
         let meta = match (meta, parts.meta) {
             (None, None) => Ok(None),
@@ -80,13 +75,12 @@ impl<T: for<'de> serde::Deserialize<'de>> Document<T> {
             short_name: parts.short_name,
             doctype: DocumentType::Markdown,
             meta,
-            content: content.to_string(),
+            content: parsed_matter.content.to_string(),
         })
     }
 
     /// Load the document at this path.
     pub fn load(parts: DocumentParts) -> DocumentResult<Document<T>> {
-
         let ext = parts.main_file.extension()
             .and_then(|s| s.to_str());
 
@@ -188,20 +182,21 @@ fn find_file_with_stem(file_stem: &OsStr, path: &Path) -> Result<Vec<PathBuf>, D
 
 #[cfg(test)]
 mod test {
-    use crate::test_util::get_resources_path;
-    use crate::document::{DocumentParts, Document};
+    use at_objects::input_types::{ArticleMeta, ProjectMeta};
+
+    use crate::document::{Document, DocumentParts};
     use crate::document::DocumentLoadError::*;
-    use at_objects::input_types::ProjectMeta;
+    use crate::test_util::get_resources_path;
 
     #[test]
     fn loads_markdown_with_meta() {
         let parts = DocumentParts {
             short_name: "some-name".to_string(),
             main_file: get_resources_path("blog-posts/site-release.md"),
-            meta: None
+            meta: None,
         };
 
-        let doc = Document::<ProjectMeta>::load(parts.clone()).unwrap();
+        let doc = Document::<ArticleMeta>::load(parts.clone()).unwrap();
 
         assert_eq!(doc.short_name, parts.short_name);
     }
@@ -209,7 +204,7 @@ mod test {
     #[test]
     fn finds_separate_meta() {
         let path = get_resources_path("blog-posts/separate-meta/");
-        let path= path.as_path();
+        let path = path.as_path();
 
         let detected = DocumentParts::load(path).unwrap();
 
@@ -221,7 +216,7 @@ mod test {
     #[test]
     fn finds_single_index_in_folder() {
         let path = get_resources_path("blog-posts/one");
-        let path= path.as_path();
+        let path = path.as_path();
 
         let detected = DocumentParts::load(path).unwrap();
 
@@ -233,7 +228,7 @@ mod test {
     #[test]
     fn finds_single_file_post() {
         let path = get_resources_path("blog-posts/this-file.md");
-        let path= path.as_path();
+        let path = path.as_path();
 
         let detected = DocumentParts::load(path).unwrap();
 
@@ -245,7 +240,7 @@ mod test {
     #[test]
     fn errors_on_multiple_meta() {
         let path = get_resources_path("blog-posts/many-meta");
-        let path= path.as_path();
+        let path = path.as_path();
 
         let detected = DocumentParts::load(path);
 
@@ -255,7 +250,7 @@ mod test {
     #[test]
     fn errors_on_multiple_index() {
         let path = get_resources_path("blog-posts/many-index");
-        let path= path.as_path();
+        let path = path.as_path();
 
         let detected = DocumentParts::load(path);
 
@@ -265,7 +260,7 @@ mod test {
     #[test]
     fn errors_on_no_index_in_folder() {
         let path = get_resources_path("blog-posts/none");
-        let path= path.as_path();
+        let path = path.as_path();
 
         let detected = DocumentParts::load(path);
 
