@@ -64,8 +64,8 @@ impl<T: for<'de> serde::Deserialize<'de>> Document<T> {
 
         let meta = opt_fm
             .map(|yaml| {
-                let str = yaml.as_str().unwrap();
-                serde_yaml::from_str::<T>(str)
+                let str = yaml.into_string().unwrap();
+                serde_yaml::from_str::<T>(str.as_str())
             })
             .map_or(Ok(None), |e| e.map(Some))?;
 
@@ -85,9 +85,7 @@ impl<T: for<'de> serde::Deserialize<'de>> Document<T> {
     }
 
     /// Load the document at this path.
-    pub fn load(
-        path: &Path) -> DocumentResult<Document<T>> {
-        let parts = DocumentParts::load(path)?;
+    pub fn load(parts: DocumentParts) -> DocumentResult<Document<T>> {
 
         let ext = parts.main_file.extension()
             .and_then(|s| s.to_str());
@@ -106,7 +104,7 @@ impl<T: for<'de> serde::Deserialize<'de>> Document<T> {
     }
 }
 
-#[derive(Debug)]
+#[derive(Debug, Clone)]
 pub struct DocumentParts {
     short_name: String,
     main_file: PathBuf,
@@ -191,8 +189,22 @@ fn find_file_with_stem(file_stem: &OsStr, path: &Path) -> Result<Vec<PathBuf>, D
 #[cfg(test)]
 mod test {
     use crate::test_util::get_resources_path;
-    use crate::document::DocumentParts;
+    use crate::document::{DocumentParts, Document};
     use crate::document::DocumentLoadError::*;
+    use at_objects::input_types::ProjectMeta;
+
+    #[test]
+    fn loads_markdown_with_meta() {
+        let parts = DocumentParts {
+            short_name: "some-name".to_string(),
+            main_file: get_resources_path("blog-posts/site-release.md"),
+            meta: None
+        };
+
+        let doc = Document::<ProjectMeta>::load(parts.clone()).unwrap();
+
+        assert_eq!(doc.short_name, parts.short_name);
+    }
 
     #[test]
     fn finds_separate_meta() {
