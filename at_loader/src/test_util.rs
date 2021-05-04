@@ -6,3 +6,9 @@ pub fn get_resources_path(child: &str) -> PathBuf {
     d.push(child);
     d
 }
+
+pub fn get_resources_base() -> PathBuf {
+    let mut d = PathBuf::from(env!("CARGO_MANIFEST_DIR"));
+    d.push("resources/test");
+    d
+}

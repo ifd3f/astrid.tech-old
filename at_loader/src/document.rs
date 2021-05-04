@@ -5,8 +5,10 @@ use std::io;
 use std::path::{Path, PathBuf};
 
 use yaml_rust::ScanError;
+use serde::de::Error;
 
 /// Everything that could possibly go wrong if you were to load a document.
+#[derive(Debug)]
 pub enum DocumentLoadError {
     InvalidPath(PathBuf),
     NotAFileOrDirectory(PathBuf),
@@ -104,6 +106,7 @@ impl<T: for<'de> serde::Deserialize<'de>> Document<T> {
     }
 }
 
+#[derive(Debug)]
 pub struct DocumentParts {
     short_name: String,
     main_file: PathBuf,
@@ -183,4 +186,77 @@ fn find_file_with_stem(file_stem: &OsStr, path: &Path) -> Result<Vec<PathBuf>, D
             }
         }).collect();
     Ok(data)
+}
+
+#[cfg(test)]
+mod test {
+    use crate::test_util::get_resources_path;
+    use crate::document::DocumentParts;
+    use crate::document::DocumentLoadError::*;
+
+    #[test]
+    fn finds_separate_meta() {
+        let path = get_resources_path("blog-posts/separate-meta/");
+        let path= path.as_path();
+
+        let detected = DocumentParts::load(path).unwrap();
+
+        assert_eq!(detected.meta, Some(get_resources_path("blog-posts/separate-meta/meta.yaml")));
+        assert_eq!(detected.main_file, get_resources_path("blog-posts/separate-meta/index.md"));
+        assert_eq!(detected.short_name, "separate-meta");
+    }
+
+    #[test]
+    fn finds_single_index_in_folder() {
+        let path = get_resources_path("blog-posts/one");
+        let path= path.as_path();
+
+        let detected = DocumentParts::load(path).unwrap();
+
+        assert_eq!(detected.main_file, get_resources_path("blog-posts/one/index.md"));
+        assert_eq!(detected.short_name, "one");
+        assert_eq!(detected.meta, None);
+    }
+
+    #[test]
+    fn finds_single_file_post() {
+        let path = get_resources_path("blog-posts/this-file.md");
+        let path= path.as_path();
+
+        let detected = DocumentParts::load(path).unwrap();
+
+        assert_eq!(detected.main_file, get_resources_path("blog-posts/this-file.md"));
+        assert_eq!(detected.short_name, "this-file");
+        assert_eq!(detected.meta, None);
+    }
+
+    #[test]
+    fn errors_on_multiple_meta() {
+        let path = get_resources_path("blog-posts/many-meta");
+        let path= path.as_path();
+
+        let detected = DocumentParts::load(path);
+
+        assert_matches!(detected, Err(AmbiguousMeta(_)));
+    }
+
+    #[test]
+    fn errors_on_multiple_index() {
+        let path = get_resources_path("blog-posts/many-index");
+        let path= path.as_path();
+
+        let detected = DocumentParts::load(path);
+
+        assert_matches!(detected, Err(AmbiguousIndex(_)));
+    }
+
+    #[test]
+    fn errors_on_no_index_in_folder() {
+        let path = get_resources_path("blog-posts/none");
+        let path= path.as_path();
+
+        let detected = DocumentParts::load(path);
+
+        assert_matches!(detected, Err(NoIndex));
+    }
 }

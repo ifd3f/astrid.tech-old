@@ -27,7 +27,7 @@ impl Article {
 
 #[cfg(test)]
 mod test {
-    use at_common::test_util::get_resources_path;
+    use crate::test_util::get_resources_path;
 
     #[test]
     fn read_article() {
