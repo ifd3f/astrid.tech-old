@@ -7,11 +7,11 @@ use crate::input_types::ProjectStatus::NoStatus;
 #[derive(Serialize, Deserialize, Debug)]
 #[serde(rename_all = "camelCase")]
 pub struct ArticleMeta {
-    title: String,
-    description: String,
-    date: DateTime<Utc>,
-    thumbnail: Option<String>,
-    tags: Vec<String>,
+    pub title: String,
+    pub description: String,
+    pub date: DateTime<Utc>,
+    pub thumbnail: Option<String>,
+    pub tags: Vec<String>,
 }
 
 #[derive(Serialize, Deserialize, Debug)]
