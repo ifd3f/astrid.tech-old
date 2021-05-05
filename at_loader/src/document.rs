@@ -9,6 +9,8 @@ use serde::Deserialize;
 use serde_yaml::to_value;
 use yaml_rust::{ScanError, YamlEmitter};
 
+use at_objects::page::{DocumentType, MetaType};
+
 /// Everything that could possibly go wrong if you were to load a document.
 #[derive(Debug)]
 pub enum DocumentLoadError {
@@ -44,44 +46,6 @@ impl From<yaml_rust::scanner::ScanError> for DocumentLoadError {
     }
 }
 
-pub enum DocumentType {
-    Markdown,
-    Jupyter,
-}
-
-impl DocumentType {
-    fn from_ext(ext: &str) -> Result<DocumentType, DocumentLoadError> {
-        match ext {
-            "md" => Ok(DocumentType::Markdown),
-            "ipynb" => Ok(DocumentType::Jupyter),
-            ext => Err(DocumentLoadError::UnknownDocumentType(ext.to_string())),
-        }
-    }
-}
-
-enum MetaType {
-    JSON,
-    YAML,
-}
-
-impl MetaType {
-    fn from_ext(ext: &str) -> Result<MetaType, DocumentLoadError> {
-        match ext {
-            "json" => Ok(MetaType::JSON),
-            "yaml" => Ok(MetaType::YAML),
-            ext => Err(DocumentLoadError::UnknownMetaType(ext.to_string())),
-        }
-    }
-
-    fn parse<T: for<'de> Deserialize<'de>>(&self, path: &Path) -> DocumentResult<T> {
-        let file = File::open(path)?;
-        match self {
-            MetaType::JSON => panic!("JSON NYI"),
-            MetaType::YAML => Ok(serde_yaml::from_reader(file)?)
-        }
-    }
-}
-
 fn read_meta<T: for<'de> Deserialize<'de>>(path: &Path) -> DocumentResult<T> {
     let ext = path.extension()
         .and_then(|s| s.to_str());
@@ -93,10 +57,11 @@ fn read_meta<T: for<'de> Deserialize<'de>>(path: &Path) -> DocumentResult<T> {
 }
 
 pub struct Document<T> {
-    short_name: String,
-    doctype: DocumentType,
-    content: String,
-    meta: Option<T>,
+    pub short_name: String,
+    pub doctype: DocumentType,
+    pub content: String,
+    pub meta: Option<T>,
+    pub files: DocumentParts,
 }
 
 impl<T: for<'de> serde::Deserialize<'de>> Document<T> {
@@ -104,11 +69,13 @@ impl<T: for<'de> serde::Deserialize<'de>> Document<T> {
     fn load_markdown(
         parts: DocumentParts
     ) -> DocumentResult<Document<T>> {
-        let data = fs::read_to_string(parts.main_file.clone())?;
+        let data = fs::read_to_string(parts.main_file)?;
         let (opt_fm, content) = frontmatter::parse_and_find_content(data.as_str())?;
 
-        let meta = opt_fm
-            .map(|yaml| {
+        // If there
+        let meta = match (opt_fm, parts.meta) {
+            (None, None) => Ok(None),
+            (Some(yaml), None) => {
                 // i fucking hate this
                 let str = {
                     let mut yaml_str = String::new();
@@ -117,13 +84,9 @@ impl<T: for<'de> serde::Deserialize<'de>> Document<T> {
                     yaml_str
                 };
                 serde_yaml::from_str(str.as_str())
-            }).map_or(Ok(None), |e| e)?;
-
-        let meta = match (meta, parts.meta) {
-            (None, None) => Ok(None),
-            (Some(m), None) => Ok(Some(m)),
+            }
             (None, Some(mp)) => read_meta(&mp),
-            (_, Some(mp)) => Err(DocumentLoadError::AmbiguousMeta(vec![parts.main_file, mp]))
+            (_, Some(mp)) => Err(DocumentLoadError::AmbiguousMeta(vec![parts.main_file, mp]))?
         }?;
 
         Ok(Document {
@@ -131,6 +94,7 @@ impl<T: for<'de> serde::Deserialize<'de>> Document<T> {
             doctype: DocumentType::Markdown,
             meta,
             content: content.to_string(),
+            files: parts.clone(),
         })
     }
 
@@ -149,6 +113,10 @@ impl<T: for<'de> serde::Deserialize<'de>> Document<T> {
             Jupyter => panic!("Not yet implemented!")
         }
     }
+
+    pub fn load_path(path: &Path) -> DocumentResult<Document<T>> {
+        Self::load(DocumentParts::load(path)?)
+    }
 }
 
 #[derive(Debug, Clone)]
@@ -156,6 +124,7 @@ pub struct DocumentParts {
     short_name: String,
     main_file: PathBuf,
     meta: Option<PathBuf>,
+    asset_dir: PathBuf,
 }
 
 impl DocumentParts {
@@ -188,6 +157,7 @@ impl DocumentParts {
             short_name,
             main_file: index,
             meta,
+            asset_dir: path.into_path_buf(),
         })
     }
 
@@ -197,8 +167,9 @@ impl DocumentParts {
             .map_or(Err(DocumentLoadError::InvalidPath(PathBuf::from(path))), |s| Ok(s.to_string()))?;
         Ok(DocumentParts {
             short_name,
-            main_file: PathBuf::from(path),
+            main_file: path.into(),
             meta: None,
+            asset_dir: path.parent().unwrap().into(),
         })
     }
 
@@ -210,7 +181,7 @@ impl DocumentParts {
         } else if fs_meta.is_file() {
             DocumentParts::load_from_file(path)
         } else {
-            Err(DocumentLoadError::NotAFileOrDirectory(PathBuf::from(path)))
+            Err(DocumentLoadError::NotAFileOrDirectory(path.into()))
         }
     }
 }
@@ -247,6 +218,7 @@ mod test {
             short_name: "some-name".to_string(),
             main_file: get_resources_path("blog-posts/site-release.md"),
             meta: None,
+            asset_dir: get_resources_path("blog-posts"),
         };
 
         let doc = Document::<ArticleMeta>::load(parts.clone()).unwrap();
@@ -262,6 +234,7 @@ mod test {
             short_name: "some-name".to_string(),
             main_file: get_resources_path("blog-posts/separate-meta/index.md"),
             meta: None,
+            asset_dir: get_resources_path("blog-posts"),
         };
 
         let doc = Document::<ArticleMeta>::load(parts.clone()).unwrap();
@@ -276,6 +249,7 @@ mod test {
             short_name: "some-name".to_string(),
             main_file: get_resources_path("blog-posts/separate-meta/index.md"),
             meta: Some(get_resources_path("blog-posts/separate-meta/meta.yaml")),
+            asset_dir: get_resources_path("blog-posts"),
         };
 
         let doc = Document::<ArticleMeta>::load(parts.clone()).unwrap();

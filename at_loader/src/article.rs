@@ -1,14 +1,18 @@
 use std::fs::File;
 use std::io::Read;
-use std::path::Path;
+use std::path::{Path, PathBuf};
 
 use pandoc::PandocOption;
 
 use at_objects::input_types::ArticleMeta;
 
-use crate::document::DocumentLoadError;
+use crate::document::{DocumentLoadError, Document};
 
-pub struct Article {}
+pub struct Article {
+    meta: ArticleMeta,
+    rawContent: String,
+    assetDir: PathBuf
+}
 
 pub enum ArticleReadError {
     DocumentLoad(DocumentLoadError),
@@ -22,7 +26,12 @@ impl From<DocumentLoadError> for ArticleReadError {
 }
 
 impl Article {
-    pub fn read(path: &str) {}
+    pub fn read(path: &Path) {
+        let document = Document::<ArticleMeta>::load_path(path)?;
+        let meta = document.meta.ok_or(ArticleReadError::NoMeta)?;
+
+
+    }
 }
 
 #[cfg(test)]

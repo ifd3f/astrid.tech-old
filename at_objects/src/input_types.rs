@@ -1,8 +1,7 @@
+
 use chrono::{DateTime, NaiveDate, Utc};
 use serde;
-
 use serde::{Deserialize, Serialize};
-use crate::input_types::ProjectStatus::NoStatus;
 
 #[derive(Serialize, Deserialize, Debug)]
 #[serde(rename_all = "camelCase")]
@@ -24,7 +23,9 @@ pub enum ProjectStatus {
 }
 
 impl Default for ProjectStatus {
-    fn default() -> Self { NoStatus }
+    fn default() -> Self {
+        ProjectStatus::NoStatus
+    }
 }
 
 #[derive(Serialize, Deserialize, Debug)]
