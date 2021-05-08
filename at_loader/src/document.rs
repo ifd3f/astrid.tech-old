@@ -9,7 +9,7 @@ use serde::Deserialize;
 use serde_yaml::to_value;
 use yaml_rust::{ScanError, YamlEmitter};
 
-use at_objects::page::{DocumentType, MetaParseError, MetaType};
+use crate::page::{DocumentType, MetaParseError, MetaType};
 
 /// Everything that could possibly go wrong if you were to load a document.
 #[derive(Debug)]
@@ -209,7 +209,7 @@ fn find_file_with_stem(file_stem: &OsStr, path: &Path) -> Result<Vec<PathBuf>, D
 
 #[cfg(test)]
 mod test {
-    use at_objects::input_types::{ArticleMeta, ProjectMeta};
+    use crate::input_types::{ArticleMeta, ProjectMeta};
 
     use crate::document::{Document, DocumentParts};
     use crate::document::DocumentLoadError::*;

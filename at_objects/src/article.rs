@@ -2,9 +2,9 @@ use std::path::PathBuf;
 
 use chrono::Datelike;
 
-use crate::input_types::ArticleMeta;
+use at_loader::input_types::ArticleMeta;
 use crate::timestream::{DatedSlug, TimestreamObject};
-use crate::page::Page;
+use at_loader::page::Page;
 
 pub struct Article {
     meta: ArticleMeta,

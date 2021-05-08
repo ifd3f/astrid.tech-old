@@ -1,7 +1,7 @@
 use std::path::{Path, PathBuf};
 
 
-use at_objects::input_types::ArticleMeta;
+use crate::input_types::ArticleMeta;
 
 use crate::document::{DocumentLoadError};
 
