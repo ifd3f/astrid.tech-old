@@ -4,7 +4,6 @@ use std::path::{Path, PathBuf};
 
 use serde::Deserialize;
 
-
 pub enum DocumentType {
     Markdown,
     Jupyter,

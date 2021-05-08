@@ -99,7 +99,7 @@ impl<T: for<'de> serde::Deserialize<'de>> Document<T> {
             short_name: parts.short_name,
             doctype: DocumentType::Markdown,
             meta,
-            content: content.to_string()
+            content: content.to_string(),
         })
     }
 
@@ -209,10 +209,9 @@ fn find_file_with_stem(file_stem: &OsStr, path: &Path) -> Result<Vec<PathBuf>, D
 
 #[cfg(test)]
 mod test {
-    use crate::input_types::{ArticleMeta, ProjectMeta};
-
     use crate::document::{Document, DocumentParts};
     use crate::document::DocumentLoadError::*;
+    use crate::input_types::{ArticleMeta, ProjectMeta};
     use crate::test_util::get_resources_path;
 
     #[test]

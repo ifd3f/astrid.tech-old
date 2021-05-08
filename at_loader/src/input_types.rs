@@ -1,4 +1,3 @@
-
 use chrono::{DateTime, NaiveDate, Utc};
 use serde;
 use serde::{Deserialize, Serialize};

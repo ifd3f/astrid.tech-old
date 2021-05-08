@@ -1,9 +1,7 @@
 use std::path::{Path, PathBuf};
 
-
+use crate::document::DocumentLoadError;
 use crate::input_types::ArticleMeta;
-
-use crate::document::{DocumentLoadError};
 
 pub struct Article {
     meta: ArticleMeta,
