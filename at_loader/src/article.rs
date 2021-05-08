@@ -1,12 +1,9 @@
-use std::fs::File;
-use std::io::Read;
 use std::path::{Path, PathBuf};
 
-use pandoc::PandocOption;
 
 use at_objects::input_types::ArticleMeta;
 
-use crate::document::{DocumentLoadError, Document};
+use crate::document::{DocumentLoadError};
 
 pub struct Article {
     meta: ArticleMeta,
@@ -26,12 +23,10 @@ impl From<DocumentLoadError> for ArticleReadError {
 }
 
 impl Article {
-    pub fn read(path: &Path) {
-        let document = Document::<ArticleMeta>::load_path(path)?;
-        let meta = document.meta.ok_or(ArticleReadError::NoMeta)?;
-
-
-    }
+    //pub fn read(path: &Path) {
+    //    let document = Document::<ArticleMeta>::load_path(path)?;
+    //    let meta = document.meta.ok_or(ArticleReadError::NoMeta)?;
+    //}
 }
 
 #[cfg(test)]

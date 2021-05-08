@@ -9,7 +9,6 @@ chrono = { version = "0.4.19", features = ["serde"] }
 serde = { version = "1.0", features = ["derive"] }
 serde_yaml = "0.8.14"
 yaml-rust = "0.4.4"
-walkdir = "2"
 at_common = { path = "../at_common" }
 at_objects = { path = "../at_objects" }
 pandoc_ast = "0.8.0"

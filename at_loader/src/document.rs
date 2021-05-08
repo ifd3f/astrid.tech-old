@@ -9,7 +9,7 @@ use serde::Deserialize;
 use serde_yaml::to_value;
 use yaml_rust::{ScanError, YamlEmitter};
 
-use at_objects::page::{DocumentType, MetaType};
+use at_objects::page::{DocumentType, MetaParseError, MetaType};
 
 /// Everything that could possibly go wrong if you were to load a document.
 #[derive(Debug)]
@@ -24,6 +24,7 @@ pub enum DocumentLoadError {
     IOError(io::Error),
     YAMLSyntaxError(serde_yaml::Error),
     YAMLScanError(yaml_rust::scanner::ScanError),
+    MetaFileError(MetaParseError),
 }
 
 pub type DocumentResult<T> = Result<T, DocumentLoadError>;
@@ -46,14 +47,19 @@ impl From<yaml_rust::scanner::ScanError> for DocumentLoadError {
     }
 }
 
+impl From<MetaParseError> for DocumentLoadError {
+    fn from(e: MetaParseError) -> Self {
+        DocumentLoadError::MetaFileError(e)
+    }
+}
+
 fn read_meta<T: for<'de> Deserialize<'de>>(path: &Path) -> DocumentResult<T> {
     let ext = path.extension()
-        .and_then(|s| s.to_str());
-    let metatype = match ext {
-        Some(ext) => MetaType::from_ext(ext),
-        None => Err(DocumentLoadError::UnknownMetaType("".to_string()))
-    }?;
-    metatype.parse(path)
+        .and_then(|s| s.to_str())
+        .unwrap_or("");
+
+    let meta_type = MetaType::from_ext(ext).ok_or(DocumentLoadError::UnknownMetaType(ext.to_string()))?;
+    Ok(meta_type.parse(path)?)
 }
 
 pub struct Document<T> {
@@ -61,7 +67,7 @@ pub struct Document<T> {
     pub doctype: DocumentType,
     pub content: String,
     pub meta: Option<T>,
-    pub files: DocumentParts,
+
 }
 
 impl<T: for<'de> serde::Deserialize<'de>> Document<T> {
@@ -69,12 +75,12 @@ impl<T: for<'de> serde::Deserialize<'de>> Document<T> {
     fn load_markdown(
         parts: DocumentParts
     ) -> DocumentResult<Document<T>> {
-        let data = fs::read_to_string(parts.main_file)?;
+        let data = fs::read_to_string(parts.main_file.as_path())?;
         let (opt_fm, content) = frontmatter::parse_and_find_content(data.as_str())?;
 
         // If there
         let meta = match (opt_fm, parts.meta) {
-            (None, None) => Ok(None),
+            (None, None) => None,
             (Some(yaml), None) => {
                 // i fucking hate this
                 let str = {
@@ -83,30 +89,27 @@ impl<T: for<'de> serde::Deserialize<'de>> Document<T> {
                     emitter.dump(&yaml).unwrap();
                     yaml_str
                 };
-                serde_yaml::from_str(str.as_str())
+                serde_yaml::from_str(str.as_str())?
             }
-            (None, Some(mp)) => read_meta(&mp),
+            (None, Some(mp)) => read_meta(&mp)?,
             (_, Some(mp)) => Err(DocumentLoadError::AmbiguousMeta(vec![parts.main_file, mp]))?
-        }?;
+        };
 
         Ok(Document {
             short_name: parts.short_name,
             doctype: DocumentType::Markdown,
             meta,
-            content: content.to_string(),
-            files: parts.clone(),
+            content: content.to_string()
         })
     }
 
     /// Load the document at this path.
     pub fn load(parts: DocumentParts) -> DocumentResult<Document<T>> {
         let ext = parts.main_file.extension()
-            .and_then(|s| s.to_str());
+            .and_then(|s| s.to_str())
+            .unwrap_or("");
 
-        let doctype = match ext {
-            Some(ext) => DocumentType::from_ext(ext),
-            None => Err(DocumentLoadError::UnknownDocumentType("".to_string()))
-        }?;
+        let doctype = DocumentType::from_ext(ext).ok_or(DocumentLoadError::UnknownDocumentType(ext.to_string()));
 
         match doctype {
             Markdown => Self::load_markdown(parts),
@@ -157,7 +160,7 @@ impl DocumentParts {
             short_name,
             main_file: index,
             meta,
-            asset_dir: path.into_path_buf(),
+            asset_dir: path.to_path_buf(),
         })
     }
 

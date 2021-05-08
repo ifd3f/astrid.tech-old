@@ -4,7 +4,6 @@ use std::path::{Path, PathBuf};
 
 use serde::Deserialize;
 
-use crate::page::MetaParseError::IOError;
 
 pub enum DocumentType {
     Markdown,
@@ -26,6 +25,7 @@ pub enum MetaType {
     YAML,
 }
 
+#[derive(Debug)]
 pub enum MetaParseError {
     YAMLError(serde_yaml::Error),
     IOError(std::io::Error),
