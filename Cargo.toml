@@ -3,5 +3,6 @@
 members = [
     "at_shortener",
     "at_loader",
-    "at_web"
+    "at_web",
+    "at_render"
 ]

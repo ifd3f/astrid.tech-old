@@ -1,0 +1,11 @@
+[package]
+name = "at_render"
+version = "0.1.0"
+authors = ["Astrid Yu <astrid@astrid.tech>"]
+edition = "2018"
+
+# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
+
+[dependencies]
+quick-js = "0.4.1"
+rusty_v8 = "0.22.2"

@@ -8,6 +8,7 @@
       <sourceFolder url="file://$MODULE_DIR$/at_shortener/src" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/at_web/src" isTestSource="false" />
       <sourceFolder url="file://$MODULE_DIR$/at_common/src" isTestSource="false" />
+      <sourceFolder url="file://$MODULE_DIR$/at_render/src" isTestSource="false" />
       <excludeFolder url="file://$MODULE_DIR$/target" />
     </content>
     <orderEntry type="inheritedJdk" />
