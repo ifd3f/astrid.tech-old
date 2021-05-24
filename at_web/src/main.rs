@@ -1,6 +1,8 @@
 #![feature(decl_macro)]
 #![feature(proc_macro_hygiene)]
 
+mod routes;
+
 extern crate at_shortener;
 extern crate at_objects;
 extern crate at_loader;
@@ -11,7 +13,6 @@ extern crate rocket;
 
 use std::env;
 use dotenv::dotenv;
-mod shortener_routes;
 use crate::shortener_routes::TargetURL;
 
 
@@ -27,6 +28,6 @@ fn main() {
 
     rocket::ignite()
         .manage(target_url)
-        .mount("/", routes![shortener_routes::index, shortener_routes::lengthen])
+        .mount("/", routes![shortener::index, shortener::lengthen])
         .launch();
 }
