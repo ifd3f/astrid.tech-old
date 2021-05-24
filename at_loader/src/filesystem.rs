@@ -34,10 +34,12 @@ impl FilesystemSet {
 #[cfg(test)]
 mod tests {
     use std::fs;
-    use std::io::Write;
+    use std::io::{Write, Read};
 
     use crate::filesystem::FilesystemSet;
     use crate::test_util::{get_resources_path, get_temp_path};
+    use std::borrow::Borrow;
+    use std::ops::Deref;
 
     #[test]
     fn raw_write_applies_to_ephemeral() {
@@ -50,5 +52,36 @@ mod tests {
         let virtual_path = fss.get_filesystem().join("foo.txt").unwrap();
         let contents = virtual_path.read_to_string().unwrap();
         assert_eq!(contents, "foo bar spam");
+    }
+
+    #[test]
+    fn ephemeral_write_does_not_change_base() {
+        let root = get_temp_path("root");
+        let eph = get_temp_path("eph");
+        let fss = FilesystemSet::create(root.clone(), eph.clone());
+        let mut base_file_path = root.join("file.txt");
+        {
+            let mut base_file = fs::File::create(base_file_path.as_path()).unwrap();
+            base_file.write_all("base file contents".as_ref()).unwrap();
+        }
+        let virtual_file_path = fss.get_filesystem().join("file.txt").unwrap();
+
+        {
+            let mut virtual_file = virtual_file_path.create_file().unwrap();
+            virtual_file.write_all("overlay file contents".as_ref());
+        }
+
+        {
+            let mut base_file = fs::File::open(base_file_path).unwrap();
+            let mut buf = String::new();
+            base_file.read_to_string(&mut buf).unwrap();
+            assert_eq!(buf, "base file contents");
+        }
+        {
+            let mut virtual_file = virtual_file_path.open_file().unwrap();
+            let mut buf = String::new();
+            virtual_file.read_to_string(&mut buf).unwrap();
+            assert_eq!(buf, "overlay file contents");
+        }
     }
 }
