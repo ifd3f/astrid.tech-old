@@ -5,7 +5,7 @@ authors = ["Astrid Yu <astrid@astrid.tech>"]
 edition = "2018"
 
 [[bin]]
-name = "aay-tw"
+name = "astrid-tech"
 path = "src/main.rs"
 
 [dependencies]
@@ -15,7 +15,13 @@ newbase60 = "0.1.0"
 reqwest = "0.11.2"
 rocket = "0.4.7"
 rocket_codegen = "0.4.7"
+serde = { version = "1.0", features = ["derive"] }
 scraper = "0.12.0"
+
+[dependencies.rocket_contrib]
+version = "0.4.10"
+default-features = false
+features = ["tera_templates"]
 
 [dev-dependencies]
 rstest = "0.7.0"

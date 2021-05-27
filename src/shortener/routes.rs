@@ -10,11 +10,6 @@ pub struct TargetURL {
     pub url: String,
 }
 
-#[get("/")]
-pub fn index(target_url: State<TargetURL>) -> Redirect {
-    Redirect::to(target_url.url.clone())
-}
-
 #[get("/<code>")]
 pub fn lengthen(target_url: State<TargetURL>, code: &RawStr) -> Result<Redirect, Status> {
     let expanded = match expand_shortcode(code) {

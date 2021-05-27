@@ -7,11 +7,26 @@ extern crate dotenv;
 extern crate rocket;
 
 use std::env;
-use dotenv::dotenv;
-mod shortener;
 
+use dotenv::dotenv;
+use rocket_contrib::templates::Template;
+use serde::{Serialize, Deserialize};
 use crate::shortener::routes::TargetURL;
 
+mod shortener;
+
+#[derive(Serialize, Deserialize)]
+struct ExampleContext<'a> {
+    name: &'a str
+}
+
+#[get("/")]
+fn index() -> Template {
+    let context = ExampleContext{
+        name: "memes"
+    };
+    Template::render("index", &context)
+}
 
 fn main() {
     dotenv().ok();
@@ -25,6 +40,7 @@ fn main() {
 
     rocket::ignite()
         .manage(target_url)
-        .mount("/", routes![shortener::routes::index, shortener::routes::lengthen])
+        .mount("/", routes![index, shortener::routes::lengthen])
+        .attach(Template::fairing())
         .launch();
 }
