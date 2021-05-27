@@ -6,18 +6,20 @@ use std::borrow::Borrow;
 
 pub struct FilesystemSet {
     actual_overlay_path: PathBuf,
+    actual_base_path: PathBuf,
     overlay: VfsPath,
 }
 
 impl FilesystemSet {
-    pub fn create(root: PathBuf, ephemeral: PathBuf) -> FilesystemSet {
-        let user_source = PhysicalFS::new(root);
+    pub fn create(base: PathBuf, ephemeral: PathBuf) -> FilesystemSet {
+        let user_source = PhysicalFS::new(base.clone());
         let cache = PhysicalFS::new(ephemeral.clone());
 
         let overlay = OverlayFS::new(&[VfsPath::new(cache), VfsPath::new(user_source)]);
 
         FilesystemSet {
             actual_overlay_path: ephemeral,
+            actual_base_path: base,
             overlay: VfsPath::new(overlay),
         }
     }
@@ -26,7 +28,11 @@ impl FilesystemSet {
         &self.overlay
     }
 
-    pub fn get_raw_write_path(&self) -> &Path {
+    pub fn get_raw_read_path(&self) -> &Path {
+        &self.actual_base_path
+    }
+
+    pub fn get_raw_write_path(&mut self) -> &Path {
         self.actual_overlay_path.borrow()
     }
 }

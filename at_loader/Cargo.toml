@@ -10,4 +10,5 @@ serde = { version = "1.0", features = ["derive"] }
 serde_yaml = "0.8.14"
 yaml-rust = "0.4.4"
 vfs = "0.5.1"
+pandoc = "0.8.4"
 frontmatter = "0.4.0"
