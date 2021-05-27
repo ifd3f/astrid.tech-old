@@ -2,9 +2,9 @@ use std::ops::Add;
 
 use chrono::{Datelike, Duration, FixedOffset, NaiveDate, NaiveDateTime};
 
-use crate::mapper::ShortCode::{Blog, Project, Text};
-use crate::mapper::ShortCodeParseError::{EmptyString, SXGError, TooLong, UnsupportedType};
-use crate::newbase60::sxg_to_num;
+use crate::shortener::mapper::ShortCode::{Blog, Project, Text};
+use crate::shortener::mapper::ShortCodeParseError::{EmptyString, SXGError, TooLong, UnsupportedType};
+use newbase60::sxg_to_num;
 
 #[derive(Debug, Clone, PartialEq, Eq)]
 enum ShortCode<'a> {
@@ -85,7 +85,7 @@ pub fn expand_shortcode(shortcode: &str) -> Result<String, ShortCodeParseError> 
 
 #[cfg(test)]
 mod tests {
-    use crate::mapper::*;
+    use crate::shortener::mapper::*;
     use rstest::rstest;
 
     #[rstest(input, expected)]

@@ -1,11 +1,10 @@
 use std::env;
 
-use rocket::{Response, State};
 use rocket::http::{RawStr, Status};
 use rocket::response::Redirect;
-use rocket::response::status::NotFound;
+use rocket::State;
 
-use at_shortener::mapper::expand_shortcode;
+use crate::shortener::mapper::expand_shortcode;
 
 pub struct TargetURL {
     pub url: String,
