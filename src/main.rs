@@ -1,11 +1,7 @@
 #![feature(decl_macro)]
 #![feature(proc_macro_hygiene)]
 
-extern crate at_shortener;
-extern crate at_objects;
-extern crate at_loader;
 extern crate dotenv;
-extern crate newbase60;
 #[macro_use]
 extern crate rocket;
 

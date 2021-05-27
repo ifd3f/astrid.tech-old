@@ -1,6 +1,5 @@
 use std::env;
 
-use dotenv::dotenv;
 use rocket::{Response, State};
 use rocket::http::{RawStr, Status};
 use rocket::response::Redirect;
