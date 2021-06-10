@@ -1,4 +1,3 @@
-use std::env;
 
 use rocket::http::{RawStr, Status};
 use rocket::response::Redirect;

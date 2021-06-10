@@ -1,4 +1,3 @@
-use scraper::html::Select;
 use scraper::{Html, Selector};
 
 pub async fn follow_redirect(uri: String, max_times: u32) -> String {
@@ -44,10 +43,10 @@ pub fn extract_meta_redirect(document: &'a str) -> Option<String> {
 
 #[cfg(test)]
 mod tests {
-    use crate::follow_redirect::*;
     use rstest::*;
     use std::fs;
     use std::path::{Path, PathBuf};
+    use crate::shortener::follow_redirect::extract_meta_redirect;
 
     #[fixture]
     fn test_resources_dir() -> PathBuf {

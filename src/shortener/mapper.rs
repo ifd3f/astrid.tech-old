@@ -1,10 +1,9 @@
 use std::ops::Add;
 
 use chrono::{Datelike, Duration, FixedOffset, NaiveDate, NaiveDateTime};
+use newbase60::sxg_to_num;
 
 use crate::shortener::mapper::ShortCode::{Blog, Project, Text};
-use crate::shortener::mapper::ShortCodeParseError::{EmptyString, SXGError, TooLong, UnsupportedType};
-use newbase60::sxg_to_num;
 
 #[derive(Debug, Clone, PartialEq, Eq)]
 enum ShortCode<'a> {
@@ -41,7 +40,7 @@ impl ShortCode<'_> {
             'b' => {
                 let number = match sxg_to_num(&shortcode[1..]) {
                     Some(n) => n,
-                    None => return Err(SXGError),
+                    None => return Err(ShortCodeParseError::SXGError),
                 };
 
                 let date = days_after_epoch(number as i64);
@@ -50,7 +49,7 @@ impl ShortCode<'_> {
             't' => {
                 let number = match sxg_to_num(&shortcode[1..]) {
                     Some(n) => n,
-                    None => return Err(SXGError),
+                    None => return Err(ShortCodeParseError::SXGError),
                 };
 
                 let epoch_days = (number / 60) as i64;
@@ -85,8 +84,10 @@ pub fn expand_shortcode(shortcode: &str) -> Result<String, ShortCodeParseError> 
 
 #[cfg(test)]
 mod tests {
-    use crate::shortener::mapper::*;
     use rstest::rstest;
+
+    use crate::shortener::mapper::*;
+    use crate::shortener::mapper::ShortCodeParseError::*;
 
     #[rstest(input, expected)]
     #[case("pfoob", Project("foob"))]

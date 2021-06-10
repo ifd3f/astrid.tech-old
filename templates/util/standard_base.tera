@@ -1,0 +1,11 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>{% block title %}{% endblock title %}</title>
+    <link rel="micropub" href="https://localhost:8000/micropub">
+</head>
+<body>
+<h1>Astrid Yu</h1>
+{% block content %}{% endblock content %}
+</body>
+</html>

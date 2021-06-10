@@ -17,6 +17,10 @@ rocket = "0.4.7"
 rocket_codegen = "0.4.7"
 serde = { version = "1.0", features = ["derive"] }
 scraper = "0.12.0"
+oxide-auth-rocket = "0.1.0"
+oxide-auth = "0.5.0"
+rand = "0.8.3"
+redis = "0.20.1"
 
 [dependencies.rocket_contrib]
 version = "0.4.10"
