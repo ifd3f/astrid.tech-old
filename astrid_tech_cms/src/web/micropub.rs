@@ -1,29 +1,49 @@
+use std::convert::TryInto;
+
 use chrono::{DateTime, Duration, Utc};
-use serde::{Serialize, Deserialize};
+use serde::{Deserialize, Serialize};
+use url::Url;
+
+use crate::content::post::BarePost;
+use crate::content::content::PostContent;
 
 #[derive(Serialize, Deserialize, Debug, Eq, PartialEq)]
 #[serde(tag = "h")]
 pub enum Micropub {
-    #[serde(rename = "entry")]
-    Entry { content: String, category: Vec<String>, mp_syndicate_to: Vec<String> }
+    #[serde(rename = "entry", rename_all = "kebab-case")]
+    Entry {
+        name: Option<String>,
+        summary: Option<String>,
+        content: Option<String>,
+        published: Option<DateTime<Utc>>,
+        updated: Option<DateTime<Utc>>,
+        #[serde(default)]
+        category: Vec<String>,
+        location: String,
+        in_reply_to: Url,
+        repost_of: Option<String>,
+        #[serde(default)]
+        syndication: Vec<String>,
+        #[serde(default)]
+        mp_syndicate_to: Vec<String>,
+    }
 }
 
+impl TryInto<Post> for Micropub {
+    type Error = ();
 
-#[derive(Serialize, Deserialize, Debug, Eq, PartialEq)]
-#[serde(rename_all = "kebab-case")]
-pub struct Entry {
-    name: Option<String>,
-    summary: Option<String>,
-    content: Option<String>,
-    published: Option<DateTime<Utc>>,
-    updated: Option<DateTime<Utc>>,
-    category: Vec<String>,
-    location: String,
-    in_reply_to: String,
-    repost_of: Vec<String>,
-    syndication: Vec<String>,
-    mp_syndicate_to: String,
+    fn try_into(self) -> Result<BarePost, Self::Error> {
+        BarePost {
+            content : PostContent {
+                content_type: ContentType::Markdown,
+                content_path: "".to_string(),
+                content: "".to_string()
+            },
+            meta:  {}
+        }
+    }
 }
+
 
 #[derive(Serialize, Deserialize, Debug, Eq, PartialEq)]
 #[serde(rename_all = "kebab-case")]

@@ -14,11 +14,12 @@ use vfs::{VfsFileType, VfsPath};
 use crate::content::content::{ContentType, FindIndexError, PostContent, UnsupportedContentType};
 use crate::content::content;
 use crate::content::post_registry::DateSlug;
+use url::Url;
 
 #[derive(Eq, PartialEq, Clone, Debug)]
 pub struct BarePost {
-    content: PostContent,
-    meta: EmbeddedMeta,
+    pub content: PostContent,
+    pub meta: EmbeddedMeta,
 }
 
 impl BarePost {
@@ -132,15 +133,15 @@ enum SyndicationStrategy {
 #[serde(tag = "status", rename_all = "camelCase")]
 enum Syndication {
     Scheduled {
-        url: String,
+        url: Url,
         strategy: Option<SyndicationStrategy>,
     },
     Attempting {
-        url: String,
+        url: Url,
         strategy: Option<SyndicationStrategy>,
     },
     Completed {
-        url: String,
+        url: Url,
         completed_on: DateTime<Utc>,
     },
 }
@@ -163,21 +164,23 @@ enum HType {
 struct EmbeddedMeta {
     title: Option<String>,
     description: Option<String>,
+    short_name: Option<String>,
+
     date: DateTime<Utc>,
     published_date: Option<DateTime<Utc>>,
     updated_date: Option<DateTime<Utc>>,
-    reply_to: Option<String>,
-    short_name: Option<String>,
     #[serde(default)]
     ordinal: usize,
+
+    reply_to: Option<Url>,
     #[serde(default)]
     tags: Vec<String>,
     #[serde(default)]
-    media: Vec<MediaEntry>,
+    syndications: Vec<Syndication>,
     #[serde(flatten)]
     h_type: HType,
     #[serde(default)]
-    syndications: Vec<Syndication>,
+    media: Vec<MediaEntry>,
 }
 
 impl EmbeddedMeta {
