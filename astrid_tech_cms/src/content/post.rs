@@ -14,7 +14,6 @@ use crate::content::content;
 
 #[derive(Eq, PartialEq, Debug)]
 pub struct Post {
-    name: String,
     content: PostContent,
     meta: EmbeddedMeta,
 }
@@ -32,6 +31,8 @@ pub enum PostError {
     Serde(serde_json::error::Error),
     AmbiguousIndex(FindIndexError),
     UnsupportedContentType(UnsupportedContentType),
+    ContentTypeDoesNotSupportFrontmatter(ContentType),
+    NotAFile(VfsPath),
 }
 
 impl From<vfs::VfsError> for PostError {
@@ -77,14 +78,14 @@ struct RecipeStep {
 
 #[derive(Serialize, Deserialize, Debug, Eq, PartialEq)]
 #[serde(tag = "type")]
-enum PostType {
+enum HType {
     #[serde(rename = "entry")]
     Entry,
     #[serde(rename = "recipe")]
     Recipe {
         //duration: Option<Duration>,
         ingredients: Vec<String>,
-        instructions: Vec<RecipeStep>
+        instructions: Vec<RecipeStep>,
     },
 }
 
@@ -98,65 +99,86 @@ struct EmbeddedMeta {
     short_name: Option<String>,
     #[serde(default)]
     ordinal: usize,
-    #[serde(flatten)]
-    post_type: PostType,
     #[serde(default)]
     tags: Vec<String>,
     #[serde(default)]
     media: Vec<MediaEntry>,
+    #[serde(flatten)]
+    h_type: HType,
+}
+
+
+#[derive(Serialize, Deserialize, Debug)]
+#[serde(untagged)]
+enum YAMLContent {
+    #[serde(rename_all = "camelCase")]
+    Separate { content_path: String },
+    #[serde(rename_all = "camelCase")]
+    Embedded { content: String, content_type: String },
+}
+
+impl YAMLContent {
+    fn to_content(self, dir: VfsPath) -> Result<PostContent, PostError> {
+        Ok(match self {
+            YAMLContent::Separate { content_path } => {
+                let content_file = dir.join(content_path.as_str())?;
+                let content_type = ContentType::from_ext(content_file.extension().unwrap().as_str())?;
+                PostContent {
+                    content: content_file.read_to_string()?,
+                    content_type,
+                }
+            }
+            YAMLContent::Embedded { content, content_type } => {
+                PostContent {
+                    content,
+                    content_type: ContentType::from_mimetype(content_type.as_str())?,
+                }
+            }
+        })
+    }
 }
 
 #[derive(Serialize, Deserialize, Debug)]
 #[serde(rename_all = "camelCase")]
-struct SeparateYAMLMeta {
-    content_path: String,
+struct YAMLPostSchema {
+    #[serde(flatten)]
+    content: YAMLContent,
     #[serde(flatten)]
     meta: EmbeddedMeta,
 }
 
-impl TryFrom<&VfsPath> for Post {
+impl TryFrom<VfsPath> for Post {
     type Error = PostError;
 
-    fn try_from(path: &VfsPath) -> Result<Self, Self::Error> {
-        let (name, meta, content) = match path.metadata()?.file_type {
-            VfsFileType::File => {
-                todo!()
-            }
-            VfsFileType::Directory => {
-                // Search for index file
-                let index = content::find_index(path)?;
-                let index_file = path.join(index.as_str())?;
+    /// Creates a post from a post file.
+    fn try_from(path: VfsPath) -> Result<Self, Self::Error> {
+        if path.metadata()?.file_type != VfsFileType::File {
+            Err(PostError::NotAFile(path.clone()))?;
+        }
 
-                let (meta, content) = match index.as_str() {
-                    "index.yaml" => {
-                        let file = index_file.open_file()?;
-                        let meta: SeparateYAMLMeta = serde_yaml::from_reader(file)?;
-                        let content_file = path.join(meta.content_path.as_str())?;
-                        let content_type = ContentType::from_ext(content_file.extension().unwrap().as_str())?;
-                        (meta.meta, PostContent { content: content_file.read_to_string()?, content_type })
-                    }
-                    "index.md" => {
-                        let contents = {
-                            let mut string = String::new();
-                            index_file.open_file()?.read_to_string(&mut string);
-                            string
-                        };
-                        let matter = Matter::<YAML>::new();
-                        let parsed = matter.matter(contents);
-                        let meta: EmbeddedMeta = parsed.data.deserialize()?;
-                        (meta, PostContent { content: parsed.content, content_type: ContentType::Markdown })
-                    }
-                    _ => {
-                        todo!()
-                    }
+        let ext = path.extension().unwrap();
+        let (meta, content) = if ext == "yaml" || ext == "yml" {
+            let file = path.open_file()?;
+            let meta: YAMLPostSchema = serde_yaml::from_reader(file)?;
+            (meta.meta, meta.content.to_content(path.parent().unwrap())?)
+        } else {
+            let content_type = ContentType::from_ext(ext.as_str())?;
+            if !content_type.supports_frontmatter() {
+                Err(PostError::ContentTypeDoesNotSupportFrontmatter(content_type))?
+            } else {
+                let contents = {
+                    let mut string = String::new();
+                    path.open_file()?.read_to_string(&mut string);
+                    string
                 };
-
-                (path.filename(), meta, content)
+                let matter = Matter::<YAML>::new();
+                let parsed = matter.matter(contents);
+                let meta: EmbeddedMeta = parsed.data.deserialize()?;
+                (meta, PostContent { content: parsed.content, content_type })
             }
         };
 
         Ok(Post {
-            name,
             content,
             meta,
         })
@@ -170,7 +192,7 @@ mod test {
     use vfs::{MemoryFS, VfsPath};
 
     use crate::content::content::ContentType;
-    use crate::content::post::{EmbeddedMeta, Post, PostType, SeparateYAMLMeta};
+    use crate::content::post::{EmbeddedMeta, Post, HType, YAMLPostSchema};
 
     const TXT_ARTICLE_YAML: &str = r#"
         date: 2021-06-12 10:51:30 +08:00
@@ -203,16 +225,17 @@ mod test {
 
     #[test]
     fn parses_article_meta() {
-        let parsed: SeparateYAMLMeta = serde_yaml::from_str(TXT_ARTICLE_YAML).unwrap();
+        let parsed: YAMLPostSchema = serde_yaml::from_str(TXT_ARTICLE_YAML).unwrap();
 
-        assert_eq!(parsed.meta.post_type, PostType::Entry);
+        assert_eq!(parsed.meta.h_type, HType::Entry);
     }
 
     #[test]
     fn reads_article() {
         let path = setup_working_separate_meta_post();
+        let post_path = path.join("index.yaml").unwrap();
 
-        let post = Post::try_from(&path).unwrap();
+        let post = Post::try_from(post_path).unwrap();
 
         assert_eq!(post.content.content_type, ContentType::Text);
         assert_eq!(post.content.content, TXT_CONTENTS);
