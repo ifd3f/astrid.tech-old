@@ -11,6 +11,7 @@ use std::borrow::Borrow;
 pub struct Post {
     name: String,
     file_contents: String,
+    meta: EmbeddedMeta
 }
 
 impl Post {
@@ -19,6 +20,7 @@ impl Post {
     }
 }
 
+#[derive(Debug)]
 pub enum PostError {
     Filesystem(vfs::VfsError),
     YAML(serde_yaml::Error),
@@ -50,45 +52,52 @@ impl From<FindIndexError> for PostError {
     }
 }
 
-#[derive(Serialize, Deserialize)]
+#[derive(Serialize, Deserialize, Debug)]
 struct ImageEntry {
     image: String,
-    caption: String
+    caption: String,
 }
 
-#[derive(Serialize, Deserialize)]
+#[derive(Serialize, Deserialize, Debug)]
 #[serde(tag = "type", rename_all = "camelCase")]
 enum PostType {
-    #[serde(rename = "post")]
+    #[serde(rename = "article")]
     Article {
         title: String,
-        description: String,
+        description: Option<String>,
     },
     #[serde(rename = "note")]
     Note,
     #[serde(rename = "recipe")]
     Recipe {
         title: String,
-        description: String
+        description: Option<String>,
     },
-    #[serde(rename = "images")]
-    Images {
+    #[serde(rename = "image")]
+    Image {
         title: String,
-        description: String,
-        images: Vec<ImageEntry>
+        description: Option<String>,
+        images: Vec<ImageEntry>,
     },
 }
 
-#[derive(Serialize, Deserialize)]
+#[derive(Serialize, Deserialize, Debug)]
 #[serde(rename_all = "camelCase")]
-struct StoredMeta {
+struct EmbeddedMeta {
     date: DateTime<Utc>,
     #[serde(flatten)]
     post_type: PostType,
-    content_path: Option<String>,
     tags: Vec<String>,
 }
 
+#[derive(Serialize, Deserialize, Debug)]
+struct SeparateYAMLMeta {
+    content_path: String,
+    #[serde(flatten)]
+    meta: EmbeddedMeta,
+}
+
+#[derive(Eq, PartialEq, Debug)]
 enum FindIndexError {
     NoIndex,
     MultipleIndices(Vec<String>),
@@ -122,17 +131,16 @@ impl TryFrom<&VfsPath> for Post {
                 todo!()
             }
             VfsFileType::Directory => {
-                // Search for index file, and verify integrity
+                // Search for index file
                 let index = find_index(path)?;
                 let index_file = path.join(index.as_str())?;
 
                 let (meta, content) = match index.as_str() {
                     "index.yaml" => {
                         let file = index_file.open_file()?;
-                        let meta: StoredMeta = serde_yaml::from_reader(file)?;
-                        let path = meta.content_path.clone().unwrap();
-                        let content_file = index_file.join(path.as_str())?;
-                        (meta, content_file.read_to_string()?)
+                        let meta: SeparateYAMLMeta = serde_yaml::from_reader(file)?;
+                        let content_file = path.join(meta.content_path.as_str())?;
+                        (meta.meta, content_file.read_to_string()?)
                     }
                     "index.md" => {
                         let contents = {
@@ -142,7 +150,7 @@ impl TryFrom<&VfsPath> for Post {
                         };
                         let matter = Matter::<YAML>::new();
                         let parsed = matter.matter(contents);
-                        let meta: StoredMeta = parsed.data.deserialize()?;
+                        let meta: EmbeddedMeta = parsed.data.deserialize()?;
                         (meta, parsed.content)
                     }
                     _ => {
@@ -157,6 +165,62 @@ impl TryFrom<&VfsPath> for Post {
         Ok(Post {
             name,
             file_contents,
+            meta
         })
+    }
+}
+
+#[cfg(test)]
+mod test {
+    use crate::content::post::{Post, EmbeddedMeta, PostType, SeparateYAMLMeta};
+    use vfs::{MemoryFS, VfsPath};
+    use std::convert::TryFrom;
+
+    const TXT_ARTICLE_YAML: &str = r#"
+        date: 2021-06-12 10:51:30 +08:00
+        title: Example post with txt
+
+        type: article
+        content_path: "post.txt"
+        tags:
+          - rust
+          - python
+          - csharp
+        "#;
+    const TXT_CONTENTS: &str = r#"
+        foo bar spam
+        "#;
+
+    fn setup_working_separate_meta_post() -> VfsPath {
+        let fs = MemoryFS::new();
+        let root = VfsPath::new(fs);
+
+        let mut file = root.join("index.yaml").unwrap().create_file().unwrap();
+        file.write(TXT_ARTICLE_YAML.as_ref());
+
+        let mut file = root.join("post.txt").unwrap().create_file().unwrap();
+        file.write(TXT_CONTENTS.as_ref());
+        root
+    }
+
+    #[test]
+    fn parses_article_meta() {
+        let parsed: SeparateYAMLMeta = serde_yaml::from_str(TXT_ARTICLE_YAML).unwrap();
+
+        if let PostType::Article { title, description } = parsed.meta.post_type {
+            assert_eq!(title, "Example post with txt");
+            assert_eq!(description, None);
+        } else {
+            panic!("Post is not an Article")
+        }
+    }
+
+    #[test]
+    fn reads_article() {
+        let path = setup_working_separate_meta_post();
+
+        let post = Post::try_from(&path).unwrap();
+
+        assert_eq!(post.file_contents, TXT_CONTENTS)
     }
 }
