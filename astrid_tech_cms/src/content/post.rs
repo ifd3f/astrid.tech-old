@@ -2,7 +2,7 @@ use std::borrow::Borrow;
 use std::convert::TryFrom;
 use std::str::FromStr;
 
-use chrono::{DateTime, Utc};
+use chrono::{Datelike, DateTime, Utc};
 use gray_matter::engine::yaml::YAML;
 use gray_matter::matter::Matter;
 use gray_matter::value::pod::Pod;
@@ -11,22 +11,28 @@ use vfs::{VfsFileType, VfsPath};
 
 use crate::content::content::{ContentType, FindIndexError, PostContent, UnsupportedContentType};
 use crate::content::content;
+use crate::content::post_registry::DateSlug;
 
 #[derive(Eq, PartialEq, Debug)]
-pub struct Post {
+pub struct BarePost {
     content: PostContent,
     meta: EmbeddedMeta,
 }
 
-impl Post {
+impl BarePost {
     fn write_to(&self, path: &mut VfsPath) {
         todo!()
+    }
+
+    pub fn get_slug(&self) -> DateSlug {
+        self.meta.get_slug()
     }
 }
 
 #[derive(Debug)]
 pub enum PostError {
     Filesystem(vfs::VfsError),
+    IO(std::io::Error),
     YAML(serde_yaml::Error),
     Serde(serde_json::error::Error),
     AmbiguousIndex(FindIndexError),
@@ -50,6 +56,12 @@ impl From<serde_yaml::Error> for PostError {
 impl From<serde_json::Error> for PostError {
     fn from(e: serde_json::Error) -> Self {
         PostError::Serde(e)
+    }
+}
+
+impl From<std::io::Error> for PostError {
+    fn from(e: std::io::Error) -> Self {
+        PostError::IO(e)
     }
 }
 
@@ -77,6 +89,30 @@ struct RecipeStep {
 }
 
 #[derive(Serialize, Deserialize, Debug, Eq, PartialEq)]
+#[serde(rename_all = "camelCase")]
+enum SyndicationStrategy {
+    TitleOnly,
+    ContentOnly
+}
+
+#[derive(Serialize, Deserialize, Debug, Eq, PartialEq)]
+#[serde(tag = "status", rename_all = "camelCase")]
+enum Syndication {
+    Scheduled {
+        url: String,
+        strategy: Option<SyndicationStrategy>
+    },
+    Attempting {
+        url: String,
+        strategy: Option<SyndicationStrategy>
+    },
+    Completed {
+        url: String,
+        completed_on: DateTime<Utc>,
+    },
+}
+
+#[derive(Serialize, Deserialize, Debug, Eq, PartialEq)]
 #[serde(tag = "type")]
 enum HType {
     #[serde(rename = "entry")]
@@ -96,6 +132,8 @@ struct EmbeddedMeta {
     description: Option<String>,
     date: DateTime<Utc>,
     published_date: Option<DateTime<Utc>>,
+    updated_date: Option<DateTime<Utc>>,
+    reply_to: Option<String>,
     short_name: Option<String>,
     #[serde(default)]
     ordinal: usize,
@@ -105,6 +143,19 @@ struct EmbeddedMeta {
     media: Vec<MediaEntry>,
     #[serde(flatten)]
     h_type: HType,
+    #[serde(default)]
+    syndications: Vec<Syndication>,
+}
+
+impl EmbeddedMeta {
+    pub fn get_slug(&self) -> DateSlug {
+        DateSlug {
+            year: self.date.year(),
+            month: self.date.month() as u8,
+            day: self.date.day() as u8,
+            ordinal: self.ordinal,
+        }
+    }
 }
 
 
@@ -118,7 +169,7 @@ enum YAMLContent {
 }
 
 impl YAMLContent {
-    fn to_content(self, dir: VfsPath) -> Result<PostContent, PostError> {
+    fn into_content(self, dir: VfsPath) -> Result<PostContent, PostError> {
         Ok(match self {
             YAMLContent::Separate { content_path } => {
                 let content_file = dir.join(content_path.as_str())?;
@@ -147,7 +198,7 @@ struct YAMLPostSchema {
     meta: EmbeddedMeta,
 }
 
-impl TryFrom<VfsPath> for Post {
+impl TryFrom<VfsPath> for BarePost {
     type Error = PostError;
 
     /// Creates a post from a post file.
@@ -160,7 +211,7 @@ impl TryFrom<VfsPath> for Post {
         let (meta, content) = if ext == "yaml" || ext == "yml" {
             let file = path.open_file()?;
             let meta: YAMLPostSchema = serde_yaml::from_reader(file)?;
-            (meta.meta, meta.content.to_content(path.parent().unwrap())?)
+            (meta.meta, meta.content.into_content(path.parent().unwrap())?)
         } else {
             let content_type = ContentType::from_ext(ext.as_str())?;
             if !content_type.supports_frontmatter() {
@@ -168,7 +219,7 @@ impl TryFrom<VfsPath> for Post {
             } else {
                 let contents = {
                     let mut string = String::new();
-                    path.open_file()?.read_to_string(&mut string);
+                    path.open_file()?.read_to_string(&mut string)?;
                     string
                 };
                 let matter = Matter::<YAML>::new();
@@ -178,7 +229,7 @@ impl TryFrom<VfsPath> for Post {
             }
         };
 
-        Ok(Post {
+        Ok(BarePost {
             content,
             meta,
         })
@@ -192,7 +243,7 @@ mod test {
     use vfs::{MemoryFS, VfsPath};
 
     use crate::content::content::ContentType;
-    use crate::content::post::{EmbeddedMeta, Post, HType, YAMLPostSchema};
+    use crate::content::post::{BarePost, EmbeddedMeta, HType, YAMLPostSchema};
 
     const TXT_ARTICLE_YAML: &str = r#"
         date: 2021-06-12 10:51:30 +08:00
@@ -235,7 +286,7 @@ mod test {
         let path = setup_working_separate_meta_post();
         let post_path = path.join("index.yaml").unwrap();
 
-        let post = Post::try_from(post_path).unwrap();
+        let post = BarePost::try_from(post_path).unwrap();
 
         assert_eq!(post.content.content_type, ContentType::Text);
         assert_eq!(post.content.content, TXT_CONTENTS);
