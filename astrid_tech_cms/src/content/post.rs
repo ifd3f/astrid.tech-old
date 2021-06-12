@@ -8,7 +8,8 @@ use gray_matter::matter::Matter;
 use gray_matter::value::pod::Pod;
 use serde::{Deserialize, Serialize};
 use vfs::{VfsFileType, VfsPath};
-use crate::content::content::{PostContent, UnsupportedContentType, ContentType, FindIndexError};
+
+use crate::content::content::{ContentType, FindIndexError, PostContent, UnsupportedContentType};
 use crate::content::content;
 
 #[derive(Eq, PartialEq, Debug)]
@@ -64,37 +65,34 @@ impl From<FindIndexError> for PostError {
 }
 
 #[derive(Serialize, Deserialize, Debug, Eq, PartialEq)]
-struct ImageEntry {
+struct MediaEntry {
     image: String,
     caption: String,
 }
 
 #[derive(Serialize, Deserialize, Debug, Eq, PartialEq)]
+struct RecipeStep {
+    text: String
+}
+
+#[derive(Serialize, Deserialize, Debug, Eq, PartialEq)]
 #[serde(tag = "type")]
 enum PostType {
-    #[serde(rename = "article")]
-    Article {
-        title: String,
-        description: Option<String>,
-    },
-    #[serde(rename = "note")]
-    Note,
+    #[serde(rename = "entry")]
+    Entry,
     #[serde(rename = "recipe")]
     Recipe {
-        title: String,
-        description: Option<String>,
-    },
-    #[serde(rename = "image")]
-    Image {
-        title: String,
-        description: Option<String>,
-        images: Vec<ImageEntry>,
+        //duration: Option<Duration>,
+        ingredients: Vec<String>,
+        instructions: Vec<RecipeStep>
     },
 }
 
 #[derive(Serialize, Deserialize, Debug, Eq, PartialEq)]
 #[serde(rename_all = "camelCase")]
 struct EmbeddedMeta {
+    title: Option<String>,
+    description: Option<String>,
     date: DateTime<Utc>,
     published_date: Option<DateTime<Utc>>,
     short_name: Option<String>,
@@ -102,7 +100,10 @@ struct EmbeddedMeta {
     ordinal: usize,
     #[serde(flatten)]
     post_type: PostType,
+    #[serde(default)]
     tags: Vec<String>,
+    #[serde(default)]
+    media: Vec<MediaEntry>,
 }
 
 #[derive(Serialize, Deserialize, Debug)]
@@ -168,14 +169,14 @@ mod test {
 
     use vfs::{MemoryFS, VfsPath};
 
-    use crate::content::post::{EmbeddedMeta, Post, PostType, SeparateYAMLMeta};
     use crate::content::content::ContentType;
+    use crate::content::post::{EmbeddedMeta, Post, PostType, SeparateYAMLMeta};
 
     const TXT_ARTICLE_YAML: &str = r#"
         date: 2021-06-12 10:51:30 +08:00
         title: Example post with txt
 
-        type: article
+        type: entry
         shortName: foo-bar
         ordinal: 0
         contentPath: "post.txt"
@@ -204,13 +205,7 @@ mod test {
     fn parses_article_meta() {
         let parsed: SeparateYAMLMeta = serde_yaml::from_str(TXT_ARTICLE_YAML).unwrap();
 
-        assert_eq!(
-            parsed.meta.post_type,
-            PostType::Article {
-                title: "Example post with txt".to_string(),
-                description: None,
-            }
-        );
+        assert_eq!(parsed.meta.post_type, PostType::Entry);
     }
 
     #[test]
