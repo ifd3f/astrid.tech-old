@@ -1,6 +1,6 @@
 use vfs::VfsPath;
 
-#[derive(Eq, PartialEq, Debug)]
+#[derive(Eq, PartialEq, Debug, Clone)]
 pub enum ContentType {
     Markdown,
     ReStructuredText,
@@ -9,7 +9,7 @@ pub enum ContentType {
     HTMLFragment,
 }
 
-#[derive(Eq, PartialEq, Debug)]
+#[derive(Eq, PartialEq, Debug, Clone)]
 pub struct UnsupportedContentType(String);
 
 impl ContentType {
@@ -66,13 +66,14 @@ impl ContentType {
     }
 }
 
-#[derive(Eq, PartialEq, Debug)]
+#[derive(Eq, PartialEq, Debug, Clone)]
 pub struct PostContent {
     pub content_type: ContentType,
+    pub content_path: String,
     pub content: String,
 }
 
-#[derive(Eq, PartialEq, Debug)]
+#[derive(Eq, PartialEq, Debug, Clone)]
 pub enum FindIndexError {
     NoIndex,
     MultipleIndices(Vec<String>),

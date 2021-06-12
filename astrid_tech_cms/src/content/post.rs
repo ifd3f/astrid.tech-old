@@ -1,9 +1,11 @@
 use std::borrow::Borrow;
 use std::convert::TryFrom;
+use std::io::Write;
 use std::str::FromStr;
 
 use chrono::{Datelike, DateTime, Utc};
 use gray_matter::engine::yaml::YAML;
+use gray_matter::entity::ParsedEntityStruct;
 use gray_matter::matter::Matter;
 use gray_matter::value::pod::Pod;
 use serde::{Deserialize, Serialize};
@@ -13,15 +15,46 @@ use crate::content::content::{ContentType, FindIndexError, PostContent, Unsuppor
 use crate::content::content;
 use crate::content::post_registry::DateSlug;
 
-#[derive(Eq, PartialEq, Debug)]
+#[derive(Eq, PartialEq, Clone, Debug)]
 pub struct BarePost {
     content: PostContent,
     meta: EmbeddedMeta,
 }
 
 impl BarePost {
-    fn write_to(&self, path: &mut VfsPath) {
-        todo!()
+    fn write_to(&self, path: &mut VfsPath) -> Result<(), PostError> {
+        // TODO
+        if self.content.content_type.supports_frontmatter() {
+            // If our content type supports having frontmatter, create a single file.
+            let mut file = path.create_file()?;
+            let meta_yaml = serde_yaml::to_string(&self.meta)?;
+            file.write(meta_yaml.as_bytes());
+            file.write("\n---\n".as_ref());
+            file.write(self.content.content.as_bytes());
+        } else {
+            // If our content type does not support having frontmatter, we must use the YAML format.
+            // First, identify if we need to have.
+            let content = YAMLContent::from(&self.content);
+
+            if let YAMLContent::Separate { content_path } = &content {
+                let content_path = path.parent().unwrap()
+                    .join(content_path.as_str())?;
+                content_path.create_dir_all()?;
+
+                let mut file = content_path.create_file()?;
+                file.write(self.content.content.as_bytes());
+            }
+
+            {
+                let mut meta_file = path.create_file()?;
+                let data = YAMLPostSchema {
+                    content,
+                    meta: self.meta.clone(),
+                };
+                serde_yaml::to_writer(meta_file, &data);
+            }
+        }
+        Ok(())
     }
 
     pub fn get_slug(&self) -> DateSlug {
@@ -77,34 +110,34 @@ impl From<FindIndexError> for PostError {
     }
 }
 
-#[derive(Serialize, Deserialize, Debug, Eq, PartialEq)]
+#[derive(Serialize, Deserialize, Debug, Eq, PartialEq, Clone)]
 struct MediaEntry {
     image: String,
     caption: String,
 }
 
-#[derive(Serialize, Deserialize, Debug, Eq, PartialEq)]
+#[derive(Serialize, Deserialize, Debug, Eq, PartialEq, Clone)]
 struct RecipeStep {
     text: String
 }
 
-#[derive(Serialize, Deserialize, Debug, Eq, PartialEq)]
+#[derive(Serialize, Deserialize, Debug, Eq, PartialEq, Clone)]
 #[serde(rename_all = "camelCase")]
 enum SyndicationStrategy {
     TitleOnly,
-    ContentOnly
+    ContentOnly,
 }
 
-#[derive(Serialize, Deserialize, Debug, Eq, PartialEq)]
+#[derive(Serialize, Deserialize, Debug, Eq, PartialEq, Clone)]
 #[serde(tag = "status", rename_all = "camelCase")]
 enum Syndication {
     Scheduled {
         url: String,
-        strategy: Option<SyndicationStrategy>
+        strategy: Option<SyndicationStrategy>,
     },
     Attempting {
         url: String,
-        strategy: Option<SyndicationStrategy>
+        strategy: Option<SyndicationStrategy>,
     },
     Completed {
         url: String,
@@ -112,7 +145,7 @@ enum Syndication {
     },
 }
 
-#[derive(Serialize, Deserialize, Debug, Eq, PartialEq)]
+#[derive(Serialize, Deserialize, Debug, Eq, PartialEq, Clone)]
 #[serde(tag = "type")]
 enum HType {
     #[serde(rename = "entry")]
@@ -125,7 +158,7 @@ enum HType {
     },
 }
 
-#[derive(Serialize, Deserialize, Debug, Eq, PartialEq)]
+#[derive(Serialize, Deserialize, Debug, Eq, PartialEq, Clone)]
 #[serde(rename_all = "camelCase")]
 struct EmbeddedMeta {
     title: Option<String>,
@@ -168,6 +201,21 @@ enum YAMLContent {
     Embedded { content: String, content_type: String },
 }
 
+impl From<&PostContent> for YAMLContent {
+    fn from(content: &PostContent) -> Self {
+        if content.content_path == "." {
+            YAMLContent::Embedded {
+                content: content.content.clone(),
+                content_type: content.content_type.to_mimetype().to_string(),
+            }
+        } else {
+            YAMLContent::Separate {
+                content_path: content.content_path.clone()
+            }
+        }
+    }
+}
+
 impl YAMLContent {
     fn into_content(self, dir: VfsPath) -> Result<PostContent, PostError> {
         Ok(match self {
@@ -176,12 +224,14 @@ impl YAMLContent {
                 let content_type = ContentType::from_ext(content_file.extension().unwrap().as_str())?;
                 PostContent {
                     content: content_file.read_to_string()?,
+                    content_path,
                     content_type,
                 }
             }
             YAMLContent::Embedded { content, content_type } => {
                 PostContent {
                     content,
+                    content_path: ".".to_string(),
                     content_type: ContentType::from_mimetype(content_type.as_str())?,
                 }
             }
@@ -223,9 +273,8 @@ impl TryFrom<VfsPath> for BarePost {
                     string
                 };
                 let matter = Matter::<YAML>::new();
-                let parsed = matter.matter(contents);
-                let meta: EmbeddedMeta = parsed.data.deserialize()?;
-                (meta, PostContent { content: parsed.content, content_type })
+                let parsed: ParsedEntityStruct<EmbeddedMeta> = matter.matter_struct(contents);
+                (parsed.data, PostContent { content: parsed.content, content_type, content_path: ".".to_string() })
             }
         };
 
