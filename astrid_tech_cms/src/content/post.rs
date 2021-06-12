@@ -70,7 +70,7 @@ struct ImageEntry {
 }
 
 #[derive(Serialize, Deserialize, Debug, Eq, PartialEq)]
-#[serde(tag = "type", rename_all = "camelCase")]
+#[serde(tag = "type")]
 enum PostType {
     #[serde(rename = "article")]
     Article {
@@ -96,12 +96,17 @@ enum PostType {
 #[serde(rename_all = "camelCase")]
 struct EmbeddedMeta {
     date: DateTime<Utc>,
+    published_date: Option<DateTime<Utc>>,
+    short_name: Option<String>,
+    #[serde(default)]
+    ordinal: usize,
     #[serde(flatten)]
     post_type: PostType,
     tags: Vec<String>,
 }
 
 #[derive(Serialize, Deserialize, Debug)]
+#[serde(rename_all = "camelCase")]
 struct SeparateYAMLMeta {
     content_path: String,
     #[serde(flatten)]
@@ -171,7 +176,9 @@ mod test {
         title: Example post with txt
 
         type: article
-        content_path: "post.txt"
+        shortName: foo-bar
+        ordinal: 0
+        contentPath: "post.txt"
         tags:
           - rust
           - python

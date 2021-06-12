@@ -51,3 +51,8 @@ pub fn find_index(path: &VfsPath) -> Result<String, FindIndexError> {
         _ => Err(FindIndexError::MultipleIndices(indices))
     }
 }
+
+pub enum FileMetaSet {
+    EmbeddedMeta { file: VfsPath, content_type: ContentType },
+    SeparateMeta { meta: VfsPath, content: VfsPath, content_type: ContentType },
+}
