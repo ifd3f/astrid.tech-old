@@ -1,8 +1,12 @@
 use std::convert::TryFrom;
 
+use chrono::{DateTime, Utc};
+use gray_matter::engine::yaml::YAML;
+use gray_matter::matter::Matter;
+use gray_matter::value::pod::Pod;
 use serde::{Deserialize, Serialize};
-use serde_yaml::Error;
 use vfs::{VfsFileType, VfsPath};
+use std::borrow::Borrow;
 
 pub struct Post {
     name: String,
@@ -15,9 +19,10 @@ impl Post {
     }
 }
 
-enum PostError {
+pub enum PostError {
     Filesystem(vfs::VfsError),
     YAML(serde_yaml::Error),
+    Serde(serde_json::error::Error),
     AmbiguousIndex(FindIndexError),
 }
 
@@ -28,8 +33,14 @@ impl From<vfs::VfsError> for PostError {
 }
 
 impl From<serde_yaml::Error> for PostError {
-    fn from(e: Error) -> Self {
+    fn from(e: serde_yaml::Error) -> Self {
         PostError::YAML(e)
+    }
+}
+
+impl From<serde_json::Error> for PostError {
+    fn from(e: serde_json::Error) -> Self {
+        PostError::Serde(e)
     }
 }
 
@@ -40,22 +51,42 @@ impl From<FindIndexError> for PostError {
 }
 
 #[derive(Serialize, Deserialize)]
+struct ImageEntry {
+    image: String,
+    caption: String
+}
+
+#[derive(Serialize, Deserialize)]
+#[serde(tag = "type", rename_all = "camelCase")]
 enum PostType {
     #[serde(rename = "post")]
-    Post,
+    Article {
+        title: String,
+        description: String,
+    },
     #[serde(rename = "note")]
     Note,
     #[serde(rename = "recipe")]
-    Recipe,
+    Recipe {
+        title: String,
+        description: String
+    },
     #[serde(rename = "images")]
-    Images,
+    Images {
+        title: String,
+        description: String,
+        images: Vec<ImageEntry>
+    },
 }
 
 #[derive(Serialize, Deserialize)]
 #[serde(rename_all = "camelCase")]
 struct StoredMeta {
-    content_type: PostType,
-    content: Option<String>,
+    date: DateTime<Utc>,
+    #[serde(flatten)]
+    post_type: PostType,
+    content_path: Option<String>,
+    tags: Vec<String>,
 }
 
 enum FindIndexError {
@@ -95,27 +126,31 @@ impl TryFrom<&VfsPath> for Post {
                 let index = find_index(path)?;
                 let index_file = path.join(index.as_str())?;
 
-                match index.as_str() {
+                let (meta, content) = match index.as_str() {
                     "index.yaml" => {
                         let file = index_file.open_file()?;
-                        let meta = serde_yaml::from_reader(file)? as StoredMeta;
+                        let meta: StoredMeta = serde_yaml::from_reader(file)?;
+                        let path = meta.content_path.clone().unwrap();
+                        let content_file = index_file.join(path.as_str())?;
+                        (meta, content_file.read_to_string()?)
                     }
-                    "index.md" => {}
-                    _ => {}
-                }
-                if let Some(path) = meta {
-                    let file = path.open_file()?;
-                    let meta = serde_yaml::from_reader(file)? as StoredMeta;
-                    let content_path = match &meta.content {
-                        None => find_index(&path)?.as_str(),
-                        Some(content) => content.as_str()
-                    };
+                    "index.md" => {
+                        let contents = {
+                            let mut string = String::new();
+                            index_file.open_file()?.read_to_string(&mut string);
+                            string
+                        };
+                        let matter = Matter::<YAML>::new();
+                        let parsed = matter.matter(contents);
+                        let meta: StoredMeta = parsed.data.deserialize()?;
+                        (meta, parsed.content)
+                    }
+                    _ => {
+                        todo!()
+                    }
+                };
 
-                    let data = path.join(content_path)?.read_to_string()?;
-                    (path.filename(), meta, data)
-                } else {
-                    (todo!(), todo!(), todo!())
-                }
+                (path.filename(), meta, content)
             }
         };
 
