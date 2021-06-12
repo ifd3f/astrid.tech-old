@@ -8,33 +8,8 @@ use gray_matter::matter::Matter;
 use gray_matter::value::pod::Pod;
 use serde::{Deserialize, Serialize};
 use vfs::{VfsFileType, VfsPath};
-
-#[derive(Eq, PartialEq, Debug)]
-pub enum ContentType {
-    Markdown,
-    JupyterNotebook,
-    Text,
-}
-
-#[derive(Eq, PartialEq, Debug)]
-struct UnsupportedContentType(String);
-
-impl ContentType {
-    fn from_ext(ext: &str) -> Result<Self, UnsupportedContentType> {
-        match ext {
-            "md" | "markdown" => Ok(ContentType::Markdown),
-            "ipynb" => Ok(ContentType::JupyterNotebook),
-            "txt" => Ok(ContentType::Text),
-            _ => Err(UnsupportedContentType(ext.to_string()))
-        }
-    }
-}
-
-#[derive(Eq, PartialEq, Debug)]
-pub struct PostContent {
-    content_type: ContentType,
-    content: String,
-}
+use crate::content::content::{PostContent, UnsupportedContentType, ContentType, FindIndexError};
+use crate::content::content;
 
 #[derive(Eq, PartialEq, Debug)]
 pub struct Post {
@@ -133,31 +108,6 @@ struct SeparateYAMLMeta {
     meta: EmbeddedMeta,
 }
 
-#[derive(Eq, PartialEq, Debug)]
-enum FindIndexError {
-    NoIndex,
-    MultipleIndices(Vec<String>),
-}
-
-fn find_index(path: &VfsPath) -> Result<String, FindIndexError> {
-    let mut indices: Vec<String> = path.read_dir().unwrap()
-        .filter_map(|c| {
-            let name = c.filename();
-            if name.starts_with("index.") {
-                Some(name)
-            } else {
-                None
-            }
-        })
-        .collect();
-
-    match indices.len() {
-        0 => Err(FindIndexError::NoIndex),
-        1 => Ok(indices[0].clone()),
-        _ => Err(FindIndexError::MultipleIndices(indices))
-    }
-}
-
 impl TryFrom<&VfsPath> for Post {
     type Error = PostError;
 
@@ -168,7 +118,7 @@ impl TryFrom<&VfsPath> for Post {
             }
             VfsFileType::Directory => {
                 // Search for index file
-                let index = find_index(path)?;
+                let index = content::find_index(path)?;
                 let index_file = path.join(index.as_str())?;
 
                 let (meta, content) = match index.as_str() {
@@ -213,7 +163,8 @@ mod test {
 
     use vfs::{MemoryFS, VfsPath};
 
-    use crate::content::post::{ContentType, EmbeddedMeta, Post, PostType, SeparateYAMLMeta};
+    use crate::content::post::{EmbeddedMeta, Post, PostType, SeparateYAMLMeta};
+    use crate::content::content::ContentType;
 
     const TXT_ARTICLE_YAML: &str = r#"
         date: 2021-06-12 10:51:30 +08:00
