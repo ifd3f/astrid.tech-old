@@ -16,53 +16,6 @@ use crate::content::content;
 use crate::content::post_registry::DateSlug;
 use url::Url;
 
-#[derive(Eq, PartialEq, Clone, Debug)]
-pub struct BarePost {
-    pub content: PostContent,
-    pub meta: EmbeddedMeta,
-}
-
-impl BarePost {
-    fn write_to(&self, path: &mut VfsPath) -> Result<(), PostError> {
-        // TODO
-        if self.content.content_type.supports_frontmatter() {
-            // If our content type supports having frontmatter, create a single file.
-            let mut file = path.create_file()?;
-            let meta_yaml = serde_yaml::to_string(&self.meta)?;
-            file.write(meta_yaml.as_bytes());
-            file.write("\n---\n".as_ref());
-            file.write(self.content.content.as_bytes());
-        } else {
-            // If our content type does not support having frontmatter, we must use the YAML format.
-            // First, identify if we need to have.
-            let content = YAMLContent::from(&self.content);
-
-            if let YAMLContent::Separate { content_path } = &content {
-                let content_path = path.parent().unwrap()
-                    .join(content_path.as_str())?;
-                content_path.create_dir_all()?;
-
-                let mut file = content_path.create_file()?;
-                file.write(self.content.content.as_bytes());
-            }
-
-            {
-                let mut meta_file = path.create_file()?;
-                let data = YAMLPostSchema {
-                    content,
-                    meta: self.meta.clone(),
-                };
-                serde_yaml::to_writer(meta_file, &data);
-            }
-        }
-        Ok(())
-    }
-
-    pub fn get_slug(&self) -> DateSlug {
-        self.meta.get_slug()
-    }
-}
-
 #[derive(Debug)]
 pub enum PostError {
     Filesystem(vfs::VfsError),
@@ -161,7 +114,7 @@ enum HType {
 
 #[derive(Serialize, Deserialize, Debug, Eq, PartialEq, Clone)]
 #[serde(rename_all = "camelCase")]
-struct EmbeddedMeta {
+pub struct EmbeddedMeta {
     title: Option<String>,
     description: Option<String>,
     short_name: Option<String>,
@@ -250,6 +203,54 @@ struct YAMLPostSchema {
     #[serde(flatten)]
     meta: EmbeddedMeta,
 }
+
+#[derive(Eq, PartialEq, Clone, Debug)]
+pub struct BarePost {
+    pub content: PostContent,
+    pub meta: EmbeddedMeta,
+}
+
+impl BarePost {
+    fn write_to(&self, path: &mut VfsPath) -> Result<(), PostError> {
+        // TODO
+        if self.content.content_type.supports_frontmatter() {
+            // If our content type supports having frontmatter, create a single file.
+            let mut file = path.create_file()?;
+            let meta_yaml = serde_yaml::to_string(&self.meta)?;
+            file.write(meta_yaml.as_bytes());
+            file.write("\n---\n".as_ref());
+            file.write(self.content.content.as_bytes());
+        } else {
+            // If our content type does not support having frontmatter, we must use the YAML format.
+            // First, identify if we need to have.
+            let content = YAMLContent::from(&self.content);
+
+            if let YAMLContent::Separate { content_path } = &content {
+                let content_path = path.parent().unwrap()
+                    .join(content_path.as_str())?;
+                content_path.create_dir_all()?;
+
+                let mut file = content_path.create_file()?;
+                file.write(self.content.content.as_bytes());
+            }
+
+            {
+                let mut meta_file = path.create_file()?;
+                let data = YAMLPostSchema {
+                    content,
+                    meta: self.meta.clone(),
+                };
+                serde_yaml::to_writer(meta_file, &data);
+            }
+        }
+        Ok(())
+    }
+
+    pub fn get_slug(&self) -> DateSlug {
+        self.meta.get_slug()
+    }
+}
+
 
 impl TryFrom<VfsPath> for BarePost {
     type Error = PostError;

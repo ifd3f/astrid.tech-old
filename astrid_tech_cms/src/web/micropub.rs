@@ -29,21 +29,6 @@ pub enum Micropub {
     }
 }
 
-impl TryInto<Post> for Micropub {
-    type Error = ();
-
-    fn try_into(self) -> Result<BarePost, Self::Error> {
-        BarePost {
-            content : PostContent {
-                content_type: ContentType::Markdown,
-                content_path: "".to_string(),
-                content: "".to_string()
-            },
-            meta:  {}
-        }
-    }
-}
-
 
 #[derive(Serialize, Deserialize, Debug, Eq, PartialEq)]
 #[serde(rename_all = "kebab-case")]

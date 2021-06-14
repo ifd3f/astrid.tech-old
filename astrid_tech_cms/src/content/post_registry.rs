@@ -38,6 +38,10 @@ pub struct PostRegistry {
     pub map: HashMap<DateSlug, BarePost>
 }
 
+pub struct Post {
+
+}
+
 impl PostRegistry {
     fn write_to(&self, path: &mut VfsPath) {
         todo!()
