@@ -13,7 +13,7 @@ use url::Url;
 use uuid::Uuid;
 use vfs::{VfsFileType, VfsPath};
 
-use crate::content::content::{ContentType, find_with_name, FindIndexError, PostContent, UnsupportedContentType, ReadPostContentError};
+use crate::content::content::{ContentType, find_unique_with_name, FindFilenameError, PostContent, ReadPostContentError, UnsupportedContentType};
 use crate::content::content;
 use crate::content::post::Syndication::Scheduled;
 use crate::content::post_registry::DateSlug;
@@ -24,7 +24,8 @@ pub enum PostError {
     IO(std::io::Error),
     YAML(serde_yaml::Error),
     Serde(serde_json::error::Error),
-    AmbiguousIndex(FindIndexError),
+    AmbiguousIndex(FindFilenameError),
+    AmbiguousContent(FindFilenameError),
     UnsupportedContentType(UnsupportedContentType),
     ContentTypeDoesNotSupportFrontmatter(ContentType),
     NotADirectory(VfsPath),
@@ -58,12 +59,6 @@ impl From<std::io::Error> for PostError {
 impl From<UnsupportedContentType> for PostError {
     fn from(e: UnsupportedContentType) -> Self {
         PostError::UnsupportedContentType(e)
-    }
-}
-
-impl From<FindIndexError> for PostError {
-    fn from(e: FindIndexError) -> Self {
-        PostError::AmbiguousIndex(e)
     }
 }
 
@@ -162,23 +157,30 @@ pub struct BarePost {
 
 impl BarePost {
     fn write_to(&self, path: &mut VfsPath) -> Result<(), PostError> {
-        // TODO
+        let extension = self.content.content_type.to_ext();
+
         if self.content.content_type.supports_frontmatter() {
             // If our content type supports having frontmatter, create a single file.
-            let mut file = path.join("index.md")?.create_file()?;
+            let mut filename = "index.".to_string();
+            filename.push_str(extension);
+
+            let mut file = path.join(filename.as_str())?.create_file()?;
             let meta_yaml = serde_yaml::to_string(&self.meta)?;
             file.write(meta_yaml.as_bytes());
             file.write("\n---\n".as_ref());
             file.write(self.content.content.as_bytes());
+
             return Ok(());
         }
 
         {
-            let mut meta_file = path.create_file()?;
+            let mut filename = "content.".to_string();
+            filename.push_str(extension);
+            let mut meta_file = path.join(filename.as_str())?.create_file()?;
             serde_yaml::to_writer(meta_file, &self.meta);
         }
         {
-            let mut content_file = path.join("index.yml")?.create_file()?;
+            let mut content_file = path.join("index.yaml")?.create_file()?;
             content_file.write(self.content.content.as_bytes());
         }
 
@@ -200,7 +202,7 @@ impl TryFrom<VfsPath> for BarePost {
             Err(PostError::NotADirectory(path.clone()))?;
         }
 
-        let index_name = find_with_name("index", &path)?;
+        let index_name = find_unique_with_name("index", &path).map_err(PostError::AmbiguousIndex)?;
         let index_path = path.join(index_name.as_str())?;
 
         let ext = index_path.extension().unwrap();
@@ -208,7 +210,7 @@ impl TryFrom<VfsPath> for BarePost {
             let file = index_path.open_file()?;
             let meta: EmbeddedMeta = serde_yaml::from_reader(file)?;
 
-            let content_filename = find_with_name("content", &path)?;
+            let content_filename = find_unique_with_name("content", &path).map_err(PostError::AmbiguousContent)?;
             let content_path = path.join(content_filename.as_str())?;
             let content = PostContent::try_from(content_path)?;
 
@@ -217,7 +219,7 @@ impl TryFrom<VfsPath> for BarePost {
 
         let content_type = ContentType::from_ext(ext.as_str())?;
         if !content_type.supports_frontmatter() {
-            Err(PostError::ContentTypeDoesNotSupportFrontmatter(content_type))?
+            Err(PostError::ContentTypeDoesNotSupportFrontmatter(content_type))
         } else {
             let contents = index_path.read_to_string()?;
             let matter = Matter::<YAML>::new();
@@ -232,57 +234,102 @@ impl TryFrom<VfsPath> for BarePost {
 #[cfg(test)]
 mod test {
     use std::convert::TryFrom;
+    use std::io::Write;
 
     use vfs::{MemoryFS, VfsPath};
 
     use crate::content::content::ContentType;
-    use crate::content::post::{BarePost, EmbeddedMeta, HType, YAMLPostSchema};
+    use crate::content::post::{BarePost, EmbeddedMeta, HType};
 
     const TXT_ARTICLE_YAML: &str = r#"
-        date: 2021-06-12 10:51:30 +08:00
-        title: Example post with txt
+date: 2021-06-12 10:51:30 +08:00
+title: Example post with text
 
-        type: entry
-        shortName: foo-bar
-        uuid: 2fdb77e7-a019-4e51-9ba4-cd6b2eedd60e
-        ordinal: 0
-        contentPath: "post.txt"
-        tags:
-          - rust
-          - python
-          - csharp
-        "#;
+type: entry
+shortName: foo-bar
+uuid: 2fdb77e7-a019-4e51-9ba4-cd6b2eedd60e
+ordinal: 0
+tags:
+  - rust
+  - python
+  - csharp
+"#;
     const TXT_CONTENTS: &str = r#"
-        foo bar spam
-        "#;
+foo bar spam
+"#;
 
-    fn setup_working_separate_meta_post() -> VfsPath {
-        let fs = MemoryFS::new();
-        let root = VfsPath::new(fs);
-
-        let mut file = root.join("index.yaml").unwrap().create_file().unwrap();
-        file.write(TXT_ARTICLE_YAML.as_ref());
-
-        let mut file = root.join("post.txt").unwrap().create_file().unwrap();
-        file.write(TXT_CONTENTS.as_ref());
+    fn setup_working_separate_content_post() -> VfsPath {
+        let root = VfsPath::new(MemoryFS::new());
+        {
+            let mut file = root.join("index.yaml").unwrap().create_file().unwrap();
+            file.write(TXT_ARTICLE_YAML.as_ref());
+        }
+        {
+            let mut file = root.join("content.txt").unwrap().create_file().unwrap();
+            file.write(TXT_CONTENTS.as_ref());
+        }
         root
     }
 
-    #[test]
-    fn parses_article_meta() {
-        let parsed: YAMLPostSchema = serde_yaml::from_str(TXT_ARTICLE_YAML).unwrap();
+    fn setup_working_combined_post() -> VfsPath {
+        let root = VfsPath::new(MemoryFS::new());
 
-        assert_eq!(parsed.meta.h_type, HType::Entry);
+        let mut file = root.join("index.md").unwrap().create_file().unwrap();
+        file.write("---\n".as_ref());
+        file.write(TXT_ARTICLE_YAML.as_ref());
+        file.write("\n---\n".as_ref());
+        file.write(TXT_CONTENTS.as_ref());
+
+        root
+    }
+
+    fn get_working_separate_content_post() -> BarePost {
+        BarePost::try_from(setup_working_separate_content_post()).unwrap()
+    }
+
+    fn get_working_combined_post() -> BarePost {
+        BarePost::try_from(setup_working_combined_post()).unwrap()
     }
 
     #[test]
-    fn reads_article() {
-        let path = setup_working_separate_meta_post();
-        let post_path = path.join("index.yaml").unwrap();
+    fn reads_separate_content() {
+        let path = setup_working_separate_content_post();
 
-        let post = BarePost::try_from(post_path).unwrap();
+        let post = BarePost::try_from(path).unwrap();
 
         assert_eq!(post.content.content_type, ContentType::Text);
         assert_eq!(post.content.content, TXT_CONTENTS);
+    }
+
+    #[test]
+    fn reads_joined_content() {
+        let path = setup_working_combined_post();
+
+        let post = BarePost::try_from(path).unwrap();
+
+        assert_eq!(post.content.content_type, ContentType::Markdown);
+        assert_eq!(post.content.content.trim(), "foo bar spam");
+    }
+
+    #[test]
+    fn writes_separate_content_correctly() {
+        let mut new_fs = VfsPath::new(MemoryFS::new());
+        let expected = get_working_separate_content_post();
+
+        expected.write_to(&mut new_fs);
+
+        let actual = BarePost::try_from(new_fs).unwrap();
+        assert_eq!(actual, expected);
+    }
+
+    #[test]
+    fn writes_combined_content_correctly() {
+        let mut new_fs = VfsPath::new(MemoryFS::new());
+        let expected = get_working_combined_post();
+
+        expected.write_to(&mut new_fs);
+
+        let actual = BarePost::try_from(new_fs).unwrap();
+        assert_eq!(actual, expected);
     }
 }

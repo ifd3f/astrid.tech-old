@@ -113,12 +113,12 @@ impl PostContent {
 }
 
 #[derive(Eq, PartialEq, Debug, Clone)]
-pub enum FindIndexError {
-    NoIndex,
-    MultipleIndices(Vec<String>),
+pub enum FindFilenameError {
+    NotFound,
+    Multiple(Vec<String>),
 }
 
-pub fn find_with_name(name: &str, path: &VfsPath) -> Result<String, FindIndexError> {
+pub fn find_unique_with_name(name: &str, path: &VfsPath) -> Result<String, FindFilenameError> {
     let mut prefix = name.to_string();
     prefix.push('.');
 
@@ -134,8 +134,8 @@ pub fn find_with_name(name: &str, path: &VfsPath) -> Result<String, FindIndexErr
         .collect();
 
     match indices.len() {
-        0 => Err(FindIndexError::NoIndex),
+        0 => Err(FindFilenameError::NotFound),
         1 => Ok(indices[0].clone()),
-        _ => Err(FindIndexError::MultipleIndices(indices))
+        _ => Err(FindFilenameError::Multiple(indices))
     }
 }
