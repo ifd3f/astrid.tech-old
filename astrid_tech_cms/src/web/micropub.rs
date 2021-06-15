@@ -1,22 +1,42 @@
 use chrono::{DateTime, Utc};
-use serde::{Deserialize, Serialize};
+use serde::{Deserialize, Serialize, Deserializer};
 use serde::de::Error;
 use url::Url;
+
+pub fn maybe_vec<'de, D, V>(deserializer: D) -> Result<Vec<V>, D::Error>
+    where
+        D: Deserializer<'de>,
+        V: Deserialize<'de>,
+{
+    #[derive(Deserialize)]
+    #[serde(untagged)]
+    enum MaybeVec<V> {
+        Value(V),
+        Vec(Vec<V>),
+    }
+
+    match MaybeVec::deserialize(deserializer)? {
+        MaybeVec::Value(v) => Ok(vec![v]),
+        MaybeVec::Vec(v) => Ok(v),
+    }
+}
 
 #[derive(Serialize, Deserialize, Debug)]
 #[serde(tag = "h", rename_all = "kebab-case")]
 pub enum Micropub {
-    Entry(Entry)
+    Entry(Entry),
+    Event(Event),
+    Cite(Cite)
 }
 
 /// Needed because it's weird
-#[derive(Serialize, Deserialize)]
+#[derive(Deserialize, Debug)]
 struct MicropubWorkaround {
     #[serde(flatten)]
-    x: Micropub
+    data: Micropub
 }
 
-#[derive(Serialize, Deserialize, Debug)]
+#[derive(Serialize, Deserialize, Debug, Eq, PartialEq)]
 #[serde(rename_all = "kebab-case")]
 pub struct Entry {
     pub name: Option<String>,
@@ -25,6 +45,7 @@ pub struct Entry {
     pub published: Option<DateTime<Utc>>,
     pub updated: Option<DateTime<Utc>>,
     #[serde(default)]
+    #[serde(deserialize_with = "maybe_vec")]
     pub category: Vec<String>,
     pub location: Option<Url>,
     pub in_reply_to: Option<Url>,
@@ -32,9 +53,9 @@ pub struct Entry {
     #[serde(default)]
     pub syndication: Vec<Url>,
     #[serde(default)]
-    pub mp_syndicate_to: Option<Url>,
+    #[serde(deserialize_with = "maybe_vec")]
+    pub mp_syndicate_to: Vec<Url>,
 }
-
 
 #[derive(Serialize, Deserialize, Debug, Eq, PartialEq)]
 #[serde(rename_all = "kebab-case")]
@@ -44,7 +65,7 @@ pub struct Event {
     description: Option<String>,
     #[serde(flatten)]
     time: EventTime,
-    duration: String,
+    #[serde(deserialize_with = "maybe_vec")]
     category: Vec<String>,
     location: String,
 }
@@ -53,7 +74,8 @@ pub struct Event {
 #[serde(untagged)]
 enum EventTime {
     StartOnly { start: DateTime<Utc> },
-    //StartDuration { start: DateTime<Utc>, duration: Duration },
+    // TODO need support https://github.com/chronotope/chrono/issues/117#issuecomment-854858641
+    // StartDuration { start: DateTime<Utc>, duration: chrono::Duration },
     StartEnd { start: DateTime<Utc>, end: DateTime<Utc> },
 }
 
@@ -70,11 +92,12 @@ pub struct Cite {
 #[cfg(test)]
 mod tests {
     use serde::{Deserialize, Serialize};
+    use url::Url;
 
     use crate::web::micropub::{Micropub, MicropubWorkaround};
 
     #[test]
-    fn parses_entry() {
+    fn parses_h_entry() {
         // from https://indieweb.org/Micropub#New_Note
         const H_ENTRY: &str = "h=entry\
 &content=The+%40Jawbone+UP%2C+my+favorite+of+the+%23quantifiedself+trackers%2C+finally+released+their+official+API%21+http%3A%2F%2Fjawbone.com%2Fup%2Fdeveloper%2F\
@@ -83,10 +106,32 @@ mod tests {
 
         let obj: MicropubWorkaround = serde_qs::from_str(H_ENTRY).unwrap();
 
-        if let Micropub::Entry(data) = obj.x {
+        if let Micropub::Entry(data) = obj.data {
+            assert_eq!(data.name, None);
             assert_eq!(data.category, vec!["jawbone", "quantifiedself", "api"]);
+            assert_eq!(data.mp_syndicate_to, vec![Url::parse("https://myfavoritesocialnetwork.example/aaronpk").unwrap()]);
         } else {
             panic!("Not an entry")
+        }
+    }
+
+    #[test]
+    fn parses_h_event() {
+        // from https://indieweb.org/Micropub#h-event
+        const H_EVENT: &str = "h=event\
+&name=IndieWeb Dinner at 21st Amendment\
+&description=In SF Monday evening? Join @caseorganic and I for an #indieweb dinner at 6pm! (Sorry for the short notice!)\
+&start=2013-09-30T18:00:00-07:00\
+&category=indieweb\
+&location=http://21st-amendment.com/";
+
+        let obj: MicropubWorkaround = serde_qs::from_str(H_EVENT).unwrap();
+
+        if let Micropub::Event(data) = obj.data {
+            assert_eq!(data.name, Some("IndieWeb Dinner at 21st Amendment".to_string()));
+            assert_eq!(data.category, vec!["indieweb"]);
+        } else {
+            panic!("Not an event")
         }
     }
 }
