@@ -30,7 +30,7 @@ impl PostCreator {
 
         let short_name = "".to_string();
 
-        let meta = post::EmbeddedMeta {
+        let meta = post::Meta {
             title: entry.name,
             description: entry.summary,
             short_name: Some(short_name),

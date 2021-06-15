@@ -10,7 +10,7 @@ use url::Url;
 use uuid::Uuid;
 use vfs::{VfsFileType, VfsPath};
 
-use crate::content::content::{ContentType, find_unique_with_name, FindFilenameError, PostContent, ReadPostContentError, UnsupportedContentType};
+use crate::content::content::{ContentType, find_unique_with_name, FindFilenameError, Content, ReadPostContentError, UnsupportedContentType};
 use crate::content::post_registry::DateSlug;
 
 #[derive(Debug)]
@@ -75,19 +75,12 @@ pub struct RecipeStep {
 }
 
 #[derive(Serialize, Deserialize, Debug, Eq, PartialEq, Clone)]
-#[serde(rename_all = "camelCase")]
-pub enum SyndicationStrategy {
-    TitleOnly,
-    ContentOnly,
-}
-
-#[derive(Serialize, Deserialize, Debug, Eq, PartialEq, Clone)]
 #[serde(tag = "status", rename_all = "camelCase")]
 pub enum Syndication {
     Scheduled {
         url: Url,
-        strategy: Option<SyndicationStrategy>,
     },
+    #[serde(rename_all = "camelCase")]
     Completed {
         url: Url,
         completed_on: DateTime<Utc>,
@@ -109,7 +102,10 @@ pub enum HType {
 
 #[derive(Serialize, Deserialize, Debug, Eq, PartialEq, Clone)]
 #[serde(rename_all = "camelCase")]
-pub struct EmbeddedMeta {
+pub struct Meta {
+    #[serde(flatten)]
+    pub h_type: HType,
+
     pub title: Option<String>,
     pub description: Option<String>,
     pub short_name: Option<String>,
@@ -127,13 +123,11 @@ pub struct EmbeddedMeta {
     pub tags: Vec<String>,
     #[serde(default)]
     pub syndications: Vec<Syndication>,
-    #[serde(flatten)]
-    pub h_type: HType,
     #[serde(default)]
     pub media: Vec<MediaEntry>,
 }
 
-impl EmbeddedMeta {
+impl Meta {
     pub fn get_slug(&self) -> DateSlug {
         DateSlug {
             year: self.date.year(),
@@ -145,12 +139,12 @@ impl EmbeddedMeta {
 }
 
 #[derive(Eq, PartialEq, Clone, Debug)]
-pub struct BarePost {
-    pub meta: EmbeddedMeta,
-    pub content: PostContent,
+pub struct Post {
+    pub meta: Meta,
+    pub content: Content,
 }
 
-impl BarePost {
+impl Post {
     fn write_to(&self, path: &mut VfsPath) -> Result<(), PostError> {
         let extension = self.content.content_type.to_ext();
 
@@ -187,8 +181,7 @@ impl BarePost {
     }
 }
 
-
-impl TryFrom<VfsPath> for BarePost {
+impl TryFrom<VfsPath> for Post {
     type Error = PostError;
 
     /// Creates a post from a post directory.
@@ -203,13 +196,13 @@ impl TryFrom<VfsPath> for BarePost {
         let ext = index_path.extension().unwrap();
         if ext == "yaml" || ext == "yml" {
             let file = index_path.open_file()?;
-            let meta: EmbeddedMeta = serde_yaml::from_reader(file)?;
+            let meta: Meta = serde_yaml::from_reader(file)?;
 
             let content_filename = find_unique_with_name("content", &path).map_err(PostError::AmbiguousContent)?;
             let content_path = path.join(content_filename.as_str())?;
-            let content = PostContent::try_from(content_path)?;
+            let content = Content::try_from(content_path)?;
 
-            return Ok(BarePost { meta, content });
+            return Ok(Post { meta, content });
         }
 
         let content_type = ContentType::from_ext(ext.as_str())?;
@@ -218,10 +211,10 @@ impl TryFrom<VfsPath> for BarePost {
         } else {
             let contents = index_path.read_to_string()?;
             let matter = Matter::<YAML>::new();
-            let parsed: ParsedEntityStruct<EmbeddedMeta> = matter.matter_struct(contents);
+            let parsed: ParsedEntityStruct<Meta> = matter.matter_struct(contents);
 
-            let content = PostContent::new(content_type, parsed.content);
-            Ok(BarePost { meta: parsed.data, content })
+            let content = Content::new(content_type, parsed.content);
+            Ok(Post { meta: parsed.data, content })
         }
     }
 }
@@ -234,7 +227,7 @@ mod test {
     use vfs::{MemoryFS, VfsPath};
 
     use crate::content::content::ContentType;
-    use crate::content::post::{BarePost};
+    use crate::content::post::{Post};
 
     const TXT_ARTICLE_YAML: &str = r#"
 date: 2021-06-12 10:51:30 +08:00
@@ -278,19 +271,19 @@ foo bar spam
         root
     }
 
-    fn get_working_separate_content_post() -> BarePost {
-        BarePost::try_from(setup_working_separate_content_post()).unwrap()
+    fn get_working_separate_content_post() -> Post {
+        Post::try_from(setup_working_separate_content_post()).unwrap()
     }
 
-    fn get_working_combined_post() -> BarePost {
-        BarePost::try_from(setup_working_combined_post()).unwrap()
+    fn get_working_combined_post() -> Post {
+        Post::try_from(setup_working_combined_post()).unwrap()
     }
 
     #[test]
     fn reads_separate_content() {
         let path = setup_working_separate_content_post();
 
-        let post = BarePost::try_from(path).unwrap();
+        let post = Post::try_from(path).unwrap();
 
         assert_eq!(post.content.content_type, ContentType::Text);
         assert_eq!(post.content.content, TXT_CONTENTS);
@@ -300,7 +293,7 @@ foo bar spam
     fn reads_joined_content() {
         let path = setup_working_combined_post();
 
-        let post = BarePost::try_from(path).unwrap();
+        let post = Post::try_from(path).unwrap();
 
         assert_eq!(post.content.content_type, ContentType::Markdown);
         assert_eq!(post.content.content.trim(), "foo bar spam");
@@ -313,7 +306,7 @@ foo bar spam
 
         expected.write_to(&mut new_fs);
 
-        let actual = BarePost::try_from(new_fs).unwrap();
+        let actual = Post::try_from(new_fs).unwrap();
         assert_eq!(actual, expected);
     }
 
@@ -324,7 +317,7 @@ foo bar spam
 
         expected.write_to(&mut new_fs);
 
-        let actual = BarePost::try_from(new_fs).unwrap();
+        let actual = Post::try_from(new_fs).unwrap();
         assert_eq!(actual, expected);
     }
 }

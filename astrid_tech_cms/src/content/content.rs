@@ -104,7 +104,7 @@ impl ContentType {
 }
 
 #[derive(Eq, PartialEq, Debug, Clone)]
-pub struct PostContent {
+pub struct Content {
     pub(crate) content_type: ContentType,
     pub(crate) content: String,
 }
@@ -128,23 +128,23 @@ impl From<UnsupportedContentType> for ReadPostContentError {
     }
 }
 
-impl TryFrom<VfsPath> for PostContent {
+impl TryFrom<VfsPath> for Content {
     type Error = ReadPostContentError;
 
     fn try_from(path: VfsPath) -> Result<Self, Self::Error> {
         let ext = path.extension().ok_or(ReadPostContentError::NoExtension)?;
         let content_type = ContentType::from_ext(ext.as_str())?;
         let content = path.read_to_string()?;
-        Ok(PostContent {
+        Ok(Content {
             content_type,
             content,
         })
     }
 }
 
-impl PostContent {
-    pub fn new(content_type: ContentType, content: String) -> PostContent {
-        PostContent { content_type, content }
+impl Content {
+    pub fn new(content_type: ContentType, content: String) -> Content {
+        Content { content_type, content }
     }
 }
 

@@ -4,7 +4,7 @@ use std::convert::TryFrom;
 use itertools::Itertools;
 use vfs::{VfsError, VfsPath};
 
-use crate::content::post::{BarePost, PostError};
+use crate::content::post::{Post, PostError};
 
 #[derive(Ord, PartialOrd, Eq, PartialEq, Debug, Hash)]
 pub struct DateSlug {
@@ -34,7 +34,7 @@ impl From<vfs::VfsError> for PostRegistryError {
 
 /// Contains all of the website data
 pub struct PostRegistry {
-    pub map: HashMap<DateSlug, BarePost>
+    pub map: HashMap<DateSlug, Post>
 }
 
 pub struct Post {
@@ -53,9 +53,9 @@ impl TryFrom<VfsPath> for PostRegistry {
     fn try_from(path: VfsPath) -> Result<Self, Self::Error> {
         let posts = path.walk_dir()?
             .filter_ok(|p| p.filename().starts_with("index."))
-            .map_ok(|p| BarePost::try_from(p));
+            .map_ok(|p| Post::try_from(p));
 
-        let mut map: HashMap<DateSlug, BarePost> = HashMap::new();
+        let mut map: HashMap<DateSlug, Post> = HashMap::new();
 
         for post in posts {
             let post = post??;
