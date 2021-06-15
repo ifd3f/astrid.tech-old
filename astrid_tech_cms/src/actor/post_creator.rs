@@ -7,10 +7,10 @@ use itertools::Itertools;
 use uuid::Uuid;
 use vfs::{VfsError, VfsPath, VfsResult};
 
-use crate::content::{post, content};
-use crate::content::post::Syndication;
-use crate::web::micropub::Entry;
+use crate::content::{content, post};
 use crate::content::content::ContentType;
+use crate::content::post::{HType, Syndication};
+use crate::web::micropub::Entry;
 
 pub struct PostCreator {
     filesystem: VfsPath
@@ -23,7 +23,7 @@ impl PostCreator {
             .join(date.year().to_string().as_str())?
             .join(date.month().to_string().as_str())?
             .join(date.day().to_string().as_str())?;
-        let ordinal = get_next_ordinal(day_dir)?;
+        let ordinal = get_next_ordinal(&day_dir)?;
         let ordinal_dir = day_dir.join(ordinal.to_string().as_str())?;
 
         let uuid = Uuid::new_v4();
@@ -32,18 +32,18 @@ impl PostCreator {
         let short_name = "".to_string();
 
         let meta = post::EmbeddedMeta {
-            title: msg.entry.name,
-            description: msg.entry.summary,
+            title: entry.name,
+            description: entry.summary,
             short_name: Some(short_name),
             uuid,
             date,
-            published_date: msg.entry.published,
-            updated_date: msg.entry.updated,
+            published_date: entry.published,
+            updated_date: entry.updated,
             ordinal,
-            reply_to: msg.entry.in_reply_to,
-            repost_of: msg.entry.repost_of,
-            tags: msg.entry.category,
-            syndications: msg.entry.mp_syndicate_to.iter()
+            reply_to: entry.in_reply_to,
+            repost_of: entry.repost_of,
+            tags: entry.category,
+            syndications: entry.mp_syndicate_to.iter()
                 .map(|url| {
                     Syndication::Scheduled { url: url.clone(), strategy: None }
                 })
@@ -51,15 +51,6 @@ impl PostCreator {
             h_type: HType::Entry,
             media: vec![],
         };
-
-        let content = content::PostContent {
-            content_type: ContentType::Markdown,
-            content_path: "".to_string(),
-            content: "".to_string()
-        };
-
-
-
         Ok(())
     }
 }
@@ -80,7 +71,19 @@ enum CreatePostError {
     NonNumericName(ParseIntError),
 }
 
-fn get_next_ordinal(day_dir: VfsPath) -> Result<usize, CreatePostError> {
+impl From<VfsError> for CreatePostError {
+    fn from(e: VfsError) -> Self {
+        CreatePostError::Filesystem(e)
+    }
+}
+
+impl From<ParseIntError> for CreatePostError {
+    fn from(e: ParseIntError) -> Self {
+        CreatePostError::NonNumericName(e)
+    }
+}
+
+fn get_next_ordinal(day_dir: &VfsPath) -> Result<usize, CreatePostError> {
     let largest_ordinal = day_dir.read_dir()?
         .map(|x| x.filename().parse::<usize>())
         .fold_ok(0, usize::max);

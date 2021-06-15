@@ -13,7 +13,7 @@ use url::Url;
 use uuid::Uuid;
 use vfs::{VfsFileType, VfsPath};
 
-use crate::content::content::{ContentType, FindIndexError, PostContent, UnsupportedContentType};
+use crate::content::content::{ContentType, find_with_name, FindIndexError, PostContent, UnsupportedContentType, ReadPostContentError};
 use crate::content::content;
 use crate::content::post::Syndication::Scheduled;
 use crate::content::post_registry::DateSlug;
@@ -27,7 +27,8 @@ pub enum PostError {
     AmbiguousIndex(FindIndexError),
     UnsupportedContentType(UnsupportedContentType),
     ContentTypeDoesNotSupportFrontmatter(ContentType),
-    NotAFile(VfsPath),
+    NotADirectory(VfsPath),
+    ReadPost(ReadPostContentError),
 }
 
 impl From<vfs::VfsError> for PostError {
@@ -66,20 +67,26 @@ impl From<FindIndexError> for PostError {
     }
 }
 
+impl From<ReadPostContentError> for PostError {
+    fn from(e: ReadPostContentError) -> Self {
+        PostError::ReadPost(e)
+    }
+}
+
 #[derive(Serialize, Deserialize, Debug, Eq, PartialEq, Clone)]
-struct MediaEntry {
+pub struct MediaEntry {
     image: String,
     caption: String,
 }
 
 #[derive(Serialize, Deserialize, Debug, Eq, PartialEq, Clone)]
-struct RecipeStep {
+pub struct RecipeStep {
     text: String
 }
 
 #[derive(Serialize, Deserialize, Debug, Eq, PartialEq, Clone)]
 #[serde(rename_all = "camelCase")]
-enum SyndicationStrategy {
+pub enum SyndicationStrategy {
     TitleOnly,
     ContentOnly,
 }
@@ -99,7 +106,7 @@ pub enum Syndication {
 
 #[derive(Serialize, Deserialize, Debug, Eq, PartialEq, Clone)]
 #[serde(tag = "type")]
-enum HType {
+pub enum HType {
     #[serde(rename = "entry")]
     Entry,
     #[serde(rename = "recipe")]
@@ -147,67 +154,10 @@ impl EmbeddedMeta {
     }
 }
 
-
-#[derive(Serialize, Deserialize, Debug)]
-#[serde(untagged)]
-enum YAMLContent {
-    #[serde(rename_all = "camelCase")]
-    Separate { content_path: String },
-    #[serde(rename_all = "camelCase")]
-    Embedded { content: String, content_type: String },
-}
-
-impl From<&PostContent> for YAMLContent {
-    fn from(content: &PostContent) -> Self {
-        if content.content_path == "." {
-            YAMLContent::Embedded {
-                content: content.content.clone(),
-                content_type: content.content_type.to_mimetype().to_string(),
-            }
-        } else {
-            YAMLContent::Separate {
-                content_path: content.content_path.clone()
-            }
-        }
-    }
-}
-
-impl YAMLContent {
-    fn into_content(self, dir: VfsPath) -> Result<PostContent, PostError> {
-        Ok(match self {
-            YAMLContent::Separate { content_path } => {
-                let content_file = dir.join(content_path.as_str())?;
-                let content_type = ContentType::from_ext(content_file.extension().unwrap().as_str())?;
-                PostContent {
-                    content: content_file.read_to_string()?,
-                    content_path,
-                    content_type,
-                }
-            }
-            YAMLContent::Embedded { content, content_type } => {
-                PostContent {
-                    content,
-                    content_path: ".".to_string(),
-                    content_type: ContentType::from_mimetype(content_type.as_str())?,
-                }
-            }
-        })
-    }
-}
-
-#[derive(Serialize, Deserialize, Debug)]
-#[serde(rename_all = "camelCase")]
-struct YAMLPostSchema {
-    #[serde(flatten)]
-    content: YAMLContent,
-    #[serde(flatten)]
-    meta: EmbeddedMeta,
-}
-
 #[derive(Eq, PartialEq, Clone, Debug)]
 pub struct BarePost {
-    pub content: PostContent,
     pub meta: EmbeddedMeta,
+    pub content: PostContent,
 }
 
 impl BarePost {
@@ -215,34 +165,23 @@ impl BarePost {
         // TODO
         if self.content.content_type.supports_frontmatter() {
             // If our content type supports having frontmatter, create a single file.
-            let mut file = path.create_file()?;
+            let mut file = path.join("index.md")?.create_file()?;
             let meta_yaml = serde_yaml::to_string(&self.meta)?;
             file.write(meta_yaml.as_bytes());
             file.write("\n---\n".as_ref());
             file.write(self.content.content.as_bytes());
-        } else {
-            // If our content type does not support having frontmatter, we must use the YAML format.
-            // First, identify if we need to have.
-            let content = YAMLContent::from(&self.content);
-
-            if let YAMLContent::Separate { content_path } = &content {
-                let content_path = path.parent().unwrap()
-                    .join(content_path.as_str())?;
-                content_path.create_dir_all()?;
-
-                let mut file = content_path.create_file()?;
-                file.write(self.content.content.as_bytes());
-            }
-
-            {
-                let mut meta_file = path.create_file()?;
-                let data = YAMLPostSchema {
-                    content,
-                    meta: self.meta.clone(),
-                };
-                serde_yaml::to_writer(meta_file, &data);
-            }
+            return Ok(());
         }
+
+        {
+            let mut meta_file = path.create_file()?;
+            serde_yaml::to_writer(meta_file, &self.meta);
+        }
+        {
+            let mut content_file = path.join("index.yml")?.create_file()?;
+            content_file.write(self.content.content.as_bytes());
+        }
+
         Ok(())
     }
 
@@ -255,37 +194,38 @@ impl BarePost {
 impl TryFrom<VfsPath> for BarePost {
     type Error = PostError;
 
-    /// Creates a post from a post file.
+    /// Creates a post from a post directory.
     fn try_from(path: VfsPath) -> Result<Self, Self::Error> {
-        if path.metadata()?.file_type != VfsFileType::File {
-            Err(PostError::NotAFile(path.clone()))?;
+        if path.metadata()?.file_type != VfsFileType::Directory {
+            Err(PostError::NotADirectory(path.clone()))?;
         }
 
-        let ext = path.extension().unwrap();
-        let (meta, content) = if ext == "yaml" || ext == "yml" {
-            let file = path.open_file()?;
-            let meta: YAMLPostSchema = serde_yaml::from_reader(file)?;
-            (meta.meta, meta.content.into_content(path.parent().unwrap())?)
-        } else {
-            let content_type = ContentType::from_ext(ext.as_str())?;
-            if !content_type.supports_frontmatter() {
-                Err(PostError::ContentTypeDoesNotSupportFrontmatter(content_type))?
-            } else {
-                let contents = {
-                    let mut string = String::new();
-                    path.open_file()?.read_to_string(&mut string)?;
-                    string
-                };
-                let matter = Matter::<YAML>::new();
-                let parsed: ParsedEntityStruct<EmbeddedMeta> = matter.matter_struct(contents);
-                (parsed.data, PostContent { content: parsed.content, content_type, content_path: ".".to_string() })
-            }
-        };
+        let index_name = find_with_name("index", &path)?;
+        let index_path = path.join(index_name.as_str())?;
 
-        Ok(BarePost {
-            content,
-            meta,
-        })
+        let ext = index_path.extension().unwrap();
+        if ext == "yaml" || ext == "yml" {
+            let file = index_path.open_file()?;
+            let meta: EmbeddedMeta = serde_yaml::from_reader(file)?;
+
+            let content_filename = find_with_name("content", &path)?;
+            let content_path = path.join(content_filename.as_str())?;
+            let content = PostContent::try_from(content_path)?;
+
+            return Ok(BarePost { meta, content });
+        }
+
+        let content_type = ContentType::from_ext(ext.as_str())?;
+        if !content_type.supports_frontmatter() {
+            Err(PostError::ContentTypeDoesNotSupportFrontmatter(content_type))?
+        } else {
+            let contents = index_path.read_to_string()?;
+            let matter = Matter::<YAML>::new();
+            let parsed: ParsedEntityStruct<EmbeddedMeta> = matter.matter_struct(contents);
+
+            let content = PostContent::new(content_type, parsed.content);
+            Ok(BarePost { meta: parsed.data, content })
+        }
     }
 }
 

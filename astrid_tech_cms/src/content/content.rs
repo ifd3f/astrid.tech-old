@@ -1,4 +1,5 @@
-use vfs::VfsPath;
+use serde::__private::TryFrom;
+use vfs::{VfsError, VfsPath};
 
 #[derive(Eq, PartialEq, Debug, Clone)]
 pub enum ContentType {
@@ -68,9 +69,47 @@ impl ContentType {
 
 #[derive(Eq, PartialEq, Debug, Clone)]
 pub struct PostContent {
-    pub content_type: ContentType,
-    pub content_path: String,
-    pub content: String,
+    pub(crate) content_type: ContentType,
+    pub(crate) content: String,
+}
+
+#[derive(Debug)]
+pub enum ReadPostContentError {
+    NoExtension,
+    Filesystem(VfsError),
+    InvalidExtension(UnsupportedContentType),
+}
+
+impl From<VfsError> for ReadPostContentError {
+    fn from(e: VfsError) -> Self {
+        ReadPostContentError::Filesystem(e)
+    }
+}
+
+impl From<UnsupportedContentType> for ReadPostContentError {
+    fn from(e: UnsupportedContentType) -> Self {
+        ReadPostContentError::InvalidExtension(e)
+    }
+}
+
+impl TryFrom<VfsPath> for PostContent {
+    type Error = ReadPostContentError;
+
+    fn try_from(path: VfsPath) -> Result<Self, Self::Error> {
+        let ext = path.extension().ok_or(ReadPostContentError::NoExtension)?;
+        let content_type = ContentType::from_ext(ext.as_str())?;
+        let content = path.read_to_string()?;
+        Ok(PostContent {
+            content_type,
+            content,
+        })
+    }
+}
+
+impl PostContent {
+    pub fn new(content_type: ContentType, content: String) -> PostContent {
+        PostContent { content_type, content }
+    }
 }
 
 #[derive(Eq, PartialEq, Debug, Clone)]
@@ -79,11 +118,14 @@ pub enum FindIndexError {
     MultipleIndices(Vec<String>),
 }
 
-pub fn find_index(path: &VfsPath) -> Result<String, FindIndexError> {
+pub fn find_with_name(name: &str, path: &VfsPath) -> Result<String, FindIndexError> {
+    let mut prefix = name.to_string();
+    prefix.push('.');
+
     let mut indices: Vec<String> = path.read_dir().unwrap()
         .filter_map(|c| {
             let name = c.filename();
-            if name.starts_with("index.") {
+            if name.starts_with(prefix.as_str()) {
                 Some(name)
             } else {
                 None
@@ -96,9 +138,4 @@ pub fn find_index(path: &VfsPath) -> Result<String, FindIndexError> {
         1 => Ok(indices[0].clone()),
         _ => Err(FindIndexError::MultipleIndices(indices))
     }
-}
-
-pub enum FileMetaSet {
-    EmbeddedMeta { file: VfsPath, content_type: ContentType },
-    SeparateMeta { meta: VfsPath, content: VfsPath, content_type: ContentType },
 }

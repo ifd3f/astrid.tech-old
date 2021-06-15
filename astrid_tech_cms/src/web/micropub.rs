@@ -7,7 +7,7 @@ use url::Url;
 use crate::content::content::PostContent;
 use crate::content::post::BarePost;
 
-#[derive(Serialize, Deserialize, Debug, Eq, PartialEq)]
+#[derive(Serialize, Deserialize, Debug)]
 #[serde(tag = "h")]
 pub enum Micropub {
     #[serde(rename = "entry")]
@@ -15,6 +15,7 @@ pub enum Micropub {
 }
 
 
+#[derive(Serialize, Deserialize, Debug)]
 #[serde(rename = "entry", rename_all = "kebab-case")]
 pub struct Entry {
     pub name: Option<String>,
@@ -69,7 +70,7 @@ pub struct Cite {
 mod tests {
     #[test]
     fn parses_micropub(){
-        const H_ENTRY = r#"{
+        const H_ENTRY: &str = r#"{
             "name": "test"
         }"#;
     }
