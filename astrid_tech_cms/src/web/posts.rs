@@ -1,5 +1,5 @@
 use actix_web::{get, post, Responder};
-use actix_web::web::{Form, Path, Query};
+use actix_web::web::{Form,  Query};
 
 use crate::web::micropub::Micropub;
 

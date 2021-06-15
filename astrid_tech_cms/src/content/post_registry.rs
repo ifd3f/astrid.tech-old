@@ -1,10 +1,9 @@
-use std::collections::{BTreeMap, HashMap};
+use std::collections::{ HashMap};
 use std::convert::TryFrom;
 
 use itertools::Itertools;
 use vfs::{VfsError, VfsPath};
 
-use crate::content::media::Media;
 use crate::content::post::{BarePost, PostError};
 
 #[derive(Ord, PartialOrd, Eq, PartialEq, Debug, Hash)]

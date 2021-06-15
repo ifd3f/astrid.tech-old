@@ -1,11 +1,8 @@
-use std::convert::TryInto;
 
-use chrono::{DateTime, Duration, Utc};
+use chrono::{DateTime,  Utc};
 use serde::{Deserialize, Serialize};
 use url::Url;
 
-use crate::content::content::PostContent;
-use crate::content::post::BarePost;
 
 #[derive(Serialize, Deserialize, Debug)]
 #[serde(tag = "h")]

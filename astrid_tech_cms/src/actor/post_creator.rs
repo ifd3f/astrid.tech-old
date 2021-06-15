@@ -2,13 +2,12 @@ use std::num::ParseIntError;
 
 use actix::{Actor, Context};
 use actix::prelude::*;
-use chrono::{Datelike, DateTime, Utc};
+use chrono::{Datelike,  Utc};
 use itertools::Itertools;
 use uuid::Uuid;
-use vfs::{VfsError, VfsPath, VfsResult};
+use vfs::{VfsError, VfsPath};
 
-use crate::content::{content, post};
-use crate::content::content::ContentType;
+use crate::content::{post};
 use crate::content::post::{HType, Syndication};
 use crate::web::micropub::Entry;
 
@@ -93,7 +92,7 @@ fn get_next_ordinal(day_dir: &VfsPath) -> Result<usize, CreatePostError> {
 impl Handler<CreatePost> for PostCreator {
     type Result = MessageResult<CreatePost>;
 
-    fn handle(&mut self, msg: CreatePost, ctx: &mut Self::Context) -> Self::Result {
+    fn handle(&mut self, msg: CreatePost, _ctx: &mut Self::Context) -> Self::Result {
         MessageResult(self.create_post(msg.entry))
     }
 }

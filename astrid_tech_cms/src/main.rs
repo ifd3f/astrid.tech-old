@@ -9,8 +9,10 @@ use crate::web::posts;
 mod content;
 mod web;
 mod syndication;
-mod schema;
 mod actor;
+
+#[allow(non_snake_case)]
+mod schema;
 
 #[actix_web::main]
 async fn main() -> std::io::Result<()> {

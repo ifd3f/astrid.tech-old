@@ -122,7 +122,7 @@ pub fn find_unique_with_name(name: &str, path: &VfsPath) -> Result<String, FindF
     let mut prefix = name.to_string();
     prefix.push('.');
 
-    let mut indices: Vec<String> = path.read_dir().unwrap()
+    let indices: Vec<String> = path.read_dir().unwrap()
         .filter_map(|c| {
             let name = c.filename();
             if name.starts_with(prefix.as_str()) {

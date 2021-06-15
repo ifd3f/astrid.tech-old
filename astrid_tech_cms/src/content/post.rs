@@ -1,21 +1,16 @@
-use std::borrow::Borrow;
 use std::convert::TryFrom;
 use std::io::Write;
-use std::str::FromStr;
 
 use chrono::{Datelike, DateTime, Utc};
 use gray_matter::engine::yaml::YAML;
 use gray_matter::entity::ParsedEntityStruct;
 use gray_matter::matter::Matter;
-use gray_matter::value::pod::Pod;
 use serde::{Deserialize, Serialize};
 use url::Url;
 use uuid::Uuid;
 use vfs::{VfsFileType, VfsPath};
 
 use crate::content::content::{ContentType, find_unique_with_name, FindFilenameError, PostContent, ReadPostContentError, UnsupportedContentType};
-use crate::content::content;
-use crate::content::post::Syndication::Scheduled;
 use crate::content::post_registry::DateSlug;
 
 #[derive(Debug)]
@@ -166,9 +161,9 @@ impl BarePost {
 
             let mut file = path.join(filename.as_str())?.create_file()?;
             let meta_yaml = serde_yaml::to_string(&self.meta)?;
-            file.write(meta_yaml.as_bytes());
-            file.write("\n---\n".as_ref());
-            file.write(self.content.content.as_bytes());
+            file.write(meta_yaml.as_bytes())?;
+            file.write("\n---\n".as_ref())?;
+            file.write(self.content.content.as_bytes())?;
 
             return Ok(());
         }
@@ -176,12 +171,12 @@ impl BarePost {
         {
             let mut filename = "content.".to_string();
             filename.push_str(extension);
-            let mut meta_file = path.join(filename.as_str())?.create_file()?;
-            serde_yaml::to_writer(meta_file, &self.meta);
+            let meta_file = path.join(filename.as_str())?.create_file()?;
+            serde_yaml::to_writer(meta_file, &self.meta)?;
         }
         {
             let mut content_file = path.join("index.yaml")?.create_file()?;
-            content_file.write(self.content.content.as_bytes());
+            content_file.write(self.content.content.as_bytes())?;
         }
 
         Ok(())
@@ -239,7 +234,7 @@ mod test {
     use vfs::{MemoryFS, VfsPath};
 
     use crate::content::content::ContentType;
-    use crate::content::post::{BarePost, EmbeddedMeta, HType};
+    use crate::content::post::{BarePost};
 
     const TXT_ARTICLE_YAML: &str = r#"
 date: 2021-06-12 10:51:30 +08:00
@@ -262,11 +257,11 @@ foo bar spam
         let root = VfsPath::new(MemoryFS::new());
         {
             let mut file = root.join("index.yaml").unwrap().create_file().unwrap();
-            file.write(TXT_ARTICLE_YAML.as_ref());
+            file.write(TXT_ARTICLE_YAML.as_ref()).unwrap();
         }
         {
             let mut file = root.join("content.txt").unwrap().create_file().unwrap();
-            file.write(TXT_CONTENTS.as_ref());
+            file.write(TXT_CONTENTS.as_ref()).unwrap();
         }
         root
     }
@@ -275,10 +270,10 @@ foo bar spam
         let root = VfsPath::new(MemoryFS::new());
 
         let mut file = root.join("index.md").unwrap().create_file().unwrap();
-        file.write("---\n".as_ref());
-        file.write(TXT_ARTICLE_YAML.as_ref());
-        file.write("\n---\n".as_ref());
-        file.write(TXT_CONTENTS.as_ref());
+        file.write("---\n".as_ref()).unwrap();
+        file.write(TXT_ARTICLE_YAML.as_ref()).unwrap();
+        file.write("\n---\n".as_ref()).unwrap();
+        file.write(TXT_CONTENTS.as_ref()).unwrap();
 
         root
     }
