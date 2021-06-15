@@ -9,12 +9,14 @@ use gray_matter::entity::ParsedEntityStruct;
 use gray_matter::matter::Matter;
 use gray_matter::value::pod::Pod;
 use serde::{Deserialize, Serialize};
+use url::Url;
+use uuid::Uuid;
 use vfs::{VfsFileType, VfsPath};
 
 use crate::content::content::{ContentType, FindIndexError, PostContent, UnsupportedContentType};
 use crate::content::content;
+use crate::content::post::Syndication::Scheduled;
 use crate::content::post_registry::DateSlug;
-use url::Url;
 
 #[derive(Debug)]
 pub enum PostError {
@@ -84,12 +86,8 @@ enum SyndicationStrategy {
 
 #[derive(Serialize, Deserialize, Debug, Eq, PartialEq, Clone)]
 #[serde(tag = "status", rename_all = "camelCase")]
-enum Syndication {
+pub enum Syndication {
     Scheduled {
-        url: Url,
-        strategy: Option<SyndicationStrategy>,
-    },
-    Attempting {
         url: Url,
         strategy: Option<SyndicationStrategy>,
     },
@@ -115,25 +113,27 @@ enum HType {
 #[derive(Serialize, Deserialize, Debug, Eq, PartialEq, Clone)]
 #[serde(rename_all = "camelCase")]
 pub struct EmbeddedMeta {
-    title: Option<String>,
-    description: Option<String>,
-    short_name: Option<String>,
+    pub title: Option<String>,
+    pub description: Option<String>,
+    pub short_name: Option<String>,
+    pub uuid: Uuid,
 
-    date: DateTime<Utc>,
-    published_date: Option<DateTime<Utc>>,
-    updated_date: Option<DateTime<Utc>>,
+    pub date: DateTime<Utc>,
+    pub published_date: Option<DateTime<Utc>>,
+    pub updated_date: Option<DateTime<Utc>>,
     #[serde(default)]
-    ordinal: usize,
+    pub ordinal: usize,
 
-    reply_to: Option<Url>,
+    pub reply_to: Option<Url>,
+    pub repost_of: Option<Url>,
     #[serde(default)]
-    tags: Vec<String>,
+    pub tags: Vec<String>,
     #[serde(default)]
-    syndications: Vec<Syndication>,
+    pub syndications: Vec<Syndication>,
     #[serde(flatten)]
-    h_type: HType,
+    pub h_type: HType,
     #[serde(default)]
-    media: Vec<MediaEntry>,
+    pub media: Vec<MediaEntry>,
 }
 
 impl EmbeddedMeta {
@@ -304,6 +304,7 @@ mod test {
 
         type: entry
         shortName: foo-bar
+        uuid: 2fdb77e7-a019-4e51-9ba4-cd6b2eedd60e
         ordinal: 0
         contentPath: "post.txt"
         tags:

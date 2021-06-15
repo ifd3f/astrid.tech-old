@@ -1,7 +1,8 @@
-drop table Posts;
-drop table Images;
-drop table Projects;
+drop table if exists Posts;
+drop table if exists Images;
+drop table if exists Projects;
+drop table if exists Content;
 
-drop table TagToObject;
-drop table TaggedObjects;
-drop table Tags;
+drop table if exists TagToObject;
+drop table if exists TaggedObjects;
+drop table if exists Tags;

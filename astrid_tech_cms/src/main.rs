@@ -10,6 +10,7 @@ mod content;
 mod web;
 mod syndication;
 mod schema;
+mod actor;
 
 #[actix_web::main]
 async fn main() -> std::io::Result<()> {

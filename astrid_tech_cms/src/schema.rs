@@ -1,4 +1,12 @@
 table! {
+    Content (path) {
+        path -> Text,
+        content -> Binary,
+        content_type -> Binary,
+    }
+}
+
+table! {
     Images (name) {
         name -> Nullable<Text>,
     }
@@ -28,7 +36,6 @@ table! {
         syndications -> Text,
         h_type -> Text,
         media -> Nullable<Text>,
-        content_type -> Text,
         content -> Text,
     }
 }
@@ -78,13 +85,16 @@ table! {
     }
 }
 
+joinable!(Posts -> Content (content));
 joinable!(Posts -> TaggedObjects (uuid));
+joinable!(Projects -> Content (content));
 joinable!(Projects -> Images (thumbnail));
 joinable!(Projects -> TaggedObjects (uuid));
 joinable!(TagToObject -> TaggedObjects (object_uuid));
 joinable!(TagToObject -> Tags (tag));
 
 allow_tables_to_appear_in_same_query!(
+    Content,
     Images,
     Posts,
     Projects,

@@ -4,29 +4,33 @@ use chrono::{DateTime, Duration, Utc};
 use serde::{Deserialize, Serialize};
 use url::Url;
 
-use crate::content::post::BarePost;
 use crate::content::content::PostContent;
+use crate::content::post::BarePost;
 
 #[derive(Serialize, Deserialize, Debug, Eq, PartialEq)]
 #[serde(tag = "h")]
 pub enum Micropub {
-    #[serde(rename = "entry", rename_all = "kebab-case")]
-    Entry {
-        name: Option<String>,
-        summary: Option<String>,
-        content: Option<String>,
-        published: Option<DateTime<Utc>>,
-        updated: Option<DateTime<Utc>>,
-        #[serde(default)]
-        category: Vec<String>,
-        location: String,
-        in_reply_to: Url,
-        repost_of: Option<String>,
-        #[serde(default)]
-        syndication: Vec<String>,
-        #[serde(default)]
-        mp_syndicate_to: Vec<String>,
-    }
+    #[serde(rename = "entry")]
+    Entry(Entry)
+}
+
+
+#[serde(rename = "entry", rename_all = "kebab-case")]
+pub struct Entry {
+    pub name: Option<String>,
+    pub summary: Option<String>,
+    pub content: Option<String>,
+    pub published: Option<DateTime<Utc>>,
+    pub updated: Option<DateTime<Utc>>,
+    #[serde(default)]
+    pub category: Vec<String>,
+    pub location: String,
+    pub in_reply_to: Option<Url>,
+    pub repost_of: Option<Url>,
+    #[serde(default)]
+    pub syndication: Vec<Url>,
+    #[serde(default)]
+    pub mp_syndicate_to: Vec<Url>,
 }
 
 
@@ -61,3 +65,12 @@ pub struct Cite {
     content: Option<String>,
 }
 
+#[cfg(test)]
+mod tests {
+    #[test]
+    fn parses_micropub(){
+        const H_ENTRY = r#"{
+            "name": "test"
+        }"#;
+    }
+}

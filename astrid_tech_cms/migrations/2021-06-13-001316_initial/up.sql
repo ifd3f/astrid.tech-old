@@ -29,6 +29,13 @@ create table Images
     name TEXT PRIMARY KEY
 );
 
+create table Content
+(
+    path TEXT PRIMARY KEY UNIQUE NOT NULL,
+    content                      NOT NULL,
+    content_type                 NOT NULL
+);
+
 create table Posts
 (
     uuid           TEXT PRIMARY KEY UNIQUE NOT NULL,
@@ -58,10 +65,10 @@ create table Posts
     h_type         TEXT                    NOT NULL,
     media          TEXT,
 
-    content_type   TEXT                    NOT NULL,
     content        TEXT                    NOT NULL,
 
     foreign key (uuid) references TaggedObjects (uuid),
+    foreign key (content) references Content (path),
     unique (year, month, day, ordinal)
 );
 
@@ -84,6 +91,7 @@ CREATE TABLE Projects
     thumbnail      TEXT,
     content        TEXT                    NOT NULL,
 
+    foreign key (content) references Content (path),
     foreign key (uuid) references TaggedObjects (uuid),
     foreign key (thumbnail) references Images (name)
 );
