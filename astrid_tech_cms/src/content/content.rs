@@ -1,6 +1,8 @@
+use std::fmt;
+
 use serde::{Deserialize, Deserializer, Serialize, Serializer};
-use serde::__private::TryFrom;
-use serde::de::Error;
+use serde::__private::{Formatter, TryFrom};
+use serde::de::{Error, Visitor};
 use vfs::{VfsError, VfsPath};
 
 #[derive(Eq, PartialEq, Debug, Clone)]
@@ -19,12 +21,28 @@ impl Serialize for ContentType {
     }
 }
 
-impl Deserialize for ContentType {
+struct ContentTypeVisitor;
+
+impl<'de> Visitor<'de> for ContentTypeVisitor {
+    type Value = ContentType;
+
+    fn expecting(&self, formatter: &mut Formatter<'a>) -> fmt::Result {
+        formatter.write_str("a mimetype")
+    }
+
+    fn visit_str<E>(self, v: &str) -> Result<Self::Value, E>
+        where
+            E: Error,
+    {
+        ContentType::from_mimetype(v)
+            .map_err(|e| E::custom(format!("Unsupported mimetype {}", e.0)))
+    }
+}
+
+impl<'de> Deserialize<'de> for ContentType {
     fn deserialize<D>(deserializer: D) -> Result<Self, <D as Deserializer<'de>>::Error> where
         D: Deserializer<'de> {
-        let mimetype = deserializer.deserialize_str()?;
-        ContentType::from_mimetype(mimetype)
-            .map_err(|e| D::Error::custom(format!("Unsupported mimetype {}", e.0)))
+        deserializer.deserialize_str(ContentTypeVisitor)
     }
 }
 

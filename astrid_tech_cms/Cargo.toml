@@ -19,3 +19,6 @@ url = { version = "2.2", features = ["serde"] }
 barrel = "0.6.5"
 diesel = "1.4"
 actix = "0.12"
+
+[dev-dependencies]
+serde_qs = "0.8.3"

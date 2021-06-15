@@ -1,5 +1,5 @@
 use actix_web::{get, post, Responder};
-use actix_web::web::{Form,  Query};
+use actix_web::web::{Form, Query};
 
 use crate::web::micropub::Micropub;
 
@@ -16,10 +16,5 @@ pub async fn get_posts(
 
 #[post("/api/micropub")]
 pub async fn micropub_post(post: Form<Micropub>) -> impl Responder {
-    match post.0 {
-        Micropub::Entry(e)=> {
-
-        }
-    }
     ""
 }
