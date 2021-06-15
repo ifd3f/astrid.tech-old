@@ -4,12 +4,12 @@ use std::convert::TryFrom;
 use vfs::VfsPath;
 
 use crate::content::media::Media;
-use crate::content::post_registry::PostRegistry;
+use crate::content::post_registry::PostStorage;
 
 /// Contains all of the website data
 pub struct BlogContent {
     media: HashMap<String, Media>,
-    posts: PostRegistry
+    posts: PostStorage
 }
 
 impl BlogContent {
@@ -22,7 +22,7 @@ impl TryFrom<VfsPath> for BlogContent {
     type Error = ();
 
     fn try_from(path: VfsPath) -> Result<Self, Self::Error> {
-        let posts = PostRegistry::try_from(path).unwrap();
+        let posts = PostStorage::try_from(path).unwrap();
 
         // Load non-post media
         todo!()

@@ -10,8 +10,9 @@ use url::Url;
 use uuid::Uuid;
 use vfs::{VfsFileType, VfsPath};
 
-use crate::content::content::{ContentType, find_unique_with_name, FindFilenameError, Content, ReadPostContentError, UnsupportedContentType};
+use crate::content::content::{Content, ContentType, find_unique_with_name, FindFilenameError, ReadPostContentError, UnsupportedContentType};
 use crate::content::post_registry::DateSlug;
+use crate::web::micropub::{Entry, Micropub};
 
 #[derive(Debug)]
 pub enum PostError {
@@ -145,7 +146,7 @@ pub struct Post {
 }
 
 impl Post {
-    fn write_to(&self, path: &mut VfsPath) -> Result<(), PostError> {
+    pub fn write_to(&self, path: &mut VfsPath) -> Result<(), PostError> {
         let extension = self.content.content_type.to_ext();
 
         if self.content.content_type.supports_frontmatter() {
@@ -178,6 +179,46 @@ impl Post {
 
     pub fn get_slug(&self) -> DateSlug {
         self.meta.get_slug()
+    }
+
+    pub fn from_micropub_entry(uuid: Uuid, date: DateTime<Utc>, ordinal: usize, entry: Entry) -> Post {
+        let short_name = "".to_string();
+
+        let meta = Meta {
+            title: entry.name,
+            description: entry.summary,
+            short_name: Some(short_name),
+            uuid,
+            date,
+            published_date: entry.published,
+            updated_date: entry.updated,
+            ordinal,
+            reply_to: entry.in_reply_to,
+            repost_of: entry.repost_of,
+            tags: entry.category,
+            syndications: entry.mp_syndicate_to.iter()
+                .map(|url| {
+                    Syndication::Scheduled { url: url.clone() }
+                })
+                .collect(),
+            h_type: HType::Entry,
+            media: vec![],
+        };
+
+        let content = Content {
+            content_type: ContentType::Markdown,
+            content: entry.content.unwrap_or_default(),
+        };
+
+        Post { meta, content }
+    }
+
+    pub fn from_micropub(uuid: Uuid, date: DateTime<Utc>, ordinal: usize, mp: Micropub) -> Post {
+        match mp {
+            Micropub::Entry(e) => Self::from_micropub_entry(uuid, date, ordinal, e),
+            Micropub::Event(_) => { todo!() }
+            Micropub::Cite(_) => { todo!() }
+        }
     }
 }
 
@@ -227,7 +268,7 @@ mod test {
     use vfs::{MemoryFS, VfsPath};
 
     use crate::content::content::ContentType;
-    use crate::content::post::{Post};
+    use crate::content::post::Post;
 
     const TXT_ARTICLE_YAML: &str = r#"
 date: 2021-06-12 10:51:30 +08:00
