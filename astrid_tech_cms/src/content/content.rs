@@ -1,4 +1,6 @@
+use serde::{Deserialize, Deserializer, Serialize, Serializer};
 use serde::__private::TryFrom;
+use serde::de::Error;
 use vfs::{VfsError, VfsPath};
 
 #[derive(Eq, PartialEq, Debug, Clone)]
@@ -8,6 +10,22 @@ pub enum ContentType {
     JupyterNotebook,
     Text,
     HTMLFragment,
+}
+
+impl Serialize for ContentType {
+    fn serialize<S>(&self, serializer: S) -> Result<<S as Serializer>::Ok, <S as Serializer>::Error> where
+        S: Serializer {
+        serializer.serialize_str(self.to_mimetype())
+    }
+}
+
+impl Deserialize for ContentType {
+    fn deserialize<D>(deserializer: D) -> Result<Self, <D as Deserializer<'de>>::Error> where
+        D: Deserializer<'de> {
+        let mimetype = deserializer.deserialize_str()?;
+        ContentType::from_mimetype(mimetype)
+            .map_err(|e| D::Error::custom(format!("Unsupported mimetype {}", e.0)))
+    }
 }
 
 #[derive(Eq, PartialEq, Debug, Clone)]
