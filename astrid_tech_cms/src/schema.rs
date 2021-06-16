@@ -1,20 +1,13 @@
 table! {
-    Content (path) {
-        path -> Text,
-        content -> Binary,
-        content_type -> Binary,
-    }
-}
-
-table! {
-    Images (name) {
+    image (name) {
         name -> Nullable<Text>,
     }
 }
 
 table! {
-    Posts (uuid) {
+    post (uuid) {
         uuid -> Text,
+        date -> Text,
         year -> Integer,
         month -> Integer,
         day -> Integer,
@@ -22,9 +15,8 @@ table! {
         title -> Nullable<Text>,
         description -> Nullable<Text>,
         short_name -> Nullable<Text>,
-        date -> Integer,
-        published_date -> Nullable<Integer>,
-        updated_date -> Nullable<Integer>,
+        published_date -> Nullable<Text>,
+        updated_date -> Nullable<Text>,
         reply_to -> Nullable<Text>,
         bookmark_of -> Nullable<Text>,
         like_of -> Nullable<Text>,
@@ -32,16 +24,16 @@ table! {
         rsvp -> Nullable<Text>,
         url -> Nullable<Text>,
         location -> Nullable<Text>,
-        tags -> Text,
         syndications -> Text,
         h_type -> Text,
-        media -> Nullable<Text>,
+        media -> Text,
         content -> Text,
+        content_type -> Text,
     }
 }
 
 table! {
-    Projects (uuid) {
+    project (uuid) {
         uuid -> Text,
         title -> Text,
         description -> Text,
@@ -55,50 +47,45 @@ table! {
         source_urls -> Nullable<Text>,
         thumbnail -> Nullable<Text>,
         content -> Text,
+        content_type -> Text,
     }
 }
 
 table! {
-    TagToObject (id) {
-        id -> Integer,
+    tag (short_name) {
+        short_name -> Text,
+        name -> Nullable<Text>,
+        background_color -> Nullable<Text>,
+        color -> Nullable<Text>,
+        description -> Text,
+    }
+}
+
+table! {
+    tag_to_object (object_uuid, tag) {
         object_uuid -> Text,
         tag -> Text,
     }
 }
 
 table! {
-    TaggedObjects (uuid) {
+    tagged_object (uuid) {
         uuid -> Text,
-        url -> Text,
-        #[sql_name = "type"]
-        type_ -> Text,
+        url -> Nullable<Text>,
     }
 }
 
-table! {
-    Tags (short_name) {
-        short_name -> Text,
-        name -> Nullable<Text>,
-        background_color -> Nullable<Text>,
-        color -> Nullable<Text>,
-        description -> Nullable<Text>,
-    }
-}
-
-joinable!(Posts -> Content (content));
-joinable!(Posts -> TaggedObjects (uuid));
-joinable!(Projects -> Content (content));
-joinable!(Projects -> Images (thumbnail));
-joinable!(Projects -> TaggedObjects (uuid));
-joinable!(TagToObject -> TaggedObjects (object_uuid));
-joinable!(TagToObject -> Tags (tag));
+joinable!(post -> tagged_object (uuid));
+joinable!(project -> image (thumbnail));
+joinable!(project -> tagged_object (uuid));
+joinable!(tag_to_object -> tag (tag));
+joinable!(tag_to_object -> tagged_object (object_uuid));
 
 allow_tables_to_appear_in_same_query!(
-    Content,
-    Images,
-    Posts,
-    Projects,
-    TagToObject,
-    TaggedObjects,
-    Tags,
+    image,
+    post,
+    project,
+    tag,
+    tag_to_object,
+    tagged_object,
 );

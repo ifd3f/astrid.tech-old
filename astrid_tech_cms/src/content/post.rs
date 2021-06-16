@@ -1,7 +1,7 @@
 use std::convert::TryFrom;
 use std::io::Write;
 
-use chrono::{Datelike, DateTime, Utc};
+use chrono::{Datelike, DateTime, FixedOffset};
 use gray_matter::engine::yaml::YAML;
 use gray_matter::entity::ParsedEntityStruct;
 use gray_matter::matter::Matter;
@@ -13,6 +13,7 @@ use vfs::{VfsFileType, VfsPath};
 use crate::content::content::{Content, ContentType, find_unique_with_name, FindFilenameError, ReadPostContentError, UnsupportedContentType};
 use crate::content::post_registry::DateSlug;
 use crate::web::micropub::{Entry, Micropub};
+use std::str::FromStr;
 
 #[derive(Debug)]
 pub enum PostError {
@@ -84,7 +85,7 @@ pub enum Syndication {
     #[serde(rename_all = "camelCase")]
     Completed {
         url: Url,
-        completed_on: DateTime<Utc>,
+        completed_on: DateTime<FixedOffset>,
     },
 }
 
@@ -112,11 +113,11 @@ pub struct Meta {
     pub short_name: Option<String>,
     pub uuid: Uuid,
 
-    pub date: DateTime<Utc>,
-    pub published_date: Option<DateTime<Utc>>,
-    pub updated_date: Option<DateTime<Utc>>,
+    pub date: DateTime<FixedOffset>,
+    pub published_date: Option<DateTime<FixedOffset>>,
+    pub updated_date: Option<DateTime<FixedOffset>>,
     #[serde(default)]
-    pub ordinal: usize,
+    pub ordinal: u32,
 
     pub reply_to: Option<Url>,
     pub repost_of: Option<Url>,
@@ -130,10 +131,11 @@ pub struct Meta {
 
 impl Meta {
     pub fn get_slug(&self) -> DateSlug {
+        let utc = self.date.naive_utc();
         DateSlug {
-            year: self.date.year(),
-            month: self.date.month() as u8,
-            day: self.date.day() as u8,
+            year: utc.year(),
+            month: utc.month() as u8,
+            day: utc.day() as u8,
             ordinal: self.ordinal,
         }
     }
@@ -181,7 +183,7 @@ impl Post {
         self.meta.get_slug()
     }
 
-    pub fn from_micropub_entry(uuid: Uuid, date: DateTime<Utc>, ordinal: usize, entry: Entry) -> Post {
+    pub fn from_micropub_entry(uuid: Uuid, date: DateTime<FixedOffset>, ordinal: u32, entry: Entry) -> Post {
         let short_name = "".to_string();
 
         let meta = Meta {
@@ -213,7 +215,7 @@ impl Post {
         Post { meta, content }
     }
 
-    pub fn from_micropub(uuid: Uuid, date: DateTime<Utc>, ordinal: usize, mp: Micropub) -> Post {
+    pub fn from_micropub(uuid: Uuid, date: DateTime<FixedOffset>, ordinal: u32, mp: Micropub) -> Post {
         match mp {
             Micropub::Entry(e) => Self::from_micropub_entry(uuid, date, ordinal, e),
             Micropub::Event(_) => { todo!() }
@@ -261,7 +263,7 @@ impl TryFrom<VfsPath> for Post {
 }
 
 #[cfg(test)]
-mod test {
+pub mod test {
     use std::convert::TryFrom;
     use std::io::Write;
 
@@ -312,11 +314,11 @@ foo bar spam
         root
     }
 
-    fn get_working_separate_content_post() -> Post {
+    pub fn get_working_separate_content_post() -> Post {
         Post::try_from(setup_working_separate_content_post()).unwrap()
     }
 
-    fn get_working_combined_post() -> Post {
+    pub fn get_working_combined_post() -> Post {
         Post::try_from(setup_working_combined_post()).unwrap()
     }
 

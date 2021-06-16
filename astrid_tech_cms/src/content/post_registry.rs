@@ -2,7 +2,7 @@ use std::collections::HashMap;
 use std::convert::TryFrom;
 use std::num::ParseIntError;
 
-use chrono::{Datelike, Utc};
+use chrono::{Datelike, Utc, DateTime};
 use itertools::Itertools;
 use uuid::Uuid;
 use vfs::{VfsError, VfsPath};
@@ -15,7 +15,7 @@ pub struct DateSlug {
     pub year: i32,
     pub month: u8,
     pub day: u8,
-    pub ordinal: usize,
+    pub ordinal: u32,
 }
 
 #[derive(Debug)]
@@ -48,10 +48,10 @@ pub struct PostStorage {
     filesystem: VfsPath
 }
 
-fn get_next_ordinal(day_dir: &VfsPath) -> Result<usize, PostStorageError> {
+fn get_next_ordinal(day_dir: &VfsPath) -> Result<u32, PostStorageError> {
     let largest_ordinal = day_dir.read_dir()?
-        .map(|x| x.filename().parse::<usize>())
-        .fold_ok(0, usize::max);
+        .map(|x| x.filename().parse::<u32>())
+        .fold_ok(0, u32::max);
     Ok(largest_ordinal? + 1)
 }
 
@@ -68,11 +68,20 @@ impl PostStorage {
 
         let uuid = Uuid::new_v4();
 
-        let post = Post::from_micropub(uuid, date, ordinal, mp);
+        let post = Post::from_micropub(uuid, DateTime::from(date), ordinal, mp);
         ordinal_dir.create_dir_all()?;
         post.write_to(&mut ordinal_dir)?;
 
         Ok(post)
+    }
+
+    pub fn iter_posts(&self) -> impl Iterator<Item=Result<Post, PostError>> {
+        self.filesystem
+            .read_dir().unwrap()  // years
+            .flat_map(|d| d.read_dir().unwrap())  // months
+            .flat_map(|d| d.read_dir().unwrap())  // days
+            .flat_map(|d| d.read_dir().unwrap())  // ordinals
+            .map(|d| Post::try_from(d))
     }
 }
 

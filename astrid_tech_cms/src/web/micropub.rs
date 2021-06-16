@@ -1,4 +1,4 @@
-use chrono::{DateTime, Utc};
+use chrono::{DateTime, FixedOffset};
 use serde::{Deserialize, Serialize, Deserializer};
 use serde::de::Error;
 use url::Url;
@@ -42,8 +42,8 @@ pub struct Entry {
     pub name: Option<String>,
     pub summary: Option<String>,
     pub content: Option<String>,
-    pub published: Option<DateTime<Utc>>,
-    pub updated: Option<DateTime<Utc>>,
+    pub published: Option<DateTime<FixedOffset>>,
+    pub updated: Option<DateTime<FixedOffset>>,
     #[serde(default)]
     #[serde(deserialize_with = "maybe_vec")]
     pub category: Vec<String>,
@@ -73,17 +73,17 @@ pub struct Event {
 #[derive(Serialize, Deserialize, Debug, Eq, PartialEq)]
 #[serde(untagged)]
 enum EventTime {
-    StartOnly { start: DateTime<Utc> },
+    StartOnly { start: DateTime<FixedOffset> },
     // TODO need support https://github.com/chronotope/chrono/issues/117#issuecomment-854858641
-    // StartDuration { start: DateTime<Utc>, duration: chrono::Duration },
-    StartEnd { start: DateTime<Utc>, end: DateTime<Utc> },
+    // StartDuration { start: DateTime<FixedOffset>, duration: chrono::Duration },
+    StartEnd { start: DateTime<FixedOffset>, end: DateTime<FixedOffset> },
 }
 
 #[derive(Serialize, Deserialize, Debug, Eq, PartialEq)]
 #[serde(rename_all = "kebab-case")]
 pub struct Cite {
     name: Option<String>,
-    published: Option<DateTime<Utc>>,
+    published: Option<DateTime<FixedOffset>>,
     author: Option<String>,
     url: Option<String>,
     content: Option<String>,

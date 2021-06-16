@@ -1,8 +1,10 @@
-drop table if exists Posts;
-drop table if exists Images;
-drop table if exists Projects;
-drop table if exists Content;
+drop index if exists post_ymdo_idx;
 
-drop table if exists TagToObject;
-drop table if exists TaggedObjects;
-drop table if exists Tags;
+drop table if exists post;
+drop table if exists image;
+drop table if exists project;
+
+drop table if exists tag_to_object;
+drop table if exists tagged_object;
+drop table if exists tag;
+

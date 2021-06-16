@@ -1,44 +1,38 @@
-create table TaggedObjects
+create table tagged_object
 (
     uuid TEXT PRIMARY KEY NOT NULL,
-    url  TEXT             NOT NULL,
-    type TEXT             NOT NULL
+    url  TEXT
 );
 
-create table Tags
+create table tag
 (
     short_name       TEXT PRIMARY KEY NOT NULL,
     name             TEXT,
     background_color TEXT,
     color            TEXT,
-    description      TEXT
+    description      TEXT             NOT NULL
 );
 
-create table TagToObject
+create table tag_to_object
 (
-    id          INTEGER PRIMARY KEY NOT NULL,
     object_uuid TEXT                NOT NULL,
     tag         TEXT                NOT NULL,
 
-    foreign key (object_uuid) references TaggedObjects (uuid),
-    foreign key (tag) references Tags (short_name)
+    foreign key (object_uuid) references tagged_object (uuid),
+    foreign key (tag) references tag (short_name),
+    primary key (object_uuid, tag)
 );
 
-create table Images
+create table image
 (
     name TEXT PRIMARY KEY
 );
 
-create table Content
-(
-    path TEXT PRIMARY KEY UNIQUE NOT NULL,
-    content                      NOT NULL,
-    content_type                 NOT NULL
-);
-
-create table Posts
+create table post
 (
     uuid           TEXT PRIMARY KEY UNIQUE NOT NULL,
+
+    date           TEXT                    NOT NULL,
     year           INTEGER                 NOT NULL,
     month          INTEGER                 NOT NULL,
     day            INTEGER                 NOT NULL,
@@ -48,9 +42,8 @@ create table Posts
     description    TEXT,
     short_name     TEXT,
 
-    date           INTEGER                 NOT NULL,
-    published_date INTEGER,
-    updated_date   INTEGER,
+    published_date TEXT,
+    updated_date   TEXT,
 
     reply_to       TEXT,
     bookmark_of    TEXT,
@@ -60,19 +53,18 @@ create table Posts
     url            TEXT,
     location       TEXT,
 
-    tags           TEXT                    NOT NULL,
     syndications   TEXT                    NOT NULL, -- a json array
     h_type         TEXT                    NOT NULL,
-    media          TEXT,
+    media          TEXT                    NOT NULL,
 
     content        TEXT                    NOT NULL,
+    content_type   TEXT                    NOT NULL,
 
-    foreign key (uuid) references TaggedObjects (uuid),
-    foreign key (content) references Content (path),
+    foreign key (uuid) references tagged_object (uuid),
     unique (year, month, day, ordinal)
 );
 
-CREATE TABLE Projects
+CREATE TABLE project
 (
     uuid           TEXT PRIMARY KEY UNIQUE NOT NULL,
 
@@ -89,9 +81,12 @@ CREATE TABLE Projects
     status         TEXT,
     source_urls    TEXT,
     thumbnail      TEXT,
-    content        TEXT                    NOT NULL,
 
-    foreign key (content) references Content (path),
-    foreign key (uuid) references TaggedObjects (uuid),
-    foreign key (thumbnail) references Images (name)
+    content        TEXT                    NOT NULL,
+    content_type   TEXT                    NOT NULL,
+
+    foreign key (uuid) references tagged_object (uuid),
+    foreign key (thumbnail) references image (name)
 );
+
+CREATE UNIQUE INDEX post_ymdo_idx ON post (year, month, day, ordinal, short_name);

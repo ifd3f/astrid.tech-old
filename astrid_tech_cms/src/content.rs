@@ -4,3 +4,4 @@ pub mod media;
 pub mod post_registry;
 pub mod image;
 pub mod content;
+mod index;
