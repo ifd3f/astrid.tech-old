@@ -63,6 +63,14 @@ class Entry(Model):
     content = TextField(blank=True)
     """The content of this entry."""
 
+    def set_all_dates(self, date):
+        """Helper to set all the date fields to the given date. Mostly useful for testing and little else."""
+        self.date = date
+        self.created_date = date
+        self.published_date = date
+        self.updated_date = date
+        return self
+
     @property
     def slug(self):
         slug = f'/{self.date.year}/{self.date.month}/{self.date.day}/{self.ordinal}'
@@ -74,6 +82,9 @@ class Entry(Model):
         if self.title is not None:
             return self.title
         return self.slug
+
+    class Meta:
+        unique_together = ('date', 'ordinal')
 
 
 class Attachment(Model):
