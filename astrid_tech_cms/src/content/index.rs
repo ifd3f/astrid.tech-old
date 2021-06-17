@@ -17,13 +17,10 @@ use diesel::associations::HasTable;
 use std::borrow::Borrow;
 use std::sync::Arc;
 
-struct Index {
-    conn: Arc<SqliteConnection>
-}
 
-#[derive(Insertable, Queryable, Debug)]
+#[derive(Insertable, Debug)]
 #[table_name = "post"]
-struct DBPost {
+struct InsertPost {
     uuid: String,
 
     date: String,
@@ -77,12 +74,11 @@ impl Tag {
     }
 }
 
-#[derive(Insertable, Queryable, Debug)]
+#[derive(Insertable, Debug)]
 #[table_name = "tagged_object"]
 struct TaggedObject {
     uuid: String,
     url: Option<String>,
-
 }
 
 #[derive(Insertable, Debug)]
@@ -92,12 +88,12 @@ struct TagToObject {
     tag: String,
 }
 
-impl From<Post> for DBPost {
+impl From<Post> for InsertPost {
     fn from(post: Post) -> Self {
         let slug = post.get_slug();
         let Post { meta, content } = post;
         let date = meta.date;
-        DBPost {
+        InsertPost {
             uuid: meta.uuid.to_string(),
             date: date.to_rfc3339(),
             year: slug.year,
@@ -125,7 +121,7 @@ impl From<Post> for DBPost {
     }
 }
 
-impl Into<Post> for DBPost {
+impl Into<Post> for InsertPost {
     fn into(self) -> Post {
         let meta = content::post::Meta {
             h_type: serde_json::from_str(self.h_type.as_str()).unwrap(),
@@ -151,62 +147,86 @@ impl Into<Post> for DBPost {
     }
 }
 
-impl Index {
-    pub fn new(conn: Arc<SqliteConnection>) -> Index {
-        Index { conn }
-    }
+pub fn store_post(conn: &SqliteConnection, post: Post) {
+    let uuid_str = post.meta.uuid.to_string();
+    let to = TaggedObject { uuid: uuid_str.clone(), url: None };
+    let tags: Vec<Tag> = post.meta.tags.iter()
+        .map(|t| Tag::from_shortname(t.clone()))
+        .collect();
+    let links: Vec<TagToObject> = post.meta.tags.iter()
+        .map(|t| TagToObject { object_uuid: uuid_str.clone(), tag: t.clone() })
+        .collect();
 
-    pub fn store_post(conn: &SqliteConnection, post: Post) {
-        let uuid_str = post.meta.uuid.to_string();
-        let to = TaggedObject { uuid: uuid_str.clone(), url: None };
-        let tags: Vec<Tag> = post.meta.tags.iter()
-            .map(|t| Tag::from_shortname(t.clone()))
-            .collect();
-        let links: Vec<TagToObject> = post.meta.tags.iter()
-            .map(|t| TagToObject { object_uuid: uuid_str.clone(), tag: t.clone() })
-            .collect();
+    conn.transaction::<(), diesel::result::Error, _>(|| {
+        diesel::insert_into(tagged_object::table)
+            .values(&to)
+            .execute(conn)?;
 
-        conn.transaction::<(), diesel::result::Error, _>(|| {
-            diesel::insert_into(tagged_object::table)
-                .values(&to)
-                .execute(conn)?;
+        diesel::insert_or_ignore_into(tag::table)
+            .values(&tags)
+            .execute(conn)?;
 
-            diesel::insert_or_ignore_into(tag::table)
-                .values(&tags)
-                .execute(conn)?;
+        diesel::insert_into(post::table)
+            .values(&InsertPost::from(post))
+            .execute(conn)?;
 
-            diesel::insert_into(post::table)
-                .values(&DBPost::from(post))
-                .execute(conn)?;
+        diesel::insert_into(tag_to_object::table)
+            .values(&links)
+            .execute(conn)?;
 
-            diesel::insert_into(tag_to_object::table)
-                .values(&links)
-                .execute(conn)?;
-
-            Ok(())
-        }).unwrap();
-    }
+        Ok(())
+    }).unwrap();
 }
+
 
 #[cfg(test)]
 mod tests {
-    use diesel::{Connection, QueryDsl, RunQueryDsl, SqliteConnection};
+    use diesel::{ Identifiable, Queryable, Connection, QueryDsl, RunQueryDsl, SqliteConnection};
     use diesel::sqlite::Sqlite;
+    use diesel::prelude::*;
 
-    use crate::content::index::{DBPost, Index};
+    use crate::content::index::{InsertPost, store_post};
     use crate::content::post::test::get_working_combined_post;
     use crate::schema;
+    use crate::schema::tagged_object;
     use std::sync::Arc;
+
+    #[derive(Identifiable, Queryable)]
+    struct QueryPost {
+        uuid: String,
+        year: i32,
+        month: i32,
+        day: i32
+    }
+
+    #[derive(Identifiable, Queryable)]
+    struct QueryTag {
+        id: String
+    }
+
+    #[derive(Associations, Identifiable, Queryable)]
+    #[belongs_to(QueryPost)]
+    #[belongs_to(QueryTag)]
+    #[table_name = "tagged_object"]
+    struct QueryTaggedObject {
+        id: i32,
+        query_post_id: String,
+        url: String
+    }
 
     #[test]
     fn stores_posts() {
-        let conn =SqliteConnection::establish("index.sqlite3").unwrap();
+        let conn = SqliteConnection::establish("index.sqlite3").unwrap();
         let obj = get_working_combined_post();
-        Index::store_post(&conn, obj);
+        let uuid_str = obj.meta.uuid.to_string();
 
-       // conn.test_transaction(|| {
-       //     Index::store_post(&conn, obj);
-       //     Ok(()) as Result<(), ()>
-       // });
+         conn.test_transaction(|| {
+             store_post(&conn, obj);
+
+             find(uuid_str.as_str())
+                 .get_result::<QueryPost>(&conn);
+
+             Ok(()) as Result<(), ()>
+         });
     }
 }

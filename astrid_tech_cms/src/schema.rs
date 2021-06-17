@@ -62,7 +62,8 @@ table! {
 }
 
 table! {
-    tag_to_object (object_uuid, tag) {
+    tag_to_object (id) {
+        id -> Nullable<Integer>,
         object_uuid -> Text,
         tag -> Text,
     }

@@ -15,12 +15,12 @@ create table tag
 
 create table tag_to_object
 (
+    id INTEGER PRIMARY KEY,
     object_uuid TEXT                NOT NULL,
     tag         TEXT                NOT NULL,
 
     foreign key (object_uuid) references tagged_object (uuid),
-    foreign key (tag) references tag (short_name),
-    primary key (object_uuid, tag)
+    foreign key (tag) references tag (short_name)
 );
 
 create table image
