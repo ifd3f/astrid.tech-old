@@ -31,7 +31,7 @@ django-celery = "*"
 djangorestframework-recursive = "*"
 psycopg2-binary = "*"
 gunicorn = "*"
-django-indieweb = "*"
+python-slugify = "*"
 
 [dev-packages]
 

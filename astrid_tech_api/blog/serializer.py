@@ -1,5 +1,7 @@
 from django.forms import DateTimeField
-from rest_framework.serializers import Serializer, CharField, URLField
+from rest_framework.serializers import Serializer, CharField, URLField, ModelSerializer
+
+from blog.models import Entry
 
 
 class MicropubEntrySerializer(Serializer):
@@ -18,3 +20,8 @@ class MicropubEntrySerializer(Serializer):
 
     syndication = URLField(many=True)
     mp_syndicate_to = URLField(source='mp-syndicate-to', many=True)
+
+
+class EntrySerializer(ModelSerializer):
+    class Meta:
+        model = Entry
