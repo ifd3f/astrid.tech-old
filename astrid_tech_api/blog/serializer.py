@@ -6,7 +6,7 @@ from rest_framework.fields import ListField
 from rest_framework.serializers import Serializer, CharField, URLField, ModelSerializer
 from structlog import get_logger
 
-from .models import Entry, Syndication, Tag
+from .models import Entry, Syndication, Tag, SyndicationTarget
 
 logger = get_logger(__name__)
 
@@ -32,19 +32,19 @@ class MicropubEntrySerializer(Serializer):
     def create_entry(validated_data):
         published = validated_data.get('published', datetime.now())
         entry = Entry.objects.create(
-            title=validated_data.get('name'),
-            description=validated_data.get('content'),
+            title=validated_data.get('name', ''),
+            description=validated_data.get('summary', ''),
 
             created_date=published,
             published_date=published,
 
             date=published,
 
-            reply_to=validated_data.get('in-reply-to'),
-            location=validated_data.get('location'),
-            repost_of=validated_data.get('repost-of'),
+            reply_to=validated_data.get('in-reply-to', ''),
+            location=validated_data.get('location', ''),
+            repost_of=validated_data.get('repost-of', ''),
 
-            content=validated_data.get('content')
+            content=validated_data.get('content', '')
         )
 
         for url in validated_data.get('syndication', []):
@@ -54,8 +54,9 @@ class MicropubEntrySerializer(Serializer):
                 entry_id=entry.pk
             )
         for url in validated_data.get('mp-syndicate-to', []):
+            target = SyndicationTarget.objects.filter(enabled=True).get(id=url)
             Syndication.objects.create(
-                target=url,
+                target=target,
                 status=Syndication.Status.SCHEDULED,
                 entry_id=entry.pk
             )

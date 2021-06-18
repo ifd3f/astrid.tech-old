@@ -1,4 +1,3 @@
-from django.contrib.auth.models import Permission
 from django.http import HttpResponse, JsonResponse
 from django.views.decorators.http import require_http_methods
 from structlog import get_logger
@@ -42,12 +41,10 @@ def _unauthorized():
 
 def _syndication_targets():
     targets = SyndicationTarget.objects.filter(enabled=True)
-    return {
-        'syndicate-to': [
-            {'uid': target.id, 'name': target.enabled}
-            for target in targets
-        ]
-    }
+    return [
+        target.micropub_syndication_target
+        for target in targets
+    ]
 
 
 @require_http_methods(["GET", "POST"])

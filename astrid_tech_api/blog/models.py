@@ -1,4 +1,4 @@
-from datetime import datetime
+from datetime import datetime, timezone
 from uuid import uuid4
 
 from django.db.models import Model, TextField, CharField, UUIDField, IntegerField, DateTimeField, URLField, \
@@ -62,20 +62,20 @@ class Entry(Model):
 
     content_type = CharField(max_length=127, default='text/markdown')
     """The content type, as a mimetype."""
-    content = TextField(blank=True)
+    content = TextField(blank=True, default='')
     """The content of this entry."""
 
-    def set_all_dates(self, date):
+    def set_all_dates(self, dt: datetime):
         """Helper to set all the date fields to the given date. Mostly useful for testing and little else."""
-        self.date = date
-        self.created_date = date
-        self.published_date = date
-        self.updated_date = date
+        self.date = dt.astimezone(timezone.utc)
+        self.created_date = dt
+        self.published_date = dt
+        self.updated_date = dt
         return self
 
     @property
     def slug(self):
-        slug = f'/{self.date.year}/{self.date.month}/{self.date.day}/{self.ordinal}'
+        slug = f'/{self.date.year}/{self.date.month:02}/{self.date.day:02}/{self.ordinal}'
         if self.short_name:
             slug += '/' + self.short_name
         return slug
@@ -114,6 +114,10 @@ class SyndicationTarget(Model):
         if self.name is not None:
             return self.name
         return self.id
+
+    @property
+    def micropub_syndication_target(self):
+        return {'uid': self.id, 'name': self.name}
 
 
 class Syndication(Model):
