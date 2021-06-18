@@ -26,6 +26,10 @@ class MicropubEndpointTests(TestCase):
     EMPTY_DATE = datetime(2012, 1, 14, 3, 21, 34, 0, pytz.timezone('Asia/Dubai'))
     EXPECTED_EMPTY_DATE = date(2012, 1, 13)
 
+    OCCUPIED_DATE = datetime(2012, 1, 13, 3, 21, 34, 0, pytz.timezone('Asia/Dubai'))
+    EXPECTED_OCCUPIED_DATE = date(2012, 1, 12)
+
+    @freeze_time(OCCUPIED_DATE)
     def setUp(self) -> None:
         self.disallowed_user = get_user_model().objects.create_user(username='stranger', password='7812')
         self.allowed_user = get_user_model().objects.create_user(username='myself', password='12345')
@@ -40,6 +44,10 @@ class MicropubEndpointTests(TestCase):
             name='My uncool twitter account that should never be used',
             enabled=False
         )
+        self.existing_entry = Entry(
+            content="I wrote something here but I might write another thing later"
+        ).set_all_dates(MicropubEndpointTests.OCCUPIED_DATE)
+        self.existing_entry.save()
 
     def post(self, **params):
         return self.client.post('/api/micropub/', params)
@@ -120,6 +128,20 @@ class MicropubEndpointTests(TestCase):
         self.assertIsNotNone(entry.tags.get(short_name='django'))
         self.assertIsNotNone(entry.tags.get(short_name='python'))
 
+    @freeze_time(OCCUPIED_DATE)
+    def test_create_valid_entry_on_occupied_date(self):
+        self.client.force_login(self.allowed_user)
+        form = {
+            'h': 'entry',
+            'content': "I'm writing another note on this date!"
+        }
+
+        response = self.post_and_assert_status(**form)
+
+        self.assertEqual('https://astrid.tech/2012/01/12/1', response.headers['Link'])
+        entry = Entry.objects.get(date=MicropubEndpointTests.EXPECTED_OCCUPIED_DATE, ordinal=1)
+        self.assertEqual(form['content'], entry.content)
+
     @freeze_time(EMPTY_DATE)
     def test_create_entry_with_enabled_syndication(self):
         self.client.force_login(self.allowed_user)
@@ -145,6 +167,20 @@ class MicropubEndpointTests(TestCase):
             'name': "Syndicating to a Mastodon instance that is disabled uwu",
             'mp-syndicate-to': [
                 self.disabled_syn_target.id
+            ]
+        }
+
+        self.post_and_assert_status(400, **form)
+        self.assertFalse(Entry.objects.filter(date=MicropubEndpointTests.EXPECTED_EMPTY_DATE).exists())
+
+    @freeze_time(EMPTY_DATE)
+    def test_create_entry_with_nonexistent_syndication(self):
+        self.client.force_login(self.allowed_user)
+        form = {
+            'h': 'entry',
+            'name': "Syndicating to a Mastodon instance that doesn't exist owo",
+            'mp-syndicate-to': [
+                'https://nobody@mastodon.example.com'
             ]
         }
 
