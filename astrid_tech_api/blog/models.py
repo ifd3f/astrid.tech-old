@@ -2,7 +2,7 @@ from datetime import datetime, timezone
 from uuid import uuid4
 
 from django.db.models import Model, TextField, CharField, UUIDField, IntegerField, DateTimeField, URLField, \
-    ManyToManyField, ForeignKey, CASCADE, DateField, Max, TextChoices, BooleanField, RESTRICT, Q
+    ManyToManyField, ForeignKey, CASCADE, DateField, Max, TextChoices, BooleanField, RESTRICT, Q, QuerySet
 
 
 class Tag(Model):
@@ -66,7 +66,7 @@ class Entry(Model):
     """The content of this entry."""
 
     @staticmethod
-    def objects_visible_at(dt):
+    def objects_visible_at(dt) -> 'QuerySet[Entry]':
         return Entry.objects.filter(
             Q(published_date__isnull=False) & Q(published_date__lte=dt) &
             (Q(deleted_date__isnull=True) | Q(deleted_date__gt=dt))
