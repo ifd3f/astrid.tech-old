@@ -1,9 +1,11 @@
+from datetime import datetime
+
+from django.db import transaction
 from django.http import HttpResponse, JsonResponse
 from django.views.decorators.http import require_http_methods
 from structlog import get_logger
 
-from blog.models import SyndicationTarget
-from blog.serializer import MicropubEntrySerializer
+from blog.models import SyndicationTarget, Entry, Syndication, Tag
 
 logger = get_logger(__name__)
 
@@ -47,6 +49,44 @@ def _syndication_targets():
     ]
 
 
+@transaction.atomic
+def create_entry(query):
+    published = query.get('published', datetime.now())
+    entry = Entry.objects.create(
+        title=query.get('name', ''),
+        description=query.get('summary', ''),
+
+        created_date=published,
+        published_date=published,
+
+        date=published,
+
+        reply_to=query.get('in-reply-to', ''),
+        location=query.get('location', ''),
+        repost_of=query.get('repost-of', ''),
+
+        content=query.get('content', '')
+    )
+
+    for url in query.getlist('syndication'):
+        Syndication.objects.create(
+            location=url,
+            status=Syndication.Status.SYNDICATED,
+            entry_id=entry.pk
+        )
+    for url in query.getlist('mp-syndicate-to'):
+        target = SyndicationTarget.objects.filter(enabled=True).get(id=url)
+        Syndication.objects.create(
+            target=target,
+            status=Syndication.Status.SCHEDULED,
+            entry_id=entry.pk
+        )
+    for category in query.getlist('category'):
+        tag, _ = Tag.objects.get_or_create(short_name=category)
+        entry.tags.add(tag)
+    return entry
+
+
 @require_http_methods(["GET", "POST"])
 def micropub(request):
     if request.user.is_anonymous:
@@ -75,13 +115,17 @@ def micropub(request):
             logger_ = logger.bind(form=dict(request.POST))
             logger_.debug('Validating')
 
-            serializer = MicropubEntrySerializer(data=request.POST)
-
+            '''
             if not serializer.is_valid():
                 logger_.info('Error while creating post', errors=serializer.errors)
                 return _invalid_request(serializer.errors)
+            '''
 
-            entry = MicropubEntrySerializer.create_entry(serializer.validated_data)
+            try:
+                entry = create_entry(request.POST)
+            except SyndicationTarget.DoesNotExist:
+                return _invalid_request('Invalid syndication targets')
+
             logger_.info('Successfully created post', entry=entry)
 
             return HttpResponse(

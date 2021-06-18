@@ -8,7 +8,6 @@ from django.test import TestCase
 from freezegun import freeze_time
 
 from blog.models import Entry, SyndicationTarget
-from blog.serializer import MicropubEntrySerializer
 
 EXISTING_MP_SYNDICATE_FORM = {
     'h': 'entry',
@@ -53,31 +52,6 @@ class SyndicationTest:
             name='My uncool twitter account that should never be used',
             enabled=False
         )
-
-
-class MicropubSerializerTests(TestCase, SyndicationTest):
-    def setUp(self):
-        self.set_up_syndication_targets()
-
-    def test_note(self):
-        form_data = {'h': 'entry', 'content': 'Hello World'}
-        serializer = MicropubEntrySerializer(data=form_data)
-        self.assertTrue(serializer.is_valid(raise_exception=True))
-
-        entry = MicropubEntrySerializer.create_entry(serializer.validated_data)
-
-        self.assertEqual('Hello World', entry.content)
-
-    def test_with_existing_syndications(self):
-        serializer = MicropubEntrySerializer(data=EXISTING_MP_SYNDICATE_FORM)
-        self.assertTrue(serializer.is_valid(raise_exception=True))
-
-        self.assertIn('mp-syndicate-to', serializer.validated_data)
-
-        entry = MicropubEntrySerializer.create_entry(serializer.validated_data)
-
-        syndication = entry.syndication_set.get()
-        self.assertEqual('https://example@twitter.com', syndication.target.id)
 
 
 class MicropubEndpointTests(TestCase, SyndicationTest):
