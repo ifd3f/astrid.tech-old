@@ -2,7 +2,7 @@ from datetime import datetime, timezone
 from uuid import uuid4
 
 from django.db.models import Model, TextField, CharField, UUIDField, IntegerField, DateTimeField, URLField, \
-    ManyToManyField, ForeignKey, CASCADE, DateField, Max, TextChoices, BooleanField, RESTRICT
+    ManyToManyField, ForeignKey, CASCADE, DateField, Max, TextChoices, BooleanField, RESTRICT, Q
 
 
 class Tag(Model):
@@ -64,6 +64,13 @@ class Entry(Model):
     """The content type, as a mimetype."""
     content = TextField(blank=True, default='')
     """The content of this entry."""
+
+    @staticmethod
+    def objects_visible_at(dt):
+        return Entry.objects.filter(
+            Q(published_date__isnull=False) & Q(published_date__lte=dt) &
+            (Q(deleted_date__isnull=True) | Q(deleted_date__gt=dt))
+        )
 
     def set_all_dates(self, dt: datetime):
         """Helper to set all the date fields to the given date. Mostly useful for testing and little else."""

@@ -23,4 +23,3 @@ class EntryOrdinalTests(TestCase):
         with self.assertRaises(IntegrityError):
             entry = Entry(short_name='second-post', ordinal=10).set_all_dates(self.date_1)
             entry.save()
-
