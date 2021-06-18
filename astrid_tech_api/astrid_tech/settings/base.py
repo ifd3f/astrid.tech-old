@@ -51,7 +51,6 @@ INSTALLED_APPS = [
     'comments',
     'analytics',
     'accounts',
-    'api',
     'printer3d'
 ]
 
