@@ -10,6 +10,7 @@ logger = get_logger(__name__)
 
 
 def _invalid_request(info):
+    """See https://micropub.spec.indieweb.org/#error-response]"""
     return JsonResponse(
         status=400,
         data={
@@ -20,6 +21,7 @@ def _invalid_request(info):
 
 
 def _forbidden():
+    """See https://micropub.spec.indieweb.org/#error-response"""
     return JsonResponse(
         status=403,
         data={
@@ -29,6 +31,7 @@ def _forbidden():
 
 
 def _unauthorized():
+    """See https://micropub.spec.indieweb.org/#error-response"""
     return JsonResponse(
         status=401,
         data={
@@ -37,20 +40,33 @@ def _unauthorized():
     )
 
 
+def _syndication_targets():
+    targets = SyndicationTarget.objects.filter(enabled=True)
+    return {
+        'syndicate-to': [
+            {'uid': target.id, 'name': target.enabled}
+            for target in targets
+        ]
+    }
+
 
 @require_http_methods(["GET", "POST"])
 def micropub(request):
+    if request.user.is_anonymous:
+        return _unauthorized()
+
+    if not request.user.has_perm('blog.add_entry'):
+        return _forbidden()
+
     if request.method == 'GET':
+        # See https://micropub.spec.indieweb.org/#querying
+
         if 'q' not in request.GET:
             return _invalid_request('must specify "q"')
 
         if request.GET['q'] == 'syndicate-to':
-            targets = SyndicationTarget.objects.filter(enabled=True)
             return JsonResponse({
-                'syndicate-to': [
-                    {'uid': target.id, 'name': target.enabled}
-                    for target in targets
-                ]
+                'syndicate-to': _syndication_targets()
             })
 
     if request.method == 'POST':

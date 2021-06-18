@@ -3,17 +3,14 @@ from datetime import date
 
 from django.contrib.auth import get_user_model
 from django.contrib.auth.models import Permission
+from django.test import TestCase
 from freezegun import freeze_time
-from rest_framework.permissions import DjangoModelPermissions
-from rest_framework.test import APITestCase
 
 from blog.models import Entry
 from blog.serializer import MicropubEntrySerializer
 
 
-class MicropubSerializerTests(APITestCase):
-    permission_classes = [DjangoModelPermissions]
-
+class MicropubSerializerTests(TestCase):
     def test_micropub(self):
         form_data = {'h': 'entry', 'content': 'Hello World'}
 
@@ -24,10 +21,10 @@ class MicropubSerializerTests(APITestCase):
         self.assertEqual('Hello World', entry.content)
 
 
-class MicropubEndpointTests(APITestCase):
+class MicropubEndpointTests(TestCase):
     def setUp(self) -> None:
-        self.disallowed_user = get_user_model().objects.create_user(username='foobar', password='7812')
-        self.allowed_user = get_user_model().objects.create_user(username='testuser', password='12345')
+        self.disallowed_user = get_user_model().objects.create_user(username='stranger', password='7812')
+        self.allowed_user = get_user_model().objects.create_user(username='myself', password='12345')
         self.allowed_user.user_permissions.add(Permission.objects.get(codename='add_entry'))
 
     def post(self, **params):
@@ -36,7 +33,23 @@ class MicropubEndpointTests(APITestCase):
     def get(self, **params):
         return self.client.get('/api/micropub/', params)
 
+    def test_post_fails_on_anonymous(self):
+        self.client.logout()
+
+        response = self.post()
+
+        self.assertEqual(401, response.status_code, msg=response.content)
+
+    def test_post_fails_on_disallowed_user(self):
+        self.client.force_login(self.disallowed_user)
+
+        response = self.post()
+
+        self.assertEqual(403, response.status_code, msg=response.content)
+
     def test_get_fails_without_q(self):
+        self.client.force_login(self.allowed_user)
+
         response = self.get()
 
         self.assertEqual(400, response.status_code)
@@ -44,6 +57,8 @@ class MicropubEndpointTests(APITestCase):
         self.assertEqual('invalid_request', data['error'])
 
     def test_post_fails_without_h(self):
+        self.client.force_login(self.allowed_user)
+
         response = self.post()
 
         self.assertEqual(400, response.status_code)
@@ -51,6 +66,8 @@ class MicropubEndpointTests(APITestCase):
         self.assertEqual('invalid_request', data['error'])
 
     def test_get_syndication_targets(self):
+        self.client.force_login(self.allowed_user)
+
         response = self.get(q='syndicate-to')
 
         self.assertEqual(200, response.status_code, msg=response.content)
@@ -64,6 +81,7 @@ class MicropubEndpointTests(APITestCase):
 
     @freeze_time("2012-01-14 03:21:34", tz_offset=-4)
     def test_create_valid_entry_1(self):
+        self.client.force_login(self.allowed_user)
         form = {
             'h': 'entry',
             'name': 'Hello World!',
