@@ -1,3 +1,4 @@
+import json
 from datetime import date
 
 from django.contrib.auth import get_user_model
@@ -29,8 +30,31 @@ class MicropubEndpointTests(APITestCase):
         self.allowed_user = get_user_model().objects.create_user(username='testuser', password='12345')
         self.allowed_user.user_permissions.add(Permission.objects.get(codename='add_entry'))
 
+    def post(self, **params):
+        return self.client.post('/api/micropub/', params)
+
+    def get(self, **params):
+        return self.client.get('/api/micropub/', params)
+
+    def test_get_fails_without_q(self):
+        response = self.get()
+
+        self.assertEqual(400, response.status_code)
+        data = json.loads(response.content)
+        self.assertEqual('invalid_request', data['error'])
+
+    def test_post_fails_without_h(self):
+        response = self.post()
+
+        self.assertEqual(400, response.status_code)
+        data = json.loads(response.content)
+        self.assertEqual('invalid_request', data['error'])
+
     def test_get_syndication_targets(self):
-        pass
+        response = self.get(q='syndicate-to')
+
+        self.assertEqual(200, response.status_code, msg=response.content)
+        data = json.loads(response.content)
 
     def test_get_config(self):
         pass
@@ -47,7 +71,7 @@ class MicropubEndpointTests(APITestCase):
             'category': ['cpp', 'django', 'python']
         }
 
-        response = self.client.post('/api/micropub/', form)
+        response = self.post(**form)
 
         self.assertEqual(202, response.status_code, msg=response.content)
         entry = Entry.objects.get()

@@ -2,7 +2,7 @@ from datetime import datetime
 from uuid import uuid4
 
 from django.db.models import Model, TextField, CharField, UUIDField, IntegerField, DateTimeField, URLField, \
-    ManyToManyField, ForeignKey, CASCADE, DateField, Max, TextChoices, BooleanField
+    ManyToManyField, ForeignKey, CASCADE, DateField, Max, TextChoices, BooleanField, RESTRICT
 
 
 class Tag(Model):
@@ -105,13 +105,24 @@ class Attachment(Model):
     """If this contains sensitive content."""
 
 
+class SyndicationTarget(Model):
+    id = URLField(primary_key=True, null=False)
+    name = CharField(max_length=50, blank=True)
+    enabled = BooleanField(default=True)
+
+    def __str__(self):
+        if self.name is not None:
+            return self.name
+        return self.id
+
+
 class Syndication(Model):
     entry = ForeignKey(Entry, on_delete=CASCADE, null=False, blank=False)
     """The entry this syndication is associated with."""
 
     last_updated = DateTimeField(auto_now=True)
     """The last time this syndication was updated."""
-    target = URLField(null=True, blank=True)
+    target = ForeignKey(SyndicationTarget, on_delete=RESTRICT, null=True, blank=True)
     """Where to syndicate this object to, or None if we do not need to syndicate it."""
     location = URLField(null=True, blank=True)
     """Where this entry was syndicated to, or None if it has not been syndicated there."""
