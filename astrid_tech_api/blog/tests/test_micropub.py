@@ -145,9 +145,9 @@ class MicropubEndpointTests(TestCase, SyndicationTest):
         self.assertEqual(form['name'], entry.title)
         self.assertEqual(form['content'], entry.content)
         self.assertEqual(form['in-reply-to'], entry.reply_to)
-        self.assertIsNotNone(entry.tags.get(short_name='cpp'))
-        self.assertIsNotNone(entry.tags.get(short_name='django'))
-        self.assertIsNotNone(entry.tags.get(short_name='python'))
+        self.assertIsNotNone(entry.tags.get(id='cpp'))
+        self.assertIsNotNone(entry.tags.get(id='django'))
+        self.assertIsNotNone(entry.tags.get(id='python'))
 
     @freeze_time(OCCUPIED_DATE)
     def test_create_valid_entry_on_occupied_date(self):

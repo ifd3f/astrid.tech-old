@@ -82,7 +82,7 @@ def create_entry(query):
             entry_id=entry.pk
         )
     for category in query.getlist('category'):
-        tag, _ = Tag.objects.get_or_create(short_name=category)
+        tag, _ = Tag.objects.get_or_create(id=category)
         entry.tags.add(tag)
     return entry
 

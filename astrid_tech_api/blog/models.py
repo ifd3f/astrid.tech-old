@@ -6,14 +6,14 @@ from django.db.models import Model, TextField, CharField, UUIDField, IntegerFiel
 
 
 class Tag(Model):
-    short_name = CharField(max_length=32, null=False, blank=False, unique=True)
+    id = CharField(max_length=32, null=False, blank=False, primary_key=True)
     name = CharField(max_length=32, blank=True)
     color = CharField(max_length=10, blank=True)
     background_color = CharField(max_length=10, blank=True)
     description = TextField(null=True, blank=True)
 
     def __str__(self):
-        return self.short_name
+        return self.id
 
 
 def default_entry_ordinal():
@@ -34,7 +34,7 @@ class Entry(Model):
     uuid = UUIDField(unique=True, default=uuid4, editable=False)
 
     title = CharField(max_length=128, blank=True, null=True)
-    short_name = CharField(max_length=64, blank=True, null=True)
+    slug_name = CharField(max_length=64, blank=True, null=True)
     description = TextField(blank=True, null=True)
 
     created_date = DateTimeField(default=datetime.now, blank=True)
@@ -83,8 +83,8 @@ class Entry(Model):
     @property
     def slug(self):
         slug = f'/{self.date.year}/{self.date.month:02}/{self.date.day:02}/{self.ordinal}'
-        if self.short_name:
-            slug += '/' + self.short_name
+        if self.slug_name:
+            slug += '/' + self.slug_name
         return slug
 
     def is_visible_at(self, date):
@@ -156,7 +156,7 @@ class Project(Model):
 
     title = TextField()
     description = TextField()
-    short_name = TextField()
+    slug_name = TextField()
 
     start_date = DateTimeField()
     end_date = DateTimeField()

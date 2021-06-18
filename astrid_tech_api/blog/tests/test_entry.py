@@ -12,7 +12,7 @@ class EntryOrdinalTests(TestCase):
     def setUp(self) -> None:
         self.date_1 = datetime(2021, 6, 1)
         self.date_2 = datetime(2021, 6, 8)
-        self.post_1 = Entry(short_name='first-post', ordinal=10).set_all_dates(self.date_1)
+        self.post_1 = Entry(slug_name='first-post', ordinal=10).set_all_dates(self.date_1)
         self.post_1.save()
 
     def test_ordinal_is_zero_for_initial_date(self):
@@ -23,7 +23,7 @@ class EntryOrdinalTests(TestCase):
 
     def test_creation_fails_on_duplicate_slug_date_and_ordinal(self):
         with self.assertRaises(IntegrityError):
-            entry = Entry(short_name='second-post', ordinal=10).set_all_dates(self.date_1)
+            entry = Entry(slug_name='second-post', ordinal=10).set_all_dates(self.date_1)
             entry.save()
 
 
