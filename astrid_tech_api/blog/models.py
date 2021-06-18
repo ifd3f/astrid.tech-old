@@ -37,12 +37,14 @@ class Entry(Model):
     short_name = CharField(max_length=64, blank=True, null=True)
     description = TextField(blank=True, null=True)
 
-    created_date = DateTimeField(default=datetime.now)
+    created_date = DateTimeField(default=datetime.now, blank=True)
     """When this entry was originally created. Usually the same as the published date."""
-    published_date = DateTimeField(default=datetime.now)
+    published_date = DateTimeField(default=datetime.now, null=True, blank=True)
     """When this entry was, or will be, published."""
     updated_date = DateTimeField(auto_now=True)
     """When this entry was last updated."""
+    deleted_date = DateTimeField(null=True, blank=True)
+    """When this entry was deleted or is scheduled to be deleted, or None if it is not deleted."""
 
     date = DateField(default=datetime.now)
     """The date used in the slug."""
@@ -56,7 +58,7 @@ class Entry(Model):
     repost_of = URLField(blank=True, null=True)
     """What this is a repost of."""
     tags = ManyToManyField(Tag, blank=True)
-    """A list of posts.."""
+    """Tags this entry is associated with."""
 
     content_type = CharField(max_length=127, default='text/markdown')
     """The content type, as a mimetype."""
@@ -77,6 +79,11 @@ class Entry(Model):
         if self.short_name:
             slug += '/' + self.short_name
         return slug
+
+    def is_visible_at(self, date):
+        if self.published_date is not None and self.published_date <= date:
+            return True
+        return self.deleted_date is None or self.deleted_date >= date
 
     def __str__(self):
         if self.title is not None:

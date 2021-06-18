@@ -1,11 +1,14 @@
 from datetime import datetime
 
-from django.db.transaction import atomic
+from django.db import transaction
 from django.forms import DateTimeField
 from rest_framework.fields import ListField
 from rest_framework.serializers import Serializer, CharField, URLField, ModelSerializer
+from structlog import get_logger
 
-from .models import Entry, Syndication
+from .models import Entry, Syndication, Tag
+
+logger = get_logger(__name__)
 
 
 class MicropubEntrySerializer(Serializer):
@@ -15,26 +18,25 @@ class MicropubEntrySerializer(Serializer):
 
     published = DateTimeField(required=False)
     updated = DateTimeField(required=False)
-    category = ListField(CharField())
+    category = ListField(child=CharField(), required=False)
 
     in_reply_to = URLField(source='in-reply-to', required=False)
     location = URLField(required=False)
     repost_of = URLField(source='repost-of', required=False)
 
-    syndication = ListField(URLField())
-    mp_syndicate_to = ListField(URLField(source='mp-syndicate-to'))
+    syndication = ListField(child=URLField(), required=False)
+    mp_syndicate_to = ListField(child=URLField(), source='mp-syndicate-to', required=False)
 
     @staticmethod
-    @atomic
+    @transaction.atomic
     def create_entry(validated_data):
         published = validated_data.get('published', datetime.now())
-        entry = Entry(
+        entry = Entry.objects.create(
             title=validated_data.get('name'),
             description=validated_data.get('content'),
 
             created_date=published,
             published_date=published,
-            updated_date=validated_data.get('updated'),
 
             date=published,
 
@@ -44,28 +46,27 @@ class MicropubEntrySerializer(Serializer):
 
             content=validated_data.get('content')
         )
-        entry.save()
+
         for url in validated_data.get('syndication', []):
-            entry.syndication_set.create(
-                Syndication(
-                    entry=entry,
-                    location=url,
-                    status=Syndication.Status.SYNDICATED
-                )
+            Syndication.objects.create(
+                location=url,
+                status=Syndication.Status.SYNDICATED,
+                entry_id=entry.pk
             )
         for url in validated_data.get('mp-syndicate-to', []):
-            entry.syndication_set.create(
-                Syndication(
-                    entry=entry,
-                    target=url,
-                    status=Syndication.Status.SCHEDULED
-                )
+            Syndication.objects.create(
+                target=url,
+                status=Syndication.Status.SCHEDULED,
+                entry_id=entry.pk
             )
         for category in validated_data.get('category', []):
-            entry.tags.get_or_create(
-                short_name=category
-            )
+            tag, _ = Tag.objects.get_or_create(short_name=category)
+            entry.tags.add(tag)
         return entry
+
+    @staticmethod
+    def from_entry(entry: Entry):
+        pass
 
 
 class EntrySerializer(ModelSerializer):
