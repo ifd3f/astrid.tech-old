@@ -25,7 +25,7 @@ class MicropubEntrySerializer(Serializer):
     repost_of = URLField(source='repost-of', required=False)
 
     syndication = ListField(child=URLField(), required=False)
-    mp_syndicate_to = ListField(child=URLField(), source='mp-syndicate-to', required=False)
+    mp_syndicate_to = ListField(source='mp-syndicate-to', child=URLField(), required=False)
 
     @staticmethod
     @transaction.atomic
