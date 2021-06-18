@@ -6,7 +6,7 @@ from django.db.models import Model, TextField, CharField, UUIDField, IntegerFiel
 
 
 class Tag(Model):
-    short_name = CharField(max_length=32, null=False, blank=False, primary_key=True)
+    short_name = CharField(max_length=32, null=False, blank=False, unique=True)
     name = CharField(max_length=32, blank=True)
     color = CharField(max_length=10, blank=True)
     background_color = CharField(max_length=10, blank=True)
@@ -31,7 +31,7 @@ class Entry(Model):
             return 0
         return result + 1
 
-    uuid = UUIDField(primary_key=True, default=uuid4, editable=False)
+    uuid = UUIDField(unique=True, default=uuid4, editable=False)
 
     title = CharField(max_length=128, blank=True, null=True)
     short_name = CharField(max_length=64, blank=True, null=True)
@@ -145,7 +145,7 @@ class Syndication(Model):
 
 
 class Project(Model):
-    uuid = UUIDField(primary_key=True, default=uuid4, editable=False)
+    uuid = UUIDField(unique=True, default=uuid4, editable=False)
 
     title = TextField()
     description = TextField()
