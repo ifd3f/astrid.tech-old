@@ -6,6 +6,12 @@ from .models import Entry
 logger = get_logger(__name__)
 
 
-class EntrySerializer(ModelSerializer):
+class PublicEntrySerializer(ModelSerializer):
     class Meta:
         model = Entry
+        read_only_fields = ['date']
+
+        extra_kwargs = {
+            'deleted_date': {'write_only': True}
+        }
+        fields = '__all__'

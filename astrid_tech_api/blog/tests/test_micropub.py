@@ -148,6 +148,7 @@ class MicropubEndpointTests(TestCase, SyndicationTest):
         self.assertIsNotNone(entry.tags.get(id='cpp'))
         self.assertIsNotNone(entry.tags.get(id='django'))
         self.assertIsNotNone(entry.tags.get(id='python'))
+        self.assertTrue(entry.is_visible())
 
     @freeze_time(OCCUPIED_DATE)
     def test_create_valid_entry_on_occupied_date(self):
@@ -162,6 +163,7 @@ class MicropubEndpointTests(TestCase, SyndicationTest):
         self.assertEqual('https://astrid.tech/2012/01/12/1', response.headers['Link'])
         entry = Entry.objects.get(date=EXPECTED_OCCUPIED_DATE, ordinal=1)
         self.assertEqual(form['content'], entry.content)
+        self.assertTrue(entry.is_visible())
 
     @freeze_time(EMPTY_DATE)
     def test_create_entry_with_enabled_syndication(self):
@@ -172,6 +174,7 @@ class MicropubEndpointTests(TestCase, SyndicationTest):
         entry = Entry.objects.get(date=EXPECTED_EMPTY_DATE)
         syndication = entry.syndication_set.get()
         self.assertEqual(self.syn_target_1, syndication.target)
+        self.assertTrue(entry.is_visible())
 
     @freeze_time(EMPTY_DATE)
     def test_create_entry_with_disabled_syndication(self):

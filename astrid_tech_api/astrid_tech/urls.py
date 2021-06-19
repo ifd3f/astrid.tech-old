@@ -5,13 +5,14 @@ from django.urls import path, include
 from rest_framework.routers import DefaultRouter
 from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
 
-from blog.views import micropub
+from blog.views import micropub, PublicEntriesViewSet
 from comments.views import CommentViewSet
 from printer3d.views import PrinterViewSet
 
 router = DefaultRouter(trailing_slash=True)
 router.register(r'comments', CommentViewSet, basename='comments')
 router.register(r'3dprinter', PrinterViewSet, basename='3dprinter')
+router.register(r'entries', PublicEntriesViewSet, basename='entries')
 
 urlpatterns = [
                   path('admin/', admin.site.urls),

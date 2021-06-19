@@ -1,6 +1,7 @@
 from datetime import datetime, timezone
 from uuid import uuid4
 
+import pytz
 from django.db.models import Model, TextField, CharField, UUIDField, IntegerField, DateTimeField, URLField, \
     ManyToManyField, ForeignKey, CASCADE, DateField, Max, TextChoices, BooleanField, RESTRICT, Q, QuerySet
 
@@ -17,14 +18,24 @@ class Tag(Model):
 
 
 def default_entry_ordinal():
-    return Entry.get_next_ordinal(datetime.now())
+    return Entry.get_next_ordinal()
+
+
+def utc_now():
+    return datetime.now(pytz.utc)
 
 
 class Entry(Model):
     @staticmethod
-    def get_next_ordinal(date):
+    def get_next_ordinal(date=None):
+        """
+        Next ordinal for the given date, or None if no ordinal.
+        """
+        if date is None:
+            date = datetime.utcnow()
+
         result = Entry.objects.filter(
-            date__exact=date
+            date__exact=date.astimezone(pytz.utc)
         ).aggregate(Max('ordinal'))['ordinal__max']
 
         if result is None:
@@ -37,16 +48,16 @@ class Entry(Model):
     slug_name = CharField(max_length=64, blank=True, null=True)
     description = TextField(blank=True, null=True)
 
-    created_date = DateTimeField(default=datetime.now, blank=True)
+    created_date = DateTimeField(default=utc_now, blank=True)
     """When this entry was originally created. Usually the same as the published date."""
-    published_date = DateTimeField(default=datetime.now, null=True, blank=True)
+    published_date = DateTimeField(default=utc_now, null=True, blank=True)
     """When this entry was, or will be, published."""
     updated_date = DateTimeField(auto_now=True)
     """When this entry was last updated."""
     deleted_date = DateTimeField(null=True, blank=True)
     """When this entry was deleted or is scheduled to be deleted, or None if it is not deleted."""
 
-    date = DateField(default=datetime.now)
+    date = DateField(default=utc_now)
     """The date used in the slug."""
     ordinal = IntegerField(null=False, default=default_entry_ordinal)
     """The ordinal entry for the day."""
@@ -88,9 +99,13 @@ class Entry(Model):
         return slug
 
     def is_visible_at(self, date):
-        if self.published_date is not None and self.published_date <= date:
+        date = date.astimezone(pytz.utc)
+        if self.published_date is not None and self.published_date.astimezone(pytz.utc) <= date:
             return True
-        return self.deleted_date is None or self.deleted_date >= date
+        return self.deleted_date is None or self.deleted_date.astimezone(pytz.utc) >= date
+
+    def is_visible(self):
+        return self.is_visible_at(datetime.now())
 
     def __str__(self):
         if self.title is not None:
