@@ -71,6 +71,11 @@ class MicropubEndpointTests(TestCase, SyndicationTest):
     def post(self, **params):
         return self.client.post('/api/micropub/', params)
 
+    def post_json_and_assert_status(self, obj, expected_status_code=202):
+        response = self.client.post('/api/micropub/', json.dumps(obj), content_type='application/json')
+        self.assertEqual(expected_status_code, response.status_code, msg=response.content)
+        return response
+
     def post_and_assert_status(self, expected_status_code=202, **params):
         response = self.post(**params)
         self.assertEqual(expected_status_code, response.status_code, msg=response.content)
@@ -194,7 +199,7 @@ class MicropubEndpointTests(TestCase, SyndicationTest):
         self.assertFalse(Entry.objects.filter(date=EXPECTED_EMPTY_DATE).exists())
 
     @freeze_time(EMPTY_DATE)
-    def test_create_entry_with_html_content(self):
+    def test_create_json_entry_with_html_content(self):
         form = {
             "type": ["h-entry"],
             "properties": {
@@ -212,9 +217,27 @@ class MicropubEndpointTests(TestCase, SyndicationTest):
         }
         self.client.force_login(self.allowed_user)
 
-        response = self.client.post('/api/micropub/', json.dumps(form), content_type='application/json')
-        self.assertEqual(200, response.status_code, msg=response.content)
+        self.post_json_and_assert_status(form)
 
         obj = Entry.objects.get(date=EXPECTED_EMPTY_DATE)
         self.assertEqual('text/html', obj.content_type)
+
+    @freeze_time(EMPTY_DATE)
+    def test_create_json_entry_with_plain_content(self):
+        form = {
+            "type": ["h-entry"],
+            "properties": {
+                "name": ["Itching: h-event to iCal converter"],
+                "content": ["testing plaintext do it pls"],
+                "category": [
+                    "indieweb", "p3k"
+                ]
+            }
+        }
+        self.client.force_login(self.allowed_user)
+
+        self.post_json_and_assert_status(form)
+
+        obj = Entry.objects.get(date=EXPECTED_EMPTY_DATE)
+        self.assertEqual('text/plain', obj.content_type)
 

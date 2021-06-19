@@ -1,3 +1,4 @@
+import json
 from datetime import datetime
 from typing import Iterable
 
@@ -77,29 +78,31 @@ def parse_mf2_content(content_obj):
 
 
 @transaction.atomic
-def create_entry_from_json(obj: dict):
-    content_type, content = parse_mf2_content(obj.get('content', _EMPTY))
+def create_entry_from_json(properties: dict):
+    content_obj = properties.get('content', _EMPTY)
+    content_type, content = parse_mf2_content(content_obj)
 
-    published = obj.get('published', datetime.now(pytz.utc))
+    published = properties.get('published', datetime.now(pytz.utc))
     entry = Entry.objects.create(
-        title=obj.get('name', _EMPTY)[0],
-        description=obj.get('summary', _EMPTY),
+        title=properties.get('name', _EMPTY)[0],
+        description=properties.get('summary', _EMPTY),
 
         created_date=published,
         published_date=published,
 
         date=published,
 
-        reply_to=obj.get('in-reply-to', _EMPTY),
-        location=obj.get('location', _EMPTY),
-        repost_of=obj.get('repost-of', _EMPTY),
+        reply_to=properties.get('in-reply-to', _EMPTY),
+        location=properties.get('location', _EMPTY),
+        repost_of=properties.get('repost-of', _EMPTY),
 
-        content=content
+        content=content,
+        content_type=content_type
     )
 
-    create_syndications(entry, obj.get('category', []))
-    create_mp_syndicate_to(entry, obj.get('mp-syndicate-to', []))
-    create_categories(entry, obj.get('category', []))
+    create_syndications(entry, properties.get('category', []))
+    create_mp_syndicate_to(entry, properties.get('mp-syndicate-to', []))
+    create_categories(entry, properties.get('category', []))
     return entry
 
 
@@ -147,9 +150,25 @@ def _syndication_targets():
 
 
 def handle_create_json(logger_, request: WSGIRequest):
-    [h_type] = request.POST.get('type')
+    data = json.loads(request.body)
+    [h_type] = data.get('type')
 
-    entry = create_entry_from_json(request.POST)
+    logger_.debug('Decoded type', h_type=h_type)
+
+    if h_type == 'h-entry':
+        try:
+            entry = create_entry_from_json(data.get('properties', {}))
+        except SyndicationTarget.DoesNotExist:
+            return _invalid_request('Invalid syndication targets')
+
+        logger_.info('Successfully created entry', entry=entry)
+
+        return HttpResponse(
+            status=202,
+            headers={'Link': 'https://astrid.tech' + entry.slug}
+        )
+
+    return _invalid_request(f'unsupported type {h_type}')
 
 
 def handle_create_form(logger_, request: WSGIRequest):
@@ -159,7 +178,6 @@ def handle_create_form(logger_, request: WSGIRequest):
 
     logger_.debug('Decoded h-type', h_type=h_type)
 
-    logger.debug('Creating a new post')
     if request.POST['h'] == 'entry':
         logger_ = logger.bind(form=dict(request.POST))
         logger_.debug('Validating')
@@ -169,7 +187,7 @@ def handle_create_form(logger_, request: WSGIRequest):
         except SyndicationTarget.DoesNotExist:
             return _invalid_request('Invalid syndication targets')
 
-        logger_.info('Successfully created post', entry=entry)
+        logger_.info('Successfully created entry', entry=entry)
 
         return HttpResponse(
             status=202,
@@ -180,7 +198,7 @@ def handle_create_form(logger_, request: WSGIRequest):
 
 
 @require_http_methods(["GET", "POST"])
-def micropub(request: WSGIRequest):
+def micropub(request) -> HttpResponse:
     logger_ = logger.bind()
 
     if request.user.is_anonymous:
