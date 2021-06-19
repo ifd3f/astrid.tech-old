@@ -14,6 +14,9 @@ from pathlib import Path
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 import structlog
+from celery import app as _celery
+
+celery_app = _celery
 
 BASE_DIR = Path(__file__).resolve().parent.parent.parent
 

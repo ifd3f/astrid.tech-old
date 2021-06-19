@@ -3,7 +3,7 @@ from uuid import uuid4
 
 import pytz
 from django.db.models import Model, TextField, CharField, UUIDField, IntegerField, DateTimeField, URLField, \
-    ManyToManyField, ForeignKey, CASCADE, DateField, Max, TextChoices, BooleanField, RESTRICT, Q, QuerySet
+    ManyToManyField, ForeignKey, CASCADE, DateField, Max, TextChoices, BooleanField, RESTRICT, Q, QuerySet, FileField
 
 
 class Tag(Model):
@@ -121,6 +121,8 @@ class Attachment(Model):
     """The entry this attachment is attached to."""
     url = URLField(null=False, blank=False)
     """Where this attachment points to."""
+    content_type = CharField(max_length=128, null=False, blank=False)
+    """The type of content this is."""
     caption = TextField(blank=True, null=True)
     """A caption for this attachment."""
     spoiler = BooleanField(default=False, null=False)

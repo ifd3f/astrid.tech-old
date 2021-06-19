@@ -32,6 +32,8 @@ djangorestframework-recursive = "*"
 psycopg2-binary = "*"
 gunicorn = "*"
 python-slugify = "*"
+lxml = "*"
+celery = "*"
 
 [dev-packages]
 freezegun = "*"

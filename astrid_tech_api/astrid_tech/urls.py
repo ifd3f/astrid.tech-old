@@ -14,15 +14,17 @@ router.register(r'comments', CommentViewSet, basename='comments')
 router.register(r'3dprinter', PrinterViewSet, basename='3dprinter')
 router.register(r'entries', PublicEntriesViewSet, basename='entries')
 
-urlpatterns = [
-                  path('admin/', admin.site.urls),
-                  path('assets/', include('analytics.urls')),
-                  path('accounts/', include('django.contrib.auth.urls')),
-                  path('o/', include('oauth2_provider.urls', namespace='oauth2_provider')),
-                  path('auth/', include('accounts.urls')),
-                  path('api/micropub/', micropub),
-                  path('api/token', TokenObtainPairView.as_view()),
-                  path('api/token/refresh', TokenRefreshView.as_view()),
-                  path('3dprinter/', include('printer3d.urls')),
-                  path('api/', include(router.urls)),
-              ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+urlpatterns = \
+    [
+        path('admin/', admin.site.urls),
+        path('assets/', include('analytics.urls')),
+        path('accounts/', include('django.contrib.auth.urls')),
+        path('o/', include('oauth2_provider.urls', namespace='oauth2_provider')),
+        path('auth/', include('accounts.urls')),
+        path('api/micropub/', micropub),
+        path('api/token', TokenObtainPairView.as_view()),
+        path('api/webmention', include('webmention.urls')),
+        path('api/token/refresh', TokenRefreshView.as_view()),
+        path('3dprinter/', include('printer3d.urls')),
+        path('api/', include(router.urls)),
+    ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
