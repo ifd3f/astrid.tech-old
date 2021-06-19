@@ -9,9 +9,9 @@ logger = get_logger(__name__)
 class PublicEntrySerializer(ModelSerializer):
     class Meta:
         model = Entry
-        read_only_fields = ['date']
+        read_only_fields = ['date', 'ordinal']
 
         extra_kwargs = {
             'deleted_date': {'write_only': True}
         }
-        fields = '__all__'
+        exclude = ['id']
