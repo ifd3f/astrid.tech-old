@@ -34,7 +34,7 @@ class PublicEntriesViewSet(ModelViewSet):
             qs = qs.filter(ordinal=ordinal)
 
         tags = params.getlist('has_tag')
-        if len(tags) > 0:
-            qs = qs.filter(tags__id=tags)
+        for tag in tags:
+            qs = qs.filter(tags__id=tag)
 
         return qs

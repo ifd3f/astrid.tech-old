@@ -41,7 +41,12 @@ class EntryAPI(APITestCase):
     def test_can_filter_ordinals(self):
         response = self.client.get('/api/entries/', {'ordinal': 4})
 
-        data = response.json()
-        self.assertEqual(1, len(data))
-        obj, = data
+        [obj] = response.json()
         self.assertEqual('Entry #4', obj['title'])
+
+    @freeze_time(retrieve_on)
+    def test_tag_filter_is_and(self):
+        response = self.client.get('/api/entries/?has_tag=even&has_tag=prime')
+
+        [obj] = response.json()
+        self.assertEqual('Entry #2', obj['title'])
