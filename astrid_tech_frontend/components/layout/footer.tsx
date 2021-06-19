@@ -2,7 +2,8 @@ import Link from "next/link";
 import React, { FC, ReactNode } from "react";
 import { Col, Container, Row } from "reactstrap";
 import style from "./footer.module.scss";
-
+import Image from "next/image";
+import packageJson from "../../package.json";
 export const Tea = () => {
   return (
     <span title="tea" aria-label="tea" role="img">
@@ -61,7 +62,7 @@ const AGPL: FC = () => {
           alt="GNU Affero General Public License"
           width={100}
           height={40}
-          src={require("public/agpl.png")}
+          src="/agpl.png"
         />
       </a>
       <p>
@@ -88,7 +89,7 @@ const SiteLink: FC<SiteLinkProps> = ({ href, children }) => (
 );
 
 const FooterSection = () => {
-  const version = "1";
+  const version = packageJson.version;
 
   return (
     <footer className={style.footer}>
