@@ -42,10 +42,7 @@ interface IconInfoDisplayProps {
 
 const ImageOfMyself = () => (
   <div className={homepageStyles.imageSelf + " u-photo"}>
-    <img
-      src={require("public/avatar.jpg?resize&sizes[]=300")}
-      alt="Astrid Yu"
-    />
+    <img src={require("public/avatar.jpg")} alt="Astrid Yu" />
   </div>
 );
 
