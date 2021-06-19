@@ -144,6 +144,7 @@ class MicropubEndpointTests(TestCase, SyndicationTest):
         entry = Entry.objects.get(date=EXPECTED_EMPTY_DATE)
         self.assertEqual(form['name'], entry.title)
         self.assertEqual(form['content'], entry.content)
+        self.assertEqual('text/plain', entry.content_type)
         self.assertEqual(form['in-reply-to'], entry.reply_to)
         self.assertIsNotNone(entry.tags.get(id='cpp'))
         self.assertIsNotNone(entry.tags.get(id='django'))
@@ -191,3 +192,29 @@ class MicropubEndpointTests(TestCase, SyndicationTest):
         self.post_and_assert_status(400, **NONEXISTENT_MP_SYNDICATE_FORM)
 
         self.assertFalse(Entry.objects.filter(date=EXPECTED_EMPTY_DATE).exists())
+
+    @freeze_time(EMPTY_DATE)
+    def test_create_entry_with_html_content(self):
+        form = {
+            "type": ["h-entry"],
+            "properties": {
+                "name": ["Itching: h-event to iCal converter"],
+                "content": [
+                    {
+                        "html": "Now that I've been <a href=\"https://aaronparecki.com/events\">creating a list of "
+                                "events</a> on my site using <a href=\"https://p3k.io\">p3k</a>, it would be great if "
+                                "I could get a more calendar-like view of that list..."}
+                ],
+                "category": [
+                    "indieweb", "p3k"
+                ]
+            }
+        }
+        self.client.force_login(self.allowed_user)
+
+        response = self.client.post('/api/micropub/', json.dumps(form), content_type='application/json')
+        self.assertEqual(200, response.status_code, msg=response.content)
+
+        obj = Entry.objects.get(date=EXPECTED_EMPTY_DATE)
+        self.assertEqual('text/html', obj.content_type)
+
