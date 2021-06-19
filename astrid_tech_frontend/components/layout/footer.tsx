@@ -3,7 +3,6 @@ import React, { FC, ReactNode } from "react";
 import { Col, Container, Row } from "reactstrap";
 import style from "./footer.module.scss";
 import Image from "next/image";
-import agpl from "../../public/agpl.png";
 import packageJson from "../../package.json";
 export const Tea = () => {
   return (
@@ -59,11 +58,11 @@ const AGPL: FC = () => {
   return (
     <>
       <a href="https://www.gnu.org/licenses/agpl-3.0.en.html">
-        <Image
+        <img
           alt="GNU Affero General Public License"
           width={100}
           height={40}
-          src={agpl}
+          src="/agpl.png"
         />
       </a>
       <p>

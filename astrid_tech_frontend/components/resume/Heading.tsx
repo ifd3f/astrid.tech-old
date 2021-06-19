@@ -1,7 +1,6 @@
 import Link from "next/link";
 import React, { FC, ReactNode } from "react";
 import homepageStyles from "./heading.module.scss";
-import avatar from "../../public/avatar.jpg";
 import Image from "next/image";
 
 const APPX_BEGAN_PROGRAMMING = new Date("2013-02-01");
@@ -44,7 +43,7 @@ interface IconInfoDisplayProps {
 
 const ImageOfMyself = () => (
   <div className={homepageStyles.imageSelf + " u-photo"}>
-    <Image src={avatar} alt="Astrid Yu" />
+    <img src="/avatar.jpg" alt="Astrid Yu" />
   </div>
 );
 
