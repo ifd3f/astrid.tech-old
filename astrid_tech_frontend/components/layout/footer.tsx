@@ -4,7 +4,7 @@ import { Col, Container, Row } from "reactstrap";
 import style from "./footer.module.scss";
 import Image from "next/image";
 import agpl from "../../public/agpl.png";
-
+import packageJson from "../../package.json";
 export const Tea = () => {
   return (
     <span title="tea" aria-label="tea" role="img">
@@ -90,7 +90,7 @@ const SiteLink: FC<SiteLinkProps> = ({ href, children }) => (
 );
 
 const FooterSection = () => {
-  const version = "1";
+  const version = packageJson.version;
 
   return (
     <footer className={style.footer}>

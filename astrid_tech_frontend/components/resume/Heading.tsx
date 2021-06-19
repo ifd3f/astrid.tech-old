@@ -57,7 +57,6 @@ export function HeadingSection() {
           <h1 className={homepageStyles.name + " p-name"}>Astrid Yu</h1>
           <p className={homepageStyles.postTitle}>Software Developer</p>
         </div>
-        <ImageOfMyself />
       </div>
       <p className={homepageStyles.skillBrag}>
         Made using{" "}
