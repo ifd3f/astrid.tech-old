@@ -1,5 +1,5 @@
 ---
-title: Brainstorming a third redesign?
+title: A third redesign?
 date: 2021-05-03 10:17:05
 description: The grass is always greener on the other side
 tags:
@@ -39,4 +39,4 @@ There are a couple of decisions I can make.
   - _Go back to Gatsby._ It's an appealing option; Gatsby includes more batteries for blog sites than Next.js. But then again, I do want to try something new.
   - _Write my own static site generator!_ This has been in the works for a while. I'm experimenting with writing one in Haskell right now. Unfortunately, I'm shit at Haskell, so it's going about as well as you'd expect.
 
-I think it's still possible to preserve some of my React libraries and UI, though. I would just serve it as [custom elements](https://reactjs.org/docs/web-components.html). I can extend my Markdown posts this way, too.
+I think it's still possible to preserve some of my React libraries and UI, though. I would just serve it as [custom elements](https://reactjs.org/docs/web-components.html). 
