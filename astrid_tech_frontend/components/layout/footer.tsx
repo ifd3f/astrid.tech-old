@@ -2,6 +2,8 @@ import Link from "next/link";
 import React, { FC, ReactNode } from "react";
 import { Col, Container, Row } from "reactstrap";
 import style from "./footer.module.scss";
+import Image from "next/image";
+import agpl from "../../public/agpl.png";
 
 export const Tea = () => {
   return (
@@ -57,11 +59,11 @@ const AGPL: FC = () => {
   return (
     <>
       <a href="https://www.gnu.org/licenses/agpl-3.0.en.html">
-        <img
+        <Image
           alt="GNU Affero General Public License"
           width={100}
           height={40}
-          src={require("public/agpl.png")}
+          src={agpl}
         />
       </a>
       <p>
