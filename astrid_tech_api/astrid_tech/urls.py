@@ -25,7 +25,7 @@ urlpatterns = \
         path('o/authorize', indieauth.views.IndieAuthView.as_view()),
         path('o/', include('oauth2_provider.urls', namespace='oauth2_provider')),
         path('auth/', include('accounts.urls')),
-        path('auth/indieauth', indieauth.views.auth_consent),
+        path('auth/indieauth', indieauth.views.IndieAuthView.as_view()),
         path('api/micropub/', micropub),
         path('api/token', TokenObtainPairView.as_view()),
         path('api/webmention', include('webmention.urls')),

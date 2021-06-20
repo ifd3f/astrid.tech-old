@@ -26,6 +26,14 @@ MEDIA_ROOT = BASE_DIR / 'media'
 MEDIA_URL = '/media/'
 
 OAUTH2_PROVIDER_APPLICATION_MODEL = 'oauth2_provider.Application'
+OAUTH2_PROVIDER = {
+    'SCOPES': {
+        'update': 'Update',
+        'create': 'Create',
+    },
+
+    'CLIENT_ID_GENERATOR_CLASS': 'oauth2_provider.generators.ClientIdGenerator',
+}
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/3.1/howto/deployment/checklist/
@@ -153,6 +161,7 @@ timestamper = structlog.processors.TimeStamper(fmt="iso")
 def add_service_name(service_name):
     def processor(logger, method_name, event_dict):
         return {**event_dict, 'service': service_name}
+
     return processor
 
 
