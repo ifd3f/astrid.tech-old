@@ -1,11 +1,22 @@
 <!DOCTYPE html>
 <html>
 <head>
-    <title>Authorize {{ client_id }}</title>
+    <title>Authorize {{ perm_rq.client_id }}</title>
 </head>
 <body>
-<h1><a href="{{ client_id }}">{{ client_id }}</a> wants your authorization</h1>
-<p>test</p>
-<p><a href="{% url 'password_reset' %}">Lost password?</a></p>
+<h1><a href="{{ perm_rq.client_id }}">{{ perm_rq.client_id }}</a> wants your authorization</h1>
+
+<h2>Requested scopes</h2>
+<ul>
+{% for scope in perm_rq.scope.split %}
+    <li>{{ scope }}</li>
+{% endfor %}
+</ul>
+
+<form action="/auth/indieauth/confirm" method="POST">
+    <input type="submit" value="Authorize"/>
+    <input type="hidden" name="request_id" value="{{ perm_rq.pk }}">
+</form>
+
 </body>
 </html>
