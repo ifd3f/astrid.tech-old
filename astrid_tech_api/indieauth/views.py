@@ -4,9 +4,8 @@ from urllib.parse import urlparse, parse_qsl, urlencode, urlunparse
 import pytz
 from django.contrib.auth.decorators import login_required
 from django.db import transaction
-from django.http import HttpResponse
+from django.http import HttpResponse, JsonResponse
 from django.shortcuts import render, redirect
-from django.utils.crypto import get_random_string
 from django.views.decorators.http import require_http_methods
 from structlog import get_logger
 
@@ -44,11 +43,13 @@ def auth_consent(request):
 
         perm_rq = ConsentRequest.objects.create(
             client_id=client_id,
+            me=me,
             state=state,
             response_type=response_type,
             redirect_uri=redirect_uri,
             scope=scope,
             expires_at=datetime.now(pytz.utc) + timedelta(minutes=5),
+            confirmed=False
         )
         logger_.info('Rendering form', perm_rq=perm_rq)
 
@@ -60,7 +61,22 @@ def auth_consent(request):
         redirect_uri = request.POST.get('redirect_uri')
         code = request.POST.get('code')
         client_id = request.POST.get('client_id')
-        ConsentRequest.objects.get(client_id=client_id, redirect_uri=redirect_uri, code=code)
+        try:
+            obj = ConsentRequest.objects.get(client_id=client_id, redirect_uri=redirect_uri, auth_code=code)
+        except ConsentRequest.DoesNotExist:
+            return HttpResponse('request expired', status=498)
+
+        if obj.has_expired:
+            obj.delete()
+            return HttpResponse('request expired', status=498)
+
+        # TODO create authorization
+
+        response = {'me': 'https://astrid.tech/'}
+        if request.headers.get('Accept') == 'application/json':
+            return JsonResponse(response, status=200)
+        else:
+            return HttpResponse(urlencode(response), status=200)
 
 
 @login_required
@@ -75,7 +91,9 @@ def auth_confirm(request):
         obj.delete()
         return HttpResponse('request expired', status=498)
 
-    obj.auth_code = get_random_string(length=64)
+    obj.confirm()
+    obj.save()
+
     params = {'code': obj.auth_code, 'state': obj.state}
     logger_.info('Adding params to redirect', params=params, redirect_uri=obj.redirect_uri)
 
@@ -87,5 +105,4 @@ def auth_confirm(request):
     parts = parts._replace(query=urlencode(query))
     redirect_to = urlunparse(parts)
 
-    obj.delete()
     return redirect(redirect_to)
