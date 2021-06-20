@@ -1,11 +1,18 @@
 from datetime import datetime
 
 import pytz
-from django.db.models import CharField, URLField, DateTimeField, Model, BooleanField
+from django.db.models import CharField, URLField, DateTimeField, Model, BooleanField, UUIDField
 from django.utils.crypto import get_random_string
 
 
+def generate_consent_request_id():
+    return get_random_string(16)
+
+
 class ConsentRequest(Model):
+    id = CharField(max_length=16, primary_key=True, default=generate_consent_request_id)
+    """The ID of this request. It should be hard to predict."""
+
     client_id = CharField(max_length=128, unique=True)
     me = CharField(max_length=128, unique=True)
     redirect_uri = URLField()

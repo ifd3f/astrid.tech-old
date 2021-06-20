@@ -75,7 +75,7 @@ def _authorize_indieauth(request):
 
     obj.delete()
 
-    response = {'me': 'https://astrid.tech/'}
+    response = {'me': obj.me}
     if request.headers.get('Accept') == 'application/json':
         return JsonResponse(response, status=HTTP_200_OK)
     else:
