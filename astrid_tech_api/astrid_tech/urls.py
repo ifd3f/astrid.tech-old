@@ -5,9 +5,9 @@ from django.urls import path, include
 from rest_framework.routers import DefaultRouter
 from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
 
+import indieauth.views
 from blog.views import micropub, PublicEntriesViewSet
 from comments.views import CommentViewSet
-from indieauth.views import indieauth
 from printer3d.views import PrinterViewSet
 
 router = DefaultRouter(trailing_slash=True)
@@ -22,7 +22,8 @@ urlpatterns = \
         path('accounts/', include('django.contrib.auth.urls')),
         path('o/', include('oauth2_provider.urls', namespace='oauth2_provider')),
         path('auth/', include('accounts.urls')),
-        path('auth/indieauth', indieauth),
+        path('auth/indieauth', indieauth.views.auth_consent),
+        path('auth/indieauth/confirm', indieauth.views.auth_confirm),
         path('api/micropub/', micropub),
         path('api/token', TokenObtainPairView.as_view()),
         path('api/webmention', include('webmention.urls')),

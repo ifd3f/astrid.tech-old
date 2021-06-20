@@ -18,7 +18,7 @@ from celery import app as _celery
 
 celery_app = _celery
 
-BASE_DIR = Path(__file__).resolve().parent.parent.parent
+BASE_DIR = Path(__file__).resolve().parent.parent
 
 STATIC_URL = '/static/'
 STATIC_ROOT = BASE_DIR / 'staticfiles'
@@ -54,7 +54,8 @@ INSTALLED_APPS = [
     'comments',
     'analytics',
     'accounts',
-    'printer3d'
+    'printer3d',
+    'indieauth'
 ]
 
 MIDDLEWARE = [
