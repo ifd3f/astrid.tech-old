@@ -1,8 +1,9 @@
 from datetime import datetime
 
 import pytz
-from django.db.models import CharField, URLField, DateTimeField, Model, BooleanField, UUIDField
+from django.db.models import CharField, URLField, DateTimeField, Model, BooleanField, OneToOneField, CASCADE
 from django.utils.crypto import get_random_string
+from oauth2_provider.models import Application
 
 
 def generate_consent_request_id():
@@ -13,7 +14,7 @@ class ConsentRequest(Model):
     id = CharField(max_length=16, primary_key=True, default=generate_consent_request_id)
     """The ID of this request. It should be hard to predict."""
 
-    client_id = CharField(max_length=128, unique=True)
+    client_id = URLField(max_length=128, unique=True)
     me = CharField(max_length=128, unique=True)
     redirect_uri = URLField()
     response_type = CharField(max_length=32)
@@ -33,3 +34,9 @@ class ConsentRequest(Model):
     @property
     def has_expired(self):
         return datetime.now(pytz.utc) >= self.expires_at
+
+
+class ClientSite(Model):
+    client_id = URLField(primary_key=True, null=False, unique=True)
+
+    application = OneToOneField(Application, on_delete=CASCADE)

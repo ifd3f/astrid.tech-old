@@ -6,6 +6,7 @@ from rest_framework.routers import DefaultRouter
 from rest_framework_simplejwt.views import TokenObtainPairView, TokenRefreshView
 
 import indieauth.views
+from astrid_tech.views import index
 from blog.views import micropub, PublicEntriesViewSet
 from comments.views import CommentViewSet
 from printer3d.views import PrinterViewSet
@@ -17,13 +18,14 @@ router.register(r'entries', PublicEntriesViewSet, basename='entries')
 
 urlpatterns = \
     [
+        path('', index),
         path('admin/', admin.site.urls),
         path('assets/', include('analytics.urls')),
         path('accounts/', include('django.contrib.auth.urls')),
+        path('o/authorize', indieauth.views.IndieAuthView.as_view()),
         path('o/', include('oauth2_provider.urls', namespace='oauth2_provider')),
         path('auth/', include('accounts.urls')),
         path('auth/indieauth', indieauth.views.auth_consent),
-        path('auth/indieauth/confirm', indieauth.views.auth_confirm),
         path('api/micropub/', micropub),
         path('api/token', TokenObtainPairView.as_view()),
         path('api/webmention', include('webmention.urls')),
