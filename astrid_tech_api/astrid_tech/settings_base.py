@@ -28,10 +28,12 @@ MEDIA_URL = '/media/'
 OAUTH2_PROVIDER_APPLICATION_MODEL = 'oauth2_provider.Application'
 OAUTH2_PROVIDER = {
     'SCOPES': {
+        "id": "OpenID Connect scope",
         'update': 'Update',
         'create': 'Create',
     },
-
+    "OIDC_ENABLED": True,
+    "OAUTH2_VALIDATOR_CLASS": "indieauth.oauth_validators.IndieAuthValidator",
     'CLIENT_ID_GENERATOR_CLASS': 'oauth2_provider.generators.ClientIdGenerator',
 }
 

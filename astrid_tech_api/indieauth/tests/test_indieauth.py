@@ -1,4 +1,5 @@
 from datetime import datetime, timedelta
+from urllib.parse import urlencode
 
 import pytz
 from django.contrib.auth import get_user_model
@@ -14,15 +15,17 @@ working_id_params = dict(
     client_id='https://webapp.example.org/',
     redirect_uri='https://webapp.example.org/auth/callback?some=param',
     state='1234567890',
-    scope='create update',
     response_type='code'
 )
 
-allow = {
-    **working_id_params,
-    'scope': ['create', 'update'],
-    'allow': True
-}
+allow = [
+    *{**working_id_params}.items(),
+    ('scope', 'create'),
+    ('scope', 'update'),
+    ('allow', True)
+]
+
+working_id_params['scope'] = 'create+update'
 
 confirm_time = datetime(2021, 6, 20, 11, 2, 15, tzinfo=pytz.utc)
 expired_time = confirm_time + timedelta(minutes=12)
@@ -37,6 +40,10 @@ class TestIndieAuthFlow(TestCase):
         self.disallowed_user = get_user_model().objects.create_user(username='stranger', password='7812')
         self.allowed_user = get_user_model().objects.create_user(username='myself', password='12345')
 
+    def post_allow_form(self):
+        return self.client.post('/auth/indieauth', urlencode(allow),
+                                content_type='application/x-www-form-urlencoded')
+
     def setup_allowed_user_logged_in(self):
         self.client.force_login(self.allowed_user)
 
@@ -44,9 +51,9 @@ class TestIndieAuthFlow(TestCase):
     def setup_confirmed_application_and_logout(self):
         self.setup_allowed_user_logged_in()
         self.client.get('/auth/indieauth', working_id_params)
-        response = self.client.post('/auth/indieauth', allow)
+        response = self.post_allow_form()
         qs = get_uri_params(response.headers['Location'])
-        return qs
+        return qs['code']
 
     def authorize_with_code(self, code, accept='application/json'):
         response = self.client.post(
@@ -84,10 +91,27 @@ class TestIndieAuthFlow(TestCase):
         self.setup_allowed_user_logged_in()
         self.client.get('/auth/indieauth', working_id_params)
 
-        response = self.client.post('/auth/indieauth', allow)
+        response = self.post_allow_form()
 
         self.assertEqual(302, response.status_code)
         qs = get_uri_params(response.headers['Location'])
         self.assertEqual('param', qs['some'])
         self.assertEqual(working_id_params['state'], qs['state'])
         self.assertIn('code', qs)
+
+    @freeze_time(confirm_time)
+    def test_post_retrieves_indieauth_data(self):
+        code = self.setup_confirmed_application_and_logout()
+
+        response = self.client.post('/o/token/', urlencode({
+            'code': code,
+            'grant_type': 'authorization_code',
+            'client_id': working_id_params['client_id'],
+            'redirect_uri': working_id_params['redirect_uri'],
+            'me': working_id_params['me']
+        }), content_type='application/x-www-form-urlencoded')
+
+        data = response.json()
+        self.assertEqual(200, response.status_code)
+        self.assertIn('access_token', data)
+        self.assertIn('me', data)

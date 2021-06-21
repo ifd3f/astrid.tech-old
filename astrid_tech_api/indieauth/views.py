@@ -1,16 +1,8 @@
-from datetime import datetime, timedelta
-from urllib.parse import urlparse, parse_qsl, urlencode, urlunparse
+from urllib.parse import urlparse
 
-import pytz
-from django.contrib.auth.decorators import login_required
-from django.core.handlers.wsgi import WSGIRequest
 from django.db import transaction
-from django.http import HttpResponse, JsonResponse
-from django.shortcuts import render, redirect
-from django.views.decorators.http import require_http_methods
 from oauth2_provider.models import Application
 from oauth2_provider.views import AuthorizationView
-from rest_framework.status import *
 from structlog import get_logger
 
 from .models import ClientSite
@@ -67,4 +59,10 @@ class IndieAuthView(AuthorizationView):
         me = request.GET.get('me')
         if me is not None:
             self.setup_indieauth(client_id, redirect_uri)
-        return super().get(request, *args, **kwargs)
+        return AuthorizationView.get(self, request, *args, **kwargs)
+
+    def post(self, request, *args, **kwargs):
+        code = request.POST.get('code')
+        if code is not None:
+            pass
+        return AuthorizationView.post(self, request, *args, **kwargs)
