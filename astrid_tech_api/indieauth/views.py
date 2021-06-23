@@ -1,8 +1,9 @@
+import json
 from urllib.parse import urlparse
 
 from django.db import transaction
 from oauth2_provider.models import Application
-from oauth2_provider.views import AuthorizationView
+from oauth2_provider.views import AuthorizationView, TokenView
 from structlog import get_logger
 
 from .models import ClientSite
@@ -66,3 +67,16 @@ class IndieAuthView(AuthorizationView):
         if code is not None:
             pass
         return AuthorizationView.post(self, request, *args, **kwargs)
+
+
+class IndieAuthTokenView(TokenView):
+    def post(self, request, *args, **kwargs):
+        response = super(IndieAuthTokenView, self).post(request, *args, **kwargs)
+
+        if response.status_code == 200:
+            # janky as fuck way to inject "me" but such is life
+            token = json.loads(response.content)
+            token['me'] = 'https://astrid.tech/'
+            response.content = json.dumps(token)
+
+        return response
