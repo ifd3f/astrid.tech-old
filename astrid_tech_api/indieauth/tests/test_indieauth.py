@@ -120,12 +120,27 @@ class TestIndieAuthFlow(TestCase):
         self.assertIn('code', qs)
 
     @freeze_time(confirm_time)
-    def test_post_retrieves_indieauth_data(self):
+    def test_post_to_token_retrieves_token(self):
         code = self.setup_confirmed_application_and_logout()
 
         response = self.post_oauth_consent(code)
 
-        data = response.json()
         self.assertEqual(200, response.status_code, msg=response.content)
+        data = response.json()
         self.assertIn('access_token', data)
+        self.assertEqual('https://astrid.tech/', data['me'])
+
+    @freeze_time(confirm_time)
+    def test_post_to_authorization_retrieves_profile(self):
+        code = self.setup_confirmed_application_and_logout()
+
+        response = self.client.post(auth_endpoint, urlencode({
+            'code': code,
+            'grant_type': 'authorization_code',
+            'client_id': working_id_params['client_id'],
+            'redirect_uri': working_id_params['redirect_uri']
+        }), content_type='application/x-www-form-urlencoded')
+
+        self.assertEqual(200, response.status_code, msg=response.content)
+        data = response.json()
         self.assertEqual('https://astrid.tech/', data['me'])

@@ -2,6 +2,7 @@ import json
 from urllib.parse import urlparse
 
 from django.db import transaction
+from django.http import JsonResponse, HttpResponse
 from oauth2_provider.models import Application
 from oauth2_provider.views import AuthorizationView, TokenView
 from structlog import get_logger
@@ -65,7 +66,15 @@ class IndieAuthView(AuthorizationView):
     def post(self, request, *args, **kwargs):
         code = request.POST.get('code')
         if code is not None:
-            pass
+            url, headers, body, status = self.create_token_response(request)
+            if status == 200:
+                return JsonResponse({'me': 'https://astrid.tech/'}, status=200)
+            response = HttpResponse(content=body, status=status)
+
+            for k, v in headers.items():
+                response[k] = v
+            return response
+
         return AuthorizationView.post(self, request, *args, **kwargs)
 
 
