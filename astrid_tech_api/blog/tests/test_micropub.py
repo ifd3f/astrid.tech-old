@@ -8,7 +8,7 @@ from django.test import TestCase
 from freezegun import freeze_time
 
 from blog.models import Entry
-from blog.tests import SyndicationTest
+from blog.tests import SyndicationTestMixin
 
 EXISTING_MP_SYNDICATE_FORM = {
     'h': 'entry',
@@ -41,7 +41,7 @@ OCCUPIED_DATE = datetime(2012, 1, 13, 3, 21, 34, 0, pytz.timezone('Asia/Dubai'))
 EXPECTED_OCCUPIED_DATE = date(2012, 1, 12)
 
 
-class MicropubEndpointTests(TestCase, SyndicationTest):
+class MicropubEndpointTests(TestCase, SyndicationTestMixin):
     @freeze_time(OCCUPIED_DATE)
     def setUp(self):
         self.disallowed_user = get_user_model().objects.create_user(username='stranger', password='7812')

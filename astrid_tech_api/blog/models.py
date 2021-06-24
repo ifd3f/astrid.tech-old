@@ -6,6 +6,21 @@ from django.db.models import Model, TextField, CharField, UUIDField, IntegerFiel
     ManyToManyField, ForeignKey, CASCADE, DateField, Max, TextChoices, BooleanField, RESTRICT, Q, QuerySet, FileField
 
 
+
+class SyndicationTarget(Model):
+    id = URLField(primary_key=True, null=False)
+    name = CharField(max_length=50, blank=True)
+    enabled = BooleanField(default=True)
+
+    def __str__(self):
+        if self.name is not None:
+            return self.name
+        return self.id
+
+    @property
+    def micropub_syndication_target(self):
+        return {'uid': self.id, 'name': self.name}
+
 class Tag(Model):
     id = CharField(max_length=32, null=False, blank=False, primary_key=True)
     name = CharField(max_length=32, blank=True)
@@ -129,29 +144,14 @@ class Attachment(Model):
     """If this contains sensitive content."""
 
 
-class SyndicationTarget(Model):
-    id = URLField(primary_key=True, null=False)
-    name = CharField(max_length=50, blank=True)
-    enabled = BooleanField(default=True)
-
-    def __str__(self):
-        if self.name is not None:
-            return self.name
-        return self.id
-
-    @property
-    def micropub_syndication_target(self):
-        return {'uid': self.id, 'name': self.name}
-
-
 class Syndication(Model):
-    entry = ForeignKey(Entry, on_delete=CASCADE, null=False, blank=False)
+    entry = ForeignKey(Entry, on_delete=CASCADE, null=False, blank=False, related_name='syndications')
     """The entry this syndication is associated with."""
+    target = ForeignKey(SyndicationTarget, on_delete=RESTRICT, null=True, blank=True, related_name='syndications')
+    """Where to syndicate this object to, or None if we do not need to syndicate it."""
 
     last_updated = DateTimeField(auto_now=True)
     """The last time this syndication was updated."""
-    target = ForeignKey(SyndicationTarget, on_delete=RESTRICT, null=True, blank=True)
-    """Where to syndicate this object to, or None if we do not need to syndicate it."""
     location = URLField(null=True, blank=True)
     """Where this entry was syndicated to, or None if it has not been syndicated there."""
 

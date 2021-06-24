@@ -1,4 +1,4 @@
-from rest_framework.relations import PrimaryKeyRelatedField, StringRelatedField
+from rest_framework.fields import SerializerMethodField
 from rest_framework.relations import PrimaryKeyRelatedField
 from rest_framework.serializers import ModelSerializer
 from structlog import get_logger
@@ -9,16 +9,18 @@ logger = get_logger(__name__)
 
 
 class ChildSyndicationSerializer(ModelSerializer):
-    target = StringRelatedField(many=True)
-
     class Meta:
         model = Syndication
-        exclude = ['id', 'entry']
+        fields = ['last_updated', 'location']
 
 
 class PublicEntrySerializer(ModelSerializer):
-    #syndications = ChildSyndicationSerializer(many=True, read_only=True)
+    syndications = SerializerMethodField()
     tags = PrimaryKeyRelatedField(queryset=Tag.objects.all(), many=True)
+
+    def get_syndications(self, obj: Entry):
+        objects = obj.syndications.filter(status=Syndication.Status.SYNDICATED)
+        return ChildSyndicationSerializer(objects, many=True).data
 
     class Meta:
         model = Entry
