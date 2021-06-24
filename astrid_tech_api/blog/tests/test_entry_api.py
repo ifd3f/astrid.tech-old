@@ -79,7 +79,7 @@ class EntryRetrieveAPI(APITestCase, SyndicationTestMixin):
         self.assertEqual(200, response.status_code, msg=response.content)
         obj = response.json()
         self.assertEqual('Entry #2', obj['title'])
-        self.assertListEqual(['even', 'prime'], obj['tags'])
+        self.assertCountEqual(['even', 'prime'], obj['tags'])
 
     @freeze_time(retrieve_on)
     def test_retrieves_only_successful_syndications(self):
