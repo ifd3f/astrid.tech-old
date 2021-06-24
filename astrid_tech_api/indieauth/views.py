@@ -13,7 +13,7 @@ logger = get_logger(__name__)
 
 
 # http://127.0.0.1:8001/o/authorize?me=https://astrid.tech/&client_id=https://webapp.example.org/&redirect_uri=https://webapp.example.org/auth/callback&state=1234567890&response_type=code
-class IndieAuthView(AuthorizationView):
+class IndieAuthAuthorizationView(AuthorizationView):
     def setup_indieauth(self, client_id, redirect_uri):
         """
         Set up the IndieAuth application with the given parameters, or does nothing if it is given an

@@ -11,7 +11,7 @@ create_on = datetime(2021, 6, 18, 5, 5, tzinfo=pytz.utc)
 retrieve_on = datetime(2021, 6, 18, 5, 6, tzinfo=pytz.utc)
 
 
-class EntryAPI(APITestCase, SyndicationTestMixin):
+class EntryRetrieveAPI(APITestCase, SyndicationTestMixin):
     @freeze_time(create_on)
     def setUp(self):
         self.set_up_syndication_targets()
