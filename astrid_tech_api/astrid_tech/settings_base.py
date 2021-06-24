@@ -14,13 +14,28 @@ from pathlib import Path
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 import structlog
+from celery import app as _celery
 
-BASE_DIR = Path(__file__).resolve().parent.parent.parent
+celery_app = _celery
+
+BASE_DIR = Path(__file__).resolve().parent.parent
 
 STATIC_URL = '/static/'
 STATIC_ROOT = BASE_DIR / 'staticfiles'
 MEDIA_ROOT = BASE_DIR / 'media'
 MEDIA_URL = '/media/'
+
+OAUTH2_PROVIDER_APPLICATION_MODEL = 'oauth2_provider.Application'
+OAUTH2_PROVIDER = {
+    'SCOPES': {
+        "id": "OpenID Connect scope",
+        'update': 'Update',
+        'create': 'Create',
+    },
+    "OIDC_ENABLED": True,
+    "OAUTH2_VALIDATOR_CLASS": "indieauth.oauth_validators.IndieAuthValidator",
+    'CLIENT_ID_GENERATOR_CLASS': 'oauth2_provider.generators.ClientIdGenerator',
+}
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/3.1/howto/deployment/checklist/
@@ -29,6 +44,8 @@ MEDIA_URL = '/media/'
 DEBUG = True
 
 ALLOWED_HOSTS = []
+
+DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 # Application definition
 
@@ -49,8 +66,8 @@ INSTALLED_APPS = [
     'comments',
     'analytics',
     'accounts',
-    'api',
-    'printer3d'
+    'printer3d',
+    'indieauth'
 ]
 
 MIDDLEWARE = [
@@ -65,7 +82,6 @@ MIDDLEWARE = [
 ]
 
 CORS_ALLOWED_ORIGINS = [
-    "http://localhost:8000",
     "https://astrid.tech"
 ]
 
@@ -74,7 +90,10 @@ ROOT_URLCONF = 'astrid_tech.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [BASE_DIR / 'templates'],
+        'DIRS': [
+            BASE_DIR / 'indieauth' / 'templates',
+            BASE_DIR / 'templates'
+        ],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -127,8 +146,13 @@ REST_FRAMEWORK = {
     ],
     'DEFAULT_AUTHENTICATION_CLASSES': [
         'rest_framework.authentication.BasicAuthentication',
-        'rest_framework_simplejwt.authentication.JWTAuthentication',
         'oauth2_provider.contrib.rest_framework.OAuth2Authentication',
+    ],
+
+    'DEFAULT_PARSER_CLASSES': [
+        'rest_framework.parsers.JSONParser',
+        'rest_framework.parsers.FormParser',
+        'rest_framework.parsers.MultiPartParser',
     ]
 }
 
@@ -138,6 +162,7 @@ timestamper = structlog.processors.TimeStamper(fmt="iso")
 def add_service_name(service_name):
     def processor(logger, method_name, event_dict):
         return {**event_dict, 'service': service_name}
+
     return processor
 
 

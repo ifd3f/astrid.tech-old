@@ -1,8 +1,10 @@
-import logging
-
-from .base import *
+from .settings_base import *
 
 SECRET_KEY = '%ffncy2-l!jns867*ilhza9bzz7pt1c^032=afdp9qzzve%4iu'
+
+CORS_ALLOWED_ORIGINS += [
+    "http://localhost:8000",
+]
 
 DATABASES = {
     'default': {
@@ -30,17 +32,11 @@ LOGGING = {
         "console": {
             "class": "logging.StreamHandler",
             "formatter": "plain_console",
-        },
-        "file": {
-            "class": "logging.handlers.TimedRotatingFileHandler",
-            'when': 'h',
-            "filename": "logs/output.log",
-            "formatter": "json_formatter",
-        },
+        }
     },
     "loggers": {
         "": {
-            "handlers": ["console", "file"],
+            "handlers": ["console"],
             "level": "DEBUG",
         }
     }
