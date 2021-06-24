@@ -7,7 +7,8 @@ from django.contrib.auth.models import Permission
 from django.test import TestCase
 from freezegun import freeze_time
 
-from blog.models import Entry, SyndicationTarget
+from blog.models import Entry
+from blog.tests import SyndicationTest
 
 EXISTING_MP_SYNDICATE_FORM = {
     'h': 'entry',
@@ -38,20 +39,6 @@ EXPECTED_EMPTY_DATE = date(2012, 1, 13)
 
 OCCUPIED_DATE = datetime(2012, 1, 13, 3, 21, 34, 0, pytz.timezone('Asia/Dubai'))
 EXPECTED_OCCUPIED_DATE = date(2012, 1, 12)
-
-
-# noinspection PyAttributeOutsideInit
-class SyndicationTest:
-    def set_up_syndication_targets(self):
-        self.syn_target_1 = SyndicationTarget.objects.create(
-            id='https://example@twitter.com',
-            name='My cool twitter account that everyone should follow'
-        )
-        self.disabled_syn_target = SyndicationTarget.objects.create(
-            id='https://not_my@twitter.com',
-            name='My uncool twitter account that should never be used',
-            enabled=False
-        )
 
 
 class MicropubEndpointTests(TestCase, SyndicationTest):

@@ -11,6 +11,7 @@ from blog.serializer import PublicEntrySerializer
 class PublicEntriesViewSet(ModelViewSet):
     permission_classes = [IsAuthenticatedOrReadOnly]
     serializer_class = PublicEntrySerializer
+    lookup_field = 'uuid'
 
     def get_queryset(self):
         qs = Entry.objects_visible_at(datetime.now(pytz.utc))
@@ -38,3 +39,4 @@ class PublicEntriesViewSet(ModelViewSet):
             qs = qs.filter(tags__id=tag)
 
         return qs
+
