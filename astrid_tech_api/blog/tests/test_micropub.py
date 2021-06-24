@@ -165,7 +165,7 @@ class MicropubEndpointTests(TestCase, SyndicationTestMixin):
         self.post_and_assert_status(**EXISTING_MP_SYNDICATE_FORM)
 
         entry = Entry.objects.get(date=EXPECTED_EMPTY_DATE)
-        syndication = entry.syndication_set.get()
+        syndication = entry.syndications.get()
         self.assertEqual(self.syn_target_1, syndication.target)
         self.assertTrue(entry.is_visible())
 
