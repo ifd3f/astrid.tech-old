@@ -101,9 +101,24 @@ const SEO: FC<SEOProps> = ({
         href="https://astrid.tech/feed.json"
       />
 
-      {/* Web login */}
-      <link href="https://github.com/astralbijection" rel="me authn" />
-      <link href="mailto:astrid@astrid.tech" rel="me" />
+      {/* IndieAuth */}
+      <link
+        rel="authorization_endpoint"
+        href="https://api.astrid.tech/auth/indieauth"
+      />
+      <link
+        rel="token_endpoint"
+        href="https://api.astrid.tech/auth/indieauth/token"
+      />
+
+      {/* Micropub */}
+      <link rel="micropub" href="https://api.astrid.tech/api/micropub/" />
+
+      {/* Webmention */}
+      <link
+        rel="webmention"
+        href="https://api.astrid.tech/api/webmention/receive"
+      />
     </Head>
   );
 };
