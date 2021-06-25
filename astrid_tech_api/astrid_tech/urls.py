@@ -26,7 +26,7 @@ urlpatterns = \
         path('auth/indieauth', indieauth.views.IndieAuthAuthorizationView.as_view()),
         path('auth/indieauth/token', indieauth.views.IndieAuthTokenView.as_view()),
         path('api/micropub/', micropub),
-        path('api/webmention', include('webmention.urls')),
+        path('api/webmention/', include('webmention.urls')),
         path('3dprinter/', include('printer3d.urls')),
         path('api/', include(router.urls)),
     ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
