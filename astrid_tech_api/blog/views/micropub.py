@@ -1,17 +1,18 @@
 import json
 from datetime import datetime
-from typing import Iterable
+from typing import Iterable, Union, Dict
 from urllib.parse import urlunparse
 
 import pytz
 from django.core.handlers.wsgi import WSGIRequest
 from django.db import transaction
 from django.http import HttpResponse, JsonResponse, QueryDict
+from django.urls import reverse
 from django.views.decorators.http import require_http_methods
 from rest_framework.status import *
 from structlog import get_logger
 
-from blog.models import SyndicationTarget, Entry, Syndication, Tag, UploadedFile
+from blog.models import SyndicationTarget, Entry, Syndication, Tag, UploadedFile, Attachment
 
 logger = get_logger(__name__)
 _EMPTY = ['']
@@ -40,6 +41,27 @@ def create_categories(entry: Entry, categories: Iterable[str]):
     for category in categories:
         tag, _ = Tag.objects.get_or_create(id=category)
         entry.tags.add(tag)
+
+
+def create_images(entry: Entry, objs: Iterable[Union[str, Dict[str, str]]]):
+    for i, obj in enumerate(objs):
+        if isinstance(obj, str):
+            url = obj
+            caption = None
+        else:
+            url = obj['value']
+            caption = obj.get('alt')
+
+        spoiler = caption is not None and '#spoiler' in caption
+
+        Attachment.objects.create(
+            entry=entry,
+            index=i,
+            url=url,
+            caption=caption,
+            spoiler=spoiler,
+            content_type='photo'
+        )
 
 
 @transaction.atomic
@@ -105,6 +127,7 @@ def create_entry_from_json(properties: dict):
     create_syndications(entry, properties.get('category', []))
     create_mp_syndicate_to(entry, properties.get('mp-syndicate-to', []))
     create_categories(entry, properties.get('category', []))
+    create_images(entry, properties.get('photo', []))
     return entry
 
 
@@ -145,10 +168,17 @@ def _unauthorized():
 
 def _syndication_targets():
     targets = SyndicationTarget.objects.filter(enabled=True)
-    return [
-        target.micropub_syndication_target
-        for target in targets
-    ]
+    return {
+        'syndicate-to': [
+            target.micropub_syndication_target
+            for target in targets
+        ]
+    }
+
+
+def _media_endpoint(host):
+    location = urlunparse(('https', host, reverse('micropub-media-endpoint'), None, None, None))
+    return {'media-endpoint': location}
 
 
 def handle_create_json(logger_, request: WSGIRequest):
@@ -211,24 +241,32 @@ def micropub(request: WSGIRequest) -> HttpResponse:
 
     if request.method == 'GET':
         # See https://micropub.spec.indieweb.org/#querying
-
-        if 'q' not in request.GET:
+        q = request.GET.get('q')
+        if q is None:
             return _invalid_request('must specify "q"')
 
-        if request.GET['q'] == 'syndicate-to':
-            return JsonResponse({
-                'syndicate-to': _syndication_targets()
-            })
+        if q == 'syndicate-to':
+            return JsonResponse(_syndication_targets())
+
+        host = request.headers.get('Host')
+
+        if q == 'config':
+            return JsonResponse({**_media_endpoint(host), **_syndication_targets()})
+
+        return _invalid_request(f'unsupported q {q}')
 
     if request.method == 'POST':
         logger_ = logger_.bind(form=dict(request.POST))
+        action = request.POST.get('action')
 
-        if request.content_type == JSON:
-            return handle_create_json(logger_, request)
-        elif request.content_type in FORM:
-            return handle_create_form(logger_, request)
+        if action is None:
+            if request.content_type == JSON:
+                return handle_create_json(logger_, request)
+            elif request.content_type in FORM:
+                return handle_create_form(logger_, request)
+            return _invalid_request(f'unsupported content-type {request.content_type}')
 
-        return _invalid_request(f'unsupported content-type {request.content_type}')
+        return _invalid_request(f'unsupported action {action}')
 
 
 @require_http_methods(['POST'])

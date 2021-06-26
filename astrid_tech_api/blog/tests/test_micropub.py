@@ -6,6 +6,7 @@ import pytz
 from django.contrib.auth import get_user_model
 from django.contrib.auth.models import Permission
 from django.test import TestCase
+from django.urls import reverse
 from freezegun import freeze_time
 
 from blog.models import Entry, UploadedFile
@@ -119,10 +120,13 @@ class MicropubEndpointTests(TestCase, SyndicationTestMixin):
         self.assertNotIn(self.disabled_syn_target.micropub_syndication_target, data['syndicate-to'])
 
     def test_get_config(self):
-        pass
+        self.client.force_login(self.allowed_user)
 
-    def test_get_source(self):
-        pass
+        response = self.client.get(reverse('micropub'), {'q': 'config'})
+
+        self.assertEqual(200, response.status_code, msg=response.content)
+        data = response.json()
+        self.assertIn(reverse('micropub-media-endpoint'), data['media-endpoint'])
 
     @freeze_time(EMPTY_DATE)
     def test_create_valid_entry_1(self):
@@ -233,6 +237,35 @@ class MicropubEndpointTests(TestCase, SyndicationTestMixin):
         obj = Entry.objects.get(date=EXPECTED_EMPTY_DATE)
         self.assertEqual('text/plain', obj.content_type)
 
+    @freeze_time(EMPTY_DATE)
+    def test_create_json_entry_with_attached_photos(self):
+        i1_url = "https://example.com/image1.png"
+        i2_alt = "some cool caption"
+        i2_url = "https://another.site/image2.png"
+        form = {
+            "type": ["h-entry"],
+            "properties": {
+                "content": ["testing plaintext do it pls"],
+                "photo": [
+                    i1_url,
+                    {
+                        "alt": i2_alt,
+                        "value": i2_url
+                    }
+                ]
+            }
+        }
+        self.client.force_login(self.allowed_user)
+
+        self.post_json_and_assert_status(form)
+
+        obj = Entry.objects.get(date=EXPECTED_EMPTY_DATE)
+        [i1, i2] = obj.attachments.all()
+        self.assertEqual(i1_url, i1.url)
+        self.assertIsNone(i1.caption)
+        self.assertEqual(i2_url, i2.url)
+        self.assertEqual(i2_alt, i2.caption)
+
 
 class MediaEndpointTests(TestCase):
     def test_upload_file(self):
@@ -242,4 +275,9 @@ class MediaEndpointTests(TestCase):
         self.assertEqual(201, response.status_code, msg=response.content)
         location = response.headers.get('Location')
         self.assertIsNotNone(location)
+        self.assertTrue(UploadedFile.objects.filter(name=IMG1.name))
 
+    def test_fails_on_no_file(self):
+        response = self.client.post('/api/micropub/media')
+
+        self.assertEqual(400, response.status_code, msg=response.content)

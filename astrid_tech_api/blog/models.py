@@ -145,8 +145,10 @@ class Entry(Model):
 
 
 class Attachment(Model):
-    entry = ForeignKey(Entry, on_delete=CASCADE, null=False, blank=False)
+    entry = ForeignKey(Entry, on_delete=CASCADE, null=False, blank=False, related_name='attachments')
     """The entry this attachment is attached to."""
+    index = IntegerField(null=False)
+    """A value for keeping track of upload order."""
     url = URLField(null=False, blank=False)
     """Where this attachment points to."""
     content_type = CharField(max_length=128, null=False, blank=False)
@@ -155,8 +157,6 @@ class Attachment(Model):
     """A caption for this attachment."""
     spoiler = BooleanField(default=False, null=False)
     """If this contains sensitive content."""
-
-    uploaded_file = ForeignKey(UploadedFile, on_delete=CASCADE, null=True, blank=True)
 
 
 class Syndication(Model):
