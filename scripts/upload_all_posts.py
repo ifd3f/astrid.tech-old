@@ -7,6 +7,7 @@ from pathlib import Path
 
 import click
 import frontmatter
+import pytz
 from dotenv import load_dotenv
 
 from util import create_auth_session
@@ -17,7 +18,7 @@ def markdown_to_micropub(path: Path):
         day = path.parent
         month = day.parent
         year = month.parent
-        dt = f'{int(year.name)}-{int(month.name)}-{int(day.name)}T00:00:00Z'
+        dt = datetime(int(year.name), int(month.name), int(day.name), tzinfo=pytz.utc).isoformat()
 
         with path.open('r') as fp:
             content = fp.read()
@@ -71,8 +72,8 @@ def main(content_dir):
             print(f'Reading {child}')
             data = markdown_to_micropub(child)
             print('Has data', data)
-            response = s.post('https://api.astrid.tech/api/micropub/', json=data)
-            assert response.status_code == '201', response.content
+            response = s.post('http://localhost:8001/api/micropub/', json=data)
+            assert response.status_code == 201, response.content
 
 
 if __name__ == '__main__':

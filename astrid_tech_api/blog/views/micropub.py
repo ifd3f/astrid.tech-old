@@ -67,10 +67,24 @@ def create_images(entry: Entry, objs: Iterable[Union[str, Dict[str, str]]]):
         )
 
 
+def get_dates(query: Dict):
+    published = query.get('published', datetime.now(pytz.utc))
+    if isinstance(published, list):
+        [published] = published
+    if isinstance(published, str):
+        published = datetime.fromisoformat(published)
+
+    created = query.get('created', published)
+    if isinstance(created, list):
+        [created] = created
+    if isinstance(created, str):
+        created = datetime.fromisoformat(created)
+    return published, created
+
+
 @transaction.atomic
 def create_entry_from_query(query: QueryDict):
-    published = query.get('published', datetime.now(pytz.utc))
-    created = query.get('created', published)
+    published, created = get_dates(query)
 
     entry = Entry.objects.create(
         title=query.get('name', ''),
@@ -79,7 +93,8 @@ def create_entry_from_query(query: QueryDict):
         created_date=created,
         published_date=published,
 
-        date=published,
+        date=created,
+        ordinal=Entry.get_next_ordinal(created),
 
         reply_to=query.get('in-reply-to', ''),
         location=query.get('location', ''),
@@ -111,15 +126,17 @@ def create_entry_from_json(properties: dict):
     content_obj = properties.get('content', _EMPTY)
     content_type, content = parse_mf2_content(content_obj)
 
-    published = properties.get('published', datetime.now(pytz.utc))
+    published, created = get_dates(properties)
+
     entry = Entry.objects.create(
         title=properties.get('name', _EMPTY)[0],
         description=properties.get('summary', _EMPTY),
 
         created_date=published,
-        published_date=published,
+        published_date=created,
 
-        date=published,
+        date=created,
+        ordinal=Entry.get_next_ordinal(created),
 
         reply_to=properties.get('in-reply-to', _EMPTY),
         location=properties.get('location', _EMPTY),
