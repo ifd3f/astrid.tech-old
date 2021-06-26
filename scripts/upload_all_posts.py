@@ -72,7 +72,7 @@ def main(content_dir):
             print(f'Reading {child}')
             data = markdown_to_micropub(child)
             print('Has data', data)
-            response = s.post('http://localhost:8001/api/micropub/', json=data)
+            response = s.post('https://api.astrid.tech/api/micropub/', json=data)
             assert response.status_code == 201, response.content
 
 
