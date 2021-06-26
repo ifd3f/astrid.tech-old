@@ -86,12 +86,12 @@ class MicropubEndpointTests(TestCase, SyndicationTestMixin):
     def get(self, **params):
         return self.client.get('/api/micropub/', params)
 
-    def post_json_and_assert_status(self, obj, *, expected_status_code=202, with_auth_headers=True, **kwargs):
+    def post_json_and_assert_status(self, obj, *, expected_status_code=201, with_auth_headers=True, **kwargs):
         return self.post_and_assert_status(obj, expected_status_code=expected_status_code,
                                            with_auth_headers=with_auth_headers, content_type='application/json',
                                            **kwargs)
 
-    def post_and_assert_status(self, *args, expected_status_code=202, with_auth_headers=True, **kwargs):
+    def post_and_assert_status(self, *args, expected_status_code=201, with_auth_headers=True, **kwargs):
         if with_auth_headers:
             kwargs = {**kwargs, **self.auth_headers}
         response = self.client.post('/api/micropub/', *args, **kwargs)

@@ -179,6 +179,13 @@ def _syndication_targets():
     }
 
 
+def _created(entry: Entry):
+    return HttpResponse(
+        status=HTTP_201_CREATED,
+        headers={'Link': 'https://astrid.tech' + entry.slug}
+    )
+
+
 def _media_endpoint(host):
     location = urlunparse(('https', host, reverse('micropub-media-endpoint'), None, None, None))
     return {'media-endpoint': location}
@@ -204,10 +211,7 @@ def handle_create_json(logger_, request: WSGIRequest):
 
         logger_.info('Successfully created entry', entry=entry)
 
-        return HttpResponse(
-            status=HTTP_202_ACCEPTED,
-            headers={'Link': 'https://astrid.tech' + entry.slug}
-        )
+        return _created(entry)
 
     return _invalid_request(f'unsupported type {h_type}')
 
@@ -230,10 +234,7 @@ def handle_create_form(logger_, request: WSGIRequest):
 
         logger_.info('Successfully created entry', entry=entry)
 
-        return HttpResponse(
-            status=202,
-            headers={'Link': 'https://astrid.tech' + entry.slug}
-        )
+        return _created(entry)
 
     return _invalid_request(f'unsupported h-type {h_type}')
 
