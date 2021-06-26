@@ -1,6 +1,6 @@
 import json
 from datetime import datetime
-from typing import Iterable, Union, Dict, Tuple, Optional
+from typing import Iterable, Union, Dict
 from urllib.parse import urlunparse
 
 import pytz
@@ -12,8 +12,9 @@ from django.urls import reverse
 from django.views.decorators.http import require_http_methods
 from oauth2_provider.models import AccessToken
 from rest_framework.status import *
-from structlog import get_logger
 from result import Ok, Err, Result
+from structlog import get_logger
+
 from blog.models import SyndicationTarget, Entry, Syndication, Tag, UploadedFile, Attachment
 
 logger = get_logger(__name__)
@@ -234,26 +235,29 @@ def handle_create_form(logger_, request: WSGIRequest):
 UserModel = get_user_model()
 
 
-def authenticate_request(request) -> Result[AccessToken, HttpResponse]:
+def get_auth_token(request: WSGIRequest) -> Result[AccessToken, HttpResponse]:
     # Find the access token in the different places it might be
     auth_header = request.headers.get('Authorization')
-    auth_param = request.POST.get('access_token')
     if auth_header is not None:
-        access_token = ''.removeprefix('Bearer ')
-    elif auth_param is not None:
-        access_token = auth_param
-    else:
-        return Err(_unauthorized())
+        return Ok(auth_header.removeprefix('Bearer '))
 
+    auth_param = request.POST.get('access_token')
+    if auth_param is not None:
+        return Ok(auth_param)
+
+    return Err(_unauthorized())
+
+
+def authenticate_request(access_token: str) -> Result[AccessToken, HttpResponse]:
     # Verify that the token exists
     try:
         token = AccessToken.objects.get(token=access_token)
     except AccessToken.DoesNotExist:
-        return Err( _forbidden())
+        return Err(_forbidden())
 
     # Verify that the token is still valid
     if token.is_expired():
-        return Err( _forbidden())
+        return Err(_forbidden())
 
     return Ok(token)
 
@@ -262,10 +266,15 @@ def authenticate_request(request) -> Result[AccessToken, HttpResponse]:
 def micropub(request: WSGIRequest) -> HttpResponse:
     logger_ = logger.bind()
 
-    result = authenticate_request(request)
-    if isinstance(result, Err):
-        return result.value
-    access_token = result.value
+    token_result = get_auth_token(request)
+    if isinstance(token_result, Err):
+        return token_result.value
+
+    auth_result = authenticate_request(token_result.value)
+    if isinstance(auth_result, Err):
+        return auth_result.value
+
+    access_token = auth_result.value
 
     if request.method == 'GET':
         # See https://micropub.spec.indieweb.org/#querying
@@ -299,6 +308,8 @@ def micropub(request: WSGIRequest) -> HttpResponse:
             return _invalid_request(f'unsupported content-type {request.content_type}')
 
         return _invalid_request(f'unsupported action {action}')
+
+    raise RuntimeError(f"Got unsupported method {request.method}")
 
 
 @require_http_methods(['POST'])

@@ -67,19 +67,33 @@ class MicropubMixin(TestCase):
         ).set_all_dates(OCCUPIED_DATE)
         self.existing_entry.save()
 
-    def post(self, params=None, headers=None):
-        return self.client.post('/api/micropub/', params=params, headers=headers)
+        self.client_site = ClientSite.get_or_create_full('https://my-micropub-client.com',
+                                                         'https://my-micropub-client.com/redirect')
+        self.create_only_token = AccessToken.objects.create(
+            user=self.allowed_user,
+            token='61237612jkl123',
+            application=self.client_site.application,
+            scope='create',
+            expires=datetime.now(tz=pytz.utc) + timedelta(days=1)
+        )
+
+        self.auth_headers = {'HTTP_AUTHORIZATION': f'Bearer {self.create_only_token.token}'}
+
+    def post(self, *args, **kwargs):
+        return self.client.post('/api/micropub/', *args, **kwargs)
 
     def get(self, **params):
         return self.client.get('/api/micropub/', params)
 
-    def post_json_and_assert_status(self, obj, headers=None, expected_status_code=202):
-        response = self.client.post('/api/micropub/', json.dumps(obj), headers=headers, content_type='application/json')
+    def post_json_and_assert_status(self, obj, expected_status_code=202, **kwargs):
+        response = self.client.post('/api/micropub/', json.dumps(obj), content_type='application/json', **kwargs)
         self.assertEqual(expected_status_code, response.status_code, msg=response.content)
         return response
 
-    def post_and_assert_status(self, params=None, expected_status_code=202, headers=None):
-        response = self.client.post('/api/micropub/', params, headers=headers)
+    def post_and_assert_status(self, *args, expected_status_code=202, with_auth_headers=True, **kwargs):
+        if with_auth_headers:
+            kwargs = {**kwargs, **self.auth_headers}
+        response = self.client.post('/api/micropub/', *args, **kwargs)
         self.assertEqual(expected_status_code, response.status_code, msg=response.content)
         return response
 
@@ -104,8 +118,6 @@ class MicropubEndpointTests(SyndicationTestMixin, MicropubMixin):
         self.assertEqual(403, response.status_code, msg=response.content)
 
     def test_get_fails_without_q(self):
-        self.client.force_login(self.allowed_user)
-
         response = self.get()
 
         self.assertEqual(400, response.status_code)
@@ -113,8 +125,6 @@ class MicropubEndpointTests(SyndicationTestMixin, MicropubMixin):
         self.assertEqual('invalid_request', data['error'])
 
     def test_post_fails_without_h(self):
-        self.client.force_login(self.allowed_user)
-
         response = self.post()
 
         self.assertEqual(400, response.status_code)
@@ -122,8 +132,6 @@ class MicropubEndpointTests(SyndicationTestMixin, MicropubMixin):
         self.assertEqual('invalid_request', data['error'])
 
     def test_get_syndication_targets(self):
-        self.client.force_login(self.allowed_user)
-
         response = self.get(q='syndicate-to')
 
         self.assertEqual(200, response.status_code, msg=response.content)
@@ -132,17 +140,29 @@ class MicropubEndpointTests(SyndicationTestMixin, MicropubMixin):
         self.assertNotIn(self.disabled_syn_target.micropub_syndication_target, data['syndicate-to'])
 
     def test_get_config(self):
-        self.client.force_login(self.allowed_user)
-
         response = self.client.get(reverse('micropub'), {'q': 'config'})
 
         self.assertEqual(200, response.status_code, msg=response.content)
         data = response.json()
         self.assertIn(reverse('micropub-media-endpoint'), data['media-endpoint'])
 
+    @freeze_time(OCCUPIED_DATE)
+    def test_can_create_with_params_token(self):
+        response = self.post_and_assert_status(
+            {**SIMPLE_URLENCODED_NOTE, 'access_token': self.create_only_token.token},
+            with_auth_headers=False
+        )
+
+        self.assertEqual('https://astrid.tech/2012/01/12/1', response.headers['Link'])
+
+    @freeze_time(OCCUPIED_DATE)
+    def test_can_create_with_header_token(self):
+        response = self.post_and_assert_status(SIMPLE_URLENCODED_NOTE, **self.auth_headers)
+
+        self.assertEqual('https://astrid.tech/2012/01/12/1', response.headers['Link'])
+
     @freeze_time(EMPTY_DATE)
     def test_create_valid_entry_1(self):
-        self.client.force_login(self.allowed_user)
         form = {
             'h': 'entry',
             'name': 'Hello World!',
@@ -151,7 +171,7 @@ class MicropubEndpointTests(SyndicationTestMixin, MicropubMixin):
             'category': ['cpp', 'django', 'python']
         }
 
-        response = self.post_and_assert_status(form)
+        response = self.post_and_assert_status(form, **self.auth_headers)
 
         self.assertEqual('https://astrid.tech/2012/01/13/0', response.headers['Link'])
         entry = Entry.objects.get(date=EXPECTED_EMPTY_DATE)
@@ -166,7 +186,6 @@ class MicropubEndpointTests(SyndicationTestMixin, MicropubMixin):
 
     @freeze_time(OCCUPIED_DATE)
     def test_create_valid_entry_on_occupied_date(self):
-        self.client.force_login(self.allowed_user)
         form = SIMPLE_URLENCODED_NOTE
 
         response = self.post_and_assert_status(form)
@@ -178,8 +197,6 @@ class MicropubEndpointTests(SyndicationTestMixin, MicropubMixin):
 
     @freeze_time(EMPTY_DATE)
     def test_create_entry_with_enabled_syndication(self):
-        self.client.force_login(self.allowed_user)
-
         self.post_and_assert_status(EXISTING_MP_SYNDICATE_FORM)
 
         entry = Entry.objects.get(date=EXPECTED_EMPTY_DATE)
@@ -189,16 +206,12 @@ class MicropubEndpointTests(SyndicationTestMixin, MicropubMixin):
 
     @freeze_time(EMPTY_DATE)
     def test_create_entry_with_disabled_syndication(self):
-        self.client.force_login(self.allowed_user)
-
         self.post_and_assert_status(DISABLED_MP_SYNDICATE_FORM, 400)
 
         self.assertFalse(Entry.objects.filter(date=EXPECTED_EMPTY_DATE).exists())
 
     @freeze_time(EMPTY_DATE)
     def test_create_entry_with_nonexistent_syndication(self):
-        self.client.force_login(self.allowed_user)
-
         self.post_and_assert_status(NONEXISTENT_MP_SYNDICATE_FORM, 400)
 
         self.assertFalse(Entry.objects.filter(date=EXPECTED_EMPTY_DATE).exists())
@@ -220,7 +233,6 @@ class MicropubEndpointTests(SyndicationTestMixin, MicropubMixin):
                 ]
             }
         }
-        self.client.force_login(self.allowed_user)
 
         self.post_json_and_assert_status(form)
 
@@ -239,7 +251,6 @@ class MicropubEndpointTests(SyndicationTestMixin, MicropubMixin):
                 ]
             }
         }
-        self.client.force_login(self.allowed_user)
 
         self.post_json_and_assert_status(form)
 
@@ -264,7 +275,6 @@ class MicropubEndpointTests(SyndicationTestMixin, MicropubMixin):
                 ]
             }
         }
-        self.client.force_login(self.allowed_user)
 
         self.post_json_and_assert_status(form)
 
@@ -290,27 +300,3 @@ class MediaEndpointTests(TestCase):
         response = self.client.post('/api/micropub/media')
 
         self.assertEqual(400, response.status_code, msg=response.content)
-
-
-class MicropubAuthenticationTests(MicropubMixin):
-    @freeze_time(OCCUPIED_DATE)
-    def setUp(self) -> None:
-        self.set_up_micropub_tests()
-
-        self.client_site = ClientSite.get_or_create_full('https://my-micropub-client.com',
-                                                         'https://my-micropub-client.com/redirect')
-        self.create_only_token = AccessToken.objects.create(
-            user=self.allowed_user,
-            token='61237612jkl123',
-            application=self.client_site.application,
-            scope='create',
-            expires=datetime.now(tz=pytz.utc) + timedelta(days=1)
-        )
-
-    @freeze_time(OCCUPIED_DATE)
-    def test_can_create_with_create_scope_in_params(self):
-        response = self.post_and_assert_status(
-            params={**SIMPLE_URLENCODED_NOTE, 'access_token':self.create_only_token.token},
-        )
-
-        self.assertEqual('https://astrid.tech/2012/01/12/1', response.headers['Link'])
