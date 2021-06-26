@@ -1,15 +1,21 @@
 import json
 from datetime import datetime
-from typing import Iterable
+from typing import Iterable, Union, Dict
+from urllib.parse import urlunparse
 
 import pytz
+from django.contrib.auth import get_user_model
 from django.core.handlers.wsgi import WSGIRequest
 from django.db import transaction
 from django.http import HttpResponse, JsonResponse, QueryDict
+from django.urls import reverse
 from django.views.decorators.http import require_http_methods
+from oauth2_provider.models import AccessToken
+from rest_framework.status import *
+from result import Ok, Err, Result
 from structlog import get_logger
 
-from blog.models import SyndicationTarget, Entry, Syndication, Tag
+from blog.models import SyndicationTarget, Entry, Syndication, Tag, UploadedFile, Attachment
 
 logger = get_logger(__name__)
 _EMPTY = ['']
@@ -38,6 +44,27 @@ def create_categories(entry: Entry, categories: Iterable[str]):
     for category in categories:
         tag, _ = Tag.objects.get_or_create(id=category)
         entry.tags.add(tag)
+
+
+def create_images(entry: Entry, objs: Iterable[Union[str, Dict[str, str]]]):
+    for i, obj in enumerate(objs):
+        if isinstance(obj, str):
+            url = obj
+            caption = None
+        else:
+            url = obj['value']
+            caption = obj.get('alt')
+
+        spoiler = caption is not None and '#spoiler' in caption
+
+        Attachment.objects.create(
+            entry=entry,
+            index=i,
+            url=url,
+            caption=caption,
+            spoiler=spoiler,
+            content_type='photo'
+        )
 
 
 @transaction.atomic
@@ -103,6 +130,7 @@ def create_entry_from_json(properties: dict):
     create_syndications(entry, properties.get('category', []))
     create_mp_syndicate_to(entry, properties.get('mp-syndicate-to', []))
     create_categories(entry, properties.get('category', []))
+    create_images(entry, properties.get('photo', []))
     return entry
 
 
@@ -143,14 +171,27 @@ def _unauthorized():
 
 def _syndication_targets():
     targets = SyndicationTarget.objects.filter(enabled=True)
-    return [
-        target.micropub_syndication_target
-        for target in targets
-    ]
+    return {
+        'syndicate-to': [
+            target.micropub_syndication_target
+            for target in targets
+        ]
+    }
+
+
+def _media_endpoint(host):
+    location = urlunparse(('https', host, reverse('micropub-media-endpoint'), None, None, None))
+    return {'media-endpoint': location}
 
 
 def handle_create_json(logger_, request: WSGIRequest):
     data = json.loads(request.body)
+
+    h_types = data.get('type')
+    if h_types is None:
+        return _invalid_request(f'must specify h_type')
+    if len(h_types) != 1:
+        return _invalid_request(f'must specify only one h_type')
     [h_type] = data.get('type')
 
     logger_.debug('Decoded type', h_type=h_type)
@@ -164,7 +205,7 @@ def handle_create_json(logger_, request: WSGIRequest):
         logger_.info('Successfully created entry', entry=entry)
 
         return HttpResponse(
-            status=202,
+            status=HTTP_202_ACCEPTED,
             headers={'Link': 'https://astrid.tech' + entry.slug}
         )
 
@@ -197,33 +238,93 @@ def handle_create_form(logger_, request: WSGIRequest):
     return _invalid_request(f'unsupported h-type {h_type}')
 
 
+UserModel = get_user_model()
+
+
+def get_auth_token(request: WSGIRequest) -> Result[AccessToken, HttpResponse]:
+    # Find the access token in the different places it might be
+    auth_header = request.headers.get('Authorization')
+    if auth_header is not None:
+        return Ok(auth_header.removeprefix('Bearer '))
+
+    auth_param = request.POST.get('access_token')
+    if auth_param is not None:
+        return Ok(auth_param)
+
+    return Err(_unauthorized())
+
+
+def authenticate_request(access_token: str) -> Result[AccessToken, HttpResponse]:
+    # Verify that the token exists
+    try:
+        token = AccessToken.objects.get(token=access_token)
+    except AccessToken.DoesNotExist:
+        return Err(_forbidden())
+
+    # Verify that the token is still valid
+    if token.is_expired():
+        return Err(_forbidden())
+
+    return Ok(token)
+
+
 @require_http_methods(["GET", "POST"])
-def micropub(request) -> HttpResponse:
+def micropub(request: WSGIRequest) -> HttpResponse:
     logger_ = logger.bind()
-
-    if request.user.is_anonymous:
-        return _unauthorized()
-
-    if not request.user.has_perm('blog.add_entry'):
-        return _forbidden()
 
     if request.method == 'GET':
         # See https://micropub.spec.indieweb.org/#querying
-
-        if 'q' not in request.GET:
+        q = request.GET.get('q')
+        if q is None:
             return _invalid_request('must specify "q"')
 
-        if request.GET['q'] == 'syndicate-to':
-            return JsonResponse({
-                'syndicate-to': _syndication_targets()
-            })
+        if q == 'syndicate-to':
+            return JsonResponse(_syndication_targets())
+
+        host = request.headers.get('Host')
+
+        if q == 'config':
+            return JsonResponse({**_media_endpoint(host), **_syndication_targets()})
+
+        return _invalid_request(f'unsupported q {q}')
 
     if request.method == 'POST':
+        token_result = get_auth_token(request)
+        if isinstance(token_result, Err):
+            return token_result.value
+
+        auth_result = authenticate_request(token_result.value)
+        if isinstance(auth_result, Err):
+            return auth_result.value
+
+        access_token = auth_result.value
+
         logger_ = logger_.bind(form=dict(request.POST))
+        action = request.POST.get('action')
 
-        if request.content_type == JSON:
-            return handle_create_json(logger_, request)
-        elif request.content_type in FORM:
-            return handle_create_form(logger_, request)
+        # No "action" supplied means a create action
+        if action is None:
+            if not access_token.is_valid(['create']):
+                return _forbidden()
 
-        return _invalid_request(f'unsupported content-type {request.content_type}')
+            if request.content_type == JSON:
+                return handle_create_json(logger_, request)
+            if request.content_type in FORM:
+                return handle_create_form(logger_, request)
+            return _invalid_request(f'unsupported content-type {request.content_type}')
+
+        return _invalid_request(f'unsupported action {action}')
+
+    raise RuntimeError(f"Got unsupported method {request.method}")
+
+
+@require_http_methods(['POST'])
+def upload_media(request: WSGIRequest) -> HttpResponse:
+    file = request.FILES.get('file')
+    if file is None:
+        return HttpResponse(status=HTTP_400_BAD_REQUEST)
+    obj = UploadedFile.objects.create(name=file.name, content_type=file.content_type, file=file)
+
+    host = request.headers.get('Host')
+    location = urlunparse(('https', host, obj.file.url, None, None, None))
+    return HttpResponse(status=HTTP_201_CREATED, headers={'Location': location})

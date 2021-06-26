@@ -3,8 +3,8 @@ from uuid import uuid4
 
 import pytz
 from django.db.models import Model, TextField, CharField, UUIDField, IntegerField, DateTimeField, URLField, \
-    ManyToManyField, ForeignKey, CASCADE, DateField, Max, TextChoices, BooleanField, RESTRICT, Q, QuerySet, FileField
-
+    ManyToManyField, ForeignKey, CASCADE, DateField, Max, TextChoices, BooleanField, RESTRICT, Q, QuerySet, FileField, \
+    ImageField
 
 
 class SyndicationTarget(Model):
@@ -21,6 +21,7 @@ class SyndicationTarget(Model):
     def micropub_syndication_target(self):
         return {'uid': self.id, 'name': self.name}
 
+
 class Tag(Model):
     id = CharField(max_length=32, null=False, blank=False, primary_key=True)
     name = CharField(max_length=32, blank=True)
@@ -30,6 +31,18 @@ class Tag(Model):
 
     def __str__(self):
         return self.id
+
+
+class UploadedFile(Model):
+    name = CharField(max_length=64, blank=False)
+    content_type = CharField(max_length=64)
+    uuid = UUIDField(default=uuid4, null=False, blank=True)
+    created = DateTimeField(auto_now_add=True)
+    updated = DateTimeField(auto_now=True)
+    file = FileField()
+
+    class Meta:
+        unique_together = ('uuid', 'name')
 
 
 def default_entry_ordinal():
@@ -50,11 +63,11 @@ class Entry(Model):
             date = datetime.utcnow()
 
         result = Entry.objects.filter(
-            date__exact=date.astimezone(pytz.utc)
-        ).aggregate(Max('ordinal'))['ordinal__max']
+            date__exact=date.astimezone(pytz.utc)  # On the given date
+        ).aggregate(Max('ordinal'))['ordinal__max']  # Take the biggest ordinal
 
         if result is None:
-            return 0
+            return 0  # First post of the date
         return result + 1
 
     uuid = UUIDField(unique=True, default=uuid4, editable=False)
@@ -132,8 +145,10 @@ class Entry(Model):
 
 
 class Attachment(Model):
-    entry = ForeignKey(Entry, on_delete=CASCADE, null=False, blank=False)
+    entry = ForeignKey(Entry, on_delete=CASCADE, null=False, blank=False, related_name='attachments')
     """The entry this attachment is attached to."""
+    index = IntegerField(null=False)
+    """A value for keeping track of upload order."""
     url = URLField(null=False, blank=False)
     """Where this attachment points to."""
     content_type = CharField(max_length=128, null=False, blank=False)

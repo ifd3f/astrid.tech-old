@@ -6,7 +6,7 @@ from rest_framework.routers import DefaultRouter
 
 import indieauth.views
 from astrid_tech.views import index
-from blog.views import micropub, PublicEntriesViewSet
+from blog.views import micropub, PublicEntriesViewSet, upload_media
 from comments.views import CommentViewSet
 from printer3d.views import PrinterViewSet
 
@@ -25,7 +25,8 @@ urlpatterns = \
         path('auth/', include('accounts.urls')),
         path('auth/indieauth', indieauth.views.IndieAuthAuthorizationView.as_view()),
         path('auth/indieauth/token', indieauth.views.IndieAuthTokenView.as_view()),
-        path('api/micropub/', micropub),
+        path('api/micropub/', micropub, name='micropub'),
+        path('api/micropub/media', upload_media, name='micropub-media-endpoint'),
         path('api/webmention/', include('webmention.urls')),
         path('3dprinter/', include('printer3d.urls')),
         path('api/', include(router.urls)),
