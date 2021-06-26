@@ -1,3 +1,6 @@
+"""
+Quick n' dirty script for uploading images from my old format.
+"""
 from os.path import splitext
 from pathlib import Path
 

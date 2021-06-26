@@ -1,10 +1,12 @@
+"""
+Quick n' dirty script for uploading posts from my old format.
+"""
 from datetime import datetime, date
 from os.path import splitext
 from pathlib import Path
 
 import click
 import frontmatter
-import pytz as pytz
 from dotenv import load_dotenv
 
 from util import create_auth_session
