@@ -70,11 +70,13 @@ def create_images(entry: Entry, objs: Iterable[Union[str, Dict[str, str]]]):
 @transaction.atomic
 def create_entry_from_query(query: QueryDict):
     published = query.get('published', datetime.now(pytz.utc))
+    created = query.get('created', published)
+
     entry = Entry.objects.create(
         title=query.get('name', ''),
         description=query.get('summary', ''),
 
-        created_date=published,
+        created_date=created,
         published_date=published,
 
         date=published,
@@ -127,7 +129,7 @@ def create_entry_from_json(properties: dict):
         content_type=content_type
     )
 
-    create_syndications(entry, properties.get('category', []))
+    create_syndications(entry, properties.get('syndication', []))
     create_mp_syndicate_to(entry, properties.get('mp-syndicate-to', []))
     create_categories(entry, properties.get('category', []))
     create_images(entry, properties.get('photo', []))
@@ -206,6 +208,7 @@ def handle_create_json(logger_, request: WSGIRequest):
     if h_type == 'h-entry':
         try:
             entry = create_entry_from_json(data.get('properties', {}))
+            entry.refresh_from_db()
         except SyndicationTarget.DoesNotExist:
             return _invalid_request('Invalid syndication targets')
 
@@ -229,6 +232,7 @@ def handle_create_form(logger_, request: WSGIRequest):
 
         try:
             entry = create_entry_from_query(request.POST)
+            entry.refresh_from_db()
         except SyndicationTarget.DoesNotExist:
             return _invalid_request('Invalid syndication targets')
 
