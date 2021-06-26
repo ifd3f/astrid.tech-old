@@ -54,10 +54,11 @@ OCCUPIED_DATE = datetime(2012, 1, 13, 3, 21, 34, 0, pytz.timezone('Asia/Dubai'))
 EXPECTED_OCCUPIED_DATE = date(2012, 1, 12)
 
 
-class MicropubMixin(TestCase):
-    # noinspection PyPep8Naming,PyAttributeOutsideInit
+class MicropubEndpointTests(TestCase, SyndicationTestMixin):
     @freeze_time(OCCUPIED_DATE)
-    def set_up_micropub_tests(self):
+    def setUp(self):
+        self.set_up_syndication_targets()
+
         self.disallowed_user = get_user_model().objects.create_user(username='stranger', password='7812')
         self.allowed_user = get_user_model().objects.create_user(username='myself', password='12345')
         self.allowed_user.user_permissions.add(Permission.objects.get(codename='add_entry'))
@@ -74,7 +75,7 @@ class MicropubMixin(TestCase):
             token='61237612jkl123',
             application=self.client_site.application,
             scope='create',
-            expires=datetime.now(tz=pytz.utc) + timedelta(days=1)
+            expires=datetime.now(tz=pytz.utc) + timedelta(days=3)
         )
 
         self.auth_headers = {'HTTP_AUTHORIZATION': f'Bearer {self.create_only_token.token}'}
@@ -85,10 +86,10 @@ class MicropubMixin(TestCase):
     def get(self, **params):
         return self.client.get('/api/micropub/', params)
 
-    def post_json_and_assert_status(self, obj, expected_status_code=202, **kwargs):
-        response = self.client.post('/api/micropub/', json.dumps(obj), content_type='application/json', **kwargs)
-        self.assertEqual(expected_status_code, response.status_code, msg=response.content)
-        return response
+    def post_json_and_assert_status(self, obj, *, expected_status_code=202, with_auth_headers=True, **kwargs):
+        return self.post_and_assert_status(obj, expected_status_code=expected_status_code,
+                                           with_auth_headers=with_auth_headers, content_type='application/json',
+                                           **kwargs)
 
     def post_and_assert_status(self, *args, expected_status_code=202, with_auth_headers=True, **kwargs):
         if with_auth_headers:
@@ -97,26 +98,12 @@ class MicropubMixin(TestCase):
         self.assertEqual(expected_status_code, response.status_code, msg=response.content)
         return response
 
-
-class MicropubEndpointTests(SyndicationTestMixin, MicropubMixin):
-    def setUp(self):
-        self.set_up_syndication_targets()
-        self.set_up_micropub_tests()
-
-    def test_post_fails_on_anonymous(self):
-        self.client.logout()
-
+    def test_post_fails_without_token(self):
         response = self.post()
 
         self.assertEqual(401, response.status_code, msg=response.content)
 
-    def test_post_fails_on_disallowed_user(self):
-        self.client.force_login(self.disallowed_user)
-
-        response = self.post()
-
-        self.assertEqual(403, response.status_code, msg=response.content)
-
+    @freeze_time(OCCUPIED_DATE)
     def test_get_fails_without_q(self):
         response = self.get()
 
@@ -124,13 +111,14 @@ class MicropubEndpointTests(SyndicationTestMixin, MicropubMixin):
         data = json.loads(response.content)
         self.assertEqual('invalid_request', data['error'])
 
+    @freeze_time(OCCUPIED_DATE)
     def test_post_fails_without_h(self):
-        response = self.post()
+        response = self.post_json_and_assert_status({}, expected_status_code=400)
 
-        self.assertEqual(400, response.status_code)
         data = json.loads(response.content)
         self.assertEqual('invalid_request', data['error'])
 
+    @freeze_time(OCCUPIED_DATE)
     def test_get_syndication_targets(self):
         response = self.get(q='syndicate-to')
 
@@ -171,7 +159,7 @@ class MicropubEndpointTests(SyndicationTestMixin, MicropubMixin):
             'category': ['cpp', 'django', 'python']
         }
 
-        response = self.post_and_assert_status(form, **self.auth_headers)
+        response = self.post_and_assert_status(form)
 
         self.assertEqual('https://astrid.tech/2012/01/13/0', response.headers['Link'])
         entry = Entry.objects.get(date=EXPECTED_EMPTY_DATE)
@@ -206,13 +194,13 @@ class MicropubEndpointTests(SyndicationTestMixin, MicropubMixin):
 
     @freeze_time(EMPTY_DATE)
     def test_create_entry_with_disabled_syndication(self):
-        self.post_and_assert_status(DISABLED_MP_SYNDICATE_FORM, 400)
+        self.post_and_assert_status(DISABLED_MP_SYNDICATE_FORM, expected_status_code=400)
 
         self.assertFalse(Entry.objects.filter(date=EXPECTED_EMPTY_DATE).exists())
 
     @freeze_time(EMPTY_DATE)
     def test_create_entry_with_nonexistent_syndication(self):
-        self.post_and_assert_status(NONEXISTENT_MP_SYNDICATE_FORM, 400)
+        self.post_and_assert_status(NONEXISTENT_MP_SYNDICATE_FORM, expected_status_code=400)
 
         self.assertFalse(Entry.objects.filter(date=EXPECTED_EMPTY_DATE).exists())
 
@@ -222,12 +210,11 @@ class MicropubEndpointTests(SyndicationTestMixin, MicropubMixin):
             "type": ["h-entry"],
             "properties": {
                 "name": ["Itching: h-event to iCal converter"],
-                "content": [
-                    {
-                        "html": "Now that I've been <a href=\"https://aaronparecki.com/events\">creating a list of "
-                                "events</a> on my site using <a href=\"https://p3k.io\">p3k</a>, it would be great if "
-                                "I could get a more calendar-like view of that list..."}
-                ],
+                "content": [{
+                    "html": "Now that I've been <a href=\"https://aaronparecki.com/events\">creating a list of "
+                            "events</a> on my site using <a href=\"https://p3k.io\">p3k</a>, it would be great if "
+                            "I could get a more calendar-like view of that list..."
+                }],
                 "category": [
                     "indieweb", "p3k"
                 ]

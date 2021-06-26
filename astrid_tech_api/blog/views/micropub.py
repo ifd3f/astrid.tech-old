@@ -186,6 +186,12 @@ def _media_endpoint(host):
 
 def handle_create_json(logger_, request: WSGIRequest):
     data = json.loads(request.body)
+
+    h_types = data.get('type')
+    if h_types is None:
+        return _invalid_request(f'must specify h_type')
+    if len(h_types) != 1:
+        return _invalid_request(f'must specify only one h_type')
     [h_type] = data.get('type')
 
     logger_.debug('Decoded type', h_type=h_type)
@@ -266,16 +272,6 @@ def authenticate_request(access_token: str) -> Result[AccessToken, HttpResponse]
 def micropub(request: WSGIRequest) -> HttpResponse:
     logger_ = logger.bind()
 
-    token_result = get_auth_token(request)
-    if isinstance(token_result, Err):
-        return token_result.value
-
-    auth_result = authenticate_request(token_result.value)
-    if isinstance(auth_result, Err):
-        return auth_result.value
-
-    access_token = auth_result.value
-
     if request.method == 'GET':
         # See https://micropub.spec.indieweb.org/#querying
         q = request.GET.get('q')
@@ -293,6 +289,16 @@ def micropub(request: WSGIRequest) -> HttpResponse:
         return _invalid_request(f'unsupported q {q}')
 
     if request.method == 'POST':
+        token_result = get_auth_token(request)
+        if isinstance(token_result, Err):
+            return token_result.value
+
+        auth_result = authenticate_request(token_result.value)
+        if isinstance(auth_result, Err):
+            return auth_result.value
+
+        access_token = auth_result.value
+
         logger_ = logger_.bind(form=dict(request.POST))
         action = request.POST.get('action')
 
