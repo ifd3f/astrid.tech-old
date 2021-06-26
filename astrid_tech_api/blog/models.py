@@ -41,6 +41,10 @@ class UploadedFile(Model):
     updated = DateTimeField(auto_now=True)
     file = FileField()
 
+    @property
+    def url(self):
+        return f'/assets/{self.uuid}/{self.name}'
+
     class Meta:
         unique_together = ('uuid', 'name')
 

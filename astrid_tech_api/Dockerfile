@@ -1,6 +1,5 @@
 FROM python:3.9-slim
 RUN pip install pipenv
-RUN apt-get update && apt-get install -y --no-install-recommends gcc
 
 ARG INSTALL_DEV_DEPENDENCIES
 ENV PYTHONUNBUFFERED=1 DJANGO_SETTINGS_MODULE=astrid_tech.settings_prod

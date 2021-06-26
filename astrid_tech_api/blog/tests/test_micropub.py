@@ -10,7 +10,7 @@ from django.urls import reverse
 from freezegun import freeze_time
 from oauth2_provider.models import AccessToken
 
-from blog.models import Entry, UploadedFile
+from blog.models import Entry, UploadedFile, SyndicationTarget, Syndication, Tag
 from blog.tests import SyndicationTestMixin
 from indieauth.models import ClientSite
 
@@ -171,6 +171,21 @@ class MicropubEndpointTests(TestCase, SyndicationTestMixin):
         self.assertIsNotNone(entry.tags.get(id='django'))
         self.assertIsNotNone(entry.tags.get(id='python'))
         self.assertTrue(entry.is_visible())
+
+    @freeze_time(EMPTY_DATE)
+    def test_create_valid_entry_2(self):
+        form = {'type': ['h-entry'], 'properties': {'name': ['Down-shifting and filtering a signal'],
+                                                    'summary': ['Because the FPGA is fast, but not *that* fast'],
+                                                    'content': ['Insert content here'],
+                                                    'category': ['notes', 'computer-engineering', 'python', 'jupyter',
+                                                                 'fpgas', 'numpy', 'matplotlib', 'dsp', 'math',
+                                                                 'scikit-learn'], 'created': '2020-06-18',
+                                                    'published': '2020-06-18', 'photo': []}}
+
+        self.post_json_and_assert_status(form)
+
+        self.assertTrue(Tag.objects.filter(id="computer-engineering").exists())
+        self.assertFalse(Syndication.objects.exists())
 
     @freeze_time(OCCUPIED_DATE)
     def test_create_valid_entry_on_occupied_date(self):
