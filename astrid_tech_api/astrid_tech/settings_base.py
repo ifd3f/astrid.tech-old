@@ -31,6 +31,7 @@ OAUTH2_PROVIDER = {
         "id": "OpenID Connect scope",
         'update': 'Update',
         'create': 'Create',
+        'media': 'Media upload',
     },
     "OIDC_ENABLED": True,
     "OAUTH2_VALIDATOR_CLASS": "indieauth.oauth_validators.IndieAuthValidator",
