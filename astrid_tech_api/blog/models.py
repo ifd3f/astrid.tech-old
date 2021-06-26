@@ -136,7 +136,7 @@ class Entry(Model):
         return self.is_visible_at(datetime.now())
 
     def __str__(self):
-        if self.title is not None:
+        if self.title:
             return self.title
         return self.slug
 

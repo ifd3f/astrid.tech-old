@@ -27,6 +27,14 @@ class EntryOrdinalTests(TestCase):
             entry.save()
 
 
+class EntryStrTests(TestCase):
+    def test_str_with_empty_title(self):
+        entry = Entry(title='', content='foo bar', ordinal=0).set_all_dates(datetime(2021, 5, 7))
+        entry.save()
+
+        self.assertEqual('/2021/05/07/0', str(entry))
+
+
 class PublicEntriesVisibility(TestCase):
     @freeze_time(datetime(2021, 1, 1))
     def setUp(self):
