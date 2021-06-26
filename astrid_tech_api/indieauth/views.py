@@ -1,9 +1,7 @@
 import json
 from urllib.parse import urlparse
 
-from django.db import transaction
 from django.http import JsonResponse, HttpResponse
-from oauth2_provider.models import Application
 from oauth2_provider.views import AuthorizationView, TokenView
 from structlog import get_logger
 
@@ -32,26 +30,7 @@ class IndieAuthAuthorizationView(AuthorizationView):
 
         logger.debug('Ensuring IndieAuth app exists', client_id=client_id)
 
-        with transaction.atomic():
-            # Create the app if it doesn't exist and populate fields
-            try:
-                app = Application.objects.get(client_id=client_id)
-            except Application.DoesNotExist:
-                app = Application.objects.create(client_id=client_id)
-            app.name = f'IndieAuth for {client_id}'
-            app.authorization_grant_type = Application.GRANT_AUTHORIZATION_CODE
-
-            # Whitelist this redirect URI if it's not on the list
-            if redirect_uri not in app.redirect_uris:
-                app.redirect_uris += redirect_uri
-
-            app.save()
-
-            # Create the site if it doesn't exist and populate fields
-            try:
-                site = ClientSite.objects.get(client_id=client_id)
-            except ClientSite.DoesNotExist:
-                site = ClientSite.objects.create(client_id=client_id, application=app)
+        ClientSite.get_or_create_full(client_id, redirect_uri)
 
         return True
 

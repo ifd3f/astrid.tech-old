@@ -1,5 +1,5 @@
 import json
-from datetime import datetime, date
+from datetime import datetime, date, timedelta
 from pathlib import Path
 
 import pytz
@@ -8,9 +8,11 @@ from django.contrib.auth.models import Permission
 from django.test import TestCase
 from django.urls import reverse
 from freezegun import freeze_time
+from oauth2_provider.models import AccessToken
 
 from blog.models import Entry, UploadedFile
 from blog.tests import SyndicationTestMixin
+from indieauth.models import ClientSite
 
 TEST_PATH = Path(__file__).parent
 IMG1 = TEST_PATH / 'img1.png'
@@ -40,6 +42,11 @@ NONEXISTENT_MP_SYNDICATE_FORM = {
     ]
 }
 
+SIMPLE_URLENCODED_NOTE = {
+    'h': 'entry',
+    'content': "I'm writing another note on this date!"
+}
+
 EMPTY_DATE = datetime(2012, 1, 14, 3, 21, 34, 0, pytz.timezone('Asia/Dubai'))
 EXPECTED_EMPTY_DATE = date(2012, 1, 13)
 
@@ -47,35 +54,40 @@ OCCUPIED_DATE = datetime(2012, 1, 13, 3, 21, 34, 0, pytz.timezone('Asia/Dubai'))
 EXPECTED_OCCUPIED_DATE = date(2012, 1, 12)
 
 
-class MicropubEndpointTests(TestCase, SyndicationTestMixin):
+class MicropubMixin(TestCase):
+    # noinspection PyPep8Naming,PyAttributeOutsideInit
     @freeze_time(OCCUPIED_DATE)
-    def setUp(self):
+    def set_up_micropub_tests(self):
         self.disallowed_user = get_user_model().objects.create_user(username='stranger', password='7812')
         self.allowed_user = get_user_model().objects.create_user(username='myself', password='12345')
         self.allowed_user.user_permissions.add(Permission.objects.get(codename='add_entry'))
-
-        self.set_up_syndication_targets()
 
         self.existing_entry = Entry(
             content="I wrote something here but I might write another thing later"
         ).set_all_dates(OCCUPIED_DATE)
         self.existing_entry.save()
 
-    def post(self, **params):
-        return self.client.post('/api/micropub/', params)
-
-    def post_json_and_assert_status(self, obj, expected_status_code=202):
-        response = self.client.post('/api/micropub/', json.dumps(obj), content_type='application/json')
-        self.assertEqual(expected_status_code, response.status_code, msg=response.content)
-        return response
-
-    def post_and_assert_status(self, expected_status_code=202, **params):
-        response = self.post(**params)
-        self.assertEqual(expected_status_code, response.status_code, msg=response.content)
-        return response
+    def post(self, params=None, headers=None):
+        return self.client.post('/api/micropub/', params=params, headers=headers)
 
     def get(self, **params):
         return self.client.get('/api/micropub/', params)
+
+    def post_json_and_assert_status(self, obj, headers=None, expected_status_code=202):
+        response = self.client.post('/api/micropub/', json.dumps(obj), headers=headers, content_type='application/json')
+        self.assertEqual(expected_status_code, response.status_code, msg=response.content)
+        return response
+
+    def post_and_assert_status(self, params=None, expected_status_code=202, headers=None):
+        response = self.client.post('/api/micropub/', params, headers=headers)
+        self.assertEqual(expected_status_code, response.status_code, msg=response.content)
+        return response
+
+
+class MicropubEndpointTests(SyndicationTestMixin, MicropubMixin):
+    def setUp(self):
+        self.set_up_syndication_targets()
+        self.set_up_micropub_tests()
 
     def test_post_fails_on_anonymous(self):
         self.client.logout()
@@ -139,7 +151,7 @@ class MicropubEndpointTests(TestCase, SyndicationTestMixin):
             'category': ['cpp', 'django', 'python']
         }
 
-        response = self.post_and_assert_status(**form)
+        response = self.post_and_assert_status(form)
 
         self.assertEqual('https://astrid.tech/2012/01/13/0', response.headers['Link'])
         entry = Entry.objects.get(date=EXPECTED_EMPTY_DATE)
@@ -155,12 +167,9 @@ class MicropubEndpointTests(TestCase, SyndicationTestMixin):
     @freeze_time(OCCUPIED_DATE)
     def test_create_valid_entry_on_occupied_date(self):
         self.client.force_login(self.allowed_user)
-        form = {
-            'h': 'entry',
-            'content': "I'm writing another note on this date!"
-        }
+        form = SIMPLE_URLENCODED_NOTE
 
-        response = self.post_and_assert_status(**form)
+        response = self.post_and_assert_status(form)
 
         self.assertEqual('https://astrid.tech/2012/01/12/1', response.headers['Link'])
         entry = Entry.objects.get(date=EXPECTED_OCCUPIED_DATE, ordinal=1)
@@ -171,7 +180,7 @@ class MicropubEndpointTests(TestCase, SyndicationTestMixin):
     def test_create_entry_with_enabled_syndication(self):
         self.client.force_login(self.allowed_user)
 
-        self.post_and_assert_status(**EXISTING_MP_SYNDICATE_FORM)
+        self.post_and_assert_status(EXISTING_MP_SYNDICATE_FORM)
 
         entry = Entry.objects.get(date=EXPECTED_EMPTY_DATE)
         syndication = entry.syndications.get()
@@ -182,7 +191,7 @@ class MicropubEndpointTests(TestCase, SyndicationTestMixin):
     def test_create_entry_with_disabled_syndication(self):
         self.client.force_login(self.allowed_user)
 
-        self.post_and_assert_status(400, **DISABLED_MP_SYNDICATE_FORM)
+        self.post_and_assert_status(DISABLED_MP_SYNDICATE_FORM, 400)
 
         self.assertFalse(Entry.objects.filter(date=EXPECTED_EMPTY_DATE).exists())
 
@@ -190,7 +199,7 @@ class MicropubEndpointTests(TestCase, SyndicationTestMixin):
     def test_create_entry_with_nonexistent_syndication(self):
         self.client.force_login(self.allowed_user)
 
-        self.post_and_assert_status(400, **NONEXISTENT_MP_SYNDICATE_FORM)
+        self.post_and_assert_status(NONEXISTENT_MP_SYNDICATE_FORM, 400)
 
         self.assertFalse(Entry.objects.filter(date=EXPECTED_EMPTY_DATE).exists())
 
@@ -281,3 +290,27 @@ class MediaEndpointTests(TestCase):
         response = self.client.post('/api/micropub/media')
 
         self.assertEqual(400, response.status_code, msg=response.content)
+
+
+class MicropubAuthenticationTests(MicropubMixin):
+    @freeze_time(OCCUPIED_DATE)
+    def setUp(self) -> None:
+        self.set_up_micropub_tests()
+
+        self.client_site = ClientSite.get_or_create_full('https://my-micropub-client.com',
+                                                         'https://my-micropub-client.com/redirect')
+        self.create_only_token = AccessToken.objects.create(
+            user=self.allowed_user,
+            token='61237612jkl123',
+            application=self.client_site.application,
+            scope='create',
+            expires=datetime.now(tz=pytz.utc) + timedelta(days=1)
+        )
+
+    @freeze_time(OCCUPIED_DATE)
+    def test_can_create_with_create_scope_in_params(self):
+        response = self.post_and_assert_status(
+            params={**SIMPLE_URLENCODED_NOTE, 'access_token':self.create_only_token.token},
+        )
+
+        self.assertEqual('https://astrid.tech/2012/01/12/1', response.headers['Link'])

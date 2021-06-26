@@ -1,17 +1,19 @@
 import json
 from datetime import datetime
-from typing import Iterable, Union, Dict
+from typing import Iterable, Union, Dict, Tuple, Optional
 from urllib.parse import urlunparse
 
 import pytz
+from django.contrib.auth import get_user_model
 from django.core.handlers.wsgi import WSGIRequest
 from django.db import transaction
 from django.http import HttpResponse, JsonResponse, QueryDict
 from django.urls import reverse
 from django.views.decorators.http import require_http_methods
+from oauth2_provider.models import AccessToken
 from rest_framework.status import *
 from structlog import get_logger
-
+from result import Ok, Err, Result
 from blog.models import SyndicationTarget, Entry, Syndication, Tag, UploadedFile, Attachment
 
 logger = get_logger(__name__)
@@ -229,15 +231,41 @@ def handle_create_form(logger_, request: WSGIRequest):
     return _invalid_request(f'unsupported h-type {h_type}')
 
 
+UserModel = get_user_model()
+
+
+def authenticate_request(request) -> Result[AccessToken, HttpResponse]:
+    # Find the access token in the different places it might be
+    auth_header = request.headers.get('Authorization')
+    auth_param = request.POST.get('access_token')
+    if auth_header is not None:
+        access_token = ''.removeprefix('Bearer ')
+    elif auth_param is not None:
+        access_token = auth_param
+    else:
+        return Err(_unauthorized())
+
+    # Verify that the token exists
+    try:
+        token = AccessToken.objects.get(token=access_token)
+    except AccessToken.DoesNotExist:
+        return Err( _forbidden())
+
+    # Verify that the token is still valid
+    if token.is_expired():
+        return Err( _forbidden())
+
+    return Ok(token)
+
+
 @require_http_methods(["GET", "POST"])
 def micropub(request: WSGIRequest) -> HttpResponse:
     logger_ = logger.bind()
 
-    if request.user.is_anonymous:
-        return _unauthorized()
-
-    if not request.user.has_perm('blog.add_entry'):
-        return _forbidden()
+    result = authenticate_request(request)
+    if isinstance(result, Err):
+        return result.value
+    access_token = result.value
 
     if request.method == 'GET':
         # See https://micropub.spec.indieweb.org/#querying
@@ -259,10 +287,14 @@ def micropub(request: WSGIRequest) -> HttpResponse:
         logger_ = logger_.bind(form=dict(request.POST))
         action = request.POST.get('action')
 
+        # No "action" supplied means a create action
         if action is None:
+            if not access_token.is_valid(['create']):
+                return _forbidden()
+
             if request.content_type == JSON:
                 return handle_create_json(logger_, request)
-            elif request.content_type in FORM:
+            if request.content_type in FORM:
                 return handle_create_form(logger_, request)
             return _invalid_request(f'unsupported content-type {request.content_type}')
 
