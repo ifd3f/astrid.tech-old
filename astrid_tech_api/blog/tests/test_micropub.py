@@ -1,5 +1,6 @@
 import json
 from datetime import datetime, date
+from pathlib import Path
 
 import pytz
 from django.contrib.auth import get_user_model
@@ -7,8 +8,12 @@ from django.contrib.auth.models import Permission
 from django.test import TestCase
 from freezegun import freeze_time
 
-from blog.models import Entry
+from blog.models import Entry, UploadedFile
 from blog.tests import SyndicationTestMixin
+
+TEST_PATH = Path(__file__).parent
+IMG1 = TEST_PATH / 'img1.png'
+IMG2 = TEST_PATH / 'img2.jpg'
 
 EXISTING_MP_SYNDICATE_FORM = {
     'h': 'entry',
@@ -227,4 +232,14 @@ class MicropubEndpointTests(TestCase, SyndicationTestMixin):
 
         obj = Entry.objects.get(date=EXPECTED_EMPTY_DATE)
         self.assertEqual('text/plain', obj.content_type)
+
+
+class MediaEndpointTests(TestCase):
+    def test_upload_file(self):
+        with IMG1.open('rb') as f:
+            response = self.client.post('/api/micropub/media', {'file': f})
+
+        self.assertEqual(201, response.status_code, msg=response.content)
+        location = response.headers.get('Location')
+        self.assertIsNotNone(location)
 

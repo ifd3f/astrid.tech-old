@@ -1,15 +1,17 @@
 import json
 from datetime import datetime
 from typing import Iterable
+from urllib.parse import urlunparse
 
 import pytz
 from django.core.handlers.wsgi import WSGIRequest
 from django.db import transaction
 from django.http import HttpResponse, JsonResponse, QueryDict
 from django.views.decorators.http import require_http_methods
+from rest_framework.status import *
 from structlog import get_logger
 
-from blog.models import SyndicationTarget, Entry, Syndication, Tag
+from blog.models import SyndicationTarget, Entry, Syndication, Tag, UploadedFile
 
 logger = get_logger(__name__)
 _EMPTY = ['']
@@ -164,7 +166,7 @@ def handle_create_json(logger_, request: WSGIRequest):
         logger_.info('Successfully created entry', entry=entry)
 
         return HttpResponse(
-            status=202,
+            status=HTTP_202_ACCEPTED,
             headers={'Link': 'https://astrid.tech' + entry.slug}
         )
 
@@ -198,7 +200,7 @@ def handle_create_form(logger_, request: WSGIRequest):
 
 
 @require_http_methods(["GET", "POST"])
-def micropub(request) -> HttpResponse:
+def micropub(request: WSGIRequest) -> HttpResponse:
     logger_ = logger.bind()
 
     if request.user.is_anonymous:
@@ -227,3 +229,15 @@ def micropub(request) -> HttpResponse:
             return handle_create_form(logger_, request)
 
         return _invalid_request(f'unsupported content-type {request.content_type}')
+
+
+@require_http_methods(['POST'])
+def upload_media(request: WSGIRequest) -> HttpResponse:
+    file = request.FILES.get('file')
+    if file is None:
+        return HttpResponse(status=HTTP_400_BAD_REQUEST)
+    obj = UploadedFile.objects.create(name=file.name, content_type=file.content_type, file=file)
+
+    host = request.headers.get('Host')
+    location = urlunparse(('https', host, obj.file.url, None, None, None))
+    return HttpResponse(status=HTTP_201_CREATED, headers={'Location': location})
