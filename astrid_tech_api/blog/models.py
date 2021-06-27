@@ -25,9 +25,18 @@ class SyndicationTarget(Model):
 class Tag(Model):
     id = CharField(max_length=32, null=False, blank=False, primary_key=True)
     name = CharField(max_length=32, blank=True)
-    color = CharField(max_length=10, blank=True)
-    background_color = CharField(max_length=10, blank=True)
+    color = CharField(max_length=10, blank=True, null=True)
+    background_color = CharField(max_length=10, blank=True, null=True)
     description = TextField(null=True, blank=True)
+
+    def save(self, *args, **kwargs):
+        if not self.name:
+            self.name = self.id
+        if not self.color:
+            self.color = None
+        if not self.background_color:
+            self.background_color = None
+        super().save(*args, **kwargs)
 
     def __str__(self):
         return self.id

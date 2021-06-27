@@ -1,68 +1,73 @@
-import axios, { AxiosInstance, AxiosResponse } from "axios"
+import axios, { AxiosInstance, AxiosResponse } from "axios";
+import { Tag } from "types/types";
 
 export type CommentForm = {
-  author_name: string | null
-  author_email: string
-  author_website: string | null
-  reply_parent?: number
-  content_md: string
-  slug: string
-}
+  author_name: string | null;
+  author_email: string;
+  author_website: string | null;
+  reply_parent?: number;
+  content_md: string;
+  slug: string;
+};
 
 type CommentData = {
-  id: number
-  time_authored: string
-  reply_parent?: number
-  author_name?: string
-  author_email: string
-  author_website?: string
-  content_md: string
-  content_html: string
-  slug: string
-}
+  id: number;
+  time_authored: string;
+  reply_parent?: number;
+  author_name?: string;
+  author_email: string;
+  author_website?: string;
+  content_md: string;
+  content_html: string;
+  slug: string;
+};
 
 export type CommentAuthor = {
-  name: string
-  email: string
-  website: string
-}
+  name: string;
+  email: string;
+  website: string;
+};
 
 export type Comment = {
-  id: number
-  timeAuthored: Date
-  children: Comment[]
-  author: CommentAuthor
-  htmlContent: string
-}
+  id: number;
+  timeAuthored: Date;
+  children: Comment[];
+  author: CommentAuthor;
+  htmlContent: string;
+};
 
 export class AstridTechAPI {
-  private axios: AxiosInstance
+  private axios: AxiosInstance;
 
   constructor(root: string) {
-    this.axios = axios.create({ baseURL: root })
+    this.axios = axios.create({ baseURL: root });
+  }
+
+  static createWithEnvRoot() {
+    return new AstridTechAPI(process.env.ASTRID_TECH_API_ROOT!!);
   }
 
   async createComment(
     comment: CommentForm
   ): Promise<AxiosResponse<CommentData>> {
-    return await this.axios.post(`/api/comments/`, comment)
+    return await this.axios.post(`/api/comments/`, comment);
   }
 
   async reportComment(comment: number, reason: string, email?: string) {
     return await this.axios.post(`/api/comments/${comment}/report/`, {
       reason,
       email,
-    })
+    });
   }
 
   async getComments(slug: string): Promise<Comment[]> {
     const response = await this.axios.get<CommentData[]>("/api/comments/", {
       params: { slug },
-    })
-    const data = response.data
+    });
+    const data = response.data;
 
     const idToComment = new Map(
-      data.map(c => [
+      data.map((c) => [
         c.id,
         {
           id: c.id,
@@ -76,20 +81,26 @@ export class AstridTechAPI {
           },
         } as Comment,
       ])
-    )
+    );
 
-    const output = []
+    const output = [];
 
     for (let raw of data) {
-      const comment = idToComment.get(raw.id)!!
+      const comment = idToComment.get(raw.id)!!;
       if (!raw.reply_parent) {
-        output.push(comment)
-        continue
+        output.push(comment);
+        continue;
       }
-      const parent = idToComment.get(raw.reply_parent)!!
-      parent?.children.push(comment)
+      const parent = idToComment.get(raw.reply_parent)!!;
+      parent?.children.push(comment);
     }
 
-    return output
+    return output;
+  }
+
+  async getTags(): Promise<Tag[]> {
+    const result = await this.axios.get<Tag[]>("/api/tags/");
+
+    return result.data;
   }
 }

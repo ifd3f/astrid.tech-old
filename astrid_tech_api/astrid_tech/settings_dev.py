@@ -3,7 +3,7 @@ from .settings_base import *
 SECRET_KEY = '%ffncy2-l!jns867*ilhza9bzz7pt1c^032=afdp9qzzve%4iu'
 
 CORS_ALLOWED_ORIGINS += [
-    "http://localhost:8000",
+    "http://localhost:3000",
 ]
 
 DATABASES = {

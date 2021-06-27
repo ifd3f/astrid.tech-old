@@ -19,7 +19,7 @@ export const TagBadge: FC<TagBadgeProps> = ({
   children,
 }) => {
   if (typeof tag == "string") {
-    const table = useTagTable();
+    const { table } = useTagTable();
     tag = table.get(tag);
   }
   const linkTo = tag.slug[0] == "/" ? tag.slug : "/t/" + tag.slug;

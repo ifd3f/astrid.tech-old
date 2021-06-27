@@ -1,4 +1,13 @@
-import { createContext, FC, ReactNode, useContext } from "react";
+import { useAPI } from "components/api/APIProvider";
+import { AstridTechAPI } from "lib/astrid-tech-api";
+import {
+  createContext,
+  useEffect,
+  FC,
+  ReactNode,
+  useContext,
+  useState,
+} from "react";
 import { parseMachineTagOrNull } from "../../lib/MachineTag";
 import {
   getContrastingTextColor,
@@ -8,13 +17,31 @@ import {
 } from "../../lib/util";
 import { Tag } from "../../types/types";
 
-export class TagTable {
+export interface TagTable {
+  get(tag: string): Tag;
+}
+
+class EmptyTagTable implements TagTable {
+  get(tag: string): Tag {
+    if (typeof tag != "string") {
+      return tag;
+    }
+    return {
+      name: tag,
+      backgroundColor: "#333333",
+      color: "#FFFFFF",
+      slug: tag,
+    };
+  }
+}
+
+class FilledTagTable {
   private readonly cache: Map<string, Tag>;
   constructor(data: Tag[]) {
     this.cache = new Map(data.map((t) => [t.slug, t]));
   }
 
-  get(tag: Tag | string): Tag {
+  get(tag: string): Tag {
     if (typeof tag != "string") {
       return tag;
     }
@@ -51,17 +78,21 @@ export class TagTable {
   }
 }
 
-const Context = createContext<TagTable>({} as TagTable);
+const Context = createContext<{ table: TagTable }>({
+  table: new EmptyTagTable(),
+});
 
-export type TagTableProviderProps = { tags: Tag[]; children: ReactNode };
+export type TagTableProviderProps = { children: ReactNode };
 
-export const TagTableProvider: FC<TagTableProviderProps> = ({
-  tags,
-  children,
-}) => {
-  return (
-    <Context.Provider value={new TagTable(tags)}>{children}</Context.Provider>
-  );
+export type TagTableContext = { table: TagTable };
+
+export const TagTableProvider: FC<TagTableProviderProps> = ({ children }) => {
+  const { api } = useAPI();
+  const [table, setTable] = useState<TagTable>(new EmptyTagTable());
+  useEffect(() => {
+    api.getTags().then((tags) => setTable(new FilledTagTable(tags)));
+  }, []);
+  return <Context.Provider value={{ table }}>{children}</Context.Provider>;
 };
 
 export const useTagTable = () => useContext(Context);

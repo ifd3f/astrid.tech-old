@@ -9,7 +9,7 @@ module.exports = withPlugins(
     trailingSlash: true,
     env: {
       publicRoot: "https://astrid.tech/",
-      apiRoot: getEnv("ASTRID_TECH_API_ROOT", "http://localhost:8001"),
+      apiRoot: process.env.ASTRID_TECH_API_ROOT
     },
     exportPathMap() {
       return {

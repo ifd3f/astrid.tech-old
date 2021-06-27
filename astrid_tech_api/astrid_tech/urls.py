@@ -7,6 +7,7 @@ from rest_framework.routers import DefaultRouter
 import indieauth.views
 from astrid_tech.views import index
 from blog.views import micropub, PublicEntriesViewSet, upload_media
+from blog.views.rest import TagsViewSet
 from comments.views import CommentViewSet
 from printer3d.views import PrinterViewSet
 
@@ -14,6 +15,7 @@ router = DefaultRouter(trailing_slash=True)
 router.register(r'comments', CommentViewSet, basename='comments')
 router.register(r'3dprinter', PrinterViewSet, basename='3dprinter')
 router.register(r'entries', PublicEntriesViewSet, basename='entries')
+router.register(r'tags', TagsViewSet, basename='tags')
 
 urlpatterns = \
     [

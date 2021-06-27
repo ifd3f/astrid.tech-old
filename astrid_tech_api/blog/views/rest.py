@@ -4,8 +4,8 @@ import pytz
 from rest_framework.permissions import IsAuthenticatedOrReadOnly
 from rest_framework.viewsets import ModelViewSet
 
-from blog.models import Entry
-from blog.serializer import PublicEntrySerializer
+from blog.models import Entry, Tag
+from blog.serializer import PublicEntrySerializer, TagSerializer
 
 
 class PublicEntriesViewSet(ModelViewSet):
@@ -40,3 +40,8 @@ class PublicEntriesViewSet(ModelViewSet):
 
         return qs
 
+
+class TagsViewSet(ModelViewSet):
+    permission_classes = [IsAuthenticatedOrReadOnly]
+    serializer_class = TagSerializer
+    queryset = Tag.objects.all()

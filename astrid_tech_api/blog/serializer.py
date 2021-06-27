@@ -30,3 +30,9 @@ class PublicEntrySerializer(ModelSerializer):
             'deleted_date': {'write_only': True}
         }
         exclude = ['id']
+
+
+class TagSerializer(ModelSerializer):
+    class Meta:
+        model = Tag
+        fields = '__all__'
