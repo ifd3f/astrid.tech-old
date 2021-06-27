@@ -10,7 +10,7 @@ from django.urls import reverse
 from freezegun import freeze_time
 from oauth2_provider.models import AccessToken
 
-from blog.models import Entry, UploadedFile, SyndicationTarget, Syndication, Tag
+from blog.models import Entry, UploadedFile, Syndication, Tag
 from blog.tests import SyndicationTestMixin
 from indieauth.models import ClientSite
 
@@ -141,13 +141,13 @@ class MicropubEndpointTests(TestCase, SyndicationTestMixin):
             with_auth_headers=False
         )
 
-        self.assertEqual('https://astrid.tech/2012/01/12/1', response.headers['Link'])
+        self.assertEqual('https://astrid.tech/2012/01/12/1', response.headers['Location'])
 
     @freeze_time(OCCUPIED_DATE)
     def test_can_create_with_header_token(self):
         response = self.post_and_assert_status(SIMPLE_URLENCODED_NOTE, **self.auth_headers)
 
-        self.assertEqual('https://astrid.tech/2012/01/12/1', response.headers['Link'])
+        self.assertEqual('https://astrid.tech/2012/01/12/1', response.headers['Location'])
 
     @freeze_time(EMPTY_DATE)
     def test_create_valid_entry_1(self):
@@ -161,7 +161,7 @@ class MicropubEndpointTests(TestCase, SyndicationTestMixin):
 
         response = self.post_and_assert_status(form)
 
-        self.assertEqual('https://astrid.tech/2012/01/13/0', response.headers['Link'])
+        self.assertEqual('https://astrid.tech/2012/01/13/0', response.headers['Location'])
         entry = Entry.objects.get(date=EXPECTED_EMPTY_DATE)
         self.assertEqual(form['name'], entry.title)
         self.assertEqual(form['content'], entry.content)
@@ -176,13 +176,20 @@ class MicropubEndpointTests(TestCase, SyndicationTestMixin):
 
     @freeze_time(EMPTY_DATE)
     def test_create_valid_entry_2(self):
-        form = {'type': ['h-entry'], 'properties': {'name': ['Down-shifting and filtering a signal'],
-                                                    'summary': ['Because the FPGA is fast, but not *that* fast'],
-                                                    'content': ['Insert content here'],
-                                                    'category': ['notes', 'computer-engineering', 'python', 'jupyter',
-                                                                 'fpgas', 'numpy', 'matplotlib', 'dsp', 'math',
-                                                                 'scikit-learn'], 'created': ['2020-06-18'],
-                                                    'published': ['2020-06-18'], 'photo': []}}
+        form = {
+            'type': ['h-entry'],
+            'properties': {
+                'name': ['Down-shifting and filtering a signal'],
+                'summary': ['Because the FPGA is fast, but not *that* fast'],
+                'content': ['Insert content here'],
+                'category': ['notes', 'computer-engineering', 'python', 'jupyter',
+                             'fpgas', 'numpy', 'matplotlib', 'dsp', 'math',
+                             'scikit-learn'],
+                'created': ['2020-06-18'],
+                'published': ['2020-06-18'],
+                'photo': []
+            }
+        }
 
         self.post_json_and_assert_status(form)
 
@@ -195,7 +202,7 @@ class MicropubEndpointTests(TestCase, SyndicationTestMixin):
 
         response = self.post_and_assert_status(form)
 
-        self.assertEqual('https://astrid.tech/2012/01/12/1', response.headers['Link'])
+        self.assertEqual('https://astrid.tech/2012/01/12/1', response.headers['Location'])
         entry = Entry.objects.get(date=EXPECTED_OCCUPIED_DATE, ordinal=1)
         self.assertEqual(form['content'], entry.content)
         self.assertTrue(entry.is_visible())

@@ -223,7 +223,7 @@ def _syndication_targets():
 def _created(entry: Entry):
     return HttpResponse(
         status=HTTP_201_CREATED,
-        headers={'Link': 'https://astrid.tech' + entry.slug}
+        headers={'Location': 'https://astrid.tech' + entry.slug}
     )
 
 
