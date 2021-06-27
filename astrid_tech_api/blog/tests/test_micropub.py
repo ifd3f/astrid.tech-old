@@ -171,6 +171,8 @@ class MicropubEndpointTests(TestCase, SyndicationTestMixin):
         self.assertIsNotNone(entry.tags.get(id='django'))
         self.assertIsNotNone(entry.tags.get(id='python'))
         self.assertTrue(entry.is_visible())
+        self.assertFalse(entry.repost_of)
+        self.assertFalse(entry.location)
 
     @freeze_time(EMPTY_DATE)
     def test_create_valid_entry_2(self):
@@ -179,8 +181,8 @@ class MicropubEndpointTests(TestCase, SyndicationTestMixin):
                                                     'content': ['Insert content here'],
                                                     'category': ['notes', 'computer-engineering', 'python', 'jupyter',
                                                                  'fpgas', 'numpy', 'matplotlib', 'dsp', 'math',
-                                                                 'scikit-learn'], 'created': '2020-06-18',
-                                                    'published': '2020-06-18', 'photo': []}}
+                                                                 'scikit-learn'], 'created': ['2020-06-18'],
+                                                    'published': ['2020-06-18'], 'photo': []}}
 
         self.post_json_and_assert_status(form)
 
@@ -197,6 +199,8 @@ class MicropubEndpointTests(TestCase, SyndicationTestMixin):
         entry = Entry.objects.get(date=EXPECTED_OCCUPIED_DATE, ordinal=1)
         self.assertEqual(form['content'], entry.content)
         self.assertTrue(entry.is_visible())
+        self.assertFalse(entry.repost_of)
+        self.assertFalse(entry.location)
 
     @freeze_time(EMPTY_DATE)
     def test_create_entry_with_enabled_syndication(self):
@@ -232,7 +236,8 @@ class MicropubEndpointTests(TestCase, SyndicationTestMixin):
                 }],
                 "category": [
                     "indieweb", "p3k"
-                ]
+                ],
+                "repost-of": []
             }
         }
 
@@ -240,6 +245,7 @@ class MicropubEndpointTests(TestCase, SyndicationTestMixin):
 
         obj = Entry.objects.get(date=EXPECTED_EMPTY_DATE)
         self.assertEqual('text/html', obj.content_type)
+        self.assertFalse(obj.repost_of)
 
     @freeze_time(EMPTY_DATE)
     def test_create_json_entry_with_plain_content(self):

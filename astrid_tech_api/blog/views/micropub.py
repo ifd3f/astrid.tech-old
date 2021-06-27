@@ -1,6 +1,6 @@
 import json
 from datetime import datetime
-from typing import Iterable, Union, Dict
+from typing import Iterable, Union, Dict, List
 from urllib.parse import urlunparse
 
 import pytz
@@ -21,6 +21,10 @@ logger = get_logger(__name__)
 _EMPTY = ['']
 
 
+class InvalidMicropubException(Exception):
+    pass
+
+
 def create_syndications(entry: Entry, syndications: Iterable[str]):
     for url in syndications:
         Syndication.objects.create(
@@ -32,7 +36,11 @@ def create_syndications(entry: Entry, syndications: Iterable[str]):
 
 def create_mp_syndicate_to(entry: Entry, targets: Iterable[str]):
     for uid in targets:
-        target = SyndicationTarget.objects.filter(enabled=True).get(id=uid)
+        try:
+            target = SyndicationTarget.objects.filter(enabled=True).get(id=uid)
+        except SyndicationTarget.DoesNotExist:
+            raise InvalidMicropubException(f'invalid syndication target {uid}')
+
         Syndication.objects.create(
             target=target,
             status=Syndication.Status.SCHEDULED,
@@ -82,6 +90,20 @@ def get_dates(query: Dict):
     return published, created
 
 
+def get_microformat_str(d: Dict[str, List[str]], key):
+    objs = d.get(key, [])
+    if not isinstance(objs, list):
+        raise InvalidMicropubException(f'key {repr(key)} is not a list')
+
+    if len(objs) == 0:
+        return None
+    if len(objs) != 1:
+        raise InvalidMicropubException(f'too many values for key {repr(key)}')
+    [v] = objs
+    return v
+
+
+
 @transaction.atomic
 def create_entry_from_query(query: QueryDict):
     published, created = get_dates(query)
@@ -129,8 +151,8 @@ def create_entry_from_json(properties: dict):
     published, created = get_dates(properties)
 
     entry = Entry.objects.create(
-        title=properties.get('name', _EMPTY)[0],
-        description=properties.get('summary', _EMPTY),
+        title=get_microformat_str(properties, 'name'),
+        description=get_microformat_str(properties, 'summary'),
 
         created_date=published,
         published_date=created,
@@ -138,9 +160,9 @@ def create_entry_from_json(properties: dict):
         date=created,
         ordinal=Entry.get_next_ordinal(created),
 
-        reply_to=properties.get('in-reply-to', _EMPTY),
-        location=properties.get('location', _EMPTY),
-        repost_of=properties.get('repost-of', _EMPTY),
+        reply_to=get_microformat_str(properties, 'in-reply-to'),
+        location=get_microformat_str(properties, 'location'),
+        repost_of=get_microformat_str(properties, 'repost-of'),
 
         content=content,
         content_type=content_type
@@ -213,12 +235,7 @@ def _media_endpoint(host):
 def handle_create_json(logger_, request: WSGIRequest):
     data = json.loads(request.body)
 
-    h_types = data.get('type')
-    if h_types is None:
-        return _invalid_request(f'must specify h_type')
-    if len(h_types) != 1:
-        return _invalid_request(f'must specify only one h_type')
-    [h_type] = data.get('type')
+    h_type = get_microformat_str(data, 'type')
 
     logger_.debug('Decoded type', h_type=h_type)
 
@@ -329,10 +346,14 @@ def micropub(request: WSGIRequest) -> HttpResponse:
             if not access_token.is_valid(['create']):
                 return _forbidden()
 
-            if request.content_type == JSON:
-                return handle_create_json(logger_, request)
-            if request.content_type in FORM:
-                return handle_create_form(logger_, request)
+            try:
+                if request.content_type == JSON:
+                    return handle_create_json(logger_, request)
+                if request.content_type in FORM:
+                    return handle_create_form(logger_, request)
+            except InvalidMicropubException as e:
+                return _invalid_request(e.args)
+
             return _invalid_request(f'unsupported content-type {request.content_type}')
 
         return _invalid_request(f'unsupported action {action}')
