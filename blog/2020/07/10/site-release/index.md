@@ -2,7 +2,7 @@
 type: blog
 
 title: Finally live!
-date: "2020-07-10T11:48:00-0700"
+date: "2020-07-10T11:48:00-07:00"
 description: "Yay!"
 tags:
   - /projects/astrid-tech/
