@@ -3,16 +3,11 @@ import { parse } from "remark";
 import { BlogPost, BlogPostMeta } from "../../types/types";
 import { getConnection } from "./util";
 
-export type Path = {
-  year: string;
-  month: string;
-  day: string;
-  slug: string[];
-};
-
 export function getPathFromEntry(entry: Entry) : Path{
   return buildPath(new Date(entry.date), entry.ordinal, entry.slug_name)
 }
+
+type Path = string[];
 
 export function getYMDString(date: Date) {
   const year = date.getFullYear().toString();
@@ -25,14 +20,14 @@ export function buildPath(
   date: Date,
   ordinal: number,
   slugName?: string
-): Path {
+) : Path {
   const { year, month, day } = getYMDString(date);
 
-  const slug = [ordinal.toString()];
+  const slug = [year, month, day, ordinal.toString()];
   if (slugName && slugName.length > 0) {
     slug.push(slugName);
   }
-  return { year, month, day, slug };
+  return slug;
 }
 
 export function rowToBlogMeta(row: any, tags: string[]): BlogPostMeta<string> {
@@ -67,10 +62,11 @@ export async function resolveBlogPost(
 ): Promise<Entry[]> {
   const parsed = [];
   for (const s of [year, month, day, ordinal]) {
+    if (!s) break;
+
     const n = parseInt(s);
-    if (isNaN(n)) {
-      break;
-    }
+    if (isNaN(n)) break;
+    
     parsed.push(n);
   }
 
@@ -95,15 +91,8 @@ export async function resolveBlogPost(
   return await api.getEntries(params);
 }
 
-export async function getBlogPost(path: Path): Promise<EntryDetail> {
+export async function getBlogPost(year: any, month: any, day: any, ordinal: any): Promise<EntryDetail> {
   const api = AstridTechAPI.createWithEnvRoot();
-  const {
-    year,
-    month,
-    day,
-    slug: [ordinal],
-  } = path;
-
   const [entry] = await api.getEntriesWithDetail({
     year,
     month,
