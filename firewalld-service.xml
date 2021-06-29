@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
+<service>
+  <short>api.astrid.tech Development</short>
+  <description>api.astrid.tech is the backend of the world-renowned website, astrid.tech</description>
+  <port protocol="tcp" port="8001"/>
+</service>

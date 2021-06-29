@@ -7,7 +7,6 @@ import React, { useEffect } from "react";
 import { CookiesProvider } from "react-cookie";
 import { APIProvider } from "../components/api/APIProvider";
 import { TagTableProvider } from "../components/tags/TagTableProvider";
-import tags from "../data/tags";
 import "../styles/custom.scss";
 import ReactGA from "react-ga";
 import { useRouter } from "next/router";
@@ -22,12 +21,12 @@ export default function MyApp({ Component, pageProps }: AppProps) {
   }, [pathname, query]);
 
   return (
-    <TagTableProvider tags={tags}>
-      <CookiesProvider>
-        <APIProvider root={process.env.apiRoot!}>
+    <CookiesProvider>
+      <APIProvider root={process.env.apiRoot!}>
+        <TagTableProvider>
           <Component {...pageProps} />
-        </APIProvider>
-      </CookiesProvider>
-    </TagTableProvider>
+        </TagTableProvider>
+      </APIProvider>
+    </CookiesProvider>
   );
 }

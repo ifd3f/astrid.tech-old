@@ -1,3 +1,4 @@
+import { AstridTechAPI, Entry, EntryDetail } from "lib/astrid-tech-api";
 import { BlogPost, BlogPostMeta } from "../../types/types";
 import { getBlogSlug } from "../util";
 import { getConnection } from "./util";
@@ -19,50 +20,40 @@ export function rowToBlogPost(row: any, tags: string[]): BlogPost<string> {
   };
 }
 
-export function getBlogPostSlugs(): Path[] {
-  const db = getConnection();
-  const results = db
-    .prepare("SELECT date AS dateStr, slug FROM blog_post")
-    .all() as {
-    dateStr: string;
-    slug: string;
-  }[];
-  return results.map((post) =>
-    getBlogSlug({
-      date: new Date(post.dateStr),
-      slug: post.slug,
-    })
-  );
+export async function getBlogPostSlugs(): Promise<Path[]> {
+  const api = AstridTechAPI.createWithEnvRoot();
+  const entries = await api.getEntries();
+
+  return entries.map((e) => {
+    const date = new Date(e.date);
+    const year = date.getFullYear().toString();
+    const month = (date.getMonth() + 1).toString();
+    const day = (date.getDate() + 1).toString();
+    const slug = [e.ordinal.toString()];
+    if (e.slug_name && e.slug_name.length > 0) {
+      slug.push(e.slug_name);
+    }
+    return { year, month, day, slug };
+  });
 }
 
-export function getBlogPost(path: Path): BlogPost<string> {
-  const db = getConnection();
-  const row = db
-    .prepare(
-      `SELECT 
-        id, 
-        asset_root as assetRoot, 
-        thumbnail, 
-        title, 
-        description, 
-        slug, 
-        date, 
-        content
-      FROM blog_post
-      WHERE year = @year AND month = @month AND day = @day AND slug = @slug`
-    )
-    .get({
-      year: path.year,
-      month: path.month,
-      day: path.day,
-      slug: path.slug[0],
-    });
+export async function getBlogPost(path: Path): Promise<EntryDetail> {
+  const api = AstridTechAPI.createWithEnvRoot();
+  const {
+    year,
+    month,
+    day,
+    slug: [ordinal],
+  } = path;
 
-  const tags = db
-    .prepare(`SELECT tag FROM blog_tag WHERE fk_blog = @id`)
-    .all({ id: row.id })
-    .map(({ tag }) => tag);
-  return rowToBlogPost(row, tags);
+  const [entry] = await api.getEntriesWithDetail({
+    year,
+    month,
+    day,
+    ordinal: parseInt(ordinal),
+  });
+
+  return entry;
 }
 
 export function getBlogPosts(): BlogPost<string>[] {

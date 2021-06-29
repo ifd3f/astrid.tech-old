@@ -14,7 +14,7 @@ class ChildSyndicationSerializer(ModelSerializer):
         fields = ['last_updated', 'location']
 
 
-class PublicEntrySerializer(ModelSerializer):
+class PublicEntryListSerializer(ModelSerializer):
     syndications = SerializerMethodField()
     tags = PrimaryKeyRelatedField(queryset=Tag.objects.all(), many=True)
 
@@ -29,10 +29,27 @@ class PublicEntrySerializer(ModelSerializer):
         extra_kwargs = {
             'deleted_date': {'write_only': True}
         }
+        exclude = ['id', 'content', 'content_type']
+
+
+class PublicEntryDetailSerializer(PublicEntryListSerializer):
+    class Meta:
+        model = Entry
+        read_only_fields = ['date', 'ordinal']
+
+        extra_kwargs = {
+            'deleted_date': {'write_only': True}
+        }
         exclude = ['id']
 
 
-class TagSerializer(ModelSerializer):
+class TagListSerializer(ModelSerializer):
+    class Meta:
+        model = Tag
+        exclude = ['description']
+
+
+class TagDetailSerializer(ModelSerializer):
     class Meta:
         model = Tag
         fields = '__all__'

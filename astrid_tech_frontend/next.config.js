@@ -1,6 +1,7 @@
-const { getEnv } = require("./lib/jsenvutil");
 const withPlugins = require("next-compose-plugins");
 
+
+console.log(`ASTRID_TECH_API_ROOT = ${process.env.ASTRID_TECH_API_ROOT}`)
 
 module.exports = withPlugins(
   [

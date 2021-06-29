@@ -5,18 +5,10 @@ import React, { FC, useEffect, useState } from "react";
 import { Container } from "reactstrap";
 import Layout from "../components/layout";
 import SEO from "../components/seo";
-import { getStaticPaths as projectPaths } from "./projects/[slug]";
-import { getStaticPaths as tagPaths } from "./t/[slug]";
-import { getStaticPaths as blogPaths } from "./[year]/[month]/[day]/[...slug]";
 
 async function getAllPaths() {
-  return (
-    await Promise.all(
-      [blogPaths, tagPaths, projectPaths].map((x) => x.getStringPaths!())
-    )
-  )
-    .flat()
-    .concat(["/projects", "/about", "/", "/latest", "/licenses", "/privacy"]);
+  // TODO
+  return ["/projects", "/about", "/", "/latest", "/licenses", "/privacy"];
 }
 
 export const getStaticProps = async () => {

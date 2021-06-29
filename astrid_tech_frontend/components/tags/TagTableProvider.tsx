@@ -37,6 +37,7 @@ class EmptyTagTable implements TagTable {
 
 class FilledTagTable {
   private readonly cache: Map<string, Tag>;
+
   constructor(data: Tag[]) {
     this.cache = new Map(data.map((t) => [t.slug, t]));
   }
@@ -90,7 +91,7 @@ export const TagTableProvider: FC<TagTableProviderProps> = ({ children }) => {
   const { api } = useAPI();
   const [table, setTable] = useState<TagTable>(new EmptyTagTable());
   useEffect(() => {
-    api.getTags().then((tags) => setTable(new FilledTagTable(tags)));
+    //api.getTags().then((tags) => setTable(new FilledTagTable(tags)));
   }, []);
   return <Context.Provider value={{ table }}>{children}</Context.Provider>;
 };

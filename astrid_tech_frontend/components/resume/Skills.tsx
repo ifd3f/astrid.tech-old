@@ -70,7 +70,7 @@ const SkillCategoryView: FC<SkillCategoryViewProps> = ({
 );
 
 export function SkillsSection() {
-  const skills = require("../../data/objs/misc/skills") as SkillGroup[];
+  const skills = [] as SkillGroup[];
   return (
     <HomepageSection style={{ backgroundColor: "#55cdfc" }}>
       <div className={style.sectionHeading}>

@@ -6,22 +6,19 @@ import { renderMarkdown } from "../../../../lib/markdown";
 import { wrappedStaticPaths } from "../../../../lib/pathcache";
 import { BlogPost, convertBlogPostToObjectDate } from "../../../../types/types";
 
-export const getStaticPaths = wrappedStaticPaths(
-  __filename,
-  async () => {
-    const slugs = getBlogPostSlugs();
-    return {
-      paths: slugs.map((params) => ({
-        params,
-      })),
-      fallback: false,
-    };
-  },
-  ({ year, month, day, slug }: Path) => `/${year}/${month}/${day}/${slug[0]}`
-);
+export const getStaticPaths = async () => {
+  const slugs = await getBlogPostSlugs();
+  console.log("Got blog slugs", slugs);
+  return {
+    paths: slugs.map((params) => ({
+      params,
+    })),
+    fallback: true,
+  };
+};
 
 export const getStaticProps: GetStaticProps = async ({ params }) => {
-  const post = getBlogPost(params!! as Path);
+  const post = await getBlogPost(params!! as Path);
 
   const content = await renderMarkdown(post.content, post.assetRoot);
 

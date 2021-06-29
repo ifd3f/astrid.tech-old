@@ -36,6 +36,36 @@ export type Comment = {
   htmlContent: string;
 };
 
+export type Entry = {
+  syndications: any[]; // TODO
+  tags: string[];
+  uuid: string;
+  title: string;
+  slug_name?: string;
+  description: string;
+  created_date: Date;
+  published_date: Date;
+  updated_date: Date;
+  date: string;
+  ordinal: number;
+  reply_to?: string;
+  location?: string;
+  repost_of?: string;
+};
+
+export type EntryDetail = Entry & {
+  content_type: string;
+  content: string;
+};
+
+export type SearchParam = {
+  year?: number | string;
+  month?: number | string;
+  day?: number | string;
+  ordinal?: number | string;
+  detailed?: boolean;
+};
+
 export class AstridTechAPI {
   private axios: AxiosInstance;
 
@@ -102,5 +132,16 @@ export class AstridTechAPI {
     const result = await this.axios.get<Tag[]>("/api/tags/");
 
     return result.data;
+  }
+
+  async getEntries(params: SearchParam = {}): Promise<Entry[]> {
+    const result = await this.axios.get<Entry[]>("/api/entries/", { params });
+
+    return result.data;
+  }
+  async getEntriesWithDetail(params: SearchParam = {}): Promise<EntryDetail[]> {
+    const result = await this.getEntries({ ...params, detailed: true });
+
+    return result as EntryDetail[];
   }
 }
