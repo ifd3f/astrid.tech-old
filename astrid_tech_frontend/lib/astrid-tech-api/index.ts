@@ -139,6 +139,7 @@ export class AstridTechAPI {
 
     return result.data;
   }
+
   async getEntriesWithDetail(params: SearchParam = {}): Promise<EntryDetail[]> {
     const result = await this.getEntries({ ...params, detailed: true });
 

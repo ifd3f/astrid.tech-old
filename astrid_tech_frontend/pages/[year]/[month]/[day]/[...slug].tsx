@@ -1,37 +1,85 @@
-import { GetStaticProps, InferGetStaticPropsType } from "next";
+import {
+  GetServerSideProps,
+  GetStaticProps,
+  InferGetServerSidePropsType,
+  InferGetStaticPropsType,
+} from "next";
 import { FC } from "react";
-import BlogPostPage from "../../../../components/blog/blog";
-import { getBlogPost, getBlogPostSlugs, Path } from "../../../../lib/cache";
+import BlogPostPage, { ClientBlogPost } from "../../../../components/blog/blog";
+import {
+  getBlogPost,
+  getBlogPostSlugs,
+  getPathFromEntry,
+  Path,
+  resolveBlogPost,
+} from "../../../../lib/cache";
 import { renderMarkdown } from "../../../../lib/markdown";
 import { wrappedStaticPaths } from "../../../../lib/pathcache";
 import { BlogPost, convertBlogPostToObjectDate } from "../../../../types/types";
 
-export const getStaticPaths = async () => {
-  const slugs = await getBlogPostSlugs();
-  console.log("Got blog slugs", slugs);
+export const getServerSideProps: GetServerSideProps = async ({ params }) => {
+  const path = params!! as Path;
+  const {
+    year,
+    month,
+    day,
+    slug: [ordinal, slugName],
+  } = path;
+
+  const posts = await resolveBlogPost(year, month, day, ordinal);
+  console.debug("Resolved blog posts", posts);
+
+  if (posts.length == 1) {
+    const [post] = posts;
+    console.log("There is a single blog post", post);
+    if (post.slug_name != slugName) {
+      const { year, month, day, slug } = getPathFromEntry(post);
+      const segments = [year, month, day].concat(slug);
+      const destination = "/" + segments.join("/");
+      console.log("Redirecting user to canonical URL", destination);
+
+      return {
+        redirect: {
+          permanent: false,
+          destination,
+        },
+      };
+    }
+    console.log("Redirecting user to canonical URL", destination);
+
+    const content = ""; // TODO
+
+    return {
+      props: {
+        exact: true,
+        post: {
+          title: post.title,
+          contentHtml: content,
+          path,
+          tags: post.tags,
+          description: post.description,
+        } as ClientBlogPost,
+      },
+    };
+  }
+
   return {
-    paths: slugs.map((params) => ({
-      params,
-    })),
-    fallback: true,
+    props: {
+      exact: false,
+      posts,
+    },
   };
 };
 
-export const getStaticProps: GetStaticProps = async ({ params }) => {
-  const post = await getBlogPost(params!! as Path);
-
-  const content = await renderMarkdown(post.content, post.assetRoot);
-
-  return {
-    props: { post: { ...post, content: content } },
-  };
-};
-
-const Post: FC<InferGetStaticPropsType<typeof getStaticProps>> = ({ post }) => {
-  const p = post as BlogPost<string>;
-  return (
-    <BlogPostPage post={convertBlogPostToObjectDate(p) as BlogPost<Date>} />
-  );
+const Post: FC<InferGetServerSidePropsType<typeof getServerSideProps>> = ({
+  exact,
+  post,
+  posts,
+}) => {
+  if (exact) {
+    return <p>TODO</p>; //<BlogPostPage post={post} />;
+  }
+  return <p>TODO multiple Posts</p>; // TODO
 };
 
 export default Post;

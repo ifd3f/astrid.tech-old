@@ -1,4 +1,5 @@
 import { format } from "date-fns";
+import { Path } from "lib/cache";
 import { join } from "path";
 import React, { createContext, FC, useContext } from "react";
 import { FaCalendar } from "react-icons/fa";
@@ -40,22 +41,27 @@ const PostStatusGroup: FC = () => {
   );
 };
 
-export type BlogPostPageProps = { post: BlogPost<Date> };
+export type ClientBlogPost = {
+  title?: string;
+  description?: string;
+  tags: string[];
+  path: Path;
+  htmlContent?: string;
+};
+
+export type BlogPostPageProps = { post: ClientBlogPost };
 
 export const BlogPostPage: FC<BlogPostPageProps> = ({ post }) => {
-  const slug = blogSlugToString(getBlogSlug(post));
-  const url = join(process.env.publicRoot!, slug);
-
   return (
     <ProjectContext.Provider value={{ post }}>
-      <SEO title={post.title} description={post.description} />
+      <SEO title={"title" /* TODO*/} description={"desc" /* TODO*/} />
       <Layout currentLocation="blog">
         <LongformLayout
-          title={post.title}
-          url={url}
-          description={post.description}
-          descriptionRaw={post.description}
-          headingColor={getHSLString(getPersistentColor(slug))}
+          title={"title" /* TODO*/}
+          url={""}
+          description={"desc" /* TODO*/}
+          descriptionRaw={"desc" /* TODO*/}
+          headingColor="#FFFFFF"
           sidebar={
             <>
               <PostStatusGroup />
@@ -64,14 +70,16 @@ export const BlogPostPage: FC<BlogPostPageProps> = ({ post }) => {
           }
           above={null}
         >
-          <article className="longform">
-            <ContentDisplay>{post.content}</ContentDisplay>
-          </article>
+          {post.htmlContent ? (
+            <article className="longform">
+              <ContentDisplay>{post.htmlContent}</ContentDisplay>
+            </article>
+          ) : null}
         </LongformLayout>
         <Container>
           <section id="comments">
             <h2>Comments</h2>
-            <CommentSection slug={slug} />
+            <CommentSection slug={"TODO" /*TODO*/} />
           </section>
         </Container>
       </Layout>
