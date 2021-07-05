@@ -1,5 +1,6 @@
 import fs from "fs";
 import { join } from "path";
+import escapeHtml from 'escape-html';
 import remark from "remark";
 import VFile from "vfile";
 import { truncateKeepWords } from "./util";
@@ -24,26 +25,20 @@ const excerpt = require("remark-excerpt");
 const strip = require("strip-markdown");
 const emoji = require("remark-emoji");
 
-const publicRoot = join(process.cwd(), "public");
 
-export async function renderMarkdown(md: string, assetRoot: string) {
-  function convertRelativeFileRef(url: URL) {
-    if (
-      url.hostname == null &&
-      url.pathname != null &&
-      url.pathname[0] != "/"
-    ) {
-      const newPath = join("/_", assetRoot, url.pathname);
-      const expectedFile = join(publicRoot, newPath);
-      if (fs.existsSync(expectedFile) && fs.statSync(expectedFile).isFile()) {
-        return newPath;
-      }
-    }
-    return url;
+export async function renderContentToHTML(contentType: string, content: string) {
+  switch (contentType) {
+    case "text/markdown":
+      return await renderMarkdown(content)
+    case "text/html":
+      return content;
+    default:  // or plaintext
+      return escapeHtml(content);
   }
+}
 
+export async function renderMarkdown(md: string) {
   const vfile = VFile(md);
-  vfile.data = { destinationDir: join("./public/_", assetRoot) };
 
   const out = await unified()
     .use(markdown)
@@ -59,7 +54,6 @@ export async function renderMarkdown(md: string, assetRoot: string) {
     .use(footnotes)
     .use(remark2rehype, { allowDangerousHtml: true })
     .use(raw)
-    .use(urls, convertRelativeFileRef)
     .use(katex)
     .use(picture)
     .use(html, { sanitize: false })

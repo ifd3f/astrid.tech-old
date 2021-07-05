@@ -14,18 +14,21 @@ import {
   Path,
   resolveBlogPost,
 } from "../lib/cache";
-import { renderMarkdown } from "../lib/markdown";
+import { renderContentToHTML, renderMarkdown } from "../lib/markdown";
 import { wrappedStaticPaths } from "../lib/pathcache";
 import { BlogPost, convertBlogPostToObjectDate } from "../types/types";
 
-export const getServerSideProps: GetServerSideProps = async ({ params }) => {
+export const getServerSideProps: GetServerSideProps = async ({
+  params,
+  res,
+}) => {
   const path = params!!.path!! as string[];
 
   // // Check if this is a permashortlink query
   // if (path.length == 1) {
   //   const [psl] = path;
   //   if (isNaN(parseInt(psl))) {
-  //     // TODO (perma)shortlink handling   
+  //     // TODO (perma)shortlink handling
   //   }
   // }
 
@@ -41,6 +44,11 @@ export const getServerSideProps: GetServerSideProps = async ({ params }) => {
   // }
 
   // Resolve as if this is a blog post
+
+  res.setHeader(
+    "Cache-Control",
+    "public, s-maxage=10, stale-while-revalidate=59"
+  );
 
   const [year, month, day, ordinal, slugName] = path as string[];
 
@@ -65,20 +73,23 @@ export const getServerSideProps: GetServerSideProps = async ({ params }) => {
         },
       };
     }
-    
+
     // Render the content
     console.log("Rendering content");
 
+    const start = new Date().getTime();
     const fullPost = await getBlogPost(year, month, day, ordinal);
-
-    const content = ""; // TODO
+    const htmlContent = fullPost.content
+      ? await renderContentToHTML(fullPost.content_type, fullPost.content)
+      : null; // TODO
+    console.log(new Date().getTime() - start);
 
     return {
       props: {
-        pageType: 'entry',
+        pageType: "post",
         post: {
           title: fullPost.title,
-          contentHtml: content,
+          htmlContent,
           path,
           tags: fullPost.tags,
           description: fullPost.description,
@@ -89,7 +100,7 @@ export const getServerSideProps: GetServerSideProps = async ({ params }) => {
 
   return {
     props: {
-      pageType: 'entries',
+      pageType: "posts",
       posts,
     },
   };
@@ -100,8 +111,8 @@ const Post: FC<InferGetServerSidePropsType<typeof getServerSideProps>> = ({
   post,
   posts,
 }) => {
-  if (pageType == 'post') {
-    return <p>TODO</p>; //<BlogPostPage post={post} />;
+  if (pageType == "post") {
+    return <BlogPostPage post={post} />;
   }
   return <p>TODO multiple Posts</p>; // TODO
 };

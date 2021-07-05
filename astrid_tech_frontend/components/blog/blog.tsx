@@ -53,37 +53,24 @@ export type BlogPostPageProps = { post: ClientBlogPost };
 
 export const BlogPostPage: FC<BlogPostPageProps> = ({ post }) => {
   return (
-    <ProjectContext.Provider value={{ post }}>
-      <SEO title={"title" /* TODO*/} description={"desc" /* TODO*/} />
-      <Layout currentLocation="blog">
-        <LongformLayout
-          title={"title" /* TODO*/}
-          url={""}
-          description={"desc" /* TODO*/}
-          descriptionRaw={"desc" /* TODO*/}
-          headingColor="#FFFFFF"
-          sidebar={
-            <>
-              <PostStatusGroup />
-              <TagsGroup tags={post.tags} />
-            </>
-          }
-          above={null}
-        >
-          {post.htmlContent ? (
-            <article className="longform">
-              <ContentDisplay>{post.htmlContent}</ContentDisplay>
-            </article>
-          ) : null}
-        </LongformLayout>
+    <>
+      <SEO title={post.title} description={post.description} />
+      <Layout>
         <Container>
+          <article style={{ backgroundColor: "white" }}>
+            {post.title ? <h1>{post.title}</h1> : null}
+            {post.description ? <p>{post.description}</p> : null}
+            {post.htmlContent ? (
+              <div dangerouslySetInnerHTML={{ __html: post.htmlContent }} />
+            ) : null}
+          </article>
           <section id="comments">
             <h2>Comments</h2>
             <CommentSection slug={"TODO" /*TODO*/} />
           </section>
         </Container>
       </Layout>
-    </ProjectContext.Provider>
+    </>
   );
 };
 

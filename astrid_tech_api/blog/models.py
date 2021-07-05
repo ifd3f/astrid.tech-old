@@ -2,9 +2,10 @@ from datetime import datetime, timezone
 from uuid import uuid4
 
 import pytz
+from django.core.validators import URLValidator
 from django.db.models import Model, TextField, CharField, UUIDField, IntegerField, DateTimeField, URLField, \
     ManyToManyField, ForeignKey, CASCADE, DateField, Max, TextChoices, BooleanField, RESTRICT, Q, QuerySet, FileField, \
-    ImageField
+    OneToOneField
 
 
 class SyndicationTarget(Model):
@@ -66,6 +67,29 @@ def utc_now():
     return datetime.now(pytz.utc)
 
 
+class Content(Model):
+    """The content of a page."""
+
+    content_type = CharField(max_length=127, default='text/markdown')
+    """The content type, as a mimetype."""
+    content = TextField(blank=True, default='')
+    """The content of this entry."""
+    content_html = TextField(blank=True, default='')
+    """The content, rendered as HTML."""
+
+    def save(self, force_insert=False, force_update=False, using=None,
+             update_fields=None):
+        if self.content_type == 'text/markdown':
+            pass
+        elif self.content_type == 'text/html':
+            # HTML is just HTML.
+            self.content_html = self.content
+        else:
+            # Treat unknown content types as plaintext
+            self.content_html = f"<pre>{self.content}</pre>"
+        super(Content, self).save(force_insert, force_update, using, update_fields)
+
+
 class Entry(Model):
     @staticmethod
     def get_next_ordinal(date=None):
@@ -85,8 +109,8 @@ class Entry(Model):
 
     uuid = UUIDField(unique=True, default=uuid4, editable=False)
 
-    title = CharField(max_length=128, blank=True, null=True)
-    slug_name = CharField(max_length=64, blank=True, null=True)
+    title = CharField(max_length=128, blank=True, null=False)
+    slug_name = CharField(max_length=64, blank=True, null=False)
     description = TextField(blank=True, null=True)
 
     created_date = DateTimeField(default=utc_now, blank=True)
@@ -103,15 +127,17 @@ class Entry(Model):
     ordinal = IntegerField(null=False, default=default_entry_ordinal)
     """The ordinal entry for the day."""
 
-    reply_to = URLField(blank=True, null=True)
+    reply_to = URLField(blank=True, null=True, validators=[URLValidator()])
     """What this is in reply to."""
-    location = URLField(blank=True, null=True)
+    location = URLField(blank=True, null=True, validators=[URLValidator(["mailto"])])
     """What location this was created from, or related to."""
     repost_of = URLField(blank=True, null=True)
     """What this is a repost of."""
     tags = ManyToManyField(Tag, blank=True)
     """Tags this entry is associated with."""
 
+    # content = OneToOneField(Content, on_delete=RESTRICT, null=False)
+    # """The content of this page."""
     content_type = CharField(max_length=127, default='text/markdown')
     """The content type, as a mimetype."""
     content = TextField(blank=True, default='')
