@@ -4,10 +4,10 @@ export type Tagged<TypeID = undefined> = {
 };
 
 export type Tag = {
+  id: string;
   name: string;
   color: string;
   backgroundColor: string;
-  slug: string;
   count?: number;
 };
 

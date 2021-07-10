@@ -25,18 +25,16 @@ import styles from "./projects.module.scss";
 import { Filterer, SearchContext } from "./search";
 
 type CountBadgeProps = {
-  tag: string | Tag;
+  tag: Tag;
   count: number;
 };
 
 const CountBadge: FC<CountBadgeProps> = ({ tag, count }) => {
-  const table = useTagTable();
-  const data = table.get(tag);
   return (
     <Badge
       style={{
-        color: data.backgroundColor,
-        backgroundColor: data.color,
+        color: tag.backgroundColor,
+        backgroundColor: tag.color,
       }}
     >
       {count}
@@ -45,47 +43,54 @@ const CountBadge: FC<CountBadgeProps> = ({ tag, count }) => {
 };
 
 const SelectableTagList: FC = () => {
-  const { selectableTags, tagUsageCounts, addFilterTag } = useContext(
-    SearchContext
-  );
+  const { table } = useTagTable();
+  const { selectableTags, tagUsageCounts, addFilterTag } =
+    useContext(SearchContext);
 
   return (
     <div className={styles.selectableTagsContainer}>
-      {selectableTags.map((tag) => (
-        <span
-          className={styles.selectableTag}
-          onClick={() => addFilterTag(tag)}
-          key={tag}
-        >
-          <TagBadge tag={tag}>
-            {" "}
-            <CountBadge tag={tag} count={tagUsageCounts.get(tag)!} />
-          </TagBadge>
-        </span>
-      ))}
+      {selectableTags.map((id) => {
+        const tag = table.get(id);
+        return (
+          <span
+            className={styles.selectableTag}
+            onClick={() => addFilterTag(id)}
+            key={id}
+          >
+            <TagBadge tag={tag}>
+              {" "}
+              <CountBadge tag={tag} count={tagUsageCounts.get(id)!} />
+            </TagBadge>
+          </span>
+        );
+      })}
     </div>
   );
 };
 
 const CurrentlyUsedTagList: FC = () => {
-  const { filterTags, tagUsageCounts, removeFilterTag } = useContext(
-    SearchContext
-  );
+  const { table } = useTagTable();
+  const { filterTags, tagUsageCounts, removeFilterTag } =
+    useContext(SearchContext);
+
   return (
     <div>
-      {[...filterTags.values()].map((tag) => (
-        <span
-          className={styles.deletableTag}
-          onClick={() => removeFilterTag(tag)}
-          key={tag}
-        >
-          <TagBadge tag={tag}>
-            {" "}
-            <CountBadge tag={tag} count={tagUsageCounts.get(tag)!} />
-            <BsX />
-          </TagBadge>
-        </span>
-      ))}
+      {[...filterTags.values()].map((id) => {
+        const tag = table.get(id);
+        return (
+          <span
+            className={styles.deletableTag}
+            onClick={() => removeFilterTag(id)}
+            key={id}
+          >
+            <TagBadge tag={tag}>
+              {" "}
+              <CountBadge tag={tag} count={tagUsageCounts.get(id)!} />
+              <BsX />
+            </TagBadge>
+          </span>
+        );
+      })}
     </div>
   );
 };
@@ -202,7 +207,7 @@ export const CardGroup: FC<{
 };
 
 export const ProjectCardsView: FC = () => {
-  const { isSearching, displayedProjects } = useContext(SearchContext);
+  const { displayedProjects } = useContext(SearchContext);
   return (
     <Row>
       {displayedProjects.map((project) => (

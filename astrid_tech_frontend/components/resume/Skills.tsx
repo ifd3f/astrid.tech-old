@@ -39,7 +39,7 @@ type SkillInfoDisplayProps = {
 };
 
 const SkillInfoDisplay: FC<SkillInfoDisplayProps> = ({ slug }) => {
-  const tag = useTagTable().get(slug);
+  const tag = useTagTable().table.get(slug);
   const link = !!tag.count;
   const inner = (
     <div

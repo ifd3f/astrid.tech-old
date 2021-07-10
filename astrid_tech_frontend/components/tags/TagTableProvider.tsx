@@ -18,19 +18,19 @@ import {
 import { Tag } from "../../types/types";
 
 export interface TagTable {
-  get(tag: string): Tag;
+  get(id: string): Tag;
 }
 
 class EmptyTagTable implements TagTable {
-  get(tag: string): Tag {
-    if (typeof tag != "string") {
-      return tag;
+  get(id: string): Tag {
+    if (typeof id != "string") {
+      return id;
     }
     return {
-      name: tag,
+      name: id,
       backgroundColor: "#333333",
       color: "#FFFFFF",
-      slug: tag,
+      id,
     };
   }
 }
@@ -39,25 +39,21 @@ class FilledTagTable {
   private readonly cache: Map<string, Tag>;
 
   constructor(data: Tag[]) {
-    this.cache = new Map(data.map((t) => [t.slug, t]));
+    this.cache = new Map(data.map((t) => [t.id, t]));
   }
 
-  get(tag: string): Tag {
-    if (typeof tag != "string") {
-      return tag;
-    }
-
-    const existing = this.cache.get(tag);
+  get(id: string): Tag {
+    const existing = this.cache.get(id);
     if (existing) return existing;
 
     const backgroundColor = getHSLString(
-      getPersistentColor(tag, RichColorTheme)
+      getPersistentColor(id, RichColorTheme)
     );
     const color = getContrastingTextColor(backgroundColor);
 
-    var name = tag;
+    var name = id;
 
-    const machineTag = parseMachineTagOrNull(tag);
+    const machineTag = parseMachineTagOrNull(id);
     if (machineTag) {
       switch (machineTag.namespace) {
         case "school":
@@ -72,9 +68,9 @@ class FilledTagTable {
       name,
       color,
       backgroundColor,
-      slug: tag,
+      id,
     };
-    this.cache.set(tag, result);
+    this.cache.set(id, result);
     return result;
   }
 }
@@ -91,7 +87,7 @@ export const TagTableProvider: FC<TagTableProviderProps> = ({ children }) => {
   const { api } = useAPI();
   const [table, setTable] = useState<TagTable>(new EmptyTagTable());
   useEffect(() => {
-    //api.getTags().then((tags) => setTable(new FilledTagTable(tags)));
+    api.getTags().then((tags) => setTable(new FilledTagTable(tags)));
   }, []);
   return <Context.Provider value={{ table }}>{children}</Context.Provider>;
 };

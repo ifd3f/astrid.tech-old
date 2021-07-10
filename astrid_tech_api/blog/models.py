@@ -30,6 +30,8 @@ class Tag(Model):
     background_color = CharField(max_length=10, blank=True, null=True)
     description = TextField(null=True, blank=True)
 
+    content_warning = BooleanField(default=False, null=False)
+
     def save(self, *args, **kwargs):
         if not self.name:
             self.name = self.id

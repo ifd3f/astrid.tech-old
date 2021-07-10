@@ -22,6 +22,13 @@ type CommentData = {
   slug: string;
 };
 
+type TagData = {
+  id: string,
+  name: string,
+  color: string,
+  background_color: string,
+}
+
 export type CommentAuthor = {
   name: string;
   email: string;
@@ -129,9 +136,14 @@ export class AstridTechAPI {
   }
 
   async getTags(): Promise<Tag[]> {
-    const result = await this.axios.get<Tag[]>("/api/tags/");
+    const result = await this.axios.get<TagData[]>("/api/tags/");
 
-    return result.data;
+    return result.data.map(t => ({
+      name: t.name,
+      id: t.id,
+      backgroundColor: t.background_color,
+      color: t.color
+    }));
   }
 
   async getEntries(params: SearchParam = {}): Promise<Entry[]> {

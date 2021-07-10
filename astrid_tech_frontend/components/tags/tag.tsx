@@ -8,7 +8,7 @@ import style from "./tag.module.scss";
 import { useTagTable } from "./TagTableProvider";
 
 type TagBadgeProps = {
-  tag: Tag | string;
+  tag: Tag;
   link?: boolean;
   children?: ReactNode;
 };
@@ -18,11 +18,7 @@ export const TagBadge: FC<TagBadgeProps> = ({
   link = false,
   children,
 }) => {
-  if (typeof tag == "string") {
-    const { table } = useTagTable();
-    tag = table.get(tag);
-  }
-  const linkTo = tag.slug[0] == "/" ? tag.slug : "/t/" + tag.slug;
+  const linkTo = tag.id[0] == "/" ? tag.id : "/t/" + tag.id;
 
   const badge = (
     <Badge
@@ -54,11 +50,13 @@ export const TagList: FC<TagListProps> = ({
   limit = Number.MAX_SAFE_INTEGER,
   className,
 }) => {
+  const { table } = useTagTable();
   const [isOpened, setOpened] = useState(false);
 
   const excluded = tags.slice(limit);
 
-  const onClick = (ev: React.MouseEvent<HTMLElement, MouseEvent>) => {
+  // Intercept events before they go down
+  const stopPropagation = (ev: React.MouseEvent<HTMLElement, MouseEvent>) => {
     ev.preventDefault();
     ev.stopPropagation();
     setOpened(!isOpened);
@@ -74,6 +72,7 @@ export const TagList: FC<TagListProps> = ({
     <>+{excluded.length}</>
   );
 
+
   return (
     <div className={className}>
       <p
@@ -82,11 +81,11 @@ export const TagList: FC<TagListProps> = ({
           marginBottom: 3,
         }}
       >
-        {shownTags.map((tag) => (
-          <TagBadge key={tag} tag={tag} link={link} />
+        {shownTags.map((id) => (
+          <TagBadge key={id} tag={table.get(id)} link={link} />
         ))}{" "}
         {excluded.length > 0 ? (
-          <Badge title={alt} onClick={onClick} style={{ cursor: "pointer" }}>
+          <Badge title={alt} onClick={stopPropagation} style={{ cursor: "pointer" }}>
             {openBadgeText}
           </Badge>
         ) : null}
