@@ -38,8 +38,10 @@ const Page: FC<InferGetServerSidePropsType<typeof getServerSideProps>> = ({
   return (
     <Layout currentLocation="brand">
       <SEO title={title} description={description} />
-      <PageHeading title={title} description={description} bgColor="#eecc8d" />
       <Container className={styles.blogContentContainer}>
+        <header>
+          <h1 className="p-name">Astrid Yu</h1>
+        </header>
         <section>
           <p className="text-right">
             <a href="https://astrid.tech/rss.xml">
