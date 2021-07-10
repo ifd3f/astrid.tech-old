@@ -43,9 +43,9 @@ export type Entry = {
   title: string;
   slug_name?: string;
   description: string;
-  created_date: Date;
-  published_date: Date;
-  updated_date: Date;
+  created_date: string;
+  published_date: string;
+  updated_date: string;
   date: string;
   ordinal: number;
   reply_to?: string;

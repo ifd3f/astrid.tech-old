@@ -7,20 +7,24 @@ import style from "../../styles/blog.module.scss";
 import { BlogPostMeta } from "../../types/types";
 import { TagList } from "../tags/tag";
 
-type PostProps = {
-  post: BlogPostMeta<Date>;
+export type PostBriefData = {
+  title: string;
+  publishedDate: string;
+  excerpt: string;
+  description: string;
+  tags: string[];
+  slug: string;
 };
 
-export const PostBrief: FC<PostProps> = ({ post }) => {
-  const dateString = format(post.date, "d MMMM yyyy");
-  const url = blogSlugToString(getBlogSlug(post));
+export const PostBrief: FC<{ post: PostBriefData }> = ({ post }) => {
+  const dateString = format(new Date(post.publishedDate), "d MMMM yyyy");
 
   return (
-    <Link href={url}>
+    <Link href={post.slug}>
       <article className={style.brief}>
         <Row>
           <div className="col-12 col-sm-8 col-md-7">
-            <a href={url}>
+            <a href={post.slug}>
               <h3>{post.title}</h3>
               <p>{post.description}</p>
               <p className="text-muted">{post.excerpt}</p>
@@ -38,11 +42,7 @@ export const PostBrief: FC<PostProps> = ({ post }) => {
   );
 };
 
-export type BlogFeedProps = {
-  posts: BlogPostMeta<Date>[];
-};
-
-export const BlogFeed: FC<BlogFeedProps> = ({ posts }) => {
+export const BlogFeed: FC<{ posts: PostBriefData[] }> = ({ posts }) => {
   return (
     <div>
       {posts.map((post) => (

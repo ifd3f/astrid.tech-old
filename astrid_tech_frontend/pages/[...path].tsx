@@ -50,7 +50,7 @@ export const getServerSideProps: GetServerSideProps = async ({
     "public, s-maxage=10, stale-while-revalidate=59"
   );
 
-  const [year, month, day, ordinal, slugName] = path as string[];
+  const [year, month, day, ordinal] = path as string[];
 
   const posts = await resolveBlogPost(year, month, day, ordinal);
   console.debug("Resolved blog posts", posts);
