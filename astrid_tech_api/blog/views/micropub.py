@@ -146,12 +146,12 @@ def create_content_from_mf2(content_obj) -> Content:
         [key] = child  # Extract the (hopefully only) key in there
         if key == 'html':
             return Content(
-                body=child,
+                body=child[key],
                 content_type='text/html'
             )
         if key == 'commonmark':
             return Content(
-                body=child,
+                body=child[key],
                 content_type='text/markdown'
             )
     raise ValueError(f'Could not parse {repr(content_obj)}')

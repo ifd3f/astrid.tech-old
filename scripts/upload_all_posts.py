@@ -14,7 +14,6 @@ from dotenv import load_dotenv
 from util import create_auth_session
 
 
-
 def markdown_to_micropub(path: Path):
     if path.name.endswith('.note.md'):
         day = path.parent

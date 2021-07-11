@@ -196,6 +196,24 @@ class MicropubEndpointTests(TestCase, SyndicationTestMixin):
         self.assertTrue(Tag.objects.filter(id="computer-engineering").exists())
         self.assertFalse(Syndication.objects.exists())
 
+    @freeze_time(EMPTY_DATE)
+    def test_create_valid_commonmark_entry(self):
+        content = 'Insert content here'
+        form = {
+            'type': ['h-entry'],
+            'properties': {
+                'name': ['Down-shifting and filtering a signal'],
+                'summary': ['Because the FPGA is fast, but not *that* fast'],
+                'content': [{'commonmark': content}],
+            }
+        }
+
+        self.post_json_and_assert_status(form)
+
+        entry = Entry.objects.get(date=EXPECTED_EMPTY_DATE, ordinal=0)
+        self.assertFalse(Syndication.objects.exists())
+        self.assertEqual(entry.content.body, content)
+
     @freeze_time(OCCUPIED_DATE)
     def test_create_valid_entry_on_occupied_date(self):
         form = SIMPLE_URLENCODED_NOTE
