@@ -10,7 +10,7 @@ from django.urls import reverse
 from freezegun import freeze_time
 from oauth2_provider.models import AccessToken
 
-from blog.models import Entry, UploadedFile, Syndication, Tag
+from blog.models import Entry, UploadedFile, Syndication, Tag, Content
 from blog.tests import SyndicationTestMixin
 from indieauth.models import ClientSite
 
@@ -64,7 +64,7 @@ class MicropubEndpointTests(TestCase, SyndicationTestMixin):
         self.allowed_user.user_permissions.add(Permission.objects.get(codename='add_entry'))
 
         self.existing_entry = Entry(
-            content="I wrote something here but I might write another thing later"
+            content=Content.objects.create(body="I wrote something here but I might write another thing later")
         ).set_all_dates(OCCUPIED_DATE)
         self.existing_entry.save()
 
@@ -164,8 +164,8 @@ class MicropubEndpointTests(TestCase, SyndicationTestMixin):
         self.assertEqual('https://astrid.tech/2012/01/13/0', response.headers['Location'])
         entry = Entry.objects.get(date=EXPECTED_EMPTY_DATE)
         self.assertEqual(form['name'], entry.title)
-        self.assertEqual(form['content'], entry.content)
-        self.assertEqual('text/plain', entry.content_type)
+        self.assertEqual(form['content'], entry.content.body)
+        self.assertEqual('text/plain', entry.content.content_type)
         self.assertEqual(form['in-reply-to'], entry.reply_to)
         self.assertIsNotNone(entry.tags.get(id='cpp'))
         self.assertIsNotNone(entry.tags.get(id='django'))
@@ -204,7 +204,7 @@ class MicropubEndpointTests(TestCase, SyndicationTestMixin):
 
         self.assertEqual('https://astrid.tech/2012/01/12/1', response.headers['Location'])
         entry = Entry.objects.get(date=EXPECTED_OCCUPIED_DATE, ordinal=1)
-        self.assertEqual(form['content'], entry.content)
+        self.assertEqual(form['content'], entry.content.body)
         self.assertTrue(entry.is_visible())
         self.assertFalse(entry.repost_of)
         self.assertFalse(entry.location)
@@ -251,7 +251,7 @@ class MicropubEndpointTests(TestCase, SyndicationTestMixin):
         self.post_json_and_assert_status(form)
 
         obj = Entry.objects.get(date=EXPECTED_EMPTY_DATE)
-        self.assertEqual('text/html', obj.content_type)
+        self.assertEqual('text/html', obj.content.content_type)
         self.assertFalse(obj.repost_of)
 
     @freeze_time(EMPTY_DATE)
@@ -270,7 +270,7 @@ class MicropubEndpointTests(TestCase, SyndicationTestMixin):
         self.post_json_and_assert_status(form)
 
         obj = Entry.objects.get(date=EXPECTED_EMPTY_DATE)
-        self.assertEqual('text/plain', obj.content_type)
+        self.assertEqual('text/plain', obj.content.content_type)
 
     @freeze_time(EMPTY_DATE)
     def test_create_json_entry_with_attached_photos(self):

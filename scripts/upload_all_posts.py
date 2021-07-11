@@ -1,6 +1,7 @@
 """
 Quick n' dirty script for uploading posts from my old format.
 """
+import os
 from datetime import datetime, date
 from os.path import splitext
 from pathlib import Path
@@ -11,6 +12,7 @@ import pytz
 from dotenv import load_dotenv
 
 from util import create_auth_session
+
 
 
 def markdown_to_micropub(path: Path):
@@ -48,7 +50,7 @@ def markdown_to_micropub(path: Path):
         "properties": {
             'name': [post.get('title')],
             'summary': [post.get('description')],
-            'content': [post.content],
+            'content': [{'commonmark': post.content}],
             'category': post.get('tags', []),
             'created': dt,
             'published': dt,
@@ -60,6 +62,7 @@ def markdown_to_micropub(path: Path):
 @click.command()
 @click.argument('content_dir')
 def main(content_dir):
+    api_root = os.environ['API_ROOT']
     content_dir = Path(content_dir)
     s = create_auth_session()
 
@@ -72,7 +75,7 @@ def main(content_dir):
             print(f'Reading {child}')
             data = markdown_to_micropub(child)
             print('Has data', data)
-            response = s.post('https://api.astrid.tech/api/micropub/', json=data)
+            response = s.post(f'{api_root}/api/micropub/', json=data)
             assert response.status_code == 201, response.content
 
 

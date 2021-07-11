@@ -72,12 +72,21 @@ def utc_now():
 class Content(Model):
     """The content of a page."""
 
-    content_type = CharField(max_length=127, default='text/markdown')
+    content_type = CharField(max_length=127, default='text/plain')
     """The content type, as a mimetype."""
-    content = TextField(blank=True, default='')
+    body = TextField(blank=True, default='')
     """The content of this entry."""
     content_html = TextField(blank=True, default='')
     """The content, rendered as HTML."""
+
+    class Status(TextChoices):
+        from django.utils.translation import gettext_lazy as _
+        SYNDICATED = 'SY', _('Syndicated')
+        SCHEDULED = 'SC', _('Scheduled')
+        ERROR = 'ER', _('Error')
+
+    status = CharField(max_length=2, choices=Status.choices, null=False, default=Status.SCHEDULED)
+    """The status of this content."""
 
     def save(self, force_insert=False, force_update=False, using=None,
              update_fields=None):
@@ -85,10 +94,10 @@ class Content(Model):
             pass
         elif self.content_type == 'text/html':
             # HTML is just HTML.
-            self.content_html = self.content
+            self.content_html = self.body
         else:
             # Treat unknown content types as plaintext
-            self.content_html = f"<pre>{self.content}</pre>"
+            self.content_html = f"<pre>{self.body}</pre>"
         super(Content, self).save(force_insert, force_update, using, update_fields)
 
 
@@ -111,9 +120,9 @@ class Entry(Model):
 
     uuid = UUIDField(unique=True, default=uuid4, editable=False)
 
-    title = CharField(max_length=128, blank=True, null=False)
-    slug_name = CharField(max_length=64, blank=True, null=False)
-    description = TextField(blank=True, null=True)
+    title = CharField(max_length=128, blank=True, null=True)
+    slug_name = CharField(max_length=64, blank=True, null=True)
+    description = TextField(blank=True, null=True, default='')
 
     created_date = DateTimeField(default=utc_now, blank=True)
     """When this entry was originally created. Usually the same as the published date."""
@@ -138,12 +147,8 @@ class Entry(Model):
     tags = ManyToManyField(Tag, blank=True)
     """Tags this entry is associated with."""
 
-    # content = OneToOneField(Content, on_delete=RESTRICT, null=False)
-    # """The content of this page."""
-    content_type = CharField(max_length=127, default='text/markdown')
-    """The content type, as a mimetype."""
-    content = TextField(blank=True, default='')
-    """The content of this entry."""
+    content = OneToOneField(Content, on_delete=RESTRICT, null=True, default=None)
+    """The content of this page."""
 
     @staticmethod
     def objects_visible_at(dt) -> 'QuerySet[Entry]':
@@ -238,4 +243,5 @@ class Project(Model):
 
     tags = ManyToManyField(Tag)
 
-    content = TextField()
+    content = OneToOneField(Content, on_delete=RESTRICT, null=False)
+    """The content of this page."""

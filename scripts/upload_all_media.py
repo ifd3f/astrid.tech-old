@@ -3,6 +3,7 @@ Quick n' dirty script for uploading images from my old format.
 """
 from os.path import splitext
 from pathlib import Path
+import os
 
 import click
 from dotenv import load_dotenv
@@ -15,6 +16,7 @@ document_files = {'.md', '.ipynb', '.txt'}
 @click.command()
 @click.argument('content_dir')
 def main(content_dir):
+    api_root = os.environ['API_ROOT']
     content_dir = Path(content_dir)
     s = create_auth_session()
 
@@ -26,7 +28,7 @@ def main(content_dir):
         if ext not in document_files:
             print(f'Uploading {child}')
             with child.open('rb') as fp:
-                s.post('https://api.astrid.tech/api/micropub/media', files={'file': fp})
+                s.post(f'{api_root}/api/micropub/media', files={'file': fp})
 
 
 if __name__ == '__main__':

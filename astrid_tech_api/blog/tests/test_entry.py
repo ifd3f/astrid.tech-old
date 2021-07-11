@@ -5,7 +5,7 @@ from django.db.models.functions import Now
 from django.test import TestCase
 from freezegun import freeze_time
 
-from blog.models import Entry
+from blog.models import Entry, Content
 
 
 class EntryOrdinalTests(TestCase):
@@ -29,7 +29,11 @@ class EntryOrdinalTests(TestCase):
 
 class EntryStrTests(TestCase):
     def test_str_with_empty_title(self):
-        entry = Entry(title='', content='foo bar', ordinal=0).set_all_dates(datetime(2021, 5, 7))
+        entry = Entry(
+            title='',
+            content=Content.objects.create(body='foo bar'),
+            ordinal=0
+        ).set_all_dates(datetime(2021, 5, 7))
         entry.save()
 
         self.assertEqual('/2021/05/07/0', str(entry))
@@ -42,17 +46,20 @@ class PublicEntriesVisibility(TestCase):
         deleted = datetime(2021, 2, 1)
         future = datetime(2021, 10, 1)
 
-        self.deleted_post = Entry(content='Deleted already').set_all_dates(published)
+        self.deleted_post = Entry(content=Content.objects.create(body='Deleted already')).set_all_dates(published)
         self.deleted_post.deleted_date = deleted
         self.deleted_post.save()
 
-        self.existing_post = Entry(content='This post should be visible', ordinal=3).set_all_dates(published)
+        self.existing_post = Entry(content=Content.objects.create(body='This post should be visible'),
+                                   ordinal=3).set_all_dates(published)
         self.existing_post.save()
 
-        self.future_post = Entry(content='This post is not visible yet').set_all_dates(future)
+        self.future_post = Entry(content=Content.objects.create(body='This post is not visible yet')).set_all_dates(
+            future)
         self.future_post.save()
 
-        self.null_publish_post = Entry(content='This post is not visible either', published_date=None)
+        self.null_publish_post = Entry(content=Content.objects.create(body='This post is not visible either'),
+                                       published_date=None)
         self.null_publish_post.save()
 
     @freeze_time(datetime(2021, 6, 17))

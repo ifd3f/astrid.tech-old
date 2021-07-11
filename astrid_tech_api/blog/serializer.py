@@ -3,7 +3,7 @@ from rest_framework.relations import PrimaryKeyRelatedField
 from rest_framework.serializers import ModelSerializer
 from structlog import get_logger
 
-from .models import Entry, Syndication, Tag
+from .models import Entry, Syndication, Tag, Content
 
 logger = get_logger(__name__)
 
@@ -13,6 +13,11 @@ class ChildSyndicationSerializer(ModelSerializer):
         model = Syndication
         fields = ['last_updated', 'location']
 
+class ContentSerializer(ModelSerializer):
+    class Meta :
+        model = Content
+        read_only_fields = ['content_html']
+        fields = ['body', 'content_type', 'content_html']
 
 class PublicEntryListSerializer(ModelSerializer):
     syndications = SerializerMethodField()
@@ -29,10 +34,12 @@ class PublicEntryListSerializer(ModelSerializer):
         extra_kwargs = {
             'deleted_date': {'write_only': True}
         }
-        exclude = ['id', 'content', 'content_type']
+        exclude = ['id', 'content']
 
 
 class PublicEntryDetailSerializer(PublicEntryListSerializer):
+    content = ContentSerializer()
+
     class Meta:
         model = Entry
         read_only_fields = ['date', 'ordinal']

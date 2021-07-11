@@ -15,7 +15,7 @@ from rest_framework.status import *
 from result import Ok, Err, Result
 from structlog import get_logger
 
-from blog.models import SyndicationTarget, Entry, Syndication, Tag, UploadedFile, Attachment
+from blog.models import SyndicationTarget, Entry, Syndication, Tag, UploadedFile, Attachment, Content
 
 logger = get_logger(__name__)
 _EMPTY = ['']
@@ -103,10 +103,14 @@ def get_microformat_str(d: Dict[str, List[str]], key):
     return v
 
 
-
 @transaction.atomic
 def create_entry_from_query(query: QueryDict):
     published, created = get_dates(query)
+
+    content = Content.objects.create(
+        body=query.get('content', ''),
+        content_type='text/plain'
+    )
 
     entry = Entry.objects.create(
         title=query.get('name', ''),
@@ -122,8 +126,7 @@ def create_entry_from_query(query: QueryDict):
         location=query.get('location', ''),
         repost_of=query.get('repost-of', ''),
 
-        content=query.get('content', ''),
-        content_type='text/plain'
+        content=content,
     )
 
     create_syndications(entry, query.getlist('syndication'))
@@ -132,21 +135,33 @@ def create_entry_from_query(query: QueryDict):
     return entry
 
 
-def parse_mf2_content(content_obj):
+def create_content_from_mf2(content_obj) -> Content:
     [child] = content_obj
     if isinstance(child, str):  # Plaintext
-        return 'text/plain', child
+        return Content(
+            body=child,
+            content_type='text/plain'
+        )
     elif isinstance(child, dict):  # An object, indicating non-plaintext
         [key] = child  # Extract the (hopefully only) key in there
         if key == 'html':
-            return 'text/html', child[key]
+            return Content(
+                body=child,
+                content_type='text/html'
+            )
+        if key == 'commonmark':
+            return Content(
+                body=child,
+                content_type='text/markdown'
+            )
     raise ValueError(f'Could not parse {repr(content_obj)}')
 
 
 @transaction.atomic
 def create_entry_from_json(properties: dict):
     content_obj = properties.get('content', _EMPTY)
-    content_type, content = parse_mf2_content(content_obj)
+    content = create_content_from_mf2(content_obj)
+    content.save()
 
     published, created = get_dates(properties)
 
@@ -164,8 +179,7 @@ def create_entry_from_json(properties: dict):
         location=get_microformat_str(properties, 'location'),
         repost_of=get_microformat_str(properties, 'repost-of'),
 
-        content=content,
-        content_type=content_type
+        content=content
     )
 
     create_syndications(entry, properties.get('syndication', []))
