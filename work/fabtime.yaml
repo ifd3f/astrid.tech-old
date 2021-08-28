@@ -1,6 +1,6 @@
 slug: fabtime
 organization: FabTime Inc.
-position: Software Intern
+position: Software Engineering Intern
 location: San Luis Obispo, CA, USA
 website: https://fabtime.com
 summary: Provides charting systems for silicon wafer fabrication plants
@@ -8,8 +8,8 @@ startDate: 2019-11-27
 endDate: 2020-06-11
 highlights:
   - Maintained software that extracts, aggregates, and visualizes silicon wafer plant productivity running on JavaScript, C, PHP, SQL, and VBScript.
-  - Modernized the user-facing data extraction system, migrating from the old VBA/Excel-based system to a REST API server running on C# ASP.NET Core.
-  - Implemented a password-restricted newsletter archive feature in PHP for the fabtime.com website.
+  - Led the modernization of the user-facing data extraction system, migrating from the old VBA/Excel-based system to a REST API server running on C# ASP.NET Core.
+  - Implemented a password-restricted newsletter archive feature in PHP for the fabtime.com website, allowing the team to rapidly share newsletter content and allow thousands of subscribers to access vital information from old newsletters.
 quotes:
   - >
     "[Astrid is] a skilled troubleshooter and programmer and [her] strength is getting up to speed quickly as well as
