@@ -8,9 +8,8 @@ startDate: 2021-06-21
 endDate: 2021-09-12
 highlights:
   - Created a tool allowing engineers to easily canary-test pull requests for a live video streaming service.
-  - Coordinated between multiple engineering teams to add features onto various microservices.
-  - Improved package building time by 50% using parallelization.
-  - Refactored Python code to improve maintainability in various ways to improve code coverage.
+  - Coordinated between multiple engineering teams to add new features onto various microservices.
+  - Reduced application build time by 50% by scheduling parallel package builds.
 tags:
   - python
   - devops

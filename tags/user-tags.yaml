@@ -236,3 +236,17 @@
   tags:
     - slug: puppeteer-js
       name: Puppeteer.js
+
+- backgroundColor: "#326ce5"
+  color: "#FFFFFF"
+  tags:
+    - slug: kubernetes
+      name: Kubernetes
+    - slug: devops
+      name: DevOps
+
+- backgroundColor: "#4267B2"
+  color: "#FFFFFF"
+  tags:
+    - slug: facebook
+      name: Facebook

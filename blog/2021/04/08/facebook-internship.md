@@ -1,7 +1,7 @@
 ---
 title: Interviewing for Facebook
 date: 2021-04-08 12:48:35-07:00
-description: " "
+description: ""
 tags:
   - coding-test
   - linux
