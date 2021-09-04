@@ -23,6 +23,10 @@ jobs:
         working-directory: astrid_tech_frontend
         run: yarn install
 
+      - name: Lint
+        uses: actions/checkout@v2
+        run: yarn lint
+
       - name: Run tests
         working-directory: astrid_tech_frontend
         run: yarn test
