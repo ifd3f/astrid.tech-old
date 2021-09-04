@@ -22,11 +22,12 @@ const Page: FC<InferGetStaticPropsType<typeof getStaticProps>> = ({
   posts,
 }) => {
   const title = "Homepage";
-  const meta = "Welcome to my website!"
+  const meta = "Welcome to my website!";
+
   return (
     <Layout currentLocation="blog">
       <SEO title={title} description={meta} />
-      <PageHeading title="Astrid Yu" bgColor="#eecc8d" />
+      <PageHeading title="Astrid Yu" bgColor="#1a237e" textColor="#ffffff" />
       <Container className={styles.blogContentContainer}>
         <section>
           <p className="text-right">
@@ -36,6 +37,7 @@ const Page: FC<InferGetStaticPropsType<typeof getStaticProps>> = ({
           </p>
         </section>
         <section>
+          <h2>Latest Posts</h
           {posts.map((post) => (
             <PostBrief
               key={post.slug}

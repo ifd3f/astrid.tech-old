@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useEffect } from "react";
 import { BsEnvelope } from "react-icons/bs";
 import { FaLinkedin } from "react-icons/fa";
 import { GiPhone } from "react-icons/gi";
@@ -13,12 +13,13 @@ import styles from "./style.module.scss";
 import { HomepageSection } from "./_layout";
 
 export const Page = ({}) => {
+  useEffect(() => {
+    console.log("Do you like to use inspect element? Well, I do too! Please hire me :)");
+  }, []);
+
   return (
     <Layout currentLocation="resume">
-      <SEO
-        title="Astrid Yu"
-        description="My name is Astrid Yu and I create software and other cool things. Welcome to my website!"
-      />
+      <SEO title="Astrid Yu" description="My digital resume" />
       <div className={styles.homepageContainer}>
         <HeadingSection />
         {/*<TestmoninalSection />*/}
