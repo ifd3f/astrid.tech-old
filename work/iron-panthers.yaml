@@ -8,7 +8,8 @@ startDate: 2014-09-01
 endDate: 2019-05-30
 highlights:
   - Won the 2019 FRC Houston World Championships.
-  - Designed a modular command scheduling system for the FTC subteam to facilitate clearer and more reliable autonomous code.
+  - Designed a modular command scheduling system for the FTC subteam to
+    facilitate clearer and more reliable autonomous code.
   - Researched advanced motion planning and path optimization algorithms.
 tags:
   - java

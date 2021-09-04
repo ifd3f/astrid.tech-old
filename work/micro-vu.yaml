@@ -6,9 +6,13 @@ website: https://www.microvu.com/
 startDate: 2020-06-22
 endDate: 2020-12-18
 highlights:
-  - Implemented components of InSpec 3, a program built on C# .NET and WPF that integrates with high-precision optical measuring machines.
-  - Led the design and implementation of a Scriban HTML template-based report generator, which produces user-friendly measurement reports and allows end-users effectively infinite customization options.
-  - Coordinated with a multidisciplinary team of software and mechanical engineers to determine the optimal design for UI Elements and reports.
+  - Implemented components of InSpec 3, a program built on C# .NET and WPF that
+    integrates with high-precision optical measuring machines.
+  - Led the design and implementation of a Scriban HTML template-based report
+    generator, which produces user-friendly measurement reports and allows
+    end-users effectively infinite customization options.
+  - Coordinated with a multidisciplinary team of software and mechanical
+    engineers to determine the optimal design for UI Elements and reports.
 tags:
   - csharp
   - wpf

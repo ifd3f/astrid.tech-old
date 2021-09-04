@@ -27,13 +27,23 @@ inspiration:
   url: https://www.cookingclassy.com/fresh-homemade-salsa/
 madeDate: 2021-01-21 15:50:00-08:00
 instructions:
-  - info: Roughly chop the tomato, onion, and cilantro enough such that they fit in the food processor.
+  - info:
+      Roughly chop the tomato, onion, and cilantro enough such that they fit in
+      the food processor.
     duration: PT10M
-  - info: Squeeze the lime into the food processor. Throw the tomato, onion, green onion, garlic, jalapeno, pepper, salt, cumin, and cilantro into the food processor. Process until they're thoroughly mixed, and you have raw salsa.
+  - info:
+      Squeeze the lime into the food processor. Throw the tomato, onion, green
+      onion, garlic, jalapeno, pepper, salt, cumin, and cilantro into the food
+      processor. Process until they're thoroughly mixed, and you have raw salsa.
     duration: PT5M
-  - info: Take the raw salsa and put it in the pan and heat until it boils. **You may want to put a lid on the pan to prevent salsa from popping out.** Let it boil for 10 minutes.
+  - info:
+      Take the raw salsa and put it in the pan and heat until it boils. **You
+      may want to put a lid on the pan to prevent salsa from popping out.** Let
+      it boil for 10 minutes.
     duration: PT15M
-  - info: You can let it cool or serve it hot. Probably better to let it cool first, though.
+  - info:
+      You can let it cool or serve it hot. Probably better to let it cool first,
+      though.
 tag:
   - salsa
   - cuisine=mexican

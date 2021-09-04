@@ -16,7 +16,9 @@ source: [https://github.com/astralbijection/Space-Admiral]
 thumbnail: null
 ---
 
-A real-time multiplayer strategy game similar to games in the Total War franchise, but set in a space opera setting. Although it was unfinished, it was a useful prototype for learning about additional kinds of trees.
+A real-time multiplayer strategy game similar to games in the Total War
+franchise, but set in a space opera setting. Although it was unfinished, it was
+a useful prototype for learning about additional kinds of trees.
 
 ## Implementation details
 

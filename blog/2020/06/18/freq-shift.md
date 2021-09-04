@@ -17,43 +17,41 @@ tags:
 
 ## Introduction
 
-When I was taking Computer Architecture, I needed an FPGA for the class,
-and a [Basys 3](https://store.digilentinc.com/basys-3-artix-7-fpga-trainer-board-recommended-for-introductory-users/)
-in particular. In any other year, I would have probably borrowed it
-from Cal Poly to take computer architecture. However,
-due to the pandemic, I had to spend money and buy it myself.
-That thing is $150 - it ain't cheap!
+When I was taking Computer Architecture, I needed an FPGA for the class, and a
+[Basys 3](https://store.digilentinc.com/basys-3-artix-7-fpga-trainer-board-recommended-for-introductory-users/)
+in particular. In any other year, I would have probably borrowed it from Cal
+Poly to take computer architecture. However, due to the pandemic, I had to spend
+money and buy it myself. That thing is $150 - it ain't cheap!
 
-Now that class is over, I had this board and I wanted to do
-something with it. I didn't want to do something that any
-ordinary microcontroller could do because that's boring, in that case I would
-just use a microcontroller. No, I wanted to make something that
-_requires_ a FPGA.
+Now that class is over, I had this board and I wanted to do something with it. I
+didn't want to do something that any ordinary microcontroller could do because
+that's boring, in that case I would just use a microcontroller. No, I wanted to
+make something that _requires_ a FPGA.
 
-So, I thought of making a direct sampling software-defined
-radio. It won't have a transmit function, only a receive
-function, because I have no idea how to do power electronics.
-Its main purpose would be basically as an ultra
-wide band scanner (I'm thinking of trying to make it scan
-a 50 MHz section all at once).
+So, I thought of making a direct sampling software-defined radio. It won't have
+a transmit function, only a receive function, because I have no idea how to do
+power electronics. Its main purpose would be basically as an ultra wide band
+scanner (I'm thinking of trying to make it scan a 50 MHz section all at once).
 
 ## Problem parameters
 
-The FPGA has a **100 MHz internal clock** for most computations, and I
-want to scan the spectrum of frequencies **between 125 and 175 MHz.**
-Therefore, by the Nyquist-Shannon theorem, I will need at least
-twice that - 325 MSPS (million samples per second) coming in.
+The FPGA has a **100 MHz internal clock** for most computations, and I want to
+scan the spectrum of frequencies **between 125 and 175 MHz.** Therefore, by the
+Nyquist-Shannon theorem, I will need at least twice that - 325 MSPS (million
+samples per second) coming in.
 
-I've figured out a possible way to get **400 MSPS at an 8 bit
-resolution** into the FPGA. This involves going above 100 MHz, and
-this will likely be elaborated on in the future. But for now, we'll just
-assume for now that that's the data stream coming in. So, every 100 MHz
-clock, we get 4 x 8-bit samples. We are dealing with a theoretical
-data rate of 3.2 Gbps, and _this_ is why we need an FPGA.
+I've figured out a possible way to get **400 MSPS at an 8 bit resolution** into
+the FPGA. This involves going above 100 MHz, and this will likely be elaborated
+on in the future. But for now, we'll just assume for now that that's the data
+stream coming in. So, every 100 MHz clock, we get 4 x 8-bit samples. We are
+dealing with a theoretical data rate of 3.2 Gbps, and _this_ is why we need an
+FPGA.
 
 ## Generating a "raw signal"
 
-Let's make a signal with lots of different frequency components that we can use for experimenting with. It should reveal why we need to pre-process the signal before FFT.
+Let's make a signal with lots of different frequency components that we can use
+for experimenting with. It should reveal why we need to pre-process the signal
+before FFT.
 
 ```python
 import numpy as np
@@ -113,23 +111,25 @@ plt.show()
 
 ![png](freq-shift_files/freq-shift_1_1.png)
 
-Once again, we only care about the 125-175MHz range! We don't care about anything outside of that! So, all those wonky sine waves I added in are essentially junk data.
+Once again, we only care about the 125-175MHz range! We don't care about
+anything outside of that! So, all those wonky sine waves I added in are
+essentially junk data.
 
-Notice that the bin size is 50 kHz. Extremely thick.
-Narrowband FM on a Baofeng UV-5R is 12.5kHz, and it's likely even smaller for other radios.
-We won't be able to see individual channels, just a group of 4 channels or more.
+Notice that the bin size is 50 kHz. Extremely thick. Narrowband FM on a Baofeng
+UV-5R is 12.5kHz, and it's likely even smaller for other radios. We won't be
+able to see individual channels, just a group of 4 channels or more.
 
-This is the motivation behind preprocessing the signal. We want to essentially zoom in
-on the 125-175MHz range so that our FFT can be much more precise for the same amount of
-computation.
+This is the motivation behind preprocessing the signal. We want to essentially
+zoom in on the 125-175MHz range so that our FFT can be much more precise for the
+same amount of computation.
 
 ## Shifting the signal downwards
 
 ### Bandpass
 
-First, we apply a bandpass filter with cutoffs at 120MHz and 180MHz. They
-are somewhat offset from the frequencies we want so that we have a little
-buffer space at the ends.
+First, we apply a bandpass filter with cutoffs at 120MHz and 180MHz. They are
+somewhat offset from the frequencies we want so that we have a little buffer
+space at the ends.
 
 ```python
 from scipy import signal
@@ -165,8 +165,8 @@ plt.show()
 ### Mixing for Shifting
 
 Next, we mix with a 115MHz signal. For a signal with frequency $f$, this should
-produce two signals, one at $f - 115\text{MHz}$, and the other reflected
-at $115\text{MHz} - (f - 115\text{MHz})$.
+produce two signals, one at $f - 115\text{MHz}$, and the other reflected at
+$115\text{MHz} - (f - 115\text{MHz})$.
 
 ```python
 mixed = bp_sig * np.cos(115e6 * 2 * np.pi * time)
@@ -182,9 +182,9 @@ plt.show()
 
 ### Lowpass
 
-We now perform a low pass to keep the low-frequency signal and get rid of its evil high-frequency twin.
-The 10-60MHz range here is the equivalent of the original's 125-175MHz range, so we'll do a 65MHz
-lowpass.
+We now perform a low pass to keep the low-frequency signal and get rid of its
+evil high-frequency twin. The 10-60MHz range here is the equivalent of the
+original's 125-175MHz range, so we'll do a 65MHz lowpass.
 
 ```python
 lp_filter = signal.butter(
@@ -216,9 +216,9 @@ plt.show()
 
 ### Decimation
 
-Finally, we decimate to get rid of what we don't want. Decimating by a
-factor of 3 means that the frequencies included here are between 0-67MHz
-post-mixing, which is 120-177MHz on the original.
+Finally, we decimate to get rid of what we don't want. Decimating by a factor of
+3 means that the frequencies included here are between 0-67MHz post-mixing,
+which is 120-177MHz on the original.
 
 ```python
 decimate = signal.decimate(lp_sig, 3)
@@ -242,12 +242,11 @@ print(f'Bin size (with pre-processing): {bin_size_1:02.3f} kHz')
 
 ### Cutting off the edges
 
-You can see how the sub-120 MHz signals get aliased in by the "checkmark"
-over the 1500 tick. This is why we want padding below 125MHz and above
-175MHz. However, the aliasing stays below 10 MHz on this spectrogram (125 MHz
-on the original). So, we'll just zoom in on the center and pretend the
-upper and lower bands don't exist and pretend the
-axes are the correct "original" values.
+You can see how the sub-120 MHz signals get aliased in by the "checkmark" over
+the 1500 tick. This is why we want padding below 125MHz and above 175MHz.
+However, the aliasing stays below 10 MHz on this spectrogram (125 MHz on the
+original). So, we'll just zoom in on the center and pretend the upper and lower
+bands don't exist and pretend the axes are the correct "original" values.
 
 ```python
 plt.specgram(decimate, FFT_SIZE, M_SAMPLES_PER_SECOND / 3)
@@ -262,8 +261,12 @@ plt.show()
 
 ## Conclusion
 
-In this post we have designed a method of pre-processing a signal so that performing a FFT on it later will be more precise and have smaller bins. If I continue working on this project, I'll post updates and make a project page for it.
+In this post we have designed a method of pre-processing a signal so that
+performing a FFT on it later will be more precise and have smaller bins. If I
+continue working on this project, I'll post updates and make a project page for
+it.
 
 ## License
 
-Copyright (c) 2020 Astrid Yu. This code is licensed under [GNU AGPL](https://www.gnu.org/licenses/agpl-3.0.en.html).
+Copyright (c) 2020 Astrid Yu. This code is licensed under
+[GNU AGPL](https://www.gnu.org/licenses/agpl-3.0.en.html).

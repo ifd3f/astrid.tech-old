@@ -34,6 +34,8 @@ Or, a 2D view of it for unsupported browsers:
 
 ![An image of the segway](./thumbnail.png)
 
-- Designed, programmed, manufactured, and assembled a robot that can balance itself for 30 seconds on a carpet floor.
+- Designed, programmed, manufactured, and assembled a robot that can balance
+  itself for 30 seconds on a carpet floor.
 - Fused data from accelerometer and gyroscope to determine robot tilt.
-- Researched methods to filter data more accurately, including moving average and exponential smoothing, complementary filters and Kalman filters.
+- Researched methods to filter data more accurately, including moving average
+  and exponential smoothing, complementary filters and Kalman filters.

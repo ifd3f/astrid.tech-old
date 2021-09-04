@@ -7,7 +7,8 @@ summary: Slack extension for improving company culture
 startDate: 2018-06-10
 endDate: 2018-07-20
 highlights:
-  - Built features for a Slack chatbot designed to improve company culture and increase coworker interactions.
+  - Built features for a Slack chatbot designed to improve company culture and
+    increase coworker interactions.
   - Utilized Slack Actions API to improve UX for common commands.
   - Interfaced with MySQL database to persist user data.
 tags:

@@ -9,13 +9,18 @@ tags:
   - raspberry-pi
 ---
 
-Look at all of these single-board computers lying around. What are they even doing? _Literally nothing._ Let's put them to good use.
+Look at all of these single-board computers lying around. What are they even
+doing? _Literally nothing._ Let's put them to good use.
 
 ![Two Pi 3's, one Pi 2, and one Orange Pi one](./raw-pis.jpeg)
 
 ## Raspberry Pi SD Cards
 
-I got the latest [Raspbian Buster Lite image](https://www.raspberrypi.org/software/operating-systems/) and extracted the image. To make things easier on myself, I decided to enable SSH-on-first-boot for the image so that I can just brainlessly `dd` everything onto SD cards.
+I got the latest
+[Raspbian Buster Lite image](https://www.raspberrypi.org/software/operating-systems/)
+and extracted the image. To make things easier on myself, I decided to enable
+SSH-on-first-boot for the image so that I can just brainlessly `dd` everything
+onto SD cards.
 
 First, I executed
 
@@ -23,7 +28,8 @@ First, I executed
 losetup -P /dev/loop99 2021-01-11-raspios-buster-armhf-lite.img
 ```
 
-to mount the image on a loop device. 99 was chosen because snapd makes a goddamn million loop devices.
+to mount the image on a loop device. 99 was chosen because snapd makes a goddamn
+million loop devices.
 
 `lsblk` returned the following:
 
@@ -60,15 +66,20 @@ Finally, I plugged in the SD cards one by one and flashed them with
 dd bs=64M of=/dev/sdb if=2021-01-11-raspios-buster-armhf-lite.img
 ```
 
-As soon as I booted each of them, and they were assigned DHCP addresses, I SSH'ed into them to change the password because security.
+As soon as I booted each of them, and they were assigned DHCP addresses, I
+SSH'ed into them to change the password because security.
 
 ## Orange Pi SD Card
 
-The Orange Pi One was set up in a similar fashion, except that I got the Armbian image from [the Orange Pi website](http://www.orangepi.org/downloadresources/) (scroll like, really far for the OPi One).
+The Orange Pi One was set up in a similar fashion, except that I got the Armbian
+image from [the Orange Pi website](http://www.orangepi.org/downloadresources/)
+(scroll like, really far for the OPi One).
 
 ## Getting k3s on them
 
-I used `ssh-copy-id` to install my public key on all of the devices for passwordless login, and then used [k3sup](https://github.com/alexellis/k3sup) for quickly installing k3s on them:
+I used `ssh-copy-id` to install my public key on all of the devices for
+passwordless login, and then used [k3sup](https://github.com/alexellis/k3sup)
+for quickly installing k3s on them:
 
 ```
 k3sup join --sudo --server-user rancher --user pi --server-ip <my server's address> --ip <the pi's address>
@@ -94,6 +105,7 @@ Please ignore the inconsistent dashing scheme on the zerg\* series.
 
 ![Look at these SBC's!](./nodezzz.jpeg)
 
-Now what are they running? ...unfortunately, still, absolutely nothing. Once again, my k3s cluster is a solution looking for a problem.
+Now what are they running? ...unfortunately, still, absolutely nothing. Once
+again, my k3s cluster is a solution looking for a problem.
 
 In my next post, I'll talk about my Grafana + Prometheus setup.

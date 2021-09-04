@@ -24,7 +24,9 @@ jobs:
           ssh-private-key: ${{secrets.PRIVATE_KEY}}
 
       - name: Set Git credentials
-        run: git config --global user.email "astrid@astrid.tech" && git config --global user.name "Astrid A. Yu"
+        run:
+          git config --global user.email "astrid@astrid.tech" && git config
+          --global user.name "Astrid A. Yu"
 
       - name: Run build script
         run: content/build.sh content out

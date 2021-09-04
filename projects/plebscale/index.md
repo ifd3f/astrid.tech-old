@@ -19,7 +19,8 @@ source:
 thumbnail: /2021/01/27/pi-clustering/nodezzz.jpeg
 ---
 
-This project is an internal cloud that is scaled enough to meet the demands of a single pleb like me.
+This project is an internal cloud that is scaled enough to meet the demands of a
+single pleb like me.
 
 ## Goals of this project
 
@@ -89,7 +90,8 @@ These resources are dedicated to one purpose and one purpose only.
 
 #### External Cloud Resources
 
-Unfortunately, my internet connection is slow, so anything I want others to be able to use has to be hosted on an external cloud.
+Unfortunately, my internet connection is slow, so anything I want others to be
+able to use has to be hosted on an external cloud.
 
 | Name      | Provider | Price ($/mo) | Arch  | Processor      | Cores | RAM (GB) | Role                |
 | --------- | -------- | ------------ | ----- | -------------- | ----- | -------- | ------------------- |
@@ -98,10 +100,19 @@ Unfortunately, my internet connection is slow, so anything I want others to be a
 | oci-2     | Oracle   | 0            | amd64 | Xeon something | 1     | 1        | Docker Compose      |
 | **Total** | ---      | 7.90         | ---   | ---            | **6** | **8**    | **Wasting my Time** |
 
-[^fn-1]: My mom complained about it being really slow, and even with Linux, it's still slow. Thus, it's worse than crap.
-[^fn-2]: This is my old laptop. I pulled it out of my backpack one day and saw the screen completely cracked for no good reason whatsoever.
+[^fn-1]:
+    My mom complained about it being really slow, and even with Linux, it's
+    still slow. Thus, it's worse than crap.
+
+[^fn-2]:
+    This is my old laptop. I pulled it out of my backpack one day and saw the
+    screen completely cracked for no good reason whatsoever.
+
 [^fn-3]: :thinking: https://emoji.gg/assets/emoji/thonk.png
-[^fn-4]: Zerg rushing is essentially the "quantity-over-quality" tactic in strategy games: you send many expendable units against the enemy to hopefully overwhelm them.
+[^fn-4]:
+    Zerg rushing is essentially the "quantity-over-quality" tactic in strategy
+    games: you send many expendable units against the enemy to hopefully
+    overwhelm them.
 
 ### Monitoring Services
 
@@ -160,4 +171,6 @@ digraph {
 
 ### Things I no longer use
 
-- ELK Stack (Elasticsearch, Logstash, Kibana, Filebeat, Metricbeat) -- This eats up a ridiculous amount of resources. As in, 6 GB (after attempts to minimize it) just dedicated to logging on a 28 GB cluster.
+- ELK Stack (Elasticsearch, Logstash, Kibana, Filebeat, Metricbeat) -- This eats
+  up a ridiculous amount of resources. As in, 6 GB (after attempts to minimize
+  it) just dedicated to logging on a 28 GB cluster.

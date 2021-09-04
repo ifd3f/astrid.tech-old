@@ -23,9 +23,12 @@ thumbnail: null
 
 Short for "Inventory Tree."
 
-I have a messy room with too many disorganized things in random places. This program will (hopefully) allow me to keep track of things better with the power of QR codes.
+I have a messy room with too many disorganized things in random places. This
+program will (hopefully) allow me to keep track of things better with the power
+of QR codes.
 
-[An attempt was made back in 2018](https://github.com/astralbijection/inv5026) to implement something similar, but it failed due to my lack of experience.
+[An attempt was made back in 2018](https://github.com/astralbijection/inv5026)
+to implement something similar, but it failed due to my lack of experience.
 
 ## Technology Stack
 
@@ -38,5 +41,6 @@ I have a messy room with too many disorganized things in random places. This pro
 
 - React as the main frontend framework
 - Axios for those API calls
-- Typescript because I kinda like it when VSCode can give me suggestions for my massive objects
+- Typescript because I kinda like it when VSCode can give me suggestions for my
+  massive objects
 - Bootstrap to make things look fabulous

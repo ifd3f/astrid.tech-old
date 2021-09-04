@@ -1,6 +1,7 @@
 Today, I got the following things done on my project:
 
-- Refactored frontend comments to use an outer context so there's less passing callbacks and stuff around
+- Refactored frontend comments to use an outer context so there's less passing
+  callbacks and stuff around
 - Implemented reporting and replying to comments
 - Dockerized the backend with nginx and Postgres!
 - Wondered why my tests passed on local SQLite, but not Docker Postgres
@@ -9,4 +10,5 @@ Today, I got the following things done on my project:
 
 Approximate total coding time: 9 hours
 
-Tomorrow I'll figure out a better API/frontend, and write tests for what is displayed.
+Tomorrow I'll figure out a better API/frontend, and write tests for what is
+displayed.

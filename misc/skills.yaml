@@ -40,7 +40,7 @@
     - slug: docker
     - slug: kubernetes
     - slug: linux
-    - slug: ansible 
+    - slug: ansible
     - slug: terraform
     - slug: gcloud
     - slug: aws

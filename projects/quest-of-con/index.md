@@ -20,8 +20,12 @@ thumbnail: ./game-screenshot.png
 
 ![A screenshot from the game.](./game-screenshot.png)
 
-A science fiction turn-based strategy game. My friends were all making turn-based strategy games at the time and I thought it would be fun to hop on the bandwagon.
+A science fiction turn-based strategy game. My friends were all making
+turn-based strategy games at the time and I thought it would be fun to hop on
+the bandwagon.
 
-This was my first experience with any form of multiplayer/networking code. I was successfully able to have two machines playing on the same game instance by using a client-server architecture.
+This was my first experience with any form of multiplayer/networking code. I was
+successfully able to have two machines playing on the same game instance by
+using a client-server architecture.
 
 ![2 computers 1 game. Notice the kiwibot in the top left corner.](./multiplayer.jpg)
