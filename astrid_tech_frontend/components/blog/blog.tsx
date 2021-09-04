@@ -1,25 +1,25 @@
-import { format } from "date-fns";
-import { join } from "path";
-import React, { createContext, FC, useContext } from "react";
-import { FaCalendar } from "react-icons/fa";
-import { Container } from "reactstrap";
+import { format } from 'date-fns';
+import { join } from 'path';
+import React, { createContext, FC, useContext } from 'react';
+import { FaCalendar } from 'react-icons/fa';
+import { Container } from 'reactstrap';
 import {
   blogSlugToString,
   getBlogSlug,
   getHSLString,
   getPersistentColor,
-} from "../../lib/util";
-import { BlogPost } from "../../types/types";
-import { CommentSection } from "../api/comments/CommentSection";
-import { ContentDisplay } from "../content";
-import Layout from "../layout/layout";
+} from '../../lib/util';
+import { BlogPost } from '../../types/types';
+import { CommentSection } from '../api/comments/CommentSection';
+import { ContentDisplay } from '../content';
+import Layout from '../layout/layout';
 import {
   InfoRow,
   LongformLayout,
   StatusGroup,
   TagsGroup,
-} from "../layout/longform-layout";
-import SEO from "../seo";
+} from '../layout/longform-layout';
+import SEO from '../seo';
 
 type PostContextData = {
   post: BlogPost<Date>;
@@ -29,7 +29,7 @@ const ProjectContext = createContext<PostContextData>({} as PostContextData);
 
 const PostStatusGroup: FC = () => {
   const { post } = useContext(ProjectContext);
-  const date = format(post.date, "d MMM yyyy");
+  const date = format(post.date, 'd MMM yyyy');
   return (
     <StatusGroup>
       <InfoRow name="Date" icon={<FaCalendar />}>

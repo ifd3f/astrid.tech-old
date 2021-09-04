@@ -1,20 +1,22 @@
-import React, { useEffect } from "react";
-import { BsEnvelope } from "react-icons/bs";
-import { FaLinkedin } from "react-icons/fa";
-import { GiPhone } from "react-icons/gi";
-import { GoMarkGithub } from "react-icons/go";
-import { Col, Row } from "reactstrap";
-import Layout from "../layout";
-import SEO from "../seo";
-import { ExperienceSection } from "./ExperienceSection";
-import { HeadingSection } from "./Heading";
-import { SkillsSection } from "./Skills";
-import styles from "./style.module.scss";
-import { HomepageSection } from "./_layout";
+import React, { useEffect } from 'react';
+import { BsEnvelope } from 'react-icons/bs';
+import { FaLinkedin } from 'react-icons/fa';
+import { GiPhone } from 'react-icons/gi';
+import { GoMarkGithub } from 'react-icons/go';
+import { Col, Row } from 'reactstrap';
+import Layout from '../layout';
+import SEO from '../seo';
+import { ExperienceSection } from './ExperienceSection';
+import { HeadingSection } from './Heading';
+import { SkillsSection } from './Skills';
+import styles from './style.module.scss';
+import { HomepageSection } from './_layout';
 
 export const Page = ({}) => {
   useEffect(() => {
-    console.log("Do you like to use inspect element? Well, I do too! Please hire me :)");
+    console.log(
+      'Do you like to use inspect element? Well, I do too! Please hire me :)'
+    );
   }, []);
 
   return (
@@ -26,10 +28,10 @@ export const Page = ({}) => {
         <SkillsSection />
         <ExperienceSection />
         {/*<ProjectsSection />*/}
-        <HomepageSection style={{ backgroundColor: "white" }}>
+        <HomepageSection style={{ backgroundColor: 'white' }}>
           <h2>Get in touch with me!</h2>
           <hr />
-          <Row className="text-center" style={{ fontSize: "16pt" }}>
+          <Row className="text-center" style={{ fontSize: '16pt' }}>
             <Col xs="12" md="6" lg="3">
               <a href="mailto:astrid@astrid.tech" rel="me">
                 <BsEnvelope title="Email" /> astrid@astrid.tech

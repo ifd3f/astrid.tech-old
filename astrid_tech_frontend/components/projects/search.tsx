@@ -1,6 +1,6 @@
-import Fuse from "fuse.js";
-import React, { createContext, FC, ReactNode, useState } from "react";
-import { Project, ProjectMeta } from "../../types/types";
+import Fuse from 'fuse.js';
+import React, { createContext, FC, ReactNode, useState } from 'react';
+import { Project, ProjectMeta } from '../../types/types';
 
 function countTagUsages(projects: ProjectMeta[]) {
   const count = new Map<string, number>();
@@ -41,7 +41,7 @@ export type FiltererArgs = {
 };
 
 export const Filterer: FC<FiltererArgs> = ({ children, projects, fuse }) => {
-  const [searchString, _setSearchString] = useState("");
+  const [searchString, _setSearchString] = useState('');
   const [filterTags, setFilterTags] = useState<string[]>([]);
   const [shouldFilterAny, _setShouldFilterAnyTags] = useState<boolean>(false);
 
@@ -69,7 +69,7 @@ export const Filterer: FC<FiltererArgs> = ({ children, projects, fuse }) => {
 
   const filterTagsSet = new Set(filterTags);
   var displayedProjects =
-    searchString == ""
+    searchString == ''
       ? projects
       : (fuse.search(searchString).map((result: any) => {
           return result.item;
@@ -77,8 +77,9 @@ export const Filterer: FC<FiltererArgs> = ({ children, projects, fuse }) => {
 
   if (filterTags.length > 0) {
     displayedProjects = displayedProjects.filter((project) => {
-      const filteredCount = project.tags.filter((tag) => filterTagsSet.has(tag))
-        .length;
+      const filteredCount = project.tags.filter((tag) =>
+        filterTagsSet.has(tag)
+      ).length;
 
       return shouldFilterAny
         ? filteredCount > 0

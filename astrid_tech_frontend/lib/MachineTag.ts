@@ -1,8 +1,8 @@
 const REGEX = /([a-z0-9-]+):([a-z0-9-]+)(?:=([a-z0-9-]+))?/i;
 
 export class MachineTag {
-  public namespace: string = "";
-  public predicate: string = "";
+  public namespace: string = '';
+  public predicate: string = '';
   public value: string | null = null;
 
   constructor(tag: string);

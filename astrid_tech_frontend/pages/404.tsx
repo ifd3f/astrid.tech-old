@@ -1,13 +1,13 @@
-import Fuse from "fuse.js";
-import { InferGetStaticPropsType } from "next";
-import { useRouter } from "next/router";
-import React, { FC, useEffect, useState } from "react";
-import { Container } from "reactstrap";
-import Layout from "../components/layout";
-import SEO from "../components/seo";
-import { getStaticPaths as projectPaths } from "./projects/[slug]";
-import { getStaticPaths as tagPaths } from "./t/[slug]";
-import { getStaticPaths as blogPaths } from "./[year]/[month]/[day]/[...slug]";
+import Fuse from 'fuse.js';
+import { InferGetStaticPropsType } from 'next';
+import { useRouter } from 'next/router';
+import React, { FC, useEffect, useState } from 'react';
+import { Container } from 'reactstrap';
+import Layout from '../components/layout';
+import SEO from '../components/seo';
+import { getStaticPaths as projectPaths } from './projects/[slug]';
+import { getStaticPaths as tagPaths } from './t/[slug]';
+import { getStaticPaths as blogPaths } from './[year]/[month]/[day]/[...slug]';
 
 async function getAllPaths() {
   return (
@@ -16,12 +16,12 @@ async function getAllPaths() {
     )
   )
     .flat()
-    .concat(["/projects", "/about", "/", "/latest", "/licenses", "/privacy"]);
+    .concat(['/projects', '/about', '/', '/latest', '/licenses', '/privacy']);
 }
 
 export const getStaticProps = async () => {
   const paths = await getAllPaths();
-  const index = Fuse.createIndex(["."], paths).toJSON();
+  const index = Fuse.createIndex(['.'], paths).toJSON();
 
   return { props: { paths, index } };
 };
@@ -34,7 +34,7 @@ const NotFoundPageContents: FC<{ suggestions: string[]; bugsURL: string }> = ({
   return (
     <div>
       <p style={{ fontSize: 20 }}>
-        Perhaps you meant to go to{" "}
+        Perhaps you meant to go to{' '}
         <strong>
           <a href={first}>{first}</a>
         </strong>
@@ -48,7 +48,7 @@ const NotFoundPageContents: FC<{ suggestions: string[]; bugsURL: string }> = ({
         ))}
       </ul>
       <p>
-        Maybe I brought you here on accident! In that event, please{" "}
+        Maybe I brought you here on accident! In that event, please{' '}
         <a href={bugsURL}>file a bug report on my GitHub issues page</a> and I
         will fix it as soon as possible!
       </p>
@@ -81,7 +81,7 @@ const NotFoundPage: FC<InferGetStaticPropsType<typeof getStaticProps>> = ({
       <Container
         style={{
           padding: 20,
-          height: "70vh",
+          height: '70vh',
         }}
         tag="main"
       >

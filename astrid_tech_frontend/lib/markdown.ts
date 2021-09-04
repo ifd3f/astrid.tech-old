@@ -1,39 +1,39 @@
-import fs from "fs";
-import { join } from "path";
-import remark from "remark";
-import VFile from "vfile";
-import { truncateKeepWords } from "./util";
-const smartypants = require("@silvenon/remark-smartypants");
-const graphviz = require("remark-graphviz");
-const math = require("remark-math");
-const prism = require("remark-prism");
-const unwrapImages = require("remark-unwrap-images");
-const picture = require("rehype-picture");
-const remark2rehype = require("remark-rehype");
-const html = require("rehype-stringify");
-const katex = require("rehype-katex");
-const footnotes = require("remark-footnotes");
-const raw = require("rehype-raw");
-const oembed = require("remark-oembed");
-const markdown = require("remark-parse");
-const unified = require("unified");
-const slug = require("remark-slug");
-const gfm = require("remark-gfm");
-const urls = require("rehype-urls");
-const excerpt = require("remark-excerpt");
-const strip = require("strip-markdown");
-const emoji = require("remark-emoji");
+import fs from 'fs';
+import { join } from 'path';
+import remark from 'remark';
+import VFile from 'vfile';
+import { truncateKeepWords } from './util';
+const smartypants = require('@silvenon/remark-smartypants');
+const graphviz = require('remark-graphviz');
+const math = require('remark-math');
+const prism = require('remark-prism');
+const unwrapImages = require('remark-unwrap-images');
+const picture = require('rehype-picture');
+const remark2rehype = require('remark-rehype');
+const html = require('rehype-stringify');
+const katex = require('rehype-katex');
+const footnotes = require('remark-footnotes');
+const raw = require('rehype-raw');
+const oembed = require('remark-oembed');
+const markdown = require('remark-parse');
+const unified = require('unified');
+const slug = require('remark-slug');
+const gfm = require('remark-gfm');
+const urls = require('rehype-urls');
+const excerpt = require('remark-excerpt');
+const strip = require('strip-markdown');
+const emoji = require('remark-emoji');
 
-const publicRoot = join(process.cwd(), "public");
+const publicRoot = join(process.cwd(), 'public');
 
 export async function renderMarkdown(md: string, assetRoot: string) {
   function convertRelativeFileRef(url: URL) {
     if (
       url.hostname == null &&
       url.pathname != null &&
-      url.pathname[0] != "/"
+      url.pathname[0] != '/'
     ) {
-      const newPath = join("/_", assetRoot, url.pathname);
+      const newPath = join('/_', assetRoot, url.pathname);
       const expectedFile = join(publicRoot, newPath);
       if (fs.existsSync(expectedFile) && fs.statSync(expectedFile).isFile()) {
         return newPath;
@@ -43,7 +43,7 @@ export async function renderMarkdown(md: string, assetRoot: string) {
   }
 
   const vfile = VFile(md);
-  vfile.data = { destinationDir: join("./public/_", assetRoot) };
+  vfile.data = { destinationDir: join('./public/_', assetRoot) };
 
   const out = await unified()
     .use(markdown)
@@ -55,7 +55,7 @@ export async function renderMarkdown(md: string, assetRoot: string) {
     .use(unwrapImages)
     .use(smartypants)
     .use(math)
-    .use(prism, { exclude: "dot" })
+    .use(prism, { exclude: 'dot' })
     .use(footnotes)
     .use(remark2rehype, { allowDangerousHtml: true })
     .use(raw)
@@ -72,7 +72,7 @@ export async function getMarkdownExcerpt(md: string, maxChars: number) {
   const text = (
     await remark().use(excerpt).use(strip).process(md)
   ).toString() as string;
-  return truncateKeepWords(text, maxChars) + "\u2026";  // ellipsis
+  return truncateKeepWords(text, maxChars) + '\u2026'; // ellipsis
 }
 
 export function withoutContent<T>(object: { content: string } & T) {
@@ -83,10 +83,12 @@ export function withoutContent<T>(object: { content: string } & T) {
   return out as { content: never } & T;
 }
 
-export const excerptify = (maxChars: number) => async <T>(
-  object: { content: string } & T
-): Promise<{ excerpt?: string } & T> =>
-  withoutContent({
-    ...object,
-    excerpt: await getMarkdownExcerpt(object.content, maxChars),
-  });
+export const excerptify =
+  (maxChars: number) =>
+  async <T>(
+    object: { content: string } & T
+  ): Promise<{ excerpt?: string } & T> =>
+    withoutContent({
+      ...object,
+      excerpt: await getMarkdownExcerpt(object.content, maxChars),
+    });

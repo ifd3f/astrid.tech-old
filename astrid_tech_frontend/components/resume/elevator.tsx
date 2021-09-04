@@ -1,8 +1,8 @@
-import React, { ReactNode } from "react";
-import { FaDiceD20 } from "react-icons/fa";
-import { GiNoodles } from "react-icons/gi";
-import { Col, Row } from "reactstrap";
-import { HomepageSection } from "./util";
+import React, { ReactNode } from 'react';
+import { FaDiceD20 } from 'react-icons/fa';
+import { GiNoodles } from 'react-icons/gi';
+import { Col, Row } from 'reactstrap';
+import { HomepageSection } from './util';
 
 function BigIcon({
   upper,

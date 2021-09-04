@@ -1,5 +1,5 @@
-import Head from "next/head";
-import React, { FC } from "react";
+import Head from 'next/head';
+import React, { FC } from 'react';
 
 interface SEOProps {
   description?: string | null;
@@ -13,9 +13,9 @@ interface SEOProps {
 
 const SEO: FC<SEOProps> = ({
   description,
-  lang = "en",
+  lang = 'en',
   meta = [],
-  origin = "https://astrid.tech",
+  origin = 'https://astrid.tech',
   canonicalUrl,
   image,
   title,
@@ -24,8 +24,8 @@ const SEO: FC<SEOProps> = ({
 
   const metas = [
     {
-      name: "viewport",
-      content: "width=device-width,initial-scale=1.0",
+      name: 'viewport',
+      content: 'width=device-width,initial-scale=1.0',
     },
     {
       name: `description`,
@@ -33,11 +33,11 @@ const SEO: FC<SEOProps> = ({
     },
     {
       name: `twitter:card`,
-      content: "summary",
+      content: 'summary',
     },
     {
       name: `twitter:creator`,
-      content: "astralbijection",
+      content: 'astralbijection',
     },
     {
       name: `twitter:title`,
@@ -60,18 +60,18 @@ const SEO: FC<SEOProps> = ({
       content: `website`,
     },
     {
-      name: "robots",
-      content: "follow,index",
+      name: 'robots',
+      content: 'follow,index',
     },
   ].concat(meta);
   if (image) {
-    metas.push({ property: "og:image", content: image });
-    metas.push({ property: "twitter:image", content: image });
-    metas.push({ property: "twitter:card", content: "summary" });
+    metas.push({ property: 'og:image', content: image });
+    metas.push({ property: 'twitter:image', content: image });
+    metas.push({ property: 'twitter:card', content: 'summary' });
   }
 
   if (canonicalUrl) {
-    metas.push({ property: "og:url", content: canonicalUrl });
+    metas.push({ property: 'og:url', content: canonicalUrl });
   }
 
   return (

@@ -1,5 +1,5 @@
-import { AxiosResponse } from "axios";
-import React, { FC, useState } from "react";
+import { AxiosResponse } from 'axios';
+import React, { FC, useState } from 'react';
 import {
   Button,
   Col,
@@ -9,37 +9,34 @@ import {
   Input,
   Label,
   Row,
-} from "reactstrap";
-import { changeEventSetter, useCookieState } from "../../util/boilerplate";
-import { useAPI } from "../APIProvider";
-import { useCommentData } from "./CommentDataProvider";
+} from 'reactstrap';
+import { changeEventSetter, useCookieState } from '../../util/boilerplate';
+import { useAPI } from '../APIProvider';
+import { useCommentData } from './CommentDataProvider';
 
 export type CommentingFormProps = {
   replyTo?: number;
   onSubmitted?: () => void;
 };
 
-const COMMENT_EMAIL_COOKIE = "comment-email";
-const COMMENT_NAME_COOKIE = "comment-name";
-const COMMENT_WEBSITE_COOKIE = "comment-website";
+const COMMENT_EMAIL_COOKIE = 'comment-email';
+const COMMENT_NAME_COOKIE = 'comment-name';
+const COMMENT_WEBSITE_COOKIE = 'comment-website';
 const cookieOptions = {
   maxAge: 30 * 24 * 3600,
-  path: "/",
-  sameSite: "strict" as "strict",
+  path: '/',
+  sameSite: 'strict' as 'strict',
 };
 
 export const CommentingForm: FC<CommentingFormProps> = ({
   replyTo,
   onSubmitted = () => {},
 }) => {
-  const [
-    [name, setName],
-    [email, setEmail],
-    [website, setWebsite],
-  ] = useCookieState(
-    [COMMENT_EMAIL_COOKIE, COMMENT_NAME_COOKIE, COMMENT_WEBSITE_COOKIE],
-    cookieOptions
-  );
+  const [[name, setName], [email, setEmail], [website, setWebsite]] =
+    useCookieState(
+      [COMMENT_EMAIL_COOKIE, COMMENT_NAME_COOKIE, COMMENT_WEBSITE_COOKIE],
+      cookieOptions
+    );
 
   const { slug, refreshComments } = useCommentData();
 
@@ -50,18 +47,18 @@ export const CommentingForm: FC<CommentingFormProps> = ({
 
   const { api } = useAPI();
   const [isSubmitting, setIsSubmitting] = useState(false);
-  const [body, setBody] = useState("");
+  const [body, setBody] = useState('');
 
   const validate = () => {
     let valid = true;
     if (!/\S+@\S+\.\S+/.test(email)) {
-      setEmailError("Enter a valid email address.");
+      setEmailError('Enter a valid email address.');
       valid = false;
     } else {
       setEmailError(null);
     }
     if (!(10 <= body.length && body.length <= 1000)) {
-      setBodyError("Body length must be between 10 and 1000 characters.");
+      setBodyError('Body length must be between 10 and 1000 characters.');
       valid = false;
     } else {
       setBodyError(null);
@@ -72,7 +69,7 @@ export const CommentingForm: FC<CommentingFormProps> = ({
       }
       setWebsiteError(null);
     } catch (_) {
-      setWebsiteError("Enter a valid URL.");
+      setWebsiteError('Enter a valid URL.');
       valid = false;
     }
     return valid;
@@ -80,7 +77,7 @@ export const CommentingForm: FC<CommentingFormProps> = ({
 
   const applyBackendErrors = (response?: AxiosResponse) => {
     if (!response) {
-      setGeneralError("A network error occured! Please try again later.");
+      setGeneralError('A network error occured! Please try again later.');
       return;
     }
     const data = response.data;
@@ -105,13 +102,13 @@ export const CommentingForm: FC<CommentingFormProps> = ({
         reply_parent: replyTo,
         slug,
       });
-      console.log("Created comment", comment);
+      console.log('Created comment', comment);
     } catch (e) {
       applyBackendErrors(e);
       setIsSubmitting(false);
       return;
     }
-    setBody("");
+    setBody('');
     setIsSubmitting(false);
     onSubmitted();
     await refreshComments();

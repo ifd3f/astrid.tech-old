@@ -1,8 +1,8 @@
-import React, { FC, ReactElement } from "react";
-import rehype from "rehype-parse";
-import rehype2react from "rehype-react";
-import unified from "unified";
-import { ContentImage } from "./ContentImage";
+import React, { FC, ReactElement } from 'react';
+import rehype from 'rehype-parse';
+import rehype2react from 'rehype-react';
+import unified from 'unified';
+import { ContentImage } from './ContentImage';
 
 const processor = unified()
   .use(rehype, { fragment: true })

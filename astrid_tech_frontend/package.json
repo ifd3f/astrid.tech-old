@@ -14,7 +14,8 @@
     "postbuild": "./post-build.sh",
     "start": "next start",
     "deploy": "npx gh-pages -t true -r \"git@github.com:astralbijection/astralbijection.github.io.git\" -b master -d out -f",
-    "typecheck": "tsc"
+    "typecheck": "tsc",
+    "format": "npx prettier -w ."
   },
   "dependencies": {
     "@fontsource/ibm-plex-sans": "^4.4.5",

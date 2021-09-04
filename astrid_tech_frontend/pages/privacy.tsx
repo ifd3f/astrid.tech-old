@@ -1,8 +1,8 @@
-import React from "react";
-import { Container } from "reactstrap";
-import Layout from "../components/layout";
-import { PageHeading } from "../components/layout/page-heading";
-import SEO from "../components/seo";
+import React from 'react';
+import { Container } from 'reactstrap';
+import Layout from '../components/layout';
+import { PageHeading } from '../components/layout/page-heading';
+import SEO from '../components/seo';
 
 const Page = () => {
   return (

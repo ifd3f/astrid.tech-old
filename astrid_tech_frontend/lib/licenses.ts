@@ -1,4 +1,4 @@
-import { promises as fs } from "fs";
+import { promises as fs } from 'fs';
 
 export type SPDX = {
   name: string;
@@ -18,7 +18,7 @@ export type LicenseWithLibraries = {
 };
 
 export async function getLicenseData(): Promise<SoftwareLicenseLibrary[]> {
-  const json = JSON.parse((await fs.readFile("data/licenses.json")).toString());
+  const json = JSON.parse((await fs.readFile('data/licenses.json')).toString());
 
   return Object.keys(json).map((library) => {
     const entry = json[library];

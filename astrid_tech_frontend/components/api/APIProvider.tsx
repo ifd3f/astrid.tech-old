@@ -4,10 +4,10 @@ import React, {
   ReactNode,
   useContext,
   useState,
-} from "react";
-import { useCookies } from "react-cookie";
-import { apiLogin } from "../../lib/astrid-tech-api/auth";
-import { AstridTechAPI } from "../../lib/astrid-tech-api/index";
+} from 'react';
+import { useCookies } from 'react-cookie';
+import { apiLogin } from '../../lib/astrid-tech-api/auth';
+import { AstridTechAPI } from '../../lib/astrid-tech-api/index';
 
 export type APIContextData = {
   login: (username: string, password: string) => Promise<void>;
@@ -17,9 +17,9 @@ export type APIContextData = {
 
 const APIContext = createContext({} as APIContextData);
 
-const API_SESSION_COOKIE = "astrid-tech-api-session";
+const API_SESSION_COOKIE = 'astrid-tech-api-session';
 
-const tokenSettings = { path: "/", maxAge: 3600 * 24 * 30 };
+const tokenSettings = { path: '/', maxAge: 3600 * 24 * 30 };
 
 export type APIProviderProps = {
   root: string;

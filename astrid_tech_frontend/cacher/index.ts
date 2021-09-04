@@ -1,28 +1,28 @@
-import sqlite3, { Database } from "better-sqlite3";
-import { promises as fs } from "fs";
-import path from "path";
+import sqlite3, { Database } from 'better-sqlite3';
+import { promises as fs } from 'fs';
+import path from 'path';
 import {
   getContrastingTextColor,
   getHSLString,
   getPersistentColor,
   RichColorTheme,
-} from "../lib/util";
-import { convertProjectToStringDate, Tag } from "../types/types";
-import { copyAssets, mapData } from "./assets";
-import { getBlogPosts } from "./blog";
-import { generateLicenses } from "./licenses";
-import { getProjects } from "./projects";
-import { buildRSSFeed } from "./rss";
-import { getLanguageTags, getUserTagOverrides } from "./tags";
-import { serializeJS } from "./util";
+} from '../lib/util';
+import { convertProjectToStringDate, Tag } from '../types/types';
+import { copyAssets, mapData } from './assets';
+import { getBlogPosts } from './blog';
+import { generateLicenses } from './licenses';
+import { getProjects } from './projects';
+import { buildRSSFeed } from './rss';
+import { getLanguageTags, getUserTagOverrides } from './tags';
+import { serializeJS } from './util';
 
-const contentDir = path.join(process.cwd(), "content");
+const contentDir = path.join(process.cwd(), 'content');
 const TAGS_D_TS = `import { Tag } from "../lib/cache";
 declare const tags: Tag[];
 export default tags;`;
 
 async function buildBlogPostCache(db: Database) {
-  console.log("Building blog post cache");
+  console.log('Building blog post cache');
 
   const insertPost = db.prepare(
     `INSERT INTO blog_post(
@@ -67,7 +67,7 @@ async function buildBlogPostCache(db: Database) {
     }));
 
   const insertTag = db.prepare(
-    "INSERT INTO blog_tag (fk_blog, tag) VALUES (@postId, @tag)"
+    'INSERT INTO blog_tag (fk_blog, tag) VALUES (@postId, @tag)'
   );
 
   db.transaction(() => {
@@ -79,7 +79,7 @@ async function buildBlogPostCache(db: Database) {
 
 function insertTags(db: Database, tags: Tag[]) {
   const insert = db.prepare(
-    "INSERT INTO tag (slug, name, color, background_color) VALUES (@slug, @name, @color, @backgroundColor)"
+    'INSERT INTO tag (slug, name, color, background_color) VALUES (@slug, @name, @color, @backgroundColor)'
   );
 
   db.transaction(() => {
@@ -90,7 +90,7 @@ function insertTags(db: Database, tags: Tag[]) {
 }
 
 async function buildTagOverrideTable(db: Database) {
-  console.log("Building language and user tag override tables");
+  console.log('Building language and user tag override tables');
 
   const [langTags, userTags] = await Promise.all([
     getLanguageTags(),
@@ -102,9 +102,9 @@ async function buildTagOverrideTable(db: Database) {
 }
 
 async function buildProjectTagOverrideTable(db: Database) {
-  console.log("Building project tag override tables");
+  console.log('Building project tag override tables');
 
-  const projects = db.prepare("SELECT slug, title FROM project").all();
+  const projects = db.prepare('SELECT slug, title FROM project').all();
 
   insertTags(
     db,
@@ -125,7 +125,7 @@ async function buildProjectTagOverrideTable(db: Database) {
 async function exportProjectData(db: Database, dest: string) {}
 
 async function exportTagOverrideData(db: Database, dest: string) {
-  console.log("Exporting tag overrides to file");
+  console.log('Exporting tag overrides to file');
   const tags = db
     .prepare(
       `SELECT t1.slug, IFNULL(t2.c, 0) as count, name, color, background_color AS backgroundColor FROM tag AS t1
@@ -152,15 +152,15 @@ async function exportTagOverrideData(db: Database, dest: string) {
     });
 
   await fs.writeFile(
-    path.join(process.cwd(), "data/tags.js"),
+    path.join(process.cwd(), 'data/tags.js'),
     serializeJS(tags)
   );
 
-  await fs.writeFile(path.join(process.cwd(), "data/tags.d.ts"), TAGS_D_TS);
+  await fs.writeFile(path.join(process.cwd(), 'data/tags.d.ts'), TAGS_D_TS);
 }
 
 async function buildProjectCache(db: Database) {
-  console.log("Building project cache");
+  console.log('Building project cache');
 
   const insertProject = db.prepare(
     `INSERT INTO project(
@@ -200,7 +200,7 @@ async function buildProjectCache(db: Database) {
   )();
 
   const insertTag = db.prepare(
-    "INSERT INTO project_tag (fk_project, tag) VALUES (@projectId, @tag)"
+    'INSERT INTO project_tag (fk_project, tag) VALUES (@projectId, @tag)'
   );
 
   db.transaction(() => {
@@ -215,15 +215,15 @@ async function buildProjectCache(db: Database) {
 async function main(dbUrl: string) {
   await fs.rm(dbUrl, { force: true });
 
-  const dataDir = path.join(__dirname, "../data");
+  const dataDir = path.join(__dirname, '../data');
   const db = sqlite3(dbUrl, {});
   const initSchema = (
-    await fs.readFile(path.join(__dirname, "schema.sql"))
+    await fs.readFile(path.join(__dirname, 'schema.sql'))
   ).toString();
   db.exec(initSchema);
 
-  await copyAssets(contentDir, path.join(__dirname, "../public/_/"));
-  await mapData(contentDir, path.join(dataDir, "objs"));
+  await copyAssets(contentDir, path.join(__dirname, '../public/_/'));
+  await mapData(contentDir, path.join(dataDir, 'objs'));
 
   await Promise.all([
     buildBlogPostCache(db),
@@ -233,12 +233,12 @@ async function main(dbUrl: string) {
   ]);
 
   await Promise.all([
-    exportTagOverrideData(db, path.join(dataDir, "tags.js")),
-    generateLicenses(path.join(dataDir, "licenses.json")),
-    buildRSSFeed(path.join(__dirname, "../public")),
+    exportTagOverrideData(db, path.join(dataDir, 'tags.js')),
+    generateLicenses(path.join(dataDir, 'licenses.json')),
+    buildRSSFeed(path.join(__dirname, '../public')),
   ]);
 }
 
-main("content.sqlite3").catch((e) => {
+main('content.sqlite3').catch((e) => {
   throw e;
 });

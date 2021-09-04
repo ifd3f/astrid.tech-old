@@ -1,8 +1,8 @@
-import React, { FC, ReactNode } from "react";
-import { BLMBanner } from "./blm";
-import { CookieNotification } from "./cookie-notification";
-import FooterSection from "./footer";
-import MainNavbar, { NavBarLinks } from "./navbar";
+import React, { FC, ReactNode } from 'react';
+import { BLMBanner } from './blm';
+import { CookieNotification } from './cookie-notification';
+import FooterSection from './footer';
+import MainNavbar, { NavBarLinks } from './navbar';
 
 type LayoutProps = {
   children: ReactNode;
@@ -21,7 +21,7 @@ const Layout: FC<LayoutProps> = ({
     <>
       <MainNavbar currentLocation={currentLocation} fixed />
       <div
-        className={"root-wrapper" + (doNotExpandHeight ? "" : " expand-height")}
+        className={'root-wrapper' + (doNotExpandHeight ? '' : ' expand-height')}
       >
         {children}
       </div>

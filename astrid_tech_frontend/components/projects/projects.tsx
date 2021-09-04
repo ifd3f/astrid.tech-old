@@ -1,7 +1,7 @@
-import Fuse from "fuse.js";
-import React, { ChangeEventHandler, FC, useContext, useState } from "react";
-import { BsCaretDown, BsCaretUp, BsX } from "react-icons/bs";
-import { FaInfoCircle } from "react-icons/fa";
+import Fuse from 'fuse.js';
+import React, { ChangeEventHandler, FC, useContext, useState } from 'react';
+import { BsCaretDown, BsCaretUp, BsX } from 'react-icons/bs';
+import { FaInfoCircle } from 'react-icons/fa';
 import {
   Badge,
   Button,
@@ -14,15 +14,15 @@ import {
   InputGroup,
   Row,
   UncontrolledTooltip,
-} from "reactstrap";
-import { Project, ProjectMeta, Tag } from "../../types/types";
-import Layout, { PageHeading } from "../layout";
-import SEO from "../seo";
-import { TagBadge } from "../tags/tag";
-import { useTagTable } from "../tags/TagTableProvider";
-import { ProjectCard } from "./project-card";
-import styles from "./projects.module.scss";
-import { Filterer, SearchContext } from "./search";
+} from 'reactstrap';
+import { Project, ProjectMeta, Tag } from '../../types/types';
+import Layout, { PageHeading } from '../layout';
+import SEO from '../seo';
+import { TagBadge } from '../tags/tag';
+import { useTagTable } from '../tags/TagTableProvider';
+import { ProjectCard } from './project-card';
+import styles from './projects.module.scss';
+import { Filterer, SearchContext } from './search';
 
 type CountBadgeProps = {
   tag: string | Tag;
@@ -45,9 +45,8 @@ const CountBadge: FC<CountBadgeProps> = ({ tag, count }) => {
 };
 
 const SelectableTagList: FC = () => {
-  const { selectableTags, tagUsageCounts, addFilterTag } = useContext(
-    SearchContext
-  );
+  const { selectableTags, tagUsageCounts, addFilterTag } =
+    useContext(SearchContext);
 
   return (
     <div className={styles.selectableTagsContainer}>
@@ -58,7 +57,7 @@ const SelectableTagList: FC = () => {
           key={tag}
         >
           <TagBadge tag={tag}>
-            {" "}
+            {' '}
             <CountBadge tag={tag} count={tagUsageCounts.get(tag)!} />
           </TagBadge>
         </span>
@@ -68,9 +67,8 @@ const SelectableTagList: FC = () => {
 };
 
 const CurrentlyUsedTagList: FC = () => {
-  const { filterTags, tagUsageCounts, removeFilterTag } = useContext(
-    SearchContext
-  );
+  const { filterTags, tagUsageCounts, removeFilterTag } =
+    useContext(SearchContext);
   return (
     <div>
       {[...filterTags.values()].map((tag) => (
@@ -80,7 +78,7 @@ const CurrentlyUsedTagList: FC = () => {
           key={tag}
         >
           <TagBadge tag={tag}>
-            {" "}
+            {' '}
             <CountBadge tag={tag} count={tagUsageCounts.get(tag)!} />
             <BsX />
           </TagBadge>
@@ -107,7 +105,7 @@ const TagsFilterDropdown: FC = () => {
           >
             Filter by tag
           </h3>
-          <Col style={{ textAlign: "right" }}>
+          <Col style={{ textAlign: 'right' }}>
             <Button onClick={toggleOpen} outline size="sm">
               {tagListOpen ? <BsCaretUp /> : <BsCaretDown />}
             </Button>
@@ -165,7 +163,7 @@ export const CardGroup: FC<{
     const infoId = `${idPrefix}-section-info`;
     heading = (
       <h3 className={styles.cardSectionTitle}>
-        {title.text}{" "}
+        {title.text}{' '}
         {title.description ? (
           <>
             <FaInfoCircle
@@ -235,9 +233,9 @@ export const ProjectsIndex: FC<{
     index
   );
 
-  const title = "Projects";
+  const title = 'Projects';
   const description =
-    "An incomplete list of the projects I have worked on, of all sizes and types.";
+    'An incomplete list of the projects I have worked on, of all sizes and types.';
 
   return (
     <Layout currentLocation="projects">

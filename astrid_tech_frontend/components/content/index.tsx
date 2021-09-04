@@ -1,1 +1,1 @@
-export * from "./ContentDisplay";
+export * from './ContentDisplay';

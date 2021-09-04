@@ -1,18 +1,18 @@
-import { format } from "date-fns";
-import Link from "next/link";
-import React, { FC } from "react";
-import { Row } from "reactstrap";
-import { blogSlugToString, getBlogSlug } from "../../lib/util";
-import style from "../../styles/blog.module.scss";
-import { BlogPostMeta } from "../../types/types";
-import { TagList } from "../tags/tag";
+import { format } from 'date-fns';
+import Link from 'next/link';
+import React, { FC } from 'react';
+import { Row } from 'reactstrap';
+import { blogSlugToString, getBlogSlug } from '../../lib/util';
+import style from '../../styles/blog.module.scss';
+import { BlogPostMeta } from '../../types/types';
+import { TagList } from '../tags/tag';
 
 type PostProps = {
   post: BlogPostMeta<Date>;
 };
 
 export const PostBrief: FC<PostProps> = ({ post }) => {
-  const dateString = format(post.date, "d MMMM yyyy");
+  const dateString = format(post.date, 'd MMMM yyyy');
   const url = blogSlugToString(getBlogSlug(post));
 
   return (

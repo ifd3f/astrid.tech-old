@@ -1,7 +1,7 @@
-import Link from "next/link";
-import React, { ComponentProps } from "react";
-import { useCookies } from "react-cookie";
-import { CookieSetOptions } from "universal-cookie";
+import Link from 'next/link';
+import React, { ComponentProps } from 'react';
+import { useCookies } from 'react-cookie';
+import { CookieSetOptions } from 'universal-cookie';
 
 export function useCookieState(fields: string[], setOptions: CookieSetOptions) {
   const [cookies, setCookie, clearCookie] = useCookies(fields);
@@ -18,7 +18,7 @@ export function changeEventSetter<T>(setter: (value: string) => void) {
   };
 }
 
-export function ALink(props: ComponentProps<"a">) {
+export function ALink(props: ComponentProps<'a'>) {
   return (
     <Link href={props.href!!}>
       <a {...props} />

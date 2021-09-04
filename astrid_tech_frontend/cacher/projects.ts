@@ -1,11 +1,11 @@
-import { promises as fs } from "fs";
-import matter from "gray-matter";
-import path, { join, ParsedPath, relative } from "path";
-import { Project, ProjectStatus } from "../types/types";
-import { walkArr } from "./util";
+import { promises as fs } from 'fs';
+import matter from 'gray-matter';
+import path, { join, ParsedPath, relative } from 'path';
+import { Project, ProjectStatus } from '../types/types';
+import { walkArr } from './util';
 
 function getSlug(parsed: ParsedPath) {
-  return parsed.name == "index" ? path.parse(parsed.dir).name : parsed.name;
+  return parsed.name == 'index' ? path.parse(parsed.dir).name : parsed.name;
 }
 
 async function loadProject(pathname: string) {
@@ -32,8 +32,8 @@ async function loadProject(pathname: string) {
 export async function getProjects(
   contentDir: string
 ): Promise<Promise<Project<Date>>[]> {
-  const files = (await walkArr(join(contentDir, "projects")))
-    .filter(({ stats }) => stats.isFile() && stats.name.endsWith(".md"))
+  const files = (await walkArr(join(contentDir, 'projects')))
+    .filter(({ stats }) => stats.isFile() && stats.name.endsWith('.md'))
     .map(({ root, stats }) =>
       loadProject(join(root, stats.name)).then((project) => ({
         assetRoot: relative(contentDir, root),

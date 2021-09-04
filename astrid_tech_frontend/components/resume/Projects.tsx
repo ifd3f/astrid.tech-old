@@ -1,4 +1,4 @@
-import React from "react";
+import React from 'react';
 import {
   Button,
   Card,
@@ -8,15 +8,15 @@ import {
   CardTitle,
   Col,
   Container,
-  Row
-} from "reactstrap";
-import { ALink } from "../util/boilerplate";
-import { HomepageSection } from "./util";
+  Row,
+} from 'reactstrap';
+import { ALink } from '../util/boilerplate';
+import { HomepageSection } from './util';
 
 const ProjectCard = () => {
   return (
     <Card inverse>
-      <CardImg width="300px" src={"/_/projects/astrid-tech/hero.png"} />
+      <CardImg width="300px" src={'/_/projects/astrid-tech/hero.png'} />
       <CardImgOverlay>
         <CardTitle tag="h5">Card</CardTitle>
         <CardText>Stuff</CardText>

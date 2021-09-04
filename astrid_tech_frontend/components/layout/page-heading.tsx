@@ -1,5 +1,5 @@
-import React, { FC, ReactNode } from "react";
-import styles from "./page-heading.module.scss";
+import React, { FC, ReactNode } from 'react';
+import styles from './page-heading.module.scss';
 
 type PageHeadingProps = {
   title: string;

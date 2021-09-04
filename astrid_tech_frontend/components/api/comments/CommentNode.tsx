@@ -1,23 +1,23 @@
-import { format } from "date-fns";
-import { useRouter } from "next/router";
-import React, { FC, ReactNode, useState } from "react";
-import { FaFlag, FaLink, FaReply } from "react-icons/fa";
-import { Button } from "reactstrap";
-import { Comment, CommentAuthor } from "../../../lib/astrid-tech-api";
-import { useCommentData } from "./CommentDataProvider";
-import { CommentingForm } from "./CommentingForm";
-import { CommentList } from "./CommentList";
-import { ReportingForm } from "./ReportingForm";
+import { format } from 'date-fns';
+import { useRouter } from 'next/router';
+import React, { FC, ReactNode, useState } from 'react';
+import { FaFlag, FaLink, FaReply } from 'react-icons/fa';
+import { Button } from 'reactstrap';
+import { Comment, CommentAuthor } from '../../../lib/astrid-tech-api';
+import { useCommentData } from './CommentDataProvider';
+import { CommentingForm } from './CommentingForm';
+import { CommentList } from './CommentList';
+import { ReportingForm } from './ReportingForm';
 
 type CommentNodeProps = {
   comment: Comment;
   isReply?: boolean;
 };
 
-type CommentState = "reply" | "report" | null;
+type CommentState = 'reply' | 'report' | null;
 
 const AuthorDisplay: FC<{ author: CommentAuthor }> = ({ author }) => {
-  const user = <strong>{author.name ?? "[anonymous]"}</strong>;
+  const user = <strong>{author.name ?? '[anonymous]'}</strong>;
   return (
     <>
       {author.website ? <a href={author.website}>{user}</a> : user}
@@ -32,7 +32,7 @@ export const CommentNode: FC<CommentNodeProps> = ({
 }) => {
   const { refreshComments } = useCommentData();
 
-  const date = format(comment.timeAuthored, "d MMM yyyy");
+  const date = format(comment.timeAuthored, 'd MMM yyyy');
   const router = useRouter();
   const commentId = `comment-${comment.id}`;
   const url = new URL(window.location.href);
@@ -54,10 +54,10 @@ export const CommentNode: FC<CommentNodeProps> = ({
     case null:
       form = null;
       break;
-    case "reply":
+    case 'reply':
       form = <CommentingForm replyTo={comment.id} onSubmitted={onSubmitted} />;
       break;
-    case "report":
+    case 'report':
       form = <ReportingForm comment={comment.id} onSubmitted={onSubmitted} />;
       break;
   }
@@ -68,31 +68,31 @@ export const CommentNode: FC<CommentNodeProps> = ({
       <article className="comment" id={commentId}>
         <div className="d-flex">
           <div className="header mr-auto">
-            <AuthorDisplay author={comment.author} />{" "}
+            <AuthorDisplay author={comment.author} />{' '}
             <span className="text-muted">
-              {isReply ? "replied " : null}
+              {isReply ? 'replied ' : null}
               on {date}
             </span>
           </div>
           <div className="">
             <Button
-              outline={actionState != "reply"}
-              onClick={toggleAction("reply")}
+              outline={actionState != 'reply'}
+              onClick={toggleAction('reply')}
               color="primary"
               size="sm"
               style={{ fontSize: 12 }}
             >
               <FaReply title="reply" /> Reply
-            </Button>{" "}
+            </Button>{' '}
             <Button
-              outline={actionState != "report"}
-              onClick={toggleAction("report")}
+              outline={actionState != 'report'}
+              onClick={toggleAction('report')}
               color="danger"
               size="sm"
               style={{ fontSize: 12 }}
             >
               <FaFlag title="flag" /> Report
-            </Button>{" "}
+            </Button>{' '}
             <Button
               href={url.href}
               outline

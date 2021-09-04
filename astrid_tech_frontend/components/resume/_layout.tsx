@@ -1,12 +1,12 @@
-import React, { CSSProperties, FC, ReactNode } from "react";
-import { Col, Container, Row } from "reactstrap";
+import React, { CSSProperties, FC, ReactNode } from 'react';
+import { Col, Container, Row } from 'reactstrap';
 
 export const HomepageSection: FC<{
   children: ReactNode;
   tag?: string;
   className?: string;
   style?: CSSProperties;
-}> = ({ children, tag = "section", style, className = "" }) => {
+}> = ({ children, tag = 'section', style, className = '' }) => {
   return React.createElement(
     tag,
     {

@@ -1,7 +1,7 @@
-import { format } from "date-fns";
-import Link from "next/link";
-import React, { FC } from "react";
-import Masonry from "react-masonry-component";
+import { format } from 'date-fns';
+import Link from 'next/link';
+import React, { FC } from 'react';
+import Masonry from 'react-masonry-component';
 import {
   Badge,
   Card,
@@ -10,25 +10,25 @@ import {
   CardHeader,
   Col,
   Container,
-} from "reactstrap";
+} from 'reactstrap';
 import {
   blogSlugToString,
   formatDateInterval,
   getBlogSlug,
-} from "../../lib/util";
+} from '../../lib/util';
 import {
   BlogPostMeta,
   convertBlogPostToObjectDate,
   convertProjectToObjectDate,
   ProjectMeta,
   SiteObject,
-} from "../../types/types";
-import Layout from "../layout/layout";
-import SEO from "../seo";
-import { ALink } from "../util/boilerplate";
-import { TagBadge, TagList } from "./tag";
-import style from "./tag.module.scss";
-import { useTagTable } from "./TagTableProvider";
+} from '../../types/types';
+import Layout from '../layout/layout';
+import SEO from '../seo';
+import { ALink } from '../util/boilerplate';
+import { TagBadge, TagList } from './tag';
+import style from './tag.module.scss';
+import { useTagTable } from './TagTableProvider';
 
 const dateClassName = `text-muted ${style.date}`;
 
@@ -45,7 +45,7 @@ const BlogPostDisplay: FC<{ post: BlogPostMeta<string> }> = ({
             <h5>
               {post.title} <Badge color="success">Blog</Badge>
             </h5>
-            <p className={dateClassName}>{format(post.date, "d MMM yyyy")}</p>
+            <p className={dateClassName}>{format(post.date, 'd MMM yyyy')}</p>
           </CardHeader>
           <CardBody>
             <div className="lead">{post.description}</div>
@@ -71,7 +71,7 @@ const ProjectDisplay: FC<{ project: ProjectMeta<string> }> = ({ project }) => {
             {project.title} <Badge color="primary">Project</Badge>
           </h5>
           <p className={dateClassName}>
-            {formatDateInterval("d MMM yyyy", startDate, endDate)}
+            {formatDateInterval('d MMM yyyy', startDate, endDate)}
           </p>
         </CardHeader>
         <CardBody>
@@ -92,21 +92,21 @@ type SiteObjectDisplayProps = {
 
 const SiteObjectDisplay: FC<SiteObjectDisplayProps> = ({ object }) => {
   switch (object.type) {
-    case "b":
+    case 'b':
       return (
         <BlogPostDisplay
           post={convertBlogPostToObjectDate(object as BlogPostMeta<string>)}
         />
       );
-    case "p":
+    case 'p':
       return (
         <ProjectDisplay
           project={convertProjectToObjectDate(object as ProjectMeta<string>)}
         />
       );
     default:
-      console.error("Empty type for object", object);
-      throw new Error("Empty type");
+      console.error('Empty type for object', object);
+      throw new Error('Empty type');
   }
 };
 

@@ -1,5 +1,5 @@
-import React from "react";
-import { Page } from "../components/resume";
+import React from 'react';
+import { Page } from '../components/resume';
 
 const Index = ({}) => {
   return <Page />;

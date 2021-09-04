@@ -1,21 +1,21 @@
-import classNames from "classnames";
-import { resolveAssetURL } from "lib/cache/assets";
-import Link from "next/link";
-import React, { CSSProperties, FC, useRef } from "react";
+import classNames from 'classnames';
+import { resolveAssetURL } from 'lib/cache/assets';
+import Link from 'next/link';
+import React, { CSSProperties, FC, useRef } from 'react';
 import {
   Badge,
   CardBody,
   CardText,
   CardTitle,
   UncontrolledTooltip,
-} from "reactstrap";
-import { getPersistentColor, PastelTheme } from "../../lib/util";
-import { Project, ProjectMeta } from "../../types/types";
-import { TagList } from "../tags/tag";
-import styles from "./project.module.scss";
+} from 'reactstrap';
+import { getPersistentColor, PastelTheme } from '../../lib/util';
+import { Project, ProjectMeta } from '../../types/types';
+import { TagList } from '../tags/tag';
+import styles from './project.module.scss';
 
 type StatusBadgeProps = {
-  status: Project["status"];
+  status: Project['status'];
 };
 
 export const StatusBadge: FC<StatusBadgeProps> = ({ status }) => {
@@ -23,20 +23,20 @@ export const StatusBadge: FC<StatusBadgeProps> = ({ status }) => {
 
   let title: string, tooltip: string, color: string;
   switch (status) {
-    case "wip":
-      title = "WIP";
-      tooltip = "I am currently working on this.";
-      color = "info";
+    case 'wip':
+      title = 'WIP';
+      tooltip = 'I am currently working on this.';
+      color = 'info';
       break;
-    case "complete":
-      title = "Complete";
-      tooltip = "This project is complete!";
-      color = "success";
+    case 'complete':
+      title = 'Complete';
+      tooltip = 'This project is complete!';
+      color = 'success';
       break;
-    case "scrapped":
-      title = "Scrapped";
+    case 'scrapped':
+      title = 'Scrapped';
       tooltip = "I decided it wasn't worth pursuing anymore.";
-      color = "danger";
+      color = 'danger';
       break;
     default:
       return null;
@@ -70,9 +70,9 @@ export const ProjectCard: FC<ProjectCardProps> = ({
       backgroundImage:
         `linear-gradient(to bottom, hsla(${h}, 80%, 80%, 1.0), hsla(${h}, 80%, 80%, 0.9), hsla(${h}, 80%, 80%, 0.6), rgba(0.6, 0.6, 0.6, 0.3)), ` +
         `url(${resolveAssetURL(project.assetRoot, project.thumbnail)})`,
-      backgroundRepeat: "no-repeat",
-      backgroundPosition: "center",
-      backgroundSize: "cover",
+      backgroundRepeat: 'no-repeat',
+      backgroundPosition: 'center',
+      backgroundSize: 'cover',
     };
   }
 
@@ -84,16 +84,16 @@ export const ProjectCard: FC<ProjectCardProps> = ({
         styles.projectCard
       )}
     >
-      <div className={classNames(styles.upper, "h-entry")}>
+      <div className={classNames(styles.upper, 'h-entry')}>
         <Link href={`/projects/${project.slug}`}>
-          <a style={{ color: "black" }}>
+          <a style={{ color: 'black' }}>
             <CardTitle>
-              <h3 className={classNames(styles.title, "p-name")}>
+              <h3 className={classNames(styles.title, 'p-name')}>
                 {project.title}
               </h3>
             </CardTitle>
             <CardText>
-              <p className={classNames(styles.subtitle, "p-summary")}>
+              <p className={classNames(styles.subtitle, 'p-summary')}>
                 {project.description}
               </p>
             </CardText>

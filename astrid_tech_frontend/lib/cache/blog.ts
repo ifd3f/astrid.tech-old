@@ -1,6 +1,6 @@
-import { BlogPost, BlogPostMeta } from "../../types/types";
-import { getBlogSlug } from "../util";
-import { getConnection } from "./util";
+import { BlogPost, BlogPostMeta } from '../../types/types';
+import { getBlogSlug } from '../util';
+import { getConnection } from './util';
 
 export type Path = { year: string; month: string; day: string; slug: string[] };
 
@@ -22,7 +22,7 @@ export function rowToBlogPost(row: any, tags: string[]): BlogPost<string> {
 export function getBlogPostSlugs(): Path[] {
   const db = getConnection();
   const results = db
-    .prepare("SELECT date AS dateStr, slug FROM blog_post")
+    .prepare('SELECT date AS dateStr, slug FROM blog_post')
     .all() as {
     dateStr: string;
     slug: string;

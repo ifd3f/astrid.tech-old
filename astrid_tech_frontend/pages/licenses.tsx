@@ -1,18 +1,18 @@
-import { InferGetStaticPropsType } from "next";
-import React, { FC } from "react";
-import { BsCircleFill } from "react-icons/bs";
-import Masonry from "react-masonry-component";
-import { PieChart } from "react-minimal-pie-chart";
-import { Col, Container, Row } from "reactstrap";
-import spdxLicenseList from "spdx-license-list";
-import Layout from "../components/layout/layout";
-import SEO from "../components/seo";
+import { InferGetStaticPropsType } from 'next';
+import React, { FC } from 'react';
+import { BsCircleFill } from 'react-icons/bs';
+import Masonry from 'react-masonry-component';
+import { PieChart } from 'react-minimal-pie-chart';
+import { Col, Container, Row } from 'reactstrap';
+import spdxLicenseList from 'spdx-license-list';
+import Layout from '../components/layout/layout';
+import SEO from '../components/seo';
 import {
   getLicenseData,
   LicenseWithLibraries,
   SoftwareLicenseLibrary,
-} from "../lib/licenses";
-import { getHSLString, getPersistentColor, RichColorTheme } from "../lib/util";
+} from '../lib/licenses';
+import { getHSLString, getPersistentColor, RichColorTheme } from '../lib/util';
 
 const LicenseSection: FC<LicenseWithLibraries> = ({ libraries, license }) => (
   <section>
@@ -46,7 +46,7 @@ const LicensesChart: FC<LicensesChartProps> = ({ licenses }) => {
     ({ license }) => license.isInvalidSPDX
   );
 
-  const other = { title: "Other", value: 0, color: "#888888", url: null };
+  const other = { title: 'Other', value: 0, color: '#888888', url: null };
   invalidLicenses.forEach(({ libraries }) => {
     other.value += libraries.length;
   });
@@ -62,7 +62,7 @@ const LicensesChart: FC<LicensesChartProps> = ({ licenses }) => {
   return (
     <Row tag="section">
       <Col xs="12" lg="6">
-        <picture style={{ display: "flex", justifyContent: "space-around" }}>
+        <picture style={{ display: 'flex', justifyContent: 'space-around' }}>
           <PieChart data={data} style={{ maxWidth: 600, maxHeight: 600 }} />
         </picture>
       </Col>
@@ -73,12 +73,12 @@ const LicensesChart: FC<LicensesChartProps> = ({ licenses }) => {
             url ? (
               <li>
                 <BsCircleFill style={{ color }} /> {title} (
-                <a href={`#${title}`}>{value} dependencies</a> |{" "}
+                <a href={`#${title}`}>{value} dependencies</a> |{' '}
                 <a href={url}>more info</a>)
               </li>
             ) : (
               <li>
-                <BsCircleFill style={{ color }} /> {title} ({value}{" "}
+                <BsCircleFill style={{ color }} /> {title} ({value}{' '}
                 dependencies)
               </li>
             )
@@ -117,7 +117,7 @@ const Licenses: FC<InferGetStaticPropsType<typeof getStaticProps>> = ({
   licenses,
   libraryCount,
 }) => {
-  const thisLicense = spdxLicenseList["AGPL-3.0"];
+  const thisLicense = spdxLicenseList['AGPL-3.0'];
 
   return (
     <Layout currentLocation="about">
@@ -129,7 +129,7 @@ const Licenses: FC<InferGetStaticPropsType<typeof getStaticProps>> = ({
         <article>
           <h1>Open-Source Licenses</h1>
           <p>
-            astrid.tech is licensed under{" "}
+            astrid.tech is licensed under{' '}
             <strong>
               <a href={thisLicense.url}>{thisLicense.name}</a>
             </strong>

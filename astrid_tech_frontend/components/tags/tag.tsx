@@ -1,11 +1,11 @@
-import classNames from "classnames";
-import React, { FC, ReactNode, useState } from "react";
-import { BsCaretLeftFill } from "react-icons/bs";
-import { Badge } from "reactstrap";
-import { Tag } from "../../types/types";
-import { ALink } from "../util/boilerplate";
-import style from "./tag.module.scss";
-import { useTagTable } from "./TagTableProvider";
+import classNames from 'classnames';
+import React, { FC, ReactNode, useState } from 'react';
+import { BsCaretLeftFill } from 'react-icons/bs';
+import { Badge } from 'reactstrap';
+import { Tag } from '../../types/types';
+import { ALink } from '../util/boilerplate';
+import style from './tag.module.scss';
+import { useTagTable } from './TagTableProvider';
 
 type TagBadgeProps = {
   tag: Tag | string;
@@ -18,19 +18,19 @@ export const TagBadge: FC<TagBadgeProps> = ({
   link = false,
   children,
 }) => {
-  if (typeof tag == "string") {
+  if (typeof tag == 'string') {
     const table = useTagTable();
     tag = table.get(tag);
   }
-  const linkTo = tag.slug[0] == "/" ? tag.slug : "/t/" + tag.slug;
+  const linkTo = tag.slug[0] == '/' ? tag.slug : '/t/' + tag.slug;
 
   const badge = (
     <Badge
-      className={classNames(style.tag, "p-category")}
+      className={classNames(style.tag, 'p-category')}
       style={{
         backgroundColor: tag.backgroundColor,
         color: tag.color,
-        cursor: "pointer",
+        cursor: 'pointer',
       }}
     >
       {tag.name}
@@ -65,8 +65,8 @@ export const TagList: FC<TagListProps> = ({
   };
 
   const alt = isOpened
-    ? "Close"
-    : "Click to show: " + excluded.map((tag) => tag).join(", ");
+    ? 'Close'
+    : 'Click to show: ' + excluded.map((tag) => tag).join(', ');
   const shownTags = isOpened ? tags : tags.slice(0, limit);
   const openBadgeText = isOpened ? (
     <BsCaretLeftFill />
@@ -78,15 +78,15 @@ export const TagList: FC<TagListProps> = ({
     <div className={className}>
       <p
         style={{
-          fontSize: "12pt",
+          fontSize: '12pt',
           marginBottom: 3,
         }}
       >
         {shownTags.map((tag) => (
           <TagBadge key={tag} tag={tag} link={link} />
-        ))}{" "}
+        ))}{' '}
         {excluded.length > 0 ? (
-          <Badge title={alt} onClick={onClick} style={{ cursor: "pointer" }}>
+          <Badge title={alt} onClick={onClick} style={{ cursor: 'pointer' }}>
             {openBadgeText}
           </Badge>
         ) : null}

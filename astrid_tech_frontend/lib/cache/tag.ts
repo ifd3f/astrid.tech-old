@@ -1,8 +1,8 @@
-import { SiteObject } from "../../types/types";
-import { excerptify } from "../markdown";
-import { getBlogPosts } from "./blog";
-import { getProjects } from "./project";
-import { getConnection } from "./util";
+import { SiteObject } from '../../types/types';
+import { excerptify } from '../markdown';
+import { getBlogPosts } from './blog';
+import { getProjects } from './project';
+import { getConnection } from './util';
 
 export function getTags(): string[] {
   const db = getConnection();
@@ -19,15 +19,15 @@ export function getTags(): string[] {
 
 function getSortKey(object: SiteObject): number {
   switch (object.type) {
-    case "b":
+    case 'b':
       return new Date(object.date).getTime();
-    case "p":
+    case 'p':
       const now = new Date().getTime();
       return object.endDate
         ? (now + new Date(object.endDate).getTime()) / 2
         : now;
   }
-  throw new Error("Unsupported type");
+  throw new Error('Unsupported type');
 }
 
 export async function getTagged(
@@ -37,12 +37,12 @@ export async function getTagged(
   const [projects, posts] = await Promise.all([
     Promise.all(
       getProjects()
-        .map((x) => ({ type: "p", ...x }))
+        .map((x) => ({ type: 'p', ...x }))
         .map(excerptify(excerptChars))
     ),
     Promise.all(
       getBlogPosts()
-        .map((x) => ({ type: "b", ...x }))
+        .map((x) => ({ type: 'b', ...x }))
         .map(excerptify(excerptChars))
     ),
   ]);

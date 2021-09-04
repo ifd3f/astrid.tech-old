@@ -1,11 +1,11 @@
-import SEO from "components/seo";
-import path from "path";
-import React, { FC, PropsWithChildren, ReactNode } from "react";
-import { MdComment } from "react-icons/md";
-import { Col, Container, Row } from "reactstrap";
-import { TagList } from "../tags/tag";
-import style from "./longform-layout.module.scss";
-import { PageHeading } from "./page-heading";
+import SEO from 'components/seo';
+import path from 'path';
+import React, { FC, PropsWithChildren, ReactNode } from 'react';
+import { MdComment } from 'react-icons/md';
+import { Col, Container, Row } from 'reactstrap';
+import { TagList } from '../tags/tag';
+import style from './longform-layout.module.scss';
+import { PageHeading } from './page-heading';
 
 type LongformLayoutProps = {
   title: string;
@@ -21,7 +21,7 @@ type LongformLayoutProps = {
 
 export const LongformLayout: FC<LongformLayoutProps> = ({
   title,
-  description, 
+  description,
   descriptionRaw,
   headingColor,
   above,
@@ -91,7 +91,7 @@ type StatusGroupProps = {
 
 export const StatusGroup: FC<StatusGroupProps> = ({ children }) => (
   <SidebarGroup>
-    <table style={{ width: "100%" }}>
+    <table style={{ width: '100%' }}>
       <tbody>{children}</tbody>
     </table>
   </SidebarGroup>

@@ -11,7 +11,7 @@ export type Tag = {
   count?: number;
 };
 
-export type WorkExperience = Tagged<"w"> & {
+export type WorkExperience = Tagged<'w'> & {
   organization: string;
   position: string;
   location: string;
@@ -22,9 +22,9 @@ export type WorkExperience = Tagged<"w"> & {
   summary?: string;
 };
 
-export type ProjectStatus = null | "early" | "wip" | "complete" | "scrapped";
+export type ProjectStatus = null | 'early' | 'wip' | 'complete' | 'scrapped';
 
-export type ProjectMeta<DateType = Date> = Tagged<"p"> & {
+export type ProjectMeta<DateType = Date> = Tagged<'p'> & {
   id?: number;
   excerpt?: string;
   title: string;
@@ -63,7 +63,7 @@ export function convertProjectToStringDate<T>(
   };
 }
 
-export type BlogPostMeta<DateType = Date> = Tagged<"b"> & {
+export type BlogPostMeta<DateType = Date> = Tagged<'b'> & {
   title: string;
   assetRoot: string;
   description: string;

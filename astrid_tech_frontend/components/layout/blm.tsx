@@ -1,10 +1,10 @@
-import React from "react"
+import React from 'react';
 
 export const BLMBanner = () => (
   <div
     className="text-light large"
     style={{
-      backgroundColor: "black",
+      backgroundColor: 'black',
       margin: 0,
       padding: 15,
       paddingLeft: 30,
@@ -13,16 +13,16 @@ export const BLMBanner = () => (
   >
     <p
       style={{
-        textAlign: "center",
+        textAlign: 'center',
         margin: 0,
       }}
     >
-      <b>Black Lives Matter.</b> Please consider donating to the{" "}
+      <b>Black Lives Matter.</b> Please consider donating to the{' '}
       <a href="https://www.paypal.me/SLOBailFund">
         San Luis Obispo, CA Bail Fund
-      </a>{" "}
+      </a>{' '}
       or <a href="https://bailfunds.github.io">other bail funds</a> so we can
       make the world a just and equitable place for all people of all colors.
     </p>
   </div>
-)
+);

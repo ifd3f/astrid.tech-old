@@ -1,7 +1,7 @@
-import { AxiosResponse } from "axios";
-import React, { FC, useState } from "react";
-import { Button, Form, FormGroup, FormText, Input } from "reactstrap";
-import { useAPI } from "../APIProvider";
+import { AxiosResponse } from 'axios';
+import React, { FC, useState } from 'react';
+import { Button, Form, FormGroup, FormText, Input } from 'reactstrap';
+import { useAPI } from '../APIProvider';
 
 type ReportFormProps = {
   comment: number;
@@ -12,14 +12,14 @@ export const ReportingForm: FC<ReportFormProps> = ({
   comment,
   onSubmitted = () => {},
 }) => {
-  const [body, setBody] = useState("");
+  const [body, setBody] = useState('');
   const { api } = useAPI();
   const [isSubmitting, setIsSubmitting] = useState(false);
   const [bodyError, setBodyError] = useState<string | null>(null);
 
   const applyBackendErrors = (response?: AxiosResponse) => {
     if (!response) {
-      setBodyError("A network error occured! Please try again later.");
+      setBodyError('A network error occured! Please try again later.');
       return;
     }
     response.data?.content_md?.forEach(setBodyError);
@@ -29,7 +29,7 @@ export const ReportingForm: FC<ReportFormProps> = ({
     try {
       setIsSubmitting(true);
       await api.reportComment(comment, body);
-      setBody("");
+      setBody('');
     } catch (e) {
       applyBackendErrors(e.response);
     }

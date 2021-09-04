@@ -1,0 +1,12 @@
+trailingComma: es5
+tabWidth: 2
+printWidth: 80
+singleQuote: false
+overrides:
+  - files: "**/*.{js,jsx,ts,tsx}"
+    options:
+      singleQuote: true
+  - files: "**/*.md"
+    options:
+      printWidth: 80
+      proseWrap: always

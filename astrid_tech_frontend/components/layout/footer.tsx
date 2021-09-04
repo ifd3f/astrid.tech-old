@@ -1,9 +1,9 @@
-import Link from "next/link";
-import React, { FC, ReactNode } from "react";
-import { Col, Container, Row } from "reactstrap";
-import style from "./footer.module.scss";
-import Image from "next/image";
-import packageJson from "../../package.json";
+import Link from 'next/link';
+import React, { FC, ReactNode } from 'react';
+import { Col, Container, Row } from 'reactstrap';
+import style from './footer.module.scss';
+import Image from 'next/image';
+import packageJson from '../../package.json';
 export const Tea = () => {
   return (
     <span title="tea" aria-label="tea" role="img">
@@ -31,21 +31,21 @@ const ContentLicense = () => (
     </a>
     <br />
     <span
-      {...{ "xmlns:dct": "http://purl.org/dc/terms/" }}
+      {...{ 'xmlns:dct': 'http://purl.org/dc/terms/' }}
       property="dct:title"
     >
       The page content of astrid.tech
-    </span>{" "}
-    by{" "}
+    </span>{' '}
+    by{' '}
     <a
-      {...{ "xmlns:cc": "http://creativecommons.org/ns#" }}
+      {...{ 'xmlns:cc': 'http://creativecommons.org/ns#' }}
       href="https://astrid.tech"
       property="cc:attributionName"
       rel="cc:attributionURL"
     >
       Astrid Yu
-    </a>{" "}
-    is licensed under a{" "}
+    </a>{' '}
+    is licensed under a{' '}
     <a rel="license" href="http://creativecommons.org/licenses/by-nc-sa/4.0/">
       Creative Commons Attribution-NonCommercial-ShareAlike 4.0 International
       License
@@ -68,10 +68,10 @@ const AGPL: FC = () => {
       <p>
         <a href="https://github.com/astralbijection/astrid.tech">
           The source code of astrid.tech
-        </a>{" "}
-        is licensed under the{" "}
+        </a>{' '}
+        is licensed under the{' '}
         <a href="https://www.gnu.org/licenses/agpl-3.0.en.html">AGPL License</a>
-        .{" "}
+        .{' '}
       </p>
     </>
   );
@@ -104,11 +104,11 @@ const FooterSection = () => {
         <Col>
           <p>
             astrid.tech v{version} was created by Astrid Yu with a generous
-            helping of <Tea /> and <Witch />. See the{" "}
+            helping of <Tea /> and <Witch />. See the{' '}
             <Link href="/projects/astrid-tech">
               self-referential project page
-            </Link>{" "}
-            or see the code yourself on{" "}
+            </Link>{' '}
+            or see the code yourself on{' '}
             <a href="https://github.com/astralbijection/astrid.tech">GitHub</a>.
           </p>
         </Col>

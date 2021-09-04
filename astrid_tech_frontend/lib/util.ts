@@ -1,14 +1,14 @@
-import crypto from "crypto";
-import { format } from "date-fns";
-import hslToHex from "hsl-to-hex";
-import seedrandom from "seedrandom";
-import { Path } from "./cache";
+import crypto from 'crypto';
+import { format } from 'date-fns';
+import hslToHex from 'hsl-to-hex';
+import seedrandom from 'seedrandom';
+import { Path } from './cache';
 
 export function getContrastingTextColor(backgroundColor: string): string {
   const [, r, g, b] = backgroundColor
     .match(/#([0-9a-f]{2})([0-9a-f]{2})([0-9a-f]{2})/i)!
-    .map((x) => new Number("0x" + x) as number);
-  return r * 0.299 + g * 0.587 + b * 0.114 > 140 ? "#000000" : "#ffffff";
+    .map((x) => new Number('0x' + x) as number);
+  return r * 0.299 + g * 0.587 + b * 0.114 > 140 ? '#000000' : '#ffffff';
 }
 
 var id = 0;
@@ -93,8 +93,8 @@ export function formatDateInterval(
 export function getBlogSlug({ date, slug }: { date: Date; slug: string }) {
   return {
     year: date.getUTCFullYear().toString(),
-    month: (date.getUTCMonth() + 1).toString().padStart(2, "0"),
-    day: date.getUTCDate().toString().padStart(2, "0"),
+    month: (date.getUTCMonth() + 1).toString().padStart(2, '0'),
+    day: date.getUTCDate().toString().padStart(2, '0'),
     slug: [slug],
   };
 }
@@ -104,12 +104,12 @@ export function blogSlugToString(path: Path) {
 }
 
 export function truncateKeepWords(text: string, maxChars: number) {
-  if (text.length < maxChars) return "";
+  if (text.length < maxChars) return '';
 
   for (let cutoff = maxChars; cutoff > 0; cutoff--) {
-    if (text.charAt(cutoff) == " ") {
+    if (text.charAt(cutoff) == ' ') {
       return text.substr(0, cutoff);
     }
   }
-  return "";
+  return '';
 }

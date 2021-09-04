@@ -1,8 +1,8 @@
-import React, { FC, useEffect, useState } from "react";
-import { useCookies } from "react-cookie";
-import { Button, Container } from "reactstrap";
+import React, { FC, useEffect, useState } from 'react';
+import { useCookies } from 'react-cookie';
+import { Button, Container } from 'reactstrap';
 
-const COOKIE_NAME = "cookie-policy-notification";
+const COOKIE_NAME = 'cookie-policy-notification';
 
 type CookieNotificationDisplayProps = {
   onAcceptTerms: () => void;
@@ -13,10 +13,10 @@ const CookieNotificationObject: FC<CookieNotificationDisplayProps> = ({
 }) => (
   <div
     style={{
-      width: "100vw",
-      position: "fixed",
+      width: '100vw',
+      position: 'fixed',
       bottom: 0,
-      backgroundColor: "white",
+      backgroundColor: 'white',
       paddingTop: 20,
       paddingBottom: 20,
     }}
@@ -24,10 +24,10 @@ const CookieNotificationObject: FC<CookieNotificationDisplayProps> = ({
     <Container>
       <p>
         I use cookies on this site for analytics, as well as to make it more fun
-        to use! Please see the{" "}
+        to use! Please see the{' '}
         <a onClick={onAcceptTerms} href="/privacy">
           Privacy Policy
-        </a>{" "}
+        </a>{' '}
         for more information about what data is collected.
       </p>
       <Button onClick={onAcceptTerms} color="success" size="small">
@@ -48,7 +48,7 @@ export const CookieNotification = () => {
 
   const onAcceptTerms = () => {
     setCookie(COOKIE_NAME, cookiePolicyVersion, {
-      path: "/",
+      path: '/',
       maxAge: 365 * 24 * 3600,
     });
   };

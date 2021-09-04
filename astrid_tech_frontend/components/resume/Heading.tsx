@@ -1,10 +1,10 @@
-import Link from "next/link";
-import React, { FC, ReactNode } from "react";
-import homepageStyles from "./heading.module.scss";
-import Image from "next/image";
+import Link from 'next/link';
+import React, { FC, ReactNode } from 'react';
+import homepageStyles from './heading.module.scss';
+import Image from 'next/image';
 
-const APPX_BEGAN_PROGRAMMING = new Date("2013-02-01");
-const APPX_BEGAN_HARDWARE = new Date("2015-12-15");
+const APPX_BEGAN_PROGRAMMING = new Date('2013-02-01');
+const APPX_BEGAN_HARDWARE = new Date('2015-12-15');
 
 type YearsSinceProps = {
   date: Date;
@@ -42,7 +42,7 @@ interface IconInfoDisplayProps {
 }
 
 const ImageOfMyself = () => (
-  <div className={homepageStyles.imageSelf + " u-photo"}>
+  <div className={homepageStyles.imageSelf + ' u-photo'}>
     <img src="/avatar.jpg" alt="Astrid Yu" />
   </div>
 );
@@ -50,15 +50,19 @@ const ImageOfMyself = () => (
 export function HeadingSection() {
   return (
     <header className="homepage-header homepage-section">
-      <div className={homepageStyles.nameWrapper + " h-card"}>
+      <div className={homepageStyles.nameWrapper + ' h-card'}>
         <div className={homepageStyles.introductionGroup}>
-          <p className={homepageStyles.preTitle}>Hello, my name is</p>
-          <h1 className={homepageStyles.name + " p-name"}>Astrid Yu</h1>
-          <p className={homepageStyles.postTitle}>Software Developer</p>
+          <p className={homepageStyles.preTitle}>
+            <strong>Hello</strong>, my name is
+          </p>
+          <h1 className={homepageStyles.name + ' p-name'}>Astrid Yu</h1>
+          <p className={homepageStyles.postTitle}>
+            and I develop <strong>software</strong>
+          </p>
         </div>
       </div>
       <p className={homepageStyles.skillBrag}>
-        Made using{" "}
+        Made using{' '}
         <Link href="/projects/astrid-tech">
           <a href="/projects/astrid-tech">
             Next.js, Django, and several other technologies

@@ -1,6 +1,6 @@
-import { ComponentProps, FC } from "react";
+import { ComponentProps, FC } from 'react';
 
-export const ContentIFrame: FC<ComponentProps<"iframe">> = ({ ...props }) => {
+export const ContentIFrame: FC<ComponentProps<'iframe'>> = ({ ...props }) => {
   return (
     <div>
       <iframe {...props} />

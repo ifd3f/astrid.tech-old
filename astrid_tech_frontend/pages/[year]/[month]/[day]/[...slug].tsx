@@ -1,10 +1,10 @@
-import { GetStaticProps, InferGetStaticPropsType } from "next";
-import { FC } from "react";
-import BlogPostPage from "../../../../components/blog/blog";
-import { getBlogPost, getBlogPostSlugs, Path } from "../../../../lib/cache";
-import { renderMarkdown } from "../../../../lib/markdown";
-import { wrappedStaticPaths } from "../../../../lib/pathcache";
-import { BlogPost, convertBlogPostToObjectDate } from "../../../../types/types";
+import { GetStaticProps, InferGetStaticPropsType } from 'next';
+import { FC } from 'react';
+import BlogPostPage from '../../../../components/blog/blog';
+import { getBlogPost, getBlogPostSlugs, Path } from '../../../../lib/cache';
+import { renderMarkdown } from '../../../../lib/markdown';
+import { wrappedStaticPaths } from '../../../../lib/pathcache';
+import { BlogPost, convertBlogPostToObjectDate } from '../../../../types/types';
 
 export const getStaticPaths = wrappedStaticPaths(
   __filename,

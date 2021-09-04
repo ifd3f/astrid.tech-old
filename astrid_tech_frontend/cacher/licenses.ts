@@ -1,11 +1,11 @@
-const crawler = require("npm-license-crawler");
+const crawler = require('npm-license-crawler');
 
 export function generateLicenses(reportPath: string) {
-  console.log("Generating license report");
+  console.log('Generating license report');
 
   const options = {
     json: reportPath,
-    start: ["."],
+    start: ['.'],
   };
 
   return new Promise<any>((resolve, reject) =>

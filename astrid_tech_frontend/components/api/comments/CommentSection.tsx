@@ -1,7 +1,7 @@
-import React, { FC } from "react";
-import { CommentDataProvider, useCommentData } from "./CommentDataProvider";
-import { CommentingForm } from "./CommentingForm";
-import { CommentList } from "./CommentList";
+import React, { FC } from 'react';
+import { CommentDataProvider, useCommentData } from './CommentDataProvider';
+import { CommentingForm } from './CommentingForm';
+import { CommentList } from './CommentList';
 
 export type CommentsSectionProps = {
   slug: string;
@@ -10,9 +10,9 @@ export type CommentsSectionProps = {
 const TopLevelCommentList = () => {
   const { state } = useCommentData();
   switch (state.status) {
-    case "initial":
+    case 'initial':
       return null;
-    case "success": {
+    case 'success': {
       const comments = state.comments;
       return comments.length > 0 ? (
         <CommentList comments={comments} />
@@ -20,7 +20,7 @@ const TopLevelCommentList = () => {
         <p>No comments. Start the conversation!</p>
       );
     }
-    case "fetching": {
+    case 'fetching': {
       const comments = state.comments;
       return (
         <div>
@@ -29,7 +29,7 @@ const TopLevelCommentList = () => {
         </div>
       );
     }
-    case "failure": {
+    case 'failure': {
       const comments = state.comments;
       return (
         <div>

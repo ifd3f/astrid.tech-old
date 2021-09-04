@@ -1,8 +1,8 @@
-import React from "react";
-import { Card, CardText, CardTitle } from "reactstrap";
-import { Course } from "../../types/types";
-import { TagList } from "../tags/tag";
-import { HomepageSection } from "./util";
+import React from 'react';
+import { Card, CardText, CardTitle } from 'reactstrap';
+import { Course } from '../../types/types';
+import { TagList } from '../tags/tag';
+import { HomepageSection } from './util';
 
 function CourseCard({
   course,
@@ -12,8 +12,8 @@ function CourseCard({
   inProgress?: boolean;
 }) {
   return (
-    <Card body inverse style={{ backgroundColor: "#BD8B13" }}>
-      <CardTitle style={{ marginBottom: 0, fontWeight: "bold" }}>
+    <Card body inverse style={{ backgroundColor: '#BD8B13' }}>
+      <CardTitle style={{ marginBottom: 0, fontWeight: 'bold' }}>
         {course.name}
       </CardTitle>
       <CardText style={{ marginBottom: 0 }}>{course.number}</CardText>
@@ -25,7 +25,7 @@ function CourseCard({
 
 export function EducationSection() {
   return (
-    <HomepageSection style={{ color: "white", backgroundColor: "#154734" }}>
+    <HomepageSection style={{ color: 'white', backgroundColor: '#154734' }}>
       <h2 className="section-heading">Education</h2>
       {/*
         <div>

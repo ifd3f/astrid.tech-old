@@ -1,6 +1,6 @@
-import React, { FC } from "react";
-import { Comment } from "../../../lib/astrid-tech-api";
-import { CommentNode } from "./CommentNode";
+import React, { FC } from 'react';
+import { Comment } from '../../../lib/astrid-tech-api';
+import { CommentNode } from './CommentNode';
 
 export type CommentListProps = {
   comments: Comment[];

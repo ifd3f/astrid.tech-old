@@ -1,12 +1,12 @@
-import React, { FC, ReactNode } from "react";
-import { BsCaretRightFill, BsStar, BsStarFill } from "react-icons/bs";
-import Masonry from "react-masonry-component";
-import { Col } from "reactstrap";
-import { useTagTable } from "../tags/TagTableProvider";
-import { ALink } from "../util/boilerplate";
-import styleSkills from "./skills.module.scss";
-import style from "./style.module.scss";
-import { HomepageSection } from "./util";
+import React, { FC, ReactNode } from 'react';
+import { BsCaretRightFill, BsStar, BsStarFill } from 'react-icons/bs';
+import Masonry from 'react-masonry-component';
+import { Col } from 'reactstrap';
+import { useTagTable } from '../tags/TagTableProvider';
+import { ALink } from '../util/boilerplate';
+import styleSkills from './skills.module.scss';
+import style from './style.module.scss';
+import { HomepageSection } from './util';
 
 type StarsProps = {
   stars: number;
@@ -70,9 +70,9 @@ const SkillCategoryView: FC<SkillCategoryViewProps> = ({
 );
 
 export function SkillsSection() {
-  const skills = require("../../data/objs/misc/skills") as SkillGroup[];
+  const skills = require('../../data/objs/misc/skills') as SkillGroup[];
   return (
-    <HomepageSection style={{ backgroundColor: "#55cdfc" }}>
+    <HomepageSection style={{ backgroundColor: '#55cdfc' }}>
       <div className={style.sectionHeading}>
         <h2>Skills</h2>
         <p>

@@ -1,5 +1,5 @@
-import { Project, ProjectMeta } from "../../types/types";
-import { getConnection } from "./util";
+import { Project, ProjectMeta } from '../../types/types';
+import { getConnection } from './util';
 
 export function rowToProjectMeta(
   row: any,
@@ -23,7 +23,7 @@ export function rowToProject(row: any, tags: string[]): Project<string> {
 export function getProjectSlugs(): string[] {
   const db = getConnection();
   return db
-    .prepare("SELECT slug FROM project")
+    .prepare('SELECT slug FROM project')
     .all()
     .map(({ slug }) => slug);
 }

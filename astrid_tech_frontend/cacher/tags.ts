@@ -1,8 +1,8 @@
-import { promises as fs } from "fs";
-import yaml from "js-yaml";
-import { join } from "path";
-import { getContrastingTextColor } from "../lib/util";
-import { Tag } from "../types/types";
+import { promises as fs } from 'fs';
+import yaml from 'js-yaml';
+import { join } from 'path';
+import { getContrastingTextColor } from '../lib/util';
+import { Tag } from '../types/types';
 
 type LinguistEntry = {
   color: string;
@@ -13,22 +13,22 @@ type LinguistData = {
 };
 
 const SLUG_OVERRIDE = new Map<string, string>([
-  ["c++", "cpp"],
-  ["c#", "csharp"],
-  ["f#", "fsharp"],
-  ["objective-c++", "objective-cpp"],
+  ['c++', 'cpp'],
+  ['c#', 'csharp'],
+  ['f#', 'fsharp'],
+  ['objective-c++', 'objective-cpp'],
 ]);
 
 function getTagSlug(name: string): string {
   const lower = name.toLowerCase();
-  return SLUG_OVERRIDE.get(lower) || lower.replace(" ", "-");
+  return SLUG_OVERRIDE.get(lower) || lower.replace(' ', '-');
 }
 
 export async function getLanguageTags() {
   const langs = yaml.load(
     await fs.readFile(`${__dirname}/languages.yml`, {
-      encoding: "utf-8",
-      flag: "r",
+      encoding: 'utf-8',
+      flag: 'r',
     })
   ) as LinguistData;
 
@@ -56,7 +56,7 @@ export async function getLanguageTags() {
 }
 
 export async function getUserTagOverrides(contentDir: string): Promise<Tag[]> {
-  const file = await fs.readFile(join(contentDir, "tags/user-tags.yaml"));
+  const file = await fs.readFile(join(contentDir, 'tags/user-tags.yaml'));
   const overrides = yaml.load(file.toString()) as {
     backgroundColor: string;
     color?: string;

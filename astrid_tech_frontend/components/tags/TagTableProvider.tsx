@@ -1,12 +1,12 @@
-import { createContext, FC, ReactNode, useContext } from "react";
-import { parseMachineTagOrNull } from "../../lib/MachineTag";
+import { createContext, FC, ReactNode, useContext } from 'react';
+import { parseMachineTagOrNull } from '../../lib/MachineTag';
 import {
   getContrastingTextColor,
   getHSLString,
   getPersistentColor,
   RichColorTheme,
-} from "../../lib/util";
-import { Tag } from "../../types/types";
+} from '../../lib/util';
+import { Tag } from '../../types/types';
 
 export class TagTable {
   private readonly cache: Map<string, Tag>;
@@ -15,7 +15,7 @@ export class TagTable {
   }
 
   get(tag: Tag | string): Tag {
-    if (typeof tag != "string") {
+    if (typeof tag != 'string') {
       return tag;
     }
 
@@ -32,10 +32,10 @@ export class TagTable {
     const machineTag = parseMachineTagOrNull(tag);
     if (machineTag) {
       switch (machineTag.namespace) {
-        case "school":
+        case 'school':
           switch (machineTag.predicate) {
-            case "cal-poly":
-              name = machineTag.value!.replace("-", " ").toUpperCase();
+            case 'cal-poly':
+              name = machineTag.value!.replace('-', ' ').toUpperCase();
           }
       }
     }
