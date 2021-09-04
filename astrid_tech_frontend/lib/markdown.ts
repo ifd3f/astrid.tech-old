@@ -72,7 +72,7 @@ export async function getMarkdownExcerpt(md: string, maxChars: number) {
   const text = (
     await remark().use(excerpt).use(strip).process(md)
   ).toString() as string;
-  return truncateKeepWords(text, maxChars) + "\u2026";  // ellipsis
+  return truncateKeepWords(text, maxChars) + "\u2026"; // ellipsis
 }
 
 export function withoutContent<T>(object: { content: string } & T) {
@@ -83,10 +83,12 @@ export function withoutContent<T>(object: { content: string } & T) {
   return out as { content: never } & T;
 }
 
-export const excerptify = (maxChars: number) => async <T>(
-  object: { content: string } & T
-): Promise<{ excerpt?: string } & T> =>
-  withoutContent({
-    ...object,
-    excerpt: await getMarkdownExcerpt(object.content, maxChars),
-  });
+export const excerptify =
+  (maxChars: number) =>
+  async <T>(
+    object: { content: string } & T
+  ): Promise<{ excerpt?: string } & T> =>
+    withoutContent({
+      ...object,
+      excerpt: await getMarkdownExcerpt(object.content, maxChars),
+    });

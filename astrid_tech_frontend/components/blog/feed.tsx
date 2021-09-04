@@ -1,6 +1,6 @@
 import { format } from "date-fns";
 import Link from "next/link";
-import React, { FC } from "react";
+import { FC } from "react";
 import { Row } from "reactstrap";
 import { blogSlugToString, getBlogSlug } from "../../lib/util";
 import style from "../../styles/blog.module.scss";

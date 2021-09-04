@@ -1,5 +1,5 @@
 import { InferGetStaticPropsType } from "next";
-import React, { FC } from "react";
+import { FC } from "react";
 import { FaRssSquare } from "react-icons/fa";
 import { Container } from "reactstrap";
 import { PostBrief } from "../components/blog/feed";
@@ -37,7 +37,7 @@ const Page: FC<InferGetStaticPropsType<typeof getStaticProps>> = ({
           </p>
         </section>
         <section>
-          <h2>Latest Posts</h
+          <h2>Latest Posts</h2>
           {posts.map((post) => (
             <PostBrief
               key={post.slug}

@@ -1,4 +1,4 @@
-import React, { ReactNode } from "react";
+import { ReactNode } from "react";
 import { Col, Row } from "reactstrap";
 import tStyles from "./testimonials.module.scss";
 import { HomepageSection } from "./util";

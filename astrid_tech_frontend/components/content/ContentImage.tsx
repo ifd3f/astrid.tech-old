@@ -1,5 +1,5 @@
 import path from "path";
-import React, { ComponentProps, FC } from "react";
+import { ComponentProps, FC } from "react";
 
 export const ContentImage: FC<ComponentProps<"img">> = (props) => {
   return (

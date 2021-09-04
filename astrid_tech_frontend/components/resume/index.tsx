@@ -1,4 +1,4 @@
-import React, { useEffect } from "react";
+import { useEffect } from "react";
 import { BsEnvelope } from "react-icons/bs";
 import { FaLinkedin } from "react-icons/fa";
 import { GiPhone } from "react-icons/gi";
@@ -14,7 +14,9 @@ import { HomepageSection } from "./_layout";
 
 export const Page = ({}) => {
   useEffect(() => {
-    console.log("Do you like to use inspect element? Well, I do too! Please hire me :)");
+    console.log(
+      "Do you like to use inspect element? Well, I do too! Please hire me :)"
+    );
   }, []);
 
   return (

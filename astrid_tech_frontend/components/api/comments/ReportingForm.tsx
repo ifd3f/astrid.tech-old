@@ -1,5 +1,5 @@
 import { AxiosResponse } from "axios";
-import React, { FC, useState } from "react";
+import { FC, useState } from "react";
 import { Button, Form, FormGroup, FormText, Input } from "reactstrap";
 import { useAPI } from "../APIProvider";
 
@@ -30,7 +30,7 @@ export const ReportingForm: FC<ReportFormProps> = ({
       setIsSubmitting(true);
       await api.reportComment(comment, body);
       setBody("");
-    } catch (e) {
+    } catch (e: any) {
       applyBackendErrors(e.response);
     }
 

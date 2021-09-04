@@ -1,4 +1,3 @@
-import React from "react";
 import { Container } from "reactstrap";
 import Layout from "../components/layout";
 import { PageHeading } from "../components/layout/page-heading";

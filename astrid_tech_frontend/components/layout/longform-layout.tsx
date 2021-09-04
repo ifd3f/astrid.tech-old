@@ -1,6 +1,6 @@
 import SEO from "components/seo";
 import path from "path";
-import React, { FC, PropsWithChildren, ReactNode } from "react";
+import { FC, PropsWithChildren, ReactNode } from "react";
 import { MdComment } from "react-icons/md";
 import { Col, Container, Row } from "reactstrap";
 import { TagList } from "../tags/tag";
@@ -21,7 +21,7 @@ type LongformLayoutProps = {
 
 export const LongformLayout: FC<LongformLayoutProps> = ({
   title,
-  description, 
+  description,
   descriptionRaw,
   headingColor,
   above,

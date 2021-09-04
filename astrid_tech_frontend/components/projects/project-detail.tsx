@@ -1,7 +1,7 @@
 import SEO from "components/seo";
 import Link from "next/link";
 import { join } from "path";
-import React, { createContext, FC, useContext } from "react";
+import { createContext, FC, useContext } from "react";
 import path from "path";
 import {
   BsArrowLeft,

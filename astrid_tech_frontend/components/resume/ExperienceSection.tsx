@@ -1,5 +1,5 @@
 import { format } from "date-fns";
-import React, { FC, ReactNode } from "react";
+import { FC, ReactNode } from "react";
 import { FaTrophy } from "react-icons/fa";
 import { Badge } from "reactstrap";
 import { WorkExperience } from "../../types/types";

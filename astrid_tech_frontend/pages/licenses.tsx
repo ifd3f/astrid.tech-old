@@ -1,5 +1,5 @@
 import { InferGetStaticPropsType } from "next";
-import React, { FC } from "react";
+import { FC } from "react";
 import { BsCircleFill } from "react-icons/bs";
 import Masonry from "react-masonry-component";
 import { PieChart } from "react-minimal-pie-chart";

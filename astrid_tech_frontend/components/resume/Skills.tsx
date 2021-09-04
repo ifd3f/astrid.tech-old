@@ -1,4 +1,4 @@
-import React, { FC, ReactNode } from "react";
+import { FC, ReactNode } from "react";
 import { BsCaretRightFill, BsStar, BsStarFill } from "react-icons/bs";
 import Masonry from "react-masonry-component";
 import { Col } from "reactstrap";

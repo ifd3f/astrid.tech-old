@@ -1,5 +1,6 @@
 import classNames from "classnames";
-import React, { FC, ReactNode, useState } from "react";
+import { FC, ReactNode, useState } from "react";
+import * as React from "react";
 import { BsCaretLeftFill } from "react-icons/bs";
 import { Badge } from "reactstrap";
 import { Tag } from "../../types/types";

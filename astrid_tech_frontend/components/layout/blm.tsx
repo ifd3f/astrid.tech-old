@@ -1,5 +1,3 @@
-import React from "react"
-
 export const BLMBanner = () => (
   <div
     className="text-light large"
@@ -25,4 +23,4 @@ export const BLMBanner = () => (
       make the world a just and equitable place for all people of all colors.
     </p>
   </div>
-)
+);

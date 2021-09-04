@@ -3,7 +3,7 @@ import "@fontsource/roboto-mono";
 import "prismjs/themes/prism-tomorrow.css";
 import "katex/dist/katex.min.css";
 import { AppProps } from "next/app";
-import React, { useEffect } from "react";
+import { useEffect } from "react";
 import { CookiesProvider } from "react-cookie";
 import { APIProvider } from "../components/api/APIProvider";
 import { TagTableProvider } from "../components/tags/TagTableProvider";

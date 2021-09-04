@@ -1,4 +1,5 @@
-import React, { FC, ReactElement } from "react";
+import { FC, ReactElement } from "react";
+import * as React from "react";
 import rehype from "rehype-parse";
 import rehype2react from "rehype-react";
 import unified from "unified";

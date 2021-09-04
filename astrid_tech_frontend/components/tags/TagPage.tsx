@@ -1,6 +1,6 @@
 import { format } from "date-fns";
 import Link from "next/link";
-import React, { FC } from "react";
+import { FC } from "react";
 import Masonry from "react-masonry-component";
 import {
   Badge,

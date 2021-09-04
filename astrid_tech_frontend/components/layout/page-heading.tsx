@@ -1,4 +1,4 @@
-import React, { FC, ReactNode } from "react";
+import { FC, ReactNode } from "react";
 import styles from "./page-heading.module.scss";
 
 type PageHeadingProps = {

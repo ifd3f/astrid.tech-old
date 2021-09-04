@@ -1,5 +1,5 @@
 import Head from "next/head";
-import React, { FC } from "react";
+import { FC } from "react";
 
 interface SEOProps {
   description?: string | null;

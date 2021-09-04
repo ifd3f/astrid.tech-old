@@ -1,5 +1,5 @@
 import Fuse from "fuse.js";
-import React, { ChangeEventHandler, FC, useContext, useState } from "react";
+import { ChangeEventHandler, FC, useContext, useState } from "react";
 import { BsCaretDown, BsCaretUp, BsX } from "react-icons/bs";
 import { FaInfoCircle } from "react-icons/fa";
 import {
@@ -45,9 +45,8 @@ const CountBadge: FC<CountBadgeProps> = ({ tag, count }) => {
 };
 
 const SelectableTagList: FC = () => {
-  const { selectableTags, tagUsageCounts, addFilterTag } = useContext(
-    SearchContext
-  );
+  const { selectableTags, tagUsageCounts, addFilterTag } =
+    useContext(SearchContext);
 
   return (
     <div className={styles.selectableTagsContainer}>
@@ -68,9 +67,8 @@ const SelectableTagList: FC = () => {
 };
 
 const CurrentlyUsedTagList: FC = () => {
-  const { filterTags, tagUsageCounts, removeFilterTag } = useContext(
-    SearchContext
-  );
+  const { filterTags, tagUsageCounts, removeFilterTag } =
+    useContext(SearchContext);
   return (
     <div>
       {[...filterTags.values()].map((tag) => (

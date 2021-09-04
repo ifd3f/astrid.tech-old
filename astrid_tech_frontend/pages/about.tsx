@@ -1,4 +1,4 @@
-import React, { FC } from "react";
+import { FC } from "react";
 import { BsEnvelope } from "react-icons/bs";
 import { GiPhone } from "react-icons/gi";
 import { GoMarkGithub } from "react-icons/go";

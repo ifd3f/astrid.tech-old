@@ -14,7 +14,9 @@
     "postbuild": "./post-build.sh",
     "start": "next start",
     "deploy": "npx gh-pages -t true -r \"git@github.com:astralbijection/astralbijection.github.io.git\" -b master -d out -f",
-    "typecheck": "tsc"
+    "typecheck": "tsc",
+    "format": "npx prettier -w .",
+    "lint": "next lint"
   },
   "dependencies": {
     "@fontsource/ibm-plex-sans": "^4.4.5",
@@ -93,6 +95,7 @@
     "webp-loader": "^0.6.0"
   },
   "devDependencies": {
+    "@next/eslint-plugin-next": "^11.1.2",
     "@types/async-redis": "^1.1.2",
     "@types/better-sqlite3": "^5.4.1",
     "@types/classnames": "^2.3.1",
@@ -107,10 +110,18 @@
     "@types/unist": "^2.0.3",
     "@types/uuid": "^8.3.0",
     "@types/walk": "^2.3.0",
+    "@typescript-eslint/eslint-plugin": "^4.30.0",
+    "@typescript-eslint/parser": "^4.30.0",
+    "eslint": "^7.32.0",
+    "eslint-config-airbnb": "^18.2.1",
+    "eslint-config-prettier": "^8.3.0",
+    "eslint-plugin-import": "^2.24.2",
+    "eslint-plugin-jsx-a11y": "^6.4.1",
+    "eslint-plugin-react": "^7.25.1",
+    "eslint-plugin-react-hooks": "^4.2.0",
     "gh-pages": "^3.2.3",
     "mocha": "^9.0.1",
     "postcss-preset-env": "^6.7.0",
-    "tailwindcss": "^2.2.4",
     "ts-mocha": "^8.0.0",
     "ts-node": "^10.0.0",
     "yarn-upgrade-all": "^0.5.4"

@@ -1,5 +1,5 @@
 import Link from "next/link";
-import React, { FC, ReactNode } from "react";
+import { FC, ReactNode } from "react";
 import { Col, Container, Row } from "reactstrap";
 import style from "./footer.module.scss";
 import Image from "next/image";

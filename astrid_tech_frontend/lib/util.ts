@@ -28,7 +28,7 @@ export function hashString(str: string) {
   return hash;
 }
 
-export function groupBy<T>(xs: T[], key: (x: T) => string) {
+export function groupBy<T>(xs: T[], key: (_: T) => string) {
   const out = new Map<string, T[]>();
   for (const x of xs) {
     const k = key(x);

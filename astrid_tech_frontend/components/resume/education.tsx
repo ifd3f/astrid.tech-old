@@ -1,4 +1,3 @@
-import React from "react";
 import { Card, CardText, CardTitle } from "reactstrap";
 import { Course } from "../../types/types";
 import { TagList } from "../tags/tag";

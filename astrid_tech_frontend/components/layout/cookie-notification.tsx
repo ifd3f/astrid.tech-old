@@ -1,4 +1,4 @@
-import React, { FC, useEffect, useState } from "react";
+import { FC, useEffect, useState } from "react";
 import { useCookies } from "react-cookie";
 import { Button, Container } from "reactstrap";
 

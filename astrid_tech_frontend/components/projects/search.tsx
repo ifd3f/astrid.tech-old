@@ -1,5 +1,5 @@
 import Fuse from "fuse.js";
-import React, { createContext, FC, ReactNode, useState } from "react";
+import { createContext, FC, ReactNode, useState } from "react";
 import { Project, ProjectMeta } from "../../types/types";
 
 function countTagUsages(projects: ProjectMeta[]) {
@@ -77,8 +77,9 @@ export const Filterer: FC<FiltererArgs> = ({ children, projects, fuse }) => {
 
   if (filterTags.length > 0) {
     displayedProjects = displayedProjects.filter((project) => {
-      const filteredCount = project.tags.filter((tag) => filterTagsSet.has(tag))
-        .length;
+      const filteredCount = project.tags.filter((tag) =>
+        filterTagsSet.has(tag)
+      ).length;
 
       return shouldFilterAny
         ? filteredCount > 0

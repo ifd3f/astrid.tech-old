@@ -1,10 +1,4 @@
-import React, {
-  createContext,
-  FC,
-  ReactNode,
-  useContext,
-  useState,
-} from "react";
+import { createContext, FC, ReactNode, useContext, useState } from "react";
 import { useCookies } from "react-cookie";
 import { apiLogin } from "../../lib/astrid-tech-api/auth";
 import { AstridTechAPI } from "../../lib/astrid-tech-api/index";

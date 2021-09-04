@@ -1,7 +1,7 @@
 import classNames from "classnames";
 import { resolveAssetURL } from "lib/cache/assets";
 import Link from "next/link";
-import React, { CSSProperties, FC, useRef } from "react";
+import { CSSProperties, FC, useRef } from "react";
 import {
   Badge,
   CardBody,
