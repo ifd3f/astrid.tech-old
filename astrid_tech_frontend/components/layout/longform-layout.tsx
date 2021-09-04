@@ -21,7 +21,7 @@ type LongformLayoutProps = {
 
 export const LongformLayout: FC<LongformLayoutProps> = ({
   title,
-  description, 
+  description,
   descriptionRaw,
   headingColor,
   above,

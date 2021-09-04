@@ -14,7 +14,9 @@ import { HomepageSection } from "./_layout";
 
 export const Page = ({}) => {
   useEffect(() => {
-    console.log("Do you like to use inspect element? Well, I do too! Please hire me :)");
+    console.log(
+      "Do you like to use inspect element? Well, I do too! Please hire me :)"
+    );
   }, []);
 
   return (

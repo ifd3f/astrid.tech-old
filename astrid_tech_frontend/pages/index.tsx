@@ -37,7 +37,7 @@ const Page: FC<InferGetStaticPropsType<typeof getStaticProps>> = ({
           </p>
         </section>
         <section>
-          <h2>Latest Posts</h
+          <h2>Latest Posts</h2>
           {posts.map((post) => (
             <PostBrief
               key={post.slug}

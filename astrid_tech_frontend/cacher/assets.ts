@@ -3,19 +3,18 @@ import yaml from "js-yaml";
 import path, { join } from "path";
 import { serializeJS, walkArr } from "./util";
 
-const getDestinationDir = (contentDir: string, outDir: string) => async (
-  src: string
-) => {
-  const relative = path.relative(contentDir, src);
-  const dest = relative.startsWith("blog/")
-    ? join(outDir, relative.substring(5))
-    : join(outDir, relative);
+const getDestinationDir =
+  (contentDir: string, outDir: string) => async (src: string) => {
+    const relative = path.relative(contentDir, src);
+    const dest = relative.startsWith("blog/")
+      ? join(outDir, relative.substring(5))
+      : join(outDir, relative);
 
-  await fs.mkdir(path.parse(dest).dir, {
-    recursive: true,
-  });
-  return { src, dest };
-};
+    await fs.mkdir(path.parse(dest).dir, {
+      recursive: true,
+    });
+    return { src, dest };
+  };
 
 export async function copyAssets(
   contentDir: string,

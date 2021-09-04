@@ -32,14 +32,11 @@ export const CommentingForm: FC<CommentingFormProps> = ({
   replyTo,
   onSubmitted = () => {},
 }) => {
-  const [
-    [name, setName],
-    [email, setEmail],
-    [website, setWebsite],
-  ] = useCookieState(
-    [COMMENT_EMAIL_COOKIE, COMMENT_NAME_COOKIE, COMMENT_WEBSITE_COOKIE],
-    cookieOptions
-  );
+  const [[name, setName], [email, setEmail], [website, setWebsite]] =
+    useCookieState(
+      [COMMENT_EMAIL_COOKIE, COMMENT_NAME_COOKIE, COMMENT_WEBSITE_COOKIE],
+      cookieOptions
+    );
 
   const { slug, refreshComments } = useCommentData();
 

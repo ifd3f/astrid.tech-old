@@ -52,9 +52,13 @@ export function HeadingSection() {
     <header className="homepage-header homepage-section">
       <div className={homepageStyles.nameWrapper + " h-card"}>
         <div className={homepageStyles.introductionGroup}>
-          <p className={homepageStyles.preTitle}>Hello, my name is</p>
+          <p className={homepageStyles.preTitle}>
+            <strong>Hello</strong>, my name is
+          </p>
           <h1 className={homepageStyles.name + " p-name"}>Astrid Yu</h1>
-          <p className={homepageStyles.postTitle}>Software Developer</p>
+          <p className={homepageStyles.postTitle}>
+            and I develop <strong>software</strong>
+          </p>
         </div>
       </div>
       <p className={homepageStyles.skillBrag}>

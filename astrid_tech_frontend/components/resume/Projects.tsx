@@ -8,7 +8,7 @@ import {
   CardTitle,
   Col,
   Container,
-  Row
+  Row,
 } from "reactstrap";
 import { ALink } from "../util/boilerplate";
 import { HomepageSection } from "./util";

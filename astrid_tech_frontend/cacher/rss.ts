@@ -32,7 +32,6 @@ async function createRSSFeed(hostname: string, posts: BlogPost[]) {
   });
 
   feed.addCategory("Technology");
-
   (await Promise.all(posts.slice(0, 10).map(excerptify(300)))).map(
     async (post) => {
       const url = root + blogSlugToString(getBlogSlug(post));
