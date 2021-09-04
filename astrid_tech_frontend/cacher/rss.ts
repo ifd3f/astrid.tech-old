@@ -7,7 +7,10 @@ import { blogSlugToString, getBlogSlug } from "../lib/util";
 import { convertBlogPostToObjectDate } from "../types/types";
 import { renderMarkdown } from "../lib/markdown";
 
-async function createRSSFeed(hostname: string, posts: BlogPost[]): Promise<Feed> {
+async function createRSSFeed(
+  hostname: string,
+  posts: BlogPost[]
+): Promise<Feed> {
   const root = `https://${hostname}`;
   const author = {
     name: "Astrid Yu",
