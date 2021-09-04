@@ -23,7 +23,6 @@ const Layout: FC<LayoutProps> = ({
       <div
         className={"root-wrapper" + (doNotExpandHeight ? "" : " expand-height")}
       >
-        <BLMBanner />
         {children}
       </div>
       {showFooter ? <FooterSection /> : null}

@@ -5,7 +5,7 @@ import { BsArrowsCollapse } from "react-icons/bs";
 import { GiHamburger } from "react-icons/gi";
 import { Collapse, Navbar, NavbarBrand, NavbarToggler } from "reactstrap";
 
-export type NavBarLinks = "brand" | "projects" | "blog" | "about";
+export type NavBarLinks = "resume" | "projects" | "blog" | "about";
 
 type NavLinkProps = {
   to: string;
@@ -44,10 +44,7 @@ const MainNavbar: FC<MainNavbarProps> = ({ currentLocation, fixed }) => {
         <NavbarBrand
           tag="a"
           href="/"
-          className={classNames(
-            "nav-link",
-            currentLocation == "brand" ? "active" : null
-          )}
+          className={classNames("nav-link")}
         >
           astrid.tech
         </NavbarBrand>
@@ -56,13 +53,16 @@ const MainNavbar: FC<MainNavbarProps> = ({ currentLocation, fixed }) => {
         {isOpen ? <BsArrowsCollapse /> : <GiHamburger />}
       </NavbarToggler>
       <Collapse isOpen={isOpen} navbar>
+        <GNavLink to="/" active={currentLocation == "blog"}>
+          Blog
+        </GNavLink>
         <GNavLink to="/projects" active={currentLocation == "projects"}>
           Projects
         </GNavLink>
-        <GNavLink to="/latest" active={currentLocation == "blog"}>
-          Blog
-        </GNavLink>
         <NavbarSeparator />
+        <GNavLink to="/resume" active={currentLocation == "resume"}>
+          Resume
+        </GNavLink>
         <GNavLink to="/about" active={currentLocation == "about"}>
           About
         </GNavLink>

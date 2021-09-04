@@ -30,15 +30,6 @@ function Bio() {
         <a href="/projects">projects</a>. I wanted a place to share what I've
         made, so I created this website!
       </p>
-      <p>
-        I'm currently interning at Micro-Vu Corporation in Windsor, CA. I'm also
-        a CS major and Math minor at Cal Poly SLO, slated to graduate in 2023
-        unless a certain virus has something to say about that. In addition, I'm
-        looking for a Summer 2021 internship. If you find the things I do to be
-        particularly interesting, or you just want to chat (I'm all for a nice
-        socially-distanced conversation), feel free to contact me through any of
-        the following channels!
-      </p>
     </div>
   );
 }

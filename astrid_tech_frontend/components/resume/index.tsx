@@ -14,7 +14,7 @@ import { HomepageSection } from "./_layout";
 
 export const Page = ({}) => {
   return (
-    <Layout currentLocation="brand">
+    <Layout currentLocation="resume">
       <SEO
         title="Astrid Yu"
         description="My name is Astrid Yu and I create software and other cool things. Welcome to my website!"
@@ -45,7 +45,7 @@ export const Page = ({}) => {
               </a>
             </Col>
             <Col xs="12" md="6" lg="3">
-              <a href="https://linkedin.com/in/astrid-yu">
+              <a href="https://linkedin.com/in/astrid-yu" rel="me">
                 <FaLinkedin title="LinkedIn" /> Connect on LinkedIn
               </a>
             </Col>
