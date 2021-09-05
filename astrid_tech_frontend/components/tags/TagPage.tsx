@@ -65,7 +65,7 @@ const ProjectDisplay: FC<{ project: ProjectMeta<string> }> = ({ project }) => {
   const endDate = project.endDate ? new Date(project.endDate) : undefined;
   return (
     <Card>
-      <ALink className={style.cardLink} href={project.slug}>
+      <ALink className={style.cardLink} href={"/projects/" + project.slug}>
         <CardHeader>
           <h5>
             {project.title} <Badge color="primary">Project</Badge>
@@ -118,6 +118,7 @@ export type TagPageProps = {
 
 const TagDetailTemplate: FC<TagPageProps> = ({ slug, related, objects }) => {
   const tag = useTagTable().get(slug);
+
   return (
     <Layout>
       <SEO title={tag.name!} description={`Items related to ${tag.name}`} />
@@ -127,12 +128,15 @@ const TagDetailTemplate: FC<TagPageProps> = ({ slug, related, objects }) => {
             Items related to <TagBadge tag={tag} />
           </h1>
         </header>
-        <section>
-          <h4>Similar Tags</h4>
-          <p>
-            <TagList tags={related} link />
-          </p>
-        </section>
+
+        {related.length > 0 ? (
+          <section>
+            <h4>Similar Tags</h4>
+            <p>
+              <TagList tags={related} link />
+            </p>
+          </section>
+        ) : null}
 
         <section style={{ paddingBottom: 30 }}>
           <Masonry

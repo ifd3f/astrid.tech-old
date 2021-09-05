@@ -1,4 +1,3 @@
-import SEO from "components/seo";
 import Link from "next/link";
 import { join } from "path";
 import { createContext, FC, useContext } from "react";
@@ -69,7 +68,7 @@ const ProjectStatusGroup = () => {
       ) : null}
       <InfoRow name="Source" icon={<BsCodeSlash />}>
         {project.source.map((url) => (
-          <p>
+          <p key={url}>
             <SourceCodeURLDisplay url={url} />
           </p>
         ))}
