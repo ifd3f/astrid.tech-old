@@ -21,7 +21,7 @@ async function loadBlogPost(pathname: string) {
   const { data, content } = matter(fileContents);
 
   return {
-    tags: data.tags,
+    tags: data.tags ? data.tags : [],
     assetRoot: path.parse(pathname).dir,
     slug,
     title: data.title,

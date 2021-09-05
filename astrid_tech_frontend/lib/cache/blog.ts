@@ -27,6 +27,7 @@ export function getBlogPostSlugs(): Path[] {
     dateStr: string;
     slug: string;
   }[];
+
   return results.map((post) =>
     getBlogSlug({
       date: new Date(post.dateStr),

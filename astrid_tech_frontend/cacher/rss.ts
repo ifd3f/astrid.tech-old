@@ -42,7 +42,7 @@ async function createRSSFeed(
       const category = post.tags.map((t) => ({ name: t }));
 
       return {
-        title: post.title,
+        title: post.title ? post.title : post.slug,
         id: url,
         link: url,
         date: post.date,

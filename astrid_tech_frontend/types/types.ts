@@ -64,7 +64,7 @@ export function convertProjectToStringDate<T>(
 }
 
 export type BlogPostMeta<DateType = Date> = Tagged<"b"> & {
-  title: string;
+  title?: string;
   assetRoot: string;
   description: string;
   date: DateType;
