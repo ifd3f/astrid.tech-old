@@ -14,6 +14,7 @@ type PostProps = {
 export const PostBrief: FC<PostProps> = ({ post }) => {
   const dateString = format(post.date, "d MMMM yyyy");
   const url = blogSlugToString(getBlogSlug(post));
+  console.log(post);
 
   return (
     <Link href={url}>
@@ -21,8 +22,8 @@ export const PostBrief: FC<PostProps> = ({ post }) => {
         <Row>
           <div className="col-12 col-sm-8 col-md-7">
             <a href={url}>
-              <h3>{post.title}</h3>
-              <p>{post.description}</p>
+              {post.title ? <h3>{post.title}</h3> : null}
+              {post.description ? <p>{post.description}</p> : null}
               <p className="text-muted">{post.excerpt}</p>
             </a>
           </div>

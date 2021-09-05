@@ -8,6 +8,7 @@ import {
   getBlogSlug,
   getHSLString,
   getPersistentColor,
+  truncateKeepWords,
 } from "../../lib/util";
 import { BlogPost } from "../../types/types";
 import { CommentSection } from "../api/comments/CommentSection";
@@ -20,6 +21,7 @@ import {
   TagsGroup,
 } from "../layout/longform-layout";
 import SEO from "../seo";
+import striptags from "striptags";
 
 type PostContextData = {
   post: BlogPost<Date>;
@@ -46,9 +48,13 @@ export const BlogPostPage: FC<BlogPostPageProps> = ({ post }) => {
   const slug = blogSlugToString(getBlogSlug(post));
   const url = join(process.env.publicRoot!, slug);
 
+  const metaTitle = post.title
+    ? post.title
+    : truncateKeepWords(striptags(post.content), 50) + "...";
+
   return (
     <ProjectContext.Provider value={{ post }}>
-      <SEO title={post.title} description={post.description} />
+      <SEO title={metaTitle} description={post.description} />
       <Layout currentLocation="blog">
         <LongformLayout
           title={post.title}

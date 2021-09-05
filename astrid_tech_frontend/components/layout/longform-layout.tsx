@@ -1,5 +1,3 @@
-import SEO from "components/seo";
-import path from "path";
 import { FC, PropsWithChildren, ReactNode } from "react";
 import { MdComment } from "react-icons/md";
 import { Col, Container, Row } from "reactstrap";
@@ -8,7 +6,7 @@ import style from "./longform-layout.module.scss";
 import { PageHeading } from "./page-heading";
 
 type LongformLayoutProps = {
-  title: string;
+  title?: string;
   description: ReactNode;
   descriptionRaw: string;
   headingColor: string;
@@ -32,12 +30,6 @@ export const LongformLayout: FC<LongformLayoutProps> = ({
 }) => {
   return (
     <>
-      <SEO
-        canonicalUrl={url}
-        title={title!}
-        description={descriptionRaw}
-        image={thumbnail}
-      />
       <PageHeading
         above={above}
         title={title}

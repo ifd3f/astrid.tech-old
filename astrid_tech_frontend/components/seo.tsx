@@ -20,16 +20,10 @@ const SEO: FC<SEOProps> = ({
   image,
   title,
 }) => {
-  const metaDescription = description ?? "Astrid Yu's Website";
-
   const metas = [
     {
       name: "viewport",
       content: "width=device-width,initial-scale=1.0",
-    },
-    {
-      name: `description`,
-      content: metaDescription,
     },
     {
       name: `twitter:card`,
@@ -44,16 +38,8 @@ const SEO: FC<SEOProps> = ({
       content: title,
     },
     {
-      name: `twitter:description`,
-      content: metaDescription,
-    },
-    {
       property: `og:title`,
       content: title,
-    },
-    {
-      property: `og:description`,
-      content: metaDescription,
     },
     {
       property: `og:type`,
@@ -64,6 +50,13 @@ const SEO: FC<SEOProps> = ({
       content: "follow,index",
     },
   ].concat(meta);
+
+  if (description) {
+    ["description", "twitter:description", "og:description"].forEach((name) => {
+      metas.push({ name, content: description });
+    });
+  }
+
   if (image) {
     metas.push({ property: "og:image", content: image });
     metas.push({ property: "twitter:image", content: image });

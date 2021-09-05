@@ -2,6 +2,7 @@ import Link from "next/link";
 import { join } from "path";
 import { createContext, FC, useContext } from "react";
 import path from "path";
+import SEO from "../seo";
 import {
   BsArrowLeft,
   BsCodeSlash,
@@ -152,16 +153,22 @@ const ProjectDetailPage: FC<ProjectDetailProps> = ({ project, similar }) => {
       )
     : undefined;
 
-  console.log("pdp thumb=", thumbnail);
+  const descriptionRaw = project.description ?? "A project made by Astrid Yu";
 
   return (
     <ProjectContext.Provider value={{ project }}>
+      <SEO
+        canonicalUrl={url}
+        title={project.title!}
+        description={descriptionRaw}
+        image={thumbnail}
+      />
       <Layout currentLocation="projects">
         <LongformLayout
           title={project.title}
           description={project.description}
           thumbnail={thumbnail}
-          descriptionRaw={project.description ?? "A project made by Astrid Yu"}
+          descriptionRaw={descriptionRaw}
           headingColor={getHSLString(getPersistentColor(slug))}
           above={
             <Link href="/projects/">
