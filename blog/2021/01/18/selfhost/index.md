@@ -34,9 +34,9 @@ On my VPS, I'm running several dockerized self-hosted apps right now, including:
   D&D campaign I'm running and possibly future ones too
 
 These are all configured with the
-[IaC repo here](https://github.com/astralbijection/astrid.tech-deployment). The
+[IaC repo here](https://github.com/astralbijection/infrastructure). The
 last commit before I published this article was
-[commit 56e26b](https://github.com/astralbijection/astrid.tech-deployment/tree/56e26b678b5c14026da32e920f4804554fcdcf9e).
+[commit 56e26b](https://github.com/astralbijection/infrastructure/tree/56e26b678b5c14026da32e920f4804554fcdcf9e).
 
 ## Organization
 

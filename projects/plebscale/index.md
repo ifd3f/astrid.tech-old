@@ -12,10 +12,11 @@ tags:
   - proxmox
   - terraform
   - ansible
+  - nixos
   - upcycling
-url: null
+url: https://cloud.astrid.tech/
 source:
-  - https://github.com/astralbijection/astrid.tech-deployment
+  - https://github.com/astralbijection/infrastructure
 thumbnail: /2021/01/27/pi-clustering/nodezzz.jpeg
 ---
 
