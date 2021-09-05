@@ -102,10 +102,7 @@ const SEO: FC<SEOProps> = ({
       />
 
       {/* IndieAuth */}
-      <link
-        rel="authorization_endpoint"
-        href="https://indieauth.com/auth"
-      />
+      <link rel="authorization_endpoint" href="https://indieauth.com/auth" />
 
       {/* Webmention */}
       <link

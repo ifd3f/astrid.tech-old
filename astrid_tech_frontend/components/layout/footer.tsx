@@ -77,6 +77,24 @@ const AGPL: FC = () => {
   );
 };
 
+/**
+ * Links for an IndieWebRing. For more info, see https://xn--sr8hvo.ws/dashboard
+ * @returns links :)
+ */
+const WebRing: FC = () => {
+  return (
+    <>
+      <a href="https://xn--sr8hvo.ws/%F0%9F%9A%AF%F0%9F%90%9E%F0%9F%8C%8A/previous">
+        ←
+      </a>
+      An IndieWeb Webring 🕸💍
+      <a href="https://xn--sr8hvo.ws/%F0%9F%9A%AF%F0%9F%90%9E%F0%9F%8C%8A/next">
+        →
+      </a>
+    </>
+  );
+};
+
 type SiteLinkProps = {
   href: string;
   children: ReactNode;
@@ -94,6 +112,9 @@ const FooterSection = () => {
   return (
     <footer className={style.footer}>
       <Container className="text-light small">
+        <p style={{ textAlign: "center" }}>
+          <WebRing />
+        </p>
         <Col>
           <Row tag="nav">
             <SiteLink href="/privacy">Privacy Policy</SiteLink>
