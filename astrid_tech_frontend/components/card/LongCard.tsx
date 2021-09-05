@@ -18,7 +18,7 @@ export const LongCard: FC = () => {
       <table>
         <tbody>
           {fields.map((f) => (
-            <tr>
+            <tr key={f.key}>
               <th style={{ textAlign: "right", paddingRight: 10 }}>
                 {f.title}
               </th>

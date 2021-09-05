@@ -7,12 +7,14 @@ import { SiArchlinux } from "react-icons/si";
 import { GoMarkGithub } from "react-icons/go";
 
 export type HCardProperty = {
+  key: string;
   title: ReactNode;
   children: ReactNode;
   classes?: string;
 };
 
 export const birthday: HCardProperty = {
+  key: "birthday",
   title: (
     <>
       <FaBirthdayCake title="Birthday" />
@@ -30,6 +32,7 @@ export const birthday: HCardProperty = {
 };
 
 export const timezone: HCardProperty = {
+  key: "timezone",
   title: "Timezone",
   children: (
     <data className="p-tz" value="-0700">
@@ -39,6 +42,7 @@ export const timezone: HCardProperty = {
 };
 
 export const pronouns: HCardProperty = {
+  key: "pronouns",
   title: (
     <>
       <a
@@ -64,6 +68,7 @@ export const pronouns: HCardProperty = {
 };
 
 export const email: HCardProperty = {
+  key: "export",
   title: (
     <>
       <BsEnvelope title="Email" /> Email
@@ -75,7 +80,9 @@ export const email: HCardProperty = {
     </a>
   ),
 };
+
 export const phone: HCardProperty = {
+  key: "phone",
   title: (
     <>
       <GiPhone title="Phone" /> Phone
@@ -89,6 +96,7 @@ export const phone: HCardProperty = {
 };
 
 export const github: HCardProperty = {
+  key: "github",
   title: (
     <>
       <GoMarkGithub title="GitHub" /> GitHub
@@ -102,6 +110,7 @@ export const github: HCardProperty = {
 };
 
 export const linkedin: HCardProperty = {
+  key: "linkedin",
   title: (
     <>
       <FaLinkedin title="LinkedIn" /> LinkedIn
@@ -115,9 +124,10 @@ export const linkedin: HCardProperty = {
 };
 
 export const favOS: HCardProperty = {
+  key: "operating-system",
   title: (
     <>
-      <FiDisc title="OS" /> Favorite OS
+      <FiDisc title="OS" /> OS
     </>
   ),
   children: (
