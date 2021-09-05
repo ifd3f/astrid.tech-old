@@ -148,7 +148,7 @@ const ProjectDetailPage: FC<ProjectDetailProps> = ({ project, similar }) => {
   const url = join(process.env.publicRoot!, slug);
   const thumbnail = project.thumbnail
     ? path.join(
-        "https://astrid.tech",
+        process.env.publicRoot!!,
         resolveAssetURL(project.assetRoot, project.thumbnail)
       )
     : undefined;

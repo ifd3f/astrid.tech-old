@@ -39,7 +39,7 @@ const ContentLicense = () => (
     by{" "}
     <a
       {...{ "xmlns:cc": "http://creativecommons.org/ns#" }}
-      href="https://astrid.tech"
+      href={process.env.publicRoot}
       property="cc:attributionName"
       rel="cc:attributionURL"
     >

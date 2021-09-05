@@ -15,7 +15,6 @@ const SEO: FC<SEOProps> = ({
   description,
   lang = "en",
   meta = [],
-  origin = "https://astrid.tech",
   canonicalUrl,
   image,
   title,
@@ -79,19 +78,19 @@ const SEO: FC<SEOProps> = ({
         title="astrid.tech RSS"
         rel="alternate"
         type="application/rss+xml"
-        href="https://astrid.tech/rss.xml"
+        href={`${process.env.publicRoot}/rss.xml`}
       />
       <link
         title="astrid.tech Atom"
         rel="alternate"
         type="application/atom+xml"
-        href="https://astrid.tech/atom.xml"
+        href={`${process.env.publicRoot}/atom.xml`}
       />
       <link
         title="astrid.tech JSON feed"
         rel="alternate"
         type="application/feed+json"
-        href="https://astrid.tech/feed.json"
+        href={`${process.env.publicRoot}/feed.json`}
       />
 
       {/* IndieAuth */}

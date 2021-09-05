@@ -17,15 +17,16 @@
 
   // Add the IDs of extensions you want installed when the container is created.
   "extensions": [
-    "dbaeumer.vscode-eslint",
-    "christian-kohler.npm-intellisense",
-    "esbenp.prettier-vscode",
-    "sibiraj-s.vscode-scss-formatter",
-    "mrmlnc.vscode-scss",
-    "redhat.vscode-yaml",
-    "shd101wyy.markdown-preview-enhanced",
-    "ms-azuretools.vscode-docker"
-  ],
+	"dbaeumer.vscode-eslint",
+	"christian-kohler.npm-intellisense",
+	"esbenp.prettier-vscode",
+	"sibiraj-s.vscode-scss-formatter",
+	"mrmlnc.vscode-scss",
+	"redhat.vscode-yaml",
+	"shd101wyy.markdown-preview-enhanced",
+	"ms-azuretools.vscode-docker",
+	"eamodio.gitlens"
+],
 
   // Use 'forwardPorts' to make a list of ports inside the container available locally.
   // "forwardPorts": [],

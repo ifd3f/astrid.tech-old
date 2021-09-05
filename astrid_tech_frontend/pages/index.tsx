@@ -31,7 +31,7 @@ const Page: FC<InferGetStaticPropsType<typeof getStaticProps>> = ({
       <Container className={styles.blogContentContainer}>
         <section>
           <p className="text-right">
-            <a href="https://astrid.tech/rss.xml">
+            <a href={`${process.env.publicRoot}/rss.xml`}>
               <FaRssSquare title="astrid.tech RSS" />
             </a>
           </p>
