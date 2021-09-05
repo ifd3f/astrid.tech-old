@@ -123,6 +123,7 @@ const FooterSection = () => {
             <ContentLicense />
           </Col>
         </Row>
+        <a href="https://github.com/astralbijection/" rel="me"></a>
       </Container>
     </footer>
   );

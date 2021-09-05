@@ -104,15 +104,8 @@ const SEO: FC<SEOProps> = ({
       {/* IndieAuth */}
       <link
         rel="authorization_endpoint"
-        href="https://api.astrid.tech/auth/indieauth"
+        href="https://indieauth.com/auth"
       />
-      <link
-        rel="token_endpoint"
-        href="https://api.astrid.tech/auth/indieauth/token"
-      />
-
-      {/* Micropub */}
-      <link rel="micropub" href="https://api.astrid.tech/api/micropub/" />
 
       {/* Webmention */}
       <link
