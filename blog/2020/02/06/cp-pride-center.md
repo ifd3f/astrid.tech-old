@@ -138,8 +138,8 @@ few hours later, Everest was in the Pride Center when
 
 > [A] creepy guy… who kind of looked like he was a custodian, but didn't look
 > like the average age of even a graduate student on campus… didn't even say hi,
-> he just walked in, sat down, and then he was looking at our books… [giving >
-> off] Christian proselytizing sort of vibes… It got more and more
+> he just walked in, sat down, and then he was looking at our books... \[giving
+> off\] Christian proselytizing sort of vibes… It got more and more
 > uncomfortable… It's kind of making the Pride Center a little less… safe to be
 > in.
 
