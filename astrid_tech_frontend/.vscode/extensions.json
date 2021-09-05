@@ -1,5 +1,6 @@
 {
-    "recommendations": [
-        "eamodio.gitlens"
-    ]
+  "recommendations": [
+    "eamodio.gitlens",
+    "visualstudioexptteam.vscodeintellicode"
+  ]
 }
