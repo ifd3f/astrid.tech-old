@@ -1,10 +1,11 @@
 import { format } from "date-fns";
 import { join } from "path";
 import { createContext, FC, useContext } from "react";
-import { FaCalendar } from "react-icons/fa";
+import { FaCalendar, FaLink } from "react-icons/fa";
 import { Container } from "reactstrap";
 import {
   blogSlugToString,
+  getBlogShortLinkCode,
   getBlogSlug,
   getHSLString,
   getPersistentColor,
@@ -32,10 +33,21 @@ const ProjectContext = createContext<PostContextData>({} as PostContextData);
 const PostStatusGroup: FC = () => {
   const { post } = useContext(ProjectContext);
   const date = format(post.date, "d MMM yyyy");
+
+  const fullSlug = blogSlugToString(getBlogSlug(post));
+  const link = process.env.publicRoot!! + fullSlug;
+
   return (
     <StatusGroup>
-      <InfoRow name="Date" icon={<FaCalendar />}>
-        {date}
+      <InfoRow name="Published" icon={<FaCalendar />}>
+        <time className="dt-published" dateTime={post.date.toISOString()}>
+          {date}
+        </time>
+      </InfoRow>
+      <InfoRow name="Permalink" icon={<FaLink />}>
+        <a href={link} className="u-url u-uid" rel="bookmark">
+          {post.slug}
+        </a>
       </InfoRow>
       {/* TODO add comment count */}
     </StatusGroup>
@@ -70,9 +82,7 @@ export const BlogPostPage: FC<BlogPostPageProps> = ({ post }) => {
           }
           above={null}
         >
-          <article className="longform">
-            <ContentDisplay>{post.content}</ContentDisplay>
-          </article>
+          <ContentDisplay>{post.content}</ContentDisplay>
         </LongformLayout>
         <Container>
           <section id="comments">

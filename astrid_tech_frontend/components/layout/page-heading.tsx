@@ -20,8 +20,16 @@ export const PageHeading: FC<PageHeadingProps> = ({
     <div style={{ backgroundColor: bgColor }}>
       <nav className={styles.above}>{above}</nav>
       <header className={styles.header}>
-        {title ? <h1 style={{ color: textColor }}>{title}</h1> : null}
-        {description ? <p style={{ color: textColor }}>{description}</p> : null}
+        {title ? (
+          <h1 style={{ color: textColor }} className="p-name">
+            {title}
+          </h1>
+        ) : null}
+        {description ? (
+          <p style={{ color: textColor }} className="p-summary">
+            {description}
+          </p>
+        ) : null}
       </header>
     </div>
   );

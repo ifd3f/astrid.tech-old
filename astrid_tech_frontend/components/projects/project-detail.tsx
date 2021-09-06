@@ -12,11 +12,8 @@ import {
 import { FaCalendar, FaEnvelope, FaGithub } from "react-icons/fa";
 import { Container } from "reactstrap";
 import { ProjectLink } from "../../lib/cache";
-import {
-  formatDateInterval,
-  getHSLString,
-  getPersistentColor,
-} from "../../lib/util";
+import { DateInterval } from "../../lib/DateInterval";
+import { getHSLString, getPersistentColor } from "../../lib/util";
 import { Project } from "../../types/types";
 import { CommentSection } from "../api/comments/CommentSection";
 import { ContentDisplay } from "../content/ContentDisplay";
@@ -59,8 +56,12 @@ const ProjectStatusGroup = () => {
   const { project } = useContext(ProjectContext);
   return (
     <StatusGroup>
-      <InfoRow name="Date" icon={<FaCalendar />}>
-        {formatDateInterval("d MMM yyyy", project.startDate, project.endDate)}
+      <InfoRow name="Dates" icon={<FaCalendar />}>
+        <DateInterval
+          formatStyle="d MMM yyyy"
+          startDate={project.startDate}
+          endDate={project.endDate}
+        />
       </InfoRow>
       {project.url ? (
         <InfoRow name="URL" icon={<BsLink />}>

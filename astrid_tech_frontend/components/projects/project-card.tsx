@@ -100,7 +100,7 @@ export const ProjectCard: FC<ProjectCardProps> = ({
           </a>
         </Link>
       </div>
-      <div className={styles.lower}>
+      <div className={classNames(styles.lower, "e-content")}>
         <TagList tags={project.tags} limit={5} className={styles.tags} link />
       </div>
     </CardBody>

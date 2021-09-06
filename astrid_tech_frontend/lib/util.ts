@@ -76,20 +76,6 @@ export function getHSLString([h, s, l]: number[]) {
   return hslToHex(h, s, l) as string;
 }
 
-export function formatDateInterval(
-  formatStyle: string,
-  startDate: Date,
-  endDate?: Date | null
-) {
-  const startStr = format(startDate, formatStyle);
-  if (startDate == endDate) {
-    return startStr;
-  }
-  return endDate
-    ? `${startStr} to ${format(endDate, formatStyle)}`
-    : `${startStr} to now`;
-}
-
 export function getBlogSlug({ date, slug }: { date: Date; slug: string }) {
   return {
     year: date.getUTCFullYear().toString(),

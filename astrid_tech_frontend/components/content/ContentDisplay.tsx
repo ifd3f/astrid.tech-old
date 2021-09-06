@@ -15,7 +15,7 @@ const processor = unified()
 
 export const ContentDisplay: FC<{ children: string }> = ({ children }) => {
   return (
-    <article className="longform">
+    <article className="longform e-content">
       {processor.processSync(children).result as ReactElement}
     </article>
   );
