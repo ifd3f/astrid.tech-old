@@ -1,8 +1,8 @@
 import crypto from "crypto";
-import { format } from "date-fns";
 import hslToHex from "hsl-to-hex";
 import seedrandom from "seedrandom";
 import { Path } from "./cache";
+import { DateToSxg, IntToSxg } from "./newbase60";
 
 export function getContrastingTextColor(backgroundColor: string): string {
   const [, r, g, b] = backgroundColor
@@ -98,4 +98,14 @@ export function truncateKeepWords(text: string, maxChars: number) {
     }
   }
   return "";
+}
+
+export function getBlogShortLinkCode({
+  date,
+  ordinal = 0,
+}: {
+  date: Date;
+  ordinal?: number;
+}) {
+  return "e" + DateToSxg(date) + IntToSxg(ordinal);
 }
