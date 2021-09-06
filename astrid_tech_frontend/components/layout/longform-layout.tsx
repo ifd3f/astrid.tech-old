@@ -97,7 +97,7 @@ export const TagsGroup: FC<TagsGroupProps> = ({ tags }) => {
   return (
     <SidebarGroup>
       <h2>Tags</h2>
-      <TagList tags={tags} link />
+      <TagList tags={tags} link relTag />
     </SidebarGroup>
   );
 };

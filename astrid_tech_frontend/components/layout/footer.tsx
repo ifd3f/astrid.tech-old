@@ -57,7 +57,7 @@ const ContentLicense = () => (
 const AGPL: FC = () => {
   return (
     <>
-      <a href="https://www.gnu.org/licenses/agpl-3.0.en.html">
+      <a rel="license" href="https://www.gnu.org/licenses/agpl-3.0.en.html">
         <img
           alt="GNU Affero General Public License"
           width={100}

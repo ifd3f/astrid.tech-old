@@ -12,18 +12,21 @@ type TagBadgeProps = {
   tag: Tag | string;
   link?: boolean;
   children?: ReactNode;
+  relTag?: boolean;
 };
 
 export const TagBadge: FC<TagBadgeProps> = ({
   tag,
   link = false,
   children,
+  relTag = false,
 }) => {
   if (typeof tag == "string") {
     const table = useTagTable();
     tag = table.get(tag);
   }
-  const linkTo = tag.slug[0] == "/" ? tag.slug : "/t/" + tag.slug;
+  const getLinkTo = (slug: string) =>
+    process.env.publicRoot + (slug[0] == "/" ? slug : "/t/" + slug);
 
   const badge = (
     <Badge
@@ -39,7 +42,13 @@ export const TagBadge: FC<TagBadgeProps> = ({
     </Badge>
   );
 
-  return link ? <ALink href={linkTo}>{badge}</ALink> : badge;
+  return link ? (
+    <ALink href={getLinkTo(tag.slug)} rel={relTag ? "tag" : undefined}>
+      {badge}
+    </ALink>
+  ) : (
+    badge
+  );
 };
 
 type TagListProps = {
@@ -47,6 +56,7 @@ type TagListProps = {
   limit?: number;
   link?: boolean;
   className?: string;
+  relTag?: boolean;
 };
 
 export const TagList: FC<TagListProps> = ({
@@ -54,6 +64,7 @@ export const TagList: FC<TagListProps> = ({
   link = false,
   limit = Number.MAX_SAFE_INTEGER,
   className,
+  relTag,
 }) => {
   const [isOpened, setOpened] = useState(false);
 
@@ -84,7 +95,7 @@ export const TagList: FC<TagListProps> = ({
         }}
       >
         {shownTags.map((tag) => (
-          <TagBadge key={tag} tag={tag} link={link} />
+          <TagBadge key={tag} tag={tag} link={link} relTag={relTag} />
         ))}{" "}
         {excluded.length > 0 ? (
           <Badge title={alt} onClick={onClick} style={{ cursor: "pointer" }}>

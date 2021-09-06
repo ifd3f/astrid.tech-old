@@ -41,7 +41,12 @@ const MainNavbar: FC<MainNavbarProps> = ({ currentLocation, fixed }) => {
       expand="md"
     >
       <Link href="/">
-        <NavbarBrand tag="a" href="/" className={classNames("nav-link")}>
+        <NavbarBrand
+          tag="a"
+          href="/"
+          className={classNames("nav-link")}
+          rel="home"
+        >
           astrid.tech
         </NavbarBrand>
       </Link>

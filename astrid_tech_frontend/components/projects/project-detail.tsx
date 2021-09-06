@@ -172,7 +172,7 @@ const ProjectDetailPage: FC<ProjectDetailProps> = ({ project, similar }) => {
           headingColor={getHSLString(getPersistentColor(slug))}
           above={
             <Link href="/projects/">
-              <a className={style.backToProjects}>
+              <a className={style.backToProjects} rel="directory">
                 <BsArrowLeft /> Back to Projects
               </a>
             </Link>
