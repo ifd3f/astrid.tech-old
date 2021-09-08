@@ -5,6 +5,14 @@ import SEO from "../components/seo";
 import { LongCard } from "../components/card";
 import styles from "../styles/blog.module.scss";
 
+
+/**
+ * Force this page to get exported
+ */
+export async function getStaticProps() {
+  return { props: {}};
+}
+
 function Bio() {
   return (
     <article>

@@ -13,7 +13,7 @@
     "build": "next build && next export",
     "postbuild": "./post-build.sh",
     "start": "next start",
-    "deploy": "npx gh-pages -t true -r \"git@github.com:astralbijection/astralbijection.github.io.git\" -b master -d out -f",
+    "serve": "npx http-server ./out -p 3002",
     "typecheck": "tsc",
     "format": "npx prettier -w .",
     "lint": "next lint"
