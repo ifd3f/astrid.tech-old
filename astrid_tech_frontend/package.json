@@ -72,7 +72,7 @@
     "remark-gfm": "^1.0.0",
     "remark-graphviz": "^0.2.2",
     "remark-grid-tables": "^2.1.2",
-    "remark-html": "^13.0.1",
+    "remark-html": "^13.0.2",
     "remark-math": "^4.0.0",
     "remark-oembed": "^1.2.2",
     "remark-parse": "^9.0.0",
