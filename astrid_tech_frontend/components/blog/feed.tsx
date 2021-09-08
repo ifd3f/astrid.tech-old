@@ -1,3 +1,5 @@
+import classNames from "classnames";
+import { SemanticDate } from "components/util/date-displays";
 import { format } from "date-fns";
 import Link from "next/link";
 import { FC } from "react";
@@ -12,23 +14,25 @@ type PostProps = {
 };
 
 export const PostBrief: FC<PostProps> = ({ post }) => {
-  const dateString = format(post.date, "d MMMM yyyy");
   const url = blogSlugToString(getBlogSlug(post));
-  console.log(post);
 
   return (
     <Link href={url}>
-      <article className={style.brief}>
+      <article className={classNames(style.brief, "h-entry")}>
         <Row>
           <div className="col-12 col-sm-8 col-md-7">
             <a href={url}>
-              {post.title ? <h3>{post.title}</h3> : null}
-              {post.description ? <p>{post.description}</p> : null}
-              <p className="text-muted">{post.excerpt}</p>
+              {post.title ? <h3 className="p-name">{post.title}</h3> : null}
+              {post.description ? (
+                <p className="p-summary">{post.description}</p>
+              ) : null}
+              <p className="p-summary text-muted">{post.excerpt}</p>
             </a>
           </div>
           <div className="col col-sm-4 col-md-5">
-            <p className={`text-muted ${style.date}`}>{dateString}</p>
+            <p className={classNames("text-muted", style.date)}>
+            <SemanticDate formatStyle="d MMM yyyy" date={post.date} className="dt-published"/>
+            </p>
             <p>
               <TagList tags={post.tags} link limit={5} />
             </p>
@@ -45,11 +49,11 @@ export type BlogFeedProps = {
 
 export const BlogFeed: FC<BlogFeedProps> = ({ posts }) => {
   return (
-    <div>
+    <section className="h-feed">
       {posts.map((post) => (
         <PostBrief key={post.slug} post={post} />
       ))}
       <p className="text-center text-muted">(End of posts)</p>
-    </div>
+    </section>
   );
 };

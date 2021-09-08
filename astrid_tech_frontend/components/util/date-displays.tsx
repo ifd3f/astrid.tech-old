@@ -1,3 +1,4 @@
+import classNames from "classnames";
 import { format } from "date-fns";
 import { FC } from "react";
 
@@ -6,25 +7,34 @@ export const DateInterval: FC<{
   startDate: Date;
   endDate?: Date | null;
 }> = ({ formatStyle, startDate, endDate }) => {
-  const startStr = (
-    <time dateTime={startDate.toISOString()}>
-      {format(startDate, formatStyle)}
-    </time>
-  );
+  const startStr = <SemanticDate date={startDate} formatStyle={formatStyle} />;
   if (startDate == endDate) {
     return startStr;
   }
 
-  const normEndDate = endDate ? endDate : new Date();
   const endStr = (
-    <time dateTime={normEndDate.toISOString()}>
-      {endDate ? format(normEndDate, formatStyle) : "now"}
-    </time>
+    <SemanticDate date={endDate ? endDate : "now"} formatStyle={formatStyle} />
   );
 
   return (
     <>
       {startStr} to {endStr}
     </>
+  );
+};
+
+export const SemanticDate: FC<{
+  className?: string;
+  formatStyle: string;
+  date: Date | "now";
+}> = ({ formatStyle, className, date }) => {
+  return date == "now" ? (
+    <time className={className} dateTime={new Date().toISOString()}>
+      now
+    </time>
+  ) : (
+    <time className={className} dateTime={date.toISOString()}>
+      {format(date, formatStyle)}
+    </time>
   );
 };

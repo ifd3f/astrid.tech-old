@@ -11,10 +11,7 @@ import {
   Col,
   Container,
 } from "reactstrap";
-import {
-  blogSlugToString,
-  getBlogSlug,
-} from "../../lib/util";
+import { blogSlugToString, getBlogSlug } from "../../lib/util";
 import {
   BlogPostMeta,
   convertBlogPostToObjectDate,
@@ -22,7 +19,7 @@ import {
   ProjectMeta,
   SiteObject,
 } from "../../types/types";
-import { DateInterval } from "../util/date-displays";
+import { DateInterval, SemanticDate } from "../util/date-displays";
 import Layout from "../layout/layout";
 import SEO from "../seo";
 import { ALink } from "../util/boilerplate";
@@ -38,21 +35,22 @@ const BlogPostDisplay: FC<{ post: BlogPostMeta<string> }> = ({
   const post = convertBlogPostToObjectDate(_post);
   const slug = blogSlugToString(getBlogSlug(post));
   return (
-    <Card>
-      <Link href={slug}>
-        <a className={style.cardLink} href={slug}>
-          <CardHeader>
-            <h5>
-              {post.title} <Badge color="success">Blog</Badge>
-            </h5>
-            <p className={dateClassName}>{format(post.date, "d MMM yyyy")}</p>
-          </CardHeader>
-          <CardBody>
-            <div className="lead">{post.description}</div>
-            <small className="text-muted">{post.excerpt!!}</small>
-          </CardBody>
-        </a>
-      </Link>
+    <Card className="h-entry">
+      <ALink className={style.cardLink} href={slug}>
+        <CardHeader>
+          <h5>
+            <span className="p-name">{post.title}</span>{" "}
+            <Badge color="success">Blog</Badge>
+          </h5>
+          <p className={dateClassName}>
+            <SemanticDate date={post.date} formatStyle="d MMM yyyy" />
+          </p>
+        </CardHeader>
+        <CardBody>
+          <div className="lead">{post.description}</div>
+          <small className="text-muted">{post.excerpt!!}</small>
+        </CardBody>
+      </ALink>
       <CardFooter>
         <TagList tags={post.tags} limit={7} link />
       </CardFooter>
@@ -71,11 +69,11 @@ const ProjectDisplay: FC<{ project: ProjectMeta<string> }> = ({ project }) => {
             {project.title} <Badge color="primary">Project</Badge>
           </h5>
           <p className={dateClassName}>
-        <DateInterval
-          formatStyle="d MMM yyyy"
-          startDate={startDate}
-          endDate={endDate}
-        />
+            <DateInterval
+              formatStyle="d MMM yyyy"
+              startDate={startDate}
+              endDate={endDate}
+            />
           </p>
         </CardHeader>
         <CardBody>

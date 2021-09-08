@@ -23,6 +23,7 @@ import {
 } from "../layout/longform-layout";
 import SEO from "../seo";
 import striptags from "striptags";
+import { SemanticDate } from "components/util/date-displays";
 
 type PostContextData = {
   post: BlogPost<Date>;
@@ -32,20 +33,17 @@ const ProjectContext = createContext<PostContextData>({} as PostContextData);
 
 const PostStatusGroup: FC = () => {
   const { post } = useContext(ProjectContext);
-  const date = format(post.date, "d MMM yyyy");
 
   const fullSlug = blogSlugToString(getBlogSlug(post));
   const link = process.env.publicRoot!! + fullSlug;
 
-  const shortcode = getBlogShortLinkCode(post);
-  const shortlink = `https://aay.tw/${shortcode}`;
+  //const shortcode = getBlogShortLinkCode(post);
+  //const shortlink = `https://aay.tw/${shortcode}`;
 
   return (
     <StatusGroup>
       <InfoRow name="Published" icon={<FaCalendar />}>
-        <time className="dt-published" dateTime={post.date.toISOString()}>
-          {date}
-        </time>
+        <SemanticDate date={post.date} formatStyle="d MMM yyyy" />
       </InfoRow>
       <InfoRow name="Permalink" icon={<FaLink />}>
         <a href={link} className="u-url u-uid" rel="bookmark">
@@ -92,7 +90,7 @@ export const BlogPostPage: FC<BlogPostPageProps> = ({ post }) => {
           }
           above={null}
         >
-          <ContentDisplay>{post.content}</ContentDisplay>
+          <ContentDisplay className="h-entry">{post.content}</ContentDisplay>
         </LongformLayout>
         <Container>
           <section id="comments">
