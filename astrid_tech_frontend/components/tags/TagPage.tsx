@@ -13,7 +13,6 @@ import {
 } from "reactstrap";
 import {
   blogSlugToString,
-  formatDateInterval,
   getBlogSlug,
 } from "../../lib/util";
 import {
@@ -23,6 +22,7 @@ import {
   ProjectMeta,
   SiteObject,
 } from "../../types/types";
+import { DateInterval } from "../../lib/DateInterval";
 import Layout from "../layout/layout";
 import SEO from "../seo";
 import { ALink } from "../util/boilerplate";
@@ -71,7 +71,11 @@ const ProjectDisplay: FC<{ project: ProjectMeta<string> }> = ({ project }) => {
             {project.title} <Badge color="primary">Project</Badge>
           </h5>
           <p className={dateClassName}>
-            {formatDateInterval("d MMM yyyy", startDate, endDate)}
+        <DateInterval
+          formatStyle="d MMM yyyy"
+          startDate={startDate}
+          endDate={endDate}
+        />
           </p>
         </CardHeader>
         <CardBody>
