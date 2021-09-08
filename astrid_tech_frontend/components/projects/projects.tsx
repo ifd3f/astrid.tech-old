@@ -153,11 +153,17 @@ const SearchSection: FC = () => {
   );
 };
 
-export const CardGroup: FC<{
+type CardGroupProps = {
   idPrefix: string;
   title?: { text: string; description?: string };
   projects: Project[];
-}> = ({ title, idPrefix, projects }) => {
+};
+
+export const CardGroup: FC<CardGroupProps> = ({
+  title,
+  idPrefix,
+  projects,
+}) => {
   var heading = null;
   if (title) {
     const infoId = `${idPrefix}-section-info`;
@@ -218,11 +224,16 @@ export const ProjectCardsView: FC = () => {
   );
 };
 
-export const ProjectsIndex: FC<{
+type ProjectsIndexProps = {
   projects: ProjectMeta[];
   fuseIndex: any;
   fuseKeys: string[];
-}> = ({ projects, fuseIndex }) => {
+};
+
+export const ProjectsIndex: FC<ProjectsIndexProps> = ({
+  projects,
+  fuseIndex,
+}) => {
   const index = Fuse.parseIndex<ProjectMeta>(fuseIndex);
   const fuse = new Fuse<ProjectMeta>(
     projects,

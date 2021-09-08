@@ -26,7 +26,12 @@ export const getStaticProps = async () => {
   return { props: { paths, index } };
 };
 
-const NotFoundPageContents: FC<{ suggestions: string[]; bugsURL: string }> = ({
+type NotFoundPageContentsProps = {
+  suggestions: string[];
+  bugsURL: string;
+};
+
+const NotFoundPageContents: FC<NotFoundPageContentsProps> = ({
   suggestions,
   bugsURL,
 }) => {

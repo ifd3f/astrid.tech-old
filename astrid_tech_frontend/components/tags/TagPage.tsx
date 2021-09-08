@@ -29,9 +29,9 @@ import { useTagTable } from "./TagTableProvider";
 
 const dateClassName = `text-muted ${style.date}`;
 
-const BlogPostDisplay: FC<{ post: BlogPostMeta<string> }> = ({
-  post: _post,
-}) => {
+type BlogPostDisplayProps = { post: BlogPostMeta<string> };
+
+const BlogPostDisplay: FC<BlogPostDisplayProps> = ({ post: _post }) => {
   const post = convertBlogPostToObjectDate(_post);
   const slug = blogSlugToString(getBlogSlug(post));
   return (
@@ -58,7 +58,9 @@ const BlogPostDisplay: FC<{ post: BlogPostMeta<string> }> = ({
   );
 };
 
-const ProjectDisplay: FC<{ project: ProjectMeta<string> }> = ({ project }) => {
+type ProjectDisplayProps = { project: ProjectMeta<string> };
+
+const ProjectDisplay: FC<ProjectDisplayProps> = ({ project }) => {
   const startDate = new Date(project.startDate);
   const endDate = project.endDate ? new Date(project.endDate) : undefined;
   return (

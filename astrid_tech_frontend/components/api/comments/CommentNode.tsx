@@ -16,7 +16,9 @@ type CommentNodeProps = {
 
 type CommentState = "reply" | "report" | null;
 
-const AuthorDisplay: FC<{ author: CommentAuthor }> = ({ author }) => {
+type AuthorDisplayProps = { author: CommentAuthor };
+
+const AuthorDisplay: FC<AuthorDisplayProps> = ({ author }) => {
   const user = <strong>{author.name ?? "[anonymous]"}</strong>;
   return (
     <>

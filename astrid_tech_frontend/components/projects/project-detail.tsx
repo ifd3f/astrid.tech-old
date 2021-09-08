@@ -111,7 +111,9 @@ const BlogPostsGroup = () => {
 };
 */
 
-const RelatedProjectsGroup: FC<{ similar: ProjectLink[] }> = ({ similar }) => {
+type RelatedProjectsGroupProps = { similar: ProjectLink[] };
+
+const RelatedProjectsGroup: FC<RelatedProjectsGroupProps> = ({ similar }) => {
   const list = (
     <ul>
       {similar.map(({ slug, title }) => (

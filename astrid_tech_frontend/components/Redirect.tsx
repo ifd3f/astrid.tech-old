@@ -2,7 +2,10 @@ import { GetStaticProps, InferGetStaticPropsType } from "next";
 import Head from "next/head";
 import { FC, useEffect } from "react";
 import { useRouter } from "next/router";
-export const Redirect: FC<{ destination: string }> = ({ destination }) => {
+
+type RedirectProps = { destination: string };
+
+export const Redirect: FC<RedirectProps> = ({ destination }) => {
   const router = useRouter();
   useEffect(() => {
     router.replace(destination);

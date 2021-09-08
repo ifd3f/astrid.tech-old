@@ -27,7 +27,7 @@ function Bio() {
   );
 }
 
-const About: FC<{}> = (props) => {
+const About: FC = (props) => {
   return (
     <Layout {...props} currentLocation="about">
       <SEO

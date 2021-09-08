@@ -8,7 +8,11 @@ export type DateIntervalProps = {
   endDate?: Date | null;
 };
 
-export const DateInterval: FC<DateIntervalProps> = ({ formatStyle, startDate, endDate }) => {
+export const DateInterval: FC<DateIntervalProps> = ({
+  formatStyle,
+  startDate,
+  endDate,
+}) => {
   const startStr = <SemanticDate date={startDate} formatStyle={formatStyle} />;
   if (startDate == endDate) {
     return startStr;
