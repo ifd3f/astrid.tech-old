@@ -16,9 +16,9 @@ import { getHSLString, getPersistentColor, RichColorTheme } from "../lib/util";
 
 const LicenseSection: FC<LicenseWithLibraries> = ({ libraries, license }) => (
   <section>
-    <h2 id={license.name}>
+    <h3 id={license.name}>
       {license.url ? <a href={license.url}>{license.name}</a> : license.name}
-    </h2>
+    </h3>
     <p>{libraries.length} dependencies use this license.</p>
     <ul>
       {libraries.map((library) => (
@@ -138,6 +138,8 @@ const Licenses: FC<InferGetStaticPropsType<typeof getStaticProps>> = ({
             configurations.
           </p>
           <LicensesChart licenses={licenses} />
+          <hr/>
+          <h2>Breakdown</h2>
           <Masonry options={{ transitionDuration: 0 }}>
             {licenses.map((licenses) => (
               <Col sm="6">

@@ -119,13 +119,27 @@ const SiteLink: FC<SiteLinkProps> = ({ href, children }) => (
   </Col>
 );
 
+type MiniAboutProps = { version: string };
+
+const MiniAbout: FC<MiniAboutProps> = ({ version }) => {
+  return (
+    <p>
+      astrid.tech v{version} was created by Astrid Yu with a generous helping of{" "}
+      <Tea /> and <Witch />. See the{" "}
+      <Link href="/projects/astrid-tech">self-referential project page</Link> or
+      see the code yourself on{" "}
+      <a href="https://github.com/astralbijection/astrid.tech">GitHub</a>.
+    </p>
+  );
+};
+
 const FooterSection = () => {
   const version = packageJson.version;
 
   return (
     <footer className={style.footer}>
       <Container className="text-light">
-        <Row>
+        <Row tag="nav">
           <Col>
             <p style={{ textAlign: "center", fontSize: 20 }}>
               <XXIIVVWebring />
@@ -135,28 +149,17 @@ const FooterSection = () => {
           </Col>
         </Row>
 
+        <Row tag="nav">
+          <SiteLink href="/privacy">Privacy Policy</SiteLink>
+          <SiteLink href="/licenses">Open Source Licenses</SiteLink>
+          <SiteLink href="/about">About/Contact</SiteLink>
+        </Row>
+
         <Row className="small">
-          <Col>
-            <Row tag="nav">
-              <SiteLink href="/privacy">Privacy Policy</SiteLink>
-              <SiteLink href="/licenses">Open Source Licenses</SiteLink>
-              <SiteLink href="/about">About/Contact</SiteLink>
-            </Row>
-          </Col>
-          <Col>
-            <p>
-              astrid.tech v{version} was created by Astrid Yu with a generous
-              helping of <Tea /> and <Witch />. See the{" "}
-              <Link href="/projects/astrid-tech">
-                self-referential project page
-              </Link>{" "}
-              or see the code yourself on{" "}
-              <a href="https://github.com/astralbijection/astrid.tech">
-                GitHub
-              </a>
-              .
-            </p>
-          </Col>
+          <MiniAbout version={version} />
+        </Row>
+
+        <Row className="small">
           <Row>
             <Col className="text-center">
               <AGPL />
