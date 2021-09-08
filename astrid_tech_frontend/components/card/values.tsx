@@ -1,9 +1,9 @@
-import React, { ReactNode } from "react";
+import { ReactNode } from "react";
 import { BsEnvelope } from "react-icons/bs";
 import { FaBirthdayCake, FaLinkedin } from "react-icons/fa";
 import { GiPhone } from "react-icons/gi";
 import { FiDisc } from "react-icons/fi";
-import { SiArchlinux } from "react-icons/si";
+import { SiArchlinux, SiNixos } from "react-icons/si";
 import { GoMarkGithub } from "react-icons/go";
 
 export type HCardProperty = {
@@ -131,9 +131,17 @@ export const favOS: HCardProperty = {
     </>
   ),
   children: (
-    <a className="u-os" href="https://archlinux.org">
-      <SiArchlinux title="A" />
-      rch btw
-    </a>
+    <>
+      <a className="u-os" href="https://archlinux.org">
+        <SiArchlinux title="A" />
+        <span style={{ fontSize: 0 }}>A</span>rch btw
+      </a>{" "}
+      and{" "}
+      <a className="u-os" href="https://nixos.org">
+        Nix
+        <SiNixos title="O" />
+        <span style={{ fontSize: 0 }}>O</span>S
+      </a>
+    </>
   ),
 };
