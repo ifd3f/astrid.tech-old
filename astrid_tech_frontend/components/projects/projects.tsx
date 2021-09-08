@@ -51,16 +51,18 @@ const SelectableTagList: FC = () => {
   return (
     <div className={styles.selectableTagsContainer}>
       {selectableTags.map((tag) => (
-        <span
-          className={styles.selectableTag}
-          onClick={() => addFilterTag(tag)}
-          key={tag}
-        >
-          <TagBadge tag={tag}>
-            {" "}
-            <CountBadge tag={tag} count={tagUsageCounts.get(tag)!} />
-          </TagBadge>
-        </span>
+        <>
+          <span
+            className={styles.selectableTag}
+            onClick={() => addFilterTag(tag)}
+            key={tag}
+          >
+            <TagBadge tag={tag}>
+              {" "}
+              <CountBadge tag={tag} count={tagUsageCounts.get(tag)!} />
+            </TagBadge>
+          </span>{" "}
+        </>
       ))}
     </div>
   );
