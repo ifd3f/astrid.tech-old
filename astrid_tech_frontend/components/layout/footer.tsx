@@ -2,8 +2,8 @@ import Link from "next/link";
 import { FC, ReactNode } from "react";
 import { Col, Container, Row } from "reactstrap";
 import style from "./footer.module.scss";
-import Image from "next/image";
 import packageJson from "../../package.json";
+
 export const Tea = () => {
   return (
     <span title="tea" aria-label="tea" role="img">
@@ -82,17 +82,29 @@ const AGPL: FC = () => {
  * Links for an IndieWebRing. For more info, see https://xn--sr8hvo.ws/dashboard
  * @returns links :)
  */
-const WebRing: FC = () => {
+const IndieWebRing: FC = () => {
   return (
     <>
       <a href="https://xn--sr8hvo.ws/%F0%9F%9A%AF%F0%9F%90%9E%F0%9F%8C%8A/previous">
         ←
-      </a>
-      An IndieWeb Webring 🕸💍
+      </a>{" "}
+      An IndieWeb Webring 🕸💍{" "}
       <a href="https://xn--sr8hvo.ws/%F0%9F%9A%AF%F0%9F%90%9E%F0%9F%8C%8A/next">
         →
       </a>
     </>
+  );
+};
+
+const XXIIVVWebring: FC = () => {
+  return (
+    <a href="https://webring.xxiivv.com/#random" target="_blank">
+      <img
+        src="https://webring.xxiivv.com/icon.white.svg"
+        style={{ height: "1em" }}
+        title="XXIIVV Webring"
+      />
+    </a>
   );
 };
 
@@ -112,40 +124,49 @@ const FooterSection = () => {
 
   return (
     <footer className={style.footer}>
-      <Container className="text-light small">
-        <p style={{ textAlign: "center" }}>
-          <WebRing />
-        </p>
-        <Col>
-          <Row tag="nav">
-            <SiteLink href="/privacy">Privacy Policy</SiteLink>
-            <SiteLink href="/licenses">Open Source Licenses</SiteLink>
-            <SiteLink href="/about">About/Contact</SiteLink>
+      <Container className="text-light">
+        <Row>
+          <Col>
+            <p style={{ textAlign: "center", fontSize: 20 }}>
+              <XXIIVVWebring />
+              {" | "}
+              <IndieWebRing />
+            </p>
+          </Col>
+        </Row>
+
+        <Row className="small">
+          <Col>
+            <Row tag="nav">
+              <SiteLink href="/privacy">Privacy Policy</SiteLink>
+              <SiteLink href="/licenses">Open Source Licenses</SiteLink>
+              <SiteLink href="/about">About/Contact</SiteLink>
+            </Row>
+          </Col>
+          <Col>
+            <p>
+              astrid.tech v{version} was created by Astrid Yu with a generous
+              helping of <Tea /> and <Witch />. See the{" "}
+              <Link href="/projects/astrid-tech">
+                self-referential project page
+              </Link>{" "}
+              or see the code yourself on{" "}
+              <a href="https://github.com/astralbijection/astrid.tech">
+                GitHub
+              </a>
+              .
+            </p>
+          </Col>
+          <Row>
+            <Col className="text-center">
+              <AGPL />
+            </Col>
+            <Col className="text-center">
+              <ContentLicense />
+            </Col>
           </Row>
-        </Col>
-        <Col>
-          <p>
-            astrid.tech v{version} was created by Astrid Yu with a generous
-            helping of <Tea /> and <Witch />. See the{" "}
-            <Link href="/projects/astrid-tech">
-              self-referential project page
-            </Link>{" "}
-            or see the code yourself on{" "}
-            <a href="https://github.com/astralbijection/astrid.tech">GitHub</a>.
-          </p>
-        </Col>
-        <Row>
-          <Col></Col>
+          <a href="https://github.com/astralbijection/" rel="me"></a>
         </Row>
-        <Row>
-          <Col className="text-center">
-            <AGPL />
-          </Col>
-          <Col className="text-center">
-            <ContentLicense />
-          </Col>
-        </Row>
-        <a href="https://github.com/astralbijection/" rel="me"></a>
       </Container>
     </footer>
   );
