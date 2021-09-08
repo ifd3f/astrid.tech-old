@@ -1,1 +1,0 @@
-export { LongCard } from "./LongCard";

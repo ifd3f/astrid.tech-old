@@ -2,9 +2,9 @@ import { FC } from "react";
 import { Col, Container, Row } from "reactstrap";
 import Layout from "../components/layout/layout";
 import SEO from "../components/seo";
-import { LongCard } from "../components/card";
 import styles from "../styles/blog.module.scss";
 import Link from "next/link";
+import * as vs from "components/card/values";
 
 /**
  * Force this page to get exported
@@ -15,7 +15,7 @@ export async function getStaticProps() {
 
 function Bio() {
   return (
-    <article>
+    <>
       <p>
         Hey, I'm Astrid and I'm a programmer. I got into coding when I was
         around 12, back when I played a ton of Minecraft. There was this mod for
@@ -31,9 +31,34 @@ function Bio() {
         <Link href="/projects">projects</Link>. I wanted a place to share what
         I've made, so I created this website!
       </p>
-    </article>
+    </>
   );
 }
+
+export const CardTable: FC = () => {
+  const fields = [
+    vs.pronouns,
+    vs.timezone,
+    vs.phone,
+    vs.email,
+    vs.birthday,
+    vs.github,
+    vs.linkedin,
+    vs.favOS,
+  ];
+  return (
+    <table>
+      <tbody>
+        {fields.map((f) => (
+          <tr key={f.key}>
+            <th style={{ textAlign: "right", paddingRight: 10 }}>{f.title}</th>
+            <td>{f.children}</td>
+          </tr>
+        ))}
+      </tbody>
+    </table>
+  );
+};
 
 const About: FC = (props) => {
   return (
@@ -44,11 +69,12 @@ const About: FC = (props) => {
       />
       <Container className={styles.blogContentContainer}>
         <h1>About me</h1>
-        <Row>
+        <Row className="h-card">
           <Col md={5}>
-            <LongCard />
+            <h2 className="p-name">Astrid Yu</h2>
+            <CardTable />
           </Col>
-          <Col>
+          <Col tag="article" className="p-note">
             <Bio />
           </Col>
         </Row>

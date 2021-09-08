@@ -131,7 +131,7 @@ export const favOS: HCardProperty = {
     </>
   ),
   children: (
-    <a className="u-url u-os" href="https://archlinux.org">
+    <a className="u-os" href="https://archlinux.org">
       <SiArchlinux title="A" />
       rch btw
     </a>

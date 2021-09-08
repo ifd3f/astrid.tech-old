@@ -15,5 +15,5 @@ parserOptions:
 plugins:
   - react
   - "@typescript-eslint"
-rules: 
+rules:
   "@next/next/no-img-element": "off" # we won't use image optimization
