@@ -22,7 +22,7 @@ import {
   ProjectMeta,
   SiteObject,
 } from "../../types/types";
-import { DateInterval } from "../../lib/DateInterval";
+import { DateInterval } from "../util/date-displays";
 import Layout from "../layout/layout";
 import SEO from "../seo";
 import { ALink } from "../util/boilerplate";

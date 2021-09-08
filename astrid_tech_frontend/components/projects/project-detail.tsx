@@ -12,7 +12,7 @@ import {
 import { FaCalendar, FaEnvelope, FaGithub } from "react-icons/fa";
 import { Container } from "reactstrap";
 import { ProjectLink } from "../../lib/cache";
-import { DateInterval } from "../../lib/DateInterval";
+import { DateInterval } from "../util/date-displays";
 import { getHSLString, getPersistentColor } from "../../lib/util";
 import { Project } from "../../types/types";
 import { CommentSection } from "../api/comments/CommentSection";
