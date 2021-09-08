@@ -14,7 +14,12 @@ const processor = unified()
     components: { img: ContentImage },
   } as any);
 
-export const ContentDisplay: FC<{ children: string; className: string }> = ({
+type ContentDisplayProps = {
+  children: string;
+  className?: string;
+};
+
+export const ContentDisplay: FC<ContentDisplayProps> = ({
   children,
   className,
 }) => {

@@ -2,11 +2,13 @@ import classNames from "classnames";
 import { format } from "date-fns";
 import { FC } from "react";
 
-export const DateInterval: FC<{
+export type DateIntervalProps = {
   formatStyle: string;
   startDate: Date;
   endDate?: Date | null;
-}> = ({ formatStyle, startDate, endDate }) => {
+};
+
+export const DateInterval: FC<DateIntervalProps> = ({ formatStyle, startDate, endDate }) => {
   const startStr = <SemanticDate date={startDate} formatStyle={formatStyle} />;
   if (startDate == endDate) {
     return startStr;
@@ -23,11 +25,17 @@ export const DateInterval: FC<{
   );
 };
 
-export const SemanticDate: FC<{
+type SemanticDateProps = {
   className?: string;
   formatStyle: string;
   date: Date | "now";
-}> = ({ formatStyle, className, date }) => {
+};
+
+export const SemanticDate: FC<SemanticDateProps> = ({
+  formatStyle,
+  className,
+  date,
+}) => {
   return date == "now" ? (
     <time className={className} dateTime={new Date().toISOString()}>
       now

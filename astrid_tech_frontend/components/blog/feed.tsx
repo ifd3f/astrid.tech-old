@@ -31,7 +31,11 @@ export const PostBrief: FC<PostProps> = ({ post }) => {
           </div>
           <div className="col col-sm-4 col-md-5">
             <p className={classNames("text-muted", style.date)}>
-            <SemanticDate formatStyle="d MMM yyyy" date={post.date} className="dt-published"/>
+              <SemanticDate
+                formatStyle="d MMM yyyy"
+                date={post.date}
+                className="dt-published"
+              />
             </p>
             <p>
               <TagList tags={post.tags} link limit={5} />
