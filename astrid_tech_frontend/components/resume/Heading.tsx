@@ -35,18 +35,6 @@ const HardwareYears = () => {
   return <YearsSince date={APPX_BEGAN_HARDWARE} />;
 };
 
-interface IconInfoDisplayProps {
-  imageSrc: string;
-  icon: ReactNode;
-  children: ReactNode;
-}
-
-const ImageOfMyself = () => (
-  <div className={homepageStyles.imageSelf + " u-photo"}>
-    <Image src="/avatar.jpg" alt="Astrid Yu" />
-  </div>
-);
-
 export function HeadingSection() {
   return (
     <header className="homepage-header homepage-section">
