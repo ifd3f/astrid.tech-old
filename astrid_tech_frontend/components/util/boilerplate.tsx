@@ -18,11 +18,3 @@ export function changeEventSetter(setter: (value: string) => void) {
     setter(ev.target.value);
   };
 }
-
-export function ALink(props: ComponentProps<"a">) {
-  return (
-    <Link href={props.href!!}>
-      <a {...props} />
-    </Link>
-  );
-}

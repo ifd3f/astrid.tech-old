@@ -43,7 +43,7 @@ interface IconInfoDisplayProps {
 
 const ImageOfMyself = () => (
   <div className={homepageStyles.imageSelf + " u-photo"}>
-    <img src="/avatar.jpg" alt="Astrid Yu" />
+    <Image src="/avatar.jpg" alt="Astrid Yu" />
   </div>
 );
 
@@ -64,9 +64,7 @@ export function HeadingSection() {
       <p className={homepageStyles.skillBrag}>
         Made using{" "}
         <Link href="/projects/astrid-tech">
-          <a href="/projects/astrid-tech">
-            Next.js, Django, and several other technologies
-          </a>
+          Next.js, Django, and several other technologies
         </Link>
       </p>
     </header>

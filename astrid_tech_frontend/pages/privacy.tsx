@@ -7,7 +7,7 @@ import SEO from "../components/seo";
  * Force this page to get exported
  */
 export async function getStaticProps() {
-  return { props: {}};
+  return { props: {} };
 }
 
 const Page = () => {

@@ -1,5 +1,6 @@
 import { FC, useEffect, useState } from "react";
 import { useCookies } from "react-cookie";
+import Link from "next/link";
 import { Button, Container } from "reactstrap";
 
 const COOKIE_NAME = "cookie-policy-notification";
@@ -25,9 +26,9 @@ const CookieNotificationObject: FC<CookieNotificationDisplayProps> = ({
       <p>
         I use cookies on this site for analytics, as well as to make it more fun
         to use! Please see the{" "}
-        <a onClick={onAcceptTerms} href="/privacy">
-          Privacy Policy
-        </a>{" "}
+        <span onClick={onAcceptTerms}>
+          <Link href="/privacy">Privacy Policy</Link>
+        </span>{" "}
         for more information about what data is collected.
       </p>
       <Button onClick={onAcceptTerms} color="success" size="small">

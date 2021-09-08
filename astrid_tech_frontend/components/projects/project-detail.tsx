@@ -118,9 +118,7 @@ const RelatedProjectsGroup: FC<RelatedProjectsGroupProps> = ({ similar }) => {
     <ul>
       {similar.map(({ slug, title }) => (
         <li key={slug}>
-          <Link href={slug}>
-            <a href={title}>{title}</a>
-          </Link>
+          <Link href={slug}>{title}</Link>
         </li>
       ))}
     </ul>
@@ -174,7 +172,7 @@ const ProjectDetailPage: FC<ProjectDetailProps> = ({ project, similar }) => {
           descriptionRaw={descriptionRaw}
           headingColor={getHSLString(getPersistentColor(slug))}
           above={
-            <Link href="/projects/">
+            <Link href="/projects/" passHref>
               <a className={style.backToProjects} rel="directory">
                 <BsArrowLeft /> Back to Projects
               </a>

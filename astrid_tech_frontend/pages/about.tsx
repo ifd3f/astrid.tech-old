@@ -4,13 +4,13 @@ import Layout from "../components/layout/layout";
 import SEO from "../components/seo";
 import { LongCard } from "../components/card";
 import styles from "../styles/blog.module.scss";
-
+import Link from "next/link";
 
 /**
  * Force this page to get exported
  */
 export async function getStaticProps() {
-  return { props: {}};
+  return { props: {} };
 }
 
 function Bio() {
@@ -28,8 +28,8 @@ function Bio() {
         Later on, I started branching out into more and more languages,
         technologies, and projects, and I eventually ended up with the
         almost-decade-long mess that you can see on the{" "}
-        <a href="/projects">projects</a>. I wanted a place to share what I've
-        made, so I created this website!
+        <Link href="/projects">projects</Link>. I wanted a place to share what
+        I've made, so I created this website!
       </p>
     </article>
   );

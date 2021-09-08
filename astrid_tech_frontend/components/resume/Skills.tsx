@@ -1,9 +1,9 @@
+import Link from "next/link";
 import { FC, ReactNode } from "react";
 import { BsCaretRightFill, BsStar, BsStarFill } from "react-icons/bs";
 import Masonry from "react-masonry-component";
 import { Col } from "reactstrap";
 import { useTagTable } from "../tags/TagTableProvider";
-import { ALink } from "../util/boilerplate";
 import styleSkills from "./skills.module.scss";
 import style from "./style.module.scss";
 import { HomepageSection } from "./util";
@@ -51,7 +51,7 @@ const SkillInfoDisplay: FC<SkillInfoDisplayProps> = ({ slug }) => {
       </p>
     </div>
   );
-  return link ? <ALink href={`/t/${tag.slug}`}>{inner}</ALink> : inner;
+  return link ? <Link href={`/t/${tag.slug}`}>{inner}</Link> : inner;
 };
 
 type SkillCategoryViewProps = {

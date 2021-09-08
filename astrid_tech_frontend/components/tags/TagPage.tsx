@@ -22,7 +22,6 @@ import {
 import { DateInterval, SemanticDate } from "../util/date-displays";
 import Layout from "../layout/layout";
 import SEO from "../seo";
-import { ALink } from "../util/boilerplate";
 import { TagBadge, TagList } from "./tag";
 import style from "./tag.module.scss";
 import { useTagTable } from "./TagTableProvider";
@@ -36,21 +35,23 @@ const BlogPostDisplay: FC<BlogPostDisplayProps> = ({ post: _post }) => {
   const slug = blogSlugToString(getBlogSlug(post));
   return (
     <Card className="h-entry">
-      <ALink className={style.cardLink} href={slug}>
-        <CardHeader>
-          <h5>
-            <span className="p-name">{post.title}</span>{" "}
-            <Badge color="success">Blog</Badge>
-          </h5>
-          <p className={dateClassName}>
-            <SemanticDate date={post.date} formatStyle="d MMM yyyy" />
-          </p>
-        </CardHeader>
-        <CardBody>
-          <div className="lead">{post.description}</div>
-          <small className="text-muted">{post.excerpt!!}</small>
-        </CardBody>
-      </ALink>
+      <Link href={slug} passHref>
+        <a className={style.cardLink}>
+          <CardHeader>
+            <h5>
+              <span className="p-name">{post.title}</span>{" "}
+              <Badge color="success">Blog</Badge>
+            </h5>
+            <p className={dateClassName}>
+              <SemanticDate date={post.date} formatStyle="d MMM yyyy" />
+            </p>
+          </CardHeader>
+          <CardBody>
+            <div className="lead">{post.description}</div>
+            <small className="text-muted">{post.excerpt!!}</small>
+          </CardBody>
+        </a>
+      </Link>
       <CardFooter>
         <TagList tags={post.tags} limit={7} link />
       </CardFooter>
@@ -65,24 +66,26 @@ const ProjectDisplay: FC<ProjectDisplayProps> = ({ project }) => {
   const endDate = project.endDate ? new Date(project.endDate) : undefined;
   return (
     <Card>
-      <ALink className={style.cardLink} href={"/projects/" + project.slug}>
-        <CardHeader>
-          <h5>
-            {project.title} <Badge color="primary">Project</Badge>
-          </h5>
-          <p className={dateClassName}>
-            <DateInterval
-              formatStyle="d MMM yyyy"
-              startDate={startDate}
-              endDate={endDate}
-            />
-          </p>
-        </CardHeader>
-        <CardBody>
-          <p className="lead">{project.description} </p>
-          <small className="text-muted">{project.excerpt!!}</small>
-        </CardBody>
-      </ALink>
+      <Link href={"/projects/" + project.slug} passHref>
+        <a className={style.cardLink}>
+          <CardHeader>
+            <h5>
+              {project.title} <Badge color="primary">Project</Badge>
+            </h5>
+            <p className={dateClassName}>
+              <DateInterval
+                formatStyle="d MMM yyyy"
+                startDate={startDate}
+                endDate={endDate}
+              />
+            </p>
+          </CardHeader>
+          <CardBody>
+            <p className="lead">{project.description} </p>
+            <small className="text-muted">{project.excerpt!!}</small>
+          </CardBody>
+        </a>
+      </Link>
       <CardFooter>
         <TagList tags={project.tags} limit={7} link />
       </CardFooter>

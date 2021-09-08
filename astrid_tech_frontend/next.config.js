@@ -11,7 +11,7 @@ if (!process.env.SITE_ROOT) {
 module.exports = withPlugins([], {
   trailingSlash: true,
   eslint: {
-    ignoreDuringBuilds: true, // TODO get rid of this
+    ignoreDuringBuilds: false,
   },
   env: {
     publicRoot: process.env.SITE_ROOT,

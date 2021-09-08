@@ -23,10 +23,11 @@ export const Witch = () => {
 const ContentLicense = () => (
   <p>
     <a rel="license" href="http://creativecommons.org/licenses/by-nc-sa/4.0/">
-      <img
+      <Image
         alt="Creative Commons License"
-        style={{ borderWidth: 0 }}
-        src="https://i.creativecommons.org/l/by-nc-sa/4.0/88x31.png"
+        src="/cc-by-nc-sa-4.0.png"
+        width={88}
+        height={31}
       />
     </a>
     <br />
@@ -58,7 +59,7 @@ const AGPL: FC = () => {
   return (
     <>
       <a rel="license" href="https://www.gnu.org/licenses/agpl-3.0.en.html">
-        <img
+        <Image
           alt="GNU Affero General Public License"
           width={100}
           height={40}

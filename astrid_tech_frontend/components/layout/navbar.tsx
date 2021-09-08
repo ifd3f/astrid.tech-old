@@ -15,7 +15,7 @@ type NavLinkProps = {
 
 const GNavLink: FC<NavLinkProps> = ({ to, children, active }) => {
   return (
-    <Link href={to}>
+    <Link href={to} passHref>
       <a className={classNames("nav-link", active ? "active" : null)}>
         {children}
       </a>
@@ -40,13 +40,8 @@ const MainNavbar: FC<MainNavbarProps> = ({ currentLocation, fixed }) => {
       fixed={fixed ? "top" : undefined}
       expand="md"
     >
-      <Link href="/">
-        <NavbarBrand
-          tag="a"
-          href="/"
-          className={classNames("nav-link")}
-          rel="home"
-        >
+      <Link href="/" passHref>
+        <NavbarBrand tag="a" className={classNames("nav-link")} rel="home">
           astrid.tech
         </NavbarBrand>
       </Link>
