@@ -138,7 +138,7 @@ const Licenses: FC<InferGetStaticPropsType<typeof getStaticProps>> = ({
             configurations.
           </p>
           <LicensesChart licenses={licenses} />
-          <hr/>
+          <hr />
           <h2>Breakdown</h2>
           <Masonry options={{ transitionDuration: 0 }}>
             {licenses.map((licenses) => (

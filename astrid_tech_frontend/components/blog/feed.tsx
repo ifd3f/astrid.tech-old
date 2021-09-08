@@ -19,13 +19,13 @@ export const PostBrief: FC<PostProps> = ({ post }) => {
     <article className={classNames(style.brief, "h-entry")}>
       <Row>
         <div className="col-12 col-sm-8 col-md-7">
-            {post.title ? <h3 className="p-name">{post.title}</h3> : null}
-            {post.description ? (
-              <p className="p-summary">{post.description}</p>
-            ) : null}
-            <p className="p-summary text-muted">
-              {post.excerpt} <Link href={url}>read more</Link>
-            </p>
+          {post.title ? <h3 className="p-name">{post.title}</h3> : null}
+          {post.description ? (
+            <p className="p-summary">{post.description}</p>
+          ) : null}
+          <p className="p-summary text-muted">
+            {post.excerpt} <Link href={url}>read more</Link>
+          </p>
         </div>
         <div className="col col-sm-4 col-md-5">
           <p className={classNames("text-muted", style.date)}>
