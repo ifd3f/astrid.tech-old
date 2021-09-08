@@ -103,7 +103,8 @@ const XXIIVVWebring: FC = () => {
         src="https://webring.xxiivv.com/icon.white.svg"
         style={{ height: "1em" }}
         title="XXIIVV Webring"
-      />
+      />{" "}
+      XXIIVV Webring
     </a>
   );
 };
@@ -142,9 +143,9 @@ const FooterSection = () => {
         <Row tag="nav">
           <Col>
             <p style={{ textAlign: "center", fontSize: 20 }}>
-              <XXIIVVWebring />
-              {" | "}
               <IndieWebRing />
+              {" | "}
+              <XXIIVVWebring />
             </p>
           </Col>
         </Row>
