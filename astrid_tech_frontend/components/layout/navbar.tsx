@@ -15,11 +15,13 @@ type NavLinkProps = {
 
 const GNavLink: FC<NavLinkProps> = ({ to, children, active }) => {
   return (
-    <Link href={to} passHref>
-      <a className={classNames("nav-link", active ? "active" : null)}>
-        {children}
-      </a>
-    </Link>
+    <li>
+      <Link href={to} passHref>
+        <a className={classNames("nav-link", active ? "active" : null)}>
+          {children}
+        </a>
+      </Link>
+    </li>
   );
 };
 
@@ -37,6 +39,7 @@ const MainNavbar: FC<MainNavbarProps> = ({ currentLocation, fixed }) => {
   return (
     <Navbar
       className="main-navbar"
+      style={{ paddingLeft: 10, paddingRight: 10 }}
       fixed={fixed ? "top" : undefined}
       expand="md"
     >
@@ -48,7 +51,17 @@ const MainNavbar: FC<MainNavbarProps> = ({ currentLocation, fixed }) => {
       <NavbarToggler onClick={toggleIsOpen}>
         {isOpen ? <BsArrowsCollapse /> : <GiHamburger />}
       </NavbarToggler>
-      <Collapse isOpen={isOpen} navbar>
+      <Collapse
+        isOpen={isOpen}
+        navbar
+        tag="ul"
+        style={{
+          marginBottom: 0,
+          marginLeft: 0,
+          paddingLeft: 0,
+          listStyleType: "none",
+        }}
+      >
         <GNavLink to="/" active={currentLocation == "blog"}>
           Blog
         </GNavLink>
