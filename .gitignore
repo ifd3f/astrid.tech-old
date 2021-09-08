@@ -2,3 +2,5 @@
 /data/
 /.env.prod
 /site.zip
+
+.vercel
