@@ -16,35 +16,31 @@ export const PostBrief: FC<PostProps> = ({ post }) => {
   const url = blogSlugToString(getBlogSlug(post));
 
   return (
-    <Link href={url} passHref>
-      <a>
-        <article className={classNames(style.brief, "h-entry")}>
-          <Row>
-            <div className="col-12 col-sm-8 col-md-7">
-              <a href={url}>
-                {post.title ? <h3 className="p-name">{post.title}</h3> : null}
-                {post.description ? (
-                  <p className="p-summary">{post.description}</p>
-                ) : null}
-                <p className="p-summary text-muted">{post.excerpt}</p>
-              </a>
-            </div>
-            <div className="col col-sm-4 col-md-5">
-              <p className={classNames("text-muted", style.date)}>
-                <SemanticDate
-                  formatStyle="d MMM yyyy"
-                  date={post.date}
-                  className="dt-published"
-                />
-              </p>
-              <p>
-                <TagList tags={post.tags} link limit={5} />
-              </p>
-            </div>
-          </Row>
-        </article>
-      </a>
-    </Link>
+    <article className={classNames(style.brief, "h-entry")}>
+      <Row>
+        <div className="col-12 col-sm-8 col-md-7">
+            {post.title ? <h3 className="p-name">{post.title}</h3> : null}
+            {post.description ? (
+              <p className="p-summary">{post.description}</p>
+            ) : null}
+            <p className="p-summary text-muted">
+              {post.excerpt} <Link href={url}>read more</Link>
+            </p>
+        </div>
+        <div className="col col-sm-4 col-md-5">
+          <p className={classNames("text-muted", style.date)}>
+            <SemanticDate
+              formatStyle="d MMM yyyy"
+              date={post.date}
+              className="dt-published"
+            />
+          </p>
+          <p>
+            <TagList tags={post.tags} link limit={5} />
+          </p>
+        </div>
+      </Row>
+    </article>
   );
 };
 

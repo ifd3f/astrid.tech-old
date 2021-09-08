@@ -96,8 +96,10 @@ export const TagList: FC<TagListProps> = ({
         }}
       >
         {shownTags.map((tag) => (
-          <TagBadge key={tag} tag={tag} link={link} relTag={relTag} />
-        ))}{" "}
+          <>
+            <TagBadge key={tag} tag={tag} link={link} relTag={relTag} />{" "}
+          </>
+        ))}
         {excluded.length > 0 ? (
           <Badge title={alt} onClick={onClick} style={{ cursor: "pointer" }}>
             {openBadgeText}
