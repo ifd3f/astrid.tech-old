@@ -23,6 +23,16 @@ export type HCardProperty = {
   classes?: string;
 };
 
+export const chinese: HCardProperty = {
+  key: "name-zh",
+  title: (
+    <span lang="zh">名字</span>
+  ),
+  children: (
+    <span lang="zh" className="p-name">余茂琦</span>
+  )
+}
+
 export const birthday: HCardProperty = {
   key: "birthday",
   title: (
