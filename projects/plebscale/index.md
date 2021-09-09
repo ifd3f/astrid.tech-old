@@ -16,7 +16,7 @@ tags:
   - upcycling
 url: https://cloud.astrid.tech/
 source:
-  - https://github.com/astralbijection/infrastructure
+  - https://github.com/astralbijection/infra
 thumbnail: /2021/01/27/pi-clustering/nodezzz.jpeg
 ---
 
