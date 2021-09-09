@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { FC, ReactNode } from "react";
+import { FC, PropsWithChildren, ReactNode } from "react";
 import { Col, Container, Row } from "reactstrap";
 import style from "./footer.module.scss";
 import packageJson from "../../package.json";
@@ -84,28 +84,47 @@ const AGPL: FC = () => {
  */
 const IndieWebRing: FC = () => {
   return (
-    <>
-      <a href="https://xn--sr8hvo.ws/%F0%9F%9A%AF%F0%9F%90%9E%F0%9F%8C%8A/previous">
-        ←
-      </a>{" "}
-      An IndieWeb Webring 🕸💍{" "}
-      <a href="https://xn--sr8hvo.ws/%F0%9F%9A%AF%F0%9F%90%9E%F0%9F%8C%8A/next">
-        →
-      </a>
-    </>
+    <WebRing
+      prev="https://xn--sr8hvo.ws/%F0%9F%9A%AF%F0%9F%90%9E%F0%9F%8C%8A/previous"
+      next="https://xn--sr8hvo.ws/%F0%9F%9A%AF%F0%9F%90%9E%F0%9F%8C%8A/next"
+    >
+      <span title="An IndieWeb Webring">🕸💍</span>
+    </WebRing>
   );
 };
 
 const XXIIVVWebring: FC = () => {
+  // TODO update when I get someone after me
   return (
-    <a href="https://webring.xxiivv.com/#random" target="_blank">
+    <WebRing
+      prev="https://webring.xxiivv.com/#yhnck"
+      next="https://webring.xxiivv.com/#xxiivv"
+    >
       <img
         src="https://webring.xxiivv.com/icon.white.svg"
         style={{ height: "1em" }}
-        title="XXIIVV Webring"
-      />{" "}
-      XXIIVV Webring
-    </a>
+        title="XXIIVV's Webring"
+      />
+    </WebRing>
+  );
+};
+
+type WebRingProps = PropsWithChildren<{
+  next: string;
+  prev: string;
+}>;
+
+const WebRing: FC<WebRingProps> = ({ next, prev, children }) => {
+  return (
+    <p style={{ fontSize: 20, marginBottom: 0 }}>
+      <a href={prev} rel="prev">
+        &larr;
+      </a>{" "}
+      {children}{" "}
+      <a href={next} rel="next">
+        &rarr;
+      </a>
+    </p>
   );
 };
 
@@ -140,36 +159,36 @@ const FooterSection = () => {
   return (
     <footer className={style.footer}>
       <Container className="text-light">
-        <Row tag="nav">
-          <Col>
-            <p style={{ textAlign: "center", fontSize: 20 }}>
-              <IndieWebRing />
-              {" | "}
-              <XXIIVVWebring />
-            </p>
+        <Row>
+          <Col tag="nav" className="text-center" sm="3">
+            <h6>Webrings</h6>
+            <IndieWebRing />
+            <XXIIVVWebring />
           </Col>
-        </Row>
 
-        <Row tag="nav">
-          <SiteLink href="/privacy">Privacy Policy</SiteLink>
-          <SiteLink href="/licenses">Open Source Licenses</SiteLink>
-          <SiteLink href="/about">About/Contact</SiteLink>
-        </Row>
+          <Col sm="9">
+            <Row tag="nav">
+              <SiteLink href="/privacy">Privacy Policy</SiteLink>
+              <SiteLink href="/licenses">Open Source Licenses</SiteLink>
+              <SiteLink href="/about">About/Contact</SiteLink>
+            </Row>
 
-        <Row className="small">
-          <MiniAbout version={version} />
-        </Row>
+            <Row className="small">
+              <MiniAbout version={version} />
+            </Row>
 
-        <Row className="small">
-          <Row>
-            <Col className="text-center">
-              <AGPL />
-            </Col>
-            <Col className="text-center">
-              <ContentLicense />
-            </Col>
-          </Row>
-          <a href="https://github.com/astralbijection/" rel="me"></a>
+            <Row className="small">
+              <Row>
+                <Col className="text-center">
+                  <AGPL />
+                </Col>
+                <Col className="text-center">
+                  <ContentLicense />
+                </Col>
+              </Row>
+              <a href="https://github.com/astralbijection/" rel="me"></a>
+            </Row>
+          </Col>
         </Row>
       </Container>
     </footer>
