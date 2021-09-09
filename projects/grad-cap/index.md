@@ -12,10 +12,10 @@ tags:
   - robotics
   - servo
   - fusion-360
+  - under-construction
 url: null
 source: [https://github.com/astralbijection/Articulated-Tassel]
 thumbnail: ./td-thumb.jpg
-underConstruction: yes
 ---
 
 This project was a joke that went too far.

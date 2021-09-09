@@ -11,9 +11,9 @@ tags:
   - abstract-syntax-trees
   - math
   - metamathematics
+  - under-construction
 source: [https://github.com/astralbijection/HasCAS]
 thumbnail: ./thumbnail.png
-underConstruction: yes
 ---
 
 ![a series of reduction steps](./thumbnail.png)

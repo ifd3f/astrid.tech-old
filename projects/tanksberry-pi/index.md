@@ -18,9 +18,9 @@ tags:
   - bootstrap-css
   - websockets
   - javascript
+  - under-construction
 source: [https://github.com/astralbijection/tanksberry-pi]
 thumbnail: ./thumbnail.jpg
-underConstruction: yes
 ---
 
 Jesus Christ, I don't know what the hell I was thinking with this one.

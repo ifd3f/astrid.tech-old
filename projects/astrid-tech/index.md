@@ -21,6 +21,7 @@ tags:
   - sass
   - bootstrap-css
   - website
+  - under-construction
 url: https://astrid.tech
 source:
   - https://github.com/astralbijection/astrid.tech

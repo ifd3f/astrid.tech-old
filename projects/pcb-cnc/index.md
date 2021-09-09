@@ -11,10 +11,10 @@ tags:
   - mechanical-engineering
   - cnc
   - autodesk-eagle
+  - under-construction
 url: null
 source: []
 thumbnail: ./completed-cnc.jpg
-underConstruction: yes
 ---
 
 ## Build pictures
