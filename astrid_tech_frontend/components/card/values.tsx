@@ -219,7 +219,7 @@ export const mastodon: HCardProperty = {
     </>
   ),
   children: (
-    <a className="u-url" rel="me" href="https://tech.lgbt/web/accounts/144788">
+    <a className="u-url" rel="me" href="https://tech.lgbt/@astralbijection">
       @astralbijection@tech.lgbt
     </a>
   ),

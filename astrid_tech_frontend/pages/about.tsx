@@ -79,7 +79,7 @@ const About: FC = (props) => {
       <Container className={styles.blogContentContainer}>
         <h1>About me</h1>
         <Row className="h-card">
-          <Col md={5}>
+          <Col>
             <h2 className="p-name">Astrid Yu</h2>
             <CardTable />
           </Col>
