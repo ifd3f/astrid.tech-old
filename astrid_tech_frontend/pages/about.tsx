@@ -53,7 +53,7 @@ export const CardTable: FC = () => {
     vs.indieweb,
     vs.thingiverse,
     vs.reddit,
-    vs.favOS,
+    vs.linux,
   ];
   return (
     <table>

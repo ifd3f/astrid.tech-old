@@ -108,6 +108,31 @@ export const phone: HCardProperty = {
   ),
 };
 
+export const linux: HCardProperty = {
+  key: "operating-system",
+  title: (
+    <>
+      <FiDisc title="OS" /> OS
+    </>
+  ),
+  children: (
+    <>
+      <a className="u-os" href="https://archlinux.org">
+        <SiArchlinux title="A" />
+        <span style={{ fontSize: 0 }}>A</span>rch btw
+      </a>{" "}
+      and{" "}
+      <a className="u-os" href="https://nixos.org">
+        Nix
+        <SiNixos title="O" />
+        <span style={{ fontSize: 0 }}>O</span>S
+      </a>
+    </>
+  ),
+};
+
+// All identities go below this line
+
 export const facebook: HCardProperty = {
   key: "facebook",
   title: (
@@ -279,28 +304,5 @@ export const twitter: HCardProperty = {
     <a className="u-url" rel="me" href="https://twitter.com/astralbijection">
       @astralbijection
     </a>
-  ),
-};
-
-export const favOS: HCardProperty = {
-  key: "operating-system",
-  title: (
-    <>
-      <FiDisc title="OS" /> OS
-    </>
-  ),
-  children: (
-    <>
-      <a className="u-os" href="https://archlinux.org">
-        <SiArchlinux title="A" />
-        <span style={{ fontSize: 0 }}>A</span>rch btw
-      </a>{" "}
-      and{" "}
-      <a className="u-os" href="https://nixos.org">
-        Nix
-        <SiNixos title="O" />
-        <span style={{ fontSize: 0 }}>O</span>S
-      </a>
-    </>
   ),
 };
