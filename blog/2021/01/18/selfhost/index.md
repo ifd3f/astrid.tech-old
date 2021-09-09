@@ -34,8 +34,8 @@ On my VPS, I'm running several dockerized self-hosted apps right now, including:
   D&D campaign I'm running and possibly future ones too
 
 These are all configured with the
-[IaC repo here](https://github.com/astralbijection/infra). The last
-commit before I published this article was
+[IaC repo here](https://github.com/astralbijection/infra). The last commit
+before I published this article was
 [commit 56e26b](https://github.com/astralbijection/infra/tree/56e26b678b5c14026da32e920f4804554fcdcf9e).
 
 ## Organization
