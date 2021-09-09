@@ -17,6 +17,7 @@ import { getHSLString, getPersistentColor } from "../../lib/util";
 import { Project } from "../../types/types";
 import { CommentSection } from "../api/comments/CommentSection";
 import { ContentDisplay } from "../content/ContentDisplay";
+import ConstructionBanner from "components/util/construction";
 import {
   InfoRow,
   Layout,
@@ -144,6 +145,26 @@ export type ProjectDetailProps = UsesProject & {
   similar: ProjectLink[];
 };
 
+const ConstructionDisclaimer: FC = () => {
+  return (
+    <>
+      <section className="text-center">
+        <h4>
+          <strong>NOTE:</strong> This section is under construction!
+        </h4>
+        <ConstructionBanner />
+        <p>
+          <em>
+            The contents of this page are incomplete and subject to change.
+            Check back later for a more complete version!
+          </em>
+        </p>
+      </section>
+      <hr />
+    </>
+  );
+};
+
 const ProjectDetailPage: FC<ProjectDetailProps> = ({ project, similar }) => {
   const slug = join("projects", project.slug);
   const url = join(process.env.publicRoot!, slug);
@@ -188,6 +209,7 @@ const ProjectDetailPage: FC<ProjectDetailProps> = ({ project, similar }) => {
             </>
           }
         >
+          {project.underConstruction ? <ConstructionDisclaimer /> : null}
           <ContentDisplay>{project.content}</ContentDisplay>
         </LongformLayout>
         <Container>

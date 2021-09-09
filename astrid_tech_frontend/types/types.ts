@@ -37,6 +37,7 @@ export type ProjectMeta<DateType = Date> = Tagged<"p"> & {
   source: string[];
   thumbnail: string;
   description: string | null;
+  underConstruction?: boolean;
 };
 
 export type Project<DateType = Date> = ProjectMeta<DateType> & {

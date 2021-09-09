@@ -16,7 +16,8 @@ CREATE TABLE project (
   status TEXT,
   source_urls TEXT,
   thumbnail_path TEXT,
-  content TEXT NOT NULL
+  content TEXT NOT NULL,
+  under_construction INTEGER
 );
 CREATE TABLE blog_post (
   id INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,

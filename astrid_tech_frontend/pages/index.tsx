@@ -1,3 +1,4 @@
+import Construction from "components/util/construction";
 import { InferGetStaticPropsType } from "next";
 import { FC } from "react";
 import { FaRssSquare } from "react-icons/fa";

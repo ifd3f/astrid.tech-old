@@ -26,6 +26,7 @@ async function loadProject(pathname: string) {
     thumbnail: data.thumbnail,
     content: content,
     description: data.description,
+    underConstruction: data.underConstruction,
   };
 }
 

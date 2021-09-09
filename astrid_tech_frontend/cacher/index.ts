@@ -174,7 +174,8 @@ async function buildProjectCache(db: Database) {
       status,
       source_urls,
       thumbnail_path, 
-      content) 
+      content,
+      under_construction) 
     VALUES (
       @assetRoot,
       @title, 
@@ -186,7 +187,8 @@ async function buildProjectCache(db: Database) {
       @status,
       @sourceUrls,
       @thumbnail,
-      @content)`
+      @content,
+      @underConstruction)`
   );
   const projects = await Promise.all(await getProjects(contentDir));
 
