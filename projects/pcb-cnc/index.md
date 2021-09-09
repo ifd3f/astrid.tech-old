@@ -14,6 +14,7 @@ tags:
 url: null
 source: []
 thumbnail: ./completed-cnc.jpg
+underConstruction: yes
 ---
 
 ## Build pictures

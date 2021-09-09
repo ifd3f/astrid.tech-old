@@ -16,6 +16,7 @@ tags:
 url: null
 source: [https://github.com/astralbijection/Quest-Of-Con]
 thumbnail: ./game-screenshot.png
+underConstruction: yes # TODO add info about terrain generator
 ---
 
 ![A screenshot from the game.](./game-screenshot.png)

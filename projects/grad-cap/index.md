@@ -15,6 +15,7 @@ tags:
 url: null
 source: [https://github.com/astralbijection/Articulated-Tassel]
 thumbnail: ./td-thumb.jpg
+underConstruction: yes
 ---
 
 This project was a joke that went too far.

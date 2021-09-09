@@ -18,6 +18,7 @@ url: https://cloud.astrid.tech/
 source:
   - https://github.com/astralbijection/infra
 thumbnail: /2021/01/27/pi-clustering/nodezzz.jpeg
+underConstruction: yes
 ---
 
 This project is an internal cloud that is scaled enough to meet the demands of a
