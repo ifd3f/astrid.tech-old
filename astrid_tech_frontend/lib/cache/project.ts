@@ -44,8 +44,7 @@ export function getProject(slug: string): Project<string> {
         url,
         source_urls as source,
         thumbnail_path as thumbnail,
-        content,
-        under_construction as underConstruction
+        content
       FROM project
       WHERE @slug = slug`
     )
@@ -101,8 +100,7 @@ export function getProjects(): Project<string>[] {
         url,
         source_urls as source,
         thumbnail_path as thumbnail,
-        content,
-        under_construction as underConstruction
+        content
       FROM project 
       ORDER BY 
         end_date DESC NULLS FIRST, 

@@ -176,6 +176,7 @@ const ProjectDetailPage: FC<ProjectDetailProps> = ({ project, similar }) => {
     : undefined;
 
   const descriptionRaw = project.description ?? "A project made by Astrid Yu";
+  const underConstruction = project.tags.includes("under-construction");
 
   return (
     <ProjectContext.Provider value={{ project }}>
@@ -209,7 +210,7 @@ const ProjectDetailPage: FC<ProjectDetailProps> = ({ project, similar }) => {
             </>
           }
         >
-          {project.underConstruction ? <ConstructionDisclaimer /> : null}
+          {underConstruction ? <ConstructionDisclaimer /> : null}
           <ContentDisplay>{project.content}</ContentDisplay>
         </LongformLayout>
         <Container>
