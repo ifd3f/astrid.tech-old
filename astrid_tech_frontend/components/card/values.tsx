@@ -37,8 +37,7 @@ export const birthday: HCardProperty = {
   key: "birthday",
   title: (
     <>
-      <FaBirthdayCake title="Birthday" />
-      Birthday
+      <FaBirthdayCake title="Birthday" /> Birthday
     </>
   ),
   children: (
@@ -142,6 +141,20 @@ export const linux: HCardProperty = {
 };
 
 // All identities go below this line
+
+export const website: HCardProperty = {
+  key: "website",
+  title: (
+    <>
+      <FaGlobe title="Website"/> Website
+    </>
+  ),
+  children: (
+    <a href="https://astrid.tech" rel="me" className="u-url">
+      astrid.tech
+    </a>
+  ),
+};
 
 export const facebook: HCardProperty = {
   key: "facebook",

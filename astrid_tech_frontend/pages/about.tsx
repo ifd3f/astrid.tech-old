@@ -43,6 +43,7 @@ export const CardTable: FC = () => {
     vs.phone,
     vs.email,
     vs.birthday,
+    vs.website,
     vs.facebook,
     vs.instagram,
     vs.github,
