@@ -2,7 +2,13 @@ import { BlogPost, BlogPostMeta } from "../../types/types";
 import { getBlogSlug } from "../util";
 import { getConnection } from "./util";
 
-export type Path = { year: string; month: string; day: string; slug: string[] };
+export type Path = {
+  year: string;
+  month: string;
+  day: string;
+  ordinal: string;
+  slug: string;
+};
 
 export function rowToBlogMeta(row: any, tags: string[]): BlogPostMeta<string> {
   return {
@@ -22,15 +28,17 @@ export function rowToBlogPost(row: any, tags: string[]): BlogPost<string> {
 export function getBlogPostSlugs(): Path[] {
   const db = getConnection();
   const results = db
-    .prepare("SELECT date AS dateStr, slug FROM blog_post")
+    .prepare("SELECT date AS dateStr, ordinal, slug FROM blog_post")
     .all() as {
     dateStr: string;
+    ordinal: number;
     slug: string;
   }[];
 
   return results.map((post) =>
     getBlogSlug({
       date: new Date(post.dateStr),
+      ordinal: post.ordinal,
       slug: post.slug,
     })
   );
@@ -48,15 +56,22 @@ export function getBlogPost(path: Path): BlogPost<string> {
         description, 
         slug, 
         date, 
+        ordinal,
         content
       FROM blog_post
-      WHERE year = @year AND month = @month AND day = @day AND slug = @slug`
+      WHERE 
+        year = @year AND 
+        month = @month AND 
+        day = @day AND 
+        ordinal = @ordinal AND 
+        slug = @slug`
     )
     .get({
       year: path.year,
       month: path.month,
       day: path.day,
-      slug: path.slug[0],
+      ordinal: path.ordinal,
+      slug: path.slug,
     });
 
   const tags = db
@@ -76,8 +91,9 @@ export function getBlogPosts(): BlogPost<string>[] {
         thumbnail, 
         title, 
         description, 
-        slug, 
         date, 
+        ordinal,
+        slug, 
         content
       FROM blog_post
       ORDER BY date DESC`
