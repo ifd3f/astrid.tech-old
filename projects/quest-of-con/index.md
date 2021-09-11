@@ -13,7 +13,7 @@ tags:
   - terrain-generation
   - ux-design
   - game-design
-  - under-construction  # TODO add info about terrain generator
+  - under-construction # TODO add info about terrain generator
 url: null
 source: [https://github.com/astralbijection/Quest-Of-Con]
 thumbnail: ./game-screenshot.png
