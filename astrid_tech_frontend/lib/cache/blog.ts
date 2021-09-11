@@ -91,8 +91,9 @@ export function getBlogPosts(): BlogPost<string>[] {
         thumbnail, 
         title, 
         description, 
-        slug, 
         date, 
+        ordinal,
+        slug, 
         content
       FROM blog_post
       ORDER BY date DESC`

@@ -95,7 +95,7 @@ export function getBlogSlug({
 }
 
 export function blogSlugToString(path: Path) {
-  return `/${path.year}/${path.month}/${path.day}/${path.slug}`;
+  return `/${path.year}/${path.month}/${path.day}/${path.ordinal}/${path.slug}`;
 }
 
 export function truncateKeepWords(text: string, maxChars: number) {

@@ -6,6 +6,7 @@ import { getBlogPost, getBlogPostSlugs, Path } from "lib/cache";
 import { renderMarkdown } from "lib/markdown";
 import { wrappedStaticPaths } from "lib/pathcache";
 import { BlogPost, convertBlogPostToObjectDate } from "types/types";
+import { blogSlugToString } from "lib/util";
 
 type PageProps = { post: BlogPost<string> };
 
@@ -18,8 +19,8 @@ export const getStaticPaths = wrappedStaticPaths(
       fallback: false,
     };
   },
-  ({ year, month, day, ordinal, slug }: Path) => {
-    return `/${year}/${month}/${day}/${ordinal}/${slug}`;
+  (path: Path) => {
+    return blogSlugToString(path);
   }
 );
 
