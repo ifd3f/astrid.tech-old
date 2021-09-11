@@ -76,12 +76,21 @@ export function getHSLString([h, s, l]: number[]) {
   return hslToHex(h, s, l) as string;
 }
 
-export function getBlogSlug({ date, slug }: { date: Date; slug: string }) {
+export function getBlogSlug({
+  date,
+  ordinal,
+  slug,
+}: {
+  date: Date;
+  ordinal: number;
+  slug: string;
+}) {
   return {
     year: date.getUTCFullYear().toString(),
     month: (date.getUTCMonth() + 1).toString().padStart(2, "0"),
     day: date.getUTCDate().toString().padStart(2, "0"),
-    slug: [slug],
+    ordinal: ordinal.toString(),
+    slug: slug,
   };
 }
 
