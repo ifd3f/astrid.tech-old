@@ -1,0 +1,18 @@
+slug: iron-panthers
+organization: Iron Panthers
+position: Programmer
+location: Burlingame, CA, USA
+website: https://ironpanthers.com
+summary: World Championship-Winning Robotics Team
+startDate: 2014-09-01
+endDate: 2019-05-30
+highlights:
+  - Won the 2019 FRC Houston World Championships.
+  - Designed a modular command scheduling system for the FTC subteam to
+    facilitate clearer and more reliable autonomous code.
+  - Researched advanced motion planning and path optimization algorithms.
+tags:
+  - java
+  - robotics
+  - control-systems
+  - opencv
