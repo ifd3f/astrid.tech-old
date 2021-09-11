@@ -1,0 +1,47 @@
+- name: Backend
+  skills:
+    - slug: python
+    - slug: cpp
+    - slug: java
+    - slug: kotlin
+    - slug: sql
+    - slug: node-js
+    - slug: csharp
+    - slug: django
+    - slug: scala
+
+- name: Frontend
+  skills:
+    - slug: javascript
+    - slug: css
+    - slug: html
+    - slug: sass
+    - slug: react-js
+    - slug: typescript
+    - slug: gatsby-js
+    - slug: next-js
+    - slug: bootstrap-css
+    - slug: material-ui
+    - slug: jquery
+
+- name: ML/Data
+  skills:
+    - slug: opencv
+    - slug: scikit-learn
+    - slug: tensorflow
+    - slug: keras
+    - slug: matplotlib
+    - slug: numpy
+    - slug: pandas
+    - slug: jupyter
+
+- name: DevOps
+  skills:
+    - slug: docker
+    - slug: kubernetes
+    - slug: linux
+    - slug: ansible
+    - slug: terraform
+    - slug: gcloud
+    - slug: aws
+    - slug: ci-cd
