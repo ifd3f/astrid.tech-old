@@ -19,6 +19,7 @@ async function loadBlogPost(pathname: string) {
   const slug = getSlug(parsed);
   const fileContents = await fs.readFile(pathname);
   const { data, content } = matter(fileContents);
+  const ordinal = data.ordinal ? data.ordinal : 0;
 
   return {
     tags: data.tags ? data.tags : [],
@@ -27,6 +28,7 @@ async function loadBlogPost(pathname: string) {
     title: data.title,
     content: content,
     date: new Date(data.date),
+    ordinal: ordinal,
     thumbnail: data.thumbnail ? join(parsed.dir, data.thumbnail) : null,
     description: data.description,
   };

@@ -25,13 +25,13 @@ export type HCardProperty = {
 
 export const chinese: HCardProperty = {
   key: "name-zh",
-  title: (
-    <span lang="zh">名字</span>
-  ),
+  title: <span lang="zh">名字</span>,
   children: (
-    <span lang="zh" className="p-name">余茂琦</span>
-  )
-}
+    <span lang="zh" className="p-name">
+      余茂琦
+    </span>
+  ),
+};
 
 export const birthday: HCardProperty = {
   key: "birthday",
@@ -146,7 +146,7 @@ export const website: HCardProperty = {
   key: "website",
   title: (
     <>
-      <FaGlobe title="Website"/> Website
+      <FaGlobe title="Website" /> Website
     </>
   ),
   children: (

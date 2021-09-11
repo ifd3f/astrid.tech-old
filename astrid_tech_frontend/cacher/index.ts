@@ -50,16 +50,16 @@ async function buildBlogPostCache(db: Database) {
   const blogPosts = await Promise.all(await getBlogPosts(contentDir));
   const ids = db
     .transaction(() =>
-      blogPosts.map((post) =>
-        insertPost.run({
+      blogPosts.map((post) => {
+        return insertPost.run({
           ...post,
           date: post.date.toISOString(),
           year: post.date.getUTCFullYear(),
           month: post.date.getUTCMonth() + 1,
           day: post.date.getUTCDate(),
-          ordinal: 0,
-        })
-      )
+          ordinal: post.ordinal,
+        });
+      })
     )()
     .map((result, i) => ({
       id: result.lastInsertRowid,

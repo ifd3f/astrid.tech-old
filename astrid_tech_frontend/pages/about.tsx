@@ -82,7 +82,9 @@ const About: FC = (props) => {
         <h1>About me</h1>
         <Row className="h-card">
           <Col>
-            <h2 className="p-name" lang="en">Astrid Yu</h2>
+            <h2 className="p-name" lang="en">
+              Astrid Yu
+            </h2>
             <CardTable />
           </Col>
           <Col tag="article" className="p-note">

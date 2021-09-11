@@ -68,6 +68,7 @@ export type BlogPostMeta<DateType = Date> = Tagged<"b"> & {
   assetRoot: string;
   description: string;
   date: DateType;
+  ordinal: number;
   slug: string;
   thumbnail: string | null;
   excerpt?: string;
