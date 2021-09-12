@@ -14,11 +14,13 @@ def dark_to_alpha(im):
 
 def shooting_frames():
     with Image.open("assets/shootingstar.gif") as orig:
-        for i in range(1, orig.n_frames):
+        for i in range(0, orig.n_frames - 1):
             orig.seek(i)
-            with orig.convert('RGBA') as conv:
-                dark_to_alpha(conv)
-                yield conv
+            conv = orig.convert('RGBA')
+            w, h = conv.size
+            conv = conv.crop((w * 0.2, 0, w * 0.8, h))
+            dark_to_alpha(conv)
+            yield conv
 
 
 def twinkling_frames():
@@ -28,11 +30,33 @@ def twinkling_frames():
             yield im
 
 
-def main():
+def words_img():
+    # Comes from https://cooltext.com/Logo-Design-Princess
+    im = Image.open("assets/text.png")
+    return im
+
+
+def rendered_frames():
+    words = words_img()
     frames = zip(shooting_frames(), twinkling_frames())
     for shooting, twinkling in frames:
-        shooting.show()
-        break
+        background = twinkling.crop((0, 10, 88, 50)).resize((88, 31))
+        shooting2 = shooting.resize((88, 31))
+        background.paste(shooting2, (0, 0), shooting2)
+        background.paste(words, (-10, 0), words)
+        yield background.convert("RGB")
+
+
+def main():
+    frames = list(rendered_frames())
+    frames[0].save(
+        'banner-88x31.gif',
+        format='GIF',
+        append_images=frames[1:],
+        save_all=True,
+        duration=300,
+        loop=0
+    )
 
 
 if __name__ == '__main__':
