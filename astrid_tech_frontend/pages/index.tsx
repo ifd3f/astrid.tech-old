@@ -12,7 +12,7 @@ import styles from "../styles/blog.module.scss";
 import { convertBlogPostToObjectDate } from "../types/types";
 
 export const getStaticProps = async () => {
-  const posts = await Promise.all(getBlogPosts().map(excerptify(500)));
+  const posts = await Promise.all(getBlogPosts().map(excerptify(280)));
   return {
     props: { posts },
   };
