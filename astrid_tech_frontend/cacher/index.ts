@@ -14,6 +14,7 @@ import { generateLicenses } from "./licenses";
 import { getProjects } from "./projects";
 import { buildRSSFeed } from "./rss";
 import { getLanguageTags, getUserTagOverrides } from "./tags";
+import { buildTWTXT } from "./twtxt";
 import { serializeJS } from "./util";
 
 const contentDir = path.join(process.cwd(), "content");
@@ -236,6 +237,7 @@ async function main(dbUrl: string) {
     exportTagOverrideData(db, path.join(dataDir, "tags.js")),
     generateLicenses(path.join(dataDir, "licenses.json")),
     buildRSSFeed(path.join(__dirname, "../public")),
+    buildTWTXT(path.join(__dirname, "../public")),
   ]);
 }
 
