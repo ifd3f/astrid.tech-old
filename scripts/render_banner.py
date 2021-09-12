@@ -13,21 +13,21 @@ def dark_to_alpha(im):
 
 
 def shooting_frames():
-    with Image.open("assets/shootingstar.gif") as orig:
-        for i in range(0, orig.n_frames - 1):
-            orig.seek(i)
-            conv = orig.convert('RGBA')
-            w, h = conv.size
-            conv = conv.crop((w * 0.2, 0, w * 0.8, h))
-            dark_to_alpha(conv)
-            yield conv
+    orig = Image.open("assets/shootingstar.gif")
+    for i in range(0, orig.n_frames - 1):
+        orig.seek(i)
+        conv = orig.convert('RGBA')
+        w, h = conv.size
+        conv = conv.crop((w * 0.2, 0, w * 0.8, h))
+        dark_to_alpha(conv)
+        yield conv
 
 
 def twinkling_frames():
-    with Image.open("assets/stars.webp") as im:
-        for i in range(0, im.n_frames):
-            im.seek(i)
-            yield im
+    im = Image.open("assets/stars.webp")
+    for i in range(0, im.n_frames):
+        im.seek(i)
+        yield im
 
 
 def words_img():
