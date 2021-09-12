@@ -18,7 +18,7 @@ tags:
 url: https://cloud.astrid.tech/
 source:
   - https://github.com/astralbijection/infra
-thumbnail: /2021/01/27/pi-clustering/nodezzz.jpeg
+thumbnail: /2021/01/27/0/pi-clustering/nodezzz.jpeg
 ---
 
 This project is an internal cloud that is scaled enough to meet the demands of a
@@ -77,9 +77,9 @@ These resources share a variety of workloads.
 
 Here's what it all looks like.
 
-![Raspberry Pis involved in the cluster.](/_/2021/01/27/pi-clustering/nodezzz.jpeg)
+![Raspberry Pis involved in the cluster.](/_/2021/01/27/0/pi-clustering/nodezzz.jpeg)
 
-![Hello from CyberCthulu](/_/2021/01/21/janky-kube-cluster/cluster.jpeg)
+![Hello from CyberCthulu](/_/2021/01/21/0/janky-kube-cluster/cluster.jpeg)
 
 #### Turnkey Home Resources
 

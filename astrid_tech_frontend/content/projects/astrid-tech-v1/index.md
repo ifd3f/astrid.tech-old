@@ -84,7 +84,7 @@ rewrite the whole thing in Next.js.
 
 I used Gatsby to statically generate the website. However, for
 [v2](https://astrid.tech/projects/astrid-tech), I decided to
-[move to Next.js](https://astrid.tech/2020/12/20/backend#replacing-gatsby).
+[move to Next.js](https://astrid.tech/2020/12/20/0/backend#replacing-gatsby).
 
 The static site was hosted via
 [Github Pages](https://github.com/astralbijection/astrid.tech) to statically

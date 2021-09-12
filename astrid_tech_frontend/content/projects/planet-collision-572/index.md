@@ -70,7 +70,7 @@ low-relative velocity contacts. This phase performs the following tasks:
 #### 3. Contact Solving
 
 I describe this step in detail in
-[this blog post](https://astrid.tech/2020/11/22/n-body-collision).
+[this blog post](https://astrid.tech/2020/11/22/0/n-body-collision).
 
 #### 4. Integration
 

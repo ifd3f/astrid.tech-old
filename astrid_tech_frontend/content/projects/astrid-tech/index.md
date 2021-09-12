@@ -33,7 +33,7 @@ ton of them, and there wasn't really a place to show them off. This website was
 made to solve that issue.
 
 This website used to be written in Gatsby, but I decided to
-[move it to Next.js](https://astrid.tech/2020/12/20/backend#replacing-gatsby)
+[move it to Next.js](https://astrid.tech/2020/12/20/0/backend#replacing-gatsby)
 
 <iframe src="https://astrid.tech" title="My website, but with recursion" width="300" height="250"></iframe>
 

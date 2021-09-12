@@ -109,7 +109,7 @@ shared code. Here is what each plugin does:
   blog folder into blog post objects.
 - `gatsby-astrid-transformer-notebook-markdown` - Converts Jupyter notebooks
   into Markdown nodes and is responsible for Jupyter notebook posts like
-  [this one](/blog/2020-06-18-frequency-shifting).
+  [this one](/2020/06/18/0/frequency-shifting).
 - `gatsby-astrid-source-lang-tags` - Responsible for making colorful language
   tags.
 - `gatsby-astrid-transformer-user-tags` - Responsible for "user tags," or tags

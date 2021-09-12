@@ -20,7 +20,7 @@ to make things less difficult.
 On my VPS, I'm running several dockerized self-hosted apps right now, including:
 
 - api.astrid.tech, the backend to this website that I was talking about
-  [last issue](/2020/12/20/backend)
+  [last issue](/2020/12/20/0/backend)
 - [Caddy](https://caddyserver.com/) as the reverse proxy for everything
 - [Trilium Notes](https://github.com/zadam/trilium), on
   [notes.astrid.tech](https://notes.astrid.tech), and password-protected so you
