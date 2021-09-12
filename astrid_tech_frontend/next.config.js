@@ -20,7 +20,7 @@ module.exports = withPlugins([], {
   env: {
     publicRoot: process.env.SITE_ROOT,
     apiRoot: process.env.ASTRID_TECH_API_ROOT,
-    shortRoot: process.env.SHORT_ROOT
+    shortRoot: process.env.SHORT_ROOT,
   },
   exportPathMap() {
     return {
