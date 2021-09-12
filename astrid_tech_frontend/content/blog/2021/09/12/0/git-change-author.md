@@ -7,21 +7,32 @@ tags:
   - git
 ---
 
-Suppose someone who formerly committed code under `John Smith <john.smith@example.com>` now commits code under `Jane Smith <jane.smith@example.com>`. All of her commit history is under John, and she wants to change it to Jane. 
+Suppose someone who formerly committed code under
+`John Smith <john.smith@example.com>` now commits code under
+`Jane Smith <jane.smith@example.com>`. All of her commit history is under John,
+and she wants to change it to Jane.
 
-Additionally, she used to commit with a funny email address called `foobar@example.com`, but she doesn't like that anymore, and wants everything to be under `jane.smith@example.com`.
+Additionally, she used to commit with a funny email address called
+`foobar@example.com`, but she doesn't like that anymore, and wants everything to
+be under `jane.smith@example.com`.
 
 ## The easy way - .mailmap
 
-There's the non-dangerous, recommended way to do it, and that's [`.mailmap`](https://git-scm.com/docs/gitmailmap). In short, she can commit a file called `.mailmap` at the root of your repository that looks like this:
+There's the non-dangerous, recommended way to do it, and that's
+[`.mailmap`](https://git-scm.com/docs/gitmailmap). In short, she can commit a
+file called `.mailmap` at the root of your repository that looks like this:
 
 ```
 Jane Smith <jane.smith@example.com> <john.smith@example.com> <foobar@example.com>
 ```
 
-where the proper email she wants goes first, and any emails that she wants to map to the proper email goes after.
+where the proper email she wants goes first, and any emails that she wants to
+map to the proper email goes after.
 
-Technically, all the metadata inside the historical commits will still say `John Smith <john.smith@example.com>` or `John Smith <foobar@example.com>`. However, in all git clients, anything with a `john.smith@example.com` or `foobar@example.com` will be displayed as `Jane Smith <jane.smith@example.com>`.
+Technically, all the metadata inside the historical commits will still say
+`John Smith <john.smith@example.com>` or `John Smith <foobar@example.com>`.
+However, in all git clients, anything with a `john.smith@example.com` or
+`foobar@example.com` will be displayed as `Jane Smith <jane.smith@example.com>`.
 
 ## The rewriting history way - git filter-branch
 
@@ -56,4 +67,8 @@ do_replace 'john.smith@example.com'
 do_replace 'foobar@example.com'
 ```
 
-This script will rewrite the entire history of her repo using git filter-branch, permanently erasing *all* instances of `john.smith@example.com` in metadata. However, she would need to `git push -f` to overwrite the history in Github or Gitlab, and if anyone else is working on the code at that time, there will be lots of fun merge conflicts to resolve.
+This script will rewrite the entire history of her repo using git filter-branch,
+permanently erasing _all_ instances of `john.smith@example.com` in metadata.
+However, she would need to `git push -f` to overwrite the history in Github or
+Gitlab, and if anyone else is working on the code at that time, there will be
+lots of fun merge conflicts to resolve.
