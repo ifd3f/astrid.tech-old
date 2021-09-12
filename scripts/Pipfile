@@ -9,6 +9,8 @@ python-dotenv = "*"
 python-frontmatter = "*"
 requests = "*"
 pytz = "*"
+pillow = "*"
+numpy = "*"
 
 [dev-packages]
 
