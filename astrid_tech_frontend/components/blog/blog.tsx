@@ -37,8 +37,8 @@ const PostStatusGroup: FC = () => {
   const fullSlug = blogSlugToString(getBlogSlug(post));
   const link = process.env.publicRoot!! + fullSlug;
 
-  //const shortcode = getBlogShortLinkCode(post);
-  //const shortlink = `https://aay.tw/${shortcode}`;
+  const shortcode = getBlogShortLinkCode(post);
+  const shortlink = `${process.env.shortRoot}/${shortcode}`;
 
   return (
     <StatusGroup>
@@ -50,13 +50,11 @@ const PostStatusGroup: FC = () => {
           {post.slug}
         </a>
       </InfoRow>
-      {/* TODO get shortlink working
-        <InfoRow name="Shortlink" icon={<FaLink />}>
-          <a href={shortlink} className="u-url">
-            aay.tw/{shortcode}
-          </a>
-        </InfoRow>
-      */}
+      <InfoRow name="Shortlink" icon={<FaLink />}>
+        <a href={shortlink} className="u-url">
+          aay.tw/{shortcode}
+        </a>
+      </InfoRow>
       {/* TODO add comment count */}
     </StatusGroup>
   );
