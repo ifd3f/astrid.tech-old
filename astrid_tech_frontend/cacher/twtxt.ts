@@ -22,7 +22,7 @@ async function createTWTXT(
     if (post.title) {
       return {
         date: post.date,
-        content: `Article: ${post.title}${suffix}`
+        content: `Article: ${post.title}${suffix}`,
       } as TWTXTEntry;
     }
 
@@ -31,7 +31,7 @@ async function createTWTXT(
     const cleaned = excerpt.replace(/[\r\n]+/g, " ");
     return {
       date: post.date,
-      content: cleaned + suffix
+      content: cleaned + suffix,
     } as TWTXTEntry;
   });
 

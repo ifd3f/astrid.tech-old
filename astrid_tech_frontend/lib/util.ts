@@ -98,15 +98,25 @@ export function blogSlugToString(path: FQPath) {
   return `/${path.year}/${path.month}/${path.day}/${path.ordinal}/${path.slug}`;
 }
 
-export function truncateKeepWords(text: string, maxChars: number) {
-  if (text.length < maxChars) return "";
+type TruncationResult = {
+  truncated: string;
+  neededTruncation: boolean;
+};
+
+export function truncateKeepWords(
+  text: string,
+  maxChars: number
+): TruncationResult {
+  if (text.length < maxChars)
+    return { truncated: text, neededTruncation: false };
 
   for (let cutoff = maxChars; cutoff > 0; cutoff--) {
     if (text.charAt(cutoff) == " ") {
-      return text.substr(0, cutoff);
+      return { truncated: text.substr(0, cutoff), neededTruncation: true };
     }
   }
-  return "";
+
+  return { truncated: text.substr(0, maxChars), neededTruncation: true };
 }
 
 export function getBlogShortLinkCode({

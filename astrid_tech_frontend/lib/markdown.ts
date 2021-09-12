@@ -70,9 +70,13 @@ export async function renderMarkdown(md: string, assetRoot: string) {
 
 export async function getMarkdownExcerpt(md: string, maxChars: number) {
   const text = (
-    await remark().use(excerpt).use(strip).process(md)
+    await remark().use(excerpt).use(strip).process(md.trim())
   ).toString() as string;
-  return truncateKeepWords(text, maxChars) + "\u2026"; // ellipsis
+  const result = truncateKeepWords(text, maxChars);
+  if (result.neededTruncation) {
+    return result.truncated + "\u2026"; // ellipsis
+  }
+  return result.truncated;
 }
 
 export function withoutContent<T>(object: { content: string } & T) {
