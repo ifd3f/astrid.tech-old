@@ -1,8 +1,7 @@
-import Redirect from "components/Redirect";
 import { GetStaticProps, InferGetStaticPropsType } from "next";
 import { FC } from "react";
 import BlogPostPage from "components/blog/blog";
-import { getBlogPost, getBlogPostSlugs, Path } from "lib/cache";
+import { getBlogPost, getBlogPostSlugs, FQPath } from "lib/cache";
 import { renderMarkdown } from "lib/markdown";
 import { wrappedStaticPaths } from "lib/pathcache";
 import { BlogPost, convertBlogPostToObjectDate } from "types/types";
@@ -19,13 +18,13 @@ export const getStaticPaths = wrappedStaticPaths(
       fallback: false,
     };
   },
-  (path: Path) => {
+  (path: FQPath) => {
     return blogSlugToString(path);
   }
 );
 
 export const getStaticProps: GetStaticProps = async ({ params }) => {
-  const path = params!! as unknown as Path;
+  const path = params!! as unknown as FQPath;
   const post = getBlogPost(path);
 
   const content = await renderMarkdown(post.content, post.assetRoot);

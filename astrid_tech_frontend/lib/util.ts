@@ -1,7 +1,7 @@
 import crypto from "crypto";
 import hslToHex from "hsl-to-hex";
 import seedrandom from "seedrandom";
-import { Path } from "./cache";
+import { FQPath } from "./cache";
 import { DateToSxg, IntToSxg } from "./newbase60";
 
 export function getContrastingTextColor(backgroundColor: string): string {
@@ -94,7 +94,7 @@ export function getBlogSlug({
   };
 }
 
-export function blogSlugToString(path: Path) {
+export function blogSlugToString(path: FQPath) {
   return `/${path.year}/${path.month}/${path.day}/${path.ordinal}/${path.slug}`;
 }
 

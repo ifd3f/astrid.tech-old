@@ -7,6 +7,7 @@ export type Path = {
   month: string;
   day: string;
   ordinal: string;
+  slug?: string;
 };
 
 export type FQPath = Path & {
