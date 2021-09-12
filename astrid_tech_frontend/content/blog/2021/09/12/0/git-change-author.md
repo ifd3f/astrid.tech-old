@@ -2,6 +2,7 @@
 title: Changing author name and email in Git
 description: 🏳️‍⚧️
 date: 2021-09-12 02:35:23-07:00
+ordinal: 0
 tags:
   - git
 ---
