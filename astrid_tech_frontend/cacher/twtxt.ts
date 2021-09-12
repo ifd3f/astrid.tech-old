@@ -16,19 +16,22 @@ async function createTWTXT(
 ): Promise<TWTXTEntry[]> {
   const promises = posts.map(async (post) => {
     const shortcode = getBlogShortLinkCode(post);
-    const shortlink = `https://${shortDomain}/${shortcode}`;
+    const shortlink = `${shortDomain}/${shortcode}`;
+    const suffix = ` | ${shortlink}`;
+
     if (post.title) {
       return {
         date: post.date,
-        content: `Article: ${post.title} | ${shortlink}`,
+        content: `Article: ${post.title}${suffix}`
       } as TWTXTEntry;
     }
 
-    const excerpt = await getMarkdownExcerpt(post.content, 120);
+    const maxLength = 140 - suffix.length;
+    const excerpt = await getMarkdownExcerpt(post.content, maxLength);
     const cleaned = excerpt.replace(/[\r\n]+/g, " ");
     return {
       date: post.date,
-      content: `${cleaned} | ${shortlink}`,
+      content: cleaned + suffix
     } as TWTXTEntry;
   });
 
