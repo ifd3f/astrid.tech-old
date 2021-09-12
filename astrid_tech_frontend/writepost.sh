@@ -6,7 +6,9 @@ if [ -z $slug ]; then
     exit 1
 fi
 
-contentRoot="content"
+frontendPath="$(dirname "$0")"
+
+contentRoot="$frontendPath/content"
 dateField=$(date --rfc-3339=seconds)
 daySubFolder=$(date -u +"%Y/%m/%d")
 dayFolder="$contentRoot/blog/$daySubFolder"
@@ -34,6 +36,7 @@ ordinal: $ordinal
 EOF
 cat $original > $tempfile
 
+echo "Will create post at $postPath"
 EDITOR="${EDITOR:-vi}"
 $EDITOR $tempfile
 
