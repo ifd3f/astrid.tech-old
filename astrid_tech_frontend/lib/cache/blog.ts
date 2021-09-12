@@ -7,6 +7,9 @@ export type Path = {
   month: string;
   day: string;
   ordinal: string;
+}
+
+export type FQPath = Path & {
   slug: string;
 };
 
@@ -25,7 +28,7 @@ export function rowToBlogPost(row: any, tags: string[]): BlogPost<string> {
   };
 }
 
-export function getBlogPostSlugs(): Path[] {
+export function getBlogPostSlugs(): FQPath[] {
   const db = getConnection();
   const results = db
     .prepare("SELECT date AS dateStr, ordinal, slug FROM blog_post")
@@ -63,15 +66,13 @@ export function getBlogPost(path: Path): BlogPost<string> {
         year = @year AND 
         month = @month AND 
         day = @day AND 
-        ordinal = @ordinal AND 
-        slug = @slug`
+        ordinal = @ordinal`
     )
     .get({
       year: path.year,
       month: path.month,
       day: path.day,
       ordinal: path.ordinal,
-      slug: path.slug,
     });
 
   const tags = db
