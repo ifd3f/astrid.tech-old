@@ -66,9 +66,7 @@ export const BlogPostPage: FC<BlogPostPageProps> = ({ post }) => {
   const slug = blogSlugToString(getBlogSlug(post));
   const url = join(process.env.publicRoot!, slug);
 
-  const metaTitle = post.title
-    ? post.title
-    : truncateKeepWords(striptags(post.content), 50) + "...";
+  const metaTitle = post.title ? post.title : post.slug;
 
   return (
     <ProjectContext.Provider value={{ post }}>
