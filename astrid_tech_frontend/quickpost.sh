@@ -1,6 +1,33 @@
 #!/usr/bin/env bash
 
-slug=$1
+# https://stackoverflow.com/a/14203146
+POSITIONAL=()
+NO_COMMIT=0
+NO_PUSH=0
+
+while [[ $# -gt 0 ]]; do
+  key="$1"
+
+  case $key in
+    -c|--no-commit)
+      NO_COMMIT=1
+      NO_PUSH=1
+      shift # past value
+      ;;
+    -p|--no-push)
+      NO_PUSH=1
+      shift # past value
+      ;;
+    *)    # unknown option
+      POSITIONAL+=("$1") # save it in an array for later
+      shift # past argument
+      ;;
+  esac
+done
+
+set -- "${POSITIONAL[@]}" # restore positional parameters
+
+slug="$1"
 if [ -z $slug ]; then 
     echo "No slug provided. Usage: $0 slug-name-here"
     exit 1
@@ -48,7 +75,18 @@ fi
 mkdir -p $postFolder
 mv $tempfile $postPath
 npx prettier -w $postPath
+
+if [ $NO_COMMIT ]; then
+    echo "--no-commit was given, skipping commit"
+    exit 0
+fi
+
 git add $postPath
 git commit -m "Create post $postPath"
 git fetch && git rebase
+
+if [ $NO_PUSH ]; then
+    echo "--no-push was given, skipping push"
+    exit 0
+fi
 git push
