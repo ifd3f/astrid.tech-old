@@ -5,7 +5,7 @@ import { BsArrowsCollapse } from "react-icons/bs";
 import { GiHamburger } from "react-icons/gi";
 import { Collapse, Navbar, NavbarBrand, NavbarToggler } from "reactstrap";
 
-export type NavBarLinks = "resume" | "projects" | "blog" | "about";
+export type NavBarLinks = "resume" | "projects" | "blog" | "about" | "now";
 
 type NavLinkProps = {
   to: string;
@@ -68,9 +68,14 @@ const MainNavbar: FC<MainNavbarProps> = ({ currentLocation, fixed }) => {
         <GNavLink to="/projects" active={currentLocation == "projects"}>
           Projects
         </GNavLink>
+
         <NavbarSeparator />
+
         <GNavLink to="/resume" active={currentLocation == "resume"}>
           Resume
+        </GNavLink>
+        <GNavLink to="/now" active={currentLocation == "now"}>
+          Now
         </GNavLink>
         <GNavLink to="/about" active={currentLocation == "about"}>
           About
