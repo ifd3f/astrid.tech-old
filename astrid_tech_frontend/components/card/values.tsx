@@ -28,9 +28,9 @@ export const name: HCardProperty = {
   key: "name-en",
   title: "Name",
   children: (
-    <span lang="zh" className="p-name">
+    <a lang="en" className="p-name u-url u-uid" href="https://astrid.tech">
       Astrid Yu
-    </span>
+    </a>
   ),
 };
 
