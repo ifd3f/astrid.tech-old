@@ -1,7 +1,10 @@
+import CardTable from "components/card/CardTable";
+import * as vs from "components/card/values";
 import { InferGetStaticPropsType } from "next";
-import { FC } from "react";
+import Link from "next/link";
+import React, { FC } from "react";
 import { FaRssSquare } from "react-icons/fa";
-import { Container } from "reactstrap";
+import { Col, Container, Row } from "reactstrap";
 import { PostBrief } from "../components/blog/feed";
 import { PageHeading } from "../components/layout";
 import Layout from "../components/layout/layout";
@@ -18,34 +21,65 @@ export const getStaticProps = async () => {
   };
 };
 
+const hCardValues = [
+  vs.name,
+  vs.pronouns,
+  vs.hobbies,
+  vs.email,
+  vs.linux,
+  vs.website,
+  vs.github,
+  vs.linkedin,
+  vs.matrix,
+  vs.twitter,
+];
+
 const Page: FC<InferGetStaticPropsType<typeof getStaticProps>> = ({
   posts,
 }) => {
   const title = "Homepage";
   const meta = "Welcome to my website!";
 
+  const blogFeed = (
+    <>
+      <h2>
+        Latest Posts{" "}
+        <a href={`${process.env.publicRoot}/atom.xml`}>
+          <FaRssSquare title="astrid.tech Atom Feed" />
+        </a>
+      </h2>
+
+      {posts.map((post) => (
+        <PostBrief key={post.slug} post={convertBlogPostToObjectDate(post)} />
+      ))}
+      <p className="text-center text-muted">(End of posts)</p>
+    </>
+  );
+
   return (
     <Layout currentLocation="blog">
       <SEO title={title} description={meta} />
-      <PageHeading title="Astrid Yu" bgColor="#1a237e" textColor="#ffffff" />
-      <Container className={styles.blogContentContainer}>
-        <section>
-          <p className="text-right">
-            <a href={`${process.env.publicRoot}/rss.xml`}>
-              <FaRssSquare title="astrid.tech RSS" />
-            </a>
-          </p>
-        </section>
-        <section>
-          <h2>Latest Posts</h2>
-          {posts.map((post) => (
-            <PostBrief
-              key={post.slug}
-              post={convertBlogPostToObjectDate(post)}
-            />
-          ))}
-          <p className="text-center text-muted">(End of posts)</p>
-        </section>
+
+      <PageHeading title="astrid.tech" bgColor="#1a237e" textColor="#ffffff">
+        <p className="p-note">
+          My personal corner of the internet devoted to tech shenanigans and
+          other stuff
+        </p>
+      </PageHeading>
+
+      <Container style={{ paddingTop: 20 }}>
+        <Row>
+          <Col className={styles.blogContentContainer} lg="8">
+            {blogFeed}
+          </Col>
+          <Col className="h-card" tag="article" xs="12" lg="4">
+            <h2>Quick facts about me</h2>
+            <CardTable fields={hCardValues} />{" "}
+            <p style={{ textAlign: "right" }}>
+              <Link href="/about">See /about for more info.</Link>
+            </p>
+          </Col>
+        </Row>
       </Container>
     </Layout>
   );
