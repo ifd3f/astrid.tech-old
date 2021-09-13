@@ -2,10 +2,14 @@
   tags:
     - slug: frontend
       name: Frontend
-    - slug: react-js
-      name: React
     - slug: responsive-design
       name: Responsive Design
+
+- backgroundColor: "#20232a"
+  color: "#61dafb"
+  tags:
+    - slug: react-js
+      name: React
 
 - backgroundColor: "#563D7C"
   tags:
