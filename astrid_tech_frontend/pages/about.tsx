@@ -40,6 +40,7 @@ const about = [
   vs.chinese,
   vs.pronouns,
   vs.hobbies,
+  vs.occupation,
   vs.timezone,
   vs.phone,
   vs.email,

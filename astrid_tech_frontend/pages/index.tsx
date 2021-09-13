@@ -25,13 +25,12 @@ const hCardValues = [
   vs.name,
   vs.pronouns,
   vs.hobbies,
+  vs.occupation,
   vs.email,
   vs.linux,
   vs.website,
   vs.github,
-  vs.linkedin,
   vs.matrix,
-  vs.twitter,
 ];
 
 const Page: FC<InferGetStaticPropsType<typeof getStaticProps>> = ({
@@ -76,7 +75,7 @@ const Page: FC<InferGetStaticPropsType<typeof getStaticProps>> = ({
             <h2>Quick facts about me</h2>
             <CardTable fields={hCardValues} />{" "}
             <p style={{ textAlign: "right" }}>
-              <Link href="/about">See /about for more info.</Link>
+              <Link href="/about">For more info, see /about.</Link>
             </p>
           </Col>
         </Row>

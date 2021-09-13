@@ -1,4 +1,4 @@
-import { ReactNode } from "react";
+import React, { ReactNode } from "react";
 import { BsEnvelope } from "react-icons/bs";
 import {
   FaBirthdayCake,
@@ -14,7 +14,7 @@ import {
 } from "react-icons/fa";
 import { FiDisc } from "react-icons/fi";
 import { GiPhone } from "react-icons/gi";
-import { GoMarkGithub } from "react-icons/go";
+import { GoMarkGithub, GoOrganization } from "react-icons/go";
 import { SiArchlinux, SiHackaday, SiMatrix, SiNixos } from "react-icons/si";
 
 export type HCardProperty = {
@@ -41,6 +41,20 @@ export const chinese: HCardProperty = {
     <span lang="zh" className="p-name">
       余茂琦
     </span>
+  ),
+};
+
+export const occupation: HCardProperty = {
+  key: "occupation",
+  title: (
+    <>
+      <GoOrganization /> Occupation
+    </>
+  ),
+  children: (
+    <>
+      CS Student @ <a href="https://calpoly.edu">Cal Poly</a>
+    </>
   ),
 };
 
