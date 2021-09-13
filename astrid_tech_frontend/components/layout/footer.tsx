@@ -143,9 +143,12 @@ type MiniAboutProps = { version: string };
 
 const MiniAbout: FC<MiniAboutProps> = ({ version }) => {
   return (
-    <p>
-      astrid.tech v{version} was created by Astrid Yu with a generous helping of{" "}
-      <Tea /> and <Witch />. See the{" "}
+    <p className="h-card">
+      <a href="https://astrid.tech" className="u-url" rel="me">
+        astrid.tech
+      </a>{" "}
+      v{version} was created by <span className="p-name">Astrid Yu</span> with a
+      generous helping of <Tea /> and <Witch />. Read the{" "}
       <Link href="/projects/astrid-tech">self-referential project page</Link> or
       see the code yourself on{" "}
       <a href="https://github.com/astralbijection/astrid.tech">GitHub</a>.
@@ -186,7 +189,6 @@ const FooterSection = () => {
                   <ContentLicense />
                 </Col>
               </Row>
-              <a href="https://github.com/astralbijection/" rel="me"></a>
             </Row>
           </Col>
         </Row>
