@@ -37,6 +37,7 @@ function Bio() {
 }
 
 const about = [
+  vs.name,
   vs.chinese,
   vs.pronouns,
   vs.hobbies,
@@ -73,13 +74,10 @@ const About: FC = (props) => {
       <Container className={styles.blogContentContainer}>
         <h1>About me</h1>
         <Row className="h-card">
-          <Col>
-            <h2 className="p-name" lang="en">
-              Astrid Yu
-            </h2>
+          <Col xs="12" md="5">
             <CardTable fields={about} />
             <hr />
-            <h4>Elsewhere</h4>
+            <h5>Elsewhere</h5>
             <CardTable fields={identities} />
           </Col>
           <Col tag="article" className="p-note">
