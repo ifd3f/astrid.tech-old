@@ -3,6 +3,7 @@ import { BsEnvelope } from "react-icons/bs";
 import {
   FaBirthdayCake,
   FaCubes,
+  FaDice,
   FaFacebook,
   FaGlobe,
   FaInstagram,
@@ -11,16 +12,26 @@ import {
   FaReddit,
   FaTwitter,
 } from "react-icons/fa";
-import { GiPhone } from "react-icons/gi";
 import { FiDisc } from "react-icons/fi";
-import { SiArchlinux, SiNixos, SiHackaday, SiMatrix } from "react-icons/si";
+import { GiPhone } from "react-icons/gi";
 import { GoMarkGithub } from "react-icons/go";
+import { SiArchlinux, SiHackaday, SiMatrix, SiNixos } from "react-icons/si";
 
 export type HCardProperty = {
   key: string;
   title: ReactNode;
   children: ReactNode;
   classes?: string;
+};
+
+export const name: HCardProperty = {
+  key: "name-en",
+  title: "Name",
+  children: (
+    <span lang="zh" className="p-name">
+      Astrid Yu
+    </span>
+  ),
 };
 
 export const chinese: HCardProperty = {
@@ -140,6 +151,18 @@ export const linux: HCardProperty = {
   ),
 };
 
+export const hobbies: HCardProperty = {
+  key: "hobbies",
+  title: (
+    <>
+      <FaDice title="Hobbies" /> Hobbies
+    </>
+  ),
+  children: (
+    <>Programming, playing video games, reading fantasy books, watching anime</>
+  ),
+};
+
 // All identities go below this line
 
 export const website: HCardProperty = {
@@ -178,7 +201,7 @@ export const github: HCardProperty = {
   key: "github",
   title: (
     <>
-      <GoMarkGithub title="GitHub" /> GitHub
+      <GoMarkGithub title="Github" /> GitHub
     </>
   ),
   children: (

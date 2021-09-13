@@ -5,6 +5,7 @@ import SEO from "../components/seo";
 import styles from "../styles/blog.module.scss";
 import Link from "next/link";
 import * as vs from "components/card/values";
+import { CardTable } from "components/card/CardTable";
 
 /**
  * Force this page to get exported
@@ -35,41 +36,31 @@ function Bio() {
   );
 }
 
-export const CardTable: FC = () => {
-  const fields = [
-    vs.chinese,
-    vs.pronouns,
-    vs.timezone,
-    vs.phone,
-    vs.email,
-    vs.birthday,
-    vs.website,
-    vs.facebook,
-    vs.instagram,
-    vs.github,
-    vs.hackaday,
-    vs.linkedin,
-    vs.mastodon,
-    vs.matrix,
-    vs.twitter,
-    vs.indieweb,
-    vs.thingiverse,
-    vs.reddit,
-    vs.linux,
-  ];
-  return (
-    <table>
-      <tbody>
-        {fields.map((f) => (
-          <tr key={f.key}>
-            <th style={{ textAlign: "right", paddingRight: 10 }}>{f.title}</th>
-            <td>{f.children}</td>
-          </tr>
-        ))}
-      </tbody>
-    </table>
-  );
-};
+const about = [
+  vs.chinese,
+  vs.pronouns,
+  vs.hobbies,
+  vs.timezone,
+  vs.phone,
+  vs.email,
+  vs.birthday,
+  vs.linux,
+];
+
+const identities = [
+  vs.website,
+  vs.facebook,
+  vs.instagram,
+  vs.github,
+  vs.hackaday,
+  vs.linkedin,
+  vs.mastodon,
+  vs.matrix,
+  vs.twitter,
+  vs.indieweb,
+  vs.thingiverse,
+  vs.reddit,
+];
 
 const About: FC = (props) => {
   return (
@@ -85,7 +76,10 @@ const About: FC = (props) => {
             <h2 className="p-name" lang="en">
               Astrid Yu
             </h2>
-            <CardTable />
+            <CardTable fields={about} />
+            <hr />
+            <h4>Elsewhere</h4>
+            <CardTable fields={identities} />
           </Col>
           <Col tag="article" className="p-note">
             <Bio />
