@@ -76,7 +76,7 @@ mkdir -p $postFolder
 mv $tempfile $postPath
 npx prettier -w $postPath
 
-if [ $NO_COMMIT ]; then
+if [ $NO_COMMIT -eq 1 ]; then
     echo "--no-commit was given, skipping commit"
     exit 0
 fi
@@ -85,7 +85,7 @@ git add $postPath
 git commit -m "Create post $postPath"
 git fetch && git rebase
 
-if [ $NO_PUSH ]; then
+if [ $NO_PUSH -eq 1 ]; then
     echo "--no-push was given, skipping push"
     exit 0
 fi
