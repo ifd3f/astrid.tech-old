@@ -17,7 +17,7 @@ import { getLanguageTags, getUserTagOverrides } from "./tags";
 import { buildTWTXT } from "./twtxt";
 import { serializeJS } from "./util";
 
-const contentDir = path.join(process.cwd(), "content");
+const contentDir = path.join(process.cwd(), "../content");
 const TAGS_D_TS = `import { Tag } from "../lib/cache";
 declare const tags: Tag[];
 export default tags;`;
