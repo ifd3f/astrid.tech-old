@@ -1,5 +1,5 @@
-import { Project, ProjectMeta } from "../../types/types";
-import { getConnection } from "./util";
+import { Database } from 'better-sqlite3';
+import { Project, ProjectMeta } from "../types";
 
 export function rowToProjectMeta(
   row: any,
@@ -20,16 +20,14 @@ export function rowToProject(row: any, tags: string[]): Project<string> {
   };
 }
 
-export function getProjectSlugs(): string[] {
-  const db = getConnection();
+export function getProjectSlugs(db: Database): string[] {
   return db
     .prepare("SELECT slug FROM project")
     .all()
     .map(({ slug }) => slug);
 }
 
-export function getProject(slug: string): Project<string> {
-  const db = getConnection();
+export function getProject(db: Database, slug: string): Project<string> {
   const project = db
     .prepare(
       `SELECT 
@@ -63,8 +61,7 @@ export type ProjectLink = {
   title: string;
 };
 
-export function getSimilarProjects(id: number): ProjectLink[] {
-  const db = getConnection();
+export function getSimilarProjects(db: Database, id: number): ProjectLink[] {
   const projects = db
     .prepare(
       `SELECT slug, title, SUM(t3.weight) as score FROM project
@@ -84,8 +81,7 @@ export function getSimilarProjects(id: number): ProjectLink[] {
   }));
 }
 
-export function getProjects(): Project<string>[] {
-  const db = getConnection();
+export function getProjects(db: Database): Project<string>[] {
   const projects = db
     .prepare(
       `SELECT 

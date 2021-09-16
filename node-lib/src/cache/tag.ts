@@ -1,11 +1,10 @@
-import { SiteObject } from "../../types/types";
+import { SiteObject } from "../types";
 import { excerptify } from "../markdown";
 import { getBlogPosts } from "./blog";
 import { getProjects } from "./project";
-import { getConnection } from "./util";
+import { Database } from 'better-sqlite3';
 
-export function getTags(): string[] {
-  const db = getConnection();
+export function getTags(db: Database): string[] {
   const results = db
     .prepare(
       `SELECT DISTINCT tag FROM project_tag
@@ -31,17 +30,18 @@ function getSortKey(object: SiteObject): number {
 }
 
 export async function getTagged(
+  db: Database,
   tag: string,
   excerptChars: number
 ): Promise<SiteObject[]> {
   const [projects, posts] = await Promise.all([
     Promise.all(
-      getProjects()
+      getProjects(db)
         .map((x) => ({ type: "p", ...x }))
         .map(excerptify(excerptChars))
     ),
     Promise.all(
-      getBlogPosts()
+      getBlogPosts(db)
         .map((x) => ({ type: "b", ...x }))
         .map(excerptify(excerptChars))
     ),

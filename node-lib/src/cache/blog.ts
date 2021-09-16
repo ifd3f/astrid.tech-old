@@ -1,7 +1,6 @@
-import { excerptify } from "src/markdown";
-import { BlogPost, BlogPostMeta } from "../../types/types";
+import { Database } from "better-sqlite3";
+import { BlogPost, BlogPostMeta } from "../types";
 import { getBlogSlug } from "../util";
-import { getConnection } from "./util";
 
 export type Path = {
   year: string;
@@ -30,8 +29,7 @@ export function rowToBlogPost(row: any, tags: string[]): BlogPost<string> {
   };
 }
 
-export function getBlogPostSlugs(): FQPath[] {
-  const db = getConnection();
+export function getBlogPostSlugs(db: Database): FQPath[] {
   const results = db
     .prepare("SELECT date AS dateStr, ordinal, slug FROM blog_post")
     .all() as {
@@ -49,8 +47,7 @@ export function getBlogPostSlugs(): FQPath[] {
   );
 }
 
-export function getBlogPost(path: Path): BlogPost<string> {
-  const db = getConnection();
+export function getBlogPost(db: Database, path: Path): BlogPost<string> {
   const row = db
     .prepare(
       `SELECT 
@@ -84,8 +81,7 @@ export function getBlogPost(path: Path): BlogPost<string> {
   return rowToBlogPost(row, tags);
 }
 
-export function getBlogPosts(): BlogPost<string>[] {
-  const db = getConnection();
+export function getBlogPosts(db: Database): BlogPost<string>[] {
   const rows = db
     .prepare(
       `SELECT 
