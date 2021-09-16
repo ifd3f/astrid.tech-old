@@ -1,16 +1,16 @@
 import "@fontsource/ibm-plex-sans";
 import "@fontsource/roboto-mono";
-import "prismjs/themes/prism-tomorrow.css";
+import "highlight.js/styles/an-old-hope.css";
 import "katex/dist/katex.min.css";
 import { AppProps } from "next/app";
+import { useRouter } from "next/router";
 import { useEffect } from "react";
 import { CookiesProvider } from "react-cookie";
+import ReactGA from "react-ga";
 import { APIProvider } from "../components/api/APIProvider";
 import { TagTableProvider } from "../components/tags/TagTableProvider";
 import tags from "../data/tags";
 import "../styles/custom.scss";
-import ReactGA from "react-ga";
-import { useRouter } from "next/router";
 
 ReactGA.initialize("UA-171109022-1");
 

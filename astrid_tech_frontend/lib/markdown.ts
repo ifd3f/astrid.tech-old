@@ -1,12 +1,13 @@
 import fs from "fs";
 import { join } from "path";
+import rehypeHighlight from "rehype-highlight";
 import remark from "remark";
 import VFile from "vfile";
 import { truncateKeepWords } from "./util";
-const smartypants = require("@silvenon/remark-smartypants");
+
 const graphviz = require("remark-graphviz");
 const math = require("remark-math");
-const prism = require("remark-prism");
+const smartypants = require("@silvenon/remark-smartypants");
 const unwrapImages = require("remark-unwrap-images");
 const picture = require("rehype-picture");
 const remark2rehype = require("remark-rehype");
@@ -55,10 +56,10 @@ export async function renderMarkdown(md: string, assetRoot: string) {
     .use(unwrapImages)
     .use(smartypants)
     .use(math)
-    .use(prism, { exclude: "dot" })
     .use(footnotes)
     .use(remark2rehype, { allowDangerousHtml: true })
     .use(raw)
+    .use(rehypeHighlight)
     .use(urls, convertRelativeFileRef)
     .use(katex)
     .use(picture)
