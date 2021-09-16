@@ -1,7 +1,7 @@
 import { promises as fs } from "fs";
 import matter from "gray-matter";
 import path, { join, ParsedPath, relative } from "path";
-import { Project, ProjectStatus } from "../types/types";
+import { Project, ProjectStatus } from "@astrid.tech/node-lib";
 import { walkArr } from "./util";
 
 function getSlug(parsed: ParsedPath) {

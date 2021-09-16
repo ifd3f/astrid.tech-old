@@ -1,7 +1,7 @@
+import { BlogPost } from "@astrid.tech/node-lib";
 import { promises as fs } from "fs";
 import matter from "gray-matter";
 import path, { join, ParsedPath, relative } from "path";
-import { BlogPost } from "../types/types";
 import { walkArr } from "./util";
 
 function getSlug(parsed: ParsedPath) {

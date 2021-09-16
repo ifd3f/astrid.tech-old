@@ -97,7 +97,6 @@
   },
   "devDependencies": {
     "@next/eslint-plugin-next": "^11.1.2",
-    "@types/async-redis": "^1.1.2",
     "@types/better-sqlite3": "^5.4.1",
     "@types/classnames": "^2.3.1",
     "@types/hsl-to-hex": "^1.0.0",

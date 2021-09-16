@@ -74,7 +74,7 @@ async function buildBlogPostCache(db: Database) {
 
   db.transaction(() => {
     ids.map(({ id, post }) =>
-      post.tags.map((tag) => insertTag.run({ tag, postId: id }))
+      post.tags.map((tag: any) => insertTag.run({ tag, postId: id }))
     );
   })();
 }
@@ -207,7 +207,7 @@ async function buildProjectCache(db: Database) {
 
   db.transaction(() => {
     projects.forEach((project, i) =>
-      project.tags.map((tag) =>
+      project.tags.map((tag: any) =>
         insertTag.run({ projectId: results[i].lastInsertRowid, tag })
       )
     );

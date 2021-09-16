@@ -9,12 +9,22 @@
   "license": "AGPLv3",
   "private": true,
   "dependencies": {
+    "@astrid.tech/node-lib": "file:../node-lib",
+    "@types/js-yaml": "^4.0.3",
+    "@types/walk": "^2.3.1",
     "better-sqlite3": "^7.4.3",
-    "@astrid.tech/node-lib": "file:../node-lib"
+    "feed": "^4.2.2",
+    "gray-matter": "^4.0.3",
+    "js-yaml": "^4.1.0",
+    "seedrandom": "^3.0.5",
+    "walk": "^2.3.14"
   },
   "devDependencies": {
+    "@tsconfig/recommended": "^1.0.1",
     "@types/better-sqlite3": "^7.4.0",
     "@types/node": "^16.9.1",
+    "@types/seedrandom": "^3.0.1",
+    "tsc": "^2.0.3",
     "typescript": "^4.4.3"
   }
 }

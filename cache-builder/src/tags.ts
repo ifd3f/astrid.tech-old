@@ -1,8 +1,8 @@
 import { promises as fs } from "fs";
 import yaml from "js-yaml";
 import { join } from "path";
-import { getContrastingTextColor } from "../lib/util";
-import { Tag } from "../types/types";
+import { getContrastingTextColor } from "@astrid.tech/node-lib";
+import { Tag } from "@astrid.tech/node-lib";
 
 type LinguistEntry = {
   color: string;

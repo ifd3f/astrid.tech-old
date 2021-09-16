@@ -48,10 +48,20 @@
   dependencies:
     "@types/unist" "*"
 
+"@types/hsl-to-hex@^1.0.0":
+  version "1.0.0"
+  resolved "https://registry.yarnpkg.com/@types/hsl-to-hex/-/hsl-to-hex-1.0.0.tgz#31d73d564b576077cf562d2796711ec8364fe0d8"
+  integrity sha512-QJOVWDdZF9Dytbt+HdzXKygmK7BNm8fAb7XrLOVChTXIz7DfRbv+w6Xax/GFWpPtze+V2WeGJJn3M8MOOPglTg==
+
 "@types/http-cache-semantics@*":
   version "4.0.1"
   resolved "https://registry.yarnpkg.com/@types/http-cache-semantics/-/http-cache-semantics-4.0.1.tgz#0ea7b61496902b95890dc4c3a116b60cb8dae812"
   integrity sha512-SZs7ekbP8CN0txVG2xVRH6EgKmEm31BOxA07vkFaETzZz1xh+cbt8BcI0slpymvwhx5dlFnQG2rTlPVQn+iRPQ==
+
+"@types/js-yaml@^4.0.3":
+  version "4.0.3"
+  resolved "https://registry.yarnpkg.com/@types/js-yaml/-/js-yaml-4.0.3.tgz#9f33cd6fbf0d5ec575dc8c8fc69c7fec1b4eb200"
+  integrity sha512-5t9BhoORasuF5uCPr+d5/hdB++zRFUTMIZOzbNkr+jZh3yQht4HYbRDyj9fY8n2TZT30iW9huzav73x4NikqWg==
 
 "@types/json5@^0.0.29":
   version "0.0.29"
@@ -98,6 +108,13 @@
   version "2.0.6"
   resolved "https://registry.yarnpkg.com/@types/unist/-/unist-2.0.6.tgz#250a7b16c3b91f672a24552ec64678eeb1d3a08d"
   integrity sha512-PBjIUxZHOuj0R15/xuwJYjFi+KZdNFrehocChv4g5hu6aFroHue8m0lBP0POdK2nKzbw0cgV1mws8+V/JAcEkQ==
+
+"@types/walk@^2.3.1":
+  version "2.3.1"
+  resolved "https://registry.yarnpkg.com/@types/walk/-/walk-2.3.1.tgz#985d9ddb2690c32e9b377548cec426918d7248c0"
+  integrity sha512-gEH9G1wA3xKfAgQmJJA/Kdk5Ne9xI1Gn/q2Dwfl06m7IsgEBUUBVzSVfbi9zf6KYL4xfA6tFtzOQk9p0vBzLDg==
+  dependencies:
+    "@types/node" "*"
 
 "@ungap/promise-all-settled@1.1.2":
   version "1.1.2"
@@ -2016,6 +2033,11 @@ safe-buffer@~5.1.0, safe-buffer@~5.1.1:
   version "5.1.2"
   resolved "https://registry.yarnpkg.com/safe-buffer/-/safe-buffer-5.1.2.tgz#991ec69d296e0313747d59bdfd2b745c35f8828d"
   integrity sha512-Gd2UZBJDkXlY7GbJxfsE8/nvKkUEU1G38c1siN6QP6a9PT9MmHB8GnpscSmMJSoF8LOIrt8ud/wPtojys4G6+g==
+
+seedrandom@^3.0.5:
+  version "3.0.5"
+  resolved "https://registry.yarnpkg.com/seedrandom/-/seedrandom-3.0.5.tgz#54edc85c95222525b0c7a6f6b3543d8e0b3aa0a7"
+  integrity sha512-8OwmbklUNzwezjGInmZ+2clQmExQPvomqjL7LFqOYqtmuxRgQYqOD3mHaU+MvZn5FLUeVxVfQjwLZW/n/JFuqg==
 
 semver@^5.4.1, semver@^5.6.0:
   version "5.7.1"
