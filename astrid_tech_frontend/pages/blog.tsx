@@ -1,7 +1,8 @@
-import * as vs from "components/card/values";
 import { InferGetStaticPropsType } from "next";
 import React, { FC } from "react";
 import { FaRssSquare } from "react-icons/fa";
+import { GrDocumentTxt } from "react-icons/gr";
+import { BiCodeCurly } from "react-icons/bi";
 import { Col, Container, Row } from "reactstrap";
 import { PostBrief } from "../components/blog/feed";
 import { PageHeading } from "../components/layout";
@@ -19,16 +20,47 @@ export const getStaticProps = async () => {
   };
 };
 
-const Page: FC<InferGetStaticPropsType<typeof getStaticProps>> = ({
+const FeedLinks = () => (
+  <>
+    <p>My posts are also available in the following formats:</p>
+    <ul>
+      <li>
+        <a href={`${process.env.publicRoot}/rss.xml`}>
+          <FaRssSquare title="astrid.tech RSS Feed" /> RSS
+        </a>
+      </li>
+      <li>
+        <a href={`${process.env.publicRoot}/atom.xml`}>
+          <FaRssSquare title="astrid.tech RSS Feed" /> Atom{" "}
+        </a>
+      </li>
+      <li>
+        <a href={`${process.env.publicRoot}/feed.json`}>
+          <BiCodeCurly title="astrid.tech JSON Feed" /> JSON Feed{" "}
+        </a>{" "}
+        (<a href="https://www.jsonfeed.org/">more info</a>)
+      </li>
+      <li>
+        <a href={`${process.env.publicRoot}/tw.txt`}>
+          <GrDocumentTxt /> twtxt
+        </a>{" "}
+        (
+        <a href="https://twtxt.readthedocs.io/en/stable/user/intro.html">
+          more info
+        </a>
+        )
+      </li>
+    </ul>
+  </>
+);
+
+export const BlogPage: FC<InferGetStaticPropsType<typeof getStaticProps>> = ({
   posts,
 }) => {
   const meta = "Archives of all my posts";
 
   const blogFeed = (
     <>
-      <a href={`${process.env.publicRoot}/atom.xml`}>
-        <FaRssSquare title="astrid.tech Atom Feed" />
-      </a>
       {posts.map((post) => (
         <PostBrief key={post.slug} post={convertBlogPostToObjectDate(post)} />
       ))}
@@ -40,16 +72,15 @@ const Page: FC<InferGetStaticPropsType<typeof getStaticProps>> = ({
     <Layout currentLocation="blog">
       <SEO title="Blog" description={meta} />
 
-      <PageHeading
-        title="Blog Archive"
-        bgColor="#1a237e"
-        textColor="#ffffff"
-      />
+      <PageHeading title="Blog Archive" bgColor="#1a237e" textColor="#ffffff" />
 
       <Container style={{ paddingTop: 20 }}>
         <Row className="justify-content-center">
           <Col className={styles.blogContentContainer} lg="8">
             {blogFeed}
+          </Col>
+          <Col className={styles.blogContentContainer} lg="4">
+            <FeedLinks />
           </Col>
         </Row>
       </Container>
@@ -57,4 +88,4 @@ const Page: FC<InferGetStaticPropsType<typeof getStaticProps>> = ({
   );
 };
 
-export default Page;
+export default BlogPage;
