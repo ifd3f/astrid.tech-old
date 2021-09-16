@@ -1,5 +1,4 @@
 import { FC, ReactNode } from "react";
-import { BLMBanner } from "./blm";
 import { CookieNotification } from "./cookie-notification";
 import FooterSection from "./footer";
 import MainNavbar, { NavBarLinks } from "./navbar";
