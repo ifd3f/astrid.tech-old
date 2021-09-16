@@ -1,4 +1,4 @@
-import { excerptify } from "lib/markdown";
+import { excerptify } from "src/markdown";
 import { BlogPost, BlogPostMeta } from "../../types/types";
 import { getBlogSlug } from "../util";
 import { getConnection } from "./util";
