@@ -8,7 +8,6 @@ import { truncateKeepWords } from "./util";
 
 const graphviz = require("remark-graphviz");
 const math = require("remark-math");
-const smartypants = require("@silvenon/remark-smartypants");
 const unwrapImages = require("remark-unwrap-images");
 const picture = require("rehype-picture");
 const remark2rehype = require("remark-rehype");
@@ -55,7 +54,6 @@ export async function renderMarkdown(md: string, assetRoot: string) {
     .use(emoji)
     .use(gfm)
     .use(unwrapImages)
-    .use(smartypants)
     .use(math)
     .use(footnotes)
     .use(remark2rehype, { allowDangerousHtml: true })
