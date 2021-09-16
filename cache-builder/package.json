@@ -7,6 +7,7 @@
   "main": "index.js",
   "author": "Astrid Yu",
   "license": "AGPLv3",
+  "type": "module",
   "private": true,
   "dependencies": {
     "@astrid.tech/node-lib": "file:../node-lib",

@@ -2,7 +2,8 @@ import fs from "fs";
 import { join } from "path";
 import rehypeHighlight from "rehype-highlight";
 import remark from "remark";
-import VFile from "vfile";
+import { VFile } from "vfile";
+
 import { truncateKeepWords } from "./util";
 
 const graphviz = require("remark-graphviz");
@@ -43,7 +44,7 @@ export async function renderMarkdown(md: string, assetRoot: string) {
     return url;
   }
 
-  const vfile = VFile(md);
+  const vfile = new VFile(md);
   vfile.data = { destinationDir: join("./public/_", assetRoot) };
 
   const out = await unified()

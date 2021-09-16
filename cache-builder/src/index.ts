@@ -237,8 +237,8 @@ async function main(dbUrl: string) {
   await Promise.all([
     exportTagOverrideData(db, path.join(dataDir, "tags.js")),
     generateLicenses(path.join(dataDir, "licenses.json")),
-    buildRSSFeed(path.join(__dirname, "../public")),
-    buildTWTXT(path.join(__dirname, "../public")),
+    buildRSSFeed(db, path.join(__dirname, "../public")),
+    buildTWTXT(db, path.join(__dirname, "../public")),
   ]);
 }
 

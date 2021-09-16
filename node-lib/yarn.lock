@@ -104,17 +104,15 @@
   dependencies:
     "@types/node" "*"
 
+"@types/seedrandom@^3.0.1":
+  version "3.0.1"
+  resolved "https://registry.yarnpkg.com/@types/seedrandom/-/seedrandom-3.0.1.tgz#1254750a4fec4aff2ebec088ccd0bb02e91fedb4"
+  integrity sha512-giB9gzDeiCeloIXDgzFBCgjj1k4WxcDrZtGl6h1IqmUPlxF+Nx8Ve+96QCyDZ/HseB/uvDsKbpib9hU5cU53pw==
+
 "@types/unist@*", "@types/unist@^2.0.0", "@types/unist@^2.0.2", "@types/unist@^2.0.3":
   version "2.0.6"
   resolved "https://registry.yarnpkg.com/@types/unist/-/unist-2.0.6.tgz#250a7b16c3b91f672a24552ec64678eeb1d3a08d"
   integrity sha512-PBjIUxZHOuj0R15/xuwJYjFi+KZdNFrehocChv4g5hu6aFroHue8m0lBP0POdK2nKzbw0cgV1mws8+V/JAcEkQ==
-
-"@types/walk@^2.3.1":
-  version "2.3.1"
-  resolved "https://registry.yarnpkg.com/@types/walk/-/walk-2.3.1.tgz#985d9ddb2690c32e9b377548cec426918d7248c0"
-  integrity sha512-gEH9G1wA3xKfAgQmJJA/Kdk5Ne9xI1Gn/q2Dwfl06m7IsgEBUUBVzSVfbi9zf6KYL4xfA6tFtzOQk9p0vBzLDg==
-  dependencies:
-    "@types/node" "*"
 
 "@ungap/promise-all-settled@1.1.2":
   version "1.1.2"

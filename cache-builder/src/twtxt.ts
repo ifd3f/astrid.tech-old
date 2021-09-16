@@ -5,6 +5,7 @@ import {
   getBlogShortLinkCode,
   getMarkdownExcerpt,
 } from "@astrid.tech/node-lib";
+import { Database } from "better-sqlite3";
 import { promises as fs } from "fs";
 import path from "path";
 
@@ -48,9 +49,9 @@ async function writeTWTXT(assetRoot: string, entries: TWTXTEntry[]) {
   await fs.writeFile(path.join(assetRoot, "tw.txt"), content);
 }
 
-export async function buildTWTXT(assetRoot: string) {
+export async function buildTWTXT(db: Database, assetRoot: string) {
   console.log("Building tw.txt");
-  const posts = getBlogPosts().map((p) => convertBlogPostToObjectDate(p));
+  const posts = getBlogPosts(db).map((p) => convertBlogPostToObjectDate(p));
   const feed = await createTWTXT("aay.tw", posts);
   await writeTWTXT(assetRoot, feed);
 }

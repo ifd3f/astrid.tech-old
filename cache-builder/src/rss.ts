@@ -6,6 +6,7 @@ import {
   getBlogSlug,
   renderMarkdown,
 } from "@astrid.tech/node-lib";
+import { Database } from "better-sqlite3";
 import { Feed, Item } from "feed";
 import { promises as fs } from "fs";
 import path from "path";
@@ -70,9 +71,9 @@ async function writeFeedData(assetRoot: string, feed: Feed) {
   ]);
 }
 
-export async function buildRSSFeed(assetRoot: string) {
+export async function buildRSSFeed(db: Database, assetRoot: string) {
   console.log("Building RSS, Atom, and JSON feeds");
-  const posts = getBlogPosts().map((p) => convertBlogPostToObjectDate(p));
+  const posts = getBlogPosts(db).map((p) => convertBlogPostToObjectDate(p));
   const feed = await createRSSFeed("astrid.tech", posts);
   await writeFeedData(assetRoot, feed);
 }
