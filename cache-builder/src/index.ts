@@ -214,11 +214,11 @@ async function buildProjectCache(db: Database) {
   })();
 }
 
-async function main(dbUrl: string) {
-  await fs.rm(dbUrl, { force: true });
+export default async function main() {
+  await fs.rm("content.sqlite3", { force: true });
 
   const dataDir = path.join(__dirname, "../data");
-  const db = sqlite3(dbUrl, {});
+  const db = sqlite3("content.sqlite3", {});
   const initSchema = (
     await fs.readFile(path.join(__dirname, "schema.sql"))
   ).toString();
@@ -241,7 +241,3 @@ async function main(dbUrl: string) {
     buildTWTXT(db, path.join(__dirname, "../public")),
   ]);
 }
-
-main("content.sqlite3").catch((e) => {
-  throw e;
-});

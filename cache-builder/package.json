@@ -9,6 +9,9 @@
   "license": "AGPLv3",
   "type": "module",
   "private": true,
+  "scripts": {
+    "start": "npx ts-node src/index.ts --project tsconfig.json"
+  },
   "dependencies": {
     "@astrid.tech/node-lib": "file:../node-lib",
     "@types/js-yaml": "^4.0.3",
@@ -21,7 +24,7 @@
     "walk": "^2.3.14"
   },
   "devDependencies": {
-    "@tsconfig/recommended": "^1.0.1",
+    "@tsconfig/node14": "^1.0.1",
     "@types/better-sqlite3": "^7.4.0",
     "@types/node": "^16.9.1",
     "@types/seedrandom": "^3.0.1",

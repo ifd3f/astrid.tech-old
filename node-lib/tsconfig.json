@@ -5,5 +5,5 @@
     "outDir": "build/"
   },
   "exclude": ["node_modules"],
-  "include": ["next-env.d.ts", "**/*.ts", "**/*.tsx", "../astrid_tech_frontend/components/pathcache.ts"]
+  "include": ["**/*.ts"]
 }
