@@ -21,7 +21,7 @@ const slug = require("remark-slug");
 const gfm = require("remark-gfm");
 const urls = require("rehype-urls");
 const excerpt = require("remark-excerpt");
-const strip = require("strip-markdown");
+const toPlainText = require("remark-plain-text");
 const emoji = require("remark-emoji");
 
 const publicRoot = join(process.cwd(), "public");
@@ -70,7 +70,7 @@ export async function renderMarkdown(md: string, assetRoot: string) {
 
 export async function getMarkdownExcerpt(md: string, maxChars: number) {
   const text = (
-    await remark().use(excerpt).use(strip).process(md.trim())
+    await remark().use(excerpt).use(toPlainText).process(md)
   ).toString() as string;
   const result = truncateKeepWords(text, maxChars);
   if (result.neededTruncation) {
