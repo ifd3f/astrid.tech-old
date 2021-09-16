@@ -5,6 +5,8 @@
     "module": "esnext",
     "allowSyntheticDefaultImports": true,
     "downlevelIteration": true,
+    "skipLibCheck": true,
+    "skipDefaultLibCheck": true,
     "target": "es5",
     "allowJs": true,
     "sourceMap": true,

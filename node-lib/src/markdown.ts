@@ -1,29 +1,31 @@
 import fs from "fs";
 import { join } from "path";
 import rehypeHighlight from "rehype-highlight";
+import raw from "rehype-raw";
+import html from "rehype-stringify";
 import remark from "remark";
+import emoji from "remark-emoji";
+import footnotes from "remark-footnotes";
+import gfm from "remark-gfm";
+import math from "remark-math";
+import markdown from "remark-parse";
+import remark2rehype from "remark-rehype";
+import slug from "remark-slug";
+import unwrapImages from "remark-unwrap-images";
+import { unified } from "unified";
 import { VFile } from "vfile";
-
 import { truncateKeepWords } from "./util";
 
-const graphviz = require("remark-graphviz");
-const math = require("remark-math");
-const unwrapImages = require("remark-unwrap-images");
-const picture = require("rehype-picture");
-const remark2rehype = require("remark-rehype");
-const html = require("rehype-stringify");
+// These have broken d.ts
 const katex = require("rehype-katex");
-const footnotes = require("remark-footnotes");
-const raw = require("rehype-raw");
+const toPlainText = require("remark-plain-text");
+
+// These do not have a d.ts
+const graphviz = require("remark-graphviz");
+const picture = require("rehype-picture");
 const oembed = require("remark-oembed");
-const markdown = require("remark-parse");
-const unified = require("unified");
-const slug = require("remark-slug");
-const gfm = require("remark-gfm");
 const urls = require("rehype-urls");
 const excerpt = require("remark-excerpt");
-const toPlainText = require("remark-plain-text");
-const emoji = require("remark-emoji");
 
 const publicRoot = join(process.cwd(), "public");
 
@@ -60,9 +62,9 @@ export async function renderMarkdown(md: string, assetRoot: string) {
     .use(raw)
     .use(rehypeHighlight)
     .use(urls, convertRelativeFileRef)
-    .use(katex)
+    .use(katex, { throwOnError: true })
     .use(picture)
-    .use(html, { sanitize: false })
+    .use(html as any)
     .process(vfile);
 
   return out.toString() as string;
