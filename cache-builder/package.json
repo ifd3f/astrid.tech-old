@@ -1,0 +1,9 @@
+{
+  "name": "@astrid.tech/cache-builder",
+  "version": "1.0.0",
+  "description": "Conglomerates everything in the content folder into a convenient SQLite database",
+  "main": "index.js",
+  "author": "Astrid Yu",
+  "license": "AGPLv3",
+  "private": true
+}

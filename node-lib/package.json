@@ -1,0 +1,10 @@
+{
+  "name": "@astrid.tech/node-lib",
+  "version": "1.0.0",
+  "main": "index.js",
+  "license": "AGPLv3",
+  "description": "Shared library utilities for node projects",
+  "repository": "https://github.com/astralbijection/astrid.tech",
+  "author": "Astrid Yu",
+  "private": true
+}
