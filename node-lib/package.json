@@ -1,7 +1,7 @@
 {
   "name": "@astrid.tech/node-lib",
   "version": "1.0.0",
-  "main": "src/index.js",
+  "main": "src/index.ts",
   "license": "AGPLv3",
   "description": "Shared library utilities for node projects",
   "repository": "https://github.com/astralbijection/astrid.tech",

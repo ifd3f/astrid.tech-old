@@ -1,13 +1,14 @@
-import sqlite3, { Database } from "better-sqlite3";
-import { promises as fs } from "fs";
-import path from "path";
 import {
   getContrastingTextColor,
   getHSLString,
   getPersistentColor,
   RichColorTheme,
-} from "@astrid.tech/node-lib/lib/util";
-import { convertProjectToStringDate, Tag } from "@astrid.tech/node-lib/types/types";
+  convertProjectToStringDate,
+ Tag,
+} from "@astrid.tech/node-lib";
+import sqlite3, { Database } from "better-sqlite3";
+import { promises as fs } from "fs";
+import path from "path";
 import { copyAssets, mapData } from "./assets";
 import { getBlogPosts } from "./blog";
 import { generateLicenses } from "./licenses";
