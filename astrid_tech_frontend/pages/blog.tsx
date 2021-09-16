@@ -19,23 +19,10 @@ export const getStaticProps = async () => {
   };
 };
 
-const hCardValues = [
-  vs.name,
-  vs.pronouns,
-  vs.hobbies,
-  vs.occupation,
-  vs.email,
-  vs.linux,
-  vs.website,
-  vs.github,
-  vs.matrix,
-];
-
 const Page: FC<InferGetStaticPropsType<typeof getStaticProps>> = ({
   posts,
 }) => {
-  const title = "Homepage";
-  const meta = "Welcome to my website!";
+  const meta = "Archives of all my posts";
 
   const blogFeed = (
     <>
@@ -51,10 +38,10 @@ const Page: FC<InferGetStaticPropsType<typeof getStaticProps>> = ({
 
   return (
     <Layout currentLocation="blog">
-      <SEO title={title} description={meta} />
+      <SEO title="Blog" description={meta} />
 
       <PageHeading
-        title="Blog Archives"
+        title="Blog Archive"
         bgColor="#1a237e"
         textColor="#ffffff"
       />

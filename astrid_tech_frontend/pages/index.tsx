@@ -16,7 +16,7 @@ import { convertBlogPostToObjectDate } from "../types/types";
 
 export const getStaticProps = async () => {
   const posts = await Promise.all(
-    getBlogPosts().slice(0, 10).map(excerptify(280))
+    getBlogPosts().slice(0, 7).map(excerptify(280))
   );
   return {
     props: { posts },
@@ -38,8 +38,8 @@ const hCardValues = [
 const Page: FC<InferGetStaticPropsType<typeof getStaticProps>> = ({
   posts,
 }) => {
-  const title = "Homepage";
-  const meta = "Welcome to my website!";
+  const description =
+    "My personal corner of the internet devoted to tech shenanigans and other stuff";
 
   const blogFeed = (
     <>
@@ -61,13 +61,10 @@ const Page: FC<InferGetStaticPropsType<typeof getStaticProps>> = ({
 
   return (
     <Layout currentLocation="home">
-      <SEO title={title} description={meta} />
+      <SEO title="Astrid Yu" description={description} />
 
       <PageHeading title="astrid.tech" bgColor="#1a237e" textColor="#ffffff">
-        <p className="p-note">
-          My personal corner of the internet devoted to tech shenanigans and
-          other stuff
-        </p>
+        <p className="p-note">{description}</p>
       </PageHeading>
 
       <Container style={{ paddingTop: 20 }}>
