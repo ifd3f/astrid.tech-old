@@ -7,8 +7,8 @@
   "main": "index.js",
   "author": "Astrid Yu",
   "license": "AGPLv3",
-  "type": "module",
   "private": true,
+  "bin": "./src/index.ts",
   "scripts": {
     "start": "npx ts-node src/index.ts --project tsconfig.json"
   },
@@ -24,7 +24,7 @@
     "walk": "^2.3.14"
   },
   "devDependencies": {
-    "@tsconfig/node14": "^1.0.1",
+    "@tsconfig/node16": "^1.0.1",
     "@types/better-sqlite3": "^7.4.0",
     "@types/node": "^16.9.1",
     "@types/seedrandom": "^3.0.1",
