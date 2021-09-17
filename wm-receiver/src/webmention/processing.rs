@@ -1,6 +1,7 @@
 use std::{error::Error, ops::Add, path::Path};
 
 use chrono::{DateTime, Duration, NaiveDateTime, TimeZone, Utc};
+use diesel::SqliteConnection;
 use scraper::{Html, Selector};
 use url::Url;
 
@@ -11,16 +12,14 @@ use crate::{
 
 use super::data::{ RelUrl, Webmention};
 
-#[derive(Queryable, Identifiable, Debug)]
-#[table_name = "mentions"]
-struct PendingRequest<'a> {
-    id: i32,
+#[derive(Queryable, Debug)]
+pub struct PendingRequest<'a> {
+    id: isize,
     source_url: &'a str,
     target_url: &'a str,
     sender_ip: &'a str,
-    processing_attempts: i32,
+    processing_attempts: isize,
     mentioned_on: NaiveDateTime,
-    processed_on: Option<NaiveDateTime>,
 }
 
 #[derive(Identifiable, Debug)]
@@ -41,7 +40,7 @@ struct GatheredWebmentionData<'a> {
 }
 
 impl<'a> PendingRequest<'a> {
-    pub async fn process(self, wm_dir: impl AsRef<Path>) -> Result<(), Box<dyn Error>> {
+    pub async fn process(self, db: &SqliteConnection, wm_dir: impl AsRef<Path>) -> Result<(), Box<dyn Error>> {
         let html = self.get_html().await?;
         let rel_url = self.extract_data_from_html(html.as_str());
         let existing_mention = read_existing_webmention(

@@ -1,15 +1,14 @@
 use std::{io, net::SocketAddr};
 
 use crate::db::get_db;
-use crate::diesel::RunQueryDsl;
-use crate::schema::mentions::dsl::*;
+use crate::webmention::processing::PendingRequest;
 use crate::webmention::MentionConfig;
 use chrono::Utc;
 use diesel::insert_into;
-use rocket::State;
 use rocket::form::Form;
 use rocket::http::Status;
 use rocket::response::status::BadRequest;
+use rocket::State;
 
 #[derive(FromForm)]
 pub struct WebmentionInput<'f> {
@@ -23,6 +22,9 @@ pub fn receive_webmention(
     config: &State<MentionConfig>,
     params: Form<WebmentionInput>,
 ) -> Result<(), BadRequest<String>> {
+    use crate::schema::mentions::dsl::*;
+    use diesel::prelude::*;
+
     let sender: String = remote_addr.to_string();
     let now = Utc::now();
 
@@ -38,12 +40,35 @@ pub fn receive_webmention(
 
 #[derive(FromForm)]
 pub struct ProcessWebmentionsRequest {
-    limit: Option<u32>,
+    limit: Option<i64>,
 }
 
 /// Schecules a task to process all the stored webmentions. This endpoint should be protected
 /// and called on a cron job.
 #[post("/api/rpc/processWebmentions", data = "<params>")]
 pub async fn process_webmentions(params: Form<ProcessWebmentionsRequest>) -> Status {
+    use crate::schema::mentions::dsl::*;
+    use diesel::prelude::*;
+
+    let limit = params.limit.unwrap_or(100);
+    let db = get_db();
+
+    let requests = mentions
+        .select((
+            id,
+            source_url,
+            target_url,
+            sender_ip,
+            processing_attempts,
+            mentioned_on,
+        ))
+        .filter(processing_status.ne(2).and(processing_attempts.lt(10)))
+        .limit(limit)
+        .load::<PendingRequest>(&db)
+        .unwrap();
+    for request in requests {
+        request.process(&db, "webmentions").await.unwrap();
+    }
+
     Status::Ok
 }
