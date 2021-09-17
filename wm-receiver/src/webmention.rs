@@ -5,6 +5,10 @@ use url::Url;
 
 use crate::schema::mentions;
 
+pub mod data;
+pub mod processing;
+pub mod writing;
+
 #[derive(Debug)]
 pub struct MentionConfig {
     pub allowed_target_hosts: HashSet<String>,
@@ -57,7 +61,7 @@ impl MentionConfig {
             target_url,
             sender_ip,
             processing_status,
-            mentioned_on
+            mentioned_on,
         })
     }
 }
@@ -86,7 +90,7 @@ pub struct InsertMention<'a> {
     target_url: &'a str,
     sender_ip: &'a str,
     processing_status: i32,
-    mentioned_on: NaiveDateTime
+    mentioned_on: NaiveDateTime,
 }
 
 #[cfg(test)]
