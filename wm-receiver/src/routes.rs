@@ -1,7 +1,9 @@
 use std::net::SocketAddr;
 
+use diesel::insert_into;
 use rocket::{http::RawStr, request::Form, response::status::BadRequest, State};
-
+use crate::schema::mentions::dsl::*;
+use crate::diesel::RunQueryDsl;
 use crate::db::get_db;
 use crate::webmention::MentionConfig;
 
@@ -17,14 +19,14 @@ pub fn receive_webmention(
     config: State<MentionConfig>,
     params: Form<WebmentionInput>,
 ) -> Result<(), BadRequest<String>> {
-    let db = get_db();
-    let sender_ip = remote_addr.to_string();
+    let sender: String = remote_addr.to_string();
 
     let mention = config
-        .create_mention(params.source, params.target, sender_ip.as_str(), 0)
+        .create_mention(params.source, params.target, sender.as_str(), 0)
         .map_err(|e| e.into())?;
 
-    //insert_into(mentions::table).values(&mention).execute(&db);
+    let db = get_db();
+    insert_into(mentions).values(&mention).execute(&db).unwrap();
 
     Ok(())
 }

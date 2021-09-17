@@ -18,7 +18,7 @@ use crate::{db::get_db, routes::*};
 
 mod db;
 mod routes;
-pub mod schema;
+mod schema;
 mod webmention;
 
 fn main() {
