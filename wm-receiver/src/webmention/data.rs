@@ -1,10 +1,10 @@
 use chrono::{DateTime, Utc};
 use serde::{Deserialize, Serialize};
 
-#[derive(Serialize, Deserialize)]
-pub struct RelUrl<'a> {
-    rels: Vec<&'a str>,
-    text: &'a str,
+#[derive(Serialize, Deserialize, Debug)]
+pub struct RelUrl {
+    pub rels: Vec<String>,
+    pub text: String,
 }
 
 pub enum MentionProcessingStatus {
@@ -17,13 +17,13 @@ pub enum MentionProcessingStatus {
 #[derive(Serialize, Deserialize)]
 pub struct Webmention<'a> {
     /// The normalized URL of the source that sent the webmention.
-    source_url: &'a str,
+    pub source_url: &'a str,
     /// The normalized URL of the target that is mentioned.
-    target_url: &'a str,
+    pub target_url: &'a str,
     /// When this mention was sent.
-    mentioned_on: DateTime<Utc>,
+    pub mentioned_on: DateTime<Utc>,
     /// When this mention was processed.
-    processed_on: DateTime<Utc>,
+    pub processed_on: DateTime<Utc>,
     /// The microformat data
-    rel_url: RelUrl<'a>,
+    pub rel_url: RelUrl,
 }

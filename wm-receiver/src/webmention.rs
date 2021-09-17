@@ -97,6 +97,8 @@ pub struct InsertMention<'a> {
 mod tests {
     use std::assert_matches::assert_matches;
 
+    use chrono::Utc;
+
     use crate::webmention::MentionRequestError;
 
     use super::MentionConfig;
@@ -114,39 +116,41 @@ mod tests {
 
     #[test]
     fn request_allowed_host_should_pass() {
+        let now = Utc::now();
         let config = get_config();
-
         let source = "https://someone.example.net/their/article";
         let target = "https://allowed.example.com/our/article";
         let sender = "1.2.3.4";
 
-        let result = config.create_mention(source, target, sender, 0).unwrap();
+        let result = config
+            .create_mention(source, target, sender, 0, now)
+            .unwrap();
 
         assert_eq!(result.target_url, target)
     }
 
     #[test]
     fn request_unknown_host_should_error() {
+        let now = Utc::now();
         let config = get_config();
-
         let source = "https://someone.example.net/their/article";
         let target = "https://facebook.com/our/article";
         let sender = "1.2.3.4";
 
-        let result = config.create_mention(source, target, sender, 0);
+        let result = config.create_mention(source, target, sender, 0, now);
 
         assert_matches!(result, Err(MentionRequestError::UnknownTargetHost(..)));
     }
 
     #[test]
     fn request_invalid_protocol_should_error() {
+        let now = Utc::now();
         let config = get_config();
-
         let source = "gopher://someone.example.net/their/article";
         let target = "https://allowed.example.com/our/article";
         let sender = "1.2.3.4";
 
-        let result = config.create_mention(source, target, sender, 0);
+        let result = config.create_mention(source, target, sender, 0, now);
 
         assert_matches!(result, Err(MentionRequestError::InvalidURL(..)));
     }
