@@ -1,4 +1,5 @@
-use std::collections::HashSet;
+use rocket::response::status::BadRequest;
+use std::{collections::HashSet, fmt::Display};
 use url::Url;
 
 use crate::schema::mentions;
@@ -54,6 +55,23 @@ impl MentionConfig {
             sender_ip,
             processing_status,
         })
+    }
+}
+
+impl<'a> Display for MentionRequestError<'a> {
+    fn fmt(&self, f: &mut std::fmt::Formatter<'_>) -> std::fmt::Result {
+        match self {
+            MentionRequestError::InvalidURL(url) => write!(f, "Invalid URL: {}", url),
+            MentionRequestError::UnknownTargetHost(host) => {
+                write!(f, "Unknown host for target param: {}", host)
+            }
+        }
+    }
+}
+
+impl<'a> Into<BadRequest<String>> for MentionRequestError<'a> {
+    fn into(self) -> BadRequest<String> {
+        BadRequest(Some(self.to_string()))
     }
 }
 
