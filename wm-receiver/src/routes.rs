@@ -32,3 +32,15 @@ pub fn receive_webmention(
 
     Ok(())
 }
+
+#[derive(FromForm)]
+pub struct ProcessWebmentionsRequest {
+    limit: Option<u32>
+}
+
+/// Schecules a task to process all the stored webmentions. This endpoint should be protected
+/// and called on a cron job.
+#[post("/api/rpc/processWebmentions", data = "<params>")]
+pub async fn process_webmentions(params: Form<ProcessWebmentionsRequest>) -> () {
+    ()
+}

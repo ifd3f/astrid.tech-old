@@ -7,7 +7,7 @@ use crate::schema::mentions;
 
 pub mod data;
 pub mod processing;
-pub mod writing;
+pub mod storage;
 
 #[derive(Debug)]
 pub struct MentionConfig {

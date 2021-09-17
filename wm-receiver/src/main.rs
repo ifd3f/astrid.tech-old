@@ -3,6 +3,8 @@
 #![feature(in_band_lifetimes)]
 #![feature(assert_matches)]
 
+extern crate serde_yaml;
+extern crate slug;
 extern crate dotenv;
 #[macro_use]
 extern crate rocket;

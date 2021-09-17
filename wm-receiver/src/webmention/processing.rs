@@ -1,9 +1,9 @@
-use std::ops::Add;
+use std::{error::Error, ops::Add};
 
 use chrono::{DateTime, Duration, NaiveDateTime, TimeZone, Utc};
 use scraper::{Html, Selector};
 
-use crate::schema::mentions;
+use crate::{schema::mentions, webmention::storage::StorageAction};
 
 use super::data::{RelUrl, Webmention};
 
@@ -39,6 +39,32 @@ struct GatheredWebmentionData<'a> {
 }
 
 impl<'a> PendingRequest<'a> {
+    pub async fn process(self) -> Result<(), Box<dyn Error>>{
+        let html = self.get_html().await?;
+        let rel_url = self.extract_data_from_html(html.as_str());
+        let existing_mention = todo!() as Option<Webmention>;
+        let now = Utc::now();
+
+        let (new_mention, result) = GatheredWebmentionData {
+            request: self,
+            rel_url,
+            existing: existing_mention,
+        }
+        .parse_to_mention(now);
+
+        let action = match (existing_mention, new_mention) {
+            (None, None) => todo!(),
+            (None, Some(n)) => StorageAction::CreateWebmention(n),
+            (Some(e), None) => StorageAction::DeleteWebmention {source_url: e.source_url, target_url: e.target_url },
+            (Some(e), Some(n)) => StorageAction::UpdateWebmention(n)
+        };
+    }
+
+    async fn get_html(&self) -> Result<String, Box<dyn std::error::Error>> {
+        let resp = reqwest::get(self.source_url).await?.text().await?;
+        Ok(resp)
+    }
+
     fn extract_data_from_html(&self, html: &'h str) -> Option<RelUrl> {
         let anchor_selector: Selector = Selector::parse("a").unwrap();
 
