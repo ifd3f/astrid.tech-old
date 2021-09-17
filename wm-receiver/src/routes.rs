@@ -1,14 +1,23 @@
-use std::collections::hash_map::RandomState;
+use std::net::SocketAddr;
 
-use rocket::http::{RawStr, Status};
+use rocket::{
+    http::{RawStr, Status},
+    Request, State,
+};
 
-use crate::{db::get_db, webmention::InsertMention};
+use crate::{db::get_db, webmention::MentionConfig};
 
 #[get("/api/webmention?<source>&<target>")]
-pub fn receive_webmention(source: &RawStr, target: &RawStr) -> Result<(), Status> {
+pub fn receive_webmention(
+    remote_addr: SocketAddr,
+    config: State<MentionConfig>,
+    source: &RawStr,
+    target: &RawStr,
+) -> Result<(), Status> {
     let db = get_db();
+    let sender_ip = remote_addr.to_string();
 
-    let mention = InsertMention::new(source, target, sender, 0);
+    let mention = config.create_mention(source, target, sender_ip.as_str(), 0);
 
     Ok(())
 }

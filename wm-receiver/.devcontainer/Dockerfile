@@ -2,6 +2,8 @@
 
 FROM mcr.microsoft.com/vscode/devcontainers/rust:0-1
 
+USER vscode
+
 # Rocket requires nightly rust
 RUN rustup default nightly
 RUN rustup component add rustfmt

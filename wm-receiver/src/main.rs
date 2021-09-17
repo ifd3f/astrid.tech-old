@@ -1,6 +1,7 @@
 #![feature(decl_macro)]
 #![feature(proc_macro_hygiene)]
 #![feature(in_band_lifetimes)]
+#![feature(assert_matches)]
 
 extern crate dotenv;
 #[macro_use]
@@ -30,7 +31,10 @@ fn main() {
 
     // Generate mention config
     let mention_config = MentionConfig {
-        allowed_target_hosts: target_hosts.split(",").map(String::new).collect(),
+        allowed_target_hosts: target_hosts
+            .split(",")
+            .map(|host| host.to_owned())
+            .collect(),
     };
 
     rocket::ignite()

@@ -18,6 +18,7 @@ reqwest = "0.11.2"
 rocket = "0.4.7"
 rocket_codegen = "0.4.7"
 scraper = "0.12.0"
+url = "*"
 
 [dependencies.diesel]
 default-features = false
