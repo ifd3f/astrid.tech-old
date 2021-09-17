@@ -12,17 +12,21 @@ name = "wm-receiver"
 path = "src/main.rs"
 
 [dependencies]
-chrono = "0.4.19"
 dotenv = "0.15.0"
 reqwest = "0.11.2"
 rocket = "0.4.7"
 rocket_codegen = "0.4.7"
 scraper = "0.12.0"
+serde = "*"
 url = "*"
+
+[dependencies.chrono]
+features = ["serde"]
+version = "*"
 
 [dependencies.diesel]
 default-features = false
-features = ["sqlite"]
+features = ["sqlite", "chrono"]
 version = "*"
 
 [dependencies.microformats_parser]

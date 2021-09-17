@@ -9,7 +9,7 @@ extern crate rocket;
 #[macro_use]
 extern crate diesel;
 
-use std::{collections::HashSet, env};
+use std::env;
 
 use dotenv::dotenv;
 use webmention::MentionConfig;
