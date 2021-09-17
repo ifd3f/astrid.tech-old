@@ -1,12 +1,12 @@
 [package]
-name = "wm-receiver"
-version = "0.1.0"
 authors = ["Astrid Yu <astrid@astrid.tech>"]
-edition = "2018"
 description = "A webmention receiver and processor."
-publish = false
+edition = "2018"
 homepage = "https://astrid.tech/projects/astrid-tech"
+name = "wm-receiver"
+publish = false
 repository = "https://github.com/astralbijection/astrid.tech.git"
+version = "0.1.0"
 
 [[bin]]
 name = "wm-receiver"
@@ -14,6 +14,7 @@ path = "src/main.rs"
 
 [dependencies]
 chrono = "0.4.19"
+diesel = "*"
 dotenv = "0.15.0"
 newbase60 = "0.1.0"
 reqwest = "0.11.2"
@@ -21,5 +22,8 @@ rocket = "0.4.7"
 rocket_codegen = "0.4.7"
 scraper = "0.12.0"
 
+[dependencies.microformats_parser]
+git = "https://gitlab.com/maxburon/microformats-parser.git"
+
 [dev-dependencies]
-rstest = "0.7.0"
+rstest = "0.11.0"
