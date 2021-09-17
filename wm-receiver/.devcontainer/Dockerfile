@@ -4,6 +4,7 @@ FROM mcr.microsoft.com/vscode/devcontainers/rust:0-1
 
 # Rocket requires nightly rust
 RUN rustup default nightly
+RUN rustup component add rustfmt
 
 # Useful CLI tools
 RUN cargo install diesel_cli cargo-add
