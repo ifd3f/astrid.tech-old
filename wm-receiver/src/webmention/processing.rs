@@ -1,11 +1,15 @@
-use std::{error::Error, ops::Add};
+use std::{error::Error, ops::Add, path::Path};
 
 use chrono::{DateTime, Duration, NaiveDateTime, TimeZone, Utc};
 use scraper::{Html, Selector};
+use url::Url;
 
-use crate::{schema::mentions, webmention::storage::StorageAction};
+use crate::{
+    schema::mentions,
+    webmention::storage::{read_existing_webmention, StorageAction},
+};
 
-use super::data::{RelUrl, Webmention};
+use super::data::{ RelUrl, Webmention};
 
 #[derive(Queryable, Identifiable, Debug)]
 #[table_name = "mentions"]
@@ -34,30 +38,36 @@ struct GatheredWebmentionData<'a> {
     request: PendingRequest<'a>,
     /// The rel_url data we found for this mention.
     rel_url: Option<RelUrl>,
-    /// The existing webmention data.
-    existing: Option<Webmention<'a>>,
 }
 
 impl<'a> PendingRequest<'a> {
-    pub async fn process(self) -> Result<(), Box<dyn Error>>{
+    pub async fn process(self, wm_dir: impl AsRef<Path>) -> Result<(), Box<dyn Error>> {
         let html = self.get_html().await?;
         let rel_url = self.extract_data_from_html(html.as_str());
-        let existing_mention = todo!() as Option<Webmention>;
+        let existing_mention = read_existing_webmention(
+            wm_dir,
+            Url::parse(self.source_url).unwrap(),
+            Url::parse(self.target_url).unwrap(),
+        );
         let now = Utc::now();
 
         let (new_mention, result) = GatheredWebmentionData {
             request: self,
             rel_url,
-            existing: existing_mention,
         }
         .parse_to_mention(now);
 
         let action = match (existing_mention, new_mention) {
             (None, None) => todo!(),
             (None, Some(n)) => StorageAction::CreateWebmention(n),
-            (Some(e), None) => StorageAction::DeleteWebmention {source_url: e.source_url, target_url: e.target_url },
-            (Some(e), Some(n)) => StorageAction::UpdateWebmention(n)
+            (Some(e), None) => StorageAction::DeleteWebmention {
+                source_url: e.source_url,
+                target_url: e.target_url,
+            },
+            (Some(e), Some(n)) => StorageAction::UpdateWebmention(n),
         };
+
+        Ok(())
     }
 
     async fn get_html(&self) -> Result<String, Box<dyn std::error::Error>> {
@@ -90,7 +100,7 @@ impl<'a> PendingRequest<'a> {
 }
 
 impl<'a> GatheredWebmentionData<'a> {
-    fn parse_to_mention(self, now: DateTime<Utc>) -> (Option<Webmention<'a>>, ProcessedRequest) {
+    fn parse_to_mention(self, now: DateTime<Utc>) -> (Option<Webmention>, ProcessedRequest) {
         let now_naive = now.naive_utc();
 
         let microformats = if let Some(microformat) = self.rel_url {
@@ -110,8 +120,8 @@ impl<'a> GatheredWebmentionData<'a> {
 
         let mentioned_on = Utc.from_utc_datetime(&self.request.mentioned_on);
         let webmention = Webmention {
-            source_url: self.request.source_url,
-            target_url: self.request.target_url,
+            source_url: self.request.source_url.to_string(),
+            target_url: self.request.target_url.to_string(),
             mentioned_on,
             processed_on: now,
             rel_url: microformats,

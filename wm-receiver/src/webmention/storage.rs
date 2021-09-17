@@ -1,8 +1,9 @@
-use std::{fs::File, io::Read, path::{Path, PathBuf}};
+use std::fs::File;
+use std::path::{Path, PathBuf};
 
-use url::Url;
-use slug::slugify;
 use super::data::Webmention;
+use slug::slugify;
+use url::Url;
 
 pub fn append_storage_subpath(dst: &mut PathBuf, source_url: Url, target_url: Url) {
     dst.push(target_url.host().unwrap().to_string());
@@ -11,34 +12,32 @@ pub fn append_storage_subpath(dst: &mut PathBuf, source_url: Url, target_url: Ur
     dst.push(format!("{}.yml", slugify(source_url.path())));
 }
 
-pub fn read_existing_webmention<'a>(
-    buf: &'a mut String,
+pub fn read_existing_webmention(
     wm_dir: impl AsRef<Path>,
     source_url: Url,
     target_url: Url,
-) -> Option<Webmention<'a>> {
+) -> Option<Webmention> {
     let mut path = PathBuf::new();
     path.push(wm_dir);
     append_storage_subpath(&mut path, source_url, target_url);
 
     let file = match File::open(path) {
-        Ok(file) =>file,
+        Ok(file) => file,
         Err(_) => return None,
     };
-    file.read_to_string(buf);
-    serde_json::from_str(buf.as_str()).ok()
+    serde_json::from_reader(file).ok()
 }
 
-pub enum StorageAction<'a> {
+pub enum StorageAction {
     DeleteWebmention {
-        source_url: &'a str,
-        target_url: &'a str,
+        source_url: String,
+        target_url: String,
     },
-    CreateWebmention(Webmention<'a>),
-    UpdateWebmention(Webmention<'a>),
+    CreateWebmention(Webmention),
+    UpdateWebmention(Webmention),
 }
 
-impl<'a> StorageAction<'a> {
+impl StorageAction {
     fn append_storage_subpath(&self, dst: &mut PathBuf) {
         let (source_url, target_url) = match self {
             StorageAction::DeleteWebmention {

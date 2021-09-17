@@ -15,11 +15,11 @@ pub enum MentionProcessingStatus {
 
 /// A user-friendly processed webmention.
 #[derive(Serialize, Deserialize)]
-pub struct Webmention<'a> {
+pub struct Webmention {
     /// The normalized URL of the source that sent the webmention.
-    pub source_url: &'a str,
+    pub source_url: String,
     /// The normalized URL of the target that is mentioned.
-    pub target_url: &'a str,
+    pub target_url: String,
     /// When this mention was sent.
     pub mentioned_on: DateTime<Utc>,
     /// When this mention was processed.
