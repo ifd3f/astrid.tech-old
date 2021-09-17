@@ -3,9 +3,9 @@
 #![feature(in_band_lifetimes)]
 #![feature(assert_matches)]
 
+extern crate dotenv;
 extern crate serde_yaml;
 extern crate slug;
-extern crate dotenv;
 #[macro_use]
 extern crate rocket;
 #[macro_use]
@@ -23,7 +23,8 @@ mod routes;
 mod schema;
 mod webmention;
 
-fn main() {
+#[launch]
+fn rocket() -> _ {
     dotenv().ok();
 
     let target_hosts = env::var("ALLOWED_TARGET_HOSTS").expect("ALLOWED_TARGET_HOSTS must be set");
@@ -39,8 +40,7 @@ fn main() {
             .collect(),
     };
 
-    rocket::ignite()
+    rocket::build()
         .manage(mention_config)
-        .mount("/", routes![receive_webmention])
-        .launch();
+        .mount("/", routes![receive_webmention, process_webmentions])
 }
