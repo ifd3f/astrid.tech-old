@@ -1,6 +1,8 @@
 ---
 date: 2021-09-16 12:06:42-07:00
 ordinal: 1
+tags:
+- /projects/astrid-tech
 ---
 
 Welp, guess it's time to do a big refactor of my project to get it working! 12
