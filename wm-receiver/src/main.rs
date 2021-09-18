@@ -5,9 +5,9 @@
 
 extern crate dotenv;
 extern crate serde_yaml;
+extern crate slug;
 #[cfg(test)]
 extern crate tempdir;
-extern crate slug;
 #[macro_use]
 extern crate rocket;
 #[macro_use]
@@ -33,12 +33,17 @@ fn rocket() -> _ {
     get_db();
 
     let target_hosts = env::var("ALLOWED_TARGET_HOSTS").expect("ALLOWED_TARGET_HOSTS must be set");
-    let mut webmention_dir = PathBuf::new();
-    webmention_dir.push(env::var("WEBMENTION_DIR").expect("WEBMENTION_DIR must be set"));
+    let mut repo_dir = PathBuf::from(env::var("REPO_DIR").expect("REPO_DIR must be set"));
+
+    let mut webmention_subdir =
+        PathBuf::from(env::var("WEBMENTION_SUBDIR").expect("WEBMENTION_SUBDIR must be set"));
+
+    let webmention_dir = repo_dir.join(webmention_subdir);
 
     // Generate mention config
     let mention_config = MentionConfig {
-        webmention_dir: webmention_dir,
+        repo_dir,
+        webmention_dir,
         allowed_target_hosts: target_hosts
             .split(",")
             .map(|host| host.to_owned())

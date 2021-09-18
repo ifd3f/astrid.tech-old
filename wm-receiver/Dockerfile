@@ -25,6 +25,8 @@ CMD cargo run --release
 ### Create a runner image with only the binary
 FROM debian:bullseye-slim as runner
 
+RUN apt-get update && apt-get install -y git
+
 COPY --from=builder /app/target/release/wm-receiver /usr/local/bin/
 WORKDIR /app
 CMD wm-receiver

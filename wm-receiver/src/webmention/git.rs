@@ -1,104 +1,27 @@
 use std::{error::Error, path::Path};
 
-use git2::*;
+use tokio::process::Command;
 
-pub fn commit_changes(repo_dir: impl AsRef<Path>) -> Result<(), Box<dyn Error>> {
-    let repo = Repository::open(repo_dir.as_ref())?;
-    let mut index = repo.index()?;
-    index.add_all(&["."], IndexAddOption::DEFAULT, None)?;
-    index.write()?;
-    let oid = index.write_tree()?;
-    let tree = repo.find_tree(oid)?;
-    let signature = Signature::now("Test", "test@astrid.tech")?;
-
-    if repo.is_empty()? {
-        repo.commit(
-            Some("HEAD"),
-            &signature,
-            &signature,
-            "init commit test",
-            &tree,
-            &[],
-        )?;
-    } else {
-        let parent_commit = repo
-            .head()?
-            .resolve()?
-            .peel(ObjectType::Commit)?
-            .into_commit()
-            .map_err(|_| git2::Error::from_str("foo"))?;
-
-        repo.commit(
-            Some("HEAD"),
-            &signature,
-            &signature,
-            "Test message",
-            &tree,
-            &[&parent_commit],
-        )?;
-    }
+pub async fn reset_dir(repo_dir: impl AsRef<Path>) -> Result<(), Box<dyn Error>> {
+    let result = Command::new("./resources/scripts/reset_to_latest.sh")
+        .arg("https://github.com/astralbijection/astrid.tech.git")
+        .arg("webmention/test")
+        .arg("main")
+        .current_dir(repo_dir)
+        .spawn()?
+        .wait()
+        .await?;
     Ok(())
 }
 
-pub fn push_git_changes(dir: impl AsRef<Path>) -> Result<(), Box<dyn Error>> {
-    let repo = Repository::open(dir)?;
-    let mut remote = repo.find_remote("origin")?;
-    remote.connect(Direction::Push)?;
-    remote.push(&["refs/heads/main:refs/heads/main"], None)?;
-
+pub async fn push_changes(repo_dir: impl AsRef<Path>) -> Result<(), Box<dyn Error>> {
+    let result = Command::new("./resources/scripts/push_to_git.sh")
+        .arg("My test changes")
+        .arg("https://github.com/astralbijection/astrid.tech.git")
+        .arg("webmention/test")
+        .current_dir(repo_dir)
+        .spawn()?
+        .wait()
+        .await?;
     Ok(())
-}
-
-#[cfg(test)]
-mod tests {
-    use std::{
-        fs::{self, File},
-        io::Write,
-        path::PathBuf,
-    };
-
-    use git2::Repository;
-    use tempdir::TempDir;
-
-    use super::{commit_changes, push_git_changes};
-
-    fn setup_repo_with_remote() -> (TempDir, PathBuf, PathBuf) {
-        let tempdir = TempDir::new("wm-receiver-test").unwrap();
-
-        let orig_path = tempdir.path().join("orig");
-        let repo = Repository::init(&orig_path).unwrap();
-
-        let subdir_path = orig_path.join("wm_subdir");
-        fs::create_dir_all(&subdir_path).unwrap();
-        let file_path = subdir_path.join("wm_file");
-        File::create(file_path)
-            .unwrap()
-            .write("Test contents".as_bytes())
-            .unwrap();
-
-        commit_changes(&orig_path).unwrap();
-
-        let remote_path = tempdir.path().join("remote");
-        let remote_repo = Repository::init_bare(&remote_path).unwrap();
-        let mut remote = remote_repo.remote_with_fetch("origin", orig_path.to_str().unwrap(), "main").unwrap();
-        remote.fetch(&["main"], None, None);
-
-        let local_path = tempdir.path().join("local");
-        let local_repo = Repository::clone(remote_path.to_str().unwrap(), &local_path).unwrap();
-        (tempdir, remote_path, local_path)
-    }
-
-    #[test]
-    fn commits_and_pushes() {
-        let (tempdir, remote, local) = setup_repo_with_remote();
-
-        let subdir_path = local.join("wm_subdir");
-        let file_path = subdir_path.join("another_file");
-        File::create(file_path)
-            .unwrap()
-            .write("More ocntents".as_bytes());
-
-        commit_changes(&local).unwrap();
-        push_git_changes(&local).unwrap();
-    }
 }

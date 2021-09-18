@@ -1,6 +1,7 @@
 use std::net::SocketAddr;
 
 use crate::db::get_db;
+use crate::webmention::git::{push_changes, reset_dir};
 use crate::webmention::processing::PendingRequest;
 use crate::webmention::requesting::MentionConfig;
 use chrono::Utc;
@@ -45,6 +46,8 @@ pub async fn process_webmentions(config: &State<MentionConfig>, limit: Option<i6
     use crate::schema::requests::dsl::*;
     use diesel::prelude::*;
 
+    reset_dir(&config.repo_dir).await.unwrap();
+
     let limit = limit.unwrap_or(100);
     let max_retries = 10; // TODO
     let db = get_db();
@@ -69,6 +72,8 @@ pub async fn process_webmentions(config: &State<MentionConfig>, limit: Option<i6
     for request in pending_requests {
         request.process(&config.webmention_dir).await.unwrap();
     }
+
+    push_changes(&config.repo_dir).await.unwrap();
 
     Status::Ok
 }

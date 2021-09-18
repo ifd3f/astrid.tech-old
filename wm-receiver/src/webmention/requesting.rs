@@ -7,6 +7,7 @@ use crate::schema::requests;
 
 #[derive(Debug)]
 pub struct MentionConfig {
+    pub repo_dir: PathBuf,
     pub webmention_dir: PathBuf,
     pub allowed_target_hosts: HashSet<String>,
 }
