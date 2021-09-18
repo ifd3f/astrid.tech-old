@@ -41,27 +41,25 @@ fn validate_url(
     Ok(())
 }
 
-impl MentionConfig {
-    pub fn create_mention(
-        &self,
-        source_url: &'a str,
-        target_url: &'a str,
-        sender_ip: &'a str,
-        processing_status: i32,
-        mentioned_on: DateTime<Utc>,
-    ) -> Result<WebmentionRequest<'a>, MentionRequestError<'a>> {
-        validate_url(source_url, None)?;
-        validate_url(target_url, Some(&self.allowed_target_hosts))?;
+pub fn create_mention(
+    allowed_target_hosts: &HashSet<String>,
+    source_url: &'a str,
+    target_url: &'a str,
+    sender_ip: &'a str,
+    processing_status: i32,
+    mentioned_on: DateTime<Utc>,
+) -> Result<WebmentionRequest<'a>, MentionRequestError<'a>> {
+    validate_url(source_url, None)?;
+    validate_url(target_url, Some(allowed_target_hosts))?;
 
-        let mentioned_on = mentioned_on.naive_utc();
-        Ok(WebmentionRequest {
-            source_url,
-            target_url,
-            sender_ip,
-            processing_status,
-            mentioned_on,
-        })
-    }
+    let mentioned_on = mentioned_on.naive_utc();
+    Ok(WebmentionRequest {
+        source_url,
+        target_url,
+        sender_ip,
+        processing_status,
+        mentioned_on,
+    })
 }
 
 impl<'a> Display for MentionRequestError<'a> {
@@ -93,37 +91,30 @@ pub struct WebmentionRequest<'a> {
 
 #[cfg(test)]
 mod tests {
-    use std::{assert_matches::assert_matches, path::PathBuf};
+    use std::{assert_matches::assert_matches, collections::HashSet, path::PathBuf};
 
     use chrono::Utc;
 
-    use crate::webmention::requesting::MentionRequestError;
+    use crate::webmention::requesting::{create_mention, MentionRequestError};
 
-    use super::MentionConfig;
-
-    fn get_config() -> MentionConfig {
-        MentionConfig {
-            allowed_target_hosts: vec![
-                "allowed.example.com".to_string(),
-                "another.example.com".to_string(),
-            ]
-            .into_iter()
-            .collect(),
-            webmention_dir: PathBuf::new(),
-        }
+    fn get_config() -> HashSet<String> {
+        vec![
+            "allowed.example.com".to_string(),
+            "another.example.com".to_string(),
+        ]
+        .into_iter()
+        .collect()
     }
 
     #[test]
     fn request_allowed_host_should_pass() {
         let now = Utc::now();
-        let config = get_config();
+        let hosts = get_config();
         let source = "https://someone.example.net/their/article";
         let target = "https://allowed.example.com/our/article";
         let sender = "1.2.3.4";
 
-        let result = config
-            .create_mention(source, target, sender, 0, now)
-            .unwrap();
+        let result = create_mention(&hosts, source, target, sender, 0, now).unwrap();
 
         assert_eq!(result.target_url, target)
     }
@@ -131,12 +122,12 @@ mod tests {
     #[test]
     fn request_unknown_host_should_error() {
         let now = Utc::now();
-        let config = get_config();
+        let hosts = get_config();
         let source = "https://someone.example.net/their/article";
         let target = "https://facebook.com/our/article";
         let sender = "1.2.3.4";
 
-        let result = config.create_mention(source, target, sender, 0, now);
+        let result = create_mention(&hosts, source, target, sender, 0, now);
 
         assert_matches!(result, Err(MentionRequestError::UnknownTargetHost(..)));
     }
@@ -144,12 +135,12 @@ mod tests {
     #[test]
     fn request_invalid_protocol_should_error() {
         let now = Utc::now();
-        let config = get_config();
+        let hosts = get_config();
         let source = "gopher://someone.example.net/their/article";
         let target = "https://allowed.example.com/our/article";
         let sender = "1.2.3.4";
 
-        let result = config.create_mention(source, target, sender, 0, now);
+        let result = create_mention(&hosts, source, target, sender, 0, now);
 
         assert_matches!(result, Err(MentionRequestError::InvalidURL(..)));
     }

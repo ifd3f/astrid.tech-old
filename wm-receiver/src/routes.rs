@@ -3,7 +3,7 @@ use std::net::SocketAddr;
 use crate::db::get_db;
 use crate::webmention::git::{push_changes, reset_dir};
 use crate::webmention::processing::PendingRequest;
-use crate::webmention::requesting::MentionConfig;
+use crate::webmention::requesting::{MentionConfig, create_mention};
 use chrono::Utc;
 use diesel::insert_into;
 use rocket::form::Form;
@@ -29,9 +29,15 @@ pub fn receive_webmention(
     let sender: String = remote_addr.to_string();
     let now = Utc::now();
 
-    let mention = config
-        .create_mention(params.source, params.target, sender.as_str(), 0, now)
-        .map_err(|e| e.into())?;
+    let mention = create_mention(
+        &config.allowed_target_hosts,
+        params.source,
+        params.target,
+        sender.as_str(),
+        0,
+        now,
+    )
+    .map_err(|e| e.into())?;
 
     let db = get_db();
     insert_into(requests).values(&mention).execute(&db).unwrap();
