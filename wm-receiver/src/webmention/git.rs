@@ -65,10 +65,10 @@ mod tests {
     fn setup_repo_with_remote() -> (TempDir, PathBuf, PathBuf) {
         let tempdir = TempDir::new("wm-receiver-test").unwrap();
 
-        let remote_path = tempdir.path().join("remote");
-        let repo = Repository::init(&remote_path).unwrap();
+        let orig_path = tempdir.path().join("orig");
+        let repo = Repository::init(&orig_path).unwrap();
 
-        let subdir_path = remote_path.join("wm_subdir");
+        let subdir_path = orig_path.join("wm_subdir");
         fs::create_dir_all(&subdir_path).unwrap();
         let file_path = subdir_path.join("wm_file");
         File::create(file_path)
@@ -76,7 +76,12 @@ mod tests {
             .write("Test contents".as_bytes())
             .unwrap();
 
-        commit_changes(&remote_path).unwrap();
+        commit_changes(&orig_path).unwrap();
+
+        let remote_path = tempdir.path().join("remote");
+        let remote_repo = Repository::init_bare(&remote_path).unwrap();
+        let mut remote = remote_repo.remote_with_fetch("origin", orig_path.to_str().unwrap(), "main").unwrap();
+        remote.fetch(&["main"], None, None);
 
         let local_path = tempdir.path().join("local");
         let local_repo = Repository::clone(remote_path.to_str().unwrap(), &local_path).unwrap();
