@@ -41,6 +41,7 @@ pub fn receive_webmention(
 #[derive(FromForm)]
 pub struct ProcessWebmentionsRequest {
     limit: Option<i64>,
+    max_retries: Option<i32>,
 }
 
 /// Schecules a task to process all the stored webmentions. This endpoint should be protected
@@ -51,6 +52,7 @@ pub async fn process_webmentions(params: Form<ProcessWebmentionsRequest>) -> Sta
     use diesel::prelude::*;
 
     let limit = params.limit.unwrap_or(100);
+    let max_retries = params.max_retries.unwrap_or(10);
     let db = get_db();
 
     let requests = mentions
@@ -62,12 +64,13 @@ pub async fn process_webmentions(params: Form<ProcessWebmentionsRequest>) -> Sta
             processing_attempts,
             mentioned_on,
         ))
-        .filter(processing_status.ne(2).and(processing_attempts.lt(10)))
+        .filter(processing_status.ne(2).and(processing_attempts.lt(max_retries)))
         .limit(limit)
         .load::<PendingRequest>(&db)
         .unwrap();
+
     for request in requests {
-        request.process(&db, "webmentions").await.unwrap();
+        request.process("webmentions").await.unwrap();
     }
 
     Status::Ok

@@ -1,18 +1,19 @@
 use std::{error::Error, ops::Add, path::Path};
 
 use chrono::{DateTime, Duration, NaiveDateTime, TimeZone, Utc};
-use diesel::SqliteConnection;
 use scraper::{Html, Selector};
 use url::Url;
 
 use crate::{
+    db::get_db,
     schema::mentions,
     webmention::storage::{read_existing_webmention, StorageAction},
 };
 
-use super::data::{ RelUrl, Webmention};
+use super::data::{RelUrl, Webmention};
 
-#[derive(Queryable, Debug)]
+#[derive(Queryable, Identifiable, Debug)]
+#[table_name = "mentions"]
 pub struct PendingRequest {
     id: i32,
     source_url: String,
@@ -22,7 +23,7 @@ pub struct PendingRequest {
     mentioned_on: NaiveDateTime,
 }
 
-#[derive(Identifiable, Debug)]
+#[derive(AsChangeset, Identifiable, Debug)]
 #[table_name = "mentions"]
 struct ProcessedRequest {
     id: i32,
@@ -40,7 +41,9 @@ struct GatheredWebmentionData {
 }
 
 impl PendingRequest {
-    pub async fn process(self, db: &SqliteConnection, wm_dir: impl AsRef<Path>) -> Result<(), Box<dyn Error>> {
+    pub async fn process(self, wm_dir: impl AsRef<Path>) -> Result<(), Box<dyn Error>> {
+        let db = get_db();
+
         let html = self.get_html().await?;
         let rel_url = self.extract_data_from_html(html.as_str());
         let existing_mention = read_existing_webmention(
@@ -50,7 +53,7 @@ impl PendingRequest {
         );
         let now = Utc::now();
 
-        let (new_mention, result) = GatheredWebmentionData {
+        let (new_mention, processed) = GatheredWebmentionData {
             request: self,
             rel_url,
         }
@@ -63,8 +66,15 @@ impl PendingRequest {
                 source_url: e.source_url,
                 target_url: e.target_url,
             },
-            (Some(e), Some(n)) => StorageAction::UpdateWebmention(n),
+            (Some(_), Some(n)) => StorageAction::UpdateWebmention(n),
         };
+
+        {
+            use crate::schema::mentions::dsl::*;
+            use diesel::prelude::*;
+
+            diesel::update(mentions).set(&processed).execute(&db)?;
+        }
 
         Ok(())
     }
