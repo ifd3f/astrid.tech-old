@@ -19,6 +19,8 @@ ADD . ./
 RUN rm ./target/release/deps/wm_receiver*
 RUN WEBMENTION_RESOURCES_DIR=/usr/local/share/wm-receiver/ cargo build --release
 
+EXPOSE 8000
+
 # Default runner for builder (for debugging only)
 CMD cargo run --release
 
@@ -31,4 +33,5 @@ COPY --from=builder /app/target/release/wm-receiver /usr/local/bin/
 COPY --from=builder /app/resources/main /usr/local/share/wm-receiver/
 
 WORKDIR /app
+EXPOSE 8000
 CMD wm-receiver
