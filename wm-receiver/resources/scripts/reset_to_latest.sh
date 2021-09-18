@@ -13,7 +13,7 @@ git reset --hard
 
 # Ensure that origin points to the remote so we can fetch the data
 git remote add origin $REMOTE || git remote set-url origin $REMOTE
-git fetch origin
+git fetch origin --depth 1 $WORK_BRANCH $MAIN_BRANCH
 git remote prune origin  # Delete the cached origin/$WORK_BRANCH if needed
 
 # Ensure work branch exists and check it out

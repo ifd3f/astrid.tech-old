@@ -11,6 +11,8 @@ fn get_script_command(name: &str) -> Result<PathBuf, Box<dyn Error>> {
 
 pub async fn reset_dir(repo_dir: impl AsRef<Path>) -> Result<(), Box<dyn Error>> {
     let cmd = get_script_command("reset_to_latest.sh")?.into_os_string();
+    tokio::fs::create_dir_all(&repo_dir).await?;
+
     Command::new(cmd)
         .arg("https://github.com/astralbijection/astrid.tech.git")
         .arg("webmention/test")
