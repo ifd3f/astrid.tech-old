@@ -58,6 +58,8 @@ impl StorageAction {
         let mut path = PathBuf::new();
         path.push(wm_dir);
         self.append_storage_subpath(&mut path);
+        // Safe to unwrap because we've created subdirectories
+        fs::create_dir_all(&path.parent().unwrap());
 
         match self {
             StorageAction::Delete {..}=> {
