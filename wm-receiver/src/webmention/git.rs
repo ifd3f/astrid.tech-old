@@ -4,7 +4,8 @@ use tokio::process::Command;
 
 fn get_script_command(name: &str) -> Result<PathBuf, Box<dyn Error>> {
     let mut dir = current_dir()?;
-    dir.push("resources/scripts");
+    dir.push(env!("WEBMENTION_RESOURCES_DIR"));
+    dir.push("scripts");
     dir.push(name);
     Ok(dir)
 }

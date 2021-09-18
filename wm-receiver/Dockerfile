@@ -17,7 +17,7 @@ RUN cargo build --release
 RUN rm src/*.rs
 ADD . ./
 RUN rm ./target/release/deps/wm_receiver*
-RUN cargo build --release
+RUN WEBMENTION_RESOURCES_DIR=/usr/local/share/wm-receiver/ cargo build --release
 
 # Default runner for builder (for debugging only)
 CMD cargo run --release
@@ -28,5 +28,7 @@ FROM debian:bullseye-slim as runner
 RUN apt-get update && apt-get install -y git libsqlite3-0
 
 COPY --from=builder /app/target/release/wm-receiver /usr/local/bin/
+COPY --from=builder /app/resources/main /usr/local/share/wm-receiver/
+
 WORKDIR /app
 CMD wm-receiver
