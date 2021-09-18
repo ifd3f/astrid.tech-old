@@ -1,16 +1,9 @@
 use chrono::{DateTime, NaiveDateTime, Utc};
 use rocket::response::status::BadRequest;
-use std::{collections::HashSet, fmt::Display, path::PathBuf};
+use std::{collections::HashSet, fmt::Display};
 use url::Url;
 
 use crate::schema::requests;
-
-#[derive(Debug)]
-pub struct MentionConfig {
-    pub repo_dir: PathBuf,
-    pub webmention_dir: PathBuf,
-    pub allowed_target_hosts: HashSet<String>,
-}
 
 #[derive(Debug, PartialEq, Eq)]
 pub enum MentionRequestError<'a> {
@@ -91,7 +84,7 @@ pub struct WebmentionRequest<'a> {
 
 #[cfg(test)]
 mod tests {
-    use std::{assert_matches::assert_matches, collections::HashSet, path::PathBuf};
+    use std::{assert_matches::assert_matches, collections::HashSet};
 
     use chrono::Utc;
 

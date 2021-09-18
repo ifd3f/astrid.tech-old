@@ -1,5 +1,14 @@
+use std::{collections::HashSet, path::PathBuf};
+
 use chrono::{DateTime, Utc};
 use serde::{Deserialize, Serialize};
+
+#[derive(Debug)]
+pub struct MentionConfig {
+    pub repo_dir: PathBuf,
+    pub webmention_dir: PathBuf,
+    pub allowed_target_hosts: HashSet<String>,
+}
 
 #[derive(Serialize, Deserialize, Debug, PartialEq, Eq)]
 pub struct RelUrl {

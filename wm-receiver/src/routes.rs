@@ -1,9 +1,10 @@
 use std::net::SocketAddr;
 
 use crate::db::get_db;
+use crate::webmention::data::MentionConfig;
 use crate::webmention::git::{push_changes, reset_dir};
 use crate::webmention::processing::PendingRequest;
-use crate::webmention::requesting::{MentionConfig, create_mention};
+use crate::webmention::requesting::create_mention;
 use chrono::Utc;
 use diesel::insert_into;
 use rocket::form::Form;
