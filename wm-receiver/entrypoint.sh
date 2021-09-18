@@ -5,23 +5,23 @@ fatal_error() {
     exit 1
 }
 
-if [ -z $GIT_EMAIL ]; then 
+if [ -z "$GIT_EMAIL" ]; then 
     fatal_error "Error: must provide GIT_EMAIL"
 fi
-if [ -z $GIT_NAME ]; then 
+if [ -z "$GIT_NAME" ]; then 
     fatal_error "Error: must provide GIT_NAME"
 fi
 
-git config --global user.email $GIT_EMAIL
-git config --global user.name $GIT_NAME
+git config --global user.email "$GIT_EMAIL"
+git config --global user.name "$GIT_NAME"
 
-if [ $SSH_PRIVATE_KEY_FILE ]; then
+if [ ! -z "$SSH_PRIVATE_KEY_FILE" ]; then
     echo "Installing SSH key"
     mkdir -p ~/.ssh
-    cp "$SSH_PRIVATE_KEY_FILE" ~/id_rsa
+    cp "$SSH_PRIVATE_KEY_FILE" ~/.ssh/id_rsa
 
     chmod 700 ~/.ssh
-    chmod 600 ~/id_rsa
+    chmod 600 ~/.ssh/id_rsa
 fi
 
 wm-receiver
