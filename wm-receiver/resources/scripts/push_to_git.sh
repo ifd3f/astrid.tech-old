@@ -1,7 +1,5 @@
 #!/usr/bin/env sh
 
-set -o xtrace
-
 MSG=$1
 REMOTE=$2
 BRANCH=$3
