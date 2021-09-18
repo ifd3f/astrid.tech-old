@@ -1,6 +1,6 @@
 use chrono::{DateTime, NaiveDateTime, Utc};
 use rocket::response::status::BadRequest;
-use std::{collections::HashSet, fmt::Display};
+use std::{collections::HashSet, fmt::Display, path::PathBuf};
 use url::Url;
 
 use crate::schema::mentions;
@@ -11,6 +11,7 @@ pub mod storage;
 
 #[derive(Debug)]
 pub struct MentionConfig {
+    pub webmention_dir: PathBuf,
     pub allowed_target_hosts: HashSet<String>,
 }
 

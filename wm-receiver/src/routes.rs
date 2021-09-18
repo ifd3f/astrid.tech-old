@@ -47,7 +47,11 @@ pub struct ProcessWebmentionsRequest {
 /// Schecules a task to process all the stored webmentions. This endpoint should be protected
 /// and called on a cron job.
 #[post("/api/rpc/processWebmentions", data = "<params>")]
-pub async fn process_webmentions(params: Form<ProcessWebmentionsRequest>) -> Status {
+pub async fn process_webmentions(
+    config: &State<MentionConfig>,
+    params: Form<ProcessWebmentionsRequest>,
+) -> Status {
+
     use crate::schema::mentions::dsl::*;
     use diesel::prelude::*;
 
@@ -63,13 +67,17 @@ pub async fn process_webmentions(params: Form<ProcessWebmentionsRequest>) -> Sta
             processing_attempts,
             mentioned_on,
         ))
-        .filter(processing_status.ne(2).and(processing_attempts.lt(max_retries)))
+        .filter(
+            processing_status
+                .ne(2)
+                .and(processing_attempts.lt(max_retries)),
+        )
         .limit(limit)
         .load::<PendingRequest>(&db)
         .unwrap();
 
     for request in requests {
-        request.process("webmentions").await.unwrap();
+        request.process(&config.webmention_dir).await.unwrap();
     }
 
     Status::Ok

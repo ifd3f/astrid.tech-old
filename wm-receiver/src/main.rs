@@ -11,7 +11,7 @@ extern crate rocket;
 #[macro_use]
 extern crate diesel;
 
-use std::env;
+use std::{env, path::PathBuf};
 
 use dotenv::dotenv;
 use webmention::MentionConfig;
@@ -27,13 +27,16 @@ mod webmention;
 fn rocket() -> _ {
     dotenv().ok();
 
-    let target_hosts = env::var("ALLOWED_TARGET_HOSTS").expect("ALLOWED_TARGET_HOSTS must be set");
-
     // Ensure the database can be connected to
     get_db();
 
+    let target_hosts = env::var("ALLOWED_TARGET_HOSTS").expect("ALLOWED_TARGET_HOSTS must be set");
+    let mut webmention_dir = PathBuf::new();
+    webmention_dir.push(env::var("WEBMENTION_DIR").expect("WEBMENTION_DIR must be set"));
+
     // Generate mention config
     let mention_config = MentionConfig {
+        webmention_dir: webmention_dir,
         allowed_target_hosts: target_hosts
             .split(",")
             .map(|host| host.to_owned())
