@@ -1,8 +1,8 @@
 ### Builder image
-FROM rustlang/rust:nightly-buster-slim as builder
+FROM ghcr.io/rust-lang/rust:nightly-bullseye-slim as builder
 
 # Install OS libraries
-RUN apt-get update && apt-get install -y libssl-dev pkg-config
+RUN apt-get update && apt-get install -y libssl-dev libsqlite3-dev pkg-config
 
 # Create project directory for downloading dependencies
 WORKDIR /
@@ -23,15 +23,8 @@ RUN cargo build --release
 CMD cargo run --release
 
 ### Create a runner image with only the binary
-FROM debian:buster-slim as runner
+FROM debian:bullseye-slim as runner
 
-# Create a user
-RUN useradd -ms /bin/bash shorty
-
-# Prepare the binary
+COPY --from=builder /app/target/release/wm-receiver /usr/local/bin/
 WORKDIR /app
-COPY --from=builder /app/target/release/wm-receiver /usr/local/bin
-
-# Run as non-root user for security
-USER proccy
 CMD wm-receiver
