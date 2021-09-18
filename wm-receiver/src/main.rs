@@ -6,6 +6,8 @@
 extern crate dotenv;
 extern crate serde_yaml;
 extern crate slug;
+#[macro_use]
+extern crate diesel_migrations;
 #[cfg(test)]
 extern crate tempdir;
 #[macro_use]
@@ -18,7 +20,7 @@ use std::{env, path::PathBuf};
 use dotenv::dotenv;
 use webmention::data::MentionConfig;
 
-use crate::{db::get_db, routes::*};
+use crate::{db::run_migrations, routes::*};
 
 mod db;
 mod routes;
@@ -40,8 +42,8 @@ fn require_env(name: &str, default: Option<&str>) -> String {
 fn rocket() -> _ {
     dotenv().ok();
 
-    // Ensure the database can be connected to
-    get_db();
+    // Perform diesel migrations
+    run_migrations();
 
     let allowed_target_hosts = require_env("ALLOWED_TARGET_HOSTS", None)
         .split(",")

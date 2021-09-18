@@ -12,6 +12,7 @@ name = "wm-receiver"
 path = "src/main.rs"
 
 [dependencies]
+diesel_migrations = "*"
 dotenv = "*"
 reqwest = "*"
 rocket = "0.5.0-rc.1"
