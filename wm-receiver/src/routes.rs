@@ -1,4 +1,4 @@
-use std::{io, net::SocketAddr};
+use std::net::SocketAddr;
 
 use crate::db::get_db;
 use crate::webmention::processing::PendingRequest;

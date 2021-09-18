@@ -1,6 +1,6 @@
 table! {
     mentions (id) {
-        id -> Nullable<Integer>,
+        id -> Integer,
         source_url -> Text,
         target_url -> Text,
         sender_ip -> Text,

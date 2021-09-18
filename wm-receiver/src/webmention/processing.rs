@@ -13,12 +13,12 @@ use crate::{
 use super::data::{ RelUrl, Webmention};
 
 #[derive(Queryable, Debug)]
-pub struct PendingRequest<'a> {
-    id: isize,
-    source_url: &'a str,
-    target_url: &'a str,
-    sender_ip: &'a str,
-    processing_attempts: isize,
+pub struct PendingRequest {
+    id: i32,
+    source_url: String,
+    target_url: String,
+    sender_ip: String,
+    processing_attempts: i32,
     mentioned_on: NaiveDateTime,
 }
 
@@ -32,21 +32,21 @@ struct ProcessedRequest {
     next_processing_attempt: Option<NaiveDateTime>,
 }
 
-struct GatheredWebmentionData<'a> {
+struct GatheredWebmentionData {
     /// The pending request data we stored in the database.
-    request: PendingRequest<'a>,
+    request: PendingRequest,
     /// The rel_url data we found for this mention.
     rel_url: Option<RelUrl>,
 }
 
-impl<'a> PendingRequest<'a> {
+impl PendingRequest {
     pub async fn process(self, db: &SqliteConnection, wm_dir: impl AsRef<Path>) -> Result<(), Box<dyn Error>> {
         let html = self.get_html().await?;
         let rel_url = self.extract_data_from_html(html.as_str());
         let existing_mention = read_existing_webmention(
             wm_dir,
-            Url::parse(self.source_url).unwrap(),
-            Url::parse(self.target_url).unwrap(),
+            Url::parse(self.source_url.as_str()).unwrap(),
+            Url::parse(self.target_url.as_str()).unwrap(),
         );
         let now = Utc::now();
 
@@ -70,7 +70,7 @@ impl<'a> PendingRequest<'a> {
     }
 
     async fn get_html(&self) -> Result<String, Box<dyn std::error::Error>> {
-        let resp = reqwest::get(self.source_url).await?.text().await?;
+        let resp = reqwest::get(self.source_url.as_str()).await?.text().await?;
         Ok(resp)
     }
 
@@ -98,7 +98,7 @@ impl<'a> PendingRequest<'a> {
     }
 }
 
-impl<'a> GatheredWebmentionData<'a> {
+impl GatheredWebmentionData {
     fn parse_to_mention(self, now: DateTime<Utc>) -> (Option<Webmention>, ProcessedRequest) {
         let now_naive = now.naive_utc();
 
