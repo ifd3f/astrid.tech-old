@@ -7,12 +7,6 @@ pub struct RelUrl {
     pub text: String,
 }
 
-pub enum MentionProcessingStatus {
-    Unprocessed,
-    Failed,
-    Succeeded,
-}
-
 /// A user-friendly processed webmention.
 #[derive(Serialize, Deserialize)]
 pub struct Webmention {

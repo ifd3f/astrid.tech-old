@@ -2,7 +2,7 @@ use std::net::SocketAddr;
 
 use crate::db::get_db;
 use crate::webmention::processing::PendingRequest;
-use crate::webmention::MentionConfig;
+use crate::webmention::requesting::MentionConfig;
 use chrono::Utc;
 use diesel::insert_into;
 use rocket::form::Form;
@@ -41,16 +41,12 @@ pub fn receive_webmention(
 /// Schecules a task to process all the stored webmentions. This endpoint should be protected
 /// and called on a cron job.
 #[post("/api/rpc/processWebmentions?<limit>")]
-pub async fn process_webmentions(
-    config: &State<MentionConfig>,
-    limit: Option<i64>,
-) -> Status {
-
+pub async fn process_webmentions(config: &State<MentionConfig>, limit: Option<i64>) -> Status {
     use crate::schema::requests::dsl::*;
     use diesel::prelude::*;
 
     let limit = limit.unwrap_or(100);
-    let max_retries = 10;  // TODO
+    let max_retries = 10; // TODO
     let db = get_db();
 
     let pending_requests = requests

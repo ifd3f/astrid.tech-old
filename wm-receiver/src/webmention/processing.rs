@@ -161,12 +161,10 @@ mod tests {
     fn extract_from_html_with_valid_target() {
         let request = PendingRequest {
             id: 0,
-            source_url: "https://source.com",
-            target_url: "https://target.com",
-            sender_ip: "1.2.3.4",
+            source_url: "https://source.com".to_string(),
+            target_url: "https://target.com".to_string(),
             processing_attempts: 0,
             mentioned_on: Utc::now().naive_utc(),
-            processed_on: None,
         };
         let html = r#"
             <a rel="in-reply-to" href="https://target.com">text</a>
@@ -182,12 +180,10 @@ mod tests {
     fn extract_from_html_with_different_target() {
         let request = PendingRequest {
             id: 0,
-            source_url: "https://source.com",
-            target_url: "https://target.com/the/given/page",
-            sender_ip: "1.2.3.4",
+            source_url: "https://source.com".to_string(),
+            target_url: "https://target.com/the/given/page".to_string(),
             processing_attempts: 0,
             mentioned_on: Utc::now().naive_utc(),
-            processed_on: None,
         };
         let html = r#"
             <a rel="in-reply-to" href="https://target.com/another/page">lol</a>

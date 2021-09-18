@@ -14,7 +14,7 @@ extern crate diesel;
 use std::{env, path::PathBuf};
 
 use dotenv::dotenv;
-use webmention::MentionConfig;
+use webmention::requesting::MentionConfig;
 
 use crate::{db::get_db, routes::*};
 
