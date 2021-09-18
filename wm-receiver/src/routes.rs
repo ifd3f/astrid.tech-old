@@ -38,25 +38,19 @@ pub fn receive_webmention(
     Ok(())
 }
 
-#[derive(FromForm)]
-pub struct ProcessWebmentionsRequest {
-    limit: Option<i64>,
-    max_retries: Option<i32>,
-}
-
 /// Schecules a task to process all the stored webmentions. This endpoint should be protected
 /// and called on a cron job.
-#[post("/api/rpc/processWebmentions", data = "<params>")]
+#[post("/api/rpc/processWebmentions?<limit>")]
 pub async fn process_webmentions(
     config: &State<MentionConfig>,
-    params: Form<ProcessWebmentionsRequest>,
+    limit: Option<i64>,
 ) -> Status {
 
     use crate::schema::mentions::dsl::*;
     use diesel::prelude::*;
 
-    let limit = params.limit.unwrap_or(100);
-    let max_retries = params.max_retries.unwrap_or(10);
+    let limit = limit.unwrap_or(100);
+    let max_retries = 10;  // TODO
     let db = get_db();
 
     let requests = mentions
