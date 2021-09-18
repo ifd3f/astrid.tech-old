@@ -1,1 +1,1 @@
-DROP TABLE IF EXISTS mentions;
+DROP TABLE IF EXISTS requests;

@@ -1,4 +1,4 @@
-CREATE TABLE mentions(
+CREATE TABLE requests(
     id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
     source_url TEXT NOT NULL,
     target_url TEXT NOT NULL,

@@ -22,7 +22,7 @@ pub fn receive_webmention(
     config: &State<MentionConfig>,
     params: Form<WebmentionInput>,
 ) -> Result<(), BadRequest<String>> {
-    use crate::schema::mentions::dsl::*;
+    use crate::schema::requests::dsl::*;
     use diesel::prelude::*;
 
     let sender: String = remote_addr.to_string();
@@ -33,7 +33,7 @@ pub fn receive_webmention(
         .map_err(|e| e.into())?;
 
     let db = get_db();
-    insert_into(mentions).values(&mention).execute(&db).unwrap();
+    insert_into(requests).values(&mention).execute(&db).unwrap();
 
     Ok(())
 }
@@ -46,14 +46,14 @@ pub async fn process_webmentions(
     limit: Option<i64>,
 ) -> Status {
 
-    use crate::schema::mentions::dsl::*;
+    use crate::schema::requests::dsl::*;
     use diesel::prelude::*;
 
     let limit = limit.unwrap_or(100);
     let max_retries = 10;  // TODO
     let db = get_db();
 
-    let requests = mentions
+    let pending_requests = requests
         .select((
             id,
             source_url,
@@ -70,7 +70,7 @@ pub async fn process_webmentions(
         .load::<PendingRequest>(&db)
         .unwrap();
 
-    for request in requests {
+    for request in pending_requests {
         request.process(&config.webmention_dir).await.unwrap();
     }
 

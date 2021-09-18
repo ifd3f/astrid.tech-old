@@ -1,5 +1,5 @@
 table! {
-    mentions (id) {
+    requests (id) {
         id -> Integer,
         source_url -> Text,
         target_url -> Text,

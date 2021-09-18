@@ -6,14 +6,14 @@ use url::Url;
 
 use crate::{
     db::get_db,
-    schema::mentions,
+    schema::requests,
     webmention::storage::{read_existing_webmention, StorageAction},
 };
 
 use super::data::{RelUrl, Webmention};
 
 #[derive(Queryable, Identifiable, Debug)]
-#[table_name = "mentions"]
+#[table_name = "requests"]
 pub struct PendingRequest {
     id: i32,
     source_url: String,
@@ -23,7 +23,7 @@ pub struct PendingRequest {
 }
 
 #[derive(AsChangeset, Identifiable, Debug)]
-#[table_name = "mentions"]
+#[table_name = "requests"]
 struct ProcessedRequest {
     id: i32,
     processing_status: i32,
@@ -72,10 +72,10 @@ impl PendingRequest {
         }
 
         {
-            use crate::schema::mentions::dsl::*;
+            use crate::schema::requests::dsl::*;
             use diesel::prelude::*;
 
-            diesel::update(mentions).set(&processed).execute(&db)?;
+            diesel::update(requests).set(&processed).execute(&db)?;
         }
 
 

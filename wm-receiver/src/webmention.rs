@@ -3,7 +3,7 @@ use rocket::response::status::BadRequest;
 use std::{collections::HashSet, fmt::Display, path::PathBuf};
 use url::Url;
 
-use crate::schema::mentions;
+use crate::schema::requests;
 
 pub mod data;
 pub mod processing;
@@ -52,12 +52,12 @@ impl MentionConfig {
         sender_ip: &'a str,
         processing_status: i32,
         mentioned_on: DateTime<Utc>,
-    ) -> Result<InsertMention<'a>, MentionRequestError<'a>> {
+    ) -> Result<WebmentionRequest<'a>, MentionRequestError<'a>> {
         validate_url(source_url, None)?;
         validate_url(target_url, Some(&self.allowed_target_hosts))?;
 
         let mentioned_on = mentioned_on.naive_utc();
-        Ok(InsertMention {
+        Ok(WebmentionRequest {
             source_url,
             target_url,
             sender_ip,
@@ -85,8 +85,8 @@ impl<'a> Into<BadRequest<String>> for MentionRequestError<'a> {
 }
 
 #[derive(Insertable, Debug)]
-#[table_name = "mentions"]
-pub struct InsertMention<'a> {
+#[table_name = "requests"]
+pub struct WebmentionRequest<'a> {
     source_url: &'a str,
     target_url: &'a str,
     sender_ip: &'a str,
