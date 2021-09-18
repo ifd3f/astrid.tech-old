@@ -53,7 +53,14 @@ pub async fn process_webmentions(config: &State<MentionConfig>, limit: Option<i6
     use crate::schema::requests::dsl::*;
     use diesel::prelude::*;
 
-    reset_dir(&config.repo_dir).await.unwrap();
+    reset_dir(
+        &config.repo_dir,
+        &config.remote_url,
+        &config.branch_name,
+        &config.base_branch,
+    )
+    .await
+    .unwrap();
 
     let limit = limit.unwrap_or(100);
     let max_retries = 10; // TODO
@@ -80,7 +87,16 @@ pub async fn process_webmentions(config: &State<MentionConfig>, limit: Option<i6
         request.process(&config.webmention_dir).await.unwrap();
     }
 
-    push_changes(&config.repo_dir).await.unwrap();
+    let now = Utc::now();
+    let message = format!("wm-receiver: Webmentions processed at {}", now.to_rfc2822());
+    push_changes(
+        &config.repo_dir,
+        message,
+        &config.remote_url,
+        &config.branch_name,
+    )
+    .await
+    .unwrap();
 
     Status::Ok
 }

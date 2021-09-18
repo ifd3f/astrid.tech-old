@@ -1,4 +1,4 @@
-use std::{env::current_dir, error::Error, path::{Path, PathBuf}};
+use std::{env::current_dir, error::Error, ffi::OsStr, path::{Path, PathBuf}};
 
 use tokio::process::Command;
 
@@ -9,14 +9,19 @@ fn get_script_command(name: &str) -> Result<PathBuf, Box<dyn Error>> {
     Ok(dir)
 }
 
-pub async fn reset_dir(repo_dir: impl AsRef<Path>) -> Result<(), Box<dyn Error>> {
+pub async fn reset_dir(
+    repo_dir: impl AsRef<Path>,
+    remote_url: impl AsRef<OsStr>,
+    branch: impl AsRef<OsStr>,
+    base_branch: impl AsRef<OsStr>,
+) -> Result<(), Box<dyn Error>> {
     let cmd = get_script_command("reset_to_latest.sh")?.into_os_string();
     tokio::fs::create_dir_all(&repo_dir).await?;
 
     Command::new(cmd)
-        .arg("https://github.com/astralbijection/astrid.tech.git")
-        .arg("webmention/test")
-        .arg("main")
+        .arg(remote_url)
+        .arg(branch)
+        .arg(base_branch)
         .current_dir(repo_dir)
         .spawn()?
         .wait()
@@ -24,12 +29,17 @@ pub async fn reset_dir(repo_dir: impl AsRef<Path>) -> Result<(), Box<dyn Error>>
     Ok(())
 }
 
-pub async fn push_changes(repo_dir: impl AsRef<Path>) -> Result<(), Box<dyn Error>> {
+pub async fn push_changes(
+    repo_dir: impl AsRef<Path>,
+    message: impl AsRef<OsStr>,
+    remote_url: impl AsRef<OsStr>,
+    branch: impl AsRef<OsStr>,
+) -> Result<(), Box<dyn Error>> {
     let cmd = get_script_command("push_to_git.sh")?.into_os_string();
     Command::new(&cmd)
-        .arg("Here are some test changes")
-        .arg("https://github.com/astralbijection/astrid.tech.git")
-        .arg("webmention/test")
+        .arg(message)
+        .arg(remote_url)
+        .arg(branch)
         .current_dir(repo_dir)
         .spawn()?
         .wait()

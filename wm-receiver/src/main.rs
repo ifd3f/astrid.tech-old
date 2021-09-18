@@ -25,6 +25,17 @@ mod routes;
 mod schema;
 mod webmention;
 
+#[inline]
+fn require_env(name: &str, default: Option<&str>) -> String {
+    if let Some(var) = env::var(name).ok() {
+        return var;
+    }
+    if let Some(data) = default {
+        return data.to_string();
+    }
+    panic!("{} was not provided!", name);
+}
+
 #[launch]
 fn rocket() -> _ {
     dotenv().ok();
@@ -32,11 +43,16 @@ fn rocket() -> _ {
     // Ensure the database can be connected to
     get_db();
 
-    let target_hosts = env::var("ALLOWED_TARGET_HOSTS").expect("ALLOWED_TARGET_HOSTS must be set");
-    let repo_dir = PathBuf::from(env::var("REPO_DIR").expect("REPO_DIR must be set"));
+    let allowed_target_hosts = require_env("ALLOWED_TARGET_HOSTS", None)
+        .split(",")
+        .map(|host| host.to_owned())
+        .collect();
+    let remote_url = require_env("REMOTE_URL", None);
+    let webmention_subdir = PathBuf::from(require_env("WEBMENTION_SUBDIR", None));
 
-    let webmention_subdir =
-        PathBuf::from(env::var("WEBMENTION_SUBDIR").expect("WEBMENTION_SUBDIR must be set"));
+    let repo_dir = PathBuf::from(require_env("REPO_DIR", Some("/var/wm-receiver/repo")));
+    let branch_name = require_env("BRANCH_NAME", Some("webmention/"));
+    let base_branch = require_env("BASE_BRANCH", Some("webmention/"));
 
     let webmention_dir = repo_dir.join(webmention_subdir);
 
@@ -44,10 +60,10 @@ fn rocket() -> _ {
     let mention_config = MentionConfig {
         repo_dir,
         webmention_dir,
-        allowed_target_hosts: target_hosts
-            .split(",")
-            .map(|host| host.to_owned())
-            .collect(),
+        allowed_target_hosts,
+        remote_url,
+        branch_name,
+        base_branch,
     };
 
     rocket::build()

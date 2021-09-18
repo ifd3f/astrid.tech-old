@@ -8,6 +8,9 @@ pub struct MentionConfig {
     pub repo_dir: PathBuf,
     pub webmention_dir: PathBuf,
     pub allowed_target_hosts: HashSet<String>,
+    pub remote_url: String,
+    pub branch_name: String,
+    pub base_branch: String,
 }
 
 #[derive(Serialize, Deserialize, Debug, PartialEq, Eq)]
@@ -16,7 +19,7 @@ pub struct RelUrl {
     pub text: String,
 }
 
-/// A user-friendly processed webmention, stored in the git repo..
+/// A user-friendly processed webmention, stored in the git repo.
 #[derive(Serialize, Deserialize)]
 pub struct WebmentionRecord {
     /// The normalized URL of the source that sent the webmention.
