@@ -60,7 +60,6 @@ pub async fn process_webmentions(params: Form<ProcessWebmentionsRequest>) -> Sta
             id,
             source_url,
             target_url,
-            sender_ip,
             processing_attempts,
             mentioned_on,
         ))

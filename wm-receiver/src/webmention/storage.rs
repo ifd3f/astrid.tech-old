@@ -1,4 +1,5 @@
-use std::fs::File;
+use std::error::Error;
+use std::fs::{self, File};
 use std::path::{Path, PathBuf};
 
 use super::data::Webmention;
@@ -25,27 +26,25 @@ pub fn read_existing_webmention(
         Ok(file) => file,
         Err(_) => return None,
     };
-    serde_json::from_reader(file).ok()
+    serde_yaml::from_reader(file).ok()
 }
 
 pub enum StorageAction {
-    DeleteWebmention {
+    Delete {
         source_url: String,
         target_url: String,
     },
-    CreateWebmention(Webmention),
-    UpdateWebmention(Webmention),
+    Write(Webmention),
 }
 
 impl StorageAction {
     fn append_storage_subpath(&self, dst: &mut PathBuf) {
         let (source_url, target_url) = match self {
-            StorageAction::DeleteWebmention {
+            StorageAction::Delete {
                 source_url,
                 target_url,
             } => (source_url, target_url),
-            StorageAction::CreateWebmention(wm) => (&wm.source_url, &wm.target_url),
-            StorageAction::UpdateWebmention(wm) => (&wm.source_url, &wm.target_url),
+            StorageAction::Write(wm) => (&wm.source_url, &wm.target_url),
         };
 
         append_storage_subpath(
@@ -55,5 +54,20 @@ impl StorageAction {
         );
     }
 
-    fn apply(self, path: &Path) {}
+    pub fn apply(self, wm_dir: impl AsRef<Path>) -> Result<(), Box<dyn Error>> {
+        let mut path = PathBuf::new();
+        path.push(wm_dir);
+        self.append_storage_subpath(&mut path);
+
+        match self {
+            StorageAction::Delete {..}=> {
+                fs::remove_file(path)?;
+            }
+            StorageAction::Write(wm) => {
+                let mut file = File::create(path)?;
+                serde_yaml::to_writer(&mut file, &wm)?;
+            }
+        }
+        Ok(())
+    }
 }

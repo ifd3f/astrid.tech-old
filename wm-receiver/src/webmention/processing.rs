@@ -18,7 +18,6 @@ pub struct PendingRequest {
     id: i32,
     source_url: String,
     target_url: String,
-    sender_ip: String,
     processing_attempts: i32,
     mentioned_on: NaiveDateTime,
 }
@@ -47,7 +46,7 @@ impl PendingRequest {
         let html = self.get_html().await?;
         let rel_url = self.extract_data_from_html(html.as_str());
         let existing_mention = read_existing_webmention(
-            wm_dir,
+            &wm_dir,
             Url::parse(self.source_url.as_str()).unwrap(),
             Url::parse(self.target_url.as_str()).unwrap(),
         );
@@ -60,14 +59,17 @@ impl PendingRequest {
         .parse_to_mention(now);
 
         let action = match (existing_mention, new_mention) {
-            (None, None) => todo!(),
-            (None, Some(n)) => StorageAction::CreateWebmention(n),
-            (Some(e), None) => StorageAction::DeleteWebmention {
+            (None, None) => None,
+            (_, Some(n)) => Some(StorageAction::Write(n)),
+            (Some(e), None) => Some(StorageAction::Delete {
                 source_url: e.source_url,
                 target_url: e.target_url,
-            },
-            (Some(_), Some(n)) => StorageAction::UpdateWebmention(n),
+            }),
         };
+
+        if let Some(action) = action {
+            action.apply(wm_dir)?;
+        }
 
         {
             use crate::schema::mentions::dsl::*;
@@ -75,6 +77,7 @@ impl PendingRequest {
 
             diesel::update(mentions).set(&processed).execute(&db)?;
         }
+
 
         Ok(())
     }
