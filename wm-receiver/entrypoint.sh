@@ -1,15 +1,15 @@
-#!/usr/bin/env sh
+#!/usr/bin/env bash
 
-fatal_error {
+fatal_error() {
     echo $1
     exit 1
 }
 
 if [ -z $GIT_EMAIL ]; then 
-    fatal_error "Must provide GIT_EMAIL"
+    fatal_error "Error: must provide GIT_EMAIL"
 fi
 if [ -z $GIT_NAME ]; then 
-    fatal_error "Must provide GIT_NAME"
+    fatal_error "Error: must provide GIT_NAME"
 fi
 
 git config --global user.email $GIT_EMAIL
