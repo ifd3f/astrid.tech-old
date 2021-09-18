@@ -1,4 +1,4 @@
 .env
-webmentions/
+testdir/
 target/
 *.sqlite3

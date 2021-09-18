@@ -5,6 +5,8 @@
 
 extern crate dotenv;
 extern crate serde_yaml;
+#[cfg(test)]
+extern crate tempdir;
 extern crate slug;
 #[macro_use]
 extern crate rocket;

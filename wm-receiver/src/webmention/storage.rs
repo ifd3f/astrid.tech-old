@@ -64,7 +64,7 @@ impl StorageAction {
         fs::create_dir_all(&parent)?;
 
         match self {
-            StorageAction::Delete {..}=> {
+            StorageAction::Delete { .. } => {
                 fs::remove_file(path)?;
             }
             StorageAction::Write(wm) => {
