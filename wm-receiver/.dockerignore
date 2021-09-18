@@ -1,0 +1,4 @@
+.env
+testdir/
+target/
+*.sqlite3
