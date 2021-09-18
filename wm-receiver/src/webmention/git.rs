@@ -1,9 +1,18 @@
-use std::{error::Error, path::Path};
+use std::{env::current_dir, error::Error, path::{Path, PathBuf}};
 
 use tokio::process::Command;
 
+fn get_script_command(name: &str) -> Result<PathBuf, Box<dyn Error>> {
+    let mut dir = current_dir()?;
+    dir.push("resources/scripts");
+    dir.push(name);
+    Ok(dir)
+}
+
 pub async fn reset_dir(repo_dir: impl AsRef<Path>) -> Result<(), Box<dyn Error>> {
-    let result = Command::new("./resources/scripts/reset_to_latest.sh")
+    let cmd = get_script_command("reset_to_latest.sh")?.into_os_string();
+    println!("{}", cmd.to_str().unwrap());
+    Command::new(cmd)
         .arg("https://github.com/astralbijection/astrid.tech.git")
         .arg("webmention/test")
         .arg("main")
@@ -15,7 +24,8 @@ pub async fn reset_dir(repo_dir: impl AsRef<Path>) -> Result<(), Box<dyn Error>>
 }
 
 pub async fn push_changes(repo_dir: impl AsRef<Path>) -> Result<(), Box<dyn Error>> {
-    let result = Command::new("./resources/scripts/push_to_git.sh")
+    let cmd = get_script_command("push_to_git.sh")?.into_os_string();
+    Command::new(&cmd)
         .arg("My test changes")
         .arg("https://github.com/astralbijection/astrid.tech.git")
         .arg("webmention/test")
