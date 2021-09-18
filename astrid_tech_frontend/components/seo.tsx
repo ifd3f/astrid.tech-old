@@ -99,7 +99,7 @@ const SEO: FC<SEOProps> = ({
       {/* Webmention */}
       <link
         rel="webmention"
-        href="https://api.astrid.tech/api/webmention/receive"
+        href="https://api.astrid.tech/api/webmention"
       />
     </Head>
   );
