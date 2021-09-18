@@ -1,15 +1,15 @@
 use chrono::{DateTime, Utc};
 use serde::{Deserialize, Serialize};
 
-#[derive(Serialize, Deserialize, Debug)]
+#[derive(Serialize, Deserialize, Debug, PartialEq, Eq)]
 pub struct RelUrl {
     pub rels: Vec<String>,
     pub text: String,
 }
 
-/// A user-friendly processed webmention.
+/// A user-friendly processed webmention, stored in the git repo..
 #[derive(Serialize, Deserialize)]
-pub struct Webmention {
+pub struct WebmentionRecord {
     /// The normalized URL of the source that sent the webmention.
     pub source_url: String,
     /// The normalized URL of the target that is mentioned.

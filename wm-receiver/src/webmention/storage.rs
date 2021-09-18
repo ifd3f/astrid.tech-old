@@ -2,7 +2,7 @@ use std::error::Error;
 use std::fs::{self, File};
 use std::path::{Path, PathBuf};
 
-use super::data::Webmention;
+use super::data::WebmentionRecord;
 use slug::slugify;
 use url::Url;
 
@@ -17,7 +17,7 @@ pub fn read_existing_webmention(
     wm_dir: impl AsRef<Path>,
     source_url: Url,
     target_url: Url,
-) -> Option<Webmention> {
+) -> Option<WebmentionRecord> {
     let mut path = PathBuf::new();
     path.push(wm_dir);
     append_storage_subpath(&mut path, source_url, target_url);
@@ -34,7 +34,7 @@ pub enum StorageAction {
         source_url: String,
         target_url: String,
     },
-    Write(Webmention),
+    Write(WebmentionRecord),
 }
 
 impl StorageAction {

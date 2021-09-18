@@ -33,9 +33,9 @@ fn rocket() -> _ {
     get_db();
 
     let target_hosts = env::var("ALLOWED_TARGET_HOSTS").expect("ALLOWED_TARGET_HOSTS must be set");
-    let mut repo_dir = PathBuf::from(env::var("REPO_DIR").expect("REPO_DIR must be set"));
+    let repo_dir = PathBuf::from(env::var("REPO_DIR").expect("REPO_DIR must be set"));
 
-    let mut webmention_subdir =
+    let webmention_subdir =
         PathBuf::from(env::var("WEBMENTION_SUBDIR").expect("WEBMENTION_SUBDIR must be set"));
 
     let webmention_dir = repo_dir.join(webmention_subdir);

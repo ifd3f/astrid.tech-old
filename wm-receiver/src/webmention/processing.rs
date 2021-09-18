@@ -10,7 +10,7 @@ use crate::{
     webmention::storage::{read_existing_webmention, StorageAction},
 };
 
-use super::data::{RelUrl, Webmention};
+use super::data::{RelUrl, WebmentionRecord};
 
 #[derive(Queryable, Identifiable, Debug)]
 #[table_name = "requests"]
@@ -59,12 +59,27 @@ impl PendingRequest {
         .parse_to_mention(now);
 
         let action = match (existing_mention, new_mention) {
+            // Invalid webmention
             (None, None) => None,
-            (_, Some(n)) => Some(StorageAction::Write(n)),
+
+            // Create
+            (None, Some(n)) => Some(StorageAction::Write(n)),
+
+            // Delete
             (Some(e), None) => Some(StorageAction::Delete {
                 source_url: e.source_url,
                 target_url: e.target_url,
             }),
+            
+            // Update
+            (Some(e), Some(n)) => {
+                // Only update if the context of the mention got updated
+                if e.rel_url != n.rel_url {
+                    Some(StorageAction::Write(n))
+                } else {
+                    None
+                }
+            }
         };
 
         if let Some(action) = action {
@@ -77,7 +92,6 @@ impl PendingRequest {
 
             diesel::update(requests).set(&processed).execute(&db)?;
         }
-
 
         Ok(())
     }
@@ -112,7 +126,7 @@ impl PendingRequest {
 }
 
 impl GatheredWebmentionData {
-    fn parse_to_mention(self, now: DateTime<Utc>) -> (Option<Webmention>, ProcessedRequest) {
+    fn parse_to_mention(self, now: DateTime<Utc>) -> (Option<WebmentionRecord>, ProcessedRequest) {
         let now_naive = now.naive_utc();
 
         let microformats = if let Some(microformat) = self.rel_url {
@@ -131,7 +145,7 @@ impl GatheredWebmentionData {
         };
 
         let mentioned_on = Utc.from_utc_datetime(&self.request.mentioned_on);
-        let webmention = Webmention {
+        let webmention = WebmentionRecord {
             source_url: self.request.source_url.to_string(),
             target_url: self.request.target_url.to_string(),
             mentioned_on,
