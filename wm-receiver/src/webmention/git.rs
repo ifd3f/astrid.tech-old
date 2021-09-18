@@ -11,7 +11,6 @@ fn get_script_command(name: &str) -> Result<PathBuf, Box<dyn Error>> {
 
 pub async fn reset_dir(repo_dir: impl AsRef<Path>) -> Result<(), Box<dyn Error>> {
     let cmd = get_script_command("reset_to_latest.sh")?.into_os_string();
-    println!("{}", cmd.to_str().unwrap());
     Command::new(cmd)
         .arg("https://github.com/astralbijection/astrid.tech.git")
         .arg("webmention/test")
@@ -26,7 +25,7 @@ pub async fn reset_dir(repo_dir: impl AsRef<Path>) -> Result<(), Box<dyn Error>>
 pub async fn push_changes(repo_dir: impl AsRef<Path>) -> Result<(), Box<dyn Error>> {
     let cmd = get_script_command("push_to_git.sh")?.into_os_string();
     Command::new(&cmd)
-        .arg("My test changes")
+        .arg("Here are some test changes")
         .arg("https://github.com/astralbijection/astrid.tech.git")
         .arg("webmention/test")
         .current_dir(repo_dir)
