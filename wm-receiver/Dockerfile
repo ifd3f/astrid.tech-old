@@ -33,5 +33,7 @@ COPY --from=builder /app/target/release/wm-receiver /usr/local/bin/
 COPY --from=builder /app/resources/main /usr/local/share/wm-receiver/
 
 WORKDIR /app
+COPY ./entrypoint.sh /app/
+
 EXPOSE 8000
-CMD wm-receiver
+CMD ./entrypoint.sh
