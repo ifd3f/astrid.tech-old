@@ -20,6 +20,10 @@ git fetch origin --depth 1 $WORK_BRANCH || git fetch origin --depth 1 $MAIN_BRAN
 # Delete the cached origin tags if needed
 git remote prune origin  
 
+# In case this is our first time on this repository, check out main
+git branch $MAIN_BRANCH
+git checkout $MAIN_BRANCH
+
 # Ensure work branch exists and check it out
 git branch $WORK_BRANCH
 git checkout $WORK_BRANCH
