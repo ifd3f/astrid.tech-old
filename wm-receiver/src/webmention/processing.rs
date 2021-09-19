@@ -4,13 +4,12 @@ use chrono::{DateTime, Duration, NaiveDateTime, TimeZone, Utc};
 use scraper::{Html, Selector};
 use url::Url;
 
-use crate::{
-    db::get_db,
-    schema::requests,
-    webmention::storage::{read_existing_webmention, StorageAction},
-};
+use crate::{db::get_db, schema::requests, webmention::storage::StorageAction};
 
-use super::data::{RelUrl, WebmentionRecord};
+use super::{
+    data::{RelUrl, WebmentionRecord},
+    storage::WebmentionStore,
+};
 
 #[derive(Queryable, Identifiable, Debug)]
 #[table_name = "requests"]
@@ -34,14 +33,15 @@ struct ProcessedRequest {
 
 pub async fn process_pending_request(
     pending: PendingRequest,
-    wm_dir: impl AsRef<Path>,
+    wm_store: &mut WebmentionStore,
 ) -> Result<(), Box<dyn Error>> {
     let db = get_db();
 
+    let wm_store = wm_store;
+
     let html = pending.fetch_html().await?;
     let rel_url = extract_rel_data_from_html(&pending.target_url, html);
-    let existing_mention = read_existing_webmention(
-        &wm_dir,
+    let existing_mention = wm_store.get_webmention(
         Url::parse(&pending.source_url).unwrap(),
         Url::parse(&pending.target_url).unwrap(),
     );
@@ -51,7 +51,7 @@ pub async fn process_pending_request(
     let action = determine_storage_action(existing_mention, new_mention);
 
     if let Some(action) = action {
-        action.apply(wm_dir)?;
+        wm_store.apply(action)?;
     }
 
     {

@@ -5,6 +5,7 @@ use crate::webmention::data::MentionConfig;
 use crate::webmention::git::ManagedGitRepo;
 use crate::webmention::processing::{process_pending_request, PendingRequest};
 use crate::webmention::requesting::create_mention;
+use crate::webmention::storage::WebmentionStore;
 use chrono::Utc;
 use diesel::insert_into;
 use rocket::form::Form;
@@ -51,14 +52,14 @@ pub fn receive_webmention(
 /// and called on a cron job.
 #[post("/api/rpc/processWebmentions?<limit>")]
 pub async fn process_webmentions(
-    config: &State<MentionConfig>,
-    global_repo: &State<Mutex<ManagedGitRepo>>,
+    shared_wm_store: &State<Mutex<WebmentionStore>>,
+    shared_repo: &State<Mutex<ManagedGitRepo>>,
     limit: Option<i64>,
 ) -> Status {
     use crate::schema::requests::dsl::*;
     use diesel::prelude::*;
 
-    let mut repo_lock = global_repo.lock().await;
+    let mut repo_lock = shared_repo.lock().await;
 
     repo_lock.reset_dir().await.unwrap();
 
@@ -83,8 +84,9 @@ pub async fn process_webmentions(
         .load::<PendingRequest>(&db)
         .unwrap();
 
+    let locked_wm_store = &mut *shared_wm_store.lock().await;
     for request in pending_requests {
-        process_pending_request(request, &config.webmention_dir)
+        process_pending_request(request, locked_wm_store)
             .await
             .unwrap();
     }

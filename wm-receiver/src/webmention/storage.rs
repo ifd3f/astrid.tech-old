@@ -1,9 +1,59 @@
 use std::error::Error;
 use std::fs::{self, File};
-use std::path::{Path, PathBuf};
+use std::path::PathBuf;
 
 use super::data::WebmentionRecord;
 use sanitize_filename::sanitize_with_options;
+
+pub struct WebmentionStore {
+    path: PathBuf,
+}
+
+impl WebmentionStore {
+    pub fn new(path: PathBuf) -> WebmentionStore {
+        WebmentionStore { path }
+    }
+
+    pub fn get_webmention(
+        &self,
+        source_url: impl AsRef<str>,
+        target_url: impl AsRef<str>,
+    ) -> Option<WebmentionRecord> {
+        let mut path = PathBuf::new();
+        path.push(&self.path);
+        append_storage_subpath(&mut path, source_url, target_url);
+
+        let file = match File::open(path) {
+            Ok(file) => file,
+            Err(_) => return None,
+        };
+        serde_json::from_reader(file).ok()
+    }
+
+    pub fn apply(&mut self, action: StorageAction) -> Result<(), Box<dyn Error>> {
+        let path = {
+            let mut path = PathBuf::new();
+            path.push(&self.path);
+            action.append_storage_subpath(&mut path);
+            path
+        };
+
+        // Safe to unwrap because this is definitely a subdirectory
+        let parent = path.parent().unwrap();
+        fs::create_dir_all(&parent)?;
+
+        match action {
+            StorageAction::Delete { .. } => {
+                fs::remove_file(path)?;
+            }
+            StorageAction::Write(wm) => {
+                let mut file = File::create(path)?;
+                serde_json::to_writer_pretty(&mut file, &wm)?;
+            }
+        }
+        Ok(())
+    }
+}
 
 pub fn append_storage_subpath(
     dst: &mut PathBuf,
@@ -21,22 +71,6 @@ pub fn append_storage_subpath(
     dst.push(sanitize_with_options(target_url, options.clone()));
     dst.push(sanitize_with_options(source_url, options));
     dst.push(format!("{}.json", hash));
-}
-
-pub fn read_existing_webmention(
-    wm_dir: impl AsRef<Path>,
-    source_url: impl AsRef<str>,
-    target_url: impl AsRef<str>,
-) -> Option<WebmentionRecord> {
-    let mut path = PathBuf::new();
-    path.push(wm_dir);
-    append_storage_subpath(&mut path, source_url, target_url);
-
-    let file = match File::open(path) {
-        Ok(file) => file,
-        Err(_) => return None,
-    };
-    serde_json::from_reader(file).ok()
 }
 
 pub enum StorageAction {
@@ -58,27 +92,6 @@ impl StorageAction {
         };
 
         append_storage_subpath(dst, source_url, target_url);
-    }
-
-    pub fn apply(self, wm_dir: impl AsRef<Path>) -> Result<(), Box<dyn Error>> {
-        let mut path = PathBuf::new();
-        path.push(wm_dir);
-        self.append_storage_subpath(&mut path);
-
-        // Safe to unwrap because we've created subdirectories
-        let parent = path.parent().unwrap();
-        fs::create_dir_all(&parent)?;
-
-        match self {
-            StorageAction::Delete { .. } => {
-                fs::remove_file(path)?;
-            }
-            StorageAction::Write(wm) => {
-                let mut file = File::create(path)?;
-                serde_json::to_writer_pretty(&mut file, &wm)?;
-            }
-        }
-        Ok(())
     }
 }
 
