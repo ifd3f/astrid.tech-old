@@ -60,13 +60,7 @@ pub async fn process_webmentions(
 
     let mut repo_lock = global_repo.lock().await;
 
-    repo_lock.reset_dir(
-        &config.remote_url,
-        &config.branch_name,
-        &config.base_branch,
-    )
-    .await
-    .unwrap();
+    repo_lock.reset_dir().await.unwrap();
 
     let limit = limit.unwrap_or(100);
     let max_retries = 10; // TODO
@@ -97,14 +91,8 @@ pub async fn process_webmentions(
 
     let now = Utc::now();
     let message = format!("wm-receiver: Webmentions processed at {}", now.to_rfc2822());
-    
-    repo_lock.push_changes(
-        message,
-        &config.remote_url,
-        &config.branch_name,
-    )
-    .await
-    .unwrap();
+
+    repo_lock.push_changes(message).await.unwrap();
 
     Status::Ok
 }

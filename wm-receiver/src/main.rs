@@ -62,12 +62,9 @@ fn rocket() -> _ {
     let mention_config = MentionConfig {
         webmention_dir,
         allowed_target_hosts,
-        remote_url,
-        branch_name,
-        base_branch,
     };
 
-    let repo = ManagedGitRepo::new(repo_dir);
+    let repo = ManagedGitRepo::new(repo_dir, remote_url, branch_name, base_branch);
 
     rocket::build()
         .manage(mention_config)

@@ -7,9 +7,6 @@ use serde::{Deserialize, Serialize};
 pub struct MentionConfig {
     pub webmention_dir: PathBuf,
     pub allowed_target_hosts: HashSet<String>,
-    pub remote_url: String,
-    pub branch_name: String,
-    pub base_branch: String,
 }
 
 #[derive(Serialize, Deserialize, Debug, PartialEq, Eq)]

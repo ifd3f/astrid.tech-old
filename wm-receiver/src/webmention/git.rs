@@ -12,26 +12,31 @@ fn get_script_command(name: &str) -> Result<PathBuf, Box<dyn Error>> {
 
 pub struct ManagedGitRepo {
     repo_dir: PathBuf,
+    remote_url: String,
+    branch: String,
+    base_branch: String
 }
 
 impl ManagedGitRepo {
-    pub fn new(repo_dir: PathBuf) -> ManagedGitRepo {
-        ManagedGitRepo { repo_dir }
+    pub fn new(repo_dir: PathBuf, remote_url: String, branch: String, base_branch: String) -> ManagedGitRepo {
+        ManagedGitRepo {
+            repo_dir,
+            remote_url,
+            branch,
+            base_branch
+        }
     }
 
     pub async fn reset_dir(
         &mut self,
-        remote_url: impl AsRef<OsStr>,
-        branch: impl AsRef<OsStr>,
-        base_branch: impl AsRef<OsStr>,
     ) -> Result<(), Box<dyn Error>> {
         let cmd = get_script_command("reset_to_latest.sh")?.into_os_string();
         tokio::fs::create_dir_all(&self.repo_dir).await?;
 
         Command::new(cmd)
-            .arg(remote_url)
-            .arg(branch)
-            .arg(base_branch)
+            .arg(&self.remote_url)
+            .arg(&self.branch)
+            .arg(&self.base_branch)
             .current_dir(&self.repo_dir)
             .spawn()?
             .wait()
@@ -42,14 +47,12 @@ impl ManagedGitRepo {
     pub async fn push_changes(
         &mut self,
         message: impl AsRef<OsStr>,
-        remote_url: impl AsRef<OsStr>,
-        branch: impl AsRef<OsStr>,
     ) -> Result<(), Box<dyn Error>> {
         let cmd = get_script_command("push_to_git.sh")?.into_os_string();
         Command::new(&cmd)
             .arg(message)
-            .arg(remote_url)
-            .arg(branch)
+            .arg(&self.remote_url)
+            .arg(&self.branch)
             .current_dir(&self.repo_dir)
             .spawn()?
             .wait()
