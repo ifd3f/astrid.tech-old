@@ -11,13 +11,15 @@ RUN USER=root cargo new --bin app --name wm-receiver
 # Install dependencies
 WORKDIR /app
 COPY ./Cargo.toml .
-RUN cargo build --release
+# Workaround: https://github.com/rust-lang/cargo/issues/6513#issuecomment-920920238
+RUN CARGO_HTTP_MULTIPLEXING=false cargo build --release
 
 # Build the app
 RUN rm src/*.rs
 ADD . ./
 RUN rm ./target/release/deps/wm_receiver*
-RUN WEBMENTION_RESOURCES_DIR=/usr/local/share/wm-receiver/ cargo build --release
+# Workaround: https://github.com/rust-lang/cargo/issues/6513#issuecomment-920920238
+RUN CARGO_HTTP_MULTIPLEXING=false WEBMENTION_RESOURCES_DIR=/usr/local/share/wm-receiver/ cargo build --release
 
 EXPOSE 8000
 
