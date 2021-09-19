@@ -21,7 +21,11 @@ use dotenv::dotenv;
 use tokio::sync::Mutex;
 use webmention::data::MentionConfig;
 
-use crate::{db::run_migrations, routes::*, webmention::{git::ManagedGitRepo, storage::WebmentionStore}};
+use crate::{
+    db::run_migrations,
+    routes::*,
+    webmention::{git::ManagedGitRepo, storage::WebmentionStore},
+};
 
 mod db;
 mod routes;
@@ -65,7 +69,12 @@ fn rocket() -> _ {
     };
 
     let store = Mutex::new(WebmentionStore::new(webmention_dir));
-    let repo = Mutex::new(ManagedGitRepo::new(repo_dir, remote_url, branch_name, base_branch));
+    let repo = Mutex::new(ManagedGitRepo::new(
+        repo_dir,
+        remote_url,
+        branch_name,
+        base_branch,
+    ));
 
     rocket::build()
         .manage(mention_config)

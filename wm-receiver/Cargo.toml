@@ -1,9 +1,10 @@
 [package]
 authors = ["Astrid Yu <astrid@astrid.tech>"]
 description = "A webmention receiver and processor."
-edition = "2018"
+edition = "2021"
 homepage = "https://astrid.tech/projects/astrid-tech"
 name = "wm-receiver"
+resolver = "1"
 publish = false
 repository = "https://github.com/astralbijection/astrid.tech.git"
 version = "0.1.0"
@@ -39,6 +40,9 @@ git = "https://gitlab.com/maxburon/microformats-parser.git"
 [dependencies.tokio]
 features = ["process", "sync"]
 version = "*"
+
+[build-dependencies]
+diesel = { version = "1.4.7", features = ["chrono", "sqlite"] }
 
 [dev-dependencies]
 rstest = "0.11.0"

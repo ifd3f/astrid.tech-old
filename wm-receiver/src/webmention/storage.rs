@@ -110,7 +110,7 @@ mod tests {
         append_storage_subpath(&mut path, source, target);
 
         assert_eq!(
-            path.into_os_string().into_string().unwrap(), 
+            path.into_os_string().into_string().unwrap(),
             "http---foo.bar.com-some-article/http---bar.spam.com-another-article/e10e9d330cb4798e8c6bf194f7ba925e112f0c508ba3607785262c9d754f51de.json",
         );
     }
