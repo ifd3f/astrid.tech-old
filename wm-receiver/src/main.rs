@@ -5,7 +5,7 @@
 
 extern crate dotenv;
 extern crate serde_json;
-extern crate slug;
+extern crate sha256;
 #[macro_use]
 extern crate diesel_migrations;
 #[cfg(test)]

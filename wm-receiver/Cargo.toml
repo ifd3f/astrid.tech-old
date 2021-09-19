@@ -17,10 +17,11 @@ dotenv = "*"
 reqwest = "*"
 rocket = "0.5.0-rc.1"
 rocket_codegen = "0.5.0-rc.1"
+sanitize-filename = "*"
 scraper = "*"
 serde = "*"
 serde_json = "*"
-slug = "*"
+sha256 = "*"
 url = "*"
 
 [dependencies.chrono]

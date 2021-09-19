@@ -70,7 +70,7 @@ impl PendingRequest {
                 source_url: e.source_url,
                 target_url: e.target_url,
             }),
-            
+
             // Update
             (Some(e), Some(n)) => {
                 // Only update if the context of the mention got updated

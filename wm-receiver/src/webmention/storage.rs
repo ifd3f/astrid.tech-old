@@ -3,20 +3,30 @@ use std::fs::{self, File};
 use std::path::{Path, PathBuf};
 
 use super::data::WebmentionRecord;
-use slug::slugify;
-use url::Url;
+use sanitize_filename::sanitize_with_options;
 
-pub fn append_storage_subpath(dst: &mut PathBuf, source_url: Url, target_url: Url) {
-    dst.push(target_url.host().unwrap().to_string());
-    dst.push(slugify(target_url.path()));
-    dst.push(source_url.host().unwrap().to_string());
-    dst.push(format!("{}.json", slugify(source_url.path())));
+pub fn append_storage_subpath(
+    dst: &mut PathBuf,
+    source_url: impl AsRef<str>,
+    target_url: impl AsRef<str>,
+) {
+    let options = sanitize_filename::Options {
+        truncate: true,
+        windows: true,
+        replacement: "-",
+    };
+
+    let hash = sha256::digest(format!("{}|{}", target_url.as_ref(), source_url.as_ref()));
+
+    dst.push(sanitize_with_options(target_url, options.clone()));
+    dst.push(sanitize_with_options(source_url, options));
+    dst.push(format!("{}.json", hash));
 }
 
 pub fn read_existing_webmention(
     wm_dir: impl AsRef<Path>,
-    source_url: Url,
-    target_url: Url,
+    source_url: impl AsRef<str>,
+    target_url: impl AsRef<str>,
 ) -> Option<WebmentionRecord> {
     let mut path = PathBuf::new();
     path.push(wm_dir);
@@ -47,11 +57,7 @@ impl StorageAction {
             StorageAction::Write(wm) => (&wm.source_url, &wm.target_url),
         };
 
-        append_storage_subpath(
-            dst,
-            Url::parse(source_url).unwrap(),
-            Url::parse(target_url).unwrap(),
-        );
+        append_storage_subpath(dst, source_url, target_url);
     }
 
     pub fn apply(self, wm_dir: impl AsRef<Path>) -> Result<(), Box<dyn Error>> {
@@ -73,5 +79,23 @@ impl StorageAction {
             }
         }
         Ok(())
+    }
+}
+
+#[cfg(test)]
+mod tests {
+    use std::assert_matches::assert_matches;
+
+    use chrono::Utc;
+
+    #[test]
+    fn append_storage_path_works() {
+        let source = "http://bar.spam.com/another/article";
+        let target = "http://foo.bar.com/some/article";
+        let mut path = PathBuf::new();
+
+        append_storage_subpath(&source, target, path);
+
+        assert_eq!(path, "foo");
     }
 }
