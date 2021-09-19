@@ -1,16 +1,11 @@
-use std::{collections::HashSet, path::PathBuf};
+use std::{collections::HashSet};
 
 use chrono::{DateTime, Utc};
 use serde::{Deserialize, Serialize};
 
 #[derive(Debug)]
 pub struct MentionConfig {
-    pub repo_dir: PathBuf,
-    pub webmention_dir: PathBuf,
     pub allowed_target_hosts: HashSet<String>,
-    pub remote_url: String,
-    pub branch_name: String,
-    pub base_branch: String,
 }
 
 #[derive(Serialize, Deserialize, Debug, PartialEq, Eq)]
@@ -21,11 +16,12 @@ pub struct RelUrl {
 
 /// A user-friendly processed webmention, stored in the git repo.
 #[derive(Serialize, Deserialize)]
+#[serde(rename_all = "camelCase")]
 pub struct WebmentionRecord {
     /// The normalized URL of the source that sent the webmention.
-    pub source_url: String,
+    pub source: String,
     /// The normalized URL of the target that is mentioned.
-    pub target_url: String,
+    pub target: String,
     /// When this mention was sent.
     pub mentioned_on: DateTime<Utc>,
     /// When this mention was processed.

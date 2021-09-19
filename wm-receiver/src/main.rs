@@ -18,9 +18,14 @@ extern crate diesel;
 use std::{env, path::PathBuf};
 
 use dotenv::dotenv;
+use tokio::sync::Mutex;
 use webmention::data::MentionConfig;
 
-use crate::{db::run_migrations, routes::*};
+use crate::{
+    db::run_migrations,
+    routes::*,
+    webmention::{git::ManagedGitRepo, storage::WebmentionStore},
+};
 
 mod db;
 mod routes;
@@ -60,15 +65,20 @@ fn rocket() -> _ {
 
     // Generate mention config
     let mention_config = MentionConfig {
-        repo_dir,
-        webmention_dir,
         allowed_target_hosts,
+    };
+
+    let store = Mutex::new(WebmentionStore::new(webmention_dir));
+    let repo = Mutex::new(ManagedGitRepo::new(
+        repo_dir,
         remote_url,
         branch_name,
         base_branch,
-    };
+    ));
 
     rocket::build()
         .manage(mention_config)
+        .manage(repo)
+        .manage(store)
         .mount("/", routes![receive_webmention, process_webmentions])
 }

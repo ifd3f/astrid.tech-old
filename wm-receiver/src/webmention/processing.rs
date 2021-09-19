@@ -1,16 +1,15 @@
-use std::{error::Error, ops::Add, path::Path};
+use std::{error::Error, ops::Add};
 
 use chrono::{DateTime, Duration, NaiveDateTime, TimeZone, Utc};
 use scraper::{Html, Selector};
 use url::Url;
 
-use crate::{
-    db::get_db,
-    schema::requests,
-    webmention::storage::{read_existing_webmention, StorageAction},
-};
+use crate::{db::get_db, schema::requests, webmention::storage::StorageAction};
 
-use super::data::{RelUrl, WebmentionRecord};
+use super::{
+    data::{RelUrl, WebmentionRecord},
+    storage::WebmentionStore,
+};
 
 #[derive(Queryable, Identifiable, Debug)]
 #[table_name = "requests"]
@@ -32,132 +31,137 @@ struct ProcessedRequest {
     next_processing_attempt: Option<NaiveDateTime>,
 }
 
-struct GatheredWebmentionData {
-    /// The pending request data we stored in the database.
-    request: PendingRequest,
-    /// The rel_url data we found for this mention.
-    rel_url: Option<RelUrl>,
+pub async fn process_pending_request(
+    pending: PendingRequest,
+    wm_store: &mut WebmentionStore,
+) -> Result<(), Box<dyn Error>> {
+    let db = get_db();
+
+    let wm_store = wm_store;
+
+    let html = pending.fetch_html().await?;
+    let rel_url = extract_rel_data_from_html(&pending.target_url, html);
+    let existing_mention = wm_store.get_webmention(
+        Url::parse(&pending.source_url).unwrap(),
+        Url::parse(&pending.target_url).unwrap(),
+    );
+
+    let now = Utc::now();
+    let (new_mention, processed) = pending.with_verification_result(rel_url, now);
+    let action = determine_storage_action(existing_mention, new_mention);
+
+    if let Some(action) = action {
+        wm_store.apply(action)?;
+    }
+
+    {
+        use crate::schema::requests::dsl::*;
+        use diesel::prelude::*;
+
+        diesel::update(requests).set(&processed).execute(&db)?;
+    }
+
+    Ok(())
+}
+
+fn determine_storage_action(
+    existing_mention: Option<WebmentionRecord>,
+    new_mention: Option<WebmentionRecord>,
+) -> Option<StorageAction> {
+    match (existing_mention, new_mention) {
+        // Webmention failed validation
+        (None, None) => None,
+
+        // Create
+        (None, Some(n)) => Some(StorageAction::Write(n)),
+
+        // Delete
+        (Some(e), None) => Some(StorageAction::Delete {
+            source_url: e.source,
+            target_url: e.target,
+        }),
+
+        // Update
+        (Some(e), Some(n)) => {
+            // Only update if the rel-url context of the mention got updated
+            if e.rel_url != n.rel_url {
+                Some(StorageAction::Write(n))
+            } else {
+                None
+            }
+        }
+    }
+}
+
+fn extract_rel_data_from_html(
+    target_url: impl AsRef<str>,
+    html: impl AsRef<str>,
+) -> Option<RelUrl> {
+    let anchor_selector: Selector = Selector::parse("a").unwrap();
+
+    for element in Html::parse_fragment(html.as_ref()).select(&anchor_selector) {
+        let text = element.text().into_iter().collect::<String>();
+        let href = if let Some(href) = element.value().attr("href") {
+            href
+        } else {
+            continue;
+        };
+
+        let rel = element.value().attr("rel");
+
+        if href == target_url.as_ref() {
+            let rels: Vec<String> = rel
+                .map(|r| r.to_string())
+                .map_or_else(Vec::new, |x| vec![x]);
+            return Some(RelUrl { rels, text });
+        }
+    }
+    None
 }
 
 impl PendingRequest {
-    pub async fn process(self, wm_dir: impl AsRef<Path>) -> Result<(), Box<dyn Error>> {
-        let db = get_db();
-
-        let html = self.get_html().await?;
-        let rel_url = self.extract_data_from_html(html.as_str());
-        let existing_mention = read_existing_webmention(
-            &wm_dir,
-            Url::parse(self.source_url.as_str()).unwrap(),
-            Url::parse(self.target_url.as_str()).unwrap(),
-        );
-        let now = Utc::now();
-
-        let (new_mention, processed) = GatheredWebmentionData {
-            request: self,
-            rel_url,
-        }
-        .parse_to_mention(now);
-
-        let action = match (existing_mention, new_mention) {
-            // Invalid webmention
-            (None, None) => None,
-
-            // Create
-            (None, Some(n)) => Some(StorageAction::Write(n)),
-
-            // Delete
-            (Some(e), None) => Some(StorageAction::Delete {
-                source_url: e.source_url,
-                target_url: e.target_url,
-            }),
-
-            // Update
-            (Some(e), Some(n)) => {
-                // Only update if the context of the mention got updated
-                if e.rel_url != n.rel_url {
-                    Some(StorageAction::Write(n))
-                } else {
-                    None
-                }
-            }
-        };
-
-        if let Some(action) = action {
-            action.apply(wm_dir)?;
-        }
-
-        {
-            use crate::schema::requests::dsl::*;
-            use diesel::prelude::*;
-
-            diesel::update(requests).set(&processed).execute(&db)?;
-        }
-
-        Ok(())
-    }
-
-    async fn get_html(&self) -> Result<String, Box<dyn std::error::Error>> {
+    async fn fetch_html(&self) -> Result<String, Box<dyn std::error::Error>> {
         let resp = reqwest::get(self.source_url.as_str()).await?.text().await?;
         Ok(resp)
     }
 
-    fn extract_data_from_html(&self, html: &'h str) -> Option<RelUrl> {
-        let anchor_selector: Selector = Selector::parse("a").unwrap();
-
-        for element in Html::parse_fragment(html).select(&anchor_selector) {
-            let text = element.text().into_iter().collect::<String>();
-            let href = if let Some(href) = element.value().attr("href") {
-                href
-            } else {
-                continue;
-            };
-
-            let rel = element.value().attr("rel");
-
-            if href == self.target_url {
-                let rels: Vec<String> = rel
-                    .map(|r| r.to_string())
-                    .map_or_else(Vec::new, |x| vec![x]);
-                return Some(RelUrl { rels, text });
-            }
-        }
-        None
-    }
-}
-
-impl GatheredWebmentionData {
-    fn parse_to_mention(self, now: DateTime<Utc>) -> (Option<WebmentionRecord>, ProcessedRequest) {
+    fn with_verification_result(
+        self,
+        rel_url: Option<RelUrl>,
+        now: DateTime<Utc>,
+    ) -> (Option<WebmentionRecord>, ProcessedRequest) {
         let now_naive = now.naive_utc();
 
-        let microformats = if let Some(microformat) = self.rel_url {
+        let microformats = if let Some(microformat) = rel_url {
             microformat
         } else {
+            // No rel-url associated with the link, meaning this is an invalid webmention
             return (
                 None,
                 ProcessedRequest {
-                    id: self.request.id,
+                    id: self.id,
                     processing_status: 1,
-                    processing_attempts: self.request.processing_attempts + 1,
+                    processing_attempts: self.processing_attempts + 1,
                     processed_on: now_naive,
                     next_processing_attempt: Some(now_naive.add(Duration::hours(1))),
                 },
             );
         };
 
-        let mentioned_on = Utc.from_utc_datetime(&self.request.mentioned_on);
+        let mentioned_on = Utc.from_utc_datetime(&self.mentioned_on);
         let webmention = WebmentionRecord {
-            source_url: self.request.source_url.to_string(),
-            target_url: self.request.target_url.to_string(),
+            source: self.source_url,
+            target: self.target_url,
             mentioned_on,
             processed_on: now,
             rel_url: microformats,
         };
         let processing_status = ProcessedRequest {
-            id: self.request.id,
+            id: self.id,
             processing_status: 2,
             processed_on: now_naive,
             next_processing_attempt: None,
-            processing_attempts: self.request.processing_attempts + 1,
+            processing_attempts: self.processing_attempts + 1,
         };
         (Some(webmention), processing_status)
     }
@@ -167,24 +171,16 @@ impl GatheredWebmentionData {
 mod tests {
     use std::assert_matches::assert_matches;
 
-    use chrono::Utc;
-
-    use super::PendingRequest;
+    use crate::webmention::processing::extract_rel_data_from_html;
 
     #[test]
     fn extract_from_html_with_valid_target() {
-        let request = PendingRequest {
-            id: 0,
-            source_url: "https://source.com".to_string(),
-            target_url: "https://target.com".to_string(),
-            processing_attempts: 0,
-            mentioned_on: Utc::now().naive_utc(),
-        };
+        let provided_target = "https://target.com".to_string();
         let html = r#"
             <a rel="in-reply-to" href="https://target.com">text</a>
         "#;
 
-        let extracted = request.extract_data_from_html(html).unwrap();
+        let extracted = extract_rel_data_from_html(provided_target, html).unwrap();
 
         assert_eq!(extracted.text, "text");
         assert_eq!(extracted.rels, vec!["in-reply-to"]);
@@ -192,18 +188,12 @@ mod tests {
 
     #[test]
     fn extract_from_html_with_different_target() {
-        let request = PendingRequest {
-            id: 0,
-            source_url: "https://source.com".to_string(),
-            target_url: "https://target.com/the/given/page".to_string(),
-            processing_attempts: 0,
-            mentioned_on: Utc::now().naive_utc(),
-        };
+        let provided_target = "https://target.com/the/given/page".to_string();
         let html = r#"
             <a rel="in-reply-to" href="https://target.com/another/page">lol</a>
         "#;
 
-        let extracted = request.extract_data_from_html(html);
+        let extracted = extract_rel_data_from_html(provided_target, html);
 
         assert_matches!(extracted, None);
     }

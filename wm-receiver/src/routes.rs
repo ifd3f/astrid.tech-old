@@ -2,15 +2,17 @@ use std::net::SocketAddr;
 
 use crate::db::get_db;
 use crate::webmention::data::MentionConfig;
-use crate::webmention::git::{push_changes, reset_dir};
-use crate::webmention::processing::PendingRequest;
+use crate::webmention::git::ManagedGitRepo;
+use crate::webmention::processing::{process_pending_request, PendingRequest};
 use crate::webmention::requesting::create_mention;
+use crate::webmention::storage::WebmentionStore;
 use chrono::Utc;
 use diesel::insert_into;
 use rocket::form::Form;
 use rocket::http::Status;
 use rocket::response::status::BadRequest;
 use rocket::State;
+use tokio::sync::Mutex;
 
 #[derive(FromForm)]
 pub struct WebmentionInput<'f> {
@@ -49,18 +51,17 @@ pub fn receive_webmention(
 /// Schecules a task to process all the stored webmentions. This endpoint should be protected
 /// and called on a cron job.
 #[post("/api/rpc/processWebmentions?<limit>")]
-pub async fn process_webmentions(config: &State<MentionConfig>, limit: Option<i64>) -> Status {
+pub async fn process_webmentions(
+    shared_wm_store: &State<Mutex<WebmentionStore>>,
+    shared_repo: &State<Mutex<ManagedGitRepo>>,
+    limit: Option<i64>,
+) -> Status {
     use crate::schema::requests::dsl::*;
     use diesel::prelude::*;
 
-    reset_dir(
-        &config.repo_dir,
-        &config.remote_url,
-        &config.branch_name,
-        &config.base_branch,
-    )
-    .await
-    .unwrap();
+    let mut repo_lock = shared_repo.lock().await;
+
+    repo_lock.reset_dir().await.unwrap();
 
     let limit = limit.unwrap_or(100);
     let max_retries = 10; // TODO
@@ -83,20 +84,17 @@ pub async fn process_webmentions(config: &State<MentionConfig>, limit: Option<i6
         .load::<PendingRequest>(&db)
         .unwrap();
 
+    let locked_wm_store = &mut *shared_wm_store.lock().await;
     for request in pending_requests {
-        request.process(&config.webmention_dir).await.unwrap();
+        process_pending_request(request, locked_wm_store)
+            .await
+            .unwrap();
     }
 
     let now = Utc::now();
     let message = format!("wm-receiver: Webmentions processed at {}", now.to_rfc2822());
-    push_changes(
-        &config.repo_dir,
-        message,
-        &config.remote_url,
-        &config.branch_name,
-    )
-    .await
-    .unwrap();
+
+    repo_lock.push_changes(message).await.unwrap();
 
     Status::Ok
 }
