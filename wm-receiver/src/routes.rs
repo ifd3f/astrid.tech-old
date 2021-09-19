@@ -3,7 +3,7 @@ use std::net::SocketAddr;
 use crate::db::get_db;
 use crate::webmention::data::MentionConfig;
 use crate::webmention::git::{push_changes, reset_dir};
-use crate::webmention::processing::PendingRequest;
+use crate::webmention::processing::{PendingRequest, process_pending_request};
 use crate::webmention::requesting::create_mention;
 use chrono::Utc;
 use diesel::insert_into;
@@ -84,7 +84,7 @@ pub async fn process_webmentions(config: &State<MentionConfig>, limit: Option<i6
         .unwrap();
 
     for request in pending_requests {
-        request.process(&config.webmention_dir).await.unwrap();
+        process_pending_request(request, &config.webmention_dir).await.unwrap();
     }
 
     let now = Utc::now();
