@@ -84,9 +84,9 @@ impl StorageAction {
 
 #[cfg(test)]
 mod tests {
-    use std::assert_matches::assert_matches;
+    use std::path::PathBuf;
 
-    use chrono::Utc;
+    use crate::webmention::storage::append_storage_subpath;
 
     #[test]
     fn append_storage_path_works() {
@@ -94,8 +94,11 @@ mod tests {
         let target = "http://foo.bar.com/some/article";
         let mut path = PathBuf::new();
 
-        append_storage_subpath(&source, target, path);
+        append_storage_subpath(&mut path, source, target);
 
-        assert_eq!(path, "foo");
+        assert_eq!(
+            path.into_os_string().into_string().unwrap(), 
+            "http---foo.bar.com-some-article/http---bar.spam.com-another-article/e10e9d330cb4798e8c6bf194f7ba925e112f0c508ba3607785262c9d754f51de.json",
+        );
     }
 }
