@@ -10,7 +10,7 @@ pub fn append_storage_subpath(dst: &mut PathBuf, source_url: Url, target_url: Ur
     dst.push(target_url.host().unwrap().to_string());
     dst.push(slugify(target_url.path()));
     dst.push(source_url.host().unwrap().to_string());
-    dst.push(format!("{}.yml", slugify(source_url.path())));
+    dst.push(format!("{}.json", slugify(source_url.path())));
 }
 
 pub fn read_existing_webmention(
@@ -26,7 +26,7 @@ pub fn read_existing_webmention(
         Ok(file) => file,
         Err(_) => return None,
     };
-    serde_yaml::from_reader(file).ok()
+    serde_json::from_reader(file).ok()
 }
 
 pub enum StorageAction {
@@ -69,7 +69,7 @@ impl StorageAction {
             }
             StorageAction::Write(wm) => {
                 let mut file = File::create(path)?;
-                serde_yaml::to_writer(&mut file, &wm)?;
+                serde_json::to_writer_pretty(&mut file, &wm)?;
             }
         }
         Ok(())

@@ -4,7 +4,7 @@
 #![feature(assert_matches)]
 
 extern crate dotenv;
-extern crate serde_yaml;
+extern crate serde_json;
 extern crate slug;
 #[macro_use]
 extern crate diesel_migrations;
