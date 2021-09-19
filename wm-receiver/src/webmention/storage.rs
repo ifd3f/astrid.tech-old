@@ -88,7 +88,7 @@ impl StorageAction {
                 source_url,
                 target_url,
             } => (source_url, target_url),
-            StorageAction::Write(wm) => (&wm.source_url, &wm.target_url),
+            StorageAction::Write(wm) => (&wm.source, &wm.target),
         };
 
         append_storage_subpath(dst, source_url, target_url);

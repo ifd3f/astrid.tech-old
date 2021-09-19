@@ -1,4 +1,4 @@
-use std::{error::Error, ops::Add, path::Path};
+use std::{error::Error, ops::Add};
 
 use chrono::{DateTime, Duration, NaiveDateTime, TimeZone, Utc};
 use scraper::{Html, Selector};
@@ -77,8 +77,8 @@ fn determine_storage_action(
 
         // Delete
         (Some(e), None) => Some(StorageAction::Delete {
-            source_url: e.source_url,
-            target_url: e.target_url,
+            source_url: e.source,
+            target_url: e.target,
         }),
 
         // Update
@@ -150,8 +150,8 @@ impl PendingRequest {
 
         let mentioned_on = Utc.from_utc_datetime(&self.mentioned_on);
         let webmention = WebmentionRecord {
-            source_url: self.source_url,
-            target_url: self.target_url,
+            source: self.source_url,
+            target: self.target_url,
             mentioned_on,
             processed_on: now,
             rel_url: microformats,
