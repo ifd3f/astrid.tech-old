@@ -26,12 +26,23 @@ source-repository head
 library
   exposed-modules:
       Lib
+      Spidey.CLI
+      Spidey.Crawl
+      Spidey.Data
+      Spidey.Send
+      Spidey.Store
   other-modules:
       Paths_spidey_send
   hs-source-dirs:
       src
+  default-extensions:
+      NamedFieldPuns
   build-depends:
       base >=4.7 && <5
+    , bytestring
+    , containers
+    , cryptohash-sha256
+    , text
   default-language: Haskell2010
 
 executable spidey-send-exe
@@ -40,10 +51,16 @@ executable spidey-send-exe
       Paths_spidey_send
   hs-source-dirs:
       app
+  default-extensions:
+      NamedFieldPuns
   ghc-options: -threaded -rtsopts -with-rtsopts=-N
   build-depends:
       base >=4.7 && <5
+    , bytestring
+    , containers
+    , cryptohash-sha256
     , spidey-send
+    , text
   default-language: Haskell2010
 
 test-suite spidey-send-test
@@ -53,8 +70,14 @@ test-suite spidey-send-test
       Paths_spidey_send
   hs-source-dirs:
       test
+  default-extensions:
+      NamedFieldPuns
   ghc-options: -threaded -rtsopts -with-rtsopts=-N
   build-depends:
       base >=4.7 && <5
+    , bytestring
+    , containers
+    , cryptohash-sha256
     , spidey-send
+    , text
   default-language: Haskell2010
