@@ -20,7 +20,7 @@ use std::{env, path::PathBuf};
 use dotenv::dotenv;
 use webmention::data::MentionConfig;
 
-use crate::{db::run_migrations, routes::*};
+use crate::{db::run_migrations, routes::*, webmention::git::ManagedGitRepo};
 
 mod db;
 mod routes;
@@ -60,7 +60,6 @@ fn rocket() -> _ {
 
     // Generate mention config
     let mention_config = MentionConfig {
-        repo_dir,
         webmention_dir,
         allowed_target_hosts,
         remote_url,
@@ -68,7 +67,10 @@ fn rocket() -> _ {
         base_branch,
     };
 
+    let repo = ManagedGitRepo::new(repo_dir);
+
     rocket::build()
         .manage(mention_config)
+        .manage(repo)
         .mount("/", routes![receive_webmention, process_webmentions])
 }

@@ -37,7 +37,7 @@ version = "*"
 git = "https://gitlab.com/maxburon/microformats-parser.git"
 
 [dependencies.tokio]
-features = ["process"]
+features = ["process", "sync"]
 version = "*"
 
 [dev-dependencies]
