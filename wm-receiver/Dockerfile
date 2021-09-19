@@ -10,13 +10,14 @@ RUN USER=root cargo new --bin app --name wm-receiver
 
 # Install dependencies
 WORKDIR /app
-COPY ./Cargo.toml .
+COPY ./Cargo.toml ./Cargo.lock ./
 # Workaround: https://github.com/rust-lang/cargo/issues/6513#issuecomment-920920238
 RUN CARGO_HTTP_MULTIPLEXING=false cargo build --release
 
 # Build the app
 RUN rm src/*.rs
-ADD . ./
+ADD ./src ./src
+ADD ./migrations ./migrations
 RUN rm ./target/release/deps/wm_receiver*
 # Workaround: https://github.com/rust-lang/cargo/issues/6513#issuecomment-920920238
 RUN CARGO_HTTP_MULTIPLEXING=false WEBMENTION_RESOURCES_DIR=/usr/local/share/wm-receiver/ cargo build --release
@@ -32,7 +33,7 @@ FROM debian:bullseye-slim as runner
 RUN apt-get update && apt-get install -y git libsqlite3-0
 
 COPY --from=builder /app/target/release/wm-receiver /usr/local/bin/
-COPY --from=builder /app/resources/main /usr/local/share/wm-receiver/
+COPY ./resources/main /usr/local/share/wm-receiver/
 
 WORKDIR /app
 COPY ./entrypoint.sh /app/
