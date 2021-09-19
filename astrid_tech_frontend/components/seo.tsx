@@ -102,6 +102,9 @@ const SEO: FC<SEOProps> = ({
         rel="webmention"
         href="https://api.astrid.tech/api/webmention"
       />
+
+      {/* Micropub */}
+      <link rel="micropub" href="https://api.astrid.tech/api/micropub" />
     </Head>
   );
 };
