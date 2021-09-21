@@ -1,12 +1,6 @@
 [package]
+edition = "2018"
 name = "at_git_utils"
 version = "0.1.0"
-edition = "2018"
-
-# See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
-
 [dependencies]
-git2 = "0.13.22"
-
-[dev-dependencies]
-rstest = "0.11.0"
+shellfn = "*"
