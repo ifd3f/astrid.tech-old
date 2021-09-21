@@ -1,7 +1,7 @@
 [package]
 authors = ["Astrid Yu <astrid@astrid.tech>"]
 description = "A webmention receiver and processor."
-edition = "2021"
+edition = "2018"
 homepage = "https://astrid.tech/projects/astrid-tech"
 name = "wm-receiver"
 resolver = "1"

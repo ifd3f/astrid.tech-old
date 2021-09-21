@@ -1,0 +1,6 @@
+[workspace]
+
+members = [
+    "aay_tw_shortener",
+    "wm-receiver",
+]
