@@ -99,3 +99,23 @@ impl ManagedGitRepo {
         Ok(())
     }
 }
+
+
+#[cfg(test)]
+mod tests {
+    use crate::ManagedGitRepo;
+
+    pub fn setup_fresh_gittest() -> () {
+        Command::new("./setup-gittest.sh")
+            .status()
+            .expect("Failed to set up gittest");
+    }
+
+    #[test]
+    fn it_works() {
+        setup_fresh_gittest();
+        let mut repo = ManagedGitRepo::new("gittest/local", "gittest/remote", "workbr", "basebr");
+
+        repo.reset_dir();
+    }
+}
