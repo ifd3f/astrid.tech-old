@@ -71,7 +71,7 @@ export const BlogPostPage: FC<BlogPostPageProps> = ({ post }) => {
   return (
     <ProjectContext.Provider value={{ post }}>
       <SEO title={metaTitle} description={post.description} />
-      <Layout currentLocation="blog">
+      <Layout currentLocation="blog" className="h-entry">
         <LongformLayout
           title={post.title}
           url={url}
@@ -86,7 +86,7 @@ export const BlogPostPage: FC<BlogPostPageProps> = ({ post }) => {
           }
           above={null}
         >
-          <ContentDisplay className="h-entry">{post.content}</ContentDisplay>
+          <ContentDisplay>{post.content}</ContentDisplay>
         </LongformLayout>
         <Container>
           <section id="comments">

@@ -59,7 +59,7 @@ function Age() {
     setUnixMs(new Date().getTime());
   });
 
-  const seconds = Math.round((unixMs  - BIRTH_MS) / 1000);
+  const seconds = Math.round((unixMs - BIRTH_MS) / 1000);
 
   return <>{seconds} seconds</>;
 }

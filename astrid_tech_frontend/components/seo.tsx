@@ -98,10 +98,7 @@ const SEO: FC<SEOProps> = ({
       <link rel="token_endpoint" href="https://tokens.indieauth.com/token" />
 
       {/* Webmention */}
-      <link
-        rel="webmention"
-        href="https://api.astrid.tech/api/webmention"
-      />
+      <link rel="webmention" href="https://api.astrid.tech/api/webmention" />
 
       {/* Micropub */}
       <link rel="micropub" href="https://api.astrid.tech/api/micropub" />
