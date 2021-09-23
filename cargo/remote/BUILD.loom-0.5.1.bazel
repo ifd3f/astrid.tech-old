@@ -1,0 +1,96 @@
+"""
+@generated
+cargo-raze crate build file.
+
+DO NOT EDIT! Replaced on runs of cargo-raze
+"""
+
+# buildifier: disable=load
+load("@bazel_skylib//lib:selects.bzl", "selects")
+
+# buildifier: disable=load
+load(
+    "@rules_rust//rust:rust.bzl",
+    "rust_binary",
+    "rust_library",
+    "rust_test",
+)
+
+package(default_visibility = [
+    # Public for visibility by "@raze__crate__version//" targets.
+    #
+    # Prefer access through "//cargo", which limits external
+    # visibility to explicit Cargo.toml dependencies.
+    "//visibility:public",
+])
+
+licenses([
+    "notice",  # MIT from expression "MIT"
+])
+
+# Generated Targets
+
+rust_library(
+    name = "loom",
+    srcs = glob(["**/*.rs"]),
+    crate_features = [
+        "checkpoint",
+        "default",
+        "serde",
+        "serde_json",
+    ],
+    crate_root = "src/lib.rs",
+    crate_type = "lib",
+    data = [],
+    edition = "2018",
+    rustc_flags = [
+        "--cap-lints=allow",
+    ],
+    tags = [
+        "cargo-raze",
+        "manual",
+    ],
+    version = "0.5.1",
+    # buildifier: leave-alone
+    deps = [
+        "@raze__cfg_if__1_0_0//:cfg_if",
+        "@raze__generator__0_7_0//:generator",
+        "@raze__scoped_tls__1_0_0//:scoped_tls",
+        "@raze__serde__1_0_130//:serde",
+        "@raze__serde_json__1_0_68//:serde_json",
+    ],
+)
+
+# Unsupported target "arc" with type "test" omitted
+
+# Unsupported target "atomic" with type "test" omitted
+
+# Unsupported target "atomic_int" with type "test" omitted
+
+# Unsupported target "atomic_relaxed" with type "test" omitted
+
+# Unsupported target "condvar" with type "test" omitted
+
+# Unsupported target "fence" with type "test" omitted
+
+# Unsupported target "futures" with type "test" omitted
+
+# Unsupported target "mpsc" with type "test" omitted
+
+# Unsupported target "mutex" with type "test" omitted
+
+# Unsupported target "rwlock" with type "test" omitted
+
+# Unsupported target "rwlock_regression1" with type "test" omitted
+
+# Unsupported target "smoke" with type "test" omitted
+
+# Unsupported target "spec" with type "test" omitted
+
+# Unsupported target "thread_api" with type "test" omitted
+
+# Unsupported target "thread_local" with type "test" omitted
+
+# Unsupported target "unsafe_cell" with type "test" omitted
+
+# Unsupported target "yield" with type "test" omitted

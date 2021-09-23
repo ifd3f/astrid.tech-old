@@ -1,0 +1,85 @@
+"""
+@generated
+cargo-raze generated Bazel file.
+
+DO NOT EDIT! Replaced on runs of cargo-raze
+"""
+
+package(default_visibility = ["//visibility:public"])
+
+licenses([
+    "notice",  # See individual crates for specific licenses
+])
+
+# Aliased targets
+alias(
+    name = "chrono",
+    actual = "@raze__chrono__0_4_19//:chrono",
+    tags = [
+        "cargo-raze",
+        "manual",
+    ],
+)
+
+alias(
+    name = "dotenv",
+    actual = "@raze__dotenv__0_15_0//:dotenv",
+    tags = [
+        "cargo-raze",
+        "manual",
+    ],
+)
+
+alias(
+    name = "newbase60",
+    actual = "@raze__newbase60__0_1_3//:newbase60",
+    tags = [
+        "cargo-raze",
+        "manual",
+    ],
+)
+
+alias(
+    name = "reqwest",
+    actual = "@raze__reqwest__0_11_4//:reqwest",
+    tags = [
+        "cargo-raze",
+        "manual",
+    ],
+)
+
+alias(
+    name = "rocket",
+    actual = "@raze__rocket__0_4_10//:rocket",
+    tags = [
+        "cargo-raze",
+        "manual",
+    ],
+)
+
+alias(
+    name = "rocket_codegen",
+    actual = "@raze__rocket_codegen__0_4_10//:rocket_codegen",
+    tags = [
+        "cargo-raze",
+        "manual",
+    ],
+)
+
+alias(
+    name = "rstest",
+    actual = "@raze__rstest__0_7_0//:rstest",
+    tags = [
+        "cargo-raze",
+        "manual",
+    ],
+)
+
+alias(
+    name = "scraper",
+    actual = "@raze__scraper__0_12_0//:scraper",
+    tags = [
+        "cargo-raze",
+        "manual",
+    ],
+)

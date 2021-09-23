@@ -1,6 +1,14 @@
 [workspace]
-
 members = [
     "aay_tw_shortener",
     "wm-receiver",
 ]
+
+[workspace.metadata.raze]
+workspace_path = "//cargo"
+targets = [
+    "x86_64-apple-darwin",
+    "x86_64-pc-windows-msvc",
+    "x86_64-unknown-linux-gnu",
+]
+genmode = "Remote"

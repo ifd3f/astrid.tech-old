@@ -1,0 +1,153 @@
+"""
+@generated
+cargo-raze crate build file.
+
+DO NOT EDIT! Replaced on runs of cargo-raze
+"""
+
+# buildifier: disable=load
+load("@bazel_skylib//lib:selects.bzl", "selects")
+
+# buildifier: disable=load
+load(
+    "@rules_rust//rust:rust.bzl",
+    "rust_binary",
+    "rust_library",
+    "rust_test",
+)
+
+package(default_visibility = [
+    # Public for visibility by "@raze__crate__version//" targets.
+    #
+    # Prefer access through "//cargo", which limits external
+    # visibility to explicit Cargo.toml dependencies.
+    "//visibility:public",
+])
+
+licenses([
+    "notice",  # MIT from expression "MIT OR Apache-2.0"
+])
+
+# Generated Targets
+# buildifier: disable=out-of-order-load
+# buildifier: disable=load-on-top
+load(
+    "@rules_rust//cargo:cargo_build_script.bzl",
+    "cargo_build_script",
+)
+
+cargo_build_script(
+    name = "rocket_build_script",
+    srcs = glob(["**/*.rs"]),
+    build_script_env = {
+    },
+    crate_features = [
+        "default",
+        "private-cookies",
+    ],
+    crate_root = "build.rs",
+    data = glob(["**"]),
+    edition = "2015",
+    rustc_flags = [
+        "--cap-lints=allow",
+    ],
+    tags = [
+        "cargo-raze",
+        "manual",
+    ],
+    version = "0.4.10",
+    visibility = ["//visibility:private"],
+    deps = [
+        "@raze__version_check__0_9_3//:version_check",
+        "@raze__yansi__0_5_0//:yansi",
+    ],
+)
+
+# Unsupported target "format-routing" with type "bench" omitted
+
+# Unsupported target "ranked-routing" with type "bench" omitted
+
+# Unsupported target "simple-routing" with type "bench" omitted
+
+rust_library(
+    name = "rocket",
+    srcs = glob(["**/*.rs"]),
+    crate_features = [
+        "default",
+        "private-cookies",
+    ],
+    crate_root = "src/lib.rs",
+    crate_type = "lib",
+    data = [],
+    edition = "2015",
+    proc_macro_deps = [
+        "@raze__rocket_codegen__0_4_10//:rocket_codegen",
+    ],
+    rustc_flags = [
+        "--cap-lints=allow",
+    ],
+    tags = [
+        "cargo-raze",
+        "manual",
+    ],
+    version = "0.4.10",
+    # buildifier: leave-alone
+    deps = [
+        ":rocket_build_script",
+        "@raze__atty__0_2_14//:atty",
+        "@raze__base64__0_13_0//:base64",
+        "@raze__log__0_4_14//:log",
+        "@raze__memchr__2_4_1//:memchr",
+        "@raze__num_cpus__1_13_0//:num_cpus",
+        "@raze__pear__0_1_4//:pear",
+        "@raze__rocket_http__0_4_10//:rocket_http",
+        "@raze__state__0_4_2//:state",
+        "@raze__time__0_1_44//:time",
+        "@raze__toml__0_4_10//:toml",
+        "@raze__yansi__0_5_0//:yansi",
+    ],
+)
+
+# Unsupported target "absolute-uris-okay-issue-443" with type "test" omitted
+
+# Unsupported target "catcher-cookies-1213" with type "test" omitted
+
+# Unsupported target "conditionally-set-server-header-996" with type "test" omitted
+
+# Unsupported target "derive-reexports" with type "test" omitted
+
+# Unsupported target "fairing_before_head_strip-issue-546" with type "test" omitted
+
+# Unsupported target "flash-lazy-removes-issue-466" with type "test" omitted
+
+# Unsupported target "form_method-issue-45" with type "test" omitted
+
+# Unsupported target "form_value_decoding-issue-82" with type "test" omitted
+
+# Unsupported target "head_handling" with type "test" omitted
+
+# Unsupported target "limits" with type "test" omitted
+
+# Unsupported target "local-request-content-type-issue-505" with type "test" omitted
+
+# Unsupported target "local_request_private_cookie-issue-368" with type "test" omitted
+
+# Unsupported target "mount_point" with type "test" omitted
+
+# Unsupported target "nested-fairing-attaches" with type "test" omitted
+
+# Unsupported target "precise-content-type-matching" with type "test" omitted
+
+# Unsupported target "redirect_from_catcher-issue-113" with type "test" omitted
+
+# Unsupported target "responder_lifetime-issue-345" with type "test" omitted
+
+# Unsupported target "route_guard" with type "test" omitted
+
+# Unsupported target "segments-issues-41-86" with type "test" omitted
+
+# Unsupported target "strict_and_lenient_forms" with type "test" omitted
+
+# Unsupported target "unsound-local-request-1312" with type "test" omitted
+
+# Unsupported target "uri-percent-encoding-issue-808" with type "test" omitted

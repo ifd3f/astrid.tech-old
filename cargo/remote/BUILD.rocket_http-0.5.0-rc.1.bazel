@@ -1,0 +1,79 @@
+"""
+@generated
+cargo-raze crate build file.
+
+DO NOT EDIT! Replaced on runs of cargo-raze
+"""
+
+# buildifier: disable=load
+load("@bazel_skylib//lib:selects.bzl", "selects")
+
+# buildifier: disable=load
+load(
+    "@rules_rust//rust:rust.bzl",
+    "rust_binary",
+    "rust_library",
+    "rust_test",
+)
+
+package(default_visibility = [
+    # Public for visibility by "@raze__crate__version//" targets.
+    #
+    # Prefer access through "//cargo", which limits external
+    # visibility to explicit Cargo.toml dependencies.
+    "//visibility:public",
+])
+
+licenses([
+    "notice",  # MIT from expression "MIT OR Apache-2.0"
+])
+
+# Generated Targets
+
+rust_library(
+    name = "rocket_http",
+    srcs = glob(["**/*.rs"]),
+    aliases = {
+        "@raze__serde__1_0_130//:serde": "serde_",
+    },
+    crate_features = [
+        "default",
+        "serde",
+        "serde_",
+    ],
+    crate_root = "src/lib.rs",
+    crate_type = "lib",
+    data = [],
+    edition = "2018",
+    rustc_flags = [
+        "--cap-lints=allow",
+    ],
+    tags = [
+        "cargo-raze",
+        "manual",
+    ],
+    version = "0.5.0-rc.1",
+    # buildifier: leave-alone
+    deps = [
+        "@raze__cookie__0_15_1//:cookie",
+        "@raze__either__1_6_1//:either",
+        "@raze__http__0_2_4//:http",
+        "@raze__hyper__0_14_13//:hyper",
+        "@raze__indexmap__1_7_0//:indexmap",
+        "@raze__log__0_4_14//:log",
+        "@raze__memchr__2_4_1//:memchr",
+        "@raze__mime__0_3_16//:mime",
+        "@raze__parking_lot__0_11_2//:parking_lot",
+        "@raze__pear__0_2_3//:pear",
+        "@raze__percent_encoding__2_1_0//:percent_encoding",
+        "@raze__pin_project_lite__0_2_7//:pin_project_lite",
+        "@raze__ref_cast__1_0_6//:ref_cast",
+        "@raze__serde__1_0_130//:serde",
+        "@raze__smallvec__1_6_1//:smallvec",
+        "@raze__stable_pattern__0_1_0//:stable_pattern",
+        "@raze__state__0_5_2//:state",
+        "@raze__time__0_2_27//:time",
+        "@raze__tokio__1_11_0//:tokio",
+        "@raze__uncased__0_9_6//:uncased",
+    ],
+)

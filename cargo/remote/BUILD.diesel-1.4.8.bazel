@@ -1,0 +1,65 @@
+"""
+@generated
+cargo-raze crate build file.
+
+DO NOT EDIT! Replaced on runs of cargo-raze
+"""
+
+# buildifier: disable=load
+load("@bazel_skylib//lib:selects.bzl", "selects")
+
+# buildifier: disable=load
+load(
+    "@rules_rust//rust:rust.bzl",
+    "rust_binary",
+    "rust_library",
+    "rust_test",
+)
+
+package(default_visibility = [
+    # Public for visibility by "@raze__crate__version//" targets.
+    #
+    # Prefer access through "//cargo", which limits external
+    # visibility to explicit Cargo.toml dependencies.
+    "//visibility:public",
+])
+
+licenses([
+    "notice",  # MIT from expression "MIT OR Apache-2.0"
+])
+
+# Generated Targets
+
+rust_library(
+    name = "diesel",
+    srcs = glob(["**/*.rs"]),
+    crate_features = [
+        "32-column-tables",
+        "chrono",
+        "default",
+        "libsqlite3-sys",
+        "sqlite",
+        "with-deprecated",
+    ],
+    crate_root = "src/lib.rs",
+    crate_type = "lib",
+    data = [],
+    edition = "2015",
+    proc_macro_deps = [
+        "@raze__diesel_derives__1_4_1//:diesel_derives",
+    ],
+    rustc_flags = [
+        "--cap-lints=allow",
+    ],
+    tags = [
+        "cargo-raze",
+        "manual",
+    ],
+    version = "1.4.8",
+    # buildifier: leave-alone
+    deps = [
+        "@raze__byteorder__1_4_3//:byteorder",
+        "@raze__chrono__0_4_19//:chrono",
+        "@raze__libsqlite3_sys__0_22_2//:libsqlite3_sys",
+    ],
+)
