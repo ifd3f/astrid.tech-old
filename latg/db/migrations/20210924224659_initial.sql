@@ -4,7 +4,7 @@ CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
 CREATE TYPE rsvp AS ENUM ('yes', 'no', 'maybe', 'interested');
 
 create table entries(
-    -- Ephemeral primary key. DB-internal ONLY. Do not expose.
+    -- Primary key. DB-internal ONLY. Do not expose.
     id serial primary key not null,
 
     -- UUID that uniquely identifies this post across space and time.
@@ -43,6 +43,28 @@ create table entries(
     content text
 );
 
+create table categories(
+    -- Primary key. DB-internal ONLY. Do not expose.
+    id serial primary key not null,
+
+    slug text unique not null,
+    name text not null,
+    backgroundColor text not null,
+    color text not null
+);
+
+create table entry_to_category(
+    entry_id integer references entries (id),
+    category_id integer references categories (id),
+
+    -- Used for ordering the categories.
+    ordinal integer not null,
+    constraint entry_to_category_pkey primary key (entry_id)
+);
+
 -- migrate:down
+drop table entry_to_category;
+drop table categories;
 drop table entries;
+
 drop type rsvp;

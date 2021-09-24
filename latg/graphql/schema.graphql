@@ -2,22 +2,22 @@ type Query {
     entries(): [Entry!]!
 }
 
-type MicroformatProperty {
-    key: String!
-    values: [String!]!
-}
-
 type Entry {
     """
     A UUID that uniquely identifies this post across space and time.
     """
     uuid: String!
 
+    """ The name of this entry """
     name: String
+
+    """ The permalink for this entry """
     permalink: String!
+    
+    """ A shorter link for this entry """
     shortlink: String!
-    ordinal: Int!
-    slug: String
+
+    slug: Slug
 
     createdDate: String!
     publishedDate: String!
@@ -26,29 +26,20 @@ type Entry {
     summary: String 
     location: String!
 
-    categories: [Tag!]!
+    categories: [Category!]!
 
-    """
-    Content, as HTML.
-    """
+    """ The body of this entry, as HTML. """
     content: String
 
     syndication: [Syndication!]!
 
     photo: [Photo!]!
     replyTo: [String!]!
-    repostOf: [String!]!
+    repostOf: String!
     rsvp: RSVP
 
-    """
-    Comments and webmentions.
-    """
+    """ Comments and webmentions. """
     comments: [Comment!]!
-    
-    """
-    Other properties that weren't included.
-    """
-    properties: [MicroformatProperty!]!
 }
 
 enum RSVP {
@@ -64,11 +55,19 @@ type Photo {
     src: String!
 }
 
-type Tag {
+type Category {
     slug: String!
     name: String!
     color: String!
     backgroundColor: String!
+}
+
+type Slug {
+    year: Int!
+    month: Int!
+    day: Int!
+    ordinal: Int!
+    slug: String
 }
 
 type Syndication {
