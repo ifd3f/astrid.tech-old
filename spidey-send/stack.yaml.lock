@@ -3,7 +3,42 @@
 # For more information, please see the documentation at:
 #   https://docs.haskellstack.org/en/stable/lock_files
 
-packages: []
+packages:
+- completed:
+    hackage: microformats2-parser-1.0.2.0@sha256:4969ee14b52eb8d20943890984663e90d23001758e5bc16cb9669c92c4962e70,3605
+    pantry-tree:
+      size: 1443
+      sha256: 9b7311e6a3a2412c7fb087b3c0fee93f0a9e6e8295930ea9ba9110f9854365a6
+  original:
+    hackage: microformats2-parser-1.0.2.0@sha256:4969ee14b52eb8d20943890984663e90d23001758e5bc16cb9669c92c4962e70,3605
+- completed:
+    hackage: aws-lambda-haskell-runtime-4.1.1@sha256:c3b3452d3a7f36950c22760fe44b51d49b43624fa3a0253e5bfc3d94809bb8fd,3024
+    pantry-tree:
+      size: 1453
+      sha256: b7e8426edb0b5d06713a26362308abbec03379e1f3ad9c6d63973088ad75cf62
+  original:
+    hackage: aws-lambda-haskell-runtime-4.1.1@sha256:c3b3452d3a7f36950c22760fe44b51d49b43624fa3a0253e5bfc3d94809bb8fd,3024
+- completed:
+    hackage: aws-lambda-haskell-runtime-wai-2.0.2@sha256:459c183c37e99e13c83002bedb2dc58c2257d2741aeec3f86571ee58361e9404,1986
+    pantry-tree:
+      size: 390
+      sha256: 615c8e2c81cf168df67285e09bf8d70da0c4207d218483a681aa6fb452903b6a
+  original:
+    hackage: aws-lambda-haskell-runtime-wai-2.0.2@sha256:459c183c37e99e13c83002bedb2dc58c2257d2741aeec3f86571ee58361e9404,1986
+- completed:
+    hackage: wai-cli-0.2.3@sha256:17ac631c5f11bedb4e32604d351084cafbdb1be4953cd1f521e55f06d82729dc,1958
+    pantry-tree:
+      size: 269
+      sha256: 0b2f8570e15d502cfddd524741b24e4f4a639b0d18ead18f79a0444c25cc0812
+  original:
+    hackage: wai-cli-0.2.3@sha256:17ac631c5f11bedb4e32604d351084cafbdb1be4953cd1f521e55f06d82729dc,1958
+- completed:
+    hackage: safe-exceptions-checked-0.1.0@sha256:ae142f284c6b102f0e7606a69a5719f4f72771d9cc353af72fa4484326689100,1603
+    pantry-tree:
+      size: 298
+      sha256: d1f8ba50967547f26cdc37cbc64bdc85af57d856986876a6a5767a61977bc299
+  original:
+    hackage: safe-exceptions-checked-0.1.0@sha256:ae142f284c6b102f0e7606a69a5719f4f72771d9cc353af72fa4484326689100,1603
 snapshots:
 - completed:
     size: 587546

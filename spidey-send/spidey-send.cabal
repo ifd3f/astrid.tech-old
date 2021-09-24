@@ -30,7 +30,6 @@ library
       Spidey.Crawl
       Spidey.Data
       Spidey.Send
-      Spidey.Store
   other-modules:
       Paths_spidey_send
   hs-source-dirs:
@@ -38,10 +37,13 @@ library
   default-extensions:
       NamedFieldPuns
   build-depends:
-      base >=4.7 && <5
+      aeson
+    , base >=4.7 && <5
     , bytestring
     , containers
     , cryptohash-sha256
+    , html-conduit
+    , microformats2-parser >=1
     , text
   default-language: Haskell2010
 
@@ -55,10 +57,13 @@ executable spidey-send-exe
       NamedFieldPuns
   ghc-options: -threaded -rtsopts -with-rtsopts=-N
   build-depends:
-      base >=4.7 && <5
+      aeson
+    , base >=4.7 && <5
     , bytestring
     , containers
     , cryptohash-sha256
+    , html-conduit
+    , microformats2-parser >=1
     , spidey-send
     , text
   default-language: Haskell2010
@@ -74,10 +79,13 @@ test-suite spidey-send-test
       NamedFieldPuns
   ghc-options: -threaded -rtsopts -with-rtsopts=-N
   build-depends:
-      base >=4.7 && <5
+      aeson
+    , base >=4.7 && <5
     , bytestring
     , containers
     , cryptohash-sha256
+    , html-conduit
+    , microformats2-parser >=1
     , spidey-send
     , text
   default-language: Haskell2010

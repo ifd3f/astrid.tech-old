@@ -3,13 +3,13 @@ module Spidey.Send where
 import Data.ByteString
 import Data.Text
 
-data SendResult = Success | Fail {sendAttempts :: Int}
+data SendStatus = Success | Fail {sendAttempts :: Int}
 
-data SendState = SendState
+data SendResult = SendResult
   { withMF2Hash :: ByteString,
-    result :: SendResult,
+    result :: SendStatus,
     time :: Integer
   }
 
-sendMentions :: Text -> ByteString -> Text -> IO SendState
+sendMentions :: Text -> ByteString -> Text -> IO SendResult
 sendMentions = undefined

@@ -25,6 +25,9 @@ dependencies:
 - cryptohash-sha256
 - containers
 - bytestring
+- microformats2-parser >= 1
+- html-conduit
+- aeson
 
 default-extensions:
   - NamedFieldPuns
