@@ -1,0 +1,12 @@
+# A development environment. DO NOT USE IN PRODUCTION!
+
+version: "3.7"
+services:
+  db:
+    image: postgres:13.1
+    environment:
+      POSTGRES_DB: latg
+      POSTGRES_USER: dev
+      POSTGRES_PASSWORD: devpassword
+    ports:
+      - 5432:5432

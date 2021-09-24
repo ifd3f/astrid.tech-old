@@ -8,32 +8,37 @@ type MicroformatProperty {
 }
 
 type Entry {
+    """
+    A UUID that uniquely identifies this post across space and time.
+    """
     uuid: String!
-    ordinal: Int!
-    slug: String
-    createdDate: String!
-    publishedDate: String!
-    updatedDate: String
 
     name: String
     permalink: String!
     shortlink: String!
+    ordinal: Int!
+    slug: String
+
+    createdDate: String!
+    publishedDate: String!
+    updatedDate: String
 
     summary: String 
-    location: [String!]!
-    replyTo: [String!]!
-    repostOf: [String!]!
+    location: String!
+
+    categories: [Tag!]!
+
+    """
+    Content, as HTML.
+    """
+    content: String
 
     syndication: [Syndication!]!
-    categories: [Tag!]!
-    rsvp: RSVP
-
-    """
-    Content, a HTML string.
-    """
-    content: String!
 
     photo: [Photo!]!
+    replyTo: [String!]!
+    repostOf: [String!]!
+    rsvp: RSVP
 
     """
     Comments and webmentions.
