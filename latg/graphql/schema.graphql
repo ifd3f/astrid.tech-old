@@ -33,13 +33,49 @@ type Entry {
 
     syndication: [Syndication!]!
 
-    photo: [Photo!]!
+    photos: [Photo!]!
     replyTo: [String!]!
     repostOf: String!
     rsvp: RSVP
 
     """ Comments and webmentions. """
     comments: [Comment!]!
+}
+
+type Project {
+    """ UUID that uniquely identifies this project across space and time. """
+    uuid: String!
+
+    """ Slug of this project. """
+    slug: String!
+
+    """ If null, do not feature. If not null, picks the order it is featured in. """
+    featuredOrder: Int
+
+    started_date: String!
+    finished_date: String
+    published_date: String!
+    updated_date: String
+
+    """ The name of this project. """
+    name: String!
+    
+    """ A tagline for this project. """
+    summary: String!
+
+    """ A URL to the project on the internet. """
+    url: String
+
+    """ A URL to the project's source code. """
+    source: String
+
+    """ A URI describing the physical location. """
+    location: String
+
+    categories: [Category!]!
+    
+    """ Content, as HTML. """
+    content: String!
 }
 
 enum RSVP {
@@ -60,6 +96,11 @@ type Category {
     name: String!
     color: String!
     backgroundColor: String!
+
+    projects(): [Project!]!
+    entries(): [Project!]!
+
+    relatedCategories(): [Category!]!
 }
 
 type Slug {

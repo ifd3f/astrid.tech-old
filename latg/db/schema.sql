@@ -90,7 +90,7 @@ CREATE TABLE public.entries (
     name text,
     summary text,
     location text,
-    photo text[] DEFAULT ARRAY[]::text[] NOT NULL,
+    photos text[] DEFAULT ARRAY[]::text[] NOT NULL,
     reply_to text[] DEFAULT ARRAY[]::text[] NOT NULL,
     repost_of text,
     rsvp public.rsvp,
@@ -124,9 +124,62 @@ ALTER SEQUENCE public.entries_id_seq OWNED BY public.entries.id;
 
 CREATE TABLE public.entry_to_category (
     entry_id integer NOT NULL,
-    category_id integer,
-    ordinal integer NOT NULL
+    category_id integer NOT NULL,
+    ordinal smallint NOT NULL
 );
+
+
+--
+-- Name: project_to_category; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.project_to_category (
+    project_id integer NOT NULL,
+    category_id integer NOT NULL,
+    ordinal smallint NOT NULL
+);
+
+
+--
+-- Name: projects; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.projects (
+    id integer NOT NULL,
+    uuid uuid NOT NULL,
+    slug text NOT NULL,
+    featured_order smallint,
+    started_date timestamp with time zone NOT NULL,
+    finished_date timestamp with time zone,
+    published_date timestamp with time zone NOT NULL,
+    updated_date timestamp with time zone,
+    name text NOT NULL,
+    summary text,
+    url text,
+    source text,
+    location text,
+    content text
+);
+
+
+--
+-- Name: projects_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE public.projects_id_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: projects_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE public.projects_id_seq OWNED BY public.projects.id;
 
 
 --
@@ -150,6 +203,13 @@ ALTER TABLE ONLY public.categories ALTER COLUMN id SET DEFAULT nextval('public.c
 --
 
 ALTER TABLE ONLY public.entries ALTER COLUMN id SET DEFAULT nextval('public.entries_id_seq'::regclass);
+
+
+--
+-- Name: projects id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.projects ALTER COLUMN id SET DEFAULT nextval('public.projects_id_seq'::regclass);
 
 
 --
@@ -185,11 +245,59 @@ ALTER TABLE ONLY public.entries
 
 
 --
+-- Name: entry_to_category entry_category_ordering; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.entry_to_category
+    ADD CONSTRAINT entry_category_ordering UNIQUE (entry_id, ordinal);
+
+
+--
 -- Name: entry_to_category entry_to_category_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.entry_to_category
-    ADD CONSTRAINT entry_to_category_pkey PRIMARY KEY (entry_id);
+    ADD CONSTRAINT entry_to_category_pkey PRIMARY KEY (category_id, entry_id);
+
+
+--
+-- Name: project_to_category project_category_ordering; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.project_to_category
+    ADD CONSTRAINT project_category_ordering UNIQUE (project_id, ordinal);
+
+
+--
+-- Name: project_to_category project_to_category_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.project_to_category
+    ADD CONSTRAINT project_to_category_pkey PRIMARY KEY (category_id, project_id);
+
+
+--
+-- Name: projects projects_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.projects
+    ADD CONSTRAINT projects_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: projects projects_slug_key; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.projects
+    ADD CONSTRAINT projects_slug_key UNIQUE (slug);
+
+
+--
+-- Name: projects projects_uuid_key; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.projects
+    ADD CONSTRAINT projects_uuid_key UNIQUE (uuid);
 
 
 --
@@ -214,6 +322,22 @@ ALTER TABLE ONLY public.entry_to_category
 
 ALTER TABLE ONLY public.entry_to_category
     ADD CONSTRAINT entry_to_category_entry_id_fkey FOREIGN KEY (entry_id) REFERENCES public.entries(id);
+
+
+--
+-- Name: project_to_category project_to_category_category_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.project_to_category
+    ADD CONSTRAINT project_to_category_category_id_fkey FOREIGN KEY (category_id) REFERENCES public.categories(id);
+
+
+--
+-- Name: project_to_category project_to_category_project_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.project_to_category
+    ADD CONSTRAINT project_to_category_project_id_fkey FOREIGN KEY (project_id) REFERENCES public.projects(id);
 
 
 --

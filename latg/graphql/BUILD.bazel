@@ -10,7 +10,7 @@ load(
 
 filegroup(
     name = "graphql",
-    srcs = ["schema.graphql"],
+    srcs = glob(["*.graphql"]),
 )
 
 haskell_library(
@@ -21,9 +21,7 @@ haskell_library(
     extra_srcs = [":graphql"],
     deps = [
         "//latg:base", 
-        "@stackage//:servant",
         "@stackage//:morpheus-graphql",
-        "@stackage//:opaleye",
         "@stackage//:text",
         "@stackage//:bytestring",
     ],

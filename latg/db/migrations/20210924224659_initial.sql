@@ -7,7 +7,7 @@ create table entries(
     -- Primary key. DB-internal ONLY. Do not expose.
     id serial primary key not null,
 
-    -- UUID that uniquely identifies this post across space and time.
+    -- UUID that uniquely identifies this entry across space and time.
     uuid uuid unique not null,
 
     -- User-friendly slug fields.
@@ -32,12 +32,49 @@ create table entries(
     location text,
 
     -- Photos
-    photo text[] not null default array[]::text[],
+    photos text[] not null default array[]::text[],
 
     -- Misc. properties
     reply_to text[] not null default array[]::text[],
     repost_of text,
     rsvp rsvp,
+
+    -- Content, as HTML.
+    content text
+);
+
+create table projects(
+    -- Primary key. DB-internal ONLY. Do not expose.
+    id serial primary key not null,
+
+    -- UUID that uniquely identifies this project across space and time.
+    uuid uuid unique not null,
+
+    -- Slug of this project.
+    slug text unique not null,
+
+    -- If null, do not feature. If not null, picks the order.
+    featured_order smallint,
+
+    started_date timestamp with time zone not null,
+    finished_date timestamp with time zone,
+    published_date timestamp with time zone not null,
+    updated_date timestamp with time zone,
+
+    -- The name of this project.
+    name text not null,
+    
+    -- A tagline for this project.
+    summary text,
+
+    -- A URL to the project on the internet.
+    url text,
+
+    -- A URL to the project's source code.
+    source text,
+
+    -- A URI describing the physical location.
+    location text,
 
     -- Content, as HTML.
     content text
@@ -58,13 +95,29 @@ create table entry_to_category(
     category_id integer references categories (id),
 
     -- Used for ordering the categories.
-    ordinal integer not null,
-    constraint entry_to_category_pkey primary key (entry_id)
+    ordinal smallint not null,
+
+    constraint entry_to_category_pkey primary key (category_id, entry_id),
+    constraint entry_category_ordering unique (entry_id, ordinal)
+);
+
+create table project_to_category(
+    project_id integer references projects (id),
+    category_id integer references categories (id),
+
+    -- Used for ordering the categories.
+    ordinal smallint not null,
+
+    constraint project_to_category_pkey primary key (category_id, project_id),
+    constraint project_category_ordering unique (project_id, ordinal)
 );
 
 -- migrate:down
+drop table project_to_category;
 drop table entry_to_category;
 drop table categories;
+drop table projects;
 drop table entries;
 
 drop type rsvp;
+drop extension "uuid-ossp";
