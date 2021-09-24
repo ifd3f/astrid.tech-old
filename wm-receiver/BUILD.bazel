@@ -1,0 +1,32 @@
+load("@rules_rust//rust:rust.bzl", "rust_binary")
+load("@rules_rust//rust:rust.bzl", "rust_library")
+
+rust_binary(
+    name = "wm-receiver",
+    srcs = ["src/main.rs", "src/db.rs"],
+    deps = [
+        "//wm-receiver/cargo:diesel_migrations",
+        "//wm-receiver/cargo:dotenv",
+        "//wm-receiver/cargo:reqwest",
+        "//wm-receiver/cargo:rocket",
+        "//wm-receiver/cargo:sanitize_filename",
+        "//wm-receiver/cargo:scraper",
+        "//wm-receiver/cargo:serde",
+        "//wm-receiver/cargo:serde_json",
+        "//wm-receiver/cargo:sha256",
+        "//wm-receiver/cargo:url",
+    ],
+    data = [
+        "migrations"
+    ],
+    proc_macro_deps = [
+        "//wm-receiver/cargo:rocket_codegen",
+    ]
+)
+
+filegroup(
+    name = "migrations",
+    srcs = glob([
+        "migrations/**/*.sql"
+    ]),
+)
