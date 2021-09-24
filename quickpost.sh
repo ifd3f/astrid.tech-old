@@ -57,8 +57,10 @@ tempfile=$(mktemp)
 original=$(mktemp)
 cat > $original <<EOF
 ---
+title: null
 date: $dateField
 ordinal: $ordinal
+tags: []
 ---
 EOF
 cat $original > $tempfile
