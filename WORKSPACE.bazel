@@ -39,6 +39,9 @@ stack_snapshot(
         "servant",
         "morpheus-graphql",
         "opaleye",
+        "text",
+        "bytestring",
+        "hie-bios",
     ],
     snapshot = "lts-18.11",
 )

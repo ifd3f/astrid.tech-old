@@ -9,7 +9,7 @@
 {-# LANGUAGE TemplateHaskell #-}
 {-# LANGUAGE TypeFamilies #-}
 
-module Schema where
+module LATG.GraphQL where
 
 import Data.ByteString.Lazy.Char8 (ByteString)
 import Data.Morpheus (interpreter)

@@ -1,7 +1,5 @@
-# Set all target’s visibility in this package to "public".
 package(default_visibility = ["//visibility:public"])
 
-# Load rules_haskell rules.
 load(
     "@rules_haskell//haskell:defs.bzl",
     "haskell_toolchain_library",
@@ -29,16 +27,18 @@ haskell_toolchain_library(name = "base")
 # GHC base package, and zlib from stackage, to print the hello world.
 haskell_binary(
     name = "latg",
+    main_function = "LATG.Main.main",
     srcs = [
         ":Main.hs", 
-        ":Schema.hs"
     ],
-    extra_srcs = ["//latg/graphql"],
     deps = [
         ":base", 
+        "//latg/graphql:hs",
         "@stackage//:servant",
         "@stackage//:morpheus-graphql",
         "@stackage//:opaleye",
+        "@stackage//:text",
+        "@stackage//:bytestring",
     ],
 )
 

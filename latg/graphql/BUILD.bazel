@@ -1,7 +1,29 @@
 package(default_visibility = ["//visibility:public"])
+load(
+    "@rules_haskell//haskell:defs.bzl",
+    "haskell_toolchain_library",
+    "haskell_library",
+    "haskell_binary",
+    "haskell_repl",
+)
 
 filegroup(
     name = "graphql",
     srcs = ["schema.graphql"],
 )
 
+haskell_library(
+    name = "hs",
+    srcs = [
+        ":Schema.hs", 
+    ],
+    extra_srcs = [":graphql"],
+    deps = [
+        "//latg:base", 
+        "@stackage//:servant",
+        "@stackage//:morpheus-graphql",
+        "@stackage//:opaleye",
+        "@stackage//:text",
+        "@stackage//:bytestring",
+    ],
+)

@@ -1,0 +1,3 @@
+cradle:
+  multi:
+    - path: "./latg"
