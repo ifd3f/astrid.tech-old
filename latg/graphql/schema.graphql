@@ -1,0 +1,76 @@
+type Query {
+    entries(): [Entry!]!
+}
+
+type MicroformatProperty {
+    key: String!
+    values: [String!]!
+}
+
+type Entry {
+    uuid: String!
+    ordinal: Int!
+    slug: String
+    createdDate: String!
+    publishedDate: String!
+    updatedDate: String
+
+    name: String
+    permalink: String!
+    shortlink: String!
+
+    summary: String 
+    location: [String!]!
+    replyTo: [String!]!
+    repostOf: [String!]!
+
+    syndication: [Syndication!]!
+    categories: [Tag!]!
+    rsvp: RSVP
+
+    """
+    Content, a HTML string.
+    """
+    content: String!
+
+    photo: [Photo!]!
+
+    """
+    Comments and webmentions.
+    """
+    comments: [Comment!]!
+    
+    """
+    Other properties that weren't included.
+    """
+    properties: [MicroformatProperty!]!
+}
+
+enum RSVP {
+    YES
+    NO
+    MAYBE
+    INTERESTED
+}
+
+type Photo {
+    warning: String
+    caption: String!
+    src: String!
+}
+
+type Tag {
+    slug: String!
+    name: String!
+    color: String!
+    backgroundColor: String!
+}
+
+type Syndication {
+    name: String
+    url: String!
+}
+
+type Comment {
+    author: String
+}

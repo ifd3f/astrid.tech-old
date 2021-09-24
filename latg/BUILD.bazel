@@ -7,6 +7,7 @@ load(
     "haskell_toolchain_library",
     "haskell_library",
     "haskell_binary",
+    "haskell_repl",
 )
 
 # haskell_toolchain_library can access builtin GHC packages
@@ -28,6 +29,25 @@ haskell_toolchain_library(name = "base")
 # GHC base package, and zlib from stackage, to print the hello world.
 haskell_binary(
     name = "latg",
-    srcs = [":Example.hs"],
-    deps = [":base"],
+    srcs = [
+        ":Main.hs", 
+        ":Schema.hs"
+    ],
+    extra_srcs = ["//latg/graphql"],
+    deps = [
+        ":base", 
+        "@stackage//:servant",
+        "@stackage//:morpheus-graphql",
+        "@stackage//:opaleye",
+    ],
+)
+
+# Following https://rules-haskell.readthedocs.io/en/latest/haskell-use-cases.html#configuring-ide-integration-with-ghcide
+# To generate hie.yaml
+haskell_repl(
+    name = "hie-bios",
+    collect_data = False,
+    deps = [
+        ":latg",
+    ],
 )
