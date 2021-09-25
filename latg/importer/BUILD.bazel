@@ -18,6 +18,7 @@ haskell_library(
         "@stackage//:text",
         "@stackage//:time",
         "@stackage//:uuid",
+        "@stackage//:vector",
     ],
 )
 

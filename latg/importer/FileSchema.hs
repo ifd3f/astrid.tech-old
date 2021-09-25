@@ -10,6 +10,7 @@ module LATG.Importer.FileSchema where
 
 import GHC.Generics
 
+import Data.Vector((!), (!?))
 import Control.Monad
 import Data.Aeson
 import Data.Aeson.Types
@@ -121,7 +122,18 @@ data Slug = Slug
 mkSlug y m d o n = Slug y m d o (Just n)
 mkSlug' y m d o = Slug y m d o Nothing
 
-instance FromJSON Slug
+instance FromJSON Slug where 
+  parseJSON = withArray "Slug" $ \a -> do 
+    if length a > 5 
+      then fail "Slug array is too long"
+      else Slug <$>
+        (parseJSON $ a ! 0) <*>
+        (parseJSON $ a ! 1) <*>
+        (parseJSON $ a ! 2) <*>
+        (parseJSON $ a ! 3) <*>
+        case a !? 4 of 
+          Just x -> parseJSON x
+          Nothing -> pure Nothing
 
 data Content 
   = EmbeddedPlaintext T.Text 

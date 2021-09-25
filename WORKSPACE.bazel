@@ -57,6 +57,7 @@ stack_snapshot(
         "time",
         "transformers",
         "uuid",
+        "vector",
         "yaml",
     ],
     snapshot = "lts-18.11",
