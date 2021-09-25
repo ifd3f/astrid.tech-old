@@ -26,8 +26,8 @@ haskell_test(
         "//latg/importer:insert-schema", 
         "//latg/importer:load-content", 
         "@stackage//:aeson",
-        "@stackage//:hspec",
         "@stackage//:bytestring",
+        "@stackage//:hspec",
         "@stackage//:uuid",
     ],
 )

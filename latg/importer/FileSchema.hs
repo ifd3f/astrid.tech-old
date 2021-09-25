@@ -14,8 +14,10 @@ import Control.Monad
 import Data.Aeson
 import Data.Aeson.Types
 
+import Data.Maybe
 import Data.Time.LocalTime
 import Data.UUID
+import Debug.Trace
 import qualified Data.Text as T
 
 data Document a = Document
@@ -38,18 +40,19 @@ instance FromJSON GenericDocument where
       docTypeObj = do
         attrs <- o .: "attrs"
         docType <- (o .: "docType") >>= parseJSON
-        case docType of
+        result <- case docType of
           HEntry -> HEntryObj <$> parseJSON attrs
           XProject -> XProjectObj <$> parseJSON attrs
+        pure (trace (show result) result)
     in
       Document <$>
         o .: "uuid" <*>
         o .: "createdDate" <*>
         o .: "publishedDate" <*>
-        o .: "updatedDate" <*>
-        o .: "content" <*>
-        o .: "tags" <*>
-        o .: "colophon" <*>
+        o .:? "updatedDate" <*>
+        o .:? "content" <*>
+        (fromMaybe [] <$> o .:? "tags") <*>
+        o .:? "colophon" <*>
         docTypeObj
 
 data DocTypeObj = HEntryObj Entry | XProjectObj Project deriving (Generic, Show)
@@ -59,7 +62,7 @@ data DocType = HEntry | XProject deriving (Generic, Show, Eq)
 instance FromJSON DocType where 
   parseJSON = withText "DocType" $ \t -> case strToDocType t of 
     Just x -> return x
-    Nothing -> fail "DocType"
+    Nothing -> fail $ "Unsupported type " ++ show t
 
 strToDocType :: T.Text -> Maybe DocType
 strToDocType "h-entry" = Just HEntry
