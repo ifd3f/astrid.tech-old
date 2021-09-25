@@ -1,9 +1,11 @@
 {
   "hType": "entry",
   "uuid": "1bc6dde3-7512-4a4d-bf6f-cc21fe6c97f6",
-  "name": "A JSON-based metadata",
-  "summary": "This is a JSON file.",
-  "createdDate": "2014-09-24T18:31:40.328-07:00",
-  "publishedDate": "2015-01-01T18:31:40.328-07:00",
-  "slug": [2015, 1, 1, 0, "json-metadata"]
+  "attrs": {
+    "name": "A JSON-based metadata",
+    "summary": "This is a JSON file.",
+    "createdDate": "2014-09-24T18:31:40.328-07:00",
+    "publishedDate": "2015-01-01T18:31:40.328-07:00",
+    "slug": [2015, 1, 1, 0, "json-metadata"]
+  }
 }
