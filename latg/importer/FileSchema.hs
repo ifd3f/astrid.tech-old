@@ -10,6 +10,7 @@ module LATG.Importer.FileSchema where
 
 import GHC.Generics
 
+import Control.Monad
 import Data.Aeson
 import Data.Aeson.Types
 
@@ -36,15 +37,10 @@ instance FromJSON GenericDocument where
     let 
       docTypeObj = do
         attrs <- o .: "attrs"
-        docType' <- (o .: "docType") 
-        docType <- parseJSON docType'
+        docType <- (o .: "docType") >>= parseJSON
         case docType of
-          HEntry -> do
-            result <- parseJSON attrs
-            pure $ HEntryObj result
-          XProject -> do 
-            result :: Project <- parseJSON attrs
-            pure $ XProjectObj result
+          HEntry -> HEntryObj <$> parseJSON attrs
+          XProject -> XProjectObj <$> parseJSON attrs
     in
       Document <$>
         o .: "uuid" <*>

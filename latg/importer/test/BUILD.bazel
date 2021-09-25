@@ -28,5 +28,6 @@ haskell_test(
         "@stackage//:aeson",
         "@stackage//:hspec",
         "@stackage//:bytestring",
+        "@stackage//:uuid",
     ],
 )
