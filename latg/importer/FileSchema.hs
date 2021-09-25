@@ -1,10 +1,17 @@
 {-# LANGUAGE DeriveGeneric #-}
 {-# LANGUAGE DuplicateRecordFields #-}
 {-# LANGUAGE NamedFieldPuns #-}
+{-# LANGUAGE ScopedTypeVariables #-}
+{-# LANGUAGE OverloadedStrings #-}
+{-# LANGUAGE TypeSynonymInstances #-}
+{-# LANGUAGE FlexibleInstances #-}
 
 module LATG.Importer.FileSchema where
 
 import GHC.Generics
+
+import Data.Aeson
+import Data.Aeson.Types
 
 import Data.Time.LocalTime
 import Data.UUID
@@ -15,16 +22,53 @@ data Document a = Document
   , createdDate :: ZonedTime
   , publishedDate :: ZonedTime
   , updatedDate :: Maybe ZonedTime
+  , content :: Maybe Content
+  , tags :: [String]
+  , colophon :: Maybe String
   , object :: a
-  , content :: Content
-  , tags :: Maybe [T.Text]
-  , colophon :: Maybe T.Text
   }
   deriving (Show)
 
-type GenericDocument = Document DocType
+type GenericDocument = Document DocTypeObj
 
-data DocType = HEntry Entry | XProject Project deriving (Generic, Show)
+instance FromJSON GenericDocument where 
+  parseJSON = withObject "GenericDocument" $ \o ->
+    let 
+      docTypeObj = do
+        attrs <- o .: "attrs"
+        docType' <- (o .: "docType") 
+        docType <- parseJSON docType'
+        case docType of
+          HEntry -> do
+            result <- parseJSON attrs
+            pure $ HEntryObj result
+          XProject -> do 
+            result :: Project <- parseJSON attrs
+            pure $ XProjectObj result
+    in
+      Document <$>
+        o .: "uuid" <*>
+        o .: "createdDate" <*>
+        o .: "publishedDate" <*>
+        o .: "updatedDate" <*>
+        o .: "content" <*>
+        o .: "tags" <*>
+        o .: "colophon" <*>
+        docTypeObj
+
+data DocTypeObj = HEntryObj Entry | XProjectObj Project deriving (Generic, Show)
+
+data DocType = HEntry | XProject deriving (Generic, Show, Eq)
+
+instance FromJSON DocType where 
+  parseJSON = withText "DocType" $ \t -> case strToDocType t of 
+    Just x -> return x
+    Nothing -> fail "DocType"
+
+strToDocType :: T.Text -> Maybe DocType
+strToDocType "h-entry" = Just HEntry
+strToDocType "x-project" = Just XProject
+strToDocType _ = Nothing
 
 data Entry = Entry
   { name :: Maybe T.Text
@@ -35,7 +79,9 @@ data Entry = Entry
   , repostOf :: Maybe T.Text
   , rsvp :: Maybe RSVP
   }
-  deriving (Generic, Show)
+  deriving (Generic, Show, Eq)
+
+instance FromJSON Entry
 
 data Project = Project
   { status :: ProjectStatus
@@ -50,13 +96,18 @@ data Project = Project
   }
   deriving (Generic, Show)
 
-data RSVP = RSVP { to :: T.Text, value :: RSVPValue } deriving (Generic, Show)
+instance FromJSON Project
+
+data RSVP = RSVP { to :: T.Text, value :: RSVPValue } deriving (Generic, Show, Eq)
+instance FromJSON RSVP
 
 data RSVPValue = RSVPYes | RSVPNo | RSVPMaybe | RSVPInterested
-  deriving (Generic, Show)
+  deriving (Generic, Show, Eq)
+instance FromJSON RSVPValue
 
 data ProjectStatus = Early | WIP | Scrapped | Complete
-  deriving (Generic, Show)
+  deriving (Generic, Show, Eq)
+instance FromJSON ProjectStatus
 
 data Slug = Slug
   { year :: Int
@@ -65,9 +116,11 @@ data Slug = Slug
   , ordinal :: Int
   , slug :: Maybe T.Text
   }
-  deriving (Generic, Show)
+  deriving (Generic, Show, Eq)
 
 data Content 
   = EmbeddedPlaintext T.Text 
   | FileRef { src :: Maybe T.Text, downloadable :: Maybe Bool }
-  deriving (Generic, Show)
+  deriving (Generic, Show, Eq)
+
+instance FromJSON Content

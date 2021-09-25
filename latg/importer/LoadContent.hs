@@ -37,7 +37,7 @@ loadContentSource :: ContentSourceType -> (ContentType, IO BS.ByteString)
 loadContentSource source = undefined
 
 transformContent :: ContentType -> BS.ByteString -> T.Text
-transformContent type raw = undefined
+transformContent contentType raw = undefined
 
 createInsertableDocument :: T.Text -> EncodedDocument a -> DbDocument
 createInsertableDocument contentHtml document = undefined
