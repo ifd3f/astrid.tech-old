@@ -12,11 +12,6 @@ haskell_library(
     srcs = [
         "FileSchema.hs",
     ],
-    compiler_flags = [
-        "-XDeriveGeneric",
-        "-XDuplicateRecordFields",
-        "-XNamedFieldPuns",
-    ],
     deps = [
         "//latg:base", 
         "@stackage//:aeson",
@@ -24,6 +19,18 @@ haskell_library(
         "@stackage//:text",
         "@stackage//:time",
         "@stackage//:uuid",
+    ],
+)
+
+haskell_library(
+    name = "insert-schema",
+    srcs = [
+        "InsertSchema.hs",
+    ],
+    deps = [
+        "//latg:base", 
+        "//latg/db:hs", 
+        "@stackage//:opaleye",
     ],
 )
 
