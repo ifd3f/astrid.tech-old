@@ -5,7 +5,24 @@ load(
     "haskell_toolchain_library",
     "haskell_library",
     "haskell_binary",
-    "haskell_repl",
+)
+
+haskell_library(
+    name = "file-schema",
+    srcs = [
+        "FileSchema/Post.hs",
+    ],
+    compiler_flags = [
+        "-XDeriveGeneric",
+        "-XNamedFieldPuns",
+    ],
+    deps = [
+        "//latg:base", 
+        "@stackage//:aeson",
+        "@stackage//:text",
+        "@stackage//:bytestring",
+        "@stackage//:uuid",
+    ],
 )
 
 haskell_binary(
@@ -16,8 +33,9 @@ haskell_binary(
     ],
     deps = [
         "//latg:base", 
+        ":file-schema",
+        "@stackage//:bytestring",
         "@stackage//:opaleye",
         "@stackage//:text",
-        "@stackage//:bytestring",
     ],
 )

@@ -17,10 +17,10 @@ haskell_binary(
     deps = [
         "//latg:base", 
         "//latg/graphql:hs",
-        "@stackage//:servant",
+        "@stackage//:bytestring",
         "@stackage//:morpheus-graphql",
         "@stackage//:opaleye",
+        "@stackage//:servant",
         "@stackage//:text",
-        "@stackage//:bytestring",
     ],
 )
