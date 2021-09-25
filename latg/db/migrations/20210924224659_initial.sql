@@ -1,14 +1,43 @@
 -- migrate:up
 CREATE EXTENSION IF NOT EXISTS "uuid-ossp";
 
-CREATE TYPE rsvp AS ENUM ('yes', 'no', 'maybe', 'interested');
+CREATE TYPE rsvp_value AS ENUM ('yes', 'no', 'maybe', 'interested');
+CREATE TYPE doc_type AS ENUM ('h-entry', 'x-project');
+
+create table documents(
+    -- Primary key. DB-internal ONLY. Do not expose.
+    id serial primary key not null,
+
+    -- UUID that uniquely identifies this document across space and time.
+    uuid uuid unique not null,
+
+    -- Actual date fields.
+    created_date timestamp with time zone not null,
+    published_date timestamp with time zone not null,
+    updated_date timestamp with time zone,
+
+    -- Canonical URL to the content.
+    canonical_url text not null,
+
+    -- Type of this document.
+    doc_type doc_type not null,
+
+    -- Content, as HTML.
+    content text,
+
+    -- Info about the app that was used to generate this entry.
+    colophon text,
+
+    -- Download link for the source of this page, or null for non-downloadable
+    page_src_url text
+);
 
 create table entries(
     -- Primary key. DB-internal ONLY. Do not expose.
     id serial primary key not null,
 
-    -- UUID that uniquely identifies this entry across space and time.
-    uuid uuid unique not null,
+    -- The document this entry is attached to.
+    document integer unique references documents (id),
 
     -- User-friendly slug fields.
     year integer not null,
@@ -16,11 +45,6 @@ create table entries(
     day integer not null,
     ordinal integer not null,
     slug text,
-
-    -- Actual date fields.
-    created_date timestamp with time zone not null,
-    published_date timestamp with time zone not null,
-    updated_date timestamp with time zone,
 
     -- The name of this entry.
     name text,
@@ -37,16 +61,11 @@ create table entries(
     -- Misc. properties
     reply_to text[] not null default array[]::text[],
     repost_of text,
-    rsvp rsvp,
 
-    -- Content, as HTML.
-    content text,
+    rsvp rsvp_value,
+    rsvp_to text,
 
-    -- Info about the app that was used to generate this entry.
-    colophon text,
-
-    -- Download link for the source of this page
-    page_src_url text
+    constraint entry_slug unique (year, month, day, ordinal)
 );
 
 CREATE TYPE project_status AS ENUM ('early', 'wip', 'scrapped', 'complete');
@@ -55,12 +74,13 @@ create table projects(
     -- Primary key. DB-internal ONLY. Do not expose.
     id serial primary key not null,
 
-    -- UUID that uniquely identifies this project across space and time.
-    uuid uuid unique not null,
+    -- The document this project is attached to.
+    document integer unique references documents (id),
 
     -- Slug of this project.
     slug text unique not null,
 
+    -- The status of this project
     status project_status,
 
     -- If null, do not feature. If not null, picks the order.
@@ -69,8 +89,6 @@ create table projects(
     started_date timestamp with time zone not null,
     finished_date timestamp with time zone,
     sort_date timestamp with time zone not null,
-    published_date timestamp with time zone not null,
-    updated_date timestamp with time zone,
 
     -- The name of this project.
     name text not null,
@@ -85,10 +103,7 @@ create table projects(
     source text,
 
     -- A URI describing the physical location.
-    location text,
-
-    -- Content, as HTML.
-    content text not null
+    location text
 );
 
 create table categories(
@@ -101,35 +116,25 @@ create table categories(
     color text not null
 );
 
-create table entry_to_category(
-    entry_id integer references entries (id),
+create table document_to_category(
+    document_id integer references documents (id),
     category_id integer references categories (id),
 
     -- Used for ordering the categories.
     ordinal smallint not null,
 
-    constraint entry_to_category_pkey primary key (category_id, entry_id),
-    constraint entry_category_ordering unique (entry_id, ordinal)
-);
-
-create table project_to_category(
-    project_id integer references projects (id),
-    category_id integer references categories (id),
-
-    -- Used for ordering the categories.
-    ordinal smallint not null,
-
-    constraint project_to_category_pkey primary key (category_id, project_id),
-    constraint project_category_ordering unique (project_id, ordinal)
+    constraint document_to_category_pkey primary key (category_id, document_id),
+    constraint document_category_ordering unique (document_id, ordinal)
 );
 
 -- migrate:down
-drop table project_to_category;
-drop table entry_to_category;
+drop table document_to_category;
 drop table categories;
 drop table projects;
 drop table entries;
+drop table documents;
 
-drop type rsvp;
+drop type rsvp_value;
 drop type project_status;
+drop type doc_type;
 drop extension "uuid-ossp";

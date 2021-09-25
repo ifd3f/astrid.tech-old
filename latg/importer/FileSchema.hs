@@ -10,44 +10,47 @@ import Data.Time.LocalTime
 import Data.UUID
 import qualified Data.Text as T
 
-data Entry = Entry
-  { name :: Maybe T.Text
-  , uuid :: UUID
-  , slug :: Slug
-  , summary :: Maybe T.Text
+data Document = Document
+  { uuid :: UUID
   , createdDate :: ZonedTime
   , publishedDate :: ZonedTime
   , updatedDate :: Maybe ZonedTime
+  , document :: DocType
+  , content :: Content
   , tags :: Maybe [T.Text]
+  , colophon :: Maybe T.Text
+  }
+  deriving (Show)
+
+data DocType = HEntry Entry | XProject Project deriving (Generic, Show)
+
+data Entry = Entry
+  { name :: Maybe T.Text
+  , summary :: Maybe T.Text
   , location :: Maybe T.Text 
   , photos :: Maybe [T.Text]
   , replyTo :: Maybe [T.Text]
   , repostOf :: Maybe T.Text
-  , rsvp :: RSVP
-  , downloadable :: Bool
-  , colophon :: Maybe T.Text
+  , rsvp :: Maybe RSVP
   }
   deriving (Generic, Show)
 
 data Project = Project
-  { uuid :: T.Text
-  , slug :: T.Text
-  , status :: ProjectStatus
+  { status :: ProjectStatus
   , startedDate :: ZonedTime
   , finishedDate :: Maybe ZonedTime
   , sortDate :: Maybe ZonedTime
-  , publishedDate :: Maybe ZonedTime
-  , updatedDate :: Maybe ZonedTime
   , name :: T.Text
-  , summary :: Maybe T.Text 
+  , summary :: T.Text 
   , url :: Maybe T.Text 
   , source :: Maybe T.Text 
   , location :: Maybe T.Text 
-  , tags :: [T.Text]
   }
   deriving (Generic, Show)
 
-data RSVP = RSVPYes | RSVPNo | RSVPMaybe | RSVPInterested
+data RSVP = RSVP { to: Text, value: RSVPValue } deriving (Generic, Show)
+
+data RSVPValue = RSVPYes | RSVPNo | RSVPMaybe | RSVPInterested
   deriving (Generic, Show)
 
 data ProjectStatus = Early | WIP | Scrapped | Complete
@@ -62,5 +65,7 @@ data Slug = Slug
   }
   deriving (Generic, Show)
 
-data Content = EmbeddedPlaintext T.Text | FileRef { src :: T.Text }
+data Content = 
+  | EmbeddedPlaintext T.Text 
+  | FileRef { src :: Maybe T.Text, downloadable :: Maybe Bool }
   deriving (Generic, Show)

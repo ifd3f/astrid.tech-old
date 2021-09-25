@@ -2,12 +2,32 @@ type Query {
     entries(): [Entry!]!
 }
 
-type Entry {
-    """
-    A UUID that uniquely identifies this post across space and time.
-    """
+type Document {
+    """ UUID that uniquely identifies this document across space and time. """
     uuid: String!
+    canonical_url: String!
 
+    createdDate: String!
+    publishedDate: String!
+    updatedDate: String
+
+    categories: [Category!]!
+
+    """ The body of this entry, as HTML. """
+    content: String
+
+    """ Info about the app that was used to generate this entry. """
+    colophon: String
+
+    """ The download link for the source file of this page (i.e. in Markdown, LaTeX, Jupyter...) """
+    pageSrcURL: String
+
+    object: DocumentType
+}
+
+union DocumentType = Entry | Project
+
+type Entry {
     """ The name of this entry """
     name: String
 
@@ -19,17 +39,8 @@ type Entry {
 
     slug: Slug
 
-    createdDate: String!
-    publishedDate: String!
-    updatedDate: String
-
     summary: String 
     location: String!
-
-    categories: [Category!]!
-
-    """ The body of this entry, as HTML. """
-    content: String
 
     syndication: [Syndication!]!
 
@@ -41,17 +52,10 @@ type Entry {
     """ Comments and webmentions. """
     comments: [Comment!]!
 
-    """ Info about the app that was used to generate this entry. """
-    colophon: String
-
-    """ The download link for the source file of this page (i.e. in Markdown, LaTeX, Jupyter...) """
-    pageSrcURL: String
+    document: Document
 }
 
 type Project {
-    """ UUID that uniquely identifies this project across space and time. """
-    uuid: String!
-
     """ Slug of this project. """
     slug: String!
 
@@ -64,8 +68,6 @@ type Project {
     started_date: String!
     finished_date: String
     sort_date: String!
-    published_date: String!
-    updated_date: String
 
     """ The name of this project. """
     name: String!
@@ -82,16 +84,15 @@ type Project {
     """ A URI describing the physical location. """
     location: String
 
-    categories: [Category!]!
-    
-    """ Content, as HTML. """
-    content: String!
-
-    """ The download link for the source file of this page (i.e. in Markdown, LaTeX, Jupyter...) """
-    pageSrcURL: String
+    document: Document
 }
 
-enum RSVP {
+type RSVP {
+    to: String!
+    value: RSVPValue!
+}
+
+enum RSVPValue {
     YES
     NO
     MAYBE
@@ -117,8 +118,7 @@ type Category {
     color: String!
     backgroundColor: String!
 
-    projects(): [Project!]!
-    entries(): [Project!]!
+    documents(): [Document!]!
 
     relatedCategories(): [Category!]!
 }

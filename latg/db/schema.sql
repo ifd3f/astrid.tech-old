@@ -24,6 +24,16 @@ COMMENT ON EXTENSION "uuid-ossp" IS 'generate universally unique identifiers (UU
 
 
 --
+-- Name: doc_type; Type: TYPE; Schema: public; Owner: -
+--
+
+CREATE TYPE public.doc_type AS ENUM (
+    'h-entry',
+    'x-project'
+);
+
+
+--
 -- Name: project_status; Type: TYPE; Schema: public; Owner: -
 --
 
@@ -36,10 +46,10 @@ CREATE TYPE public.project_status AS ENUM (
 
 
 --
--- Name: rsvp; Type: TYPE; Schema: public; Owner: -
+-- Name: rsvp_value; Type: TYPE; Schema: public; Owner: -
 --
 
-CREATE TYPE public.rsvp AS ENUM (
+CREATE TYPE public.rsvp_value AS ENUM (
     'yes',
     'no',
     'maybe',
@@ -85,30 +95,74 @@ ALTER SEQUENCE public.categories_id_seq OWNED BY public.categories.id;
 
 
 --
+-- Name: document_to_category; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.document_to_category (
+    document_id integer NOT NULL,
+    category_id integer NOT NULL,
+    ordinal smallint NOT NULL
+);
+
+
+--
+-- Name: documents; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.documents (
+    id integer NOT NULL,
+    uuid uuid NOT NULL,
+    created_date timestamp with time zone NOT NULL,
+    published_date timestamp with time zone NOT NULL,
+    updated_date timestamp with time zone,
+    canonical_url text NOT NULL,
+    doc_type public.doc_type NOT NULL,
+    content text,
+    colophon text,
+    page_src_url text
+);
+
+
+--
+-- Name: documents_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE public.documents_id_seq
+    AS integer
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: documents_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE public.documents_id_seq OWNED BY public.documents.id;
+
+
+--
 -- Name: entries; Type: TABLE; Schema: public; Owner: -
 --
 
 CREATE TABLE public.entries (
     id integer NOT NULL,
-    uuid uuid NOT NULL,
+    document integer,
     year integer NOT NULL,
     month integer NOT NULL,
     day integer NOT NULL,
     ordinal integer NOT NULL,
     slug text,
-    created_date timestamp with time zone NOT NULL,
-    published_date timestamp with time zone NOT NULL,
-    updated_date timestamp with time zone,
     name text,
     summary text,
     location text,
     photos text[] DEFAULT ARRAY[]::text[] NOT NULL,
     reply_to text[] DEFAULT ARRAY[]::text[] NOT NULL,
     repost_of text,
-    rsvp public.rsvp,
-    content text,
-    colophon text,
-    page_src_url text
+    rsvp public.rsvp_value,
+    rsvp_to text
 );
 
 
@@ -133,47 +187,23 @@ ALTER SEQUENCE public.entries_id_seq OWNED BY public.entries.id;
 
 
 --
--- Name: entry_to_category; Type: TABLE; Schema: public; Owner: -
---
-
-CREATE TABLE public.entry_to_category (
-    entry_id integer NOT NULL,
-    category_id integer NOT NULL,
-    ordinal smallint NOT NULL
-);
-
-
---
--- Name: project_to_category; Type: TABLE; Schema: public; Owner: -
---
-
-CREATE TABLE public.project_to_category (
-    project_id integer NOT NULL,
-    category_id integer NOT NULL,
-    ordinal smallint NOT NULL
-);
-
-
---
 -- Name: projects; Type: TABLE; Schema: public; Owner: -
 --
 
 CREATE TABLE public.projects (
     id integer NOT NULL,
-    uuid uuid NOT NULL,
+    document integer,
     slug text NOT NULL,
     status public.project_status,
     featured_order smallint,
     started_date timestamp with time zone NOT NULL,
     finished_date timestamp with time zone,
-    published_date timestamp with time zone NOT NULL,
-    updated_date timestamp with time zone,
+    sort_date timestamp with time zone NOT NULL,
     name text NOT NULL,
     summary text,
     url text,
     source text,
-    location text,
-    content text NOT NULL
+    location text
 );
 
 
@@ -214,6 +244,13 @@ ALTER TABLE ONLY public.categories ALTER COLUMN id SET DEFAULT nextval('public.c
 
 
 --
+-- Name: documents id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.documents ALTER COLUMN id SET DEFAULT nextval('public.documents_id_seq'::regclass);
+
+
+--
 -- Name: entries id; Type: DEFAULT; Schema: public; Owner: -
 --
 
@@ -244,6 +281,46 @@ ALTER TABLE ONLY public.categories
 
 
 --
+-- Name: document_to_category document_category_ordering; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.document_to_category
+    ADD CONSTRAINT document_category_ordering UNIQUE (document_id, ordinal);
+
+
+--
+-- Name: document_to_category document_to_category_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.document_to_category
+    ADD CONSTRAINT document_to_category_pkey PRIMARY KEY (category_id, document_id);
+
+
+--
+-- Name: documents documents_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.documents
+    ADD CONSTRAINT documents_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: documents documents_uuid_key; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.documents
+    ADD CONSTRAINT documents_uuid_key UNIQUE (uuid);
+
+
+--
+-- Name: entries entries_document_key; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.entries
+    ADD CONSTRAINT entries_document_key UNIQUE (document);
+
+
+--
 -- Name: entries entries_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -252,43 +329,19 @@ ALTER TABLE ONLY public.entries
 
 
 --
--- Name: entries entries_uuid_key; Type: CONSTRAINT; Schema: public; Owner: -
+-- Name: entries entry_slug; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
 ALTER TABLE ONLY public.entries
-    ADD CONSTRAINT entries_uuid_key UNIQUE (uuid);
+    ADD CONSTRAINT entry_slug UNIQUE (year, month, day, ordinal);
 
 
 --
--- Name: entry_to_category entry_category_ordering; Type: CONSTRAINT; Schema: public; Owner: -
+-- Name: projects projects_document_key; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY public.entry_to_category
-    ADD CONSTRAINT entry_category_ordering UNIQUE (entry_id, ordinal);
-
-
---
--- Name: entry_to_category entry_to_category_pkey; Type: CONSTRAINT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY public.entry_to_category
-    ADD CONSTRAINT entry_to_category_pkey PRIMARY KEY (category_id, entry_id);
-
-
---
--- Name: project_to_category project_category_ordering; Type: CONSTRAINT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY public.project_to_category
-    ADD CONSTRAINT project_category_ordering UNIQUE (project_id, ordinal);
-
-
---
--- Name: project_to_category project_to_category_pkey; Type: CONSTRAINT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY public.project_to_category
-    ADD CONSTRAINT project_to_category_pkey PRIMARY KEY (category_id, project_id);
+ALTER TABLE ONLY public.projects
+    ADD CONSTRAINT projects_document_key UNIQUE (document);
 
 
 --
@@ -308,14 +361,6 @@ ALTER TABLE ONLY public.projects
 
 
 --
--- Name: projects projects_uuid_key; Type: CONSTRAINT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY public.projects
-    ADD CONSTRAINT projects_uuid_key UNIQUE (uuid);
-
-
---
 -- Name: schema_migrations schema_migrations_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -324,35 +369,35 @@ ALTER TABLE ONLY public.schema_migrations
 
 
 --
--- Name: entry_to_category entry_to_category_category_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
+-- Name: document_to_category document_to_category_category_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY public.entry_to_category
-    ADD CONSTRAINT entry_to_category_category_id_fkey FOREIGN KEY (category_id) REFERENCES public.categories(id);
-
-
---
--- Name: entry_to_category entry_to_category_entry_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY public.entry_to_category
-    ADD CONSTRAINT entry_to_category_entry_id_fkey FOREIGN KEY (entry_id) REFERENCES public.entries(id);
+ALTER TABLE ONLY public.document_to_category
+    ADD CONSTRAINT document_to_category_category_id_fkey FOREIGN KEY (category_id) REFERENCES public.categories(id);
 
 
 --
--- Name: project_to_category project_to_category_category_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
+-- Name: document_to_category document_to_category_document_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY public.project_to_category
-    ADD CONSTRAINT project_to_category_category_id_fkey FOREIGN KEY (category_id) REFERENCES public.categories(id);
+ALTER TABLE ONLY public.document_to_category
+    ADD CONSTRAINT document_to_category_document_id_fkey FOREIGN KEY (document_id) REFERENCES public.documents(id);
 
 
 --
--- Name: project_to_category project_to_category_project_id_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
+-- Name: entries entries_document_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
-ALTER TABLE ONLY public.project_to_category
-    ADD CONSTRAINT project_to_category_project_id_fkey FOREIGN KEY (project_id) REFERENCES public.projects(id);
+ALTER TABLE ONLY public.entries
+    ADD CONSTRAINT entries_document_fkey FOREIGN KEY (document) REFERENCES public.documents(id);
+
+
+--
+-- Name: projects projects_document_fkey; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.projects
+    ADD CONSTRAINT projects_document_fkey FOREIGN KEY (document) REFERENCES public.documents(id);
 
 
 --
