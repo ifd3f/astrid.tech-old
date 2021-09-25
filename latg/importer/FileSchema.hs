@@ -10,17 +10,19 @@ import Data.Time.LocalTime
 import Data.UUID
 import qualified Data.Text as T
 
-data Document = Document
+data Document a = Document
   { uuid :: UUID
   , createdDate :: ZonedTime
   , publishedDate :: ZonedTime
   , updatedDate :: Maybe ZonedTime
-  , document :: DocType
+  , object :: a
   , content :: Content
   , tags :: Maybe [T.Text]
   , colophon :: Maybe T.Text
   }
   deriving (Show)
+
+type GenericDocument = Document DocType
 
 data DocType = HEntry Entry | XProject Project deriving (Generic, Show)
 
@@ -48,7 +50,7 @@ data Project = Project
   }
   deriving (Generic, Show)
 
-data RSVP = RSVP { to: Text, value: RSVPValue } deriving (Generic, Show)
+data RSVP = RSVP { to :: T.Text, value :: RSVPValue } deriving (Generic, Show)
 
 data RSVPValue = RSVPYes | RSVPNo | RSVPMaybe | RSVPInterested
   deriving (Generic, Show)
@@ -65,7 +67,7 @@ data Slug = Slug
   }
   deriving (Generic, Show)
 
-data Content = 
-  | EmbeddedPlaintext T.Text 
+data Content 
+  = EmbeddedPlaintext T.Text 
   | FileRef { src :: Maybe T.Text, downloadable :: Maybe Bool }
   deriving (Generic, Show)

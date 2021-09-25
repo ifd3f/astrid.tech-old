@@ -15,7 +15,6 @@ haskell_library(
     deps = [
         "//latg:base", 
         "@stackage//:aeson",
-        "@stackage//:bytestring",
         "@stackage//:text",
         "@stackage//:time",
         "@stackage//:uuid",
@@ -31,6 +30,21 @@ haskell_library(
         "//latg:base", 
         "//latg/db:hs", 
         "@stackage//:opaleye",
+    ],
+)
+
+haskell_library(
+    name = "load-content",
+    srcs = [
+        "LoadContent.hs",
+    ],
+    deps = [
+        ":file-schema",
+        ":insert-schema",
+        "//latg:base", 
+        "@stackage//:bytestring",
+        "@stackage//:filepath",
+        "@stackage//:text",
     ],
 )
 

@@ -18,6 +18,9 @@ haskell_test(
     ],
     deps = [
         "//latg:base", 
+        "//latg/importer:file-schema", 
+        "//latg/importer:insert-schema", 
+        "//latg/importer:load-content", 
         "@stackage//:hspec",
     ],
 )
