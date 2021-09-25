@@ -1,9 +1,9 @@
 uuid: 5529e9c3-e612-4536-a16b-e8242266c8f8
 docType: h-entry
+createdDate: 2021-09-24T20:37:47.254875497-07:00
+publishedDate: 2021-09-24T20:37:47.254875497-07:00
 attrs:
   name: If I set content.src in the YAML file...
-  createdDate: 2021-09-24T20:37:47.254875497-07:00
-  publishedDate: 2021-09-24T20:37:47.254875497-07:00
   slug: [2021, 9, 24, 8, with-src]
 content:
   src: ../somepage.txt
