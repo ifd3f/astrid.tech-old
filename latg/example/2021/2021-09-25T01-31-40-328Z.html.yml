@@ -1,0 +1,8 @@
+docType: h-entry
+uuid: 2474dbe3-6ba8-4305-944a-ff91cd6b1b4f
+name: An RSVP written in HTML by a Micropub server
+createdDate: 2021-09-24T18:31:40.328-07:00
+publishedDate: 2021-09-24T18:31:40.328-07:00
+rsvpTo: https://example.com/events/cool-event
+slug: [2021, 9, 24, 1, html-post]
+colophon: https://micropub.astrid.tech

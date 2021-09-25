@@ -1,0 +1,3 @@
+# The .mediaignore file prevents specific files from being served.
+# However, LATG will still read them during import.
+README.md

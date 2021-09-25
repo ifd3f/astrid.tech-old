@@ -8,4 +8,9 @@ load(
     "haskell_repl",
 )
 
+filegroup(
+    name = "content-example",
+    srcs = glob(["example/**/*"]),
+)
+
 haskell_toolchain_library(name = "base")
