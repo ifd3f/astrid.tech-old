@@ -37,12 +37,16 @@ stack_snapshot(
     name = "stackage",
     packages = [
         "aeson",
+        "base",
         "bytestring",
         "containers",
+        "directory",
         "either",
         "filepath",
         "frontmatter",
         "hie-bios",
+        "hspec",
+        "hspec-discover",
         "lens",
         "morpheus-graphql",
         "opaleye",
@@ -59,3 +63,33 @@ stack_snapshot(
 
 # Download a GHC binary distribution from haskell.org and register it as a toolchain.
 rules_haskell_toolchains()
+
+# See https://github.com/aherrmann/stack_snapshot_example/blob/0db0b540583e3061ac2b7b154a60d726ef227311/WORKSPACE#L78-L105
+http_archive(
+    name = "hspec-discover",
+    strip_prefix = "hspec-discover-2.8.3",
+    urls = [
+        "https://hackage.haskell.org/package/hspec-discover-2.8.3/hspec-discover-2.8.3.tar.gz",
+    ],
+    sha256 = "9a99fbb1dba6ad3ae9eb222ca073103b037492b8ec21a23e4320ea8404ce3227",
+    # Thanks to this archive, we can make executable "hspec-discover"
+    # available to other rules (see "@hspec-discover" references).
+    # To build the executable, we use the haskell_cabal_binary rule:
+    build_file_content = """
+load(
+    "@rules_haskell//haskell:cabal.bzl",
+    "haskell_cabal_binary",
+)
+haskell_cabal_binary(
+    name = "hspec-discover",
+    srcs = glob(["**"]),
+    deps = [
+        "@stackage//:base",
+        "@stackage//:directory",
+        "@stackage//:filepath",
+        "@stackage//:hspec-discover",
+    ],
+    visibility = ["//visibility:public"],
+)
+""",
+)

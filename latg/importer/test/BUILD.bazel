@@ -1,0 +1,23 @@
+package(default_visibility = ["//visibility:public"])
+
+load(
+    "@rules_haskell//haskell:defs.bzl",
+    "haskell_toolchain_library",
+    "haskell_test",
+)
+
+haskell_test(
+    name = "test",
+    tools = ["@hspec-discover"],
+    compiler_flags = [
+        "-DHSPEC_DISCOVER=$(location @hspec-discover)"
+    ],
+    srcs = [
+        "Spec.hs",
+        "ImportSmokeSpec.hs",
+    ],
+    deps = [
+        "//latg:base", 
+        "@stackage//:hspec",
+    ],
+)
