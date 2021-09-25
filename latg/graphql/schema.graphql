@@ -40,6 +40,12 @@ type Entry {
 
     """ Comments and webmentions. """
     comments: [Comment!]!
+
+    """ Info about the app that was used to generate this entry. """
+    colophon: String
+
+    """ The download link for the source file of this page (i.e. in Markdown, LaTeX, Jupyter...) """
+    pageSrcURL: String
 }
 
 type Project {
@@ -49,11 +55,15 @@ type Project {
     """ Slug of this project. """
     slug: String!
 
+    """ The current status on this project. """
+    status: ProjectStatus
+
     """ If null, do not feature. If not null, picks the order it is featured in. """
     featuredOrder: Int
 
     started_date: String!
     finished_date: String
+    sort_date: String!
     published_date: String!
     updated_date: String
 
@@ -76,6 +86,9 @@ type Project {
     
     """ Content, as HTML. """
     content: String!
+
+    """ The download link for the source file of this page (i.e. in Markdown, LaTeX, Jupyter...) """
+    pageSrcURL: String
 }
 
 enum RSVP {
@@ -83,6 +96,13 @@ enum RSVP {
     NO
     MAYBE
     INTERESTED
+}
+
+enum ProjectStatus {
+    EARLY
+    WIP
+    SCRAPPED
+    COMPLETE
 }
 
 type Photo {

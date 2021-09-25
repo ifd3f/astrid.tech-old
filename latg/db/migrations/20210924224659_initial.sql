@@ -40,8 +40,16 @@ create table entries(
     rsvp rsvp,
 
     -- Content, as HTML.
-    content text
+    content text,
+
+    -- Info about the app that was used to generate this entry.
+    colophon text,
+
+    -- Download link for the source of this page
+    page_src_url text
 );
+
+CREATE TYPE project_status AS ENUM ('early', 'wip', 'scrapped', 'complete');
 
 create table projects(
     -- Primary key. DB-internal ONLY. Do not expose.
@@ -53,11 +61,14 @@ create table projects(
     -- Slug of this project.
     slug text unique not null,
 
+    status project_status,
+
     -- If null, do not feature. If not null, picks the order.
     featured_order smallint,
 
     started_date timestamp with time zone not null,
     finished_date timestamp with time zone,
+    sort_date timestamp with time zone not null,
     published_date timestamp with time zone not null,
     updated_date timestamp with time zone,
 
@@ -77,7 +88,7 @@ create table projects(
     location text,
 
     -- Content, as HTML.
-    content text
+    content text not null
 );
 
 create table categories(
@@ -120,4 +131,5 @@ drop table projects;
 drop table entries;
 
 drop type rsvp;
+drop type project_status;
 drop extension "uuid-ossp";

@@ -24,6 +24,18 @@ COMMENT ON EXTENSION "uuid-ossp" IS 'generate universally unique identifiers (UU
 
 
 --
+-- Name: project_status; Type: TYPE; Schema: public; Owner: -
+--
+
+CREATE TYPE public.project_status AS ENUM (
+    'early',
+    'wip',
+    'scrapped',
+    'complete'
+);
+
+
+--
 -- Name: rsvp; Type: TYPE; Schema: public; Owner: -
 --
 
@@ -94,7 +106,9 @@ CREATE TABLE public.entries (
     reply_to text[] DEFAULT ARRAY[]::text[] NOT NULL,
     repost_of text,
     rsvp public.rsvp,
-    content text
+    content text,
+    colophon text,
+    page_src_url text
 );
 
 
@@ -148,6 +162,7 @@ CREATE TABLE public.projects (
     id integer NOT NULL,
     uuid uuid NOT NULL,
     slug text NOT NULL,
+    status public.project_status,
     featured_order smallint,
     started_date timestamp with time zone NOT NULL,
     finished_date timestamp with time zone,
@@ -158,7 +173,7 @@ CREATE TABLE public.projects (
     url text,
     source text,
     location text,
-    content text
+    content text NOT NULL
 );
 
 
