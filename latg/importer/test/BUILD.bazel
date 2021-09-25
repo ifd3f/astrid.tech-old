@@ -14,7 +14,7 @@ haskell_test(
     ],
     srcs = [
         "Spec.hs",
-        "ImportSmokeSpec.hs",
+        "SmokeSpec.hs",
     ],
     deps = [
         "//latg:base", 
