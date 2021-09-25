@@ -10,3 +10,10 @@ Additionally, see its sister repo, the [infra repo](https://github.com/astralbij
 - Submit a [new issue](https://github.com/plenglin/astrid.tech/issues/new)
 - See the backend's Docker image (`astridyu/astrid_tech_api`) on [Docker Hub](https://hub.docker.com/repository/docker/astridyu/astrid_tech_api)
 - See the link shortener's Docker image (`astridyu/aay_tw_shortener`) on [Docker Hub](https://hub.docker.com/repository/docker/astridyu/aay_tw_shortener)
+
+## Libraries needed
+
+- libm
+- libpq
+- libffi
+- gmp

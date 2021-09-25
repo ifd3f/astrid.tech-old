@@ -10,9 +10,9 @@ load(
 # Download rules_haskell and make it accessible as "@rules_haskell".
 http_archive(
     name = "rules_haskell",
-    strip_prefix = "rules_haskell-0.13",
-    urls = ["https://github.com/tweag/rules_haskell/archive/v0.13.tar.gz"],
-    sha256 = "b4e2c00da9bc6668fa0404275fecfdb31beb700abdba0e029e74cacc388d94d6",
+    strip_prefix = "rules_haskell-ea0e70ace2432a490d4ab4c4e54617612466e584",
+    urls = ["https://github.com/tweag/rules_haskell/archive/ea0e70ace2432a490d4ab4c4e54617612466e584.tar.gz"],
+    sha256 = "73941c142bf37df115817083c0834fbc3269c963c7049bfbc345a9c76162e918",
 )
 
 load(
@@ -62,7 +62,9 @@ stack_snapshot(
 )
 
 # Download a GHC binary distribution from haskell.org and register it as a toolchain.
-rules_haskell_toolchains()
+rules_haskell_toolchains(
+    version = "8.10.4"
+)
 
 # See https://github.com/aherrmann/stack_snapshot_example/blob/0db0b540583e3061ac2b7b154a60d726ef227311/WORKSPACE#L78-L105
 http_archive(
