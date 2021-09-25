@@ -1,3 +1,4 @@
+{-# LANGUAGE OverloadedStrings #-}
 {-# LANGUAGE ScopedTypeVariables #-}
 module FileSpec where 
 
@@ -18,6 +19,11 @@ spec = do
             Right x -> x
             Left msg -> error msg
 
-      let expected = fromJust $ fromString "1bc6dde3-7512-4a4d-bf6f-cc21fe6c97f6"
-      uuid result `shouldBe` expected
+      let expectedUUID = fromJust $ fromString "1bc6dde3-7512-4a4d-bf6f-cc21fe6c97f6"
+      uuid result `shouldBe` expectedUUID
+
+      let entry = case docType result of 
+            HEntryObj e -> e
+            x -> error $ "Not an entry: " ++ show x
+      slug entry `shouldBe` mkSlug 2015 1 1 0 "json-metadata"
       pure ()

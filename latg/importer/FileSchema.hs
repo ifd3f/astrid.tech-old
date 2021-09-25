@@ -28,7 +28,7 @@ data Document a = Document
   , content :: Maybe Content
   , tags :: [String]
   , colophon :: Maybe String
-  , object :: a
+  , docType :: a
   }
   deriving (Show)
 
@@ -77,6 +77,7 @@ data Entry = Entry
   , replyTo :: Maybe [T.Text]
   , repostOf :: Maybe T.Text
   , rsvp :: Maybe RSVP
+  , slug :: Slug
   }
   deriving (Generic, Show, Eq)
 
@@ -113,9 +114,14 @@ data Slug = Slug
   , month :: Int
   , day :: Int
   , ordinal :: Int
-  , slug :: Maybe T.Text
+  , shortName :: Maybe T.Text
   }
   deriving (Generic, Show, Eq)
+
+mkSlug y m d o n = Slug y m d o (Just n)
+mkSlug' y m d o = Slug y m d o Nothing
+
+instance FromJSON Slug
 
 data Content 
   = EmbeddedPlaintext T.Text 
