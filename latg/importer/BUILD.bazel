@@ -10,17 +10,19 @@ load(
 haskell_library(
     name = "file-schema",
     srcs = [
-        "FileSchema/Post.hs",
+        "FileSchema.hs",
     ],
     compiler_flags = [
         "-XDeriveGeneric",
+        "-XDuplicateRecordFields",
         "-XNamedFieldPuns",
     ],
     deps = [
         "//latg:base", 
         "@stackage//:aeson",
-        "@stackage//:text",
         "@stackage//:bytestring",
+        "@stackage//:text",
+        "@stackage//:time",
         "@stackage//:uuid",
     ],
 )
