@@ -8,46 +8,4 @@ load(
     "haskell_repl",
 )
 
-# haskell_toolchain_library can access builtin GHC packages
-# and assign them a bazel target name, so that they
-# can be referenced as dependencies.
 haskell_toolchain_library(name = "base")
-
-# You can add your own libraries with haskell_library.
-# haskell_library(
-#     name = "MY_LIBRARY_NAME",
-#     src_strip_prefix = "src",
-#     srcs = glob(['src/**/*.hs']),
-#     deps = [
-#         "base_pkg"
-#     ],
-# )
-
-# An example binary using the Prelude module from the
-# GHC base package, and zlib from stackage, to print the hello world.
-haskell_binary(
-    name = "latg",
-    main_function = "LATG.Main.main",
-    srcs = [
-        ":Main.hs", 
-    ],
-    deps = [
-        ":base", 
-        "//latg/graphql:hs",
-        "@stackage//:servant",
-        "@stackage//:morpheus-graphql",
-        "@stackage//:opaleye",
-        "@stackage//:text",
-        "@stackage//:bytestring",
-    ],
-)
-
-# Following https://rules-haskell.readthedocs.io/en/latest/haskell-use-cases.html#configuring-ide-integration-with-ghcide
-# To generate hie.yaml
-haskell_repl(
-    name = "hie-bios",
-    collect_data = False,
-    deps = [
-        ":latg",
-    ],
-)

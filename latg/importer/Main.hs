@@ -1,6 +1,4 @@
-module LATG.Main where
-
-import LATG.GraphQL
+module LATG.Importer.Main where
 
 main :: IO ()
 main = putStrLn "Hello from rules_haskell!"

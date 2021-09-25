@@ -1,0 +1,23 @@
+package(default_visibility = ["//visibility:public"])
+
+load(
+    "@rules_haskell//haskell:defs.bzl",
+    "haskell_toolchain_library",
+    "haskell_library",
+    "haskell_binary",
+    "haskell_repl",
+)
+
+haskell_binary(
+    name = "importer",
+    main_function = "LATG.Importer.Main.main",
+    srcs = [
+        ":Main.hs", 
+    ],
+    deps = [
+        "//latg:base", 
+        "@stackage//:opaleye",
+        "@stackage//:text",
+        "@stackage//:bytestring",
+    ],
+)
