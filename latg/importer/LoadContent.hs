@@ -3,6 +3,7 @@
 module LATG.Importer.LoadContent where
 
 import Data.Frontmatter
+import Data.Char(toLower)
 import Data.List(isPrefixOf)
 import qualified Data.Aeson as Aeson
 import qualified Data.ByteString as BS
@@ -29,7 +30,7 @@ data ContentSourceType
   deriving (Show, Eq)
 
 data ContentType
-  = PlainType
+  = PlaintextType
   | MarkdownType
   | HTMLType
   deriving (Show, Eq)
@@ -82,8 +83,18 @@ extractContentSource path (DocumentOnly content) = case content of
   where 
     withoutExtension = Right $ FileRef $ dropExtension path
 
-loadContentSource :: ContentSourceType -> (ContentType, IO BL.ByteString)
-loadContentSource source = undefined
+loadContentSource :: ContentSourceType -> IO (Either String (ContentType, BS.ByteString))
+loadContentSource (EmbeddedMarkdown md) = pure $ Right (MarkdownType, md)
+loadContentSource (EmbeddedPlaintext txt) = pure $ Right (PlaintextType, TE.encodeUtf8 txt)
+loadContentSource (FileRef path) = do
+  content <- BS.readFile path
+
+  return $ case map toLower $ takeExtension path of
+    ".html" -> Right (HTMLType, content)
+    ".htm" -> Right (HTMLType, content)
+    ".md" -> Right (MarkdownType, content)
+    ".txt" -> Right (PlaintextType, content)
+    ext -> Left $ "Unsupported content file " ++ path
 
 transformContent :: ContentType -> BL.ByteString -> TL.Text
 transformContent contentType raw = undefined

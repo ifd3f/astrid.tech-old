@@ -99,3 +99,59 @@ spec = do
       case result of
         Left _ -> pure ()
         x -> expectationFailure $ "Incorrectly extracted: " ++ show x
+
+  describe "loadContentSource" $ do
+    it "passthroughs embedded markdown" $ do
+      let input = EmbeddedMarkdown "this is **markdown**"
+
+      result <- loadContentSource input 
+
+      result `shouldBe` Right (MarkdownType, "this is **markdown**")
+
+    it "passthroughs embedded plaintext" $ do
+      let input = EmbeddedPlaintext "this is plaintext"
+
+      result <- loadContentSource input 
+
+      result `shouldBe` Right (PlaintextType, "this is plaintext")
+
+    it "reads HTM from fileref" $ do
+      let input = FileRef "latg/example/2021/something.HTM"
+      let expected = "<p>Who the hell uses .htm for their HTML pages anymore?</p>"
+
+      result <- loadContentSource input 
+
+      result `shouldBe` Right (HTMLType, expected)
+
+    it "reads HTML from fileref" $ do
+      let input = FileRef "latg/example/2015-01-01.html"
+      let expected = "<p>You can also specify your metadata in JSON.</p>"
+
+      result <- loadContentSource input 
+
+      result `shouldBe` Right (HTMLType, expected)
+
+    it "reads Markdown from fileref" $ do
+      let input = FileRef "latg/example/2015-01-01.html"
+      let expected = "<p>You can also specify your metadata in JSON.</p>"
+
+      result <- loadContentSource input 
+
+      result `shouldBe` Right (HTMLType, expected)
+
+    it "reads plaintext from fileref" $ do
+      let input = FileRef "latg/example/2012/2012-12-21-end-of-the-world.txt"
+      let expected = "Wait a sec, the world didn't end\n"
+
+      result <- loadContentSource input 
+
+      result `shouldBe` Right (PlaintextType, expected)
+
+    it "gracefully fails unsupported file extension" $ do
+      let input = FileRef "latg/example/non-sourced.json"
+
+      result <- loadContentSource input 
+
+      case result of
+        Left _ -> pure ()
+        x -> error $ "Incorrectly loaded: " ++ show x
