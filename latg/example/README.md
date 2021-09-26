@@ -1,6 +1,6 @@
 # Example content directory
 
-This directory is an example of a content directory. 
+This directory is an example of a content directory. It also provides happy path cases for testing the code with.
 
 ## Documents
 

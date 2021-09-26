@@ -104,7 +104,15 @@ instance FromJSON RSVP
 
 data RSVPValue = RSVPYes | RSVPNo | RSVPMaybe | RSVPInterested
   deriving (Generic, Show, Eq)
-instance FromJSON RSVPValue
+
+instance FromJSON RSVPValue where 
+  parseJSON (Bool True) = pure RSVPYes
+  parseJSON (Bool False) = pure RSVPNo
+  parseJSON (String "yes") = pure RSVPYes
+  parseJSON (String "no") = pure RSVPNo
+  parseJSON (String "maybe") = pure RSVPMaybe
+  parseJSON (String "interested") = pure RSVPInterested
+  parseJSON unknown = fail $ "Unknown value for RSVP " ++ show unknown
 
 data ProjectStatus = Early | WIP | Scrapped | Complete
   deriving (Generic, Show, Eq)
