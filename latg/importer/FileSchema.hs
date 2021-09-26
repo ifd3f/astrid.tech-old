@@ -126,7 +126,11 @@ instance FromJSON Slug where
   parseJSON = withArray "Slug" $ \a -> do 
     if length a > 5 
       then fail "Slug array is too long"
-      else Slug <$>
+      else pure ()
+    if length a < 4
+      then fail "Slug array is too short"
+      else pure ()
+    Slug <$>
         (parseJSON $ a ! 0) <*>
         (parseJSON $ a ! 1) <*>
         (parseJSON $ a ! 2) <*>

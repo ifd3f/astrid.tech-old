@@ -26,4 +26,36 @@ spec = do
             HEntryObj e -> e
             x -> error $ "Not an entry: " ++ show x
       slug entry `shouldBe` mkSlug 2015 1 1 0 "json-metadata"
-      pure ()
+
+  describe "Slug" $ do 
+    it "reads arrays with short name" $ do
+      let json = "[2000, 12, 8, 0, \"birthday-post\"]"
+
+      let result :: Slug = case eitherDecode json of 
+            Right x -> x
+            Left msg -> error msg
+
+      result `shouldBe` mkSlug 2000 12 8 0 "birthday-post"
+
+    it "reads arrays without short name" $ do
+      let json = "[2000, 12, 8, 0]"
+
+      let result :: Slug = case eitherDecode json of 
+            Right x -> x
+            Left msg -> error msg
+
+      result `shouldBe` mkSlug' 2000 12 8 0
+
+    it "gracefully fails short arrays" $ do
+      let json = "[2000, 12, 8]"
+
+      case eitherDecode json :: Either String Slug of 
+        Right x -> expectationFailure $ "Incorrectly decoded: " ++ show x
+        Left msg -> pure ()
+
+    it "gracefully fails long arrays" $ do
+      let json = "[2000, 12, 8, 0, \"this\", \"is\", \"too\", \"long\"]"
+
+      case eitherDecode json :: Either String Slug of 
+        Right x -> expectationFailure $ "Incorrectly decoded: " ++ show x
+        Left msg -> pure ()
