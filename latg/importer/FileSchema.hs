@@ -33,6 +33,9 @@ data Document a = Document
   }
   deriving (Show)
 
+instance Functor Document where
+  fmap f x = x { docType = f (docType x) }
+
 type GenericDocument = Document DocTypeObj
 
 instance FromJSON GenericDocument where 

@@ -23,6 +23,10 @@ data EncodedDocument a
   | DocumentOnly a
   deriving (Show, Eq)
 
+instance Functor EncodedDocument where
+  fmap f (DocumentWithMarkdown doc content) = DocumentWithMarkdown (f doc) content
+  fmap f (DocumentOnly doc) = DocumentOnly (f doc)
+
 data ContentSourceType
   = EmbeddedMarkdown BS.ByteString
   | EmbeddedPlaintext T.Text
@@ -96,7 +100,7 @@ loadContentSource (FileRef path) = do
     ".txt" -> Right (PlaintextType, content)
     ext -> Left $ "Unsupported content file " ++ path
 
-transformContent :: ContentType -> BL.ByteString -> TL.Text
+transformContent :: ContentType -> BS.ByteString -> TL.Text
 transformContent contentType raw = undefined
 
 createInsertableDocument :: TL.Text -> EncodedDocument a -> ISch.DbDocument
