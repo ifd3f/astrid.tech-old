@@ -15,6 +15,7 @@ haskell_test(
     srcs = [
         "Spec.hs",
         "FileSpec.hs",
+        "LoadSpec.hs",
         "SmokeSpec.hs",
     ],
     data = [

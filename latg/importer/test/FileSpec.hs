@@ -12,7 +12,7 @@ import Data.UUID
 spec :: Spec
 spec = do 
   describe "GenericDocument" $ do 
-    it "loads JSON files" $ do
+    it "loads from JSON entries" $ do
       json <- BL.readFile "latg/example/2015-01-01.html.json"
 
       let result :: GenericDocument = case eitherDecode json of 

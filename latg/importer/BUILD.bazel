@@ -43,9 +43,13 @@ haskell_library(
         ":file-schema",
         ":insert-schema",
         "//latg:base", 
+        "@stackage//:aeson",
         "@stackage//:bytestring",
         "@stackage//:filepath",
+        "@stackage//:frontmatter",
+        "@stackage//:htoml",
         "@stackage//:text",
+        "@stackage//:yaml",
     ],
 )
 

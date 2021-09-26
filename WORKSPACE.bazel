@@ -47,6 +47,7 @@ stack_snapshot(
         "hie-bios",
         "hspec",
         "hspec-discover",
+        "htoml",
         "lens",
         "morpheus-graphql",
         "opaleye",
