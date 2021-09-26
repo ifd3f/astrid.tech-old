@@ -2,19 +2,20 @@
 
 module LATG.Importer.LoadContent where
 
-import System.FilePath 
-import qualified LATG.Importer.FileSchema as FSch
-import qualified LATG.Importer.InsertSchema as ISch
+import Data.Frontmatter
+import Data.List(isPrefixOf)
+import qualified Data.Aeson as Aeson
 import qualified Data.ByteString as BS
 import qualified Data.ByteString.Lazy as BL
-import qualified Data.Yaml as Yaml
-import qualified Text.Toml as Toml
-import qualified Data.Aeson as Aeson
-import Data.Frontmatter
 import qualified Data.Text as T
 import qualified Data.Text.Encoding as TE
 import qualified Data.Text.Lazy as TL
 import qualified Data.Text.Lazy.Encoding as TLE
+import qualified Data.Yaml as Yaml
+import qualified LATG.Importer.FileSchema as FSch
+import qualified LATG.Importer.InsertSchema as ISch
+import qualified Text.Toml as Toml
+import System.FilePath
 
 data EncodedDocument a
   = DocumentWithMarkdown a BS.ByteString
@@ -76,9 +77,10 @@ extractContentSource path (DocumentOnly content) = case content of
   Nothing -> withoutExtension
   Just (FSch.EmbeddedPlaintext text) -> Right $ EmbeddedPlaintext text
   Just (FSch.FileRef srcMaybe _) -> case srcMaybe of
-    Just src -> Right $ FileRef src
     Nothing -> withoutExtension
-  where withoutExtension = Right $ FileRef $ dropExtension path
+    Just src -> Right $ FileRef $ takeDirectory path </> src
+  where 
+    withoutExtension = Right $ FileRef $ dropExtension path
 
 loadContentSource :: ContentSourceType -> (ContentType, IO BL.ByteString)
 loadContentSource source = undefined

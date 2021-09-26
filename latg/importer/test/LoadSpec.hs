@@ -64,7 +64,15 @@ spec = do
 
       let result = extractContentSource path $ DocumentOnly content
 
-      result `shouldBe` (Right $ FileRef "mydir/over/here.html")
+      result `shouldBe` (Right $ FileRef "mydir/foo/../over/here.html")
+
+    it "handles content.src-style documents in same directory" $ do
+      let path = "mydir/foo/something.yaml"
+      let content = Just $ FSch.FileRef (Just "samedir.html") False
+
+      let result = extractContentSource path $ DocumentOnly content
+
+      result `shouldBe` (Right $ FileRef "mydir/foo/samedir.html")
 
     it "handles markdown documents" $ do
       let path = "mydir/foo/something.md"
@@ -78,19 +86,9 @@ spec = do
       let path = "mydir/foo/something.json"
       let content = Just $ FSch.EmbeddedPlaintext "my plaintext"
 
-      let result = extractContentSource path $ DocumentWithMarkdown content "my markdown"
+      let result = extractContentSource path $ DocumentOnly content 
 
       result `shouldBe` (Right $ EmbeddedPlaintext "my plaintext")
-
-    it "fails content.src-style documents that leave the content dir" $ do
-      let path = "mydir/foo/something.toml"
-      let content = Just $ FSch.FileRef (Just "../../../../../root/.ssh/id_rsa") False
-
-      let result = extractContentSource path $ DocumentOnly content
-
-      case result of
-        Left _ -> pure ()
-        x -> expectationFailure $ "Incorrectly extracted: " ++ show x
 
     it "fails markdown with content.src" $ do
       let path = "mydir/foo/something.md"
