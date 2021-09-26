@@ -6,11 +6,11 @@ import Test.Hspec
 import qualified Data.ByteString.Lazy as BL
 import Data.Maybe
 import Data.Aeson
-import LATG.Importer.FileSchema
-import LATG.Importer.LoadContent
+import qualified LATG.Importer.FileSchema as FSch
+import LATG.Importer.LoadContent 
 import Data.UUID
 
-type ReadDocumentResult' = ReadDocumentResult (EncodedDocument GenericDocument)
+type ReadDocumentResult' = ReadDocumentResult (EncodedDocument FSch.GenericDocument)
 spec :: Spec
 spec = do 
   describe "readDocument" $ do 
@@ -46,5 +46,58 @@ spec = do
       content <- BL.readFile "latg/example/2021/2021-09-25-test-post.md"
 
       case readDocument ".md" content :: ReadDocumentResult' of
-        ValidDocument (DocumentWithContent _ _) -> pure ()
+        ValidDocument (DocumentWithMarkdown _ _) -> pure ()
         x -> expectationFailure $ "Incorrectly decoded: " ++ show x
+
+  describe "extractContentSource" $ do 
+    it "handles same name-style documents" $ do
+      let path = "mydir/foo/something.txt.toml"
+      let content = Just $ FSch.FileRef Nothing False
+
+      let result = extractContentSource path $ DocumentOnly content
+
+      result `shouldBe` (Right $ FileRef "mydir/foo/something.txt")
+
+    it "handles content.src-style documents with relative paths" $ do
+      let path = "mydir/foo/something.yaml"
+      let content = Just $ FSch.FileRef (Just "../over/here.html") False
+
+      let result = extractContentSource path $ DocumentOnly content
+
+      result `shouldBe` (Right $ FileRef "mydir/over/here.html")
+
+    it "handles markdown documents" $ do
+      let path = "mydir/foo/something.md"
+      let content = Nothing
+
+      let result = extractContentSource path $ DocumentWithMarkdown content "my markdown"
+
+      result `shouldBe` (Right $ EmbeddedMarkdown "my markdown")
+
+    it "handles embedded plaintext documents" $ do
+      let path = "mydir/foo/something.json"
+      let content = Just $ FSch.EmbeddedPlaintext "my plaintext"
+
+      let result = extractContentSource path $ DocumentWithMarkdown content "my markdown"
+
+      result `shouldBe` (Right $ EmbeddedPlaintext "my plaintext")
+
+    it "fails content.src-style documents that leave the content dir" $ do
+      let path = "mydir/foo/something.toml"
+      let content = Just $ FSch.FileRef (Just "../../../../../root/.ssh/id_rsa") False
+
+      let result = extractContentSource path $ DocumentOnly content
+
+      case result of
+        Left _ -> pure ()
+        x -> expectationFailure $ "Incorrectly extracted: " ++ show x
+
+    it "fails markdown with content.src" $ do
+      let path = "mydir/foo/something.md"
+      let content = Just $ FSch.FileRef (Just "../over/here.html") False
+
+      let result = extractContentSource path $ DocumentWithMarkdown content "this is text"
+
+      case result of
+        Left _ -> pure ()
+        x -> expectationFailure $ "Incorrectly extracted: " ++ show x

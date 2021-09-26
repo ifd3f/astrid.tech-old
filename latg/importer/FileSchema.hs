@@ -112,7 +112,7 @@ instance FromJSON RSVPValue where
   parseJSON (String "no") = pure RSVPNo
   parseJSON (String "maybe") = pure RSVPMaybe
   parseJSON (String "interested") = pure RSVPInterested
-  parseJSON unknown = fail $ "Unknown value for RSVP " ++ show unknown
+  parseJSON unknown = fail $ "Unknown value for RSVP: " ++ show unknown
 
 data ProjectStatus = Early | WIP | Scrapped | Complete
   deriving (Generic, Show, Eq)
@@ -149,7 +149,12 @@ instance FromJSON Slug where
 
 data Content 
   = EmbeddedPlaintext T.Text 
-  | FileRef { src :: Maybe T.Text, downloadable :: Maybe Bool }
+  | FileRef { src :: Maybe String, downloadable :: Bool }
   deriving (Generic, Show, Eq)
 
-instance FromJSON Content
+instance FromJSON Content where 
+  parseJSON (Object o) = FileRef <$>
+    o .:? "src" <*>
+    (fromMaybe False <$> o .:? "downloadable")
+  parseJSON (String t) = pure $ EmbeddedPlaintext t
+  parseJSON unknown = fail $ "Unknown value for Content: " ++ show unknown

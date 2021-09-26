@@ -3,8 +3,8 @@
 module LATG.Importer.LoadContent where
 
 import System.FilePath 
-import LATG.Importer.FileSchema
-import LATG.Importer.InsertSchema
+import qualified LATG.Importer.FileSchema as FSch
+import qualified LATG.Importer.InsertSchema as ISch
 import qualified Data.ByteString as BS
 import qualified Data.ByteString.Lazy as BL
 import qualified Data.Yaml as Yaml
@@ -17,24 +17,23 @@ import qualified Data.Text.Lazy as TL
 import qualified Data.Text.Lazy.Encoding as TLE
 
 data EncodedDocument a
-  = DocumentWithContent a BS.ByteString
+  = DocumentWithMarkdown a BS.ByteString
   | DocumentOnly a
-  deriving (Show)
+  deriving (Show, Eq)
 
 data ContentSourceType
-  = EmbeddedMarkdown TL.Text
+  = EmbeddedMarkdown BS.ByteString
+  | EmbeddedPlaintext T.Text
   | FileRef FilePath
-  | EmbeddedPlaintext TL.Text
-  | SameName FilePath
-  deriving (Show)
+  deriving (Show, Eq)
 
 data ContentType
   = PlainType
   | MarkdownType
   | HTMLType
-  deriving (Show)
+  deriving (Show, Eq)
 
-loadInsertableDocument :: FilePath -> IO DbDocument
+loadInsertableDocument :: FilePath -> IO ISch.DbDocument
 loadInsertableDocument = undefined
 
 data ReadDocumentResult a = NotADocument | InvalidDocument String | ValidDocument a
@@ -56,7 +55,7 @@ readDocument extension content =
     markdown = case parseFrontmatter $ BL.toStrict content of
       Done body front -> case Yaml.decodeEither' front of
         Left err -> InvalidDocument $ show err
-        Right x -> ValidDocument $ DocumentWithContent x body
+        Right x -> ValidDocument $ DocumentWithMarkdown x body
       _ -> NotADocument
 
     yaml = case Yaml.decodeEither' $ BL.toStrict content of
@@ -69,8 +68,17 @@ readDocument extension content =
         Aeson.Error err -> InvalidDocument $ show err
         Aeson.Success x -> ValidDocument $ DocumentOnly x
 
-extractContentSourceType :: FilePath -> EncodedDocument a -> ContentSourceType
-extractContentSourceType path document = undefined
+extractContentSource :: FilePath -> EncodedDocument (Maybe FSch.Content) -> Either String ContentSourceType
+extractContentSource _ (DocumentWithMarkdown content md) = case content of
+  Nothing -> Right $ EmbeddedMarkdown md
+  Just _ -> Left "Embedded markdown cannot reference other sources"
+extractContentSource path (DocumentOnly content) = case content of
+  Nothing -> withoutExtension
+  Just (FSch.EmbeddedPlaintext text) -> Right $ EmbeddedPlaintext text
+  Just (FSch.FileRef srcMaybe _) -> case srcMaybe of
+    Just src -> Right $ FileRef src
+    Nothing -> withoutExtension
+  where withoutExtension = Right $ FileRef $ dropExtension path
 
 loadContentSource :: ContentSourceType -> (ContentType, IO BL.ByteString)
 loadContentSource source = undefined
@@ -78,5 +86,5 @@ loadContentSource source = undefined
 transformContent :: ContentType -> BL.ByteString -> TL.Text
 transformContent contentType raw = undefined
 
-createInsertableDocument :: TL.Text -> EncodedDocument a -> DbDocument
+createInsertableDocument :: TL.Text -> EncodedDocument a -> ISch.DbDocument
 createInsertableDocument contentHtml document = undefined
