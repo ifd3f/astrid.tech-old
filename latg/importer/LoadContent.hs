@@ -53,11 +53,11 @@ readDocument extension content =
       Left err -> InvalidDocument err
       Right x -> ValidDocument $ DocumentOnly x
 
-    markdown = case parseYamlFrontmatter $ BL.toStrict content of
-      Done body front -> case front of 
-        Nothing -> NotADocument
-        Just x -> ValidDocument $ DocumentWithContent x body
-      _ -> InvalidDocument $ "Failure while parsing markdown"
+    markdown = case parseFrontmatter $ BL.toStrict content of
+      Done body front -> case Yaml.decodeEither' front of
+        Left err -> InvalidDocument $ show err
+        Right x -> ValidDocument $ DocumentWithContent x body
+      _ -> NotADocument
 
     yaml = case Yaml.decodeEither' $ BL.toStrict content of
       Left err -> InvalidDocument $ show err

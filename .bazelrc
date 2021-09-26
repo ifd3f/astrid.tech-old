@@ -1,5 +1,6 @@
 # Required for Haskell to build
 build --incompatible_require_linker_input_cc_api=false
+test --test_output=errors
 
 build:ci --loading_phase_threads=1
 build:ci --jobs=2
