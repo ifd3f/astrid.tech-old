@@ -10,7 +10,9 @@ import qualified LATG.Importer.FileSchema as FSch
 import LATG.Importer.LoadContent 
 import Data.UUID
 
-type ReadDocumentResult' = ReadDocumentResult (EncodedDocument FSch.GenericDocument)
+type ReadDocumentResult' = Either String (Maybe (EncodedDocument FSch.GenericDocument))
+type ReadDocumentResult'' = Either String (Maybe (EncodedDocument FSch.Content))
+
 spec :: Spec
 spec = do 
   describe "readDocument" $ do 
@@ -18,35 +20,59 @@ spec = do
       content <- BL.readFile "latg/example/2015-01-01.html.json"
 
       case readDocument ".json" content :: ReadDocumentResult' of
-        ValidDocument (DocumentOnly _) -> pure ()
+        Right (Just (DocumentOnly _)) -> pure ()
         x -> expectationFailure $ "Incorrectly decoded: " ++ show x
 
     it "reads YAML" $ do
       content <- BL.readFile "latg/example/2021/2021-09-25T01-31-40-328Z.html.yml"
 
       case readDocument ".yaml" content :: ReadDocumentResult' of
-        ValidDocument (DocumentOnly _) -> pure ()
+        Right (Just (DocumentOnly _)) -> pure ()
         x -> expectationFailure $ "Incorrectly decoded: " ++ show x
 
     it "reads TOML" $ do
       content <- BL.readFile "latg/example/2012/2012-12-21-end-of-the-world.txt.toml"
 
       case readDocument ".toml" content :: ReadDocumentResult' of
-        ValidDocument (DocumentOnly _) -> pure ()
+        Right (Just (DocumentOnly _)) -> pure ()
         x -> expectationFailure $ "Incorrectly decoded: " ++ show x
 
     it "returns NotADocument for non-frontmatter Markdown" $ do
       content <- BL.readFile "latg/example/2015-08-10.md"
 
-      case readDocument ".md" content :: ReadDocumentResult' of
-        NotADocument -> pure ()
-        x -> expectationFailure $ "Incorrectly decoded: " ++ show x
+      (readDocument ".md" content :: ReadDocumentResult'') `shouldBe` Right Nothing
+
+    it "returns NotADocument for unsupported extension" $ do
+      let content = "myYaml: is cool"
+
+      (readDocument ".notyaml" content :: ReadDocumentResult'') `shouldBe` Right Nothing
 
     it "reads frontmatter Markdown" $ do
       content <- BL.readFile "latg/example/2021/2021-09-25-test-post.md"
 
       case readDocument ".md" content :: ReadDocumentResult' of
-        ValidDocument (DocumentWithMarkdown _ _) -> pure ()
+        Right (Just (DocumentWithMarkdown _ _)) -> pure ()
+        x -> expectationFailure $ "Incorrectly decoded: " ++ show x
+
+    it "gracefully fails invalid JSON" $ do
+      let content = "lol"
+
+      case readDocument ".json" content :: ReadDocumentResult' of
+        Left _ -> pure ()
+        x -> expectationFailure $ "Incorrectly decoded: " ++ show x
+
+    it "gracefully fails invalid TOML" $ do
+      let content = "lol"
+
+      case readDocument ".toml" content :: ReadDocumentResult' of
+        Left _ -> pure ()
+        x -> expectationFailure $ "Incorrectly decoded: " ++ show x
+
+    it "gracefully fails frontmatter Markdown with invalid markdown" $ do
+      let content = "---\nunclosedList:[\n---\nmy *markdown goes* here"
+
+      case readDocument ".md" content :: ReadDocumentResult' of
+        Left _ -> pure ()
         x -> expectationFailure $ "Incorrectly decoded: " ++ show x
 
   describe "extractContentSource" $ do 

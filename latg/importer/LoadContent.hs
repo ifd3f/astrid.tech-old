@@ -2,8 +2,9 @@
 
 module LATG.Importer.LoadContent where
 
-import Data.Frontmatter
+import Data.Bifunctor
 import Data.Char(toLower)
+import qualified Data.Frontmatter as FM
 import Data.List(isPrefixOf)
 import qualified Data.Aeson as Aeson
 import qualified Data.ByteString as BS
@@ -39,13 +40,9 @@ data ContentType
   | HTMLType
   deriving (Show, Eq)
 
-loadInsertableDocument :: FilePath -> IO ISch.DbDocument
-loadInsertableDocument = undefined
+type Result = Either String
 
-data ReadDocumentResult a = NotADocument | InvalidDocument String | ValidDocument a
-  deriving (Show)
-
-readDocument :: Aeson.FromJSON a => String -> BL.ByteString -> ReadDocumentResult (EncodedDocument a)
+readDocument :: Aeson.FromJSON a => String -> BL.ByteString -> Result (Maybe (EncodedDocument a))
 readDocument extension content = 
   case extension of
     ".md" -> markdown
@@ -53,28 +50,28 @@ readDocument extension content =
     ".yml" -> yaml
     ".yaml" -> yaml
     ".toml" -> toml
+    _ -> Right Nothing
   where
-    json = case Aeson.eitherDecode content of 
-      Left err -> InvalidDocument err
-      Right x -> ValidDocument $ DocumentOnly x
+    rj = Right . Just
 
-    markdown = case parseFrontmatter $ BL.toStrict content of
-      Done body front -> case Yaml.decodeEither' front of
-        Left err -> InvalidDocument $ show err
-        Right x -> ValidDocument $ DocumentWithMarkdown x body
-      _ -> NotADocument
+    json = Just <$> DocumentOnly <$> Aeson.eitherDecode content 
 
-    yaml = case Yaml.decodeEither' $ BL.toStrict content of
-      Left err -> InvalidDocument $ show err
-      Right x -> ValidDocument $ DocumentOnly x
+    markdown = case FM.parseFrontmatter $ BL.toStrict content of
+      FM.Done body front -> case Yaml.decodeEither' front of
+        Left err -> Left $ show err
+        Right x -> rj $ DocumentWithMarkdown x body
+      _ -> Right Nothing
 
-    toml = case Toml.parseTomlDoc "" $ TE.decodeUtf8 $ BL.toStrict content of
-      Left err -> InvalidDocument $ show err
-      Right table -> case Aeson.fromJSON $ Aeson.toJSON table of
-        Aeson.Error err -> InvalidDocument $ show err
-        Aeson.Success x -> ValidDocument $ DocumentOnly x
+    yaml = Just <$> DocumentOnly <$>
+      (first show $ Yaml.decodeEither' $ BL.toStrict content)
 
-extractContentSource :: FilePath -> EncodedDocument (Maybe FSch.Content) -> Either String ContentSourceType
+    toml = do
+      table <- first show $ Toml.parseTomlDoc "" $ TE.decodeUtf8 $ BL.toStrict content 
+      case Aeson.fromJSON $ Aeson.toJSON table of
+        Aeson.Error err -> Left $ show err
+        Aeson.Success x -> rj $ DocumentOnly x
+
+extractContentSource :: FilePath -> EncodedDocument (Maybe FSch.Content) -> Result ContentSourceType
 extractContentSource _ (DocumentWithMarkdown content md) = case content of
   Nothing -> Right $ EmbeddedMarkdown md
   Just _ -> Left "Embedded markdown cannot reference other sources"
@@ -87,7 +84,7 @@ extractContentSource path (DocumentOnly content) = case content of
   where 
     withoutExtension = Right $ FileRef $ dropExtension path
 
-loadContentSource :: ContentSourceType -> IO (Either String (ContentType, BS.ByteString))
+loadContentSource :: ContentSourceType -> IO (Result (ContentType, BS.ByteString))
 loadContentSource (EmbeddedMarkdown md) = pure $ Right (MarkdownType, md)
 loadContentSource (EmbeddedPlaintext txt) = pure $ Right (PlaintextType, TE.encodeUtf8 txt)
 loadContentSource (FileRef path) = do
@@ -100,8 +97,8 @@ loadContentSource (FileRef path) = do
     ".txt" -> Right (PlaintextType, content)
     ext -> Left $ "Unsupported content file " ++ path
 
-transformContent :: ContentType -> BS.ByteString -> TL.Text
-transformContent contentType raw = undefined
+transformContent :: ContentType -> BS.ByteString -> T.Text
+transformContent contentType raw = TE.decodeUtf8 raw  -- TODO use pandoc
 
 createInsertableDocument :: TL.Text -> EncodedDocument a -> ISch.DbDocument
 createInsertableDocument contentHtml document = undefined
