@@ -20,21 +20,19 @@ import qualified LATG.Importer.InsertSchema as ISch
 import qualified Text.Toml as Toml
 import System.FilePath
 
-data EncodedDocument a
-  = DocumentWithMarkdown a BS.ByteString
-  | DocumentOnly a
+data EncodedDocument a = EncodedDocument
+  { attachedContent :: Maybe (ContentType, BS.ByteString)
+  , documentData :: a
+  }
   deriving (Show, Eq)
 
-extractDocument (DocumentWithMarkdown x _) = x
-extractDocument (DocumentOnly x) = x
+documentOnly = EncodedDocument Nothing
 
 instance Functor EncodedDocument where
-  fmap f (DocumentWithMarkdown doc content) = DocumentWithMarkdown (f doc) content
-  fmap f (DocumentOnly doc) = DocumentOnly (f doc)
+  fmap f (EncodedDocument content doc) = EncodedDocument content (f doc)
 
 data ContentSourceType
-  = EmbeddedMarkdown BS.ByteString
-  | EmbeddedPlaintext T.Text
+  = EmbeddedContent ContentType BS.ByteString
   | FileRef FilePath
   deriving (Show, Eq)
 
@@ -76,7 +74,7 @@ load path = do
           Left e -> invalid e
           Right (contentType, contentRaw) -> case transformContent contentType contentRaw of
             Left e -> invalid e
-            Right transformed -> Right (extractDocument doc, transformed)
+            Right transformed -> Right (documentData doc, transformed)
 
 readDocument :: Aeson.FromJSON a => String -> BL.ByteString -> ReadDocumentResult (EncodedDocument a)
 readDocument extension content = 
@@ -88,29 +86,29 @@ readDocument extension content =
     ".toml" -> fromEither toml
     _ -> Left NonDocument
   where
-    json = DocumentOnly <$> Aeson.eitherDecode content 
+    json = documentOnly <$> Aeson.eitherDecode content 
 
     markdown = case FM.parseFrontmatter $ BL.toStrict content of
       FM.Done body front -> case Yaml.decodeEither' front of
         Left err -> invalid $ show err
-        Right x -> Right $ DocumentWithMarkdown x body
+        Right x -> Right $ EncodedDocument (Just (MarkdownType, body)) x
       _ -> Left NonDocument
 
-    yaml = DocumentOnly <$> (first show $ Yaml.decodeEither' $ BL.toStrict content)
+    yaml = documentOnly <$> (first show $ Yaml.decodeEither' $ BL.toStrict content)
 
     toml = do
       table <- first show $ Toml.parseTomlDoc "" $ TE.decodeUtf8 $ BL.toStrict content 
       case Aeson.fromJSON $ Aeson.toJSON table of
         Aeson.Error err -> Left $ show err
-        Aeson.Success x -> Right $ DocumentOnly x
+        Aeson.Success x -> Right $ documentOnly x
 
 extractContentSource :: FilePath -> EncodedDocument (Maybe FSch.Content) -> Result ContentSourceType
-extractContentSource _ (DocumentWithMarkdown content md) = case content of
-  Nothing -> Right $ EmbeddedMarkdown md
-  Just _ -> Left "Embedded markdown cannot reference other sources"
-extractContentSource path (DocumentOnly content) = case content of
+extractContentSource _ (EncodedDocument (Just (contentType, contentRaw)) contentData) = case contentData of
+  Nothing -> Right $ EmbeddedContent contentType contentRaw
+  Just _ -> Left "Embedded content cannot reference other sources"
+extractContentSource path (EncodedDocument Nothing contentData) = case contentData of
   Nothing -> withoutExtension
-  Just (FSch.EmbeddedPlaintext text) -> Right $ EmbeddedPlaintext text
+  Just (FSch.EmbeddedPlaintext text) -> Right $ EmbeddedContent PlaintextType $ TE.encodeUtf8 text
   Just (FSch.FileRef srcMaybe _) -> case srcMaybe of
     Nothing -> withoutExtension
     Just src -> Right $ FileRef $ takeDirectory path </> src
@@ -118,8 +116,7 @@ extractContentSource path (DocumentOnly content) = case content of
     withoutExtension = Right $ FileRef $ dropExtension path
 
 loadContentSource :: ContentSourceType -> IO (Result (ContentType, BS.ByteString))
-loadContentSource (EmbeddedMarkdown md) = pure $ Right (MarkdownType, md)
-loadContentSource (EmbeddedPlaintext txt) = pure $ Right (PlaintextType, TE.encodeUtf8 txt)
+loadContentSource (EmbeddedContent contentType body) = pure $ Right (contentType, body)
 loadContentSource (FileRef path) = do
   content <- BS.readFile path
 

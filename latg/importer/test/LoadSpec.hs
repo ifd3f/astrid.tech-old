@@ -20,21 +20,21 @@ spec = do
       content <- BL.readFile "latg/example/2015-01-01.html.json"
 
       case readDocument ".json" content :: ReadDocumentResult' of
-        Right (DocumentOnly _) -> pure ()
+        Right (EncodedDocument Nothing _) -> pure ()
         x -> expectationFailure $ "Incorrectly decoded: " ++ show x
 
     it "reads YAML" $ do
       content <- BL.readFile "latg/example/2021/2021-09-25T01-31-40-328Z.html.yml"
 
       case readDocument ".yaml" content :: ReadDocumentResult' of
-        Right (DocumentOnly _) -> pure ()
+        Right (EncodedDocument Nothing _) -> pure ()
         x -> expectationFailure $ "Incorrectly decoded: " ++ show x
 
     it "reads TOML" $ do
       content <- BL.readFile "latg/example/2012/2012-12-21-end-of-the-world.txt.toml"
 
       case readDocument ".toml" content :: ReadDocumentResult' of
-        Right (DocumentOnly _) -> pure ()
+        Right (EncodedDocument Nothing _) -> pure ()
         x -> expectationFailure $ "Incorrectly decoded: " ++ show x
 
     it "returns NotADocument for non-frontmatter Markdown" $ do
@@ -51,7 +51,7 @@ spec = do
       content <- BL.readFile "latg/example/2021/2021-09-25-test-post.md"
 
       case readDocument ".md" content :: ReadDocumentResult' of
-        Right (DocumentWithMarkdown _ _) -> pure ()
+        Right (EncodedDocument (Just (MarkdownType, _)) _) -> pure ()
         x -> expectationFailure $ "Incorrectly decoded: " ++ show x
 
     it "gracefully fails invalid JSON" $ do
@@ -80,7 +80,7 @@ spec = do
       let path = "mydir/foo/something.txt.toml"
       let content = Just $ FSch.FileRef Nothing False
 
-      let result = extractContentSource path $ DocumentOnly content
+      let result = extractContentSource path $ documentOnly content
 
       result `shouldBe` (Right $ FileRef "mydir/foo/something.txt")
 
@@ -88,7 +88,7 @@ spec = do
       let path = "mydir/foo/something.yaml"
       let content = Just $ FSch.FileRef (Just "../over/here.html") False
 
-      let result = extractContentSource path $ DocumentOnly content
+      let result = extractContentSource path $ documentOnly content
 
       result `shouldBe` (Right $ FileRef "mydir/foo/../over/here.html")
 
@@ -96,31 +96,33 @@ spec = do
       let path = "mydir/foo/something.yaml"
       let content = Just $ FSch.FileRef (Just "samedir.html") False
 
-      let result = extractContentSource path $ DocumentOnly content
+      let result = extractContentSource path $ documentOnly content
 
       result `shouldBe` (Right $ FileRef "mydir/foo/samedir.html")
 
-    it "handles markdown documents" $ do
+    it "handles embedded markdown documents" $ do
       let path = "mydir/foo/something.md"
       let content = Nothing
+      let embedded = Just (MarkdownType, "this is markdown")
 
-      let result = extractContentSource path $ DocumentWithMarkdown content "my markdown"
+      let result = extractContentSource path $ EncodedDocument embedded content
 
-      result `shouldBe` (Right $ EmbeddedMarkdown "my markdown")
+      result `shouldBe` (Right $ EmbeddedContent MarkdownType "this is markdown")
 
     it "handles embedded plaintext documents" $ do
       let path = "mydir/foo/something.json"
       let content = Just $ FSch.EmbeddedPlaintext "my plaintext"
 
-      let result = extractContentSource path $ DocumentOnly content 
+      let result = extractContentSource path $ documentOnly content 
 
-      result `shouldBe` (Right $ EmbeddedPlaintext "my plaintext")
+      result `shouldBe` (Right $ EmbeddedContent PlaintextType "my plaintext")
 
-    it "fails markdown with content.src" $ do
+    it "gracefully fails embedded content with content.src" $ do
       let path = "mydir/foo/something.md"
       let content = Just $ FSch.FileRef (Just "../over/here.html") False
+      let embedded = Just (MarkdownType, "this is embedded in the document")
 
-      let result = extractContentSource path $ DocumentWithMarkdown content "this is text"
+      let result = extractContentSource path $ EncodedDocument embedded content
 
       case result of
         Left _ -> pure ()
@@ -128,14 +130,14 @@ spec = do
 
   describe "loadContentSource" $ do
     it "passthroughs embedded markdown" $ do
-      let input = EmbeddedMarkdown "this is **markdown**"
+      let input = EmbeddedContent MarkdownType "this is **markdown**"
 
       result <- loadContentSource input 
 
       result `shouldBe` Right (MarkdownType, "this is **markdown**")
 
     it "passthroughs embedded plaintext" $ do
-      let input = EmbeddedPlaintext "this is plaintext"
+      let input = EmbeddedContent PlaintextType "this is plaintext"
 
       result <- loadContentSource input 
 
