@@ -25,6 +25,9 @@ data EncodedDocument a
   | DocumentOnly a
   deriving (Show, Eq)
 
+extractDocument (DocumentWithMarkdown x _) = x
+extractDocument (DocumentOnly x) = x
+
 instance Functor EncodedDocument where
   fmap f (DocumentWithMarkdown doc content) = DocumentWithMarkdown (f doc) content
   fmap f (DocumentOnly doc) = DocumentOnly (f doc)
@@ -63,17 +66,17 @@ load :: FilePath -> IO (ReadDocumentResult (FSch.GenericDocument, T.Text))
 load path = do
   rawDoc <- BL.readFile path
 
-  let doc = readDocument (takeExtension path) rawDoc
-  let contentData :: ReadDocumentResult (EncodedDocument (Maybe FSch.Content)) = fmap FSch.content <$> doc
-  let contentSource = (contentData >>= \x -> fromEither $ extractContentSource path x)
-  
-  content :: (ReadDocumentResult (ContentType, BS.ByteString)) <- sequence $ (fromEither <$> loadContentSource) <*> contentSource
-
-  pure $ do
-    d <- doc 
-    (contentSource, contentRaw) <- fromEither content
-    pure (d, transformContent contentSource contentRaw)
-    
+  case readDocument (takeExtension path) rawDoc of 
+    Left e -> return $ Left e
+    Right doc -> case extractContentSource path $ fmap FSch.content doc of
+      Left e -> return $ invalid e
+      Right cs -> do
+        result <- loadContentSource cs
+        return $ case result of 
+          Left e -> invalid e
+          Right (contentType, contentRaw) -> case transformContent contentType contentRaw of
+            Left e -> invalid e
+            Right transformed -> Right (extractDocument doc, transformed)
 
 readDocument :: Aeson.FromJSON a => String -> BL.ByteString -> ReadDocumentResult (EncodedDocument a)
 readDocument extension content = 
@@ -127,8 +130,8 @@ loadContentSource (FileRef path) = do
     ".txt" -> Right (PlaintextType, content)
     ext -> Left $ "Unsupported content file " ++ path
 
-transformContent :: ContentType -> BS.ByteString -> T.Text
-transformContent contentType raw = TE.decodeUtf8 raw  -- TODO use pandoc
+transformContent :: ContentType -> BS.ByteString -> Result T.Text
+transformContent contentType raw = Right $ TE.decodeUtf8 raw  -- TODO use pandoc
 
 createInsertableDocument :: TL.Text -> EncodedDocument a -> ISch.DbDocument
 createInsertableDocument contentHtml document = undefined
