@@ -19,7 +19,6 @@ import qualified LATG.Importer.FileSchema as FSch
 import qualified LATG.Importer.InsertSchema as ISch
 import qualified Text.Toml as Toml
 import System.FilePath
-import Control.Monad (join)
 
 data EncodedDocument a = EncodedDocument
   { attachedContent :: Maybe (ContentType, BS.ByteString)
@@ -45,7 +44,7 @@ data ContentType
 
 type Result = Either String
 
-data NonDocument = Invalid String | NonDocument
+data NonDocument = Invalid String | NonDocument 
   deriving (Show, Eq)
 type ReadDocumentResult = Either NonDocument
 
@@ -61,28 +60,26 @@ toEither (Right x) = Right $ Just x
 invalid :: String -> ReadDocumentResult a
 invalid err = Left $ Invalid err
 
-load :: Aeson.FromJSON a => FilePath -> IO (ReadDocumentResult (FSch.Document a, T.Text))
+load :: FilePath -> IO (ReadDocumentResult (FSch.GenericDocument, T.Text))
 load path = do
   rawDoc <- BL.readFile path
 
-  let doc = readDocument (takeExtension path) rawDoc
-  let fun = mapM fromEither . loadContentHTML
-  content <- sequence $ doc >>= mapM fromEither . loadContentHTML
-
-  return $ do
-    a <- doc
-    b <- content
-    pure (documentData a, b)
-
-  where
-    loadContentHTML :: EncodedDocument (FSch.Document a) -> IO (Result T.Text)
-    loadContentHTML doc = do
-      let cs = extractContentSource path $ fmap FSch.content doc
-      rawContent <- sequence $ cs >>= sequence . loadContentSource
-      sequence $ rawContent >>= sequence . uncurry transformContent
+  case readDocument (takeExtension path) rawDoc of 
+    Left e -> return $ Left e
+    Right doc -> case extractContentSource path $ fmap FSch.content doc of
+      Left e -> return $ invalid e
+      Right cs -> do
+        result <- loadContentSource cs
+        case result of 
+          Left e -> return $ invalid e
+          Right (contentType, contentRaw) -> do
+            transformed <- transformContent contentType contentRaw 
+            return $ case transformed of
+              Left e -> invalid e
+              Right transformed' -> Right (documentData doc, transformed')
 
 readDocument :: Aeson.FromJSON a => String -> BL.ByteString -> ReadDocumentResult (EncodedDocument a)
-readDocument extension content =
+readDocument extension content = 
   case extension of
     ".md" -> markdown
     ".json" -> fromEither json
@@ -91,7 +88,7 @@ readDocument extension content =
     ".toml" -> fromEither toml
     _ -> Left NonDocument
   where
-    json = documentOnly <$> Aeson.eitherDecode content
+    json = documentOnly <$> Aeson.eitherDecode content 
 
     markdown = case FM.parseFrontmatter $ BL.toStrict content of
       FM.Done body front -> case Yaml.decodeEither' front of
@@ -99,10 +96,10 @@ readDocument extension content =
         Right x -> Right $ EncodedDocument (Just (MarkdownType, body)) x
       _ -> Left NonDocument
 
-    yaml = documentOnly <$> first show (Yaml.decodeEither' $ BL.toStrict content)
+    yaml = documentOnly <$> (first show $ Yaml.decodeEither' $ BL.toStrict content)
 
     toml = do
-      table <- first show $ Toml.parseTomlDoc "" $ TE.decodeUtf8 $ BL.toStrict content
+      table <- first show $ Toml.parseTomlDoc "" $ TE.decodeUtf8 $ BL.toStrict content 
       case Aeson.fromJSON $ Aeson.toJSON table of
         Aeson.Error err -> Left $ show err
         Aeson.Success x -> Right $ documentOnly x
@@ -117,7 +114,7 @@ extractContentSource path (EncodedDocument Nothing contentData) = case contentDa
   Just (FSch.FileRef srcMaybe _) -> case srcMaybe of
     Nothing -> withoutExtension
     Just src -> Right $ FileRef $ takeDirectory path </> src
-  where
+  where 
     withoutExtension = Right $ FileRef $ dropExtension path
 
 loadContentSource :: ContentSourceType -> IO (Result (ContentType, BS.ByteString))
