@@ -3,11 +3,19 @@
 module FileSpec where 
 
 import Test.Hspec
+    ( Spec, describe, it, expectationFailure, shouldBe )
 import qualified Data.ByteString.Lazy as BL
-import Data.Maybe
-import Data.Aeson
+import Data.Maybe ( fromJust )
+import Data.Aeson ( eitherDecode )
 import LATG.Importer.FileSchema
-import Data.UUID
+    ( mkSlug,
+      mkSlug',
+      DocTypeObj(HEntryObj),
+      Document(uuid, docType),
+      Entry(slug),
+      GenericDocument,
+      Slug )
+import Data.UUID ( fromString )
 
 spec :: Spec
 spec = do 
@@ -51,11 +59,11 @@ spec = do
 
       case eitherDecode json :: Either String Slug of 
         Right x -> expectationFailure $ "Incorrectly decoded: " ++ show x
-        Left msg -> pure ()
+        Left _ -> pure ()
 
     it "gracefully fails long arrays" $ do
       let json = "[2000, 12, 8, 0, \"this\", \"is\", \"too\", \"long\"]"
 
       case eitherDecode json :: Either String Slug of 
         Right x -> expectationFailure $ "Incorrectly decoded: " ++ show x
-        Left msg -> pure ()
+        Left _ -> pure ()

@@ -3,22 +3,19 @@
 
 module LATG.Importer.LoadContent where
 
-import Data.Bifunctor
+import Data.Bifunctor ( Bifunctor(first) )
 import Data.Char(toLower)
 import qualified Data.Frontmatter as FM
-import Data.List(isPrefixOf)
 import qualified Data.Aeson as Aeson
 import qualified Data.ByteString as BS
 import qualified Data.ByteString.Lazy as BL
 import qualified Data.Text as T
 import qualified Data.Text.Encoding as TE
-import qualified Data.Text.Lazy as TL
-import qualified Data.Text.Lazy.Encoding as TLE
 import qualified Data.Yaml as Yaml
 import qualified LATG.Importer.FileSchema as FSch
-import qualified LATG.Importer.InsertSchema as ISch
 import qualified Text.Toml as Toml
 import System.FilePath
+    ( dropExtension, (</>), takeDirectory, takeExtension )
 
 data EncodedDocument a = EncodedDocument
   { attachedContent :: Maybe (ContentType, BS.ByteString)
@@ -26,6 +23,7 @@ data EncodedDocument a = EncodedDocument
   }
   deriving (Show, Eq)
 
+documentOnly :: a -> EncodedDocument a
 documentOnly = EncodedDocument Nothing
 
 instance Functor EncodedDocument where
@@ -96,7 +94,7 @@ readDocument extension content =
         Right x -> Right $ EncodedDocument (Just (MarkdownType, body)) x
       _ -> Left NonDocument
 
-    yaml = documentOnly <$> (first show $ Yaml.decodeEither' $ BL.toStrict content)
+    yaml = documentOnly <$> first show (Yaml.decodeEither' $ BL.toStrict content)
 
     toml = do
       table <- first show $ Toml.parseTomlDoc "" $ TE.decodeUtf8 $ BL.toStrict content 
@@ -127,10 +125,7 @@ loadContentSource (FileRef path) = do
     ".htm" -> Right (HTMLType, content)
     ".md" -> Right (MarkdownType, content)
     ".txt" -> Right (PlaintextType, content)
-    ext -> Left $ "Unsupported content file " ++ path
+    _ -> Left $ "Unsupported content file " ++ path
 
 transformContent :: ContentType -> BS.ByteString -> IO (Result T.Text)
-transformContent contentType raw = pure $ Right $ TE.decodeUtf8 raw  -- TODO use pandoc
-
-createInsertableDocument :: TL.Text -> EncodedDocument a -> ISch.DbDocument
-createInsertableDocument contentHtml document = undefined
+transformContent _ raw = pure $ Right $ TE.decodeUtf8 raw  -- TODO use pandoc

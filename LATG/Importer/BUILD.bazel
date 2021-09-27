@@ -41,7 +41,6 @@ haskell_library(
     ],
     deps = [
         ":file-schema",
-        ":insert-schema",
         "//LATG:base", 
         "@stackage//:aeson",
         "@stackage//:bytestring",

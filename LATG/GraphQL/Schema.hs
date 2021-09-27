@@ -11,11 +11,7 @@
 
 module LATG.GraphQL.Schema where
 
-import Data.ByteString.Lazy.Char8 (ByteString)
-import Data.Morpheus (interpreter)
-import Data.Morpheus.Types (RootResolver (..), Undefined (..))
 import Data.Text (Text)
 import Data.Morpheus.Document (importGQLDocument)
-
 
 importGQLDocument "LATG/GraphQL/schema.graphql"

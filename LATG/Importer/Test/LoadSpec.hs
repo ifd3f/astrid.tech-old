@@ -4,11 +4,8 @@ module LoadSpec where
 
 import Test.Hspec
 import qualified Data.ByteString.Lazy as BL
-import Data.Maybe
-import Data.Aeson
 import qualified LATG.Importer.FileSchema as FSch
 import LATG.Importer.LoadContent 
-import Data.UUID
 
 type ReadDocumentResult' = ReadDocumentResult (EncodedDocument FSch.GenericDocument)
 type ReadDocumentResult'' = ReadDocumentResult (EncodedDocument FSch.Content)

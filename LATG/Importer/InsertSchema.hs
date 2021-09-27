@@ -1,7 +1,7 @@
 module LATG.Importer.InsertSchema where 
 
-import LATG.DB.Schema
 import Opaleye
+    ( SqlArray, SqlInt4, SqlText, SqlTimestamp, Field, SqlUuid )
 
 data DbDocument = DbDocument
   { uuid :: (Field SqlUuid)

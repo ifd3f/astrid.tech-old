@@ -8,17 +8,19 @@
 
 module LATG.Importer.FileSchema where
 
-import GHC.Generics
-
+import GHC.Generics ( Generic )
 import Data.Vector((!), (!?))
-import Control.Monad
 import Data.Aeson
-import Data.Aeson.Types
-
-import Data.Maybe
-import Data.Time.LocalTime
-import Data.UUID
-import Debug.Trace
+    ( FromJSON(parseJSON),
+      (.:),
+      (.:?),
+      withArray,
+      withObject,
+      withText,
+      Value(String, Object, Bool) )
+import Data.Maybe ( fromMaybe )
+import Data.Time.LocalTime ( ZonedTime )
+import Data.UUID ( UUID )
 import qualified Data.Text as T
 
 data Document a = Document
@@ -44,10 +46,9 @@ instance FromJSON GenericDocument where
       docTypeObj = do
         attrs <- o .: "attrs"
         docType <- (o .: "docType") >>= parseJSON
-        result <- case docType of
+        case docType of
           HEntry -> HEntryObj <$> parseJSON attrs
           XProject -> XProjectObj <$> parseJSON attrs
-        pure (trace (show result) result)
     in
       Document <$>
         o .: "uuid" <*>
@@ -130,7 +131,9 @@ data Slug = Slug
   }
   deriving (Generic, Show, Eq)
 
+mkSlug :: Int -> Int -> Int -> Int -> T.Text -> Slug
 mkSlug y m d o n = Slug y m d o (Just n)
+mkSlug' :: Int -> Int -> Int -> Int -> Slug
 mkSlug' y m d o = Slug y m d o Nothing
 
 instance FromJSON Slug where 
@@ -142,10 +145,10 @@ instance FromJSON Slug where
       then fail "Slug array is too short"
       else pure ()
     Slug <$>
-        (parseJSON $ a ! 0) <*>
-        (parseJSON $ a ! 1) <*>
-        (parseJSON $ a ! 2) <*>
-        (parseJSON $ a ! 3) <*>
+        parseJSON (a ! 0) <*>
+        parseJSON (a ! 1) <*>
+        parseJSON (a ! 2) <*>
+        parseJSON (a ! 3) <*>
         case a !? 4 of 
           Just x -> parseJSON x
           Nothing -> pure Nothing
