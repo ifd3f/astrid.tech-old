@@ -42,34 +42,42 @@ data ContentType
 
 type Result = Either String
 
-readDocument :: Aeson.FromJSON a => String -> BL.ByteString -> Result (Maybe (EncodedDocument a))
+data NonDocument = NonDocument | Invalid String
+  deriving (Show, Eq)
+type ReadDocumentResult = Either NonDocument
+
+fromEither :: Result a -> ReadDocumentResult a
+fromEither (Left err) = Left $ Invalid err
+fromEither (Right x) = Right x
+
+invalid :: String -> ReadDocumentResult a
+invalid err = Left $ Invalid err
+
+readDocument :: Aeson.FromJSON a => String -> BL.ByteString -> ReadDocumentResult (EncodedDocument a)
 readDocument extension content = 
   case extension of
     ".md" -> markdown
-    ".json" -> json
-    ".yml" -> yaml
-    ".yaml" -> yaml
-    ".toml" -> toml
-    _ -> Right Nothing
+    ".json" -> fromEither json
+    ".yml" -> fromEither yaml
+    ".yaml" -> fromEither yaml
+    ".toml" -> fromEither toml
+    _ -> Left NonDocument
   where
-    rj = Right . Just
-
-    json = Just <$> DocumentOnly <$> Aeson.eitherDecode content 
+    json = DocumentOnly <$> Aeson.eitherDecode content 
 
     markdown = case FM.parseFrontmatter $ BL.toStrict content of
       FM.Done body front -> case Yaml.decodeEither' front of
-        Left err -> Left $ show err
-        Right x -> rj $ DocumentWithMarkdown x body
-      _ -> Right Nothing
+        Left err -> invalid $ show err
+        Right x -> Right $ DocumentWithMarkdown x body
+      _ -> Left NonDocument
 
-    yaml = Just <$> DocumentOnly <$>
-      (first show $ Yaml.decodeEither' $ BL.toStrict content)
+    yaml = DocumentOnly <$> (first show $ Yaml.decodeEither' $ BL.toStrict content)
 
     toml = do
       table <- first show $ Toml.parseTomlDoc "" $ TE.decodeUtf8 $ BL.toStrict content 
       case Aeson.fromJSON $ Aeson.toJSON table of
         Aeson.Error err -> Left $ show err
-        Aeson.Success x -> rj $ DocumentOnly x
+        Aeson.Success x -> Right $ DocumentOnly x
 
 extractContentSource :: FilePath -> EncodedDocument (Maybe FSch.Content) -> Result ContentSourceType
 extractContentSource _ (DocumentWithMarkdown content md) = case content of
