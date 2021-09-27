@@ -7,7 +7,7 @@ load(
 )
 
 haskell_test(
-    name = "test",
+    name = "Test",
     tools = ["@hspec-discover"],
     compiler_flags = [
         "-DHSPEC_DISCOVER=$(location @hspec-discover)"
@@ -16,16 +16,15 @@ haskell_test(
         "Spec.hs",
         "FileSpec.hs",
         "LoadSpec.hs",
-        "SmokeSpec.hs",
     ],
     data = [
-        "//latg:content-example",
+        "//LATG:content-example",
     ],
     deps = [
-        "//latg:base", 
-        "//latg/importer:file-schema", 
-        "//latg/importer:insert-schema", 
-        "//latg/importer:load-content", 
+        "//LATG:base", 
+        "//LATG/Importer:file-schema", 
+        "//LATG/Importer:insert-schema", 
+        "//LATG/Importer:load-content", 
         "@stackage//:aeson",
         "@stackage//:bytestring",
         "@stackage//:hspec",

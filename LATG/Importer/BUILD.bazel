@@ -13,7 +13,7 @@ haskell_library(
         "FileSchema.hs",
     ],
     deps = [
-        "//latg:base", 
+        "//LATG:base", 
         "@stackage//:aeson",
         "@stackage//:text",
         "@stackage//:time",
@@ -28,8 +28,8 @@ haskell_library(
         "InsertSchema.hs",
     ],
     deps = [
-        "//latg:base", 
-        "//latg/db:hs", 
+        "//LATG:base", 
+        "//LATG/DB:hs", 
         "@stackage//:opaleye",
     ],
 )
@@ -42,7 +42,7 @@ haskell_library(
     deps = [
         ":file-schema",
         ":insert-schema",
-        "//latg:base", 
+        "//LATG:base", 
         "@stackage//:aeson",
         "@stackage//:bytestring",
         "@stackage//:filepath",
@@ -54,14 +54,16 @@ haskell_library(
 )
 
 haskell_binary(
-    name = "importer",
+    name = "Importer",
     main_function = "LATG.Importer.Main.main",
     srcs = [
         ":Main.hs", 
     ],
     deps = [
-        "//latg:base", 
         ":file-schema",
+        ":insert-schema",
+        ":load-content",
+        "//LATG:base", 
         "@stackage//:bytestring",
         "@stackage//:opaleye",
         "@stackage//:text",

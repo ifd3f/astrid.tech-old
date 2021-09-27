@@ -17,28 +17,28 @@ spec :: Spec
 spec = do 
   describe "readDocument" $ do 
     it "reads JSON" $ do
-      content <- BL.readFile "latg/example/2015-01-01.html.json"
+      content <- BL.readFile "LATG/Example/2015-01-01.html.json"
 
       case readDocument ".json" content :: ReadDocumentResult' of
         Right (EncodedDocument Nothing _) -> pure ()
         x -> expectationFailure $ "Incorrectly decoded: " ++ show x
 
     it "reads YAML" $ do
-      content <- BL.readFile "latg/example/2021/2021-09-25T01-31-40-328Z.html.yml"
+      content <- BL.readFile "LATG/Example/2021/2021-09-25T01-31-40-328Z.html.yml"
 
       case readDocument ".yaml" content :: ReadDocumentResult' of
         Right (EncodedDocument Nothing _) -> pure ()
         x -> expectationFailure $ "Incorrectly decoded: " ++ show x
 
     it "reads TOML" $ do
-      content <- BL.readFile "latg/example/2012/2012-12-21-end-of-the-world.txt.toml"
+      content <- BL.readFile "LATG/Example/2012/2012-12-21-end-of-the-world.txt.toml"
 
       case readDocument ".toml" content :: ReadDocumentResult' of
         Right (EncodedDocument Nothing _) -> pure ()
         x -> expectationFailure $ "Incorrectly decoded: " ++ show x
 
     it "returns NotADocument for non-frontmatter Markdown" $ do
-      content <- BL.readFile "latg/example/2015-08-10.md"
+      content <- BL.readFile "LATG/Example/2015-08-10.md"
 
       (readDocument ".md" content :: ReadDocumentResult'') `shouldBe` Left NonDocument
 
@@ -48,7 +48,7 @@ spec = do
       (readDocument ".notyaml" content :: ReadDocumentResult'') `shouldBe` Left NonDocument
 
     it "reads frontmatter Markdown" $ do
-      content <- BL.readFile "latg/example/2021/2021-09-25-test-post.md"
+      content <- BL.readFile "LATG/Example/2021/2021-09-25-test-post.md"
 
       case readDocument ".md" content :: ReadDocumentResult' of
         Right (EncodedDocument (Just (MarkdownType, _)) _) -> pure ()
@@ -144,7 +144,7 @@ spec = do
       result `shouldBe` Right (PlaintextType, "this is plaintext")
 
     it "reads HTM from fileref" $ do
-      let input = FileRef "latg/example/2021/something.HTM"
+      let input = FileRef "LATG/Example/2021/something.HTM"
       let expected = "<p>Who the hell uses .htm for their HTML pages anymore?</p>"
 
       result <- loadContentSource input 
@@ -152,7 +152,7 @@ spec = do
       result `shouldBe` Right (HTMLType, expected)
 
     it "reads HTML from fileref" $ do
-      let input = FileRef "latg/example/2015-01-01.html"
+      let input = FileRef "LATG/Example/2015-01-01.html"
       let expected = "<p>You can also specify your metadata in JSON.</p>"
 
       result <- loadContentSource input 
@@ -160,7 +160,7 @@ spec = do
       result `shouldBe` Right (HTMLType, expected)
 
     it "reads Markdown from fileref" $ do
-      let input = FileRef "latg/example/2015-01-01.html"
+      let input = FileRef "LATG/Example/2015-01-01.html"
       let expected = "<p>You can also specify your metadata in JSON.</p>"
 
       result <- loadContentSource input 
@@ -168,7 +168,7 @@ spec = do
       result `shouldBe` Right (HTMLType, expected)
 
     it "reads plaintext from fileref" $ do
-      let input = FileRef "latg/example/2012/2012-12-21-end-of-the-world.txt"
+      let input = FileRef "LATG/Example/2012/2012-12-21-end-of-the-world.txt"
       let expected = "Wait a sec, the world didn't end\n"
 
       result <- loadContentSource input 
@@ -176,7 +176,7 @@ spec = do
       result `shouldBe` Right (PlaintextType, expected)
 
     it "gracefully fails unsupported file extension" $ do
-      let input = FileRef "latg/example/non-sourced.json"
+      let input = FileRef "LATG/Example/non-sourced.json"
 
       result <- loadContentSource input 
 

@@ -16,7 +16,7 @@ haskell_library(
         "Schema.hs",
     ],
     deps = [
-        "//latg:base", 
+        "//LATG:base", 
         "@stackage//:opaleye",
     ],
 )

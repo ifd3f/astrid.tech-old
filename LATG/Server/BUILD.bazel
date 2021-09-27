@@ -8,21 +8,19 @@ load(
     "haskell_repl",
 )
 
-filegroup(
-    name = "graphql",
-    srcs = glob(["*.graphql"]),
-)
-
-haskell_library(
-    name = "hs",
+haskell_binary(
+    name = "Server",
+    main_function = "LATG.Server.Main.main",
     srcs = [
-        ":Schema.hs", 
+        ":Main.hs", 
     ],
-    extra_srcs = [":graphql"],
     deps = [
-        "//latg:base", 
-        "@stackage//:morpheus-graphql",
-        "@stackage//:text",
+        "//LATG:base", 
+        "//LATG/GraphQL:hs",
         "@stackage//:bytestring",
+        "@stackage//:morpheus-graphql",
+        "@stackage//:opaleye",
+        "@stackage//:servant",
+        "@stackage//:text",
     ],
 )

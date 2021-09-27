@@ -1,3 +1,7 @@
 cradle:
   multi:
-    - path: "./latg"
+    - path: "./LATG"
+      config:
+        cradle:
+          bios:
+            program: "LATG/.hie-bios"

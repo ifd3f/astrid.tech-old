@@ -10,7 +10,19 @@ load(
 
 filegroup(
     name = "content-example",
-    srcs = glob(["example/**/*"]),
+    srcs = glob(["Example/**/*"]),
 )
 
 haskell_toolchain_library(name = "base")
+
+haskell_repl(
+    name = "hie-bios",
+    collect_data = False,
+    testonly = True,
+    deps = [
+        "//LATG/Importer:Importer",
+        "//LATG/Importer/Test:Test",
+        "//LATG/GraphQL:hs",
+        "//LATG/DB:hs",
+    ],
+)
