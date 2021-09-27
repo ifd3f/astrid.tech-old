@@ -1,4 +1,5 @@
 {-# LANGUAGE LambdaCase #-}
+{-# LANGUAGE ScopedTypeVariables #-}
 
 module LATG.Importer.LoadContent where
 
@@ -42,7 +43,7 @@ data ContentType
 
 type Result = Either String
 
-data NonDocument = NonDocument | Invalid String
+data NonDocument = Invalid String | NonDocument 
   deriving (Show, Eq)
 type ReadDocumentResult = Either NonDocument
 
@@ -50,8 +51,29 @@ fromEither :: Result a -> ReadDocumentResult a
 fromEither (Left err) = Left $ Invalid err
 fromEither (Right x) = Right x
 
+toEither :: ReadDocumentResult a -> Result (Maybe a)
+toEither (Left (Invalid err)) = Left err
+toEither (Left NonDocument) = Right Nothing
+toEither (Right x) = Right $ Just x
+
 invalid :: String -> ReadDocumentResult a
 invalid err = Left $ Invalid err
+
+load :: FilePath -> IO (ReadDocumentResult (FSch.GenericDocument, T.Text))
+load path = do
+  rawDoc <- BL.readFile path
+
+  let doc = readDocument (takeExtension path) rawDoc
+  let contentData :: ReadDocumentResult (EncodedDocument (Maybe FSch.Content)) = fmap FSch.content <$> doc
+  let contentSource = (contentData >>= \x -> fromEither $ extractContentSource path x)
+  
+  content :: (ReadDocumentResult (ContentType, BS.ByteString)) <- sequence $ (fromEither <$> loadContentSource) <*> contentSource
+
+  pure $ do
+    d <- doc 
+    (contentSource, contentRaw) <- fromEither content
+    pure (d, transformContent contentSource contentRaw)
+    
 
 readDocument :: Aeson.FromJSON a => String -> BL.ByteString -> ReadDocumentResult (EncodedDocument a)
 readDocument extension content = 
