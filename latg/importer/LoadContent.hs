@@ -70,11 +70,13 @@ load path = do
       Left e -> return $ invalid e
       Right cs -> do
         result <- loadContentSource cs
-        return $ case result of 
-          Left e -> invalid e
-          Right (contentType, contentRaw) -> case transformContent contentType contentRaw of
-            Left e -> invalid e
-            Right transformed -> Right (documentData doc, transformed)
+        case result of 
+          Left e -> return $ invalid e
+          Right (contentType, contentRaw) -> do
+            transformed <- transformContent contentType contentRaw 
+            return $ case transformed of
+              Left e -> invalid e
+              Right transformed' -> Right (documentData doc, transformed')
 
 readDocument :: Aeson.FromJSON a => String -> BL.ByteString -> ReadDocumentResult (EncodedDocument a)
 readDocument extension content = 
@@ -127,8 +129,8 @@ loadContentSource (FileRef path) = do
     ".txt" -> Right (PlaintextType, content)
     ext -> Left $ "Unsupported content file " ++ path
 
-transformContent :: ContentType -> BS.ByteString -> Result T.Text
-transformContent contentType raw = Right $ TE.decodeUtf8 raw  -- TODO use pandoc
+transformContent :: ContentType -> BS.ByteString -> IO (Result T.Text)
+transformContent contentType raw = pure $ Right $ TE.decodeUtf8 raw  -- TODO use pandoc
 
 createInsertableDocument :: TL.Text -> EncodedDocument a -> ISch.DbDocument
 createInsertableDocument contentHtml document = undefined
