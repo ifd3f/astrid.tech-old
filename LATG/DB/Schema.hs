@@ -21,30 +21,35 @@ import Opaleye
     table,
   )
 
-documents ::
-  Table
-    ( (),
-      Field SqlUuid,
-      Field SqlTimestamptz,
-      Field SqlTimestamptz,
-      Maybe (FieldNullable SqlTimestamptz),
-      Field SqlText,
-      Field SqlText,
-      Maybe (FieldNullable SqlText),
-      Maybe (FieldNullable SqlText),
-      Maybe (FieldNullable SqlText)
-    )
-    ( Field SqlInt4,
-      Field SqlUuid,
-      Field SqlTimestamptz,
-      Field SqlTimestamptz,
-      FieldNullable SqlTimestamptz,
-      Field SqlText,
-      Field SqlText,
-      FieldNullable SqlText,
-      FieldNullable SqlText,
-      FieldNullable SqlText
-    )
+type DocumentsTable = Table DocumentsW DocumentsR
+
+type DocumentsW =
+  ( (),
+    Field SqlUuid,
+    Field SqlTimestamptz,
+    Field SqlTimestamptz,
+    Maybe (FieldNullable SqlTimestamptz),
+    Field SqlText,
+    Field SqlText,
+    Maybe (FieldNullable SqlText),
+    Maybe (FieldNullable SqlText),
+    Maybe (FieldNullable SqlText)
+  )
+
+type DocumentsR =
+  ( Field SqlInt4,
+    Field SqlUuid,
+    Field SqlTimestamptz,
+    Field SqlTimestamptz,
+    FieldNullable SqlTimestamptz,
+    Field SqlText,
+    Field SqlText,
+    FieldNullable SqlText,
+    FieldNullable SqlText,
+    FieldNullable SqlText
+  )
+
+documents :: DocumentsTable
 documents =
   table
     "documents"
@@ -62,40 +67,45 @@ documents =
         )
     )
 
-entries ::
-  Table
-    ( (),
-      Field SqlInt4,
-      Field SqlInt4,
-      Field SqlInt4,
-      Field SqlInt4,
-      Field SqlInt4,
-      Maybe (FieldNullable SqlText),
-      Maybe (FieldNullable SqlText),
-      Maybe (FieldNullable SqlText),
-      Maybe (FieldNullable SqlText),
-      Maybe (Field (SqlArray SqlText)),
-      Maybe (Field (SqlArray SqlText)),
-      Maybe (FieldNullable SqlText),
-      Maybe (FieldNullable SqlText),
-      Maybe (FieldNullable SqlText)
-    )
-    ( Field SqlInt4,
-      Field SqlInt4,
-      Field SqlInt4,
-      Field SqlInt4,
-      Field SqlInt4,
-      Field SqlInt4,
-      FieldNullable SqlText,
-      FieldNullable SqlText,
-      FieldNullable SqlText,
-      FieldNullable SqlText,
-      Field (SqlArray SqlText),
-      Field (SqlArray SqlText),
-      FieldNullable SqlText,
-      FieldNullable SqlText,
-      FieldNullable SqlText
-    )
+type EntriesTable = Table EntriesW EntriesR
+
+type EntriesW =
+  ( (),
+    Field SqlInt4,
+    Field SqlInt4,
+    Field SqlInt4,
+    Field SqlInt4,
+    Field SqlInt4,
+    Maybe (FieldNullable SqlText),
+    Maybe (FieldNullable SqlText),
+    Maybe (FieldNullable SqlText),
+    Maybe (FieldNullable SqlText),
+    Maybe (Field (SqlArray SqlText)),
+    Maybe (Field (SqlArray SqlText)),
+    Maybe (FieldNullable SqlText),
+    Maybe (FieldNullable SqlText),
+    Maybe (FieldNullable SqlText)
+  )
+
+type EntriesR =
+  ( Field SqlInt4,
+    Field SqlInt4,
+    Field SqlInt4,
+    Field SqlInt4,
+    Field SqlInt4,
+    Field SqlInt4,
+    FieldNullable SqlText,
+    FieldNullable SqlText,
+    FieldNullable SqlText,
+    FieldNullable SqlText,
+    Field (SqlArray SqlText),
+    Field (SqlArray SqlText),
+    FieldNullable SqlText,
+    FieldNullable SqlText,
+    FieldNullable SqlText
+  )
+
+entries :: EntriesTable
 entries =
   table
     "entries"
@@ -118,36 +128,44 @@ entries =
         )
     )
 
-projects ::
+type ProjectsTable =
   Table
-    ( (),
-      Field SqlInt4,
-      Field SqlText,
-      Field SqlText,
-      Field SqlInt2,
-      Field SqlTimestamptz,
-      Maybe (FieldNullable SqlTimestamptz),
-      Field SqlTimestamptz,
-      Field SqlText,
-      Maybe (FieldNullable SqlText),
-      Maybe (FieldNullable SqlText),
-      Maybe (FieldNullable SqlText),
-      Maybe (FieldNullable SqlText)
-    )
-    ( Field SqlInt4,
-      Field SqlInt4,
-      Field SqlText,
-      Field SqlText,
-      Field SqlInt2,
-      Field SqlTimestamptz,
-      FieldNullable SqlTimestamptz,
-      Field SqlTimestamptz,
-      Field SqlText,
-      FieldNullable SqlText,
-      FieldNullable SqlText,
-      FieldNullable SqlText,
-      FieldNullable SqlText
-    )
+    ProjectsW
+    ProjectsR
+
+type ProjectsW =
+  ( (),
+    Field SqlInt4,
+    Field SqlText,
+    Field SqlText,
+    Field SqlInt2,
+    Field SqlTimestamptz,
+    Maybe (FieldNullable SqlTimestamptz),
+    Field SqlTimestamptz,
+    Field SqlText,
+    Maybe (FieldNullable SqlText),
+    Maybe (FieldNullable SqlText),
+    Maybe (FieldNullable SqlText),
+    Maybe (FieldNullable SqlText)
+  )
+
+type ProjectsR =
+  ( Field SqlInt4,
+    Field SqlInt4,
+    Field SqlText,
+    Field SqlText,
+    Field SqlInt2,
+    Field SqlTimestamptz,
+    FieldNullable SqlTimestamptz,
+    Field SqlTimestamptz,
+    Field SqlText,
+    FieldNullable SqlText,
+    FieldNullable SqlText,
+    FieldNullable SqlText,
+    FieldNullable SqlText
+  )
+
+projects :: ProjectsTable
 projects =
   table
     "projects"
