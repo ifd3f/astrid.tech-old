@@ -154,7 +154,7 @@ CREATE TABLE public.entries (
     month integer NOT NULL,
     day integer NOT NULL,
     ordinal integer NOT NULL,
-    slug text,
+    short_name text,
     name text,
     summary text,
     location text,

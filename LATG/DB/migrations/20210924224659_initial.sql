@@ -44,7 +44,7 @@ create table entries(
     month integer not null,
     day integer not null,
     ordinal integer not null,
-    slug text,
+    short_name text,
 
     -- The name of this entry.
     name text,

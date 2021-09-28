@@ -2,47 +2,168 @@
 {-# LANGUAGE DuplicateRecordFields #-}
 {-# LANGUAGE NamedFieldPuns #-}
 
-module LATG.DB.Schema where 
+module LATG.DB.Schema where
 
-import Opaleye 
+import Data.Profunctor.Product (p10, p13, p15)
+import Opaleye
+  ( Field,
+    FieldNullable,
+    SqlArray,
+    SqlInt2,
+    SqlInt4,
+    SqlText,
+    SqlTimestamptz,
+    SqlUuid,
+    Table,
+    optionalTableField,
+    readOnlyTableField,
+    requiredTableField,
+    table,
+  )
 
-data EntryT a b c d e f g h i j k l m n o p q r s t = Entry
-  { id :: a
-  , uuid :: b
-  , year :: c
-  , month :: d
-  , day :: e
-  , ordinal :: f
-  , slug :: g
-  , createdDate :: h 
-  , publishedDate :: i 
-  , updatedDate :: j 
-  , name :: k
-  , summary :: l
-  , location :: m
-  , photos :: n
-  , replyTo :: o
-  , repostOf :: p
-  , rsvp :: q
-  , content :: r
-  , colophon :: s
-  , pageSrcUrl :: t
-  }
+documents ::
+  Table
+    ( (),
+      Field SqlUuid,
+      Field SqlTimestamptz,
+      Field SqlTimestamptz,
+      Maybe (FieldNullable SqlTimestamptz),
+      Field SqlText,
+      Field SqlText,
+      Maybe (FieldNullable SqlText),
+      Maybe (FieldNullable SqlText),
+      Maybe (FieldNullable SqlText)
+    )
+    ( Field SqlInt4,
+      Field SqlUuid,
+      Field SqlTimestamptz,
+      Field SqlTimestamptz,
+      FieldNullable SqlTimestamptz,
+      Field SqlText,
+      Field SqlText,
+      FieldNullable SqlText,
+      FieldNullable SqlText,
+      FieldNullable SqlText
+    )
+documents =
+  table
+    "documents"
+    ( p10
+        ( readOnlyTableField "id",
+          requiredTableField "uuid",
+          requiredTableField "created_date",
+          requiredTableField "published_date",
+          optionalTableField "updated_date",
+          requiredTableField "canonical_url",
+          requiredTableField "doc_type",
+          optionalTableField "content",
+          optionalTableField "colophon",
+          optionalTableField "page_src_url"
+        )
+    )
 
-data Project a b c d e f g h i j k l m n o = Project
-  { id :: a
-  , uuid :: b
-  , slug :: c
-  , status :: d
-  , featured_order :: e
-  , started_date :: f
-  , finished_date :: g
-  , published_date :: h
-  , updated_date :: i
-  , name :: j
-  , summary :: k
-  , url :: l
-  , source :: m
-  , location :: n
-  , content :: o
-  }
+entries ::
+  Table
+    ( (),
+      Field SqlInt4,
+      Field SqlInt4,
+      Field SqlInt4,
+      Field SqlInt4,
+      Field SqlInt4,
+      Maybe (FieldNullable SqlText),
+      Maybe (FieldNullable SqlText),
+      Maybe (FieldNullable SqlText),
+      Maybe (FieldNullable SqlText),
+      Maybe (Field (SqlArray SqlText)),
+      Maybe (Field (SqlArray SqlText)),
+      Maybe (FieldNullable SqlText),
+      Maybe (FieldNullable SqlText),
+      Maybe (FieldNullable SqlText)
+    )
+    ( Field SqlInt4,
+      Field SqlInt4,
+      Field SqlInt4,
+      Field SqlInt4,
+      Field SqlInt4,
+      Field SqlInt4,
+      FieldNullable SqlText,
+      FieldNullable SqlText,
+      FieldNullable SqlText,
+      FieldNullable SqlText,
+      Field (SqlArray SqlText),
+      Field (SqlArray SqlText),
+      FieldNullable SqlText,
+      FieldNullable SqlText,
+      FieldNullable SqlText
+    )
+entries =
+  table
+    "entries"
+    ( p15
+        ( readOnlyTableField "id",
+          requiredTableField "document",
+          requiredTableField "year",
+          requiredTableField "month",
+          requiredTableField "day",
+          requiredTableField "ordinal",
+          optionalTableField "short_name",
+          optionalTableField "summary",
+          optionalTableField "location",
+          optionalTableField "short_name",
+          optionalTableField "photos",
+          optionalTableField "reply_to",
+          optionalTableField "repost_of",
+          optionalTableField "rsvp",
+          optionalTableField "rsvp_to"
+        )
+    )
+
+projects ::
+  Table
+    ( (),
+      Field SqlInt4,
+      Field SqlText,
+      Field SqlText,
+      Field SqlInt2,
+      Field SqlTimestamptz,
+      Maybe (FieldNullable SqlTimestamptz),
+      Field SqlTimestamptz,
+      Field SqlText,
+      Maybe (FieldNullable SqlText),
+      Maybe (FieldNullable SqlText),
+      Maybe (FieldNullable SqlText),
+      Maybe (FieldNullable SqlText)
+    )
+    ( Field SqlInt4,
+      Field SqlInt4,
+      Field SqlText,
+      Field SqlText,
+      Field SqlInt2,
+      Field SqlTimestamptz,
+      FieldNullable SqlTimestamptz,
+      Field SqlTimestamptz,
+      Field SqlText,
+      FieldNullable SqlText,
+      FieldNullable SqlText,
+      FieldNullable SqlText,
+      FieldNullable SqlText
+    )
+projects =
+  table
+    "projects"
+    ( p13
+        ( readOnlyTableField "id",
+          requiredTableField "document",
+          requiredTableField "slug",
+          requiredTableField "status",
+          requiredTableField "featured_order",
+          requiredTableField "started_date",
+          optionalTableField "finished_date",
+          requiredTableField "sort_date",
+          requiredTableField "name",
+          optionalTableField "summary",
+          optionalTableField "url",
+          optionalTableField "source",
+          optionalTableField "location"
+        )
+    )
