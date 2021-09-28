@@ -58,6 +58,7 @@ toEither (Right x) = Right $ Just x
 invalid :: String -> ReadDocumentResult a
 invalid err = Left $ Invalid err
 
+-- TODO refactor this shit
 load :: FilePath -> IO (ReadDocumentResult (FSch.GenericDocument, T.Text))
 load path = do
   rawDoc <- BL.readFile path

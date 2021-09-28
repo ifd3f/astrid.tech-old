@@ -30,6 +30,7 @@ haskell_library(
     deps = [
         "//LATG:base", 
         "//LATG/DB:hs", 
+        ":load-content",
         "@stackage//:opaleye",
     ],
 )

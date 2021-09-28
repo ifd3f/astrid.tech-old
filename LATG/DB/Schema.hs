@@ -1,10 +1,13 @@
 -- oh god why
 {-# LANGUAGE DuplicateRecordFields #-}
+{-# LANGUAGE FlexibleInstances #-}
+{-# LANGUAGE MultiParamTypeClasses #-}
 {-# LANGUAGE NamedFieldPuns #-}
+{-# LANGUAGE TemplateHaskell #-}
 
 module LATG.DB.Schema where
 
-import Data.Profunctor.Product (p10, p13, p15)
+import Data.Profunctor.Product.TH (makeAdaptorAndInstance)
 import Opaleye
   ( Field,
     FieldNullable,
@@ -21,167 +24,220 @@ import Opaleye
     table,
   )
 
-type DocumentsTable = Table DocumentsW DocumentsR
+data Document a b c d e f g h i j = Document
+  { docId :: a,
+    uuid :: b,
+    createdDate :: c,
+    publishedDate :: d,
+    updatedDate :: e,
+    canonicalUrl :: f,
+    docType :: g,
+    content :: h,
+    colophon :: i,
+    pageSrcUrl :: j
+  }
 
-type DocumentsW =
-  ( (),
-    Field SqlUuid,
-    Field SqlTimestamptz,
-    Field SqlTimestamptz,
-    Maybe (FieldNullable SqlTimestamptz),
-    Field SqlText,
-    Field SqlText,
-    Maybe (FieldNullable SqlText),
-    Maybe (FieldNullable SqlText),
-    Maybe (FieldNullable SqlText)
-  )
+$(makeAdaptorAndInstance "pDocument" ''Document)
 
-type DocumentsR =
-  ( Field SqlInt4,
-    Field SqlUuid,
-    Field SqlTimestamptz,
-    Field SqlTimestamptz,
-    FieldNullable SqlTimestamptz,
-    Field SqlText,
-    Field SqlText,
-    FieldNullable SqlText,
-    FieldNullable SqlText,
-    FieldNullable SqlText
-  )
+type DocumentW =
+  Document
+    ()
+    (Field SqlUuid)
+    (Field SqlTimestamptz)
+    (Field SqlTimestamptz)
+    (Maybe (FieldNullable SqlTimestamptz))
+    (Field SqlText)
+    (Field SqlText)
+    (Maybe (FieldNullable SqlText))
+    (Maybe (FieldNullable SqlText))
+    (Maybe (FieldNullable SqlText))
 
-documents :: DocumentsTable
+type DocumentR =
+  Document
+    (Field SqlInt4)
+    (Field SqlUuid)
+    (Field SqlTimestamptz)
+    (Field SqlTimestamptz)
+    (FieldNullable SqlTimestamptz)
+    (Field SqlText)
+    (Field SqlText)
+    (FieldNullable SqlText)
+    (FieldNullable SqlText)
+    (FieldNullable SqlText)
+
+type DocumentT = Table DocumentW DocumentR
+
+documents :: DocumentT
 documents =
   table
     "documents"
-    ( p10
-        ( readOnlyTableField "id",
-          requiredTableField "uuid",
-          requiredTableField "created_date",
-          requiredTableField "published_date",
-          optionalTableField "updated_date",
-          requiredTableField "canonical_url",
-          requiredTableField "doc_type",
-          optionalTableField "content",
-          optionalTableField "colophon",
-          optionalTableField "page_src_url"
-        )
+    ( pDocument $
+        Document
+          { docId = readOnlyTableField "id",
+            uuid = requiredTableField "uuid",
+            createdDate = requiredTableField "created_date",
+            publishedDate = requiredTableField "published_date",
+            updatedDate = optionalTableField "updated_date",
+            canonicalUrl = requiredTableField "canonical_url",
+            docType = requiredTableField "doc_type",
+            content = optionalTableField "content",
+            colophon = optionalTableField "colophon",
+            pageSrcUrl = optionalTableField "page_src_url"
+          }
     )
 
-type EntriesTable = Table EntriesW EntriesR
+data Entry a b c d e f g h i j k l m n o = Entry
+  { entryId :: a,
+    entryDocument :: b,
+    year :: c,
+    month :: d,
+    day :: e,
+    ordinal :: f,
+    shortName :: g,
+    entryName :: h,
+    entrySummary :: i,
+    entryLocation :: j,
+    photos :: k,
+    replyTo :: l,
+    repostOf :: m,
+    rsvpTo :: n,
+    rsvpValue :: o
+  }
 
-type EntriesW =
-  ( (),
-    Field SqlInt4,
-    Field SqlInt4,
-    Field SqlInt4,
-    Field SqlInt4,
-    Field SqlInt4,
-    Maybe (FieldNullable SqlText),
-    Maybe (FieldNullable SqlText),
-    Maybe (FieldNullable SqlText),
-    Maybe (FieldNullable SqlText),
-    Maybe (Field (SqlArray SqlText)),
-    Maybe (Field (SqlArray SqlText)),
-    Maybe (FieldNullable SqlText),
-    Maybe (FieldNullable SqlText),
-    Maybe (FieldNullable SqlText)
-  )
+$(makeAdaptorAndInstance "pEntry" ''Entry)
 
-type EntriesR =
-  ( Field SqlInt4,
-    Field SqlInt4,
-    Field SqlInt4,
-    Field SqlInt4,
-    Field SqlInt4,
-    Field SqlInt4,
-    FieldNullable SqlText,
-    FieldNullable SqlText,
-    FieldNullable SqlText,
-    FieldNullable SqlText,
-    Field (SqlArray SqlText),
-    Field (SqlArray SqlText),
-    FieldNullable SqlText,
-    FieldNullable SqlText,
-    FieldNullable SqlText
-  )
+type EntryT = Table EntryW EntryR
 
-entries :: EntriesTable
+type EntryW =
+  Entry
+    ()
+    (Field SqlInt4)
+    (Field SqlInt4)
+    (Field SqlInt4)
+    (Field SqlInt4)
+    (Field SqlInt4)
+    (Maybe (FieldNullable SqlText))
+    (Maybe (FieldNullable SqlText))
+    (Maybe (FieldNullable SqlText))
+    (Maybe (FieldNullable SqlText))
+    (Maybe (Field (SqlArray SqlText)))
+    (Maybe (Field (SqlArray SqlText)))
+    (Maybe (FieldNullable SqlText))
+    (Maybe (FieldNullable SqlText))
+    (Maybe (FieldNullable SqlText))
+
+type EntryR =
+  Entry
+    (Field SqlInt4)
+    (Field SqlInt4)
+    (Field SqlInt4)
+    (Field SqlInt4)
+    (Field SqlInt4)
+    (Field SqlInt4)
+    (FieldNullable SqlText)
+    (FieldNullable SqlText)
+    (FieldNullable SqlText)
+    (FieldNullable SqlText)
+    (Field (SqlArray SqlText))
+    (Field (SqlArray SqlText))
+    (FieldNullable SqlText)
+    (FieldNullable SqlText)
+    (FieldNullable SqlText)
+
+entries :: EntryT
 entries =
   table
     "entries"
-    ( p15
-        ( readOnlyTableField "id",
-          requiredTableField "document",
-          requiredTableField "year",
-          requiredTableField "month",
-          requiredTableField "day",
-          requiredTableField "ordinal",
-          optionalTableField "short_name",
-          optionalTableField "summary",
-          optionalTableField "location",
-          optionalTableField "short_name",
-          optionalTableField "photos",
-          optionalTableField "reply_to",
-          optionalTableField "repost_of",
-          optionalTableField "rsvp",
-          optionalTableField "rsvp_to"
-        )
+    ( pEntry $
+        Entry
+          { entryId = readOnlyTableField "id",
+            entryDocument = requiredTableField "document",
+            year = requiredTableField "year",
+            month = requiredTableField "month",
+            day = requiredTableField "day",
+            ordinal = requiredTableField "ordinal",
+            shortName = optionalTableField "short_name",
+            entryName = optionalTableField "summary",
+            entrySummary = optionalTableField "location",
+            entryLocation = optionalTableField "short_name",
+            photos = optionalTableField "photos",
+            replyTo = optionalTableField "reply_to",
+            repostOf = optionalTableField "repost_of",
+            rsvpTo = optionalTableField "rsvp",
+            rsvpValue = optionalTableField "rsvp_to"
+          }
     )
 
-type ProjectsTable =
-  Table
-    ProjectsW
-    ProjectsR
+data Project a b c d e f g h i j k l m = Project
+  { projectId :: a,
+    projectDocument :: b,
+    slug :: c,
+    status :: d,
+    featured_order :: e,
+    started_date :: f,
+    finished_date :: g,
+    sort_date :: h,
+    projectName :: i,
+    projectSummary :: j,
+    url :: k,
+    source :: l,
+    projectLocation :: m
+  }
 
-type ProjectsW =
-  ( (),
-    Field SqlInt4,
-    Field SqlText,
-    Field SqlText,
-    Field SqlInt2,
-    Field SqlTimestamptz,
-    Maybe (FieldNullable SqlTimestamptz),
-    Field SqlTimestamptz,
-    Field SqlText,
-    Maybe (FieldNullable SqlText),
-    Maybe (FieldNullable SqlText),
-    Maybe (FieldNullable SqlText),
-    Maybe (FieldNullable SqlText)
-  )
+$(makeAdaptorAndInstance "pProject" ''Project)
 
-type ProjectsR =
-  ( Field SqlInt4,
-    Field SqlInt4,
-    Field SqlText,
-    Field SqlText,
-    Field SqlInt2,
-    Field SqlTimestamptz,
-    FieldNullable SqlTimestamptz,
-    Field SqlTimestamptz,
-    Field SqlText,
-    FieldNullable SqlText,
-    FieldNullable SqlText,
-    FieldNullable SqlText,
-    FieldNullable SqlText
-  )
+type ProjectT = Table ProjectW ProjectR
 
-projects :: ProjectsTable
+type ProjectW =
+  Project
+    ()
+    (Field SqlInt4)
+    (Field SqlText)
+    (Field SqlText)
+    (Field SqlInt2)
+    (Field SqlTimestamptz)
+    (Maybe (FieldNullable SqlTimestamptz))
+    (Field SqlTimestamptz)
+    (Field SqlText)
+    (Maybe (FieldNullable SqlText))
+    (Maybe (FieldNullable SqlText))
+    (Maybe (FieldNullable SqlText))
+    (Maybe (FieldNullable SqlText))
+
+type ProjectR =
+  Project
+    (Field SqlInt4)
+    (Field SqlInt4)
+    (Field SqlText)
+    (Field SqlText)
+    (Field SqlInt2)
+    (Field SqlTimestamptz)
+    (FieldNullable SqlTimestamptz)
+    (Field SqlTimestamptz)
+    (Field SqlText)
+    (FieldNullable SqlText)
+    (FieldNullable SqlText)
+    (FieldNullable SqlText)
+    (FieldNullable SqlText)
+
+projects :: ProjectT
 projects =
   table
     "projects"
-    ( p13
-        ( readOnlyTableField "id",
-          requiredTableField "document",
-          requiredTableField "slug",
-          requiredTableField "status",
-          requiredTableField "featured_order",
-          requiredTableField "started_date",
-          optionalTableField "finished_date",
-          requiredTableField "sort_date",
-          requiredTableField "name",
-          optionalTableField "summary",
-          optionalTableField "url",
-          optionalTableField "source",
-          optionalTableField "location"
-        )
+    ( pProject $
+        Project
+          { projectId = readOnlyTableField "id",
+            projectDocument = requiredTableField "document",
+            slug = requiredTableField "slug",
+            status = requiredTableField "status",
+            featured_order = requiredTableField "featured_order",
+            started_date = requiredTableField "started_date",
+            finished_date = optionalTableField "finished_date",
+            sort_date = requiredTableField "sort_date",
+            projectName = requiredTableField "name",
+            projectSummary = optionalTableField "summary",
+            url = optionalTableField "url",
+            source = optionalTableField "source",
+            projectLocation = optionalTableField "location"
+          }
     )

@@ -17,6 +17,7 @@ haskell_library(
     ],
     deps = [
         "//LATG:base", 
+        "@stackage//:product-profunctors",
         "@stackage//:opaleye",
     ],
 )

@@ -52,6 +52,7 @@ stack_snapshot(
         "morpheus-graphql",
         "opaleye",
         "optparse-applicative",
+        "product-profunctors",
         "servant",
         "system-fileio",
         "text",
