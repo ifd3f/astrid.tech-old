@@ -45,12 +45,12 @@ type DocumentW =
     (Field SqlUuid)
     (Field SqlTimestamptz)
     (Field SqlTimestamptz)
-    (Maybe (FieldNullable SqlTimestamptz))
+    (FieldNullable SqlTimestamptz)
     (Field SqlText)
     (Field SqlText)
-    (Maybe (FieldNullable SqlText))
-    (Maybe (FieldNullable SqlText))
-    (Maybe (FieldNullable SqlText))
+    (FieldNullable SqlText)
+    (FieldNullable SqlText)
+    (FieldNullable SqlText)
 
 type DocumentR =
   Document
@@ -77,12 +77,12 @@ documents =
             uuid = requiredTableField "uuid",
             createdDate = requiredTableField "created_date",
             publishedDate = requiredTableField "published_date",
-            updatedDate = optionalTableField "updated_date",
+            updatedDate = requiredTableField "updated_date",
             canonicalUrl = requiredTableField "canonical_url",
             docType = requiredTableField "doc_type",
-            content = optionalTableField "content",
-            colophon = optionalTableField "colophon",
-            pageSrcUrl = optionalTableField "page_src_url"
+            content = requiredTableField "content",
+            colophon = requiredTableField "colophon",
+            pageSrcUrl = requiredTableField "page_src_url"
           }
     )
 

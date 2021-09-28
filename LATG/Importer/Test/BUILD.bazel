@@ -23,7 +23,7 @@ haskell_test(
     deps = [
         "//LATG:base", 
         "//LATG/Importer:file-schema", 
-        "//LATG/Importer:insert-schema", 
+        "//LATG/Importer:insert", 
         "//LATG/Importer:load-content", 
         "@stackage//:aeson",
         "@stackage//:bytestring",

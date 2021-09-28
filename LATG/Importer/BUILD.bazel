@@ -23,14 +23,18 @@ haskell_library(
 )
 
 haskell_library(
-    name = "insert-schema",
+    name = "insert",
     srcs = [
-        "InsertSchema.hs",
+        "Insert.hs",
     ],
     deps = [
         "//LATG:base", 
         "//LATG/DB:hs", 
+        ":file-schema",
         ":load-content",
+        "@stackage//:text",
+        "@stackage//:time",
+        "@stackage//:uuid",
         "@stackage//:opaleye",
     ],
 )
@@ -61,7 +65,7 @@ haskell_binary(
     ],
     deps = [
         ":file-schema",
-        ":insert-schema",
+        ":insert",
         ":load-content",
         "//LATG:base", 
         "@stackage//:bytestring",
