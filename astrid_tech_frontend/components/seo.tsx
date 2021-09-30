@@ -93,6 +93,8 @@ const SEO: FC<SEOProps> = ({
         href={`${process.env.publicRoot}/feed.json`}
       />
 
+      <link rel="author" href="/humans.txt" />
+
       {/* IndieAuth */}
       <link rel="authorization_endpoint" href="https://indieauth.com/auth" />
       <link rel="token_endpoint" href="https://tokens.indieauth.com/token" />
