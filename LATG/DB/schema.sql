@@ -161,8 +161,7 @@ CREATE TABLE public.entries (
     photos text[] DEFAULT ARRAY[]::text[] NOT NULL,
     reply_to text[] DEFAULT ARRAY[]::text[] NOT NULL,
     repost_of text,
-    rsvp public.rsvp_value,
-    rsvp_to text
+    rsvp public.rsvp_value
 );
 
 

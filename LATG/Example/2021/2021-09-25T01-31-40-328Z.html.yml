@@ -5,7 +5,5 @@ publishedDate: 2021-09-24T18:31:40.328-07:00
 attrs:
   name: An RSVP written in HTML by a Micropub server
   slug: [2021, 9, 24, 1, html-post]
-  rsvp: 
-    to: https://example.com/events/cool-event
-    value: "yes"
+  rsvp: yes
 colophon: https://micropub.astrid.tech

@@ -87,12 +87,7 @@ type Project {
     document: Document
 }
 
-type RSVP {
-    to: String!
-    value: RSVPValue!
-}
-
-enum RSVPValue {
+enum RSVP {
     YES
     NO
     MAYBE

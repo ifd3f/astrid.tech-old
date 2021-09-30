@@ -103,13 +103,10 @@ data Project = Project
 
 instance FromJSON Project
 
-data RSVP = RSVP { to :: T.Text, value :: RSVPValue } deriving (Generic, Show, Eq)
-instance FromJSON RSVP
-
-data RSVPValue = RSVPYes | RSVPNo | RSVPMaybe | RSVPInterested
+data RSVP = RSVPYes | RSVPNo | RSVPMaybe | RSVPInterested
   deriving (Generic, Show, Eq)
 
-instance FromJSON RSVPValue where 
+instance FromJSON RSVP where 
   parseJSON (Bool True) = pure RSVPYes
   parseJSON (Bool False) = pure RSVPNo
   parseJSON (String "yes") = pure RSVPYes

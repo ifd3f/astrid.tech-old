@@ -63,7 +63,6 @@ create table entries(
     repost_of text,
 
     rsvp rsvp_value,
-    rsvp_to text,
 
     constraint entry_slug unique (year, month, day, ordinal)
 );

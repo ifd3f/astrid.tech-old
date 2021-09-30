@@ -86,7 +86,7 @@ documents =
           }
     )
 
-data Entry a b c d e f g h i j k l m n o = Entry
+data Entry a b c d e f g h i j k l m n = Entry
   { entryId :: a,
     entryDocument :: b,
     year :: c,
@@ -100,8 +100,7 @@ data Entry a b c d e f g h i j k l m n o = Entry
     photos :: k,
     replyTo :: l,
     repostOf :: m,
-    rsvpTo :: n,
-    rsvpValue :: o
+    rsvp :: n
   }
 
 $(makeAdaptorAndInstance "pEntry" ''Entry)
@@ -124,7 +123,6 @@ type EntryW =
     (Maybe (Field (SqlArray SqlText)))
     (Maybe (FieldNullable SqlText))
     (Maybe (FieldNullable SqlText))
-    (Maybe (FieldNullable SqlText))
 
 type EntryR =
   Entry
@@ -140,7 +138,6 @@ type EntryR =
     (FieldNullable SqlText)
     (Field (SqlArray SqlText))
     (Field (SqlArray SqlText))
-    (FieldNullable SqlText)
     (FieldNullable SqlText)
     (FieldNullable SqlText)
 
@@ -163,8 +160,7 @@ entries =
             photos = optionalTableField "photos",
             replyTo = optionalTableField "reply_to",
             repostOf = optionalTableField "repost_of",
-            rsvpTo = optionalTableField "rsvp",
-            rsvpValue = optionalTableField "rsvp_to"
+            rsvp = optionalTableField "rsvp"
           }
     )
 
