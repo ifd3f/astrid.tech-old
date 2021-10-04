@@ -5,4 +5,5 @@ tags:
   - /projects/astrid-tech
 ---
 
-Instead of... whatever that was, I'll be making a webmention receiver in Rust instead!
+Instead of... whatever that was, I'll be making a webmention receiver in Rust
+instead!

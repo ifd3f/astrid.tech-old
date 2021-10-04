@@ -76,7 +76,7 @@ fi
 
 mkdir -p $postFolder
 mv $tempfile $postPath
-npx prettier -w $postPath
+npx prettier -w $postPath --config content/.prettierrc.yml
 
 if [ $NO_COMMIT -eq 1 ]; then
     echo "--no-commit was given, skipping commit"
