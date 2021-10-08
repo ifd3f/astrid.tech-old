@@ -13,9 +13,6 @@ description: Please see the README on GitHub at <https://github.com/astralbiject
 
 dependencies:
   - base >= 4.7 && < 5
-  - aeson
-  - bytestring
-  - text
 
 ghc-options:
   - -threaded
@@ -31,12 +28,31 @@ internal-libraries:
   latg-db:
     source-dirs: latg/db/src
     dependencies:
-    - opaleye
+      - aeson
+      - text
+      - time
+
+  latg-graphql-lib:
+    source-dirs: latg/graphql/src
+    dependencies:
+      - bytestring
+      - morpheus-graphql
+      - text
 
   latg-importer-lib:
     source-dirs: latg/importer/src
     dependencies:
+      - aeson
+      - bytestring
+      - filepath
+      - frontmatter
+      - htoml
       - latg-db
+      - text
+      - time
+      - uuid
+      - vector
+      - yaml
 
 executables:
   latg-importer:

@@ -14,4 +14,4 @@ module LATG.GraphQL.Schema where
 import Data.Text (Text)
 import Data.Morpheus.Document (importGQLDocument)
 
-importGQLDocument "LATG/GraphQL/schema.graphql"
+importGQLDocument "latg/graphql/schema.graphql"

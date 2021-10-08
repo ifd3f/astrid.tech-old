@@ -3,6 +3,9 @@ cradle:
     - path: "./latg/db/src"
       component: "astrid-tech:lib:latg-db"
 
+    - path: "./latg/graphql/src"
+      component: "astrid-tech:lib:latg-graphql-lib"
+
     - path: "./latg/importer/src"
       component: "astrid-tech:lib:latg-importer-lib"
 
