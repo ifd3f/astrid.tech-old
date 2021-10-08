@@ -1,0 +1,52 @@
+name: astrid-tech
+version: 0.1.0.0
+github: "astralbijection/astrid.tech"
+license: AGPLv3
+author: "Astrid Yu"
+maintainer: "astrid@astrid.tech"
+copyright: "Astrid Yu"
+
+extra-source-files:
+  - README.md
+
+description: Please see the README on GitHub at <https://github.com/astralbijection/astrid.tech>
+
+dependencies:
+  - base >= 4.7 && < 5
+  - aeson
+  - bytestring
+  - text
+
+internal-libraries:
+  db:
+    source-dirs: latg/db
+  latg-importer-lib:
+    source-dirs: latg/importer
+    ghc-options:
+      - -threaded
+      - -rtsopts
+      - -with-rtsopts=-N
+    dependencies:
+      - db
+
+executables:
+  latg-importer:
+    main: Main.hs
+    source-dirs: latg/importer
+    ghc-options:
+      - -threaded
+      - -rtsopts
+      - -with-rtsopts=-N
+    dependencies:
+      - latg-importer-lib
+
+tests:
+  latg-importer-test:
+    main: Spec.hs
+    source-dirs: latg/importer/test
+    ghc-options:
+      - -threaded
+      - -rtsopts
+      - -with-rtsopts=-N
+    dependencies:
+      - latg-importer-lib

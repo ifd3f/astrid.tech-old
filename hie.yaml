@@ -1,7 +1,16 @@
 cradle:
-  multi:
-    - path: "./LATG"
-      config:
-        cradle:
-          bios:
-            program: "LATG/.hie-bios"
+  stack:
+    - path: "./latg/db"
+      component: "astrid-tech:lib:db"
+
+    - path: "./latg/importer"
+      component: "astrid-tech:lib:latg-importer-lib"
+
+    - path: "./latg/importer/Main.hs"
+      component: "astrid-tech:exe:latg-importer"
+
+    - path: "./latg/importer/Paths_astrid_tech.hs"
+      component: "astrid-tech:exe:latg-importer"
+
+    - path: "./latg/importer/test"
+      component: "astrid-tech:test:latg-importer-test"
