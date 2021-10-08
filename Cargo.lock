@@ -1023,6 +1023,7 @@ name = "latg-importer"
 version = "0.1.0"
 dependencies = [
  "chrono",
+ "rstest 0.7.0",
  "serde",
  "serde_json",
  "serde_yaml",

@@ -1,9 +1,9 @@
-use std::{collections::HashSet, fmt};
+use std::fmt;
 
-use chrono::{DateTime, FixedOffset, Utc};
+use chrono::{DateTime, FixedOffset};
 use serde::{
     de::{self, Visitor},
-    Deserialize, Deserializer, Serialize,
+    Deserialize, Deserializer,
 };
 use uuid::Uuid;
 
@@ -30,6 +30,7 @@ pub struct Entry {
     pub repost_of: Option<String>,
     pub rsvp: Option<RSVP>,
     pub ordinal: i32,
+    pub slug: Option<String>,
 }
 
 #[derive(Debug, PartialEq, Eq)]
@@ -59,7 +60,7 @@ impl<'de> Visitor<'de> for RSVPVisitor {
     fn visit_str<E: de::Error>(self, value: &str) -> Result<Self::Value, E> {
         match value {
             "yes" => Ok(RSVP::Yes),
-            "no" => Ok(RSVP::Yes),
+            "no" => Ok(RSVP::No),
             "maybe" => Ok(RSVP::Maybe),
             "interested" => Ok(RSVP::Interested),
             value => Err(E::custom(format!("unknown RSVP: {}", value))),
@@ -87,29 +88,29 @@ pub enum Content {
 
 #[cfg(test)]
 mod tests {
+    use crate::file_schema::RSVP;
+    use rstest::rstest;
     use std::assert_matches::assert_matches;
 
-    use chrono::Utc;
+    #[rstest]
+    #[case("true", RSVP::Yes)]
+    #[case("false", RSVP::No)]
+    #[case("\"yes\"", RSVP::Yes)]
+    #[case("\"no\"", RSVP::No)]
+    #[case("\"interested\"", RSVP::Interested)]
+    #[case("\"maybe\"", RSVP::Maybe)]
+    fn rsvp_works_for_true(#[case] input: &str, #[case] expected: RSVP) {
+        let result: RSVP = serde_json::from_str(input).unwrap();
 
-    use crate::file_schema::RSVP;
-
-    #[test]
-    fn rsvp_works_for_true() {
-        let result: RSVP = serde_json::from_str("true").unwrap();
-
-        assert_eq!(result, RSVP::Yes);
+        assert_eq!(result, expected);
     }
 
-    #[test]
-    fn rsvp_works_for_str() {
-        let result: RSVP = serde_json::from_str("\"interested\"").unwrap();
-
-        assert_eq!(result, RSVP::Interested);
-    }
-
-    #[test]
-    fn rsvp_fails_for_int() {
-        let result: Result<RSVP, _> = serde_json::from_str("1238");
+    #[rstest]
+    #[case("\"foo\"")]
+    #[case("1238")]
+    #[case("[\"yes\"]")]
+    fn rsvp_fails_for_unexpected(#[case] input: &str) {
+        let result: Result<RSVP, _> = serde_json::from_str(input);
 
         assert_matches!(result, Err(_));
     }
