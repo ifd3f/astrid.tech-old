@@ -1,15 +1,15 @@
 cradle:
   stack:
-    - path: "./latg/db"
-      component: "astrid-tech:lib:db"
+    - path: "./latg/db/src"
+      component: "astrid-tech:lib:latg-db"
 
-    - path: "./latg/importer"
+    - path: "./latg/importer/src"
       component: "astrid-tech:lib:latg-importer-lib"
 
-    - path: "./latg/importer/Main.hs"
+    - path: "./latg/importer/app/Main.hs"
       component: "astrid-tech:exe:latg-importer"
 
-    - path: "./latg/importer/Paths_astrid_tech.hs"
+    - path: "./latg/importer/app/Paths_astrid_tech.hs"
       component: "astrid-tech:exe:latg-importer"
 
     - path: "./latg/importer/test"
