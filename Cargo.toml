@@ -2,9 +2,6 @@
 
 members = [
     "aay_tw_shortener",
-    "latg/db",
-    "latg/graphql",
-    "latg/importer",
-    "latg/server",
+    "latg",
     "wm-receiver",
 ]

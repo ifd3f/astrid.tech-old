@@ -6,6 +6,7 @@
   "attrs": {
     "name": "A JSON-based metadata",
     "summary": "This is a JSON file.",
-    "slug": [2015, 1, 1, 0, "json-metadata"]
+    "urlName": "json-metadata",
+    "ordinal": 0
   }
 }
