@@ -1,12 +1,10 @@
 {
-  "docType": "h-entry",
+  "type": "h-entry",
   "uuid": "1bc6dde3-7512-4a4d-bf6f-cc21fe6c97f6",
   "createdDate": "2014-09-24T18:31:40-07:00",
   "publishedDate": "2015-01-01T18:31:40-07:00",
-  "attrs": {
-    "name": "A JSON-based metadata",
-    "summary": "This is a JSON file.",
-    "urlName": "json-metadata",
-    "ordinal": 0
-  }
+  "name": "A JSON-based metadata",
+  "summary": "This is a JSON file.",
+  "urlName": "json-metadata",
+  "ordinal": 0
 }

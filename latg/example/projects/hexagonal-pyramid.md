@@ -4,6 +4,7 @@ type: x-project
 createdDate: 2020-09-24T20:00:00-07:00
 publishedDate: 2020-09-24T20:00:00-07:00
 name: Hexagonal Pyramid
+urlName: hexagonal-pyramid
 status: complete
 summary: A pyramid with a hexagonal base.
 startedDate: 2017-03-17

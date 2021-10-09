@@ -1,7 +1,10 @@
-use std::{collections::HashMap, fmt};
+use std::fmt;
 
-use chrono::{DateTime, FixedOffset};
-use serde::{Deserialize, Deserializer, de::{self, MapAccess, Visitor, value::MapAccessDeserializer}};
+use chrono::{DateTime, FixedOffset, NaiveDate};
+use serde::{
+    de::{self, Visitor},
+    Deserialize, Deserializer,
+};
 use uuid::Uuid;
 
 #[derive(Debug, Deserialize)]
@@ -15,16 +18,16 @@ pub struct Document {
     pub tags: Option<Vec<String>>,
     pub colophon: Option<String>,
     #[serde(flatten)]
-    pub attrs: ContentType,
+    pub doc_type: DocType,
 }
 
 #[derive(Debug, Deserialize)]
 #[serde(tag = "type")]
-pub enum ContentType {
+pub enum DocType {
     #[serde(rename = "h-entry")]
-    HEntry(Entry),
+    Entry(Entry),
     #[serde(rename = "x-project")]
-    HProject(Project),
+    Project(Project),
 }
 
 #[derive(Debug, Deserialize)]
@@ -42,15 +45,16 @@ pub struct Entry {
 }
 
 #[derive(Debug, Deserialize)]
+#[serde(rename_all = "camelCase")]
 pub struct Project {
     pub name: String,
-    pub slug: String,
+    pub url_name: String,
     pub summary: String,
     pub url: Option<String>,
     pub location: Option<String>,
     pub source: Option<String>,
-    pub started_date: DateTime<FixedOffset>,
-    pub finished_date: Option<DateTime<FixedOffset>>,
+    pub started_date: NaiveDate,
+    pub finished_date: Option<NaiveDate>,
 }
 
 #[derive(Debug, Deserialize, PartialEq, Eq)]
@@ -117,7 +121,8 @@ pub enum Content {
 
 #[cfg(test)]
 mod tests {
-    use crate::file_schema::{Content, RSVP};
+    use crate::file_schema::{Content, DocType, RSVP};
+    use gray_matter::{engine::YAML, Matter};
     use rstest::rstest;
     use std::assert_matches::assert_matches;
     use uuid::Uuid;
@@ -151,7 +156,7 @@ mod tests {
     fn content_parses_embedded_plaintext() {
         let result: Content = serde_json::from_str("\"my text\"").unwrap();
 
-        assert_eq!(result, Content::EmbeddedPlaintext("my text".to_string()))
+        assert_eq!(result, Content::EmbeddedPlaintext("my text".to_string()));
     }
 
     #[rstest]
@@ -176,6 +181,24 @@ mod tests {
         assert_eq!(
             parsed.uuid,
             Uuid::parse_str("1bc6dde3-7512-4a4d-bf6f-cc21fe6c97f6").unwrap()
-        )
+        );
+
+        assert_matches!(parsed.doc_type, DocType::Entry(_));
+    }
+
+    #[rstest]
+    fn document_parses_project() {
+        let md = include_str!("../../example/projects/hexagonal-pyramid.md");
+        let matter = Matter::<YAML>::new();
+        let data = matter.parse(md).data.unwrap();
+
+        let parsed: Document = data.deserialize().unwrap();
+
+        assert_eq!(
+            parsed.uuid,
+            Uuid::parse_str("f2b65148-40b0-4c7a-89e1-368bf18ec875").unwrap()
+        );
+
+        assert_matches!(parsed.doc_type, DocType::Project(_));
     }
 }
