@@ -20,11 +20,12 @@ use std::{env, path::PathBuf};
 use dotenv::dotenv;
 use tokio::sync::Mutex;
 use webmention::data::MentionConfig;
+use simple_git_utils::ManagedGitRepo;
 
 use crate::{
     db::run_migrations,
     routes::*,
-    webmention::{git::ManagedGitRepo, storage::WebmentionStore},
+    webmention::storage::WebmentionStore,
 };
 
 mod db;
