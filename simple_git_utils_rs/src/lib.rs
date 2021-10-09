@@ -55,7 +55,7 @@ impl ManagedGitRepo {
         // In case this is our first time on this repository, check out main
         self.git(["checkout", &self.base_branch]).await?;
 
-        // Ensure work branch exists and check it out. Deleting first ensures we 
+        // Ensure work branch exists and check it out. Deleting first ensures we use the remote.
         self.git(["branch", "-d", &self.branch]).await?;
         self.git(["checkout", "--guess", &self.branch]).await?;
         self.git(["checkout", "-b", &self.branch]).await?;
@@ -72,7 +72,7 @@ impl ManagedGitRepo {
 
         // Push to the specified remote
         self.git(["rebase", &format!("origin/{}", self.branch)]).await?;
-        self.git(["push"]).await?;
+        self.git(["push", "origin", &self.branch]).await?;
 
         Ok(())
     }
