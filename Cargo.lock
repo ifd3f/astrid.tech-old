@@ -2346,6 +2346,10 @@ dependencies = [
 ]
 
 [[package]]
+name = "simple_git_utils"
+version = "0.1.0"
+
+[[package]]
 name = "siphasher"
 version = "0.2.3"
 source = "registry+https://github.com/rust-lang/crates.io-index"
