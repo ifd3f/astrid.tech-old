@@ -19,7 +19,7 @@ pub struct Document {
 }
 
 #[derive(Debug, Deserialize)]
-#[serde(tag = "docType", content = "attrs")]
+#[serde(tag = "type")]
 pub enum ContentType {
     #[serde(rename = "h-entry")]
     HEntry(Entry),

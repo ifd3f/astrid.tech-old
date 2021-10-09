@@ -1,6 +1,5 @@
 uuid: 98151023-8c97-41ea-bb44-afa7d6bf1e05
-docType: h-entry
+type: h-entry
 createdDate: 2021-09-26T14:57:40.328-07:00
 publishedDate: 2021-09-26T14:57:40.328-07:00
-attrs:
-  slug: [2021, 9, 26, 1, htm]
+slug: htm

@@ -1,9 +1,8 @@
 uuid: 2474dbe3-6ba8-4305-944a-ff91cd6b1b4f
-docType: h-entry
+type: h-entry
 createdDate: 2021-09-24T18:31:40.328-07:00
 publishedDate: 2021-09-24T18:31:40.328-07:00
-attrs:
-  name: An RSVP written in HTML by a Micropub server
-  slug: [2021, 9, 24, 1, html-post]
-  rsvp: yes
+name: An RSVP written in HTML by a Micropub server
+slug: html-post
+rsvp: yes
 colophon: https://micropub.astrid.tech

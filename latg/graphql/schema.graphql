@@ -11,7 +11,7 @@ type Document {
     publishedDate: String!
     updatedDate: String
 
-    categories: [Category!]!
+    tags: [Tag!]!
 
     """ The body of this entry, as HTML. """
     content: String
@@ -107,7 +107,7 @@ type Photo {
     src: String!
 }
 
-type Category {
+type Tag {
     slug: String!
     name: String!
     color: String!
@@ -115,7 +115,7 @@ type Category {
 
     documents(): [Document!]!
 
-    relatedCategories(): [Category!]!
+    relatedCategories(): [Tag!]!
 }
 
 type Slug {

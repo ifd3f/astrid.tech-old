@@ -1,7 +1,5 @@
 uuid: 2474dbe3-6ba8-4305-944a-ff91cd6b1b4f
-docType: h-entry
+type: h-entry
 createdDate: 2014-09-24T18:31:40.328-07:00
 publishedDate: 2015-08-10T18:31:40.328-07:00
-attrs:
-  name: A detached-metadata markdown file
-  slug: [2021, 9, 24, 1]
+name: A detached-metadata markdown file

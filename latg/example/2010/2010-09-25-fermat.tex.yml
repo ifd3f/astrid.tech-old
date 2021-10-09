@@ -1,11 +1,10 @@
-docType: h-entry
+type: h-entry
 uuid: b44190db-5f32-48e1-91ba-9f7d71d98652
 createdDate: 2010-09-24T18:48:40.328-07:00
 publishedDate: 2010-09-24T18:48:40.328-07:00
-attrs:
-  name: A post manually written in LaTeX but included using the src property
-  slug: [2010, 9, 24, 2, test-post]
-categories:
+name: A post manually written in LaTeX but included using the src property
+urlName: test-post
+tags:
   - math
 content:
-  downloadable: yes # Generate a download link for the source file.
+downloadable: yes # Generate a download link for the source file.
