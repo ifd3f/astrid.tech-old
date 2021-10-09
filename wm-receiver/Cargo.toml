@@ -37,6 +37,9 @@ version = "*"
 [dependencies.microformats_parser]
 git = "https://gitlab.com/maxburon/microformats-parser.git"
 
+[dependencies.simple_git_utils]
+path = "../simple_git_utils_rs"
+
 [dependencies.tokio]
 features = ["sync"]
 version = "*"

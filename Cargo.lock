@@ -2348,6 +2348,9 @@ dependencies = [
 [[package]]
 name = "simple_git_utils"
 version = "0.1.0"
+dependencies = [
+ "tokio",
+]
 
 [[package]]
 name = "siphasher"
@@ -3091,6 +3094,7 @@ dependencies = [
  "serde",
  "serde_json",
  "sha256",
+ "simple_git_utils",
  "tempdir",
  "tokio",
  "url 2.2.2",
