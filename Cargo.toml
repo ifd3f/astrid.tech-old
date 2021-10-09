@@ -6,5 +6,6 @@ members = [
     "latg/graphql",
     "latg/importer",
     "latg/server",
+    "simple_git_utils_rs",
     "wm-receiver",
 ]

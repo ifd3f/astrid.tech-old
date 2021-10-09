@@ -2,7 +2,7 @@ use std::net::SocketAddr;
 
 use crate::db::get_db;
 use crate::webmention::data::MentionConfig;
-use crate::webmention::git::ManagedGitRepo;
+use simple_git_utils::ManagedGitRepo;
 use crate::webmention::processing::{process_pending_request, PendingRequest};
 use crate::webmention::requesting::create_mention;
 use crate::webmention::storage::WebmentionStore;
@@ -94,7 +94,7 @@ pub async fn process_webmentions(
     let now = Utc::now();
     let message = format!("wm-receiver: Webmentions processed at {}", now.to_rfc2822());
 
-    repo_lock.push_changes(message).await.unwrap();
+    repo_lock.push_changes(&message).await.unwrap();
 
     Status::Ok
 }

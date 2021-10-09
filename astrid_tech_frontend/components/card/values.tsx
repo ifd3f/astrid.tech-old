@@ -1,6 +1,7 @@
 import React, { ReactNode } from "react";
 import { BsEnvelope } from "react-icons/bs";
 import {
+  FaAddressCard,
   FaBirthdayCake,
   FaCubes,
   FaDice,
@@ -175,6 +176,16 @@ export const hobbies: HCardProperty = {
   children: (
     <>Programming, playing video games, reading fantasy books, watching anime</>
   ),
+};
+
+export const vcard: HCardProperty = {
+  key: "vcard",
+  title: (
+    <>
+      <FaAddressCard title="vCard" /> vCard
+    </>
+  ),
+  children: <a href="/astridyu.vcard">Add me to your contacts!</a>,
 };
 
 // All identities go below this line

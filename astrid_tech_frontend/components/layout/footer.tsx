@@ -78,6 +78,14 @@ const AGPL: FC = () => {
   );
 };
 
+const HumansTXT = () => (
+  <p>
+    <a href="/humans.txt">
+      <img alt="Humans.txt" width={100} height={40} src="/humanstxt.gif" />
+    </a>
+  </p>
+);
+
 /**
  * Links for an IndieWebRing. For more info, see https://xn--sr8hvo.ws/dashboard
  * @returns links :)
@@ -164,6 +172,9 @@ const FooterSection = () => {
             <h6>Webrings</h6>
             <IndieWebRing />
             <XXIIVVWebring />
+            <hr />
+            <h6>Other things</h6>
+            <HumansTXT />
           </Col>
 
           <Col sm="9">

@@ -2421,6 +2421,13 @@ dependencies = [
 ]
 
 [[package]]
+name = "simple_git_utils"
+version = "0.1.0"
+dependencies = [
+ "tokio",
+]
+
+[[package]]
 name = "siphasher"
 version = "0.2.3"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -3171,6 +3178,7 @@ dependencies = [
  "serde",
  "serde_json",
  "sha256",
+ "simple_git_utils",
  "tempdir",
  "tokio",
  "url 2.2.2",

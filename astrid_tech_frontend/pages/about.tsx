@@ -47,6 +47,7 @@ const about = [
   vs.email,
   vs.birthday,
   vs.linux,
+  vs.vcard,
 ];
 
 const identities = [
