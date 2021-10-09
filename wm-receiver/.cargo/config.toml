@@ -1,5 +1,0 @@
-# Where the app should look for the resources/main folder. Change this when
-# packaging the app.
-[env.WEBMENTION_RESOURCES_DIR]
-value = "resources/main"
-relative = true 
