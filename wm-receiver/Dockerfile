@@ -20,7 +20,7 @@ ADD ./src ./src
 ADD ./migrations ./migrations
 RUN rm ./target/release/deps/wm_receiver*
 # Workaround: https://github.com/rust-lang/cargo/issues/6513#issuecomment-920920238
-RUN CARGO_HTTP_MULTIPLEXING=false WEBMENTION_RESOURCES_DIR=/usr/local/share/wm-receiver/ cargo build --release
+RUN CARGO_HTTP_MULTIPLEXING=false cargo build --release
 
 EXPOSE 8000
 
@@ -33,7 +33,6 @@ FROM debian:bullseye-slim as runner
 RUN apt-get update && apt-get install -y git libsqlite3-0
 
 COPY --from=builder /app/target/release/wm-receiver /usr/local/bin/
-COPY ./resources/main /usr/local/share/wm-receiver/
 
 WORKDIR /app
 COPY ./entrypoint.sh /app/

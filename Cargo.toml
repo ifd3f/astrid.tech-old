@@ -2,5 +2,6 @@
 
 members = [
     "aay_tw_shortener",
+    "simple_git_utils_rs",
     "wm-receiver",
 ]
