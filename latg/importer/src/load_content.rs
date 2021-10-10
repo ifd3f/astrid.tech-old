@@ -37,54 +37,76 @@ enum NonDocument {
     NonDocument,
 }
 
-struct TransformedContent {
+pub struct TransformedContent {
     html: String,
     assets: Vec<String>, // TODO
 }
 
-type ReadDocumentResult<T> = Result<T, NonDocument>;
+pub type ReadDocumentResult<T> = Result<T, NonDocument>;
 type ContentResult<T> = Result<T, String>;
 
+pub fn load(
+    path: impl AsRef<Path>,
+) -> ReadDocumentResult<(file_schema::Document, TransformedContent)> {
+    let path = path.as_ref();
+    let doc: DocumentWithPossiblyEmbeddedContent<file_schema::Document> =
+        read_document(path.extension(), &fs::read_to_string(path)?)?;
+    let content_source = extract_content_source(
+        path,
+        DocumentWithPossiblyEmbeddedContent {
+            document: &doc.document.content,
+            embedded_content: doc.embedded_content,
+        },
+    )?;
+    let loaded = load_content_source(content_source)?;
+    let transformed = transform_content(loaded)?;
+    Ok((doc.document, transformed))
+}
+
 fn read_document<T: DeserializeOwned>(
-    extension: &OsStr,
+    extension: Option<&OsStr>,
     file_content: &str,
 ) -> ReadDocumentResult<DocumentWithPossiblyEmbeddedContent<T>> {
-    match extension.to_string_lossy().as_ref() {
-        "md" | "markdown" => {
-            let entity = Matter::<YAML>::new().parse(file_content);
-            let frontmatter: Option<Pod> = entity.data;
+    if let Some(extension) = extension {
+        match extension.to_string_lossy().as_ref() {
+            "md" | "markdown" => {
+                let entity = Matter::<YAML>::new().parse(file_content);
+                let frontmatter: Option<Pod> = entity.data;
 
-            if let Some(document) = frontmatter {
-                Ok(DocumentWithPossiblyEmbeddedContent {
-                    document: document.deserialize()?,
-                    embedded_content: Some(Content {
-                        content_type: ContentType::Markdown,
-                        raw: entity.content,
-                    }),
-                })
-            } else {
-                Err(NonDocument::NonDocument)
+                if let Some(document) = frontmatter {
+                    Ok(DocumentWithPossiblyEmbeddedContent {
+                        document: document.deserialize()?,
+                        embedded_content: Some(Content {
+                            content_type: ContentType::Markdown,
+                            raw: entity.content,
+                        }),
+                    })
+                } else {
+                    Err(NonDocument::NonDocument)
+                }
             }
+            "yml" | "yaml" => Ok(DocumentWithPossiblyEmbeddedContent {
+                embedded_content: None,
+                document: serde_yaml::from_str(file_content)?,
+            }),
+            "json" => Ok(DocumentWithPossiblyEmbeddedContent {
+                embedded_content: None,
+                document: serde_json::from_str(file_content)?,
+            }),
+            "toml" => Ok(DocumentWithPossiblyEmbeddedContent {
+                embedded_content: None,
+                document: toml::from_str(file_content)?,
+            }),
+            _ => Err(NonDocument::NonDocument),
         }
-        "yml" | "yaml" => Ok(DocumentWithPossiblyEmbeddedContent {
-            embedded_content: None,
-            document: serde_yaml::from_str(file_content)?,
-        }),
-        "json" => Ok(DocumentWithPossiblyEmbeddedContent {
-            embedded_content: None,
-            document: serde_json::from_str(file_content)?,
-        }),
-        "toml" => Ok(DocumentWithPossiblyEmbeddedContent {
-            embedded_content: None,
-            document: toml::from_str(file_content)?,
-        }),
-        _ => Err(NonDocument::NonDocument),
+    } else {
+        Err(NonDocument::NonDocument)
     }
 }
 
 fn extract_content_source(
     path: &Path,
-    content_info: DocumentWithPossiblyEmbeddedContent<Option<file_schema::Content>>,
+    content_info: DocumentWithPossiblyEmbeddedContent<&Option<file_schema::Content>>,
 ) -> ContentResult<ContentSourceType> {
     if let Some(embedded_content) = content_info.embedded_content {
         return if let Some(_) = content_info.document {
@@ -110,7 +132,7 @@ fn extract_content_source(
         Some(file_schema::Content::EmbeddedPlaintext(plaintext)) => {
             Ok(ContentSourceType::Embedded(Content {
                 content_type: ContentType::Plaintext,
-                raw: plaintext,
+                raw: plaintext.to_string(),
             }))
         }
         Some(file_schema::Content::FileRef { src, .. }) => {
