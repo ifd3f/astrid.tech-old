@@ -6,6 +6,7 @@
 extern crate serde;
 
 pub mod file_schema;
+mod load_content;
 
 fn main() {
     println!("Hello, world!");

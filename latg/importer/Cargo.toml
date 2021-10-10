@@ -4,6 +4,7 @@ name = "latg-importer"
 version = "0.1.0"
 [dependencies]
 gray_matter = "*"
+html_escape = "*"
 serde_json = "*"
 serde_yaml = "*"
 toml = "*"
