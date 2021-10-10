@@ -1,5 +1,6 @@
 use std::{
     ffi::OsStr,
+    fmt::Display,
     fs,
     path::{Path, PathBuf},
 };
@@ -19,8 +20,8 @@ struct DocumentWithPossiblyEmbeddedContent<T> {
     document: T,
 }
 
-enum ContentSourceType<'a> {
-    Embedded(ContentType, &'a str),
+enum ContentSourceType {
+    Embedded(Content),
     FileRef(PathBuf),
 }
 
@@ -56,7 +57,10 @@ fn read_document<T: DeserializeOwned>(
             if let Some(document) = frontmatter {
                 Ok(DocumentWithPossiblyEmbeddedContent {
                     document: document.deserialize()?,
-                    embedded_content: Some(entity.content),
+                    embedded_content: Some(Content {
+                        content_type: ContentType::Markdown,
+                        raw: entity.content,
+                    }),
                 })
             } else {
                 Err(NonDocument::NonDocument)
@@ -86,10 +90,7 @@ fn extract_content_source(
         return if let Some(_) = content_info.document {
             Err("Documents with embedded content cannot reference other sources".to_string())
         } else {
-            Ok(ContentSourceType::Embedded(
-                embedded_content.content_type,
-                &embedded_content.raw,
-            ))
+            Ok(ContentSourceType::Embedded(embedded_content))
         };
     }
 
@@ -106,9 +107,12 @@ fn extract_content_source(
 
     match content_info.document {
         None => ref_without_extension(path),
-        Some(file_schema::Content::EmbeddedPlaintext(plaintext)) => Ok(
-            ContentSourceType::Embedded(ContentType::Plaintext, &plaintext),
-        ),
+        Some(file_schema::Content::EmbeddedPlaintext(plaintext)) => {
+            Ok(ContentSourceType::Embedded(Content {
+                content_type: ContentType::Plaintext,
+                raw: plaintext,
+            }))
+        }
         Some(file_schema::Content::FileRef { src, .. }) => {
             if let Some(src) = src {
                 let mut path = PathBuf::from(path);
@@ -124,29 +128,21 @@ fn extract_content_source(
 
 fn load_content_source(source_type: ContentSourceType) -> ContentResult<Content> {
     Ok(match source_type {
-        ContentSourceType::Embedded(content_type, raw) => Content {
-            content_type,
-            raw: raw.to_string(),
-        },
+        ContentSourceType::Embedded(content) => content,
         ContentSourceType::FileRef(path) => match path.extension() {
-            Some(ext) => match ext.to_string_lossy().as_ref() {
-                "html" | "htm" => Content {
-                    content_type: ContentType::Html,
-                    raw: fs::read_to_string(path)?,
-                },
-                "md" | "markdown" => Content {
-                    content_type: ContentType::Markdown,
-                    raw: fs::read_to_string(path)?,
-                },
-                "txt" => Content {
-                    content_type: ContentType::Plaintext,
-                    raw: fs::read_to_string(path)?,
-                },
-                _ => Err(format!(
-                    "Unsupported content at path {}",
-                    path.to_string_lossy()
-                ))?,
-            },
+            Some(ext) => {
+                let content_type = match ext.to_string_lossy().as_ref() {
+                    "html" | "htm" => ContentType::Html,
+                    "md" | "markdown" => ContentType::Markdown,
+                    "txt" => ContentType::Plaintext,
+                    _ => Err(format!(
+                        "Unsupported content at path {}",
+                        path.to_string_lossy()
+                    ))?,
+                };
+                let raw = fs::read_to_string(path).map_err(|e| e.to_string())?;
+                Content { content_type, raw }
+            }
             None => Err(format!("No extension on file {}", path.to_string_lossy()))?,
         },
     })
@@ -163,5 +159,11 @@ fn transform_content(content: Content) -> ContentResult<TransformedContent> {
             html: content.raw,
             assets: vec![],
         }),
+    }
+}
+
+impl<T: ToString> From<T> for NonDocument {
+    fn from(err: T) -> Self {
+        NonDocument::Invalid(err.to_string())
     }
 }
