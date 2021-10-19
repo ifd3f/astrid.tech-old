@@ -177,9 +177,9 @@ Here is a listing of hardware I worked with:
 | zerg-4[^fn-4]     | Orange Pi One       | arm   | sun8iw7p1     | 4      | 0.5      | k3s                   |
 | **Total**         | ---                 | ---   | ---           | **28** | **23.5** | **Wasting my Time**   |
 
-![Raspberry Pis involved in the cluster.](/_/2021/01/27/0/pi-clustering/nodezzz.jpeg)
+![Raspberry Pis involved in the cluster.](/_/2021/01/27/pi-clustering/nodezzz.jpeg)
 
-![Hello from CyberCthulu](/_/2021/01/21/0/janky-kube-cluster/cluster.jpeg)
+![Hello from CyberCthulu](/_/2021/01/21/janky-kube-cluster/cluster.jpeg)
 
 #### Public Cloud
 
