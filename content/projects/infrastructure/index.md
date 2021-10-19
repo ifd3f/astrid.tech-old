@@ -50,14 +50,14 @@ I'm currently at college, but I've brought my homelab with me!
 
 My homelab at my apartment in SLO consists of a cascaded router setup. That is,
 we have a router for the rest of the house, and I have a router specifically for
-my room. Just like Texas with ERCOT!
+my room. Just like Texas with ERCOT! I sure hope I don't end up like Texas with
+ERCOT...
 
 ![The Texas power grid compared to the rest of US/Canada.](./ercot.jpg)
 
-I sure hope I don't end up like Texas with ERCOT...
-
 The reason I do this is so that I don't accidentally break the rest of the LAN
-with my shenanigans.
+with my shenanigans. In other words, I expect that I'll end up like Texas, but
+I'm trying to prevent the problems from reaching everyone else.
 
 #### Planned segments
 
@@ -133,6 +133,8 @@ I have 2 Always Free VPSes in Oracle Cloud. I run the astrid.tech backend on
 one, and I'm planning on using the other as a VPN lighthouse.
 
 ## History
+
+This is the history of my attempts at system administration.
 
 ### v0 - Early Forays
 
@@ -390,6 +392,11 @@ update FreeIPA's server with Kubernetes Ingress entries. See
 | [KubeDB](https://kubedb.com/)                      | A Kubernetes operator that manages databases                  | Kubernetes     |
 | External DNS                                       | Adds Kubernetes Ingress entries to Cloudflare and FreeIPA DNS | Kubernetes     |
 
+FreeIPA managed the `s.astrid.tech` and `p.astrid.tech` namespaces, where `s`
+stands for **service** and `p` stands for **private**. I would register FreeIPA
+clients on the `p` namespace, and internal services on the `s` namespace (like
+`longhorn.s.astrid.tech`, `firefly.s.astrid.tech`, `grafana.s.astrid.tech`...)
+
 #### End-User Services
 
 | Name                  | Status    | Description                                                                   | Deployed on |
@@ -433,14 +440,43 @@ However, there were some bad things as well:
 
 ### v4 - Attempts at fully-automated deployment
 
-I tore down my homelab again. This time, I wanted to create a more GitOps-like
-workflow: being able to automatically deploy _everything_, simply by pushing my
-configs to `main`.
+I tore down my homelab again. This time, I wanted to automate as much as
+possible. My primary goals were:
+
+- after installing the OSes on the bare metal machines, I can set all of them up
+  by executing a single command
+- to create a more GitOps-like workflow where I can automatically deploy
+  _everything_, simply by pushing my configs to `main`
 
 #### Experiments with Ansible-based automated infrastructure bootstrapping
 
-Coming soon!
+My first attempts revolved around a core idea: what if I had a central Ansible
+playbook that would do everything for me?
 
-### v4.1 - Current NixOS Deployment
+To reduce configuration drift, I also attempted to set up Packer. The rest of
+this section is coming soon...
 
-Coming soon!
+#### NixOS!
+
+I don't exactly remember when I first found out about Nix, but it was sometime
+last year. It seemed like an interesting concept, but I didn't use it as
+anything more than a package manager with unstable/bleeding-edge packages. At
+some point, I wanted to distrohop BANANA (it was on Ubuntu at the time). Arch
+Linux and NixOS were my top two candidates to hop to. Unfortunately, I had an
+extremely weird partitioning scheme involving Windows dual-boot, ext4, and a
+strange LVM topology, so I couldn't figure out how to configure Nix to work with
+it at the time. Additionally, I didn't want to spend much time learning the Nix
+language at that moment as I was lazy, and I was more interested in having a
+functional[^fn-4] computer again. I ended up installing Arch, and it seems to
+mostly work!
+
+However, while researching how to automatically bootstrap and update my cluster,
+I met [Vika](https://fireburn.ru/) in the [IndieWeb](https://indieweb.org/) IRC.
+She told me about her
+[Nix-based setup](https://gitlab.com/vikanezrimaya/nix-flake), and I realized
+that NixOS was perfect for what I was trying to do!
+
+So, I turned my infra repo into a Nix flake, installed NixOS on Bongus, and that
+leads us to my current setup.
+
+[^fn-5]: No, not like Nix functional, I mean _working_ functional.
