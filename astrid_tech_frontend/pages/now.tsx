@@ -28,7 +28,7 @@ function Detail() {
       <ul>
         <li>
           Set up the 4th iteration of my{" "}
-          <Link href="/projects/plebscale">homelab</Link>
+          <Link href="/projects/infrastructure">homelab</Link>
         </li>
         <li>Write more content for this website</li>
         <li>Meet more people at school, since it's in-person</li>

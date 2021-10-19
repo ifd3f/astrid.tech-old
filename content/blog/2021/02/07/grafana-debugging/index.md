@@ -3,7 +3,7 @@ title: Taking pictures with Kubernetes and debugging it with Grafana
 date: 2021-02-07 02:37:00-08:00
 description: A case of mistaken causes
 tags:
-  - /projects/plebscale/
+  - /projects/infrastructure/
   - /projects/quadfrost-leds/
   - kubernetes
   - grafana

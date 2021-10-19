@@ -42,6 +42,32 @@ the Kubernetes cluster into my setup.
 
 ## Current Infrastructure Setup
 
+### Network Topology
+
+I'm currently at college, but I've brought my homelab with me!
+
+#### My apartment
+
+My homelab at my apartment in SLO consists of a cascaded router setup. That is,
+we have a router for the rest of the house, and I have a router specifically for
+my room. Just like Texas with ERCOT!
+
+![The Texas power grid compared to the rest of US/Canada.](./ercot.jpg)
+
+I sure hope I don't end up like Texas with ERCOT...
+
+The reason I do this is so that I don't accidentally break the rest of the LAN
+with my shenanigans.
+
+#### Planned segments
+
+My homelab at my _home_ home back in the bay is currently shut off. However,
+next time I get there, I'll be setting up a Raspberry Pi jump server there so I
+can pretend my homelab is multi-site.
+
+Additionally I plan on setting up a Wireguard VPN soon, with an Oracle Cloud VPS
+as the primary connection endpoint.
+
 ### Personal Computers
 
 #### BANANA
@@ -51,7 +77,7 @@ This is my usually-stay-at-home laptop with the following specs:
 - **Hostname:** banana.id.astrid.tech
 - **Model:** Lenovo Legion Y530-15ICH-1060
 - **OS:** Arch Linux/Windows 10 Dual Boot
-- **CPU:** Intel i5-8300H
+- **CPU:** Intel i5-8300H (8 core)
 - **RAM:** 32GiB
 - **GPU:** NVIDIA GeForce GTX 1060 Mobile
 - **Monitors:** 1920x1080, 2560x1440, 3840x2160
@@ -64,10 +90,10 @@ The dotfiles in ~astrid are managed using
 Cracktop is my travel laptop that I bring to and from school. It was my old
 laptop from high school.
 
-- **Hostname:** cracktop.id.astrid.tech
+- **Hostname:** cracktop-pc.id.astrid.tech
 - **Model:** HP Pavilion 13 x360
 - **OS:** NixOS Unstable
-- **CPU:** Intel i5-6300U
+- **CPU:** Intel i5-6300U (4 core)
 - **RAM:** 8GiB
 - **Monitors:** 1920x1080
 
@@ -81,16 +107,25 @@ There are a couple reasons why I use it despite its cracked screen:
 
 ### Workload Servers
 
-Coming soon!
+#### Bongus
+
+This server was an absolute steal I got off of eBay for \$200.
+
+- **Hostname:** bongus-hv.id.astrid.tech
+- **Model:** HP ProLiant DL380P Gen8
+- **OS:** NixOS Unstable
+- **CPU:** 2x Intel Xeon (2x8 phys. core, 2x16 virt. core)
+- **RAM:** 96GiB
+
+Unfortunately, it eats a lot of power, so I'm only turning it on sporadically
+when I need to heat my room.
 
 ### Jump Servers
 
 Jump servers are low-power SBCs that are always on, and can be used to send
-Wake-on-LAN packets to other machines. However, I intend to get rid of those and
-move to a Wireguard VPN-based way of connecting to my servers outside of LAN.
-
-Currently, I have only one jump server, and that is jonathan-js, a Raspberry
-Pi 3.
+Wake-on-LAN packets to other machines. However, I intend to set up Wireguard
+VPN, so I can relegate these to a Wake-on-LAN-plus-other-stuff role. Currently,
+I have only one jump server, and that is jonathan-js, a Raspberry Pi 3.
 
 ### Oracle Cloud
 
@@ -148,7 +183,8 @@ I consider this v1 of my homelab because it was something actually functional
 for a while. Although the service declarations were in a sort of modular Docker
 Compose architecture, they were all updated manually by SSHing in and
 essentially running `git pull && docker-compose up`.
-[Here are the last version of the configs before I modernized it](https://github.com/astralbijection/infra/tree/v1-final).
+[Here is the last version of the configs](https://github.com/astralbijection/infra/tree/v1-final)
+before I incorporated it into the rest of my monorepo.
 
 ### v2 - On-Premises Cloud
 
@@ -204,25 +240,37 @@ These services were deployed on the on-site hardware.
 | MySQL/MariaDB                                      | Database                                                                                                   | LXC                          |
 | Postgres                                           | Database                                                                                                   | LXC                          |
 | [Docker Compose](https://docs.docker.com/compose/) | Multi-container applications stack, useful for servers dedicated to a single purpose                       | Bare metal                   |
-| NFS                                                | File storage                                                                                               | LXC                          |
+| NFS                                                | File storage for specific Kubernetes services                                                              | LXC                          |
+| Samba                                              | File and OS image storage                                                                                  | LXC                          |
 
 #### End-User Services
 
 These were the services I actually ran, and some I planned on running but never
 ended up getting done in v2.
 
-| Name                  | Status    | Deployed on    | Description                                                                   |
-| --------------------- | --------- | -------------- | ----------------------------------------------------------------------------- |
-| OctoPrint             | Deployed  | Bare Metal     | 3D Printer sender with web UI                                                 |
-| Firefly III           | Deployed  | k3s            | Budgeting App                                                                 |
-| Printer Image Snapper | Deployed  | k3s            | Periodically takes pictures of my 3D Printer and uploads them to the internet |
-| DokuWiki, D&D         | Deployed  | Docker Compose | A wiki for worldbuilding my D&D campaign                                      |
-| Trilium Notes         | Deployed  | k3s            | Personal wiki/note-taking for school and more                                 |
-| Apache Spark          | _Planned_ | k3s            | Big Data processing engine                                                    |
-| Jupyter Notebook      | _Planned_ | k3s            | Interactive code notebooks                                                    |
-| Bookstack             | _Planned_ | k3s            | "Internal" wiki for documenting this thing                                    |
-| ELabFTW               | _Planned_ | k3s            | Lab notes                                                                     |
-| NextCloud             | _Planned_ | k3s            | Personal cloud                                                                |
+| Name                  | Status    | Description                                                                   | Deployed on    |
+| --------------------- | --------- | ----------------------------------------------------------------------------- | -------------- |
+| OctoPrint             | Deployed  | 3D Printer sender with web UI                                                 | Bare Metal     |
+| Firefly III           | Deployed  | Budgeting App                                                                 | k3s            |
+| Printer Image Snapper | Deployed  | Periodically takes pictures of my 3D Printer and uploads them to the internet | k3s            |
+| D&D Dokuwiki          | Deployed  | A wiki for worldbuilding my D&D campaign                                      | Docker Compose |
+| Trilium Notes         | Deployed  | Personal wiki/note-taking for school and more                                 | k3s            |
+| Apache Spark          | _Planned_ | Big Data processing engine                                                    | k3s            |
+| Deluge                | _Planned_ | Torrenting server                                                             | k3s            |
+| Jupyter Notebook      | _Planned_ | Interactive code notebooks                                                    | k3s            |
+| Bookstack             | _Planned_ | "Internal" wiki for documenting this thing                                    | k3s            |
+| ELabFTW               | _Planned_ | Lab notes                                                                     | k3s            |
+| NextCloud             | _Planned_ | Personal cloud                                                                | k3s            |
+
+Of course, in Kubernetes, every service gets its own Ingress. However, these are
+internal services so it seems like somewhat of an antipattern to add A records
+pointing to 192.168.xxx.xxx in Cloudflare. My solution to this was just to add
+janky entries to my /etc/hosts and "fix it later"
+([in v2 of my homelab](/2021/04/17/0/k8s-freeipa-dns)):
+
+```
+192.168.1.xxx firefly.astrid.tech grafana.astrid.tech prometheus.astrid.tech ...
+```
 
 [^fn-1]:
     My mom complained about it being really slow, and even with Linux, it's
@@ -285,57 +333,114 @@ digraph {
 | Fluent-bit | Logs          | Reads logs from each node's containers | k3s, Docker Compose |
 | Fluentd    | Logs          | Centrally parses and processes logs    | k3s                 |
 | Loki       | Logs          | Stores and indexes logs                | k3s                 |
-| Prometheus | Metrics       | Stores and indexes logs                | k3s                 |
-| Loki       | Visualization | Stores and indexes logs                | k3s                 |
+| Prometheus | Metrics       | Stores and indexes metrics             | k3s                 |
+| Grafana    | Visualization | Graphs and visualizes everything!      | k3s                 |
 
 ![Look at this graaaaaaaph, every time I look it makes me laugh](./grafana.png)
 
-### v3 - Kubernetes-Focused Cloud
+#### Reflection
 
-There were a couple of issues with v2, however.
+This was my first foray into Kubernetes, and with a homelab, so despite all the
+learning curves, I think I did great here! However, there were a lot of things
+that I could have done better with this setup.
 
 - **Ephemeral Kubernetes volumes.** I didn't have any centralized storage, or
   some kind of sane storage management, so whenever a Kubernetes pod died, it
   would lose all its data.
 - **Mixed-architecture clustering is hard.** You may notice I had both ARM and
-  x86 machines. It's very hard to do this. I do not recommend it.
+  x86 machines. Some Docker images only support one architecture at a time. It's
+  very hard to do this. I do not recommend it.
 - **Low-end machines could not support virtualization.** It was a stupid idea to
   run Proxmox on badtop with its Pentium and 4GB RAM.
 - **No domain controller.** I wanted to set up FreeIPA, but I didn't have the
   resources to do it.
 
-For this and a variety of other erasons, I decided to wipe clean my homelab and
-start anew.
+### v3 - Kubernetes-Focused Cloud
+
+I decided to tear down my homelab and start anew, to fix all the issues I had
+with v2. This included reinstalling Proxmox, as well.
 
 This time, I had a similar stack, but with a few critical differences, making my
 Kubernetes setup less painful.
 
 #### On-Site Hardware
 
+I dropped all the ARM machines. Mixed-architecture is too hard. Additionally,
+for some machines, I installed k3s on bare metal.
+
 | Name     | Model               | Arch  | Processor     | Cores | RAM (GB) | Role                  |
 | -------- | ------------------- | ----- | ------------- | ----- | -------- | --------------------- |
 | badtop   | Acer Aspire E1-510  | amd64 | Pentium N3520 | 4     | 4        | Bare Metal: k3s       |
 | cracktop | HP Pavilion x360 13 | amd64 | i5-2520M      | 4     | 8        | Proxmox: k3s          |
 | thonkpad | Thinkpad T420       | amd64 | i5-6200U      | 4     | 8        | Proxmox: k3s, FreeIPA |
+| deskrap  | Dell Optiplex 360   | amd64 | Intel Q????   | 4     | 3        | Bare Metal: k3s       |
 
 #### Infrastructure Services
 
-| Name                                               | Description                                           | Deployed on    |
-| -------------------------------------------------- | ----------------------------------------------------- | -------------- |
-| [Proxmox](https://www.proxmox.com/)                | An open-source Type 1 Hypervisor OS                   | Bare metal     |
-| [K3s](https://k3s.io/)                             | A lightweight Kubernetes distribution                 | VM, bare metal |
-| [FreeIPA](https://www.freeipa.org/)                | An all-in-one package for Identity, Policy, and Audit | VM             |
-| [Longhorn](https://rancher.com/products/longhorn/) | A distributed storage solution for Kubernetes         | Kubernetes     |
-| [KubeDB](https://kubedb.com/)                      | A Kubernetes operator that manages databases          | Kubernetes     |
+Note that this time I actually managed DNS! This was done by having External DNS
+update FreeIPA's server with Kubernetes Ingress entries. See
+[this post](/2021/04/17/0/k8s-freeipa-dns) for more information.
+
+| Name                                               | Description                                                   | Deployed on    |
+| -------------------------------------------------- | ------------------------------------------------------------- | -------------- |
+| [Proxmox](https://www.proxmox.com/)                | An open-source Type 1 Hypervisor OS                           | Bare metal     |
+| [K3s](https://k3s.io/)                             | A lightweight Kubernetes distribution                         | VM, bare metal |
+| [FreeIPA](https://www.freeipa.org/)                | An all-in-one package for Identity, Policy, and Audit         | VM             |
+| [Longhorn](https://rancher.com/products/longhorn/) | A distributed storage solution for Kubernetes                 | Kubernetes     |
+| [KubeDB](https://kubedb.com/)                      | A Kubernetes operator that manages databases                  | Kubernetes     |
+| External DNS                                       | Adds Kubernetes Ingress entries to Cloudflare and FreeIPA DNS | Kubernetes     |
 
 #### End-User Services
 
+| Name                  | Status    | Description                                                                   | Deployed on |
+| --------------------- | --------- | ----------------------------------------------------------------------------- | ----------- |
+| OctoPrint             | Deployed  | 3D Printer sender with web UI                                                 | Bare Metal  |
+| Firefly III           | Deployed  | Budgeting App                                                                 | k3s         |
+| Printer Image Snapper | Deployed  | Periodically takes pictures of my 3D Printer and uploads them to the internet | k3s         |
+| ELabFTW               | Deployed  | Lab notes                                                                     | k3s         |
+| Homer                 | Deployed  | Homepage linking together all of my services                                  | k3s         |
+| D&D Dokuwiki          | Deployed  | A wiki for worldbuilding my D&D campaign                                      | k3s         |
+| Matrix Homeserver     | _Planned_ | Self-hosted chat app                                                          | k3s         |
+| Jellyfin              | _Planned_ | Media server                                                                  | k3s         |
+| Samba                 | _Planned_ | A fileshare for all my files, it would connect to Jellyfin                    | LXC         |
+| Deluge                | _Planned_ | Torrenting server                                                             | k3s         |
+| Trilium Notes         | _Planned_ | Personal wiki/note-taking for school and more                                 | k3s         |
+| Jupyter Notebook      | _Planned_ | Interactive code notebooks                                                    | k3s         |
+| Bookstack             | _Planned_ | "Internal" wiki for documenting this thing                                    | k3s         |
+| NextCloud             | _Planned_ | Personal cloud                                                                | k3s         |
+| Apache Spark          | _Planned_ | Big Data processing engine                                                    | k3s         |
+
+#### Monitoring
+
+I used the same exact stack as in v2 with minimal modifications.
+
+#### Reflection
+
+There were lots of good things about v3. Some of the good things were:
+
+- Kubernetes storage was a lot simpler now that I had Longhorn.
+- I ended up deploying more services and it was a lot nicer to deploy them.
+
+However, there were some bad things as well:
+
+- You may notice that I dropped a lot of services. I planned to deploy them but
+  never ended up doing it.
+- The FreeIPA VM ate a lot of RAM. I didn't have as much capacity to deploy my
+  services as a result.
+- Most of this was still manually set up. The Kubernetes cluster, for example,
+  was manually set up using `k3sup`.
+- My Oracle Cloud VPS was still deploying using v1!
+
+### v4 - Attempts at fully-automated deployment
+
+I tore down my homelab again. This time, I wanted to create a more GitOps-like
+workflow: being able to automatically deploy _everything_, simply by pushing my
+configs to `main`.
+
+#### Experiments with Ansible-based automated infrastructure bootstrapping
+
 Coming soon!
 
-### Experiments with Ansible-based automated infrastructure bootstrapping
-
-Coming soon!
-
-### Current NixOS Deployment
+### v4.1 - Current NixOS Deployment
 
 Coming soon!

@@ -261,7 +261,7 @@ offered not one, but _both_ positions! I could only pick one, so I chose
 Production Engineering. The reason I chose it, despite having gone through a
 harder interview, was due to several reasons. First, since it was harder, I'll
 end up learning more things. Second, I was working on my
-[homelab](/projects/plebscale) at the time, and I find it to be an interesting
+[homelab](/projects/infrastructure) at the time, and I find it to be an interesting
 field of study. Third, I think Facebook would be the best place to do something
 like Production Engineering, because they offer services to billions of users,
 and it would be a perfect opportunity to learn about systems at scale that way.

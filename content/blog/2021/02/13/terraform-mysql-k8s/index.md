@@ -5,7 +5,7 @@ title:
 date: 2021-02-13 12:10:50-08:00
 description: DATABASES! I didn't say it, I DECLARED it!
 tags:
-  - /projects/plebscale/
+  - /projects/infrastructure/
   - terraform
   - mysql
   - proxmox
