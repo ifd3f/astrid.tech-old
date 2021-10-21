@@ -1,4 +1,5 @@
 # Build outputs
+gen/
 *.html
 *.pdf
 
