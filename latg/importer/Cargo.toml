@@ -8,6 +8,7 @@ html-escape = "*"
 pulldown-cmark = "*"
 serde_json = "*"
 serde_yaml = "*"
+thiserror = "*"
 toml = "*"
 
 [dependencies.chrono]
@@ -25,7 +26,6 @@ version = "*"
 [dependencies.uuid]
 features = ["serde"]
 version = "*"
-
 
 [dev-dependencies]
 rstest = "*"
