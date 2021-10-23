@@ -18,9 +18,14 @@ version = "*"
 features = ["derive"]
 version = "*"
 
+[dependencies.tokio]
+features = ["rt", "fs", "macros", "io-util", "process"]
+version = "*"
+
 [dependencies.uuid]
 features = ["serde"]
 version = "*"
+
 
 [dev-dependencies]
 rstest = "*"

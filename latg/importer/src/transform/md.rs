@@ -28,6 +28,6 @@ All according to keikaku[^1]!
     fn test_footnote() {
         let html = transform_markdown("foo", FOOTNOTE_CASE);
 
-        assert_eq!(html, "f");
+        assert!(html.contains(r#"class="footnote-definition""#), "HTML output: {}", html);
     }
 }
