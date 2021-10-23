@@ -1,5 +1,22 @@
 /* TEAM */
-	Your title: Astrid Yu
-	Site: astrid@astrid.tech
+	Creator: Astrid Yu
+	Developer: Astrid Yu
+	CEO: Astrid Yu
+	CTO: Astrid Yu
+	CFO: Astrid Yu
+	Writer: Astrid Yu
+	Editor: Astrid Yu
+	COO: Astrid Yu
+	SEO Specialist: Astrid Yu
+	Publisher: Astrid Yu
+	Developer: Astrid Yu
+	Developers: Astrid Yu
+	Developers: Astrid Yu
+	Developers: Astrid Yu
+	Developers: Astrid Yu
+	CIO: Astrid Yu
+	Founder: Astrid Yu
+	Site: https://astrid.tech
+	Email: astrid@astrid.tech
 	Twitter: @astralbijection
 	Location: California, USA
