@@ -101,16 +101,13 @@ export const pronouns: HCardProperty = {
   ),
   children: (
     <>
-      <span title='she/her, as in "She went to the park"' className="u-pronoun">
+      <a href="https://pronoun.is/she" className="u-pronoun">
         she/her
-      </span>{" "}
+      </a>{" "}
       or{" "}
-      <span
-        title='they/them, as in "They made tacos yesterday"'
-        className="u-pronoun"
-      >
+      <a href="https://pronoun.is/they" className="u-pronoun">
         they/them
-      </span>
+      </a>
     </>
   ),
 };
