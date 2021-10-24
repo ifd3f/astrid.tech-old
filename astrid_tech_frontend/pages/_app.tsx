@@ -15,11 +15,15 @@ import { useRouter } from "next/router";
 ReactGA.initialize("UA-171109022-1");
 
 export default function MyApp({ Component, pageProps }: AppProps) {
-  const { pathname, query } = useRouter();
+  const { asPath, isReady } = useRouter();
 
+  // Hook for Google Analytics
   useEffect(() => {
-    ReactGA.pageview(pathname + query);
-  }, [pathname, query]);
+    if (!isReady) {
+      return;
+    }
+    ReactGA.pageview(asPath);
+  }, [asPath, isReady]);
 
   return (
     <TagTableProvider tags={tags}>
