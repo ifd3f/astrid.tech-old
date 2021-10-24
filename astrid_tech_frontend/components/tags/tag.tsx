@@ -1,11 +1,11 @@
 import classNames from "classnames";
-import { FC, ReactNode, useState } from "react";
+import Link from "next/link";
+import React, { FC, ReactNode, useState } from "react";
 import { BsCaretLeftFill } from "react-icons/bs";
 import { Badge } from "reactstrap";
 import { Tag } from "../../types/types";
 import style from "./tag.module.scss";
 import { useTagTable } from "./TagTableProvider";
-import Link from "next/link";
 
 type TagBadgeProps = {
   tag: Tag | string;
@@ -87,24 +87,17 @@ export const TagList: FC<TagListProps> = ({
   );
 
   return (
-    <div className={className}>
-      <p
-        style={{
-          fontSize: "12pt",
-          marginBottom: 3,
-        }}
-      >
-        {shownTags.map((tag) => (
-          <>
-            <TagBadge key={tag} tag={tag} link={link} relTag={relTag} />{" "}
-          </>
-        ))}
-        {excluded.length > 0 ? (
-          <Badge title={alt} onClick={onClick} style={{ cursor: "pointer" }}>
-            {openBadgeText}
-          </Badge>
-        ) : null}
-      </p>
-    </div>
+    <span>
+      {shownTags.map((tag) => (
+        <React.Fragment key={tag}>
+          <TagBadge tag={tag} link={link} relTag={relTag} />{" "}
+        </React.Fragment>
+      ))}
+      {excluded.length > 0 ? (
+        <Badge title={alt} onClick={onClick} style={{ cursor: "pointer" }}>
+          {openBadgeText}
+        </Badge>
+      ) : null}
+    </span>
   );
 };
