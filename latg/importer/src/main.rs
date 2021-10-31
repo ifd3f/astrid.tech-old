@@ -8,6 +8,7 @@ extern crate serde;
 pub mod file_schema;
 mod load_content;
 pub mod transform;
+pub mod file_gen;
 
 fn main() {
     println!("Hello, world!");

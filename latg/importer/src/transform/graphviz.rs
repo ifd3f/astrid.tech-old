@@ -30,7 +30,7 @@ pub async fn transform_graphviz_to_svg(
 
     let mut svg = String::new();
     reader.read_to_string(&mut svg).await?;
-    if (svg.is_empty()) {
+    if svg.is_empty() {
         Err(InvalidGraphviz)?;
     }
 

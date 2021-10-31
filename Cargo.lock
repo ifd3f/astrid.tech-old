@@ -1063,6 +1063,7 @@ dependencies = [
  "chrono",
  "gray_matter",
  "html-escape",
+ "md5",
  "pulldown-cmark",
  "rstest 0.11.0",
  "serde",
@@ -1072,6 +1073,7 @@ dependencies = [
  "tokio",
  "toml 0.5.8",
  "uuid",
+ "vfs",
 ]
 
 [[package]]
@@ -1187,6 +1189,12 @@ name = "matches"
 version = "0.1.9"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "a3e378b66a060d48947b590737b30a1be76706c8dd7b8ba0f2fe3989c68a853f"
+
+[[package]]
+name = "md5"
+version = "0.7.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "490cc448043f947bae3cbee9c203358d62dbee0db12107a74be5c30ccfd09771"
 
 [[package]]
 name = "memchr"
@@ -3088,6 +3096,15 @@ name = "version_check"
 version = "0.9.3"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "5fecdca9a5291cc2b8dcf7dc02453fee791a280f3743cb0905f8822ae463b3fe"
+
+[[package]]
+name = "vfs"
+version = "0.5.1"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "feb0df0abbe81534013b326c5e3d723a2c9b06c04160fa0f7d8b4d42eb9b7052"
+dependencies = [
+ "thiserror",
+]
 
 [[package]]
 name = "want"

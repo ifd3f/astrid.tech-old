@@ -1,6 +1,6 @@
 use std::path::Path;
 
-use pulldown_cmark::{html, Options, Parser};
+use pulldown_cmark::{CodeBlockKind, Event, Options, Parser, html};
 
 pub fn transform_markdown(path: impl AsRef<Path>, markdown: impl AsRef<str>) -> String {
     let mut options = Options::all();
