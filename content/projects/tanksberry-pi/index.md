@@ -23,9 +23,73 @@ source: [https://github.com/astralbijection/tanksberry-pi]
 thumbnail: ./thumbnail.jpg
 ---
 
-Jesus Christ, I don't know what the hell I was thinking with this one.
+This is a tank with a functional fully 3d-printed autoloading airsoft pellet firing mechanism.
 
 <iframe width="560" height="315" src="https://www.youtube.com/embed/RDCPD6-U2Ko" frameborder="0" allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+
+## Electronics
+
+```dot
+digraph "Tanksberry Pi" {
+    node [shape=box]
+    label = "Electrical Block Diagram"
+    
+    subgraph cluster_tank {
+        label = "Tank"
+        
+        bat [label="7.4v LiPo Battery"]
+        sd5v [label="12V-5V 3A Stepdown"]
+        
+        l239d [label="L239D"]
+        ml [label="Left Motor"]
+        mr [label="Right Motor"]
+        
+        sty [label="Yaw Stepper"]
+        
+        subgraph cluster_deck {
+            label = "Deck"
+            rpi [label="Raspberry Pi 2B"]
+            wifi [label="Wifi Card"]
+            ss0 [label="StepStick 0"]
+        }
+    
+        subgraph data {
+            edge [style=dashed]
+            
+            rpi -> wifi [label="USB" dir="both"]
+            rpi -> anano [label="I2C"]
+            rpi -> ss0
+            rpi -> l239d
+            
+            anano -> {ss1, ss2, laserctl}
+        }
+        
+        subgraph power {
+            edge [color=red, fontcolor=red]
+            
+            ss0 -> sty
+            ss1 -> stp
+            ss2 -> stf
+            
+            bat -> {l239d, ss0, ss1, ss2, sd5v} [label="7.4V"]
+            sd5v -> {rpi, anano, laserctl} [label="5V"]
+            laserctl -> laser [label="5V"]
+            l239d -> {ml, mr} [label="±7.4V"]
+        }
+        
+        subgraph cluster_turret {
+            label = "Turret Assembly"
+            anano [label="Arduino Pro Mini"]
+            ss1 [label="StepStick 1"]
+            ss2 [label="StepStick 2"]
+            stp [label="Pitch Stepper"]
+            stf [label="Firing Stepper"]
+            laser [label="Laser Diode"]
+            laserctl [label="NPN Transistor"]
+        }
+    }
+}
+```
 
 CAD Model of the Turret
 
