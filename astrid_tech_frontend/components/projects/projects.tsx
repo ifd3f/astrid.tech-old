@@ -1,3 +1,4 @@
+import { useNSFW } from "components/nsfw";
 import Fuse from "fuse.js";
 import { ChangeEventHandler, FC, useContext, useState } from "react";
 import { BsCaretDown, BsCaretUp, BsX } from "react-icons/bs";
@@ -208,20 +209,24 @@ export const CardGroup: FC<CardGroupProps> = ({
 };
 
 export const ProjectCardsView: FC = () => {
-  const { isSearching, displayedProjects } = useContext(SearchContext);
+  const { displayedProjects } = useContext(SearchContext);
+  const { enabled: nsfwEnabled } = useNSFW();
+
   return (
     <Row>
-      {displayedProjects.map((project) => (
-        <Col
-          xs="12"
-          md="6"
-          xl="4"
-          key={project.slug}
-          className={styles.projectCardWrapper}
-        >
-          <ProjectCard project={project} />
-        </Col>
-      ))}
+      {displayedProjects
+        .filter((project) => !project.tags.includes("nsfw") || nsfwEnabled)
+        .map((project) => (
+          <Col
+            xs="12"
+            md="6"
+            xl="4"
+            key={project.slug}
+            className={styles.projectCardWrapper}
+          >
+            <ProjectCard project={project} />
+          </Col>
+        ))}
     </Row>
   );
 };

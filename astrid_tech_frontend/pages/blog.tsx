@@ -12,6 +12,7 @@ import { getBlogPosts } from "../lib/cache";
 import { excerptify } from "../lib/markdown";
 import styles from "../styles/blog.module.scss";
 import { convertBlogPostToObjectDate } from "../types/types";
+import { useNSFW } from "components/nsfw";
 
 export const getStaticProps = async () => {
   const posts = await Promise.all(getBlogPosts().map(excerptify(280)));
@@ -58,12 +59,15 @@ export const BlogPage: FC<InferGetStaticPropsType<typeof getStaticProps>> = ({
   posts,
 }) => {
   const meta = "Archives of all my posts";
+  const { enabled: nsfwEnabled } = useNSFW();
 
   const blogFeed = (
     <>
-      {posts.map((post) => (
-        <PostBrief key={post.slug} post={convertBlogPostToObjectDate(post)} />
-      ))}
+      {posts
+        .filter((post) => !post.tags.includes("nsfw") || nsfwEnabled)
+        .map((post) => (
+          <PostBrief key={post.slug} post={convertBlogPostToObjectDate(post)} />
+        ))}
       <p className="text-center text-muted">(End of posts)</p>
     </>
   );

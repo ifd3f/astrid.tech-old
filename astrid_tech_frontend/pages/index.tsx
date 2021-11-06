@@ -50,9 +50,11 @@ const Page: FC<InferGetStaticPropsType<typeof getStaticProps>> = ({
         </a>
       </h2>
 
-      {posts.map((post) => (
-        <PostBrief key={post.slug} post={convertBlogPostToObjectDate(post)} />
-      ))}
+      {posts
+        .filter((post) => !post.tags.includes("nsfw"))
+        .map((post) => (
+          <PostBrief key={post.slug} post={convertBlogPostToObjectDate(post)} />
+        ))}
       <p className="text-center text-muted">
         <Link href="/blog">See more posts</Link>
       </p>

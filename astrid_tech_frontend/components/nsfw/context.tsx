@@ -9,13 +9,12 @@ export type NSFWContextData = {
 const NSFWContext = createContext({} as NSFWContextData);
 
 export type NSFWProviderProps = {
-  root: string;
   children: ReactNode;
 };
 
 const NSFW_COOKIE_KEY = "enable-nsfw";
 
-export const NSFWProvider: FC<NSFWContextData> = ({ children }) => {
+export const NSFWProvider: FC<NSFWProviderProps> = ({ children }) => {
   const [cookies, setCookie] = useCookies([NSFW_COOKIE_KEY]);
 
   const enabled = cookies[NSFW_COOKIE_KEY] == "1";
