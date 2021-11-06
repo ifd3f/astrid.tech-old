@@ -3,6 +3,7 @@ import { FC, PropsWithChildren, ReactNode } from "react";
 import { Col, Container, Row } from "reactstrap";
 import style from "./footer.module.scss";
 import packageJson from "../../package.json";
+import { useNSFW } from "components/nsfw";
 
 export const Tea = () => {
   return (
@@ -117,6 +118,22 @@ const XXIIVVWebring: FC = () => {
   );
 };
 
+const NSFWToggle = () => {
+  const { enabled, setEnabled } = useNSFW();
+
+  return (
+    <p>
+      <input
+        type="checkbox"
+        checked={enabled}
+        onChange={() => setEnabled(!enabled)}
+      />{" "}
+      I am over the age of 18 and I am willing to see Not Safe For Work (NSFW)
+      content.
+    </p>
+  );
+};
+
 type WebRingProps = PropsWithChildren<{
   next: string;
   prev: string;
@@ -197,6 +214,10 @@ const FooterSection = () => {
                   <ContentLicense />
                 </Col>
               </Row>
+            </Row>
+
+            <Row className="small">
+              <NSFWToggle />
             </Row>
           </Col>
         </Row>
