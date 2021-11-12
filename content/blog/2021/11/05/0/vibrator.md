@@ -170,7 +170,7 @@ This device is almost a direct upgrade from the previous one.
   anywhere in the world via a Websocket relay!
   [See the project page for more details about that.](/projects/owostick) The
   uses of this relay system are as of yet unclear.
-- Since voltage has been doubled, the motor can deliver 4 times as much power!
+- Double the voltage means double the motor power!
 
 There are a few drawbacks, however.
 
@@ -178,5 +178,5 @@ There are a few drawbacks, however.
   opening through it, so it no longer protects the electronics from the external
   environment. To operate it in an environment with fluids, it must be wrapped
   in plastic wrap.
-- The external battery makes it bulkier, but that's the price you pay for 4x the
-  power.
+- The external battery makes it bulkier, but that's the price you pay for double
+  the power.
