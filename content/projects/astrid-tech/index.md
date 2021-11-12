@@ -1,11 +1,9 @@
 ---
-type: project
-
 title: astrid.tech v2
 status: complete
 featured: true
 description: This very website
-startDate: 2021-12-30
+startDate: 2020-03-22
 endDate: null
 tags:
   - react-js
