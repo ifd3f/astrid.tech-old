@@ -2,7 +2,8 @@
 title: null
 date: 2021-11-07 01:19:22-07:00
 ordinal: 0
-tags: []
+tags:
+  - /projects/astrid-tech
 ---
 
 My site now supports hidden content about NSFW topics! It's a bit janky, but if

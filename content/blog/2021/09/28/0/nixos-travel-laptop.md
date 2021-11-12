@@ -2,7 +2,8 @@
 title: null
 date: 2021-09-27 17:16:56-07:00
 ordinal: 0
-tags: []
+tags:
+  - nixos
 ---
 
 I'm currently trying to set up my old laptop as a travel laptop. My regular

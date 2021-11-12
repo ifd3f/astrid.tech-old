@@ -1,5 +1,8 @@
 ---
 date: 2021-09-04 21:55:00Z-07:00
+tags:
+  - /projects/astrid-tech
+  - webring
 ---
 
 I've joined the [IndieWebRing](https://xn--sr8hvo.ws/)! If you look at the

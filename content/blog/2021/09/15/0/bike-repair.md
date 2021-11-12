@@ -1,6 +1,8 @@
 ---
 date: 2021-09-15 04:32:05+00:00
 ordinal: 0
+tags:
+  - bike
 ---
 
 My bike's chain was quite loose, and it kept slipping off the gears and rattling

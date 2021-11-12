@@ -1,6 +1,8 @@
 ---
 date: 2021-09-22 19:37:44-07:00
 ordinal: 0
+tags:
+  - /projects/qr-tattoo
 ---
 
 Someone at

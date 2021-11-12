@@ -3,9 +3,9 @@ title: Can we turn smartphones into fax machines?
 date: 2021-10-21 22:51:53-07:00
 ordinal: 0
 tags:
-  - blogumentation
+  - research-notes
   - fax
-  - cparc
+  - w6bhz
   - ham-radio
 ---
 

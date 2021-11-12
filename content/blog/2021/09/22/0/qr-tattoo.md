@@ -6,7 +6,7 @@ ordinal: 0
 tags:
   - /projects/qr-tattoo
   - transhumanism
-  - blogumentation
+  - research-notes
 ---
 
 I'm already a transhuman trans humanist transhumanist human, so I thought, "why

@@ -1,6 +1,9 @@
 ---
 date: 2021-09-18 21:07:20-07:00
 ordinal: 0
+tags:
+  - /projects/astrid-tech
+  - ci-cd
 ---
 
 For some reason, my the automated build action for the Webmention receiver is

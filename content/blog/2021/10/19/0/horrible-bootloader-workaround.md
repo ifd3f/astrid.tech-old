@@ -5,6 +5,7 @@ date: 2021-10-18 19:20:01-07:00
 ordinal: 0
 tags:
   - jank
+  - incompetency
   - linux
   - blogumentation
 ---
