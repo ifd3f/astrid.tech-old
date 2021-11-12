@@ -3,7 +3,7 @@ title: QR Tattoo Preliminary Testing Results
 date: 2021-10-03 00:28:21-07:00
 ordinal: 0
 tags:
-  - qr-tattoo
+  - /projects/qr-tattoo
 ---
 
 Continuing from my

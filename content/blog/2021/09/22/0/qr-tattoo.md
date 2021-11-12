@@ -4,7 +4,7 @@ description: Leaning in *hard* on that cyberpunk aesthetic
 date: 2021-09-21 22:56:00-07:00
 ordinal: 0
 tags:
-  - qr-tattoo
+  - /projects/qr-tattoo
   - transhumanism
   - blogumentation
 ---
