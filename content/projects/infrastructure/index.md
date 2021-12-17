@@ -76,14 +76,11 @@ This is my usually-stay-at-home laptop with the following specs:
 
 - **Hostname:** banana.id.astrid.tech
 - **Model:** Lenovo Legion Y530-15ICH-1060
-- **OS:** Arch Linux/Windows 10 Dual Boot
+- **OS:** NixOS/Windows 10 Dual Boot
 - **CPU:** Intel i5-8300H (8 core)
 - **RAM:** 32GiB
 - **GPU:** NVIDIA GeForce GTX 1060 Mobile
 - **Monitors:** 1920x1080, 2560x1440, 3840x2160
-
-The dotfiles in ~astrid are managed using
-[Nix home-manager](https://github.com/nix-community/home-manager).
 
 #### Cracktop
 
