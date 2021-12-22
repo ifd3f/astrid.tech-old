@@ -103,10 +103,6 @@ export const pronouns: HCardProperty = {
     <>
       <a href="https://pronoun.is/she" className="u-pronoun">
         she/her
-      </a>{" "}
-      or{" "}
-      <a href="https://pronoun.is/they" className="u-pronoun">
-        they/them
       </a>
     </>
   ),
