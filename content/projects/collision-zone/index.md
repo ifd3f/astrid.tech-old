@@ -52,29 +52,32 @@ Here's a GIF of some AIs playing the game against each other!
 
 ## Technology Stack
 
-### The site views
+Frankly, I made it this way as an excuse to finally have a polyglot project.
 
-- **Instance Server** - A server that runs a single instance of the game. Needs
-  to be fast.
-  - Language: C++
-  - Box2D Physics Engine
-  - [WebsocketPP](https://github.com/zaphoyd/websocketpp)
-- **Matchmaking Server** - Serves the static frontend and performs matchmaking.
-  Speed is not as much of an issue here.
-  - Language: TypeScript
-  - Node.js
-  - Express
-- **Frontend** - Technically part of the matchmaking server project, might
-  consider moving it out for a decoupled frontend architecture.
-  - Language: TypeScript
-  - [Phaser 3](https://phaser.io/) Game Engine
+### Instance Server
 
-### Languages the content is written in
+A server that runs a single instance of the game. Needs to be fast.
 
-- Markdown
-- Jupyter notebooks for a few blog posts
-  - **I wrote a custom Gatsby plugin** that transforms the Jupyter notebooks
-    into Markdown files, which theemselves get transformed into blog posts.
+- Language: C++
+- Box2D Physics Engine
+- [WebsocketPP](https://github.com/zaphoyd/websocketpp)
+
+### Matchmaking Server
+
+Serves the static frontend and performs matchmaking. Speed is not as much of an
+issue here.
+
+- Language: TypeScript
+- Node.js
+- Express
+
+### Frontend
+
+Technically part of the matchmaking server project, might consider moving it out
+for a decoupled frontend architecture.
+
+- Language: TypeScript
+- [Phaser 3](https://phaser.io/) Game Engine
 
 ## The Protocol
 
