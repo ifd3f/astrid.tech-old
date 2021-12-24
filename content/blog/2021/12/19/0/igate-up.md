@@ -6,6 +6,7 @@ tags:
   - ham-radio
   - aprs
   - docker
+  - /projects/infrastructure
 ---
 
 As promised from

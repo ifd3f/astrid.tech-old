@@ -25,33 +25,43 @@ thumbnail: /2021/01/27/0/pi-clustering/nodezzz.jpeg
 This project represents my unified efforts to manage all my software
 configurations and deployments across all my machines.
 
-## Configuration Management Tools
+## Principles
 
-I use the following tools:
+In designing and building my homelab, I try to adhere to several core principles
+as much as I possibly can:
 
-- NixOS to manage machines at the bottom layer of my infrastructure, whether
-  it's a cloud-provided VPS or a bare metal machine at home.
-- Ansible to deploy changes to the astrid.tech backend. I intend to migrate away
-  from it to a pure NixOS setup, however.
-- Cloudflare for DNS on my various domain names, and Terraform for configuring
-  my DNS.
-
-In the past, I used Kubernetes to deploy end-user services. I do intend on doing
-this again, but I still need to do research on how I can declaratively integrate
-the Kubernetes cluster into my setup.
+- **[Infrastructure as Code (IaC)](https://en.wikipedia.org/wiki/Infrastructure_as_code).**
+  If a configuration can be expressed as repeatable, reproducible code, it
+  probably should be.
+- **Automation.** If I keep doing the same thing over and over again, I should
+  probably automate it.
+- **Emphasize security.** Getting hacked is scary and has real-life consequences
+  in the real world. So, I want to avoid getting hacked as much as possible by
+  taking a mildly paranoid approach to security.
+- **Use standard tools as much as possible.** This lab is here for me to learn
+  how people in the industry do things. Just as dev should mirror prod, my
+  attempts here should mirror actual corporate environments.
 
 ## Current Infrastructure Setup
 
-### Network Topology
+I'm currently at college, but I've brought my homelab with me. This means my
+homelab spans two physical sites!
 
-I'm currently at college, but I've brought my homelab with me!
+### Networking
 
-#### My apartment
+#### DNS
 
-My homelab at my apartment in SLO consists of a cascaded router setup. That is,
-we have a router for the rest of the house, and I have a router specifically for
-my room. Just like Texas with ERCOT! I sure hope I don't end up like Texas with
-ERCOT...
+I own many domain names, and they can become somewhat of a burden to maintain.
+As such, I have them all centrally managed through Cloudflare. Furthermore, to
+improve auditability and adhere to IaC best practices, I manage these domains
+through Terraform. They are automatically deployed by Terraform Cloud on every
+push to the monorepo.
+
+#### Cascaded Routers
+
+This is a setup I use whenever I have roommates. We have a router for the rest
+of the house, and I have a router specifically for my room. Just like Texas with
+ERCOT!
 
 ![The Texas power grid compared to the rest of US/Canada.](./ercot.jpg)
 
@@ -59,14 +69,18 @@ The reason I do this is so that I don't accidentally break the rest of the LAN
 with my shenanigans. In other words, I expect that I'll end up like Texas, but
 I'm trying to prevent the problems from reaching everyone else.
 
-#### Planned segments
+![Pictured: my network segment when I accidentally knock down the DNS.](./texas-snowstorm.jpg)
 
-My homelab at my _home_ home back in the bay is currently shut off. However,
-next time I get there, I'll be setting up a Raspberry Pi jump server there so I
-can pretend my homelab is multi-site.
+Now, this does make setup slightly more of a hassle, especially with the problem
+of port forwarding, but that's acceptable.
 
-Additionally I plan on setting up a Wireguard VPN soon, with an Oracle Cloud VPS
-as the primary connection endpoint.
+#### List of sites
+
+- **Site 0:** This is my home in the Bay Area. Much of the equipment has been
+  migrated to SLO, so there is not much equipment here. It has a cascaded router
+  setup.
+- **Site 1:** This is my apartment in San Luis Obispo (SLO) where I go to
+  school. It also has a cascaded router setup.
 
 ### Personal Computers
 
@@ -75,12 +89,23 @@ as the primary connection endpoint.
 This is my usually-stay-at-home laptop with the following specs:
 
 - **Hostname:** banana.id.astrid.tech
+- **Location:** Wherever I go, but usually Site 1
 - **Model:** Lenovo Legion Y530-15ICH-1060
-- **OS:** NixOS/Windows 10 Dual Boot
+- **OS:** Dual Boot: NixOS, Windows 10
 - **CPU:** Intel i5-8300H (8 core)
 - **RAM:** 32GiB
 - **GPU:** NVIDIA GeForce GTX 1060 Mobile
-- **Monitors:** 1920x1080, 2560x1440, 3840x2160
+- **Monitors:** 1920x1080 built-in + 2560x1440, 3840x2160
+- **Storage:** 1TB nVMe SSD + 500GB SATA SSD
+  - Windows is installed on the 1TB nVMe
+  - NixOS is installed on an encrypted ZFS pool on the 1TB nVMe
+  - /home is on an encrypted ZFS pool on the 500GB SSD
+- **VM Guests**
+  - **winana:** A Windows 10 VM for when I'm too darn lazy to reboot into full
+    Windows 10.
+  - **parrot-htb:** A Parrot OS VM for working on HackTheBox puzzles.
+
+I do not intend to upgrade this to Windows 11.
 
 #### Cracktop
 
@@ -88,16 +113,17 @@ Cracktop is my travel laptop that I bring to and from school. It was my old
 laptop from high school.
 
 - **Hostname:** cracktop-pc.id.astrid.tech
+- **Location:** Wherever I go
 - **Model:** HP Pavilion 13 x360
 - **OS:** NixOS Unstable
 - **CPU:** Intel i5-6300U (4 core)
 - **RAM:** 8GiB
 - **Monitors:** 1920x1080
+- **Storage:** 128GB M.2 SATA SSD
 
 There are a couple reasons why I use it despite its cracked screen:
 
 - It's a lot lighter than BANANA, which reduces the load in my backpack.
-- It's like a testing ground for managing the system over NixOS.
 - Campus has a bike theft problem, so I wouldn't be surprised if it had a device
   theft problem as well. If I lose this machine, I won't be too sad, and with
   the cracked screen, no one would want to steal it.
@@ -109,25 +135,68 @@ There are a couple reasons why I use it despite its cracked screen:
 This server was an absolute steal I got off of eBay for \$200.
 
 - **Hostname:** bongus-hv.id.astrid.tech
+- **Location:** Site 1
 - **Model:** HP ProLiant DL380P Gen8
 - **OS:** NixOS Unstable
 - **CPU:** 2x Intel Xeon (2x8 phys. core, 2x16 virt. core)
 - **RAM:** 96GiB
+- **Storage:** 128GB SATA SSD + RAID1 2x 1TB Used HDD
+  - NixOS is installed on an encrypted ZFS pool on the 128GB SSD
+  - The RAID1 HDDs are used for ZFS datasets containing miscellaneous data
 
 Unfortunately, it eats a lot of power, so I'm only turning it on sporadically
 when I need to heat my room.
 
-### Jump Servers
+### Dedicated Devices
 
-Jump servers are low-power SBCs that are always on, and can be used to send
-Wake-on-LAN packets to other machines. However, I intend to set up Wireguard
-VPN, so I can relegate these to a Wake-on-LAN-plus-other-stuff role. Currently,
-I have only one jump server, and that is jonathan-js, a Raspberry Pi 3.
+Entire bare-metal devices dedicated to a single purpose. These are usually
+low-power single-board computers (SBCs) that are always on, but have a workload
+that essentially requires the entire device.
 
-### Oracle Cloud
+#### APRS I-Gate
 
-I have 2 Always Free VPSes in Oracle Cloud. I run the astrid.tech backend on
-one, and I'm planning on using the other as a VPN lighthouse.
+A dedicated device for decoding and uploading
+[APRS](https://en.wikipedia.org/wiki/Automatic_Packet_Reporting_System) signals
+around Site 0. Created because
+[there is poor APRS coverage where I live](https://astrid.tech/2021/11/21/1/aprs-walk/).
+
+- **Location:** Site 0
+- **Model:** Orange Pi One
+- **OS:** Armbian
+- **CPU:** Allwinner H3 (4 core)
+- **RAM:** 512MB
+- **Peripherals**
+  - [RTL-SDR](https://www.nooelec.com/store/sdr/sdr-receivers/nesdr-mini.html)
+    (USB 2.0)
+
+#### Jump Servers
+
+Jump servers are Raspberry Pis with an SSH server exposed to the Internet. These
+are used to send Wake-on-LAN packets to other machines. Both Sites 0 and 1 are
+equipped with one of these:
+
+- **jonathan-js:** Raspberry Pi 3 at Site 1
+- **joseph-js:** Raspberry Pi 3 at Site 0
+
+However, I intend to set up Wireguard VPN so I don't have to expose them, so I
+can relegate these to a Wake-on-LAN-plus-other-stuff role.
+
+### Public Cloud
+
+I have 2 Always Free VPSes in Oracle Cloud. Only 1 is in use right now. The
+other will eventually become my Wireguard VPN lighthouse.
+
+#### oci1
+
+I run the astrid.tech backend on this one. It is managed through Docker Compose,
+and refreshed hourly using an Ansible Playbook hosted in Github Actions.
+
+#### Future Expansion Plans
+
+- I plan on setting up a Wireguard VPN, with an Oracle Cloud VPS as the primary
+  connection endpoint.
+- I want to set up a new Kubernetes cluster. Don't let all those YAMLs from the
+  past go to waste, after all!
 
 ## History
 
@@ -459,13 +528,14 @@ I don't exactly remember when I first found out about Nix, but it was sometime
 last year. It seemed like an interesting concept, but I didn't use it as
 anything more than a package manager with unstable/bleeding-edge packages. At
 some point, I wanted to distrohop BANANA (it was on Ubuntu at the time). Arch
-Linux and NixOS were my top two candidates to hop to. Unfortunately, I had an
-extremely weird partitioning scheme involving Windows dual-boot, ext4, and a
-strange LVM topology, so I couldn't figure out how to configure Nix to work with
-it at the time. Additionally, I didn't want to spend much time learning the Nix
-language at that moment as I was lazy, and I was more interested in having a
-functional[^fn-4] computer again. I ended up installing Arch, and it seems to
-mostly work!
+Linux and NixOS were my top two candidates to hop to.
+
+Unfortunately, I had an extremely weird partitioning scheme involving Windows
+dual-boot, ext4, and a strange LVM topology, so I couldn't figure out how to
+configure Nix to work with it at the time. Additionally, I didn't want to spend
+much time learning the Nix language at that moment as I was lazy, and I was more
+interested in having a functional[^fn-5] computer again. I ended up installing
+Arch, and it seems to mostly work!
 
 However, while researching how to automatically bootstrap and update my cluster,
 I met [Vika](https://fireburn.ru/) in the [IndieWeb](https://indieweb.org/) IRC.
