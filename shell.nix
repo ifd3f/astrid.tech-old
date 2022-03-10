@@ -5,11 +5,13 @@ pkgs.mkShell {
     curl
     docker
     docker-compose
+    ghc
     git
     nodejs
     pipenv
     python310
     rustc
+    stack
     yarn
   ];
 }
