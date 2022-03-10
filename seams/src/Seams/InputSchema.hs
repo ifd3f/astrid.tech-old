@@ -3,11 +3,18 @@
 module Seams.ContentFolder where
 
 data Post = Post {
+  location :: FilePath,
   meta :: PostMeta,
   content :: Content
 }
 
-data Content = EmbeddedMarkdown { markdown :: Text } | EmbeddedPlaintext { plaintext :: Text } | FileRef {
+data Project = Project {
+  location :: FilePath,
+  meta :: ProjectMeta,
+  content :: Content
+}
+
+data Content = Embedded { ctype :: ContentType, body :: Text } | FileRef {
   ctype :: ContentType,
   file :: FilePath 
 } 
@@ -15,8 +22,10 @@ data Content = EmbeddedMarkdown { markdown :: Text } | EmbeddedPlaintext { plain
 data ContentType = Markdown | HTML 
 
 data PostMeta = PostMeta {
-  title :: Text,
-  tagline :: Text,
+  title :: Maybe Text,
+  slug :: Maybe Text,
+  tagline :: Maybe Text,
+  thumbnail :: Maybe Text,
   tags :: [Text],
   time :: Timestamps,
   ordinal :: Integer
@@ -25,8 +34,11 @@ data PostMeta = PostMeta {
 data ProjectMeta = ProjectMeta {
   title :: Text,
   tagline :: Text,
+  thumbnail :: Maybe Text,
   tags :: [Text],
   time :: Timestamps,
+  started :: DateTime,
+  ended :: Maybe DateTime,
   ordinal :: Integer
 }
 
@@ -35,3 +47,4 @@ data Timestamps = Timestamps {
   modified :: DateTime,  
   published :: DateTime
 }
+

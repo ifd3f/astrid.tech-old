@@ -1,0 +1,16 @@
+version: '3.8'
+
+services:
+  db:
+    image: postgres:latest
+    restart: unless-stopped
+    volumes:
+      - postgres-data:/data/db
+
+    environment:
+      POSTGRES_PASSWORD: pw
+      POSTGRES_DB: seams-dev
+
+    network_mode: host
+volumes:
+  postgres-data:
