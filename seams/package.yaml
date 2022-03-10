@@ -21,6 +21,8 @@ description:         Please see the README on GitHub at <https://github.com/astr
 
 dependencies:
 - base >= 4.7 && < 5
+- datetime
+- text
 
 library:
   source-dirs: src
