@@ -21,8 +21,15 @@ description:         Please see the README on GitHub at <https://github.com/astr
 
 dependencies:
 - base >= 4.7 && < 5
-- datetime
+- aeson
+- containers
+- filepath
+- frontmatter
+- lens
+- postgresql-typed
+- servant
 - text
+- time
 
 library:
   source-dirs: src

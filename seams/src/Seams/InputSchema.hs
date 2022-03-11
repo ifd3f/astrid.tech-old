@@ -1,25 +1,33 @@
 {-# LANGUAGE DuplicateRecordFields #-}
 
-module Seams.ContentFolder where
+module Seams.InputSchema where
+import Data.Text.Lazy(Text)
+import Data.Time
+import Data.Char
+import Data.Aeson
 
-data Post = Post {
-  location :: FilePath,
-  meta :: PostMeta,
-  content :: Content
-}
+data DocumentType = FrontmatterMarkdown | YAML
 
-data Project = Project {
-  location :: FilePath,
-  meta :: ProjectMeta,
-  content :: Content
-}
+extensionToDocumentType :: String -> Either String DocumentType
+extensionToDocumentType ext = case map toLower ext of
+  ".md" -> Right FrontmatterMarkdown
+  ".markdown" -> Right FrontmatterMarkdown
+  ".yml" -> Right YAML
+  ".yaml"  -> Right YAML
+  other -> Left other
 
-data Content = Embedded { ctype :: ContentType, body :: Text } | FileRef {
-  ctype :: ContentType,
-  file :: FilePath 
-} 
+data ContentField = FileRef { ctype :: Maybe ContentType, path :: FilePath } | EmbeddedPlaintext { text :: Text }
 
-data ContentType = Markdown | HTML 
+data ContentType = Markdown | HTML | Plaintext
+
+extensionToContentType :: String -> Either String ContentType
+extensionToContentType ext = case map toLower ext of
+  ".md" -> Right Markdown
+  ".markdown" -> Right Markdown
+  ".html" -> Right HTML
+  ".htm"  -> Right HTML
+  ".txt"  -> Right Plaintext
+  other -> Left other
 
 data PostMeta = PostMeta {
   title :: Maybe Text,
@@ -31,20 +39,22 @@ data PostMeta = PostMeta {
   ordinal :: Integer
 }
 
+data PostSlug = PostSlug Int Int Int Int (Maybe String)
+
 data ProjectMeta = ProjectMeta {
   title :: Text,
   tagline :: Text,
   thumbnail :: Maybe Text,
   tags :: [Text],
   time :: Timestamps,
-  started :: DateTime,
-  ended :: Maybe DateTime,
+  started :: LocalTime,
+  ended :: Maybe LocalTime,
   ordinal :: Integer
 }
 
 data Timestamps = Timestamps {
-  created :: DateTime,
-  modified :: DateTime,  
-  published :: DateTime
+  created :: LocalTime,
+  modified :: LocalTime,  
+  published :: LocalTime
 }
 

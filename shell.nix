@@ -8,6 +8,9 @@ pkgs.mkShell {
     docker-compose
     ghc
     git
+    haskell-language-server
+    haskellPackages.hlint
+    haskellPackages.implicit-hie
     nodejs
     pipenv
     postgresql
