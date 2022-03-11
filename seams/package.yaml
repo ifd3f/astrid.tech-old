@@ -56,3 +56,6 @@ tests:
     - -with-rtsopts=-N
     dependencies:
     - seams
+    - filepath
+    - hspec
+

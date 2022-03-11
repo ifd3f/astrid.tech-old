@@ -72,6 +72,7 @@ test-suite seams-test
   type: exitcode-stdio-1.0
   main-is: Spec.hs
   other-modules:
+      Seams.ImportingSpec
       Paths_seams
   hs-source-dirs:
       test
@@ -83,6 +84,7 @@ test-suite seams-test
     , containers
     , filepath
     , frontmatter
+    , hspec
     , lens
     , postgresql-typed
     , seams

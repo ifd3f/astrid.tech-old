@@ -1,19 +1,19 @@
 {-# LANGUAGE DuplicateRecordFields #-}
 {-# LANGUAGE ScopedTypeVariables #-}
-{-# OPTIONS_GHC -Wno-deferred-out-of-scope-variables #-}
 
 module Seams.Importing where
 
-
 import Seams.InputSchema
 import System.FilePath
-import Data.Frontmatter
+import Data.Frontmatter hiding ( Result )
 import Data.ByteString.Lazy(ByteString)
+import qualified Data.ByteString.Lazy as BL
 import Data.Functor
 import Data.Map(Map)
 import qualified Data.Map as Map
-import Data.Aeson
+import Data.Aeson hiding ( Result )
 import Data.Functor.Compose
+import Data.ByteString.Builder
 
 
 newtype Error = Error String
@@ -37,71 +37,67 @@ readTree :: FilePath -> IO (FileResult String ByteString)
 readTree = undefined
 
 -- | A container for data associated with importing from a specific file path.
-newtype FileRead a = FileRead {
+newtype Loader a = Loader {
   -- | If it returns Right, then consume that file.
   -- | If it returns Left, then redirect to a different file.
-  useFile :: FilePath -> Either (FilePath, FileRead a) (ReadResult -> a)
+  useFile :: FilePath -> Either (FilePath, Loader a) (ReadResult -> a)
 }
 
-type FileReadResult e a = Compose FileRead (Either e) a
-type ReadResult = Either String ByteString
+runLoader loader path = case useFile loader path of
+  Right consume -> (path, consume)
+  Left (redirect, next) -> runLoader next redirect
 
-toResult :: FileRead a -> FileReadResult e a
+type ReadError = String
+type LoaderEither e a = Compose Loader (Either e) a
+type ReadResult = Either ReadError ByteString
+type Result a = LoaderEither ReadError a
+
+toResult :: Loader a -> LoaderEither e a
 toResult a = Compose (fmap Right a)
 
-contents :: FileReadResult String ByteString
-contents = Compose $ FileRead (\_ -> Right id)
+contents :: LoaderEither String ByteString
+contents = Compose $ Loader (\_ -> Right id)
 
-liftRedirect :: Either (FilePath, FileRead a) (ReadResult -> a) -> FileRead a
-liftRedirect r = FileRead $ const r
+liftRedirect :: Either (FilePath, Loader a) (ReadResult -> a) -> Loader a
+liftRedirect r = Loader $ const r
 
 redirectOnce path consume = liftRedirect $ Left (path, consumer consume)
 
-consumer :: (ReadResult -> a) -> FileRead a
-consumer f = FileRead $ \_ -> Right f
+consumer :: (ReadResult -> a) -> Loader a
+consumer f = Loader $ \_ -> Right f
 
-wrapFR :: a -> FileRead a
+wrapFR :: a -> Loader a
 wrapFR a = consumer (const a)
 
-path :: FileRead FilePath
-path = FileRead $ Right . const
+path :: Loader FilePath
+path = Loader $ Right . const
 
-instance Functor FileRead where
-  fmap f (FileRead makeA)
-    = FileRead (\p -> case makeA p of
+instance Functor Loader where
+  fmap f (Loader makeA)
+    = Loader (\p -> case makeA p of
                         Right consume -> Right (f . consume)
                         Left (redirect, next) -> Left (redirect, fmap f next))
 
-instance Applicative FileRead where
+instance Applicative Loader where
   pure = wrapFR
 
-  (FileRead makeF) <*> (FileRead makeA)
-    = FileRead (\p -> case (makeF p, makeA p) of
+  (Loader makeF) <*> (Loader makeA)
+    = Loader (\p -> case (makeF p, makeA p) of
                           (Right consumeF, Right consumeA) -> Right (\t -> consumeF t $ consumeA t)
                           (f, Left (redirectA, nextA)) ->
                             Left (redirectA, liftRedirect f <*> nextA)
                           (Left (redirectF, nextF), a) ->
                             Left (redirectF, nextF <*> liftRedirect a))
 
-collapse x path text = let (path', consume) = runFileRead fr path
-                           (path'', consume') = runFileRead (consume text) path'
-                        in redirectOnce path'' consume'
-                            
-                
+-- | Redirect to a different directory relative to current.
+cd :: FilePath -> Loader a -> Loader a
+cd p' (Loader use) = Loader $ \p -> case use p of
+  Right consume -> Left (p </> p', Loader use)
+  Left (redirect, next) -> Left (redirect </> p', next)
 
-runFileRead fr path = case useFile fr path of
-  Right consume -> (path, consume)
-  Left (redirect, next) -> runFileRead next redirect
-
-
-cdAbs :: FilePath -> FileRead FilePath
-cdAbs p' = liftRedirect (Left (p', pure p'))
-
-cd :: FilePath -> FileRead FilePath
-cd p' = FileRead $ \p -> Left (p </> p', pure p')
-
--- cd' :: FileRead FilePath -> FileRead FilePath
-cd' r = runFileRead 
+-- | cd, but on the Result level.
+-- cdr :: FilePath -> Result a -> Result a
+-- cdr p' ld = Compose $ Right <$> cd p' ld
 
 data Document m = Document FilePath m Content
 
@@ -113,31 +109,31 @@ data Content = Content {
   body :: ByteString
 }
 
--- loadDocument :: FromJSON m => FileReadResult String (Document m)
-loadDocument = contents <* fmap pure cd path -- parseDocument <$> path <*> getCompose contents <*> contentFilePath
-  where contentFilePath = dropExtension <$> path
+-- loadDocument :: FromJSON m => LoaderEither String (Document m)
+-- loadDocument = contents <* cdr
+--   where contentFilePath = dropExtension <$> path
 
-loadContentFile :: FilePath -> FileReadResult String Content
-loadContentFile path
-  = let cType = Compose $ pure $ extensionToContentType $ takeExtension path
-        body = contents <* fmap pure cd path
-      in Content <$> cType <*> body
+-- loadContentFile :: FilePath -> LoaderEither String Content
+-- loadContentFile path
+--   = let cType = Compose $ pure $ extensionToContentType $ takeExtension path
+--         body = contents <* fmap pure cd path
+--       in Content <$> cType <*> body
 
--- resolveContentA :: FileReadResult String UnresolvedContent -> FileReadResult String Content
+-- resolveContentA :: LoaderEither String UnresolvedContent -> LoaderEither String Content
 
-parseDocument :: (FromJSON m) => FilePath -> Either String ByteString -> Either String Content -> Either String (Document m)
-parseDocument path docContent bodyContent = do
-  dType <- extensionToDocumentType $ takeExtension path
-  docContent' <- docContent
-
-  case dType of
-      FrontmatterMarkdown ->
-        case parseYamlFrontmatter (toStrict docContent') of
-          Done rest fm -> Right $ DocumentFile fm (Embedded Markdown (toLazyByteString rest))
-          Fail _ _ err -> Left err
-          Partial _ -> Left "Incomplete input"
-      YAML -> do
-        bodyContent' <- bodyContent
-        docContent'' <- decodeEither docContent'
-        return $ Document path docContent'' bodyContent'
+-- parseDocument :: (FromJSON m) => FilePath -> Either String ByteString -> Either String Content -> Either String (Document m)
+-- parseDocument path docContent bodyContent = do
+--   dType <- extensionToDocumentType $ takeExtension path
+--   docContent' <- docContent
+-- 
+--   case dType of
+--       FrontmatterMarkdown ->
+--         case parseYamlFrontmatter (BL.toStrict docContent') of
+--           Done rest fm -> Right $ DocumentFile fm (Embedded Markdown (toLazyByteString rest))
+--           Fail _ _ err -> Left err
+--           Partial _ -> Left "Incomplete input"
+--       YAML -> do
+--         bodyContent' <- bodyContent
+--         docContent'' <- decodeEither docContent'
+--         return $ Document path docContent'' bodyContent'
 
