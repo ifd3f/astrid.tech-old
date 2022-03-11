@@ -80,6 +80,12 @@ instance Applicative FileRead where
                           (Left (redirectF, nextF), a) ->
                             Left (redirectF, nextF <*> liftRedirect a))
 
+instance Monad FileRead where
+  (FileRead make) >>= f
+    = FileRead (\p -> case make p of
+                          Right consume -> Left (p, next $ \t -> make t)
+                          Left (redirect, next) -> Left (redirect, next >>= f))
+
 cdAbs :: FilePath -> FileRead FilePath
 cdAbs p' = liftRedirect (Left (p', pure p'))
 
@@ -96,10 +102,16 @@ data Content = Content {
   body :: ByteString
 }
 
-loadDocument :: FromJSON m => FileReadResult String (Document m)
-loadDocument = undefined
+-- loadDocument :: FromJSON m => FileReadResult String (Document m)
+loadDocument
+  = let cont = fmap documentFileContent loadDocumentFile
+        meta = documentFileMeta <$> loadDocumentFile
+      in cont -- Document <$> Compose (fmap pure path) <*> meta <*> cont
 
-data DocumentFile m = DocumentFile m UnresolvedContent
+data DocumentFile m = DocumentFile {
+  documentFileMeta :: m,
+  documentFileContent :: UnresolvedContent
+}
 
 data UnresolvedContent
   = Embedded ContentType ByteString
