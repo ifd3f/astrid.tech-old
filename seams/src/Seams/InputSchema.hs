@@ -16,7 +16,7 @@ extensionToDocumentType ext = case map toLower ext of
   ".yaml"  -> Right YAML
   other -> Left other
 
-data ContentField = FileRef { ctype :: Maybe ContentType, path :: FilePath } | EmbeddedPlaintext { text :: Text }
+data ContentField = FileRef { ctype :: Maybe ContentType, file :: FilePath } | EmbeddedPlaintext { text :: Text }
 
 data ContentType = Markdown | HTML | Plaintext
 
