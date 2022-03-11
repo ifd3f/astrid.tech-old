@@ -1,6 +1,7 @@
 {-# LANGUAGE DuplicateRecordFields #-}
 {-# LANGUAGE ScopedTypeVariables #-}
 {-# OPTIONS_GHC -Wno-deferred-out-of-scope-variables #-}
+
 module Seams.Importing where
 
 
@@ -54,6 +55,8 @@ contents = Compose $ FileRead (\_ -> Right id)
 liftRedirect :: Either (FilePath, FileRead a) (ReadResult -> a) -> FileRead a
 liftRedirect r = FileRead $ const r
 
+redirectOnce path consume = liftRedirect $ Left (path, consumer consume)
+
 consumer :: (ReadResult -> a) -> FileRead a
 consumer f = FileRead $ \_ -> Right f
 
@@ -80,17 +83,25 @@ instance Applicative FileRead where
                           (Left (redirectF, nextF), a) ->
                             Left (redirectF, nextF <*> liftRedirect a))
 
-instance Monad FileRead where
-  (FileRead make) >>= f
-    = FileRead (\p -> case make p of
-                          Right consume -> Left (p, next $ \t -> make t)
-                          Left (redirect, next) -> Left (redirect, next >>= f))
+collapse x path text = let (path', consume) = runFileRead fr path
+                           (path'', consume') = runFileRead (consume text) path'
+                        in redirectOnce path'' consume'
+                            
+                
+
+runFileRead fr path = case useFile fr path of
+  Right consume -> (path, consume)
+  Left (redirect, next) -> runFileRead next redirect
+
 
 cdAbs :: FilePath -> FileRead FilePath
 cdAbs p' = liftRedirect (Left (p', pure p'))
 
 cd :: FilePath -> FileRead FilePath
 cd p' = FileRead $ \p -> Left (p </> p', pure p')
+
+-- cd' :: FileRead FilePath -> FileRead FilePath
+cd' r = runFileRead 
 
 data Document m = Document FilePath m Content
 
@@ -103,39 +114,30 @@ data Content = Content {
 }
 
 -- loadDocument :: FromJSON m => FileReadResult String (Document m)
-loadDocument
-  = let cont = fmap documentFileContent loadDocumentFile
-        meta = documentFileMeta <$> loadDocumentFile
-      in cont -- Document <$> Compose (fmap pure path) <*> meta <*> cont
+loadDocument = contents <* fmap pure cd path -- parseDocument <$> path <*> getCompose contents <*> contentFilePath
+  where contentFilePath = dropExtension <$> path
 
-data DocumentFile m = DocumentFile {
-  documentFileMeta :: m,
-  documentFileContent :: UnresolvedContent
-}
-
-data UnresolvedContent
-  = Embedded ContentType ByteString
-  | AnotherFile FilePath
-
-resolveContent :: UnresolvedContent -> FileReadResult String Content
-resolveContent (Embedded cType body) = Compose $ pure (Right $ Content cType body)
-resolveContent (AnotherFile path)
+loadContentFile :: FilePath -> FileReadResult String Content
+loadContentFile path
   = let cType = Compose $ pure $ extensionToContentType $ takeExtension path
         body = contents <* fmap pure cd path
       in Content <$> cType <*> body
 
-loadDocumentFile :: (FromJSON m) => FileReadResult String (DocumentFile m)
-loadDocumentFile = Compose $ fmap parseDocumentFile path <*> getCompose contents
+-- resolveContentA :: FileReadResult String UnresolvedContent -> FileReadResult String Content
 
-parseDocumentFile :: (FromJSON m) => FilePath -> Either String ByteString -> Either String (DocumentFile m)
-parseDocumentFile path content = do
+parseDocument :: (FromJSON m) => FilePath -> Either String ByteString -> Either String Content -> Either String (Document m)
+parseDocument path docContent bodyContent = do
   dType <- extensionToDocumentType $ takeExtension path
-  content' <- content
+  docContent' <- docContent
+
   case dType of
       FrontmatterMarkdown ->
-        case parseYamlFrontmatter (toStrict content') of
+        case parseYamlFrontmatter (toStrict docContent') of
           Done rest fm -> Right $ DocumentFile fm (Embedded Markdown (toLazyByteString rest))
           Fail _ _ err -> Left err
           Partial _ -> Left "Incomplete input"
-      YAML -> DocumentFile <$> decodeEither content' <*> pure (AnotherFile $ dropExtension path)
+      YAML -> do
+        bodyContent' <- bodyContent
+        docContent'' <- decodeEither docContent'
+        return $ Document path docContent'' bodyContent'
 
