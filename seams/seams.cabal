@@ -44,6 +44,7 @@ library
     , servant
     , text
     , time
+    , transformers
   default-language: Haskell2010
 
 executable seams-exe
@@ -66,6 +67,7 @@ executable seams-exe
     , servant
     , text
     , time
+    , transformers
   default-language: Haskell2010
 
 test-suite seams-test
@@ -91,4 +93,5 @@ test-suite seams-test
     , servant
     , text
     , time
+    , transformers
   default-language: Haskell2010

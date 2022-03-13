@@ -31,6 +31,7 @@ dependencies:
 - servant
 - text
 - time
+- transformers
 
 library:
   source-dirs: src
