@@ -32,6 +32,7 @@ dependencies:
 - text
 - time
 - transformers
+- yaml
 
 library:
   source-dirs: src
