@@ -1,6 +1,0 @@
-#!/usr/bin/env bash
-
-export DATABASE_URL="postgres://postgres:developer@localhost:5432/seams-dev?sslmode=disable"
-
-dbmate "$@"
-
