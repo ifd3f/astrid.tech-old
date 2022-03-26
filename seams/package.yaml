@@ -24,18 +24,29 @@ dependencies:
 - aeson
 - bytestring
 - containers
+- either
+- MissingH
 - filepath
 - frontmatter
 - lens
+- network-uri
 - postgresql-typed
 - servant
 - text
 - time
 - transformers
+- uuid
+- vector
 - yaml
 
 library:
   source-dirs: src
+  ghc-options:
+    - -Wall
+    - -Wcompat
+    - -Wincomplete-record-updates
+    - -Wincomplete-uni-patterns
+    - -Wredundant-constraints
 
 executables:
   seams-exe:
@@ -46,6 +57,7 @@ executables:
     - -rtsopts
     - -with-rtsopts=-N
     dependencies:
+    - base >= 4.7 && < 5
     - seams
 
 tests:
@@ -57,7 +69,10 @@ tests:
     - -rtsopts
     - -with-rtsopts=-N
     dependencies:
+    - base >= 4.7 && < 5
+    - raw-strings-qq
     - seams
+    - containers
     - filepath
     - hspec
 

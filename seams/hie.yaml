@@ -1,3 +1,10 @@
 cradle:
   stack:
+    - path: "./src"
+      component: "seams:lib"
 
+    - path: "./app/Main.hs"
+      component: "seams:exe:seams-exe"
+
+    - path: "./test"
+      component: "seams:test:seams-test"
