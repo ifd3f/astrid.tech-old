@@ -3,10 +3,10 @@
 {-# LANGUAGE ScopedTypeVariables #-}
 {-# LANGUAGE BlockArguments #-}
 
-module Seams.InputSchemaSpec where
+module Seams.Importing.FileSchemaSpec where
 
 import Test.Hspec
-import Seams.InputSchema
+import Seams.Importing.FileSchema
 import Text.RawString.QQ
 import Control.Lens
 import Data.Yaml

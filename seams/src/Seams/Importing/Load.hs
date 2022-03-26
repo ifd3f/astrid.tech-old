@@ -1,9 +1,9 @@
 {-# LANGUAGE ScopedTypeVariables #-}
 
-module Seams.Importing where
+module Seams.Importing.Load where
 
 import System.FilePath
-import Seams.InputSchema
+import Seams.Importing.FileSchema
 import Data.ByteString (ByteString)
 import Control.Monad.Trans.Class
 import Data.Aeson
@@ -16,49 +16,10 @@ import Control.Arrow
 import Data.Either.Combinators
 import Data.Either.Utils
 import Data.Functor.Identity 
-
-newtype ReadError = ReadError String
-type ReadResult = Either ReadError
-
-newtype ReadFileT m a = ReadFileT {
-  runReadFileT :: (FilePath -> m ByteString) -> m a
-}
-
-type ReadFile = ReadFileT Identity
-
-envReadFile :: FilePath -> ReadFileT m ByteString
-envReadFile path = ReadFileT $ \rf -> rf path
-
-instance Functor m => Functor (ReadFileT m) where
-  fmap f rft = ReadFileT $ fmap f . runReadFileT rft
-
-instance Applicative m => Applicative (ReadFileT m) where
-  pure a = ReadFileT $ const (pure a)
-  f <*> a = ReadFileT $ \rf ->
-    runReadFileT f rf <*> runReadFileT a rf 
-
-instance Monad m => Monad (ReadFileT m) where
-  rft >>= f = ReadFileT $ \rf ->
-    runReadFileT rft rf >>= (\x -> runReadFileT (f x) rf)
-  l >> r = r -- if we did not need a previous result, we don't run it
-
-instance MonadTrans ReadFileT where
-  lift m = ReadFileT $ const m
-
-instance MonadFail m => MonadFail (ReadFileT m) where
-  fail x = ReadFileT $ const (fail x)
-
-data Document m = Document FilePath m Content
-
-instance Functor Document where
-  fmap f (Document l m c) = Document l (f m) c
-
-data Content = Content FilePath ContentType ByteString
+import Seams.Importing.ReadFile
+import Seams.Importing.Types
 
 newtype LoadError = LoadError String
-
--- | Representation of a document file that references some content.
-data DocumentFile a = DocumentFile a Content
 
 loadDocument path = case extensionToDocumentType $ takeExtension path of
   Just dType -> loadDocAsType dType path

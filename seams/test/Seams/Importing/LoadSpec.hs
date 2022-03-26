@@ -1,9 +1,9 @@
 {-# LANGUAGE OverloadedStrings #-}
 
-module Seams.ImportingSpec where
+module Seams.Importing.LoadSpec where
 
 import Test.Hspec
-import Seams.Importing
+import Seams.Importing.Load
 import System.FilePath
 import qualified Data.Map as M
 import Data.ByteString

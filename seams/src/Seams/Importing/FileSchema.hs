@@ -1,11 +1,11 @@
-{-# LANGUAGE TemplateHaskell #-}
-{-# LANGUAGE OverloadedStrings #-}
-{-# LANGUAGE DuplicateRecordFields #-}
 {-# LANGUAGE DeriveFunctor #-}
+{-# LANGUAGE DuplicateRecordFields #-}
+{-# LANGUAGE OverloadedStrings #-}
+{-# LANGUAGE TemplateHaskell #-}
 
--- | This file defines the input schema and some parsing stuff.
+-- | This module defines the input schema and some parsing stuff.
+module Seams.Importing.FileSchema where
 
-module Seams.InputSchema where
 import Control.Lens.TH
 import Data.Text(Text)
 import Data.Time
@@ -18,10 +18,11 @@ import Data.List (stripPrefix)
 import qualified Data.Vector as V
 import Data.Maybe (maybeToList, fromMaybe)
 import qualified Data.Aeson as A
+import Data.Map (Map)
 
 -- | JSON of a document's metadata.
 data Doc meta = Doc {
-  _docUUID :: UUID,
+  _docUUID :: Maybe UUID,
   _docMeta :: meta,
   _docTime :: Timestamps,
   _docColophon :: Maybe Text,
@@ -41,6 +42,7 @@ instance FromJSON meta => FromJSON (Doc meta) where
       o .: "time" <*>
       o .:? "colophon" <*>
       o .:? "content" <*>
+      o .:? "thumbnail" <*>
       o .:? "preview"
 
 -- | Supported types of documents. Each document corresponds to a 
@@ -193,9 +195,32 @@ $(deriveJSON defaultOptions{
   fieldLabelModifier = map toLower . drop 7
 } ''ProjectMeta)
 
+type Color = String
+
+data TagColorSheet = TagColorSheet {
+  _tcsText :: Color,
+  _tcsBG :: Color,
+  _tcsTargets :: [String]
+} deriving (Show, Eq)
+
+$(deriveJSON defaultOptions{
+  fieldLabelModifier = map toLower . drop 4
+} ''TagColorSheet)
+
+data TagDesc = TagDesc {
+  _tagTitles :: Map String String,
+  _tagColors :: TagColorSheet
+} deriving (Show, Eq)
+
+$(deriveJSON defaultOptions{
+  fieldLabelModifier = map toLower . drop 4
+} ''TagDesc)
+
 makeLenses ''ProjectMeta
 makeLenses ''PostMeta
 makeLenses ''PostSlug
+makeLenses ''TagDesc
 makeLenses ''Doc
+makeLenses ''TagColorSheet
 makeLenses ''Timestamps
 
