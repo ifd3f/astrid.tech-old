@@ -6,6 +6,12 @@ data Args = Import {
   dryRun :: Bool
 }
 
+main :: IO ()
+main = execParser parserInfo >>= execute
+
+parserInfo :: ParserInfo Args
+parserInfo = info (parser <**> helper) (fullDesc <> header "seams - a Content Management System")
+
 parser :: Parser Args
 parser = Import <$>
   argument str (metavar "CONTENT_DIR") <*>

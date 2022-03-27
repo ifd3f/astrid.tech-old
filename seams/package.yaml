@@ -42,8 +42,6 @@ dependencies:
 - vector
 - yaml
 
-pkgconfig-depends: zlib
-
 library:
   source-dirs: src
   ghc-options:

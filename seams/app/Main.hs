@@ -1,7 +1,7 @@
 module Main where
 
-import Seams.CLI
+import qualified Seams.CLI as CLI
 
 main :: IO ()
-main = execParser parser >>= execute
+main = CLI.main
 

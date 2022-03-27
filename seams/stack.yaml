@@ -65,5 +65,8 @@ extra-deps: []
 #
 # Allow a newer minor version of GHC than the snapshot specifies
 # compiler-check: newer-minor
-pkgconfig-depends: zlib
+
+nix:
+  enable: true
+  packages: [zlib.dev, zlib.out]
 
