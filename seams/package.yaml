@@ -25,11 +25,13 @@ dependencies:
 - bytestring
 - containers
 - either
-- MissingH
 - filepath
 - frontmatter
 - lens
+- MissingH
 - network-uri
+- persistent
+- persistent-postgresql
 - postgresql-typed
 - servant
 - text

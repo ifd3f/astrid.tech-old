@@ -16,16 +16,20 @@ import Data.Text (Text)
 import Database.Persist.Postgresql
 import Database.Persist.TH 
 import Data.Time
+import Data.ByteString
+import Seams.Types
 
 share [mkPersist sqlSettings, mkMigrate "migrateTables"] [persistLowerCase|
 TagObj
   deriving Show
 
 Tag
-  slug Text
+  slug Text 
   title Text Maybe
+  textColor Text Maybe
+  bgColor Text Maybe
 
-  UniqueSlug slug
+  UniqueTagSlug slug
   deriving Show
 
 TagAssoc
@@ -37,21 +41,45 @@ TagAssoc
   deriving Show
 
 Content
-  contentType Text
-  body Text
+  path FilePath Unique
+  cType ContentType
+  body ByteString
   deriving Show
 
 Doc
+  contentObj ContentId 
+  path FilePath 
   published UTCTime
   created UTCTime Maybe
   updated UTCTime Maybe
-  content ContentId
   deriving Show
 
-BlogPost
+Post
   title Text Maybe
-  doc DocId
-  tagObj TagObjId
+  tagline Text Maybe
+
+  slugYear Int
+  slugMonth Int
+  slugDay Int
+  slugOrdinal Int
+  slugName Text Maybe
+
+  doc DocId 
+  tagObj TagObjId 
+
+  UniquePostSlug slugYear slugMonth slugDay slugOrdinal
+  deriving Show
+
+Project
+  title Text 
+  tagline Text 
+  slug Text 
+
+  started UTCTime
+
+  doc DocId 
+  tagObj TagObjId 
+
   deriving Show
 |]
 

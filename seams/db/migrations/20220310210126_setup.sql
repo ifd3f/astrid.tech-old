@@ -32,16 +32,16 @@ create table tags(
     bg_color text
 );
 
-create table tagged_object(
+create table tagged_objects(
     tagobj_id serial primary key
 );
 
 create table object_taggings(
-    tagged_id integer,
-    tag_id integer,
-    ordinal integer,
-    primary key (tagged_id, tag_id, ordinal),
-    unique (tagged_id, ordinal)
+    tagobj_id integer not null references tagged_objects(tagobj_id),
+    tag_id integer not null references tags(tag_id),
+    tag_ordinal integer not null,
+    primary key (tagobj_id, tag_id, tag_ordinal),
+    unique (tagobj_id, tag_ordinal)
 );
 
 create table blog_posts(
@@ -56,17 +56,17 @@ create table blog_posts(
     slug_year integer not null,
     slug_month integer not null,
     slug_day integer not null,
-    ordinal integer not null,
+    slug_ordinal integer not null,
     slug_title text,
 
-    create_time timestamp with time zone,
     publish_time timestamp with time zone,
+    create_time timestamp with time zone,
     modify_time timestamp with time zone,
 
-    content_id integer unique references content(content_id),
-    tagobj_id integer unique references tagged_object(tagobj_id),
+    content_id integer not null unique references content(content_id),
+    tagobj_id integer not null unique references tagged_objects(tagobj_id),
 
-    unique (slug_year, slug_month, slug_day, ordinal)
+    unique (slug_year, slug_month, slug_day, slug_ordinal)
 );
 
 create view blog_posts_generated as
@@ -77,7 +77,7 @@ select
         slug_year,
         slug_month,
         slug_day,
-        ordinal,
+        slug_ordinal,
         case
             when slug_title is null then ''
             else '/' || slug_title
@@ -106,7 +106,7 @@ create table projects(
     url text[] default '{}' not null,
 
     content_id integer unique references content(content_id),
-    tagobj_id integer unique references tagged_object(tagobj_id)
+    tagobj_id integer unique references tagged_objects(tagobj_id)
 );
 
 create view projects_generated as
@@ -146,7 +146,7 @@ with
             g.page_url
         from blog_posts b
             natural join blog_posts_generated g
-            natural join tagged_object
+            natural join tagged_objects
             natural join object_taggings
             natural join tags t
     )
@@ -166,7 +166,7 @@ drop table projects;
 drop view blog_posts_generated ;
 drop table blog_posts;
 drop table object_taggings;
-drop table tagged_object;
+drop table tagged_objects;
 drop table tags;
 drop table content;
 drop table images;

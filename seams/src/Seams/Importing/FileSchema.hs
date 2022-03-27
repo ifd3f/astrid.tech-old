@@ -14,16 +14,15 @@ import Data.Aeson
 import Data.Aeson.TH
 import Data.UUID
 import Data.Vector ((!), (!?))
-import Data.List (stripPrefix)
 import qualified Data.Vector as V
-import Data.Maybe (maybeToList, fromMaybe)
+import Data.Maybe (maybeToList)
 import qualified Data.Aeson as A
 import Data.Map (Map)
 
 -- | JSON of a document's metadata.
-data Doc meta = Doc {
+data Doc extra = Doc {
   _docUUID :: Maybe UUID,
-  _docMeta :: meta,
+  _docExtra :: extra,
   _docTime :: Timestamps,
   _docColophon :: Maybe Text,
   _docContent :: Maybe ContentField,
@@ -45,22 +44,6 @@ instance FromJSON meta => FromJSON (Doc meta) where
       o .:? "thumbnail" <*>
       o .:? "preview"
 
--- | Supported types of documents. Each document corresponds to a 
--- | project or blog post or something like that.
-data DocumentType = FrontmatterMarkdown | YAML
-  deriving (Show)
-
-extensionToDocumentType :: String -> Maybe DocumentType
-extensionToDocumentType ext = case map toLower ext of
-  ".md" -> Just FrontmatterMarkdown
-  ".markdown" -> Just FrontmatterMarkdown
-  ".yml" -> Just YAML
-  ".yaml"  -> Just YAML
-  other -> Nothing
-  where
-    l = map toLower ext
-    s' = fromMaybe l $ stripPrefix "." l
-
 -- | A field that refers to another content object.
 data ContentField
   = FileRef FilePath
@@ -76,27 +59,6 @@ instance FromJSON ContentField where
     A.String t -> pure $ EmbeddedPlaintext t
     Object o -> EmbeddedPlaintext <$> o .: "path"
     other -> fail $ "ContentField: unexpected object" ++ show other
-
--- | Supported formats for the body of documents.
-data ContentType = Markdown | HTML | Plaintext | Jupyter
-  deriving (Show)
-
-contentTypeToExtension ct = case ct of
-  Markdown -> "md"
-  HTML -> "html"
-  Plaintext -> "txt"
-  Jupyter -> "ipynb"
-  
-extensionToContentType :: String -> Maybe ContentType
-extensionToContentType ext
-  | s' == "html" = Just HTML
-  | s' `elem` ["ipynb", "jupyter"] = Just Jupyter
-  | s' `elem` ["md", "markdown"] = Just Markdown
-  | s' `elem` ["txt", "text", "plaintext"] = Just Plaintext
-  | otherwise = Nothing
-  where
-    l = map toLower ext
-    s' = fromMaybe l $ stripPrefix "." l
 
 data Timestamps = Timestamps {
   -- | When this content was published on the website.
@@ -121,7 +83,7 @@ data PostSlug = PostSlug {
   _slugMonth :: Int,
   _slugDay :: Int,
   _slugOrdinal :: Int,
-  _slugName :: Maybe String
+  _slugName :: Maybe Text
 } deriving (Show, Eq)
 
 -- | A PostSlug is an array like so:
@@ -145,7 +107,7 @@ instance FromJSON PostSlug where
 
 instance ToJSON PostSlug where
   toJSON (PostSlug y m d o n) = Array $ V.fromList $
-    (Number . fromIntegral <$> [y, m, d, o]) ++ (read <$> maybeToList n)
+    (Number . fromIntegral <$> [y, m, d, o]) ++ (String <$> maybeToList n)
 
 data RSVP = RSVPYes | RSVPNo | RSVPMaybe | RSVPInterested
   deriving (Show, Eq)
@@ -195,32 +157,32 @@ $(deriveJSON defaultOptions{
   fieldLabelModifier = map toLower . drop 7
 } ''ProjectMeta)
 
-type Color = String
+type Color = Text
 
 data TagColorSheet = TagColorSheet {
-  _tcsText :: Color,
-  _tcsBG :: Color,
-  _tcsTargets :: [String]
+  _tcsText :: Maybe Color,
+  _tcsBG :: Maybe Color,
+  _tcsTags :: [Text]
 } deriving (Show, Eq)
 
 $(deriveJSON defaultOptions{
   fieldLabelModifier = map toLower . drop 4
 } ''TagColorSheet)
 
-data TagDesc = TagDesc {
-  _tagTitles :: Map String String,
-  _tagColors :: TagColorSheet
+data TagConfig = TagConfig {
+  _tcfgTitles :: Map Text Text,
+  _tcfgColors :: TagColorSheet
 } deriving (Show, Eq)
 
 $(deriveJSON defaultOptions{
   fieldLabelModifier = map toLower . drop 4
-} ''TagDesc)
+} ''TagConfig)
 
 makeLenses ''ProjectMeta
 makeLenses ''PostMeta
 makeLenses ''PostSlug
-makeLenses ''TagDesc
-makeLenses ''Doc
 makeLenses ''TagColorSheet
+makeLenses ''TagConfig
+makeLenses ''Doc
 makeLenses ''Timestamps
 

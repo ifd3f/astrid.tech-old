@@ -18,6 +18,7 @@ pkgs.mkShell {
     rustc
     stack
     yarn
+    zlib
   ];
 
   # postgresql-typed and dbmate params

@@ -26,9 +26,13 @@ source-repository head
 library
   exposed-modules:
       Lib
-      Seams.DB
-      Seams.Importing
-      Seams.InputSchema
+      Seams.DB.Models
+      Seams.DB.Queries
+      Seams.Importing.FileSchema
+      Seams.Importing.Load
+      Seams.Importing.ReadFile
+      Seams.Importing.Types
+      Seams.Types
   other-modules:
       Paths_seams
   hs-source-dirs:
@@ -45,6 +49,8 @@ library
     , frontmatter
     , lens
     , network-uri
+    , persistent
+    , persistent-postgresql
     , postgresql-typed
     , servant
     , text
@@ -73,6 +79,8 @@ executable seams-exe
     , frontmatter
     , lens
     , network-uri
+    , persistent
+    , persistent-postgresql
     , postgresql-typed
     , seams
     , servant
@@ -88,8 +96,8 @@ test-suite seams-test
   type: exitcode-stdio-1.0
   main-is: Spec.hs
   other-modules:
-      Seams.ImportingSpec
-      Seams.InputSchemaSpec
+      Seams.Importing.FileSchemaSpec
+      Seams.Importing.LoadSpec
       Paths_seams
   hs-source-dirs:
       test
@@ -106,6 +114,8 @@ test-suite seams-test
     , hspec
     , lens
     , network-uri
+    , persistent
+    , persistent-postgresql
     , postgresql-typed
     , raw-strings-qq
     , seams

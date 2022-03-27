@@ -1,24 +1,25 @@
 {-# LANGUAGE TemplateHaskell #-}
 
 module Seams.Importing.Types where
-import Seams.InputSchema
+import Seams.Types
+import Control.Lens.TH
 import Data.ByteString
 
-data Document m = Document {
-  _docPath :: FilePath,
-  _docMeta :: m,
-  _docContent :: Content
-}
+data LoadedDoc m = LoadedDoc {
+  _ldPath :: FilePath,
+  _ldMeta :: m,
+  _ldContent :: Content
+} deriving (Show)
 
-instance Functor Document where
-  fmap f (Document l m c) = Document l (f m) c
+instance Functor LoadedDoc where
+  fmap f (LoadedDoc l m c) = LoadedDoc l (f m) c
 
 data Content = Content {
   _contentPath :: FilePath,
   _contentType :: ContentType,
   _contentBody :: ByteString
-}
+} deriving (Show)
 
-makeLenses ''Document
+makeLenses ''LoadedDoc
 makeLenses ''Content
 

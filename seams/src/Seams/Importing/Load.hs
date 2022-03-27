@@ -3,28 +3,23 @@
 module Seams.Importing.Load where
 
 import System.FilePath
-import Seams.Importing.FileSchema
-import Data.ByteString (ByteString)
-import Control.Monad.Trans.Class
 import Data.Aeson
-import qualified Data.ByteString.Lazy as BL
 import Data.Frontmatter
 import Data.Yaml
-import qualified Data.Yaml as Yaml
-import Control.Monad.Trans.Except
-import Control.Arrow
 import Data.Either.Combinators
 import Data.Either.Utils
-import Data.Functor.Identity 
 import Seams.Importing.ReadFile
 import Seams.Importing.Types
+import Seams.Types
 
 newtype LoadError = LoadError String
 
+loadDocument :: (MonadFail m, FromJSON h) => FilePath -> ReadFileT m (LoadedDoc h)
 loadDocument path = case extensionToDocumentType $ takeExtension path of
   Just dType -> loadDocAsType dType path
   Nothing -> fail $ "unknown doctype at path " ++ path
 
+loadDocAsType :: (MonadFail m, FromJSON h) => DocumentType -> FilePath -> ReadFileT m (LoadedDoc h)
 loadDocAsType YAML path =
   let
     contentPath = takeBaseName path
@@ -38,12 +33,12 @@ loadDocAsType YAML path =
       pure (doc, contentType)
 
     contentBody <- envReadFile contentPath
-    pure $ Document path doc (Content contentPath contentType contentBody)
+    pure $ LoadedDoc path doc (Content contentPath contentType contentBody)
 
 loadDocAsType FrontmatterMarkdown path = do
   dContent <- envReadFile path
   case parseYamlFrontmatter dContent of
     Fail _ _ err -> fail err
     Partial _ -> fail "Incomplete input"
-    Done rest fm -> pure $ Document path fm (Content path Markdown rest)
+    Done rest fm -> pure $ LoadedDoc path fm (Content path Markdown rest)
 
