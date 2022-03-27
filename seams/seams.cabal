@@ -25,7 +25,7 @@ source-repository head
 
 library
   exposed-modules:
-      Lib
+      Seams.CLI
       Seams.DB.Models
       Seams.DB.Queries
       Seams.Importing.FileSchema
@@ -49,6 +49,7 @@ library
     , frontmatter
     , lens
     , network-uri
+    , optparse-applicative
     , persistent
     , persistent-postgresql
     , postgresql-typed
@@ -79,6 +80,7 @@ executable seams-exe
     , frontmatter
     , lens
     , network-uri
+    , optparse-applicative
     , persistent
     , persistent-postgresql
     , postgresql-typed
@@ -114,6 +116,7 @@ test-suite seams-test
     , hspec
     , lens
     , network-uri
+    , optparse-applicative
     , persistent
     , persistent-postgresql
     , postgresql-typed

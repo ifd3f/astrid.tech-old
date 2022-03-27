@@ -1,6 +1,7 @@
 module Main where
 
-import Lib
+import Seams.CLI
 
 main :: IO ()
-main = someFunc
+main = execParser parser >>= execute
+

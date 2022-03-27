@@ -1,12 +1,17 @@
 { pkgs ? import <nixpkgs> { } }:
 pkgs.mkShell {
-  nativeBuildInputs = with pkgs; [
+  nativeBuildInputs = let
+    customghc = (pkgs.haskellPackages.ghcWithPackages (hpkgs: with hpkgs; [
+      cabal-install
+      zlib
+    ]));
+  in with pkgs; [
     cargo
     curl
     dbmate
     docker
     docker-compose
-    ghc
+    customghc
     git
     haskell-language-server
     haskellPackages.hlint
@@ -18,6 +23,10 @@ pkgs.mkShell {
     rustc
     stack
     yarn
+    zlib
+  ];
+
+  libraryHaskellDepends = with pkgs; [
     zlib
   ];
 

@@ -2,6 +2,8 @@
 {-# LANGUAGE DuplicateRecordFields #-}
 {-# LANGUAGE OverloadedStrings #-}
 {-# LANGUAGE TemplateHaskell #-}
+{-# LANGUAGE TupleSections #-}
+{-# LANGUAGE FlexibleInstances #-}
 
 -- | This module defines the input schema and some parsing stuff.
 module Seams.Importing.FileSchema where
@@ -18,6 +20,8 @@ import qualified Data.Vector as V
 import Data.Maybe (maybeToList)
 import qualified Data.Aeson as A
 import Data.Map (Map)
+import qualified Data.Map as M
+import Seams.Types
 
 -- | JSON of a document's metadata.
 data Doc extra = Doc {
@@ -112,7 +116,7 @@ instance ToJSON PostSlug where
 data RSVP = RSVPYes | RSVPNo | RSVPMaybe | RSVPInterested
   deriving (Show, Eq)
 
-instance FromJSON RSVP where 
+instance FromJSON RSVP where
   parseJSON (Bool True) = pure RSVPYes
   parseJSON (Bool False) = pure RSVPNo
   parseJSON (String "yes") = pure RSVPYes
@@ -121,7 +125,7 @@ instance FromJSON RSVP where
   parseJSON (String "interested") = pure RSVPInterested
   parseJSON unknown = fail $ "Unknown value for RSVP: " ++ show unknown
 
-instance ToJSON RSVP where 
+instance ToJSON RSVP where
   toJSON RSVPYes = String "yes"
   toJSON RSVPNo = String "no"
   toJSON RSVPMaybe = String "maybe"
@@ -157,13 +161,15 @@ $(deriveJSON defaultOptions{
   fieldLabelModifier = map toLower . drop 7
 } ''ProjectMeta)
 
-type Color = Text
-
 data TagColorSheet = TagColorSheet {
   _tcsText :: Maybe Color,
   _tcsBG :: Maybe Color,
-  _tcsTags :: [Text]
+  _tcsSlugs :: [Text]
 } deriving (Show, Eq)
+
+makeColorMap :: TagColorSheet -> TagColorMap
+makeColorMap (TagColorSheet appText appBg slugs) =
+  M.fromList $ map (, TagColors appText appBg) slugs
 
 $(deriveJSON defaultOptions{
   fieldLabelModifier = map toLower . drop 4
@@ -171,12 +177,18 @@ $(deriveJSON defaultOptions{
 
 data TagConfig = TagConfig {
   _tcfgTitles :: Map Text Text,
-  _tcfgColors :: TagColorSheet
+  _tcfgColors :: [TagColorSheet]
 } deriving (Show, Eq)
 
 $(deriveJSON defaultOptions{
   fieldLabelModifier = map toLower . drop 4
 } ''TagConfig)
+
+instance Semigroup TagConfig where
+  TagConfig lt lc <> TagConfig rt rc = TagConfig (lt <> rt) (lc <> rc)
+
+instance Monoid TagConfig where
+  mempty = TagConfig mempty mempty
 
 makeLenses ''ProjectMeta
 makeLenses ''PostMeta

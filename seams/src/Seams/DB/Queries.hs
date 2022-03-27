@@ -10,7 +10,7 @@ import Data.Foldable
 import Control.Lens
 import Seams.Importing.FileSchema
 import Data.Time
-import qualified Data.Map as M
+import Seams.Types
 
 insertOrGetTagId slug = either entityKey id <$> insertBy (DB.Tag slug Nothing Nothing Nothing)
 
@@ -70,13 +70,9 @@ insertTagTitle slug title = upsert
   (DB.Tag slug (Just title) Nothing Nothing)
   [DB.TagTitle =. Just title]
 
-insertTagColorSheet (TagColorSheet text bg tags) = traverse_ (\slug ->
-  upsert
-    (DB.Tag slug Nothing text bg)
-    [DB.TagTextColor =. text, DB.TagBgColor =. bg])
-  tags
-
-insertTagConfig (TagConfig titles colors) = do
-  traverse_ (uncurry insertTagTitle) $ M.assocs titles
-  insertTagColorSheet colors
+insertTagColors slug tc = upsert
+  (DB.Tag slug Nothing (tc^.text) (tc^.bg))
+  -- NOTE: text and background changes *together*
+  [ DB.TagTextColor =. tc^.text
+  , DB.TagBgColor =. tc^.bg ]
 

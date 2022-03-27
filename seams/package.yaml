@@ -30,6 +30,7 @@ dependencies:
 - lens
 - MissingH
 - network-uri
+- optparse-applicative
 - persistent
 - persistent-postgresql
 - postgresql-typed
@@ -40,6 +41,8 @@ dependencies:
 - uuid
 - vector
 - yaml
+
+pkgconfig-depends: zlib
 
 library:
   source-dirs: src

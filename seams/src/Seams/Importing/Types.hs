@@ -4,6 +4,13 @@ module Seams.Importing.Types where
 import Seams.Types
 import Control.Lens.TH
 import Data.ByteString
+import Seams.Importing.FileSchema
+
+data LoadedContent = LoadedContent {
+  _lcPosts :: [LoadedDoc (Doc PostMeta)],
+  _lcProjects :: [LoadedDoc (Doc ProjectMeta)],
+  _lcTagConfigs :: TagConfig
+}
 
 data LoadedDoc m = LoadedDoc {
   _ldPath :: FilePath,
@@ -20,6 +27,7 @@ data Content = Content {
   _contentBody :: ByteString
 } deriving (Show)
 
+makeLenses ''LoadedContent
 makeLenses ''LoadedDoc
 makeLenses ''Content
 
