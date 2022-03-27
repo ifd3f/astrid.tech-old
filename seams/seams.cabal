@@ -99,7 +99,8 @@ test-suite seams-test
   main-is: Spec.hs
   other-modules:
       Seams.Importing.FileSchemaSpec
-      Seams.Importing.LoadSpec
+      Seams.Importing.ReadFileSpec
+      Seams.TestUtils
       Paths_seams
   hs-source-dirs:
       test

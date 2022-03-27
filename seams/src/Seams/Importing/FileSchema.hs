@@ -164,7 +164,7 @@ $(deriveJSON defaultOptions{
 data TagColorSheet = TagColorSheet {
   _tcsText :: Maybe Color,
   _tcsBG :: Maybe Color,
-  _tcsSlugs :: [Text]
+  _tcsTags :: [Text]
 } deriving (Show, Eq)
 
 makeColorMap :: TagColorSheet -> TagColorMap
@@ -181,7 +181,8 @@ data TagConfig = TagConfig {
 } deriving (Show, Eq)
 
 $(deriveJSON defaultOptions{
-  fieldLabelModifier = map toLower . drop 4
+  fieldLabelModifier = map toLower . drop 5,
+  omitNothingFields = True
 } ''TagConfig)
 
 instance Semigroup TagConfig where

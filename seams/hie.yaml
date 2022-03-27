@@ -6,5 +6,9 @@ cradle:
     - path: "./app/Main.hs"
       component: "seams:exe:seams-exe"
 
+    - path: "./app/Paths_seams.hs"
+      component: "seams:exe:seams-exe"
+
     - path: "./test"
       component: "seams:test:seams-test"
+

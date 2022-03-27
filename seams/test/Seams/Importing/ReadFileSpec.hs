@@ -1,28 +1,30 @@
+{-# LANGUAGE BlockArguments #-}
 {-# LANGUAGE OverloadedStrings #-}
 
-module Seams.Importing.LoadSpec where
+module Seams.Importing.ReadFileSpec where
 
 import Test.Hspec
 import Seams.Importing.Load
 import System.FilePath
 import qualified Data.Map as M
 import Data.ByteString
+import Seams.Importing.ReadFile
 
-rfFromFilemap :: [(FilePath, ByteString)] -> FilePath -> Maybe ByteString
+rfFromFilemap :: [(FilePath, ReadResult a)] -> FilePath -> Maybe (ReadResult a)
 rfFromFilemap pairs path = M.lookup path $ M.fromList pairs
 
 exampleFS = rfFromFilemap
-  [ ("test", "bs1")
+  [ ("test", File "bs1")
   ]
 
 spec = do
-  describe "Loader" $ do
-    describe "envReadFile" $ do
-      it "reads existing files correctly" $ do
+  describe "ReadFileT" do
+    describe "envReadFile" do
+      it "reads existing files correctly" do
         let result = runReadFileT (envReadFile "test") exampleFS
         result `shouldBe` Just "bs1"
 
-      it "reads nonexistent files correctly" $ do
+      it "reads nonexistent files correctly" do
         let result = runReadFileT (envReadFile "this-doesnt-exist") exampleFS
         result `shouldBe` Nothing
 

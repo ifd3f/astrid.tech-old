@@ -73,8 +73,9 @@ tests:
     - -with-rtsopts=-N
     dependencies:
     - base >= 4.7 && < 5
-    - raw-strings-qq
     - seams
+
+    - raw-strings-qq
     - containers
     - filepath
     - hspec
