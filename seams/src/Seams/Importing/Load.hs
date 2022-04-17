@@ -22,26 +22,25 @@ type ContentLoaderT m a = ReadFileT' m a
 
 type DocLoaderT m a = ExceptT LoadError (ReadFileT' m) a
 
--- loadContentFolder :: FilePath -> ReadFileT' m LoadedContent
--- loadContentFolder path =
---   LoadedContent <$> loadDocs (path </> "blog") <*>
---   loadDocs (path </> "projects") <*>
---   loadMergeableDir (path </> "tags")
---   where
---       blogResults = loadDocs (path </> "blog")
---       projectResults = loadDocs (path </> "projectResults")
---       tagResults = loadMergeableDir (path </> "tags")
---       errors = lefts blogResults ++ lefts projectResults ++
---                   ( case tagResults of
---                       Success 
-loadDocs ::
-     (Monad m, FromJSON a)
+loadContentFolder ::
+     Monad m
   => FilePath
-  -> ContentLoaderT m [Either (WithPath LoadError) (LoadedDoc a)]
+  -> ContentLoaderT m (Validation [WithPath LoadError] LoadedContent)
+loadContentFolder path = do
+  blogResults <- loadDocs (path </> "blog")
+  projectResults <- loadDocs (path </> "projects")
+  tagResults <- loadMergeableDir (path </> "tags")
+  pure $ LoadedContent <$> blogResults <*> projectResults <*> tagResults
+
+loadDocs ::
+     (Monad m, FromJSON d)
+  => FilePath
+  -> ContentLoaderT m (Validation [WithPath LoadError] [LoadedDoc d])
 loadDocs path = do
   files <- envWalkFiles path
   let loadable = mapMaybe loadDocument' files
-  sequenceA loadable
+  results <- sequenceA loadable
+  pure $ sequenceA results
 
 loadMergeableDir ::
      (Monad m, FromJSON a, Monoid a)
@@ -60,12 +59,12 @@ loadMergeableDir path = do
 loadDocument' ::
      (Monad m, FromJSON d)
   => FilePath
-  -> Maybe (ReadFileT' m (Either (WithPath LoadError) (LoadedDoc d)))
+  -> Maybe (ReadFileT' m (Validation [WithPath LoadError] (LoadedDoc d)))
 loadDocument' path =
   loadDocument path <&>
   (\(WithPath p loader) -> do
      result <- runExceptT loader
-     pure $ mapLeft (WithPath p) result)
+     pure $ fromEither $ mapLeft (\e -> [WithPath p e]) result)
 
 loadDocument ::
      (Monad m, FromJSON d)
