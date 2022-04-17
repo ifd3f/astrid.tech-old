@@ -1,0 +1,9 @@
+{
+  "time": {
+    "created": "2014-09-24T18:31:40-07:00",
+    "published": "2015-01-01T18:31:40-07:00",
+  },
+  "name": "A JSON-based metadata",
+  "tagline": "This is a JSON file.",
+  "slug": [2015, 1, 1, 0, "json-metadata"]
+}

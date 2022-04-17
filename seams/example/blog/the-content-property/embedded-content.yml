@@ -1,0 +1,9 @@
+time:
+  created: 2021-09-24T20:41:19,918217912-07:00
+  published: 2021-09-24T20:41:24,130565413-07:00
+slug: [2021, 9, 24, 11]
+content: >
+  If I set content in the YAML file, this is merely plaintext.
+  See, this <script>alert("oh fuck")</script> is plaintext.
+# The twt subcommand lets you quickly write posts, in the spirit of twtxt
+colophon: EDITOR=nvim seams twt 

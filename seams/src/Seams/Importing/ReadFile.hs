@@ -1,12 +1,26 @@
 module Seams.Importing.ReadFile where
 import Data.Functor.Identity
-import Control.Monad.Trans.Class
 import Data.ByteString ( ByteString )
 import System.FilePath
 import Data.Yaml
+import Control.Exception
+import qualified Data.ByteString as BS
+import System.Directory
+import System.IO.Error
+import Data.Functor
+import Control.Monad.Trans
+import Control.Monad.Except
+import Control.Monad.Trans.Maybe
+import Data.Either.Utils
+import Data.Either.Combinators
 
 newtype ReadError = ReadError String
-data ReadResult f = File f | Dir [String] deriving Show
+data ReadResult content = File content | Dir [String] | Empty deriving Show
+
+instance Functor ReadResult where
+  fmap f (File c) = File (f c)
+  fmap _ (Dir children) = Dir children
+  fmap _ Empty = Empty
 
 newtype ReadFileT f m a = ReadFileT {
   runReadFileT :: (FilePath -> m (ReadResult f)) -> m a
@@ -18,25 +32,33 @@ type ReadFile f = ReadFileT f Identity
 envRead :: FilePath -> ReadFileT f m (ReadResult f)
 envRead path = ReadFileT $ \rf -> rf path
 
-envReadFile :: (MonadFail m) => FilePath -> ReadFileT b m b
-envReadFile path = do
-  result <- envRead path
-  case result of
-    File f -> pure f
-    Dir _ -> fail $ "Expected file, got dir at " ++ path
+getReadFile :: Applicative m => ReadFileT f m (FilePath -> m (ReadResult f))
+getReadFile = ReadFileT $ \rf -> pure rf
 
-envReadDir :: (MonadFail m) => FilePath -> ReadFileT f m [String]
-envReadDir path = do
-  result <- envRead path
-  case result of
-    Dir d -> pure d
-    File _ -> fail $ "Expected dir, got file at " ++ path
+newtype NonexistentFile = NonexistentFile FilePath
+
+asFile :: ReadResult a -> Maybe a
+asFile (File f) = Just f
+asFile _ = Nothing
+
+asDir :: ReadResult a -> Maybe [String]
+asDir (Dir c) = Just c
+asDir _ = Nothing
+
+envRead' :: Functor m => (ReadResult f -> Maybe a) -> e -> FilePath -> ExceptT e (ReadFileT f m) a
+envRead' sel err path = ExceptT $ envRead path <&> sel <&> maybeToEither err
+
+envReadYAML :: (FromJSON a, Monad m) => FilePath -> ReadFileT' m (Either (Maybe ParseException) a)
+envReadYAML path = runExceptT $ do
+  file <- envRead' asFile Nothing path
+  liftEither $ mapLeft Just $ decodeEither' file
 
 -- | Returns a list of all files under this.
 envWalkFiles :: (Monad m) => FilePath -> ReadFileT f m [FilePath]
 envWalkFiles path = do
   result <- envRead path
   case result of
+    Empty -> return []
     File _ -> return [path]
     Dir children -> do
       childPaths <-
@@ -44,18 +66,13 @@ envWalkFiles path = do
         in traverse envWalkFiles childPaths
       return $ concat childPaths
 
-envReadYAML :: (MonadFail m, FromJSON b) => FilePath -> ReadFileT' m b
-envReadYAML path = do
-  content <- envReadFile path
-  either (fail . show) pure $ decodeEither' content
-
 instance Functor m => Functor (ReadFileT f m) where
   fmap f rft = ReadFileT $ fmap f . runReadFileT rft
 
 instance Applicative m => Applicative (ReadFileT f m) where
   pure a = ReadFileT $ const (pure a)
   f <*> a = ReadFileT $ \rf ->
-    runReadFileT f rf <*> runReadFileT a rf 
+    runReadFileT f rf <*> runReadFileT a rf
 
 instance Monad m => Monad (ReadFileT f m) where
   rft >>= f = ReadFileT $ \rf ->
@@ -65,6 +82,13 @@ instance Monad m => Monad (ReadFileT f m) where
 instance MonadTrans (ReadFileT f) where
   lift m = ReadFileT $ const m
 
-instance MonadFail m => MonadFail (ReadFileT f m) where
-  fail x = ReadFileT $ const (fail x)
+ioReadFile :: FilePath -> ExceptT IOError IO (ReadResult ByteString)
+ioReadFile path = ExceptT $ file `catchIO` const dir `catchIO` emptyHandler
+  where
+    catchIO = catch  -- cute trick to catch IOErrors without type system complaining
+    file = Right . File <$> BS.readFile path
+    dir = Right . Dir <$> listDirectory path
+    emptyHandler e
+      | isDoesNotExistError e = pure $ Right Empty
+      | otherwise = pure $ Left e
 

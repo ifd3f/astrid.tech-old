@@ -1,0 +1,183 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+<!-- Yoinked from https://freesvg.org/roym-pyramide-2 -->
+<svg
+    xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+    xmlns:rdf="http://www.w3.org/1999/02/22-rdf-syntax-ns#"
+    xmlns="http://www.w3.org/2000/svg"
+    xmlns:cc="http://creativecommons.org/ns#"
+    xmlns:dc="http://purl.org/dc/elements/1.1/"
+    xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+    xmlns:svg="http://www.w3.org/2000/svg"
+    xmlns:ns1="http://sozi.baierouge.fr"
+    xmlns:xlink="http://www.w3.org/1999/xlink"
+    id="svg2"
+    sodipodi:docname="roym_pyramide_2.svg"
+    inkscape:export-filename="C:\joanna\Gfx\drawings_vector\admin\thumbs\roym_pyramide.png"
+    viewBox="0 0 135.66 221.52"
+    sodipodi:version="0.32"
+    inkscape:export-xdpi="51.960716"
+    version="1.0"
+    inkscape:output_extension="org.inkscape.output.svg.inkscape"
+    inkscape:export-ydpi="51.960716"
+    inkscape:version="0.45.1+0.46pre1+devel"
+    sodipodi:docbase="C:\Documents and Settings\RoyM\Mes documents\inkscape"
+  >
+  <sodipodi:namedview
+      id="base"
+      bordercolor="#666666"
+      inkscape:pageshadow="2"
+      inkscape:guide-bbox="true"
+      pagecolor="#ffffff"
+      inkscape:window-height="708"
+      inkscape:zoom="2.2841935"
+      inkscape:window-x="0"
+      showgrid="false"
+      borderopacity="1.0"
+      inkscape:current-layer="layer1"
+      inkscape:cx="183.60023"
+      inkscape:cy="110.76119"
+      showguides="true"
+      inkscape:window-y="58"
+      inkscape:guide-points="true"
+      inkscape:window-width="1280"
+      inkscape:pageopacity="0.0"
+      inkscape:document-units="px"
+  />
+  <g
+      id="layer1"
+      inkscape:label="Calque 1"
+      inkscape:groupmode="layer"
+      transform="translate(-251.1 -293.83)"
+    >
+    <g
+        id="g2426"
+      >
+      <path
+          id="path3233"
+          style="fill-opacity:.95413;stroke:#ada0a0;stroke-width:4.6581;fill:#ff6e0a"
+          sodipodi:type="star"
+          sodipodi:sides="6"
+          sodipodi:r1="48.744644"
+          inkscape:flatsided="true"
+          transform="matrix(1.3247 0 0 -.55663 -21.215 735.48)"
+          sodipodi:arg2="1.5736667"
+          sodipodi:arg1="1.0500679"
+          inkscape:randomized="0.001"
+          sodipodi:cy="441.73315"
+          sodipodi:cx="256.81241"
+          inkscape:rounded="0"
+          sodipodi:r2="42.2141"
+          d="m281.04 483.97l-48.77-0.14-24.2-42.24 24.53-42.11 48.67 0.09 24.28 42.27-24.51 42.13z"
+      />
+      <path
+          id="path3239"
+          sodipodi:nodetypes="ccc"
+          style="stroke:#000000;stroke-width:1px;fill:none"
+          d="m251.6 489.56l67.55-194.35"
+      />
+      <path
+          id="path3241"
+          sodipodi:nodetypes="cc"
+          style="stroke:#000000;stroke-width:1px;fill:none"
+          d="m386.27 489.76l-67.12-195.43"
+      />
+      <path
+          id="path3243"
+          sodipodi:nodetypes="cc"
+          style="stroke:#000000;stroke-width:1px;fill:none"
+          d="m351.6 514.75l-32.45-219.39"
+      />
+      <path
+          id="path3245"
+          sodipodi:nodetypes="cc"
+          style="stroke:#000000;stroke-width:1px;fill:none"
+          d="m286.47 514.85l32.68-217.88"
+      />
+      <path
+          id="path3247"
+          sodipodi:nodetypes="cc"
+          style="stroke:#000000;stroke-dasharray:1, 1;fill:none"
+          d="m286.42 464.05l32.73-169.21"
+      />
+      <path
+          id="path3249"
+          sodipodi:nodetypes="cc"
+          style="stroke:#000000;stroke-dasharray:1, 1;fill:none"
+          d="m351.08 464.05l-31.93-169.21"
+      />
+    </g
+    >
+  </g
+  >
+  <metadata
+    >
+    <rdf:RDF
+      >
+      <cc:Work
+        >
+        <dc:format
+          >image/svg+xml</dc:format
+        >
+        <dc:type
+            rdf:resource="http://purl.org/dc/dcmitype/StillImage"
+        />
+        <cc:license
+            rdf:resource="http://creativecommons.org/licenses/publicdomain/"
+        />
+        <dc:publisher
+          >
+          <cc:Agent
+              rdf:about="http://openclipart.org/"
+            >
+            <dc:title
+              >Openclipart</dc:title
+            >
+          </cc:Agent
+          >
+        </dc:publisher
+        >
+        <dc:title
+          >pyramide 2</dc:title
+        >
+        <dc:date
+          >2006-12-26T00:00:00</dc:date
+        >
+        <dc:description
+        />
+        <dc:source
+          >https://openclipart.org/detail/15395/-by--15395</dc:source
+        >
+        <dc:creator
+          >
+          <cc:Agent
+            >
+            <dc:title
+              >roym</dc:title
+            >
+          </cc:Agent
+          >
+        </dc:creator
+        >
+      </cc:Work
+      >
+      <cc:License
+          rdf:about="http://creativecommons.org/licenses/publicdomain/"
+        >
+        <cc:permits
+            rdf:resource="http://creativecommons.org/ns#Reproduction"
+        />
+        <cc:permits
+            rdf:resource="http://creativecommons.org/ns#Distribution"
+        />
+        <cc:permits
+            rdf:resource="http://creativecommons.org/ns#DerivativeWorks"
+        />
+      </cc:License
+      >
+    </rdf:RDF
+    >
+  </metadata
+  >
+</svg
+>
