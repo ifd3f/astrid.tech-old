@@ -9,39 +9,40 @@
 module Seams.Importing.FileSchema where
 
 import Control.Lens.TH
-import Data.Text(Text)
-import Data.Time
-import Data.Char
 import Data.Aeson
+import qualified Data.Aeson as A
 import Data.Aeson.TH
+import Data.Char
+import Data.Map (Map)
+import qualified Data.Map as M
+import Data.Maybe (maybeToList)
+import Data.Text (Text)
+import Data.Time
 import Data.UUID
 import Data.Vector ((!), (!?))
 import qualified Data.Vector as V
-import Data.Maybe (maybeToList)
-import qualified Data.Aeson as A
-import Data.Map (Map)
-import qualified Data.Map as M
 import Seams.Types
 
 -- | JSON of a document's metadata.
-data Doc extra = Doc {
-  _docUUID :: Maybe UUID,
-  _docExtra :: extra,
-  _docTime :: Timestamps,
-  _docColophon :: Maybe Text,
-  _docContent :: Maybe ContentField,
+data Doc extra =
+  Doc
+    { _docUUID :: Maybe UUID
+    , _docExtra :: extra
+    , _docTime :: Timestamps
+    , _docColophon :: Maybe Text
+    , _docContent :: Maybe ContentField
   -- | HTML thumbnail.
-  _docThumbnail :: Maybe FilePath,
+    , _docThumbnail :: Maybe FilePath
   -- | HTML preview description.
-  _docPreview :: Maybe Text
-} deriving (Show, Functor)
+    , _docPreview :: Maybe Text
+    }
+  deriving (Show, Functor)
 
 -- | Document fields. Document Meta fields are flattened.
 instance FromJSON meta => FromJSON (Doc meta) where
-  parseJSON = withObject "Doc" $ \o ->
-    Doc <$>
-      o .: "uuid" <*>
-      parseJSON (Object o) <*> -- meta's fields are flattened
+  parseJSON =
+    withObject "Doc" $ \o ->
+      Doc <$> o .: "uuid" <*> parseJSON (Object o) <*> -- meta's fields are flattened
       o .: "time" <*>
       o .:? "colophon" <*>
       o .:? "content" <*>
@@ -55,65 +56,73 @@ data ContentField
   deriving (Show)
 
 instance ToJSON ContentField where
-  toJSON (FileRef path) = object [ "path" .= path ]
+  toJSON (FileRef path) = object ["path" .= path]
   toJSON (EmbeddedPlaintext text) = A.String text
 
 instance FromJSON ContentField where
-  parseJSON x = case x of
-    A.String t -> pure $ EmbeddedPlaintext t
-    Object o -> EmbeddedPlaintext <$> o .: "path"
-    other -> fail $ "ContentField: unexpected object" ++ show other
+  parseJSON x =
+    case x of
+      A.String t -> pure $ EmbeddedPlaintext t
+      Object o -> EmbeddedPlaintext <$> o .: "path"
+      other -> fail $ "ContentField: unexpected object" ++ show other
 
-data Timestamps = Timestamps {
+data Timestamps =
+  Timestamps
   -- | When this content was published on the website.
-  _tsPublished :: ZonedTime,
+    { _tsPublished :: ZonedTime
   -- | When this content was created. Semantically, the content itself, not
   -- | the document holding the content.
   -- | If Nothing, then it is the same as published.
-  _tsCreated :: Maybe ZonedTime,
+    , _tsCreated :: Maybe ZonedTime
   -- | When this content was last edited, or Nothing if it was not edited
   -- | after publishing.
-  _tsModified :: Maybe ZonedTime
-} deriving (Show)
+    , _tsModified :: Maybe ZonedTime
+    }
+  deriving (Show)
 
-$(deriveJSON defaultOptions{
-  fieldLabelModifier = map toLower . drop 3
-} ''Timestamps)
+$(deriveJSON
+    defaultOptions {fieldLabelModifier = map toLower . drop 3}
+    ''Timestamps)
 
 -- | The slug that a post will be placed under.
 -- | The dates don't have to correspond to the actual publishing dates.
-data PostSlug = PostSlug {
-  _slugYear :: Int,
-  _slugMonth :: Int,
-  _slugDay :: Int,
-  _slugOrdinal :: Int,
-  _slugName :: Maybe Text
-} deriving (Show, Eq)
+data PostSlug =
+  PostSlug
+    { _slugYear :: Int
+    , _slugMonth :: Int
+    , _slugDay :: Int
+    , _slugOrdinal :: Int
+    , _slugName :: Maybe Text
+    }
+  deriving (Show, Eq)
 
 -- | A PostSlug is an array like so:
 -- | [2020, 3, 20, 2] 
 -- | [2020, 3, 20, 2, "some-slug"] 
 instance FromJSON PostSlug where
-  parseJSON = withArray "PostSlug" $ \a -> do
-    if length a > 5
-      then fail "array is too long"
-      else pure ()
-    if length a < 4
-      then fail "array is too short"
-      else pure ()
-
-    PostSlug <$>
-      parseJSON (a ! 0) <*>
-      parseJSON (a ! 1) <*>
-      parseJSON (a ! 2) <*>
-      parseJSON (a ! 3) <*>
-      traverse parseJSON (a !? 4)
+  parseJSON =
+    withArray "PostSlug" $ \a -> do
+      if length a > 5
+        then fail "array is too long"
+        else pure ()
+      if length a < 4
+        then fail "array is too short"
+        else pure ()
+      PostSlug <$> parseJSON (a ! 0) <*> parseJSON (a ! 1) <*> parseJSON (a ! 2) <*>
+        parseJSON (a ! 3) <*>
+        traverse parseJSON (a !? 4)
 
 instance ToJSON PostSlug where
-  toJSON (PostSlug y m d o n) = Array $ V.fromList $
+  toJSON (PostSlug y m d o n) =
+    Array $
+    V.fromList $
     (Number . fromIntegral <$> [y, m, d, o]) ++ (String <$> maybeToList n)
 
-data RSVP = RSVPYes | RSVPNo | RSVPMaybe | RSVPInterested
+data RSVP
+  = RSVPYes
+  | RSVPNo
+  | RSVPMaybe
+  | RSVPInterested
   deriving (Show, Eq)
 
 instance FromJSON RSVP where
@@ -132,58 +141,66 @@ instance ToJSON RSVP where
   toJSON RSVPInterested = String "interested"
 
 -- | Metadata associated with a blog post.
-data PostMeta = PostMeta {
-  _postTitle :: Maybe Text,
-  _postSlug :: PostSlug,
-  _postTagline :: Maybe Text,
-  _postRSVP :: Maybe RSVP,
-  _postTags :: [Text]
-} deriving (Show, Eq)
+data PostMeta =
+  PostMeta
+    { _postTitle :: Maybe Text
+    , _postSlug :: PostSlug
+    , _postTagline :: Maybe Text
+    , _postRSVP :: Maybe RSVP
+    , _postTags :: [Text]
+    }
+  deriving (Show, Eq)
 
-$(deriveJSON defaultOptions{
-  fieldLabelModifier = map toLower . drop 5
-} ''PostMeta)
+$(deriveJSON
+    defaultOptions {fieldLabelModifier = map toLower . drop 5}
+    ''PostMeta)
 
 -- | Metadata associated with a project.
-data ProjectMeta = ProjectMeta {
-  _projectTitle :: Text,
-  _projectTagline :: Text,
-  _projectSlug :: Text,
-  _projectTags :: [Text],
-  _projectStart :: ZonedTime,
-  _projectSource :: Maybe String,
-  _projectURI :: Maybe String,
-  _projectTile :: Maybe FilePath,
-  _projectEnd :: Maybe ZonedTime
-} deriving (Show)
+data ProjectMeta =
+  ProjectMeta
+    { _projectTitle :: Text
+    , _projectTagline :: Text
+    , _projectSlug :: Text
+    , _projectTags :: [Text]
+    , _projectStart :: ZonedTime
+    , _projectSource :: Maybe String
+    , _projectURI :: Maybe String
+    , _projectTile :: Maybe FilePath
+    , _projectEnd :: Maybe ZonedTime
+    }
+  deriving (Show)
 
-$(deriveJSON defaultOptions{
-  fieldLabelModifier = map toLower . drop 7
-} ''ProjectMeta)
+$(deriveJSON
+    defaultOptions {fieldLabelModifier = map toLower . drop 7}
+    ''ProjectMeta)
 
-data TagColorSheet = TagColorSheet {
-  _tcsText :: Maybe Color,
-  _tcsBG :: Maybe Color,
-  _tcsTags :: [Text]
-} deriving (Show, Eq)
+data TagColorSheet =
+  TagColorSheet
+    { _tcsText :: Maybe Color
+    , _tcsBG :: Maybe Color
+    , _tcsTags :: [Text]
+    }
+  deriving (Show, Eq)
 
 makeColorMap :: TagColorSheet -> TagColorMap
 makeColorMap (TagColorSheet appText appBg slugs) =
   M.fromList $ map (, TagColors appText appBg) slugs
 
-$(deriveJSON defaultOptions{
-  fieldLabelModifier = map toLower . drop 4
-} ''TagColorSheet)
+$(deriveJSON
+    defaultOptions {fieldLabelModifier = map toLower . drop 4}
+    ''TagColorSheet)
 
-data TagConfig = TagConfig {
-  _tcfgTitles :: Map Text Text,
-  _tcfgColors :: [TagColorSheet]
-} deriving (Show, Eq)
+data TagConfig =
+  TagConfig
+    { _tcfgTitles :: Map Text Text
+    , _tcfgColors :: [TagColorSheet]
+    }
+  deriving (Show, Eq)
 
-$(deriveJSON defaultOptions{
-  fieldLabelModifier = map toLower . drop 5,
-  omitNothingFields = True
-} ''TagConfig)
+$(deriveJSON
+    defaultOptions
+      {fieldLabelModifier = map toLower . drop 5, omitNothingFields = True}
+    ''TagConfig)
 
 instance Semigroup TagConfig where
   TagConfig lt lc <> TagConfig rt rc = TagConfig (lt <> rt) (lc <> rc)
@@ -192,10 +209,15 @@ instance Monoid TagConfig where
   mempty = TagConfig mempty mempty
 
 makeLenses ''ProjectMeta
-makeLenses ''PostMeta
-makeLenses ''PostSlug
-makeLenses ''TagColorSheet
-makeLenses ''TagConfig
-makeLenses ''Doc
-makeLenses ''Timestamps
 
+makeLenses ''PostMeta
+
+makeLenses ''PostSlug
+
+makeLenses ''TagColorSheet
+
+makeLenses ''TagConfig
+
+makeLenses ''Doc
+
+makeLenses ''Timestamps

@@ -12,14 +12,16 @@
 
 module Seams.DB.Models where
 
-import Data.Text (Text)
-import Database.Persist.Postgresql
-import Database.Persist.TH 
-import Data.Time
 import Data.ByteString
+import Data.Text (Text)
+import Data.Time
+import Database.Persist.Postgresql
+import Database.Persist.TH
 import Seams.Types
 
-share [mkPersist sqlSettings, mkMigrate "migrateTables"] [persistLowerCase|
+share
+  [mkPersist sqlSettings, mkMigrate "migrateTables"]
+  [persistLowerCase|
 TagObj
   deriving Show
 
@@ -82,4 +84,3 @@ Project
 
   deriving Show
 |]
-

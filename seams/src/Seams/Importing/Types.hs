@@ -3,34 +3,42 @@
 {-# LANGUAGE TypeSynonymInstances #-}
 
 module Seams.Importing.Types where
-import Seams.Types
+
 import Control.Lens.TH
 import Data.ByteString
-import Seams.Importing.FileSchema
 import Data.Yaml
+import Seams.Importing.FileSchema
+import Seams.Types
 
-data LoadedContent = LoadedContent {
-  _lcPosts :: [LoadedDoc (Doc PostMeta)],
-  _lcProjects :: [LoadedDoc (Doc ProjectMeta)],
-  _lcTagConfigs :: TagConfig
-}
+data LoadedContent =
+  LoadedContent
+    { _lcPosts :: [LoadedDoc (Doc PostMeta)]
+    , _lcProjects :: [LoadedDoc (Doc ProjectMeta)]
+    , _lcTagConfigs :: TagConfig
+    }
 
-data LoadedDoc m = LoadedDoc {
-  _ldPath :: FilePath,
-  _ldMeta :: m,
-  _ldContent :: Content
-} deriving (Show, Functor)
+data LoadedDoc m =
+  LoadedDoc
+    { _ldPath :: FilePath
+    , _ldMeta :: m
+    , _ldContent :: Content
+    }
+  deriving (Show, Functor)
 
-data Content = Content {
-  _contentPath :: FilePath,
-  _contentType :: ContentType,
-  _contentBody :: ByteString
-} deriving (Show)
+data Content =
+  Content
+    { _contentPath :: FilePath
+    , _contentType :: ContentType
+    , _contentBody :: ByteString
+    }
+  deriving (Show)
 
-data WithPath a = WithPath {
-  _rPath :: FilePath,
-  _rResult :: a
-} deriving (Functor)
+data WithPath a =
+  WithPath
+    { _rPath :: FilePath
+    , _rResult :: a
+    }
+  deriving (Functor)
 
 data LoadError
   = BadYaml String
@@ -43,7 +51,9 @@ data LoadError
   deriving (Show)
 
 makeLenses ''WithPath
-makeLenses ''LoadedContent
-makeLenses ''LoadedDoc
-makeLenses ''Content
 
+makeLenses ''LoadedContent
+
+makeLenses ''LoadedDoc
+
+makeLenses ''Content
