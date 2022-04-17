@@ -43,7 +43,7 @@ data WithPath a =
 data LoadError
   = BadYaml String
   | BadYaml' ParseException
-  | BadConfig FilePath
+  | BadConfig
   | IncompleteFrontmatter
   | NoContent FilePath
   | NoDocument FilePath

@@ -2,15 +2,9 @@ module Seams.Importing.ReadFile where
 
 import Control.Exception
 import Control.Monad.Except
-import Control.Monad.Trans
-import Control.Monad.Trans.Maybe
 import Data.ByteString (ByteString)
 import qualified Data.ByteString as BS
-import Data.Either.Combinators
-import Data.Either.Utils
-import Data.Functor
 import Data.Functor.Identity
-import Data.Yaml
 import System.Directory
 import System.FilePath
 import System.IO.Error
@@ -46,31 +40,6 @@ getReadFile = ReadFileT $ \rf -> pure rf
 
 newtype NonexistentFile =
   NonexistentFile FilePath
-
-asFile :: ReadResult a -> Maybe a
-asFile (File f) = Just f
-asFile _ = Nothing
-
-asDir :: ReadResult a -> Maybe [String]
-asDir (Dir c) = Just c
-asDir _ = Nothing
-
-envRead' ::
-     Functor m
-  => (ReadResult f -> Maybe a)
-  -> e
-  -> FilePath
-  -> ExceptT e (ReadFileT f m) a
-envRead' sel err path = ExceptT $ envRead path <&> sel <&> maybeToEither err
-
-envReadYAML ::
-     (FromJSON a, Monad m)
-  => FilePath
-  -> ReadFileT' m (Either (Maybe ParseException) a)
-envReadYAML path =
-  runExceptT $ do
-    file <- envRead' asFile Nothing path
-    liftEither $ mapLeft Just $ decodeEither' file
 
 -- | Returns a list of all files under this.
 envWalkFiles :: (Monad m) => FilePath -> ReadFileT f m [FilePath]

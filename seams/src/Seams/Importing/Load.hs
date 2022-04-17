@@ -1,74 +1,99 @@
 {-# LANGUAGE ScopedTypeVariables #-}
 {-# LANGUAGE FlexibleContexts #-}
-{-# LANGUAGE LambdaCase #-}
 
 module Seams.Importing.Load where
 
 import Control.Monad.Except
 import Data.Aeson
+import Data.ByteString (ByteString)
 import Data.Either.Combinators
 import Data.Either.Utils (maybeToEither)
 import Data.Frontmatter
-import Data.Functor
+import Data.Functor ((<&>))
 import Data.Maybe
 import Data.Validation
+import Data.Yaml.Aeson (decodeEither')
 import Seams.Importing.ReadFile
 import Seams.Importing.Types
 import Seams.Types
 import System.FilePath
 
--- loadContentFolder :: FilePath -> ReadFileT' m (DirImportResult LoadedContent)
-loadContentFolder path =
-  LoadedContent <$> loadDocs (path </> "blog") <*>
-  loadDocs (path </> "projects") <*>
-  loadMergeableDir (path </> "tags")
+type ContentLoaderT m a = ReadFileT' m a
 
+type DocLoaderT m a = ExceptT LoadError (ReadFileT' m) a
+
+-- loadContentFolder :: FilePath -> ReadFileT' m LoadedContent
+-- loadContentFolder path =
+--   LoadedContent <$> loadDocs (path </> "blog") <*>
+--   loadDocs (path </> "projects") <*>
+--   loadMergeableDir (path </> "tags")
+--   where
+--       blogResults = loadDocs (path </> "blog")
+--       projectResults = loadDocs (path </> "projectResults")
+--       tagResults = loadMergeableDir (path </> "tags")
+--       errors = lefts blogResults ++ lefts projectResults ++
+--                   ( case tagResults of
+--                       Success 
 loadDocs ::
-     FromJSON h => FilePath -> ReadFileT' m (DirImportResult [LoadedDoc h])
-loadDocs path = mapMaybe loadDocument <$> envWalkFiles path
+     (Monad m, FromJSON a)
+  => FilePath
+  -> ContentLoaderT m [Either (WithPath LoadError) (LoadedDoc a)]
+loadDocs path = do
+  files <- envWalkFiles path
+  let loadable = mapMaybe loadDocument' files
+  sequenceA loadable
 
 loadMergeableDir ::
-     (FromJSON a, Monoid a)
+     (Monad m, FromJSON a, Monoid a)
   => FilePath
-  -> ReadFileT' m (Validation [WithPath LoadError] a)
+  -> ContentLoaderT m (Validation [WithPath LoadError] a)
 loadMergeableDir path = do
   files <- envWalkFiles path
   results <-
     traverse
       (\p ->
          fromEither . mapLeft (\e -> [WithPath p e]) <$>
-         readYamlLE (BadConfig p) p)
+         runExceptT (performEnvRead asYaml BadConfig p))
       files
   return $ mconcat <$> sequenceA results
 
-loadDocument ::
-     (Functor m1, FromJSON d)
+loadDocument' ::
+     (Monad m, FromJSON d)
   => FilePath
-  -> Maybe (ReadFileT' m1 (WithPath (Either LoadError (LoadedDoc d))))
+  -> Maybe (ReadFileT' m (Either (WithPath LoadError) (LoadedDoc d)))
+loadDocument' path =
+  loadDocument path <&>
+  (\(WithPath p loader) -> do
+     result <- runExceptT loader
+     pure $ mapLeft (WithPath p) result)
+
+loadDocument ::
+     (Monad m, FromJSON d)
+  => FilePath
+  -> Maybe (WithPath (DocLoaderT m (LoadedDoc d)))
 loadDocument path = do
   dType <- extensionToDocumentType $ takeExtension path
-  return $ WithPath path <$> loadDocAsType dType path
+  return $ WithPath path (loadDocAsType dType path)
 
 loadDocAsType ::
-     (FromJSON d)
+     (FromJSON d, Monad m)
   => DocumentType
   -> FilePath
-  -> ReadFileT' m1 (Either LoadError (LoadedDoc d))
-loadDocAsType FrontmatterMarkdown path =
-  runExceptT $ do
-    dContent <- envRead' asFile (NoDocument path) path
-    liftEither $
-      case parseYamlFrontmatter dContent of
-        Fail _ _ err -> Left $ BadYaml err
-        Partial _ -> Left IncompleteFrontmatter
-        Done rest fm -> Right $ LoadedDoc path fm (Content path Markdown rest)
-loadDocAsType YAML path = runExceptT $ LoadedDoc path <$> yaml <*> content
+  -> DocLoaderT m (LoadedDoc d)
+loadDocAsType FrontmatterMarkdown path = do
+  dContent <- performEnvRead asFile (NoDocument path) path
+  liftEither $
+    case parseYamlFrontmatter dContent of
+      Fail _ _ err -> Left $ BadYaml err
+      Partial _ -> Left IncompleteFrontmatter
+      Done rest fm -> Right $ LoadedDoc path fm (Content path Markdown rest)
+loadDocAsType YAML path = LoadedDoc path <$> yaml <*> content
   where
-    yaml = readYamlLE' (NoDocument path) path
-    content = ExceptT (loadContent (takeBaseName path))
+    yaml = performEnvRead asYaml (NoDocument path) path
+    content = loadContent (takeBaseName path)
 
-loadContent :: Functor m => FilePath -> ReadFileT' m (Either LoadError Content)
-loadContent path = runExceptT $ Content path <$> cType <*> fileContent
+loadContent :: Monad m => FilePath -> DocLoaderT m Content
+loadContent path = Content path <$> cType <*> fileContent
   where
     ext = takeExtension path
     cType =
@@ -76,18 +101,28 @@ loadContent path = runExceptT $ Content path <$> cType <*> fileContent
       maybeToEither
         (UnsupportedContentExtension ext)
         (extensionToContentType ext)
-    fileContent = envRead' asFile (NoContent path) path
+    fileContent = performEnvRead asFile (NoContent path) path
 
-readYamlLE ::
-     (FromJSON b, Monad m)
-  => LoadError
+performEnvRead ::
+     Monad m
+  => (ReadResult ByteString -> Maybe a)
+  -> LoadError
   -> FilePath
-  -> ReadFileT' m (Either LoadError b)
-readYamlLE err path = mapLeft (maybe err BadYaml') <$> envReadYAML path
+  -> DocLoaderT m a
+performEnvRead sel err path = do
+  result <- lift $ envRead path
+  case sel result of
+    Just d -> pure d
+    Nothing -> throwError err
 
-readYamlLE' ::
-     (FromJSON a, Monad m)
-  => LoadError
-  -> FilePath
-  -> ExceptT LoadError (ReadFileT' m) a
-readYamlLE' err path = ExceptT $ readYamlLE err path
+asFile :: ReadResult a -> Maybe a
+asFile (File f) = Just f
+asFile _ = Nothing
+
+asDir :: ReadResult a -> Maybe [String]
+asDir (Dir c) = Just c
+asDir _ = Nothing
+
+asYaml :: FromJSON a => ReadResult ByteString -> Maybe a
+asYaml (File f) = either (const Nothing) Just $ decodeEither' f
+asYaml _ = Nothing
