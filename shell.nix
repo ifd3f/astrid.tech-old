@@ -15,6 +15,7 @@ pkgs.mkShell {
     git
     haskell-language-server
     haskellPackages.hlint
+    haskellPackages.hindent
     haskellPackages.implicit-hie
     nodejs
     pipenv

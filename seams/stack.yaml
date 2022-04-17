@@ -68,5 +68,5 @@ extra-deps: []
 
 nix:
   enable: true
-  packages: [zlib.dev, zlib.out]
+  packages: [postgresql, zlib.dev, zlib.out]
 
