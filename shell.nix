@@ -1,9 +1,8 @@
 { pkgs ? import <nixpkgs> { } }:
 pkgs.mkShell {
   nativeBuildInputs = let
-    customghc = (pkgs.haskellPackages.ghcWithPackages (hpkgs: with hpkgs; [
-      zlib
-    ]));
+    customghc =
+      (pkgs.haskellPackages.ghcWithPackages (hpkgs: with hpkgs; [ zlib ]));
   in with pkgs; [
     cargo
     curl
@@ -16,6 +15,7 @@ pkgs.mkShell {
     haskellPackages.hlint
     haskellPackages.hindent
     haskellPackages.implicit-hie
+    nixfmt
     nodejs
     pipenv
     postgresql
@@ -25,9 +25,7 @@ pkgs.mkShell {
     zlib
   ];
 
-  libraryHaskellDepends = with pkgs; [
-    zlib
-  ];
+  libraryHaskellDepends = with pkgs; [ zlib ];
 
   # postgresql-typed and dbmate params
   TPG_DB = "seams-db";
@@ -35,5 +33,6 @@ pkgs.mkShell {
   TPG_PASS = "developer";
   TPG_HOST = "localhost";
   TPG_PORT = 5432;
-  DATABASE_URL = "postgres://postgres:developer@localhost:5432/seams-dev?sslmode=disable";
+  DATABASE_URL =
+    "postgres://postgres:developer@localhost:5432/seams-dev?sslmode=disable";
 }
