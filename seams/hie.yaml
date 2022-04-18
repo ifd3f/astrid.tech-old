@@ -1,14 +1,13 @@
 cradle:
-  stack:
-    - path: "./src"
-      component: "seams:lib"
+  cabal:
+    - path: "src"
+      component: "lib:seams"
 
-    - path: "./app/Main.hs"
+    - path: "app/Main.hs"
       component: "seams:exe:seams-exe"
 
-    - path: "./app/Paths_seams.hs"
+    - path: "app/Paths_seams.hs"
       component: "seams:exe:seams-exe"
 
-    - path: "./test"
+    - path: "test"
       component: "seams:test:seams-test"
-

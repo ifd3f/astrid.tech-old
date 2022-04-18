@@ -2,7 +2,6 @@
 pkgs.mkShell {
   nativeBuildInputs = let
     customghc = (pkgs.haskellPackages.ghcWithPackages (hpkgs: with hpkgs; [
-      cabal-install
       zlib
     ]));
   in with pkgs; [
@@ -22,7 +21,6 @@ pkgs.mkShell {
     postgresql
     python310
     rustc
-    stack
     yarn
     zlib
   ];
