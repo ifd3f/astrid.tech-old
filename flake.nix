@@ -24,6 +24,8 @@
               haskellPackages.haskell-language-server
               cabal2nix
               nixfmt
+              haskellPackages.hindent
+              haskellPackages.hlint
             ];
           };
         };
