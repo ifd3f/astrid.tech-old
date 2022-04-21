@@ -4,7 +4,6 @@ import Control.Exception
 import Control.Monad.Except
 import Data.ByteString (ByteString)
 import qualified Data.ByteString as BS
-import Data.Functor.Identity
 import System.Directory
 import System.FilePath
 import System.IO.Error
@@ -16,7 +15,7 @@ data ReadResult content
   = File content
   | Dir [String]
   | Empty
-  deriving (Show)
+  deriving (Show, Eq)
 
 instance Functor ReadResult where
   fmap f (File c) = File (f c)
@@ -29,8 +28,6 @@ newtype ReadFileT f m a =
     }
 
 type ReadFileT' = ReadFileT ByteString
-
-type ReadFile f = ReadFileT f Identity
 
 envRead :: FilePath -> ReadFileT f m (ReadResult f)
 envRead path = ReadFileT $ \rf -> rf path

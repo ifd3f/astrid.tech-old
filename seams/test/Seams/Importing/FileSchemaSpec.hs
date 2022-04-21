@@ -15,14 +15,19 @@ import Text.RawString.QQ
 spec :: Spec
 spec = do
   describe "FileSlug" $ do
-    it "parses from array of only ints" $ do
+    it "parses from array without name" $ do
       let input = "[3, 2, 1, 4]"
-      let actual :: Maybe PostSlug = decode input
-      actual `shouldBe` Just (PostSlug 3 2 1 4 Nothing)
+      let actual = decodeEither' input
+      case actual of
+        Right x -> x `shouldBe` PostSlug 3 2 1 4 Nothing
+        Left x -> error $ show x
     it "parses from array with name" $ do
       let input = "[3, 2, 1, 4, \"test\"]"
-      let actual :: Maybe PostSlug = decode input
-      actual `shouldBe` Just (PostSlug 3 2 1 4 $ Just "test")
+      let actual = decodeEither' input
+      case actual of
+        Right x -> x `shouldBe` PostSlug 3 2 1 4 (Just "test")
+        Left x -> error $ show x
+
   describe "Doc" $ do
     it "parses meta as flattened" $ do
       let input =
@@ -42,6 +47,7 @@ spec = do
       extra ^. postRSVP `shouldBe` Just RSVPNo
       extra ^. postTitle `shouldBe` Just "foobar lol"
       extra ^. postTagline `shouldBe` Nothing
+
   describe "TagConfig" $ do
     it "parses full file" $ do
       let input =

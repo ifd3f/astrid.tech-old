@@ -55,7 +55,7 @@ library:
     - -Wredundant-constraints
 
 executables:
-  seams-exe:
+  seams:
     main:                Main.hs
     source-dirs:         app
     ghc-options:

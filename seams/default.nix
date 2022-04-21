@@ -1,3 +1,3 @@
-{ pkgs ? import <nixpkgs> { }, ... }:
-pkgs.haskellPackages.callCabal2nix "seams" ./. { }
+{ haskellPackages }:
+haskellPackages.callCabal2nix "seams" ./. { }
 

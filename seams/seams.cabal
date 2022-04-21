@@ -65,7 +65,7 @@ library
     , yaml
   default-language: Haskell2010
 
-executable seams-exe
+executable seams
   main-is: Main.hs
   other-modules:
       Paths_seams
