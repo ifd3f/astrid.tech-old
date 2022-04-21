@@ -1,42 +1,18 @@
 module Seams.CLI where
 
 import Options.Applicative
-
-class Executable a where
-  execute :: a -> IO ()
+import Seams.CLI.ServeContent
+import Seams.CLI.Types
+import Seams.CLI.Upload
 
 data SeamsArgs
   = CmdUpload Upload
-  | CmdServe Serve
+  | CmdServeContent ServeContent
   deriving (Show, Eq)
 
 instance Executable SeamsArgs where
   execute (CmdUpload a) = execute a
-  execute (CmdServe a) = execute a
-
-data Upload =
-  Upload
-    { contentDir :: FilePath
-    , targetDatabase :: Maybe String
-    }
-  deriving (Show, Eq)
-
-instance Executable Upload where
-  execute cfg = do
-    putStrLn $ "Using dir " ++ contentDir cfg
-    return ()
-
-data Serve =
-  Serve
-    { serverAddr :: String
-    , sourceDatabase :: String
-    }
-  deriving (Show, Eq)
-
-instance Executable Serve where
-  execute cfg = do
-    putStrLn $ "Using address " ++ show (serverAddr cfg)
-    return ()
+  execute (CmdServeContent a) = execute a
 
 parserInfo :: ParserInfo SeamsArgs
 parserInfo =
@@ -46,33 +22,20 @@ parserInfo =
 
 parser :: Parser SeamsArgs
 parser =
-  subparser
+  hsubparser
     (command
        "upload"
        (info
           (CmdUpload <$> uploadParser)
-          (progDesc "Upload a content directory to a database.")) <>
+          (progDesc "Upload a content directory to the database.")) <>
      command
-       "serve"
+       "serve-content"
        (info
-          (CmdUpload <$> uploadParser)
-          (progDesc "Start a server for some data.")))
-
-uploadParser :: Parser Upload
-uploadParser =
-  Upload <$> argument str (metavar "CONTENT_DIR") <*>
-  optional
-    (strOption $
-     long "db" <>
-     short 'd' <>
-     help
-       "URL to the database to upload data to. If not provided, assuming dry run.")
-
-serveParser :: Parser Serve
-serveParser =
-  Serve <$> argument str (metavar "PORT") <*>
-  strOption
-    (long "db" <> short 'd' <> help "URL to the database to serve data from.")
+          (CmdServeContent <$> serveContentParser)
+          (progDesc "Serve an API to access the content.")))
 
 main :: IO ()
-main = execParser parserInfo >>= execute
+main = do
+  args <- execParser parserInfo
+  env <- getEnv
+  execute args env

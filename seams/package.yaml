@@ -1,7 +1,7 @@
 name:                seams
 version:             0.1.0.0
-github:              "astralbijection/seams"
-license:             BSD3
+github:              "astralbijection/astrid.tech"
+license:             AGPL-3
 author:              "Astrid Yu"
 maintainer:          "astrid@astrid.tech"
 copyright:           "Astrid Yu"
@@ -17,7 +17,7 @@ extra-source-files:
 # To avoid duplicated efforts in documentation and dealing with the
 # complications of embedding Haddock markup inside cabal files, it is
 # common to point users to the README.md file.
-description:         Please see the README on GitHub at <https://github.com/astralbijection/seams#readme>
+description:         Please see the README on GitHub at <https://github.com/astralbijection/astrid.tech#readme>
 
 dependencies:
 - base >= 4.7 && < 5
@@ -40,6 +40,7 @@ dependencies:
 - text
 - time
 - transformers
+- utf8-string
 - uuid
 - validation
 - vector
@@ -56,17 +57,8 @@ library:
 
 executables:
   seams:
-    main:                Main.hs
+    main:                Main
     source-dirs:         app
-    ghc-options:
-    - -Wall
-    - -Wcompat
-    - -Wincomplete-record-updates
-    - -Wincomplete-uni-patterns
-    - -Wredundant-constraints
-    - -threaded
-    - -rtsopts
-    - -with-rtsopts=-N
     dependencies:
     - base >= 4.7 && < 5
     - seams

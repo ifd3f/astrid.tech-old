@@ -6,14 +6,13 @@ cabal-version: 1.12
 
 name:           seams
 version:        0.1.0.0
-description:    Please see the README on GitHub at <https://github.com/astralbijection/seams#readme>
-homepage:       https://github.com/astralbijection/seams#readme
-bug-reports:    https://github.com/astralbijection/seams/issues
+description:    Please see the README on GitHub at <https://github.com/astralbijection/astrid.tech#readme>
+homepage:       https://github.com/astralbijection/astrid.tech#readme
+bug-reports:    https://github.com/astralbijection/astrid.tech/issues
 author:         Astrid Yu
 maintainer:     astrid@astrid.tech
 copyright:      Astrid Yu
-license:        BSD3
-license-file:   LICENSE
+license:        AGPL-3
 build-type:     Simple
 extra-source-files:
     README.md
@@ -21,11 +20,14 @@ extra-source-files:
 
 source-repository head
   type: git
-  location: https://github.com/astralbijection/seams
+  location: https://github.com/astralbijection/astrid.tech
 
 library
   exposed-modules:
       Seams.CLI
+      Seams.CLI.ServeContent
+      Seams.CLI.Types
+      Seams.CLI.Upload
       Seams.DB.Models
       Seams.DB.Queries
       Seams.Importing.FileSchema
@@ -59,6 +61,7 @@ library
     , text
     , time
     , transformers
+    , utf8-string
     , uuid
     , validation
     , vector
@@ -71,7 +74,7 @@ executable seams
       Paths_seams
   hs-source-dirs:
       app
-  ghc-options: -Wall -Wcompat -Wincomplete-record-updates -Wincomplete-uni-patterns -Wredundant-constraints -threaded -rtsopts -with-rtsopts=-N
+  ghc-options: -main-is Main
   build-depends:
       MissingH
     , aeson
@@ -94,6 +97,7 @@ executable seams
     , text
     , time
     , transformers
+    , utf8-string
     , uuid
     , validation
     , vector
@@ -136,6 +140,7 @@ test-suite seams-test
     , text
     , time
     , transformers
+    , utf8-string
     , uuid
     , validation
     , vector
