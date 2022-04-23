@@ -7,3 +7,4 @@ content: >
   See, this <script>alert("oh fuck")</script> is plaintext.
 # The twt subcommand lets you quickly write posts, in the spirit of twtxt
 colophon: EDITOR=nvim seams twt 
+tags: []

@@ -52,7 +52,7 @@ loadMergeableDir path = do
     traverse
       (\p ->
          fromEither . mapLeft (\e -> [WithPath p e]) <$>
-         runExceptT (performEnvRead asYaml BadConfig p))
+         runExceptT (performEnvRead (asYaml BadConfig) p))
       files
   return $ mconcat <$> sequenceA results
 
@@ -80,7 +80,7 @@ loadDocAsType ::
   -> FilePath
   -> DocLoaderT m (LoadedDoc d)
 loadDocAsType FrontmatterMarkdown path = do
-  dContent <- performEnvRead asFile (NoDocument path) path
+  dContent <- performEnvRead (asFile $ NoDocument FrontmatterMarkdown path) path
   liftEither $
     case parseYamlFrontmatter dContent of
       Fail _ _ err -> Left $ BadYaml err
@@ -88,7 +88,7 @@ loadDocAsType FrontmatterMarkdown path = do
       Done rest fm -> Right $ LoadedDoc path fm (Content path Markdown rest)
 loadDocAsType YAML path = LoadedDoc path <$> yaml <*> content
   where
-    yaml = performEnvRead asYaml (NoDocument path) path
+    yaml = performEnvRead (asYaml $ NoDocument YAML path) path
     content = loadContent (takeBaseName path)
 
 loadContent :: Monad m => FilePath -> DocLoaderT m Content
@@ -100,28 +100,25 @@ loadContent path = Content path <$> cType <*> fileContent
       maybeToEither
         (UnsupportedContentExtension ext)
         (extensionToContentType ext)
-    fileContent = performEnvRead asFile (NoContent path) path
+    fileContent = performEnvRead (asFile $ NoContent path) path
 
 performEnvRead ::
      Monad m
-  => (ReadResult ByteString -> Maybe a)
-  -> LoadError
+  => (ReadResult ByteString -> Either LoadError a)
   -> FilePath
   -> DocLoaderT m a
-performEnvRead sel err path = do
+performEnvRead sel path = do
   result <- lift $ envRead path
-  case sel result of
-    Just d -> pure d
-    Nothing -> throwError err
+  liftEither $ sel result
 
-asFile :: ReadResult a -> Maybe a
-asFile (File f) = Just f
-asFile _ = Nothing
+asFile :: LoadError -> ReadResult a -> Either LoadError a
+asFile _ (File f) = Right f
+asFile e _ = Left e
 
-asDir :: ReadResult a -> Maybe [String]
-asDir (Dir c) = Just c
-asDir _ = Nothing
+asDir :: LoadError -> ReadResult a -> Either LoadError [String]
+asDir _ (Dir c) = Right c
+asDir e _ = Left e
 
-asYaml :: FromJSON a => ReadResult ByteString -> Maybe a
-asYaml (File f) = either (const Nothing) Just $ decodeEither' f
-asYaml _ = Nothing
+asYaml :: FromJSON a => LoadError -> ReadResult ByteString -> Either LoadError a
+asYaml _ (File f) = mapLeft BadYaml' $ decodeEither' f
+asYaml e _ = Left e

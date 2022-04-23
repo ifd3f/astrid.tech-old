@@ -1,5 +1,6 @@
 {-# LANGUAGE OverloadedStrings #-}
 {-# LANGUAGE TemplateHaskell #-}
+{-# LANGUAGE LambdaCase #-}
 
 module Seams.Types where
 
@@ -10,7 +11,6 @@ import Data.List (stripPrefix)
 import Data.Map (Map)
 import qualified Data.Map as M
 import Data.Maybe
-import Data.String
 import qualified Data.Text as T
 import Data.Text (Text)
 import Database.Persist
@@ -24,16 +24,11 @@ data DocumentType
   deriving (Show, Eq)
 
 extensionToDocumentType :: String -> Maybe DocumentType
-extensionToDocumentType ext =
-  case s' of
-    ".md" -> Just FrontmatterMarkdown
-    ".markdown" -> Just FrontmatterMarkdown
-    ".yml" -> Just YAML
-    ".yaml" -> Just YAML
-    _ -> Nothing
-  where
-    l = map toLower ext
-    s' = fromMaybe l $ stripPrefix "." l
+extensionToDocumentType ext
+  | s' `elem` ["md", "markdown"] = Just FrontmatterMarkdown
+  | s' `elem` ["json", "yml", "yaml"] = Just YAML
+  | otherwise = Nothing
+  where s' = normalizeExtension ext
 
 -- | Supported formats for the body of documents.
 data ContentType
@@ -43,9 +38,8 @@ data ContentType
   | Jupyter
   deriving (Show, Eq)
 
-contentTypeToExtension :: IsString p => ContentType -> p
-contentTypeToExtension ct =
-  case ct of
+contentTypeToExtension :: ContentType -> String
+contentTypeToExtension = \case
     Markdown -> "md"
     HTML -> "html"
     Plaintext -> "txt"
@@ -53,20 +47,22 @@ contentTypeToExtension ct =
 
 extensionToContentType :: String -> Maybe ContentType
 extensionToContentType ext
-  | s' == "html" = Just HTML
-  | s' `elem` ["ipynb", "jupyter"] = Just Jupyter
+  | s' `elem` ["htm", "html"] = Just HTML
+  | s' == "ipynb" = Just Jupyter
   | s' `elem` ["md", "markdown"] = Just Markdown
-  | s' `elem` ["txt", "text", "plaintext"] = Just Plaintext
+  | s' == "txt" = Just Plaintext
   | otherwise = Nothing
-  where
-    l = map toLower ext
-    s' = fromMaybe l $ stripPrefix "." l
+  where s' = normalizeExtension ext
+
+normalizeExtension :: String -> String
+normalizeExtension ext = fromMaybe l $ stripPrefix "." l
+  where l = map toLower ext
 
 instance PersistFieldSql ContentType where
   sqlType _ = SqlString
 
 instance PersistField ContentType where
-  toPersistValue = PersistText . contentTypeToExtension
+  toPersistValue = PersistText . T.pack . contentTypeToExtension 
   fromPersistValue (PersistText v) =
     maybeToEither ("Invalid text " `T.append` v) $
     extensionToContentType $ T.unpack v

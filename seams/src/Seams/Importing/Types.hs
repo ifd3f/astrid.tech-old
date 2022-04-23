@@ -46,7 +46,7 @@ data LoadError
   | BadConfig
   | IncompleteFrontmatter
   | NoContent FilePath
-  | NoDocument FilePath
+  | NoDocument DocumentType FilePath
   | UnsupportedContentExtension String
   deriving (Show)
 

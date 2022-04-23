@@ -5,5 +5,6 @@
   },
   "name": "A JSON-based metadata",
   "tagline": "This is a JSON file.",
-  "slug": [2015, 1, 1, 0, "json-metadata"]
+  "slug": [2015, 1, 1, 0, "json-metadata"],
+  "tags": []
 }

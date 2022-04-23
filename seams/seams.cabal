@@ -112,6 +112,7 @@ test-suite seams-test
       Seams.Importing.LoadSpec
       Seams.Importing.ReadFileSpec
       Seams.TestUtils
+      Seams.TypesSpec
       Paths_seams
   hs-source-dirs:
       test
