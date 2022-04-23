@@ -53,11 +53,11 @@ instance FromJSON meta => FromJSON (Doc meta) where
 data ContentField
   = FileRef FilePath
   | EmbeddedPlaintext Text
-  deriving (Show)
+  deriving (Show, Eq)
 
 instance ToJSON ContentField where
   toJSON (FileRef path) = object ["path" .= path]
-  toJSON (EmbeddedPlaintext text) = A.String text
+  toJSON (EmbeddedPlaintext content) = A.String content
 
 instance FromJSON ContentField where
   parseJSON x =
@@ -68,8 +68,9 @@ instance FromJSON ContentField where
 
 data Timestamps =
   Timestamps
+    {
   -- | When this content was published on the website.
-    { _tsPublished :: ZonedTime
+      _tsPublished :: ZonedTime
   -- | When this content was created. Semantically, the content itself, not
   -- | the document holding the content.
   -- | If Nothing, then it is the same as published.

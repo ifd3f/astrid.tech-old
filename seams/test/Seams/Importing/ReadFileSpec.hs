@@ -2,10 +2,10 @@
 
 module Seams.Importing.ReadFileSpec where
 
+import Data.ByteString (ByteString)
 import qualified Data.Map as M
 import Seams.Importing.ReadFile
 import Test.Hspec
-import Data.ByteString (ByteString)
 
 rfFromFilemap :: [(FilePath, ReadResult a)] -> FilePath -> Maybe (ReadResult a)
 rfFromFilemap pairs path = M.lookup path $ M.fromList pairs

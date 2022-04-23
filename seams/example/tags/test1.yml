@@ -1,0 +1,11 @@
+titles:
+  foo-bar: Foo Bar
+colors:
+  - text: "#ffffff"
+    bg: "#000000"
+    tags:
+      - foo-bar
+  - text: "#000000"
+    bg: "#ffffff"
+    tags:
+      - spam-eggs

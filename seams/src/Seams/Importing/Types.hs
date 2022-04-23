@@ -31,14 +31,14 @@ data Content =
     , _contentType :: ContentType
     , _contentBody :: ByteString
     }
-  deriving (Show)
+  deriving (Show, Eq)
 
 data WithPath a =
   WithPath
     { _rPath :: FilePath
     , _rResult :: a
     }
-  deriving (Functor)
+  deriving (Show, Eq, Functor)
 
 data LoadError
   = BadYaml String

@@ -27,7 +27,6 @@ spec = do
       case actual of
         Right x -> x `shouldBe` PostSlug 3 2 1 4 (Just "test")
         Left x -> error $ show x
-
   describe "Doc" $ do
     it "parses meta as flattened" $ do
       let input =
@@ -47,7 +46,6 @@ spec = do
       extra ^. postRSVP `shouldBe` Just RSVPNo
       extra ^. postTitle `shouldBe` Just "foobar lol"
       extra ^. postTagline `shouldBe` Nothing
-
   describe "TagConfig" $ do
     it "parses full file" $ do
       let input =
