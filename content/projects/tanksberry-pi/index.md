@@ -19,7 +19,7 @@ tags:
   - websockets
   - javascript
   - under-construction
-source: [https://github.com/astralbijection/tanksberry-pi]
+source: [https://github.com/astridyu/tanksberry-pi]
 thumbnail: ./thumbnail.jpg
 ---
 

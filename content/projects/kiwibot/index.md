@@ -20,7 +20,7 @@ tags:
   - robotics
   - mechanical-engineering
 url: null
-source: [https://github.com/astralbijection/KiwiBot]
+source: [https://github.com/astridyu/KiwiBot]
 thumbnail: ./kiwibot-thumb.jpg
 ---
 

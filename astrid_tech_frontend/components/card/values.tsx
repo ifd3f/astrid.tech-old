@@ -223,8 +223,8 @@ export const github: HCardProperty = {
     </>
   ),
   children: (
-    <a className="u-url" rel="me" href="https://github.com/astralbijection">
-      astralbijection
+    <a className="u-url" rel="me" href="https://github.com/astridyu">
+      astridyu
     </a>
   ),
 };

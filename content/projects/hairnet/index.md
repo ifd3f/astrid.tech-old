@@ -20,7 +20,7 @@ keywords:
   - Computer Vision
 url: null
 featured: true
-source: [https://github.com/astralbijection/Hair-Net]
+source: [https://github.com/astridyu/Hair-Net]
 thumbnail: ./thumbnail.png
 highlights:
   - Designed and trained a convolutional neural network using Python and
@@ -75,7 +75,7 @@ scores back to original size by adding data gathered from the shrinking.
 There were many issues encountered in some of the earlier trained networks, but
 they were easily solved by training on a synthetic dataset generated from my
 training data.
-[`util.py`](https://github.com/astralbijection/Hair-Net/blob/master/util.py)
+[`util.py`](https://github.com/astridyu/Hair-Net/blob/master/util.py)
 contains most of the code used to do this.
 
 - **Sometimes the neural network would detect a person in an image of a wall, a

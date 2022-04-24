@@ -23,7 +23,7 @@ stuff.
 Between then and now, I've done a ton of projects. Some were software, some were
 electronic, some were mechanical, and many were a combination of all 3. You can
 see the path of chaos and unfinished projects I left on my
-[GitHub](https://github.com/astralbijection?tab=repositories). But the problem
+[GitHub](https://github.com/astridyu?tab=repositories). But the problem
 is, **I always ended up getting halfway through and losing interest.** Also,
 I've ended up making so many projects, that **I've actually forgotten about most
 of them!**

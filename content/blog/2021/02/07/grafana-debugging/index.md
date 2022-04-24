@@ -109,7 +109,7 @@ I attended, someone suggested to me that I could somehow have a live feed of my
 connection, I can take a picture every few minutes and upload it to my server.
 
 So, I added a new endpoint to my API server, then wrote a
-[small script](https://github.com/astralbijection/printer_image_snapper) that
+[small script](https://github.com/astridyu/printer_image_snapper) that
 does exactly that. It scrapes data from my OctoPrint instance's API, snaps a
 picture from the exposed MJPG-streamer endpoint, and sends a PATCH request to my
 API server with all the information. I

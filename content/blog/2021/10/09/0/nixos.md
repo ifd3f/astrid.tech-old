@@ -16,7 +16,7 @@ with it so far.
 
 [^1]:
     All my configs are contained within the
-    [infra](https://github.com/astralbijection/infra) repo.
+    [infra](https://github.com/astridyu/infra) repo.
 
 ## Dotfiles
 

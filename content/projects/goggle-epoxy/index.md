@@ -22,7 +22,7 @@ tags:
   - optics
   - ssd1306
 url: null
-source: [https://github.com/astralbijection/Goggle-Epoxy]
+source: [https://github.com/astridyu/Goggle-Epoxy]
 thumbnail: ./circuitry.jpg
 ---
 

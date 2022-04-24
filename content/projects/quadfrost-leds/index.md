@@ -21,7 +21,7 @@ tags:
   - circuit-design
 url: null
 source:
-  - https://github.com/astralbijection/QuadFrost
+  - https://github.com/astridyu/QuadFrost
 thumbnail: ./3dp-colors.webp
 ---
 

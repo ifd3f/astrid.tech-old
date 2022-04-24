@@ -15,7 +15,7 @@ tags:
   - computer-engineering
 url: null
 source:
-  - https://github.com/astralbijection/Basys3-1D-Cellular-Automata
+  - https://github.com/astridyu/Basys3-1D-Cellular-Automata
 thumbnail: "./basys3.jpeg"
 ---
 
@@ -90,7 +90,7 @@ What this simulation does is:
 ## Appendix A: Code
 
 The code can be found on GitHub at
-https://github.com/astralbijection/Basys3-1D-Cellular-Automata.
+https://github.com/astridyu/Basys3-1D-Cellular-Automata.
 
 ## Appendix B: Efficient, adder-only approximately constant-increment frequency selection
 
@@ -158,4 +158,4 @@ $$s_2(0)=\frac{b}{4}$$
 $$s_3=\frac{3a}{4}$$
 
 The code that implements these formulas is in
-[`SpeedControl.sv`](https://github.com/astralbijection/Basys3-1D-Cellular-Automata/blob/master/FinalProject.srcs/sources_1/new/SpeedControl.sv).
+[`SpeedControl.sv`](https://github.com/astridyu/Basys3-1D-Cellular-Automata/blob/master/FinalProject.srcs/sources_1/new/SpeedControl.sv).

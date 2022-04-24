@@ -19,7 +19,7 @@ tags:
   - android
   - websockets
   - nsfw
-source: [https://github.com/astralbijection/OwOstick]
+source: [https://github.com/astridyu/OwOstick]
 thumbnail: /2021/11/04/0/reassembled.jpg
 ---
 

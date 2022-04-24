@@ -18,7 +18,7 @@ tags:
   - raspberry-pi
   - under-construction
 source:
-  - https://github.com/astralbijection/infra
+  - https://github.com/astridyu/infra
 thumbnail: /2021/01/27/0/pi-clustering/nodezzz.jpeg
 ---
 
@@ -251,7 +251,7 @@ I consider this v1 of my homelab because it was something actually functional
 for a while. Although the service declarations were in a sort of modular Docker
 Compose architecture, they were all updated manually by SSHing in and
 essentially running `git pull && docker-compose up`.
-[Here is the last version of the configs](https://github.com/astralbijection/infra/tree/v1-final)
+[Here is the last version of the configs](https://github.com/astridyu/infra/tree/v1-final)
 before I incorporated it into the rest of my monorepo.
 
 ### v2 - On-Premises Cloud
@@ -264,7 +264,7 @@ computers. It seemed awkward to manually allocate services to specific ones,
 
 It was mostly set up manually, with a few Ansible scripts to semi-automate tasks
 like upgrading software, and a few Terraform configs to create databases.
-[Here is what the infra repo looked like by the time I set up v2.](https://github.com/astralbijection/infra/tree/v2-final)
+[Here is what the infra repo looked like by the time I set up v2.](https://github.com/astridyu/infra/tree/v2-final)
 
 #### On-Site Hardware
 

@@ -4,4 +4,4 @@ ordinal: 1
 ---
 
 Holy fucking shit, it works!
-https://github.com/astralbijection/astrid.tech/pull/140
+https://github.com/astridyu/astrid.tech/pull/140

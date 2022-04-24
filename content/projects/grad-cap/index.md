@@ -14,7 +14,7 @@ tags:
   - fusion-360
   - under-construction
 url: null
-source: [https://github.com/astralbijection/Articulated-Tassel]
+source: [https://github.com/astridyu/Articulated-Tassel]
 thumbnail: ./td-thumb.jpg
 ---
 

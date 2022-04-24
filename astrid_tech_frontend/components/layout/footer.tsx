@@ -68,7 +68,7 @@ const AGPL: FC = () => {
         />
       </a>
       <p>
-        <a href="https://github.com/astralbijection/astrid.tech">
+        <a href="https://github.com/astridyu/astrid.tech">
           The source code of astrid.tech
         </a>{" "}
         is licensed under the{" "}
@@ -173,7 +173,7 @@ const MiniAbout: FC<MiniAboutProps> = ({ version }) => {
       <Tea /> and <Witch />. Read the{" "}
       <Link href="/projects/astrid-tech">self-referential project page</Link> or
       see the code yourself on{" "}
-      <a href="https://github.com/astralbijection/astrid.tech">GitHub</a>.
+      <a href="https://github.com/astridyu/astrid.tech">GitHub</a>.
     </p>
   );
 };

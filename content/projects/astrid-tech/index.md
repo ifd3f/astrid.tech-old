@@ -23,7 +23,7 @@ tags:
   - gatsby-js
 url: https://astrid.tech
 source:
-  - https://github.com/astralbijection/astrid.tech
+  - https://github.com/astridyu/astrid.tech
 thumbnail: ./thumbnail.png
 ---
 
@@ -78,15 +78,15 @@ made to solve that issue.
 I use Next.js to statically generate the website.
 
 The static site is hosted via
-[Github Pages](https://github.com/astralbijection/astrid.tech) to statically
+[Github Pages](https://github.com/astridyu/astrid.tech) to statically
 host the website.
 
 There is a
-[Github Actions](https://github.com/astralbijection/astrid.tech/actions)
+[Github Actions](https://github.com/astridyu/astrid.tech/actions)
 workflow that automatically builds on every push to verify that my code
 compiles. Additionally, if there was a push to the `main` branch, it will
 publish the build output to the
-[astralbijection.github.io](https://github.com/astralbijection/astralbijection.github.io)
+[astridyu.github.io](https://github.com/astridyu/astridyu.github.io)
 repo.
 
 #### UX design methodology
@@ -114,7 +114,7 @@ main. It is manually deployed as a Docker container on a
 ### Content
 
 The content is in its own
-[Git submodule](https://github.com/astralbijection/astrid.tech-content) as a set
+[Git submodule](https://github.com/astridyu/astrid.tech-content) as a set
 of raw files that get aggregated and compiled on each frontend build. It is
 written in the following file formats:
 
@@ -196,13 +196,13 @@ transformed those notebooks to Markdown.
 #### CI/CD Pipeline
 
 There was a
-[Github Actions](https://github.com/astralbijection/astrid.tech/actions)
+[Github Actions](https://github.com/astridyu/astrid.tech/actions)
 workflow that automatically built my website on every push to verify that my
 code compiles. If the push went to the `main` branch, it would additionally
 publish the build output to the
-[astralbijection.github.io](https://github.com/astralbijection/astralbijection.github.io)
+[astridyu.github.io](https://github.com/astridyu/astridyu.github.io)
 repo, so that Github Pages could statically host it.
-[astralbijection.github.io](https://astralbijection.github.io) used to take you
+[astridyu.github.io](https://astridyu.github.io) used to take you
 to [astrid.tech](https://astrid.tech) in this way! However, now it does not.
 
 ### Personal Branding

@@ -43,7 +43,7 @@ export const Page = ({}) => {
               </a>
             </Col>
             <Col xs="12" md="6" lg="3">
-              <a href="https://github.com/astralbijection" rel="me">
+              <a href="https://github.com/astridyu" rel="me">
                 <GoMarkGithub title="GitHub" /> Follow me on GitHub
               </a>
             </Col>

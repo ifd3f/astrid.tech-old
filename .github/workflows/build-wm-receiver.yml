@@ -11,7 +11,7 @@ on:
 
 env:
   REGISTRY: ghcr.io
-  IMAGE_NAME: astralbijection/wm-receiver
+  IMAGE_NAME: astridyu/wm-receiver
 
 jobs:
   build:

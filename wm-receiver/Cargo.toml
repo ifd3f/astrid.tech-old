@@ -6,7 +6,7 @@ homepage = "https://astrid.tech/projects/astrid-tech"
 name = "wm-receiver"
 resolver = "1"
 publish = false
-repository = "https://github.com/astralbijection/astrid.tech.git"
+repository = "https://github.com/astridyu/astrid.tech.git"
 version = "0.1.0"
 [[bin]]
 name = "wm-receiver"
