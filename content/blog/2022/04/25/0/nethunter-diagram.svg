@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Created with Inkscape (http://www.inkscape.org/) -->
+
+<svg
+   width="168.03531mm"
+   height="184.63065mm"
+   viewBox="0 0 168.03531 184.63065"
+   version="1.1"
+   id="svg5"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg">
+  <defs
+     id="defs2" />
+  <g
+     id="layer1"
+     transform="translate(-0.62148643,-0.39330685)">
+    <rect
+       style="fill:#b4b4b4;fill-opacity:1;fill-rule:evenodd;stroke-width:0.245233"
+       id="rect31"
+       width="119.5465"
+       height="38.975639"
+       x="0.62148643"
+       y="0.39330685" />
+    <rect
+       style="fill:#00c8ff;fill-opacity:1;fill-rule:evenodd;stroke-width:0.255807"
+       id="rect33"
+       width="129.9984"
+       height="39.105366"
+       x="0.62148643"
+       y="39.368946" />
+    <rect
+       style="fill:#0067ff;fill-opacity:1;fill-rule:evenodd;stroke-width:0.264583"
+       id="rect35"
+       width="141.25171"
+       height="34.632801"
+       x="0.62148643"
+       y="78.474319" />
+    <rect
+       style="fill:#000000;fill-opacity:1;fill-rule:evenodd;stroke-width:0.288618"
+       id="rect37"
+       width="167.79753"
+       height="37.284046"
+       x="0.85926032"
+       y="147.73991" />
+    <text
+       xml:space="preserve"
+       style="font-size:10.5833px;line-height:1.25;font-family:sans-serif;letter-spacing:0px;stroke-width:0.264583"
+       x="32.28447"
+       y="24.117832"
+       id="text5142"><tspan
+         id="tspan5140"
+         style="stroke-width:0.264583"
+         x="32.28447"
+         y="24.117832">Kali Nethunter</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-size:10.5833px;line-height:1.25;font-family:sans-serif;letter-spacing:0px;stroke-width:0.264583"
+       x="38.4683"
+       y="60.008808"
+       id="text7258"><tspan
+         id="tspan7256"
+         style="stroke-width:0.264583"
+         x="38.4683"
+         y="60.008808">LineageOS</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-size:10.5833px;line-height:1.25;font-family:sans-serif;letter-spacing:0px;stroke-width:0.264583"
+       x="25.590151"
+       y="98.248665"
+       id="text9044"><tspan
+         id="tspan9042"
+         style="stroke-width:0.264583"
+         x="25.590151"
+         y="98.248665">Lineage Recovery</tspan></text>
+    <rect
+       style="fill:#ff795e;fill-opacity:1;fill-rule:evenodd;stroke-width:0.276585"
+       id="rect35-9"
+       width="154.3577"
+       height="34.632801"
+       x="0.62148643"
+       y="113.10712" />
+    <text
+       xml:space="preserve"
+       style="font-size:10.5833px;line-height:1.25;font-family:sans-serif;letter-spacing:0px;white-space:pre;inline-size:116.097;stroke-width:0.264583"
+       x="51.796829"
+       y="162.3839"
+       id="text9044-5"
+       transform="translate(-37.480913,-34.102141)"><tspan
+         x="51.796829"
+         y="162.3839"
+         id="tspan1078">dm-verity, forceencrypt </tspan><tspan
+         x="51.796829"
+         y="175.61302"
+         id="tspan1080">disabler</tspan></text>
+    <text
+       xml:space="preserve"
+       style="font-size:10.5833px;line-height:1.25;font-family:sans-serif;letter-spacing:0px;fill:#ffffff;fill-opacity:1;stroke:none;stroke-width:0.265;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+       x="33.596077"
+       y="170.05046"
+       id="text11160"><tspan
+         id="tspan11158"
+         style="fill:#ffffff;fill-opacity:1;stroke:none;stroke-width:0.265;stroke-miterlimit:4;stroke-dasharray:none;stroke-opacity:1"
+         x="33.596077"
+         y="170.05046">Your hardware</tspan></text>
+  </g>
+</svg>
