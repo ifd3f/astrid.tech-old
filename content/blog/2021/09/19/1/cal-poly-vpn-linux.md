@@ -13,7 +13,7 @@ IT doesn't support Linux. That sucks, because I use Linux most of the time.
 Instead, [OpenConnect](https://www.infradead.org/openconnect/) seems to work,
 with the following command:
 
-```sh
+```bash
 openconnect --protocol=gp cpvpn.calpoly.edu --user=<user>
 ```
 
@@ -23,6 +23,6 @@ to place it in a `tmux` session or something like that.
 I personally have a shell script that runs this command for me placed at
 `~/bin/calpoly-vpn.sh` so all I have to do is run
 
-```sh
+```bash
 calpoly-vpn.sh
 ```

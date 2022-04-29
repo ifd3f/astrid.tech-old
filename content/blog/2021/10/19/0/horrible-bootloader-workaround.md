@@ -47,7 +47,7 @@ was systemd-boot getting completely wiped from my EFI entries every time I
 restarted my computer, meaning I could only boot into Windows unless I pulled
 out my Arch USB and ran
 
-```sh
+```bash
 mount /dev/mapper/bigdiskenergy-root /mnt
 mount /dev/nvme0n1p1 /mnt/boot
 arch-chroot /mnt
@@ -93,7 +93,7 @@ a workaround, I ran `bootctl install` every time I shut down my computer, but
 whenever I forgot to do that, I had to pull out my live USB again, and run the
 good ol'
 
-```sh
+```bash
 mount /dev/mapper/bigdiskenergy-root /mnt
 mount /dev/nvme0n1p1 /mnt/boot
 arch-chroot /mnt

@@ -57,7 +57,7 @@ Because [it's not a good idea to directly encrypt the pool root](https://www.red
 ### Setting up encryption for `bigdisk`
 
 To create `bigdisk/enc` (do *not* create `homie/enc` this way!), run:
-```sh
+```bash
 zfs create -o mountpoint=none -o encryption=aes-256-gcm -o keyformat=passphrase -o keylocation=prompt bigdisk/enc
 ```
 
@@ -73,7 +73,7 @@ Enter in your desired passphrase and you've created the encrypted subtree.
 ### Creating and mounting `/` and `/nix`
 
 Create your datasets and mount them like so:
-```sh
+```bash
 zfs create -o mountpoint=legacy bigdisk/enc/root
 mount -t zfs bigdisk/enc/root /mnt
 
@@ -101,7 +101,7 @@ chmod 400 /mnt/volkeys/homie.key
 You can technically use raw bytes for this, but I opted for alphanumeric ASCII chars so that I can store it in a password manager and potentially recover it if I ever lose that file.
 
 Now, execute
-```sh
+```bash
 zfs create -o mountpoint=none -o encryption=aes-256-gcm -o keyformat=passphrase -o keylocation=prompt bigdisk/enc
 ```
 
@@ -121,7 +121,7 @@ zfs load-key bigdisk/enc
 ### Create and mount `/home`
 
 Similar to before, do it like so:
-```sh
+```bash
 zfs create -o mountpoint=legacy homie/enc/home
 mkdir -p /mnt/nix
 mount -t zfs homie/enc/home /mnt/nix
@@ -136,7 +136,7 @@ At this point, you can pretty much install NixOS like normal, with configuration
 You might remember earlier that we set that flag `-o keylocation=file:///mnt/volkeys/homie.key`. Unfortunately, if you rebooted with that, ZFS will try to read from `/mnt/volkeys/homie.key` when the password file is actually at `/volkeys/homie.key` by that time!
 
 To fix this, run
-```sh
+```bash
 zfs set keylocation=file:///volkeys/homie.key homie/enc
 ```
 

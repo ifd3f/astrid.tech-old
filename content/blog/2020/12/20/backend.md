@@ -154,7 +154,7 @@ isn't being 100% used.
 I wrote the following script to limit the size of every image in my repository
 to 1600x1600, but that only reduced build time by 30 seconds.
 
-```sh
+```bash
 maxsize () {
   convert $1 -resize 1600x1600\> $1
 }

@@ -89,7 +89,7 @@ variable "mysql_admin_password" {
 
 We can import them in an `.env` file that looks like this.
 
-```sh
+```bash
 export TF_VAR_mysql_host=...
 export TF_VAR_mysql_port=...
 export TF_VAR_mysql_admin_user=...
@@ -320,7 +320,7 @@ resource "kubernetes_secret" "firefly" {
 
 To deploy, it's as simple as
 
-```sh
+```bash
 . ./.env
 terraform apply
 ```

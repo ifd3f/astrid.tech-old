@@ -38,7 +38,7 @@ For my first attempt, I tried Raspberry Pi OS Lite (no X11, no desktop). Then,
 following some (modified) instructions from the TFT store page, I ran the
 following commands on the Pi:
 
-```sh
+```bash
 wget https://github.com/goodtft/LCD-show/archive/refs/heads/master.zip
 unzip master
 cd LCD-show/
