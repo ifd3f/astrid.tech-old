@@ -35,6 +35,7 @@ On the right side of the pipe, there is `wireshark -k -i-`.
   means "capture packets from STDIN"
 
 **Related note:** Oftentimes, when a flag that usually expects a file gets a
-`-`, the program supports reading the data from STDIN or STDOUT. If you want to
-use the file specifically named `-`, you should provide `./-` in that argument
-(i.e. `-w ./-`)
+`-`, the program supports reading the data from STDIN, or writing the data to
+STDOUT, depending on what the flag actually does. If you want to use the file
+specifically named `-`, you should provide `./-` in that argument (i.e.
+`-w ./-`)
