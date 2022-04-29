@@ -16,24 +16,28 @@ export async function getStaticProps() {
 function Detail() {
   return (
     <>
+      <p>This page was last updated on 2022-04-28.</p>
       <p>Some events that just happened are:</p>
       <ul>
         <li>
-          I just wrapped up my internship at Facebook! I should write a post
-          about it at some point.
+          I had a horrible winter quarter where I took 4 upper-division CS
+          classes. Now I'm having a much more chill spring quarter with less
+          classes.
         </li>
-        <li>Starting my 3rd school year at Cal Poly</li>
-      </ul>
-      <p>I'm currently trying to:</p>
-      <ul>
         <li>
-          Set up the 4th iteration of my{" "}
+          I went to the American Chemical Society conference in{" "}
+          <Link href="/2022/03/24/0/acs-spring-2022/">San Diego</Link>.
+        </li>
+      </ul>
+      <p>Some of my current side projects include:</p>
+      <ul>
+        <li>Writing more content for this website</li>
+        <li>
+          Setting up the 4th iteration of my{" "}
           <Link href="/projects/infrastructure">homelab</Link>
         </li>
-        <li>Write more content for this website</li>
-        <li>Meet more people at school, since it's in-person</li>
-        <li>Add general improvements to this website</li>
-        <li>Find an idea for a senior project</li>
+        <li>My senior project, a weather app</li>
+        <li>Various cybersecurity shenanigans</li>
       </ul>
     </>
   );
