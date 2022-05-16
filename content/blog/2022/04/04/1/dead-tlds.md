@@ -9,15 +9,57 @@ tags:
   - /projects/qr-tattoo
 ---
 
-When I was deciding on what TLD to get for my QR tattoo, one of my first
-thoughts was to just use a subdomain of `aay.tw`. Makes sense; it's short, and I
-don't have to pay any extra money.
+**EDIT Sun May 15 10:38:34 PM PDT 2022:**
+[Hello Hacker News!](https://news.ycombinator.com/item?id=31390600) I've made
+some corrections to this post after
+[Keith Winstein](https://cs.stanford.edu/~keithw/) pointed out a small
+historical inaccuracy. Turns out, ICANN did not exist until
+[it was created by the Clinton admin on September 18, 1998](https://en.wikipedia.org/wiki/ICANN#History),
+at which point IANA was merged into ICANN. So, most of the 90's decisions around
+TLD's were made by Jon Postel and Joyce K. Reynolds at the USC Information
+Sciences Institute, which ran IANA. I have changed this article to reflect this.
 
-However, someone brought up a good point -- can I trust that `.tw` will be
-around for the next few decades? After all, `.tw` is Taiwan's domain, and if you
-know anything about contemporary geopolitics, there's a lot of variables
-involved here. So, I ended up being safe and just picking out a new `.org`
-because those will only go away when ICANN goes away.
+Additionally, many have pointed out that there are other examples where a
+country has disappeared, such as with Netherlands Antilles. I will admit that I
+probably spent 2 hours at most on researching and writing this article, so I
+didn't get to look at every ccTLD. There are lots of other ccTLDs that are not
+actually countries, but exist anyways (such as .cc, .cx being islands but also
+territories of Australia).
+
+jasonjei pointed out that `.hk` is in an interesting political situation. I did
+some quick digging and it seems that `.hk` was established in 1990, and it is
+managed by the [HKIRC](https://news.ycombinator.com/item?id=31390600), which is
+"the only organization endorsed by the Hong Kong Government to undertake the
+administration of 'hk' domain names,"
+[according to Wikipedia](https://en.wikipedia.org/wiki/.hk). Despite what the 五
+毛 s say, the Hong Kong Government is completely at the mercy of the Chinese
+government, so if China wanted to get rid of `.hk` right now, all it would take
+is telling their puppets to do it, and within the next decade, `.hk` will be
+gone.
+
+However, in 2010, another ccTLD was launched, `.香港` (Hong Kong in English and
+[`.xn--j6w193g` in punycode](https://en.wikipedia.org/wiki/Punycode)). At first,
+it might seem that if they're going to add more domains, they're probably in
+favor of keeping `.hk`. However, to put this in historical context, Hong Kong
+was transfered in 1997, and during the 2000s,
+[the PRC did attempt to tighten its grip](https://en.wikipedia.org/wiki/2000s_in_Hong_Kong),
+although relatively unsuccessfully compared to what has happened recently. So,
+this ccTLD was created in a Hong Kong that had much more autonomy. Basically, I
+have no idea, go ask someone who actually knows about east Asian geopolitics.
+
+---
+
+When I was deciding on what TLD to get for my [QR tattoo](/projects/qr-tattoo),
+one of my first thoughts was to just use a subdomain of `aay.tw`. Makes sense;
+it's short, and I don't have to pay any extra money.
+
+However, someone at a
+[Homebrew Website Club](https://indieweb.org/Homebrew_Website_Club) meeting
+brought up a good point -- can I trust that `.tw` will be around for the next
+few decades? After all, `.tw` is Taiwan's domain, and if you know anything about
+contemporary geopolitics, there's a lot of variables involved here. So, I ended
+up being safe and just picking out a new `.org` because those will only go away
+when ICANN goes away.
 
 Still, this is an interesting thing to think about. Suppose China ends up
 invading and successfully annexing Taiwan; what would happen to the
@@ -39,7 +81,7 @@ you will of that.
 Back in 1989, the Eastern Bloc countries were assigned `.su` (Soviet Union),
 `.pl` (Poland), `.cs` (Czechoslovakia), `.yu` (Yugoslavia) and `.dd` (East
 Germany). domain. 15 months later, in 1991, the Soviet Union collapsed, and it
-seems that ICANN had to deal with the fallout of that.[^su]
+seems that IANA had to deal with the fallout of that.[^su]
 
 This situation is not the same as the one with Taiwan or Ukraine; the Soviet
 Union did not collapse because it was invaded, but because of internal political
@@ -57,9 +99,10 @@ state, but it was still the same country. Thus, it inherited `.pl`.
 #### `.su`
 
 The Union of Soviet Sovialist Republics collapsed, and its constituent republics
-broken off of it (i.e. Ukraine, the Baltic States) got their own domains. ICANN
+broken off of it (i.e. Ukraine, the Baltic States) got their own domains. IANA
 introduced `.ru` in 1994 to phase out `.su`, but the Russian government nad
-internet users wanted to keep it, so ICANN let it happen.
+internet users wanted to keep it, so IANA, and eventually ICANN, let it happen.
+This repeated several times up until the present day, where
 
 It seems that ICANN wants to terminate it, IANA states that it's being phased
 out, but Russia still wants to keep it, and there's still 100,000 domains
@@ -137,3 +180,21 @@ somewhat hairy.
 At this point, I'm too lazy to look deeper into the ICANN agreements. Too much
 legalese. I guess if there's a takeaway from this research, it's that a ccTLD
 could stop existing after the country stops existing.
+
+## EDIT, a month after writing this article: The part where I wildly speculate on geopolitics and talk about situations I don't completely understand
+
+From my understanding of the political situation, China has been repeatedly
+affirming that the country of Taiwan is not a country, but is actually a rogue
+province and fully part of China. Therefore, if China were to take over Taiwan,
+then getting rid of the .tw domain would be one of the many symbolic ways it
+would strip Taiwan of its status as a sovereign nation, not to mention all the
+other material ways they would do so. It would probably not be immediate,
+because in the past, the process of removing domains has involved transition
+periods.
+
+Additionally, the situation with the special warcrime operation in Ukraine has
+progressed since I first published this post. It has become extremely obvious
+that Russia doesn't have the power to annex Ukraine, no matter how hard they
+try. However, if they had annexed Ukraine, then taking into account their
+framing of Ukraine as """rightful Russian territory,""" they would probably get
+rid of `.ua` too.
