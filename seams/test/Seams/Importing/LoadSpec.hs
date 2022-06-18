@@ -5,6 +5,7 @@ module Seams.Importing.LoadSpec where
 
 import Control.Lens
 import Control.Monad.Except
+import Data.List (intercalate)
 import Data.Validation
 import Seams.Importing.FileSchema
 import Seams.Importing.Load
@@ -13,7 +14,6 @@ import Seams.Importing.Types
 import Seams.TestUtils
 import System.FilePath
 import Test.Hspec
-import Data.List (intercalate)
 
 spec :: Spec
 spec = do

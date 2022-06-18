@@ -9,7 +9,6 @@ import Data.ByteString (ByteString)
 import Data.Either.Combinators
 import Data.Either.Utils (maybeToEither)
 import Data.Frontmatter
-import Data.Functor ((<&>))
 import Data.Maybe
 import Data.Validation
 import Data.Yaml.Aeson (decodeEither')
@@ -17,6 +16,9 @@ import Seams.Importing.ReadFile
 import Seams.Importing.Types
 import Seams.Types
 import System.FilePath
+import Control.Lens
+import Seams.Importing.FileSchema
+import Control.Monad.Trans.Maybe
 
 type ContentLoaderT m a = ReadFileT' m a
 
@@ -59,37 +61,34 @@ loadMergeableDir path = do
 loadDocument' ::
      (Monad m, FromJSON d)
   => FilePath
-  -> Maybe (ReadFileT' m (Validation [WithPath LoadError] (LoadedDoc d)))
+  -> ReadFileT' m (Validation [WithPath LoadError] (Maybe (LoadedDoc d)))
 loadDocument' path =
-  loadDocument path <&>
-  (\(WithPath p loader) -> do
-     result <- runExceptT loader
-     pure $ fromEither $ mapLeft (\e -> [WithPath p e]) result)
-
-loadDocument ::
-     (Monad m, FromJSON d)
-  => FilePath
-  -> Maybe (WithPath (DocLoaderT m (LoadedDoc d)))
-loadDocument path = do
-  dType <- extensionToDocumentType $ takeExtension path
-  return $ WithPath path (loadDocAsType dType path)
+  runExceptT . runMaybeT $ do
+          dType <- MaybeT . pure . extensionToDocumentType $ takeExtension path
+          lift $ fromEither $ mapLeft (\e -> [WithPath path e]) result
 
 loadDocAsType ::
      (FromJSON d, Monad m)
   => DocumentType
   -> FilePath
-  -> DocLoaderT m (LoadedDoc d)
+  -> DocLoaderT m (Maybe (LoadedDoc d))
 loadDocAsType FrontmatterMarkdown path = do
   dContent <- performEnvRead (asFile $ NoDocument FrontmatterMarkdown path) path
   liftEither $
     case parseYamlFrontmatter dContent of
+      Fail _ _ "string" -> Right Nothing
       Fail _ _ err -> Left $ BadYaml err
       Partial _ -> Left IncompleteFrontmatter
-      Done rest fm -> Right $ LoadedDoc path fm (Content path Markdown rest)
-loadDocAsType YAML path = LoadedDoc path <$> yaml <*> content
+      Done rest fm -> Right . Just $ LoadedDoc path fm (Content path Markdown rest)
+loadDocAsType YAML path = do
+  yaml :: Doc d <- performEnvRead (asYaml $ NoDocument YAML path) path
+  content <- case yaml^.docContent of
+    Just (EmbeddedPlaintext x) -> pure $ Content path Plaintext x
+    Just (FileRef ref) -> contentAt ref
+    Nothing -> contentAt $ dropExtension path
+  return . Just $ LoadedDoc path yaml content
   where
-    yaml = performEnvRead (asYaml $ NoDocument YAML path) path
-    content = loadContent (takeBaseName path)
+    contentAt cPath = loadContent cPath
 
 loadContent :: Monad m => FilePath -> DocLoaderT m Content
 loadContent path = Content path <$> cType <*> fileContent

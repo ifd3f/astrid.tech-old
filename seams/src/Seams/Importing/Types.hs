@@ -12,15 +12,15 @@ import Seams.Types
 
 data LoadedContent =
   LoadedContent
-    { _lcPosts :: [LoadedDoc (Doc PostMeta)]
-    , _lcProjects :: [LoadedDoc (Doc ProjectMeta)]
+    { _lcPosts :: [LoadedDoc PostMeta]
+    , _lcProjects :: [LoadedDoc ProjectMeta]
     , _lcTagConfigs :: TagConfig
     }
 
 data LoadedDoc m =
   LoadedDoc
     { _ldPath :: FilePath
-    , _ldMeta :: m
+    , _ldMeta :: Doc m
     , _ldContent :: Content
     }
   deriving (Show, Functor)

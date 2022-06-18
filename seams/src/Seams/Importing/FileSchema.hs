@@ -22,6 +22,8 @@ import Data.UUID
 import Data.Vector ((!), (!?))
 import qualified Data.Vector as V
 import Seams.Types
+import Data.ByteString (ByteString)
+import qualified Data.Text.Encoding as BSE
 
 -- | JSON of a document's metadata.
 data Doc extra =
@@ -38,32 +40,21 @@ data Doc extra =
     }
   deriving (Show, Functor)
 
--- | Document fields. Document Meta fields are flattened.
-instance FromJSON meta => FromJSON (Doc meta) where
-  parseJSON =
-    withObject "Doc" $ \o ->
-      Doc <$> o .: "uuid" <*> parseJSON (Object o) <*> -- meta's fields are flattened
-      o .: "time" <*>
-      o .:? "colophon" <*>
-      o .:? "content" <*>
-      o .:? "thumbnail" <*>
-      o .:? "preview"
-
 -- | A field that refers to another content object.
 data ContentField
   = FileRef FilePath
-  | EmbeddedPlaintext Text
+  | EmbeddedPlaintext ByteString
   deriving (Show, Eq)
 
 instance ToJSON ContentField where
   toJSON (FileRef path) = object ["path" .= path]
-  toJSON (EmbeddedPlaintext content) = A.String content
+  toJSON (EmbeddedPlaintext content) = A.String $ BSE.decodeUtf8 content
 
 instance FromJSON ContentField where
   parseJSON x =
     case x of
-      A.String t -> pure $ EmbeddedPlaintext t
-      Object o -> EmbeddedPlaintext <$> o .: "path"
+      A.String t -> pure $ EmbeddedPlaintext (BSE.encodeUtf8 t)
+      Object o -> EmbeddedPlaintext . BSE.encodeUtf8 <$> (o .: "path")
       other -> fail $ "ContentField: unexpected object" ++ show other
 
 data Timestamps =
@@ -222,3 +213,16 @@ makeLenses ''TagConfig
 makeLenses ''Doc
 
 makeLenses ''Timestamps
+
+-- | Document fields. Document Meta fields are flattened.
+instance FromJSON meta => FromJSON (Doc meta) where
+  parseJSON =
+    withObject "Doc" $ \o ->
+      Doc <$> o .: "uuid" <*>
+      parseJSON (Object o) <*> -- meta's fields are flattened
+      o .: "time" <*>
+      o .:? "colophon" <*>
+      o .:? "content" <*>
+      o .:? "thumbnail" <*>
+      o .:? "preview"
+
