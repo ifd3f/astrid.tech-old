@@ -9,6 +9,11 @@ while [[ $# -gt 0 ]]; do
   key="$1"
 
   case $key in
+    -h|--help)
+      echo "--no-commit to not immediately commit (implies --no-push)"
+      echo "--no-push to not immediately push"
+      exit 0
+      ;;
     -c|--no-commit)
       NO_COMMIT=1
       NO_PUSH=1
