@@ -6,6 +6,7 @@ description:
 date: 2022-07-07 14:38:11-07:00
 ordinal: 0
 tags:
+  - /projects/blink-mini-re
   - electrical-engineering
   - teardown
   - incompetency
@@ -93,7 +94,9 @@ Wow, that was so much easier than I thought it was!
 
 ## Staring at the circuit board
 
-There are actually two PCBs here, with a 26-pin header for talking between the two boards. One is the wifi/antenna board, and the other seems to have everything else.
+There are actually two PCBs here, with a 26-pin header for talking between the
+two boards. One is the wifi/antenna board, and the other seems to have
+everything else.
 
 ![The main board with the camera on top.](./camera-on-top.jpg)
 

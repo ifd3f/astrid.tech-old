@@ -6,6 +6,7 @@ description:
 date: 2022-08-03 10:01:19-07:00
 ordinal: 0
 tags:
+  - /projects/blink-mini-re
   - reverse-engineering
   - ghidra
   - python
