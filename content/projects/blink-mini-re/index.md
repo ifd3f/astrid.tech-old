@@ -35,5 +35,6 @@ Big thanks to [Ada](https://twitter.com/lacecard) and
 ## Blog posts about my journey so far
 
 1. [Disassembling an Amazon Blink Mini camera](https://astrid.tech/2022/07/07/0/blink-mini-disassembly/)
-2. [Blink Mini RE, Part 2 -- Desoldering and dumping the ROM](https://astrid.tech/2022/07/13/0/blink-mini-dumping/)
-3. [Blink Mini RE, Part 3 -- Staring into the eye of the binary](https://astrid.tech/2022/08/03/0/blink-mini-fw-analysis/)
+2. [Desoldering and dumping the ROM](https://astrid.tech/2022/07/13/0/blink-mini-dumping/)
+3. [Staring into the eye of the binary](https://astrid.tech/2022/08/03/0/blink-mini-fw-analysis/)
+4. [Staring into the heart of the binary](https://astrid.tech/2022/08/06/0/blink-mini-4/)
