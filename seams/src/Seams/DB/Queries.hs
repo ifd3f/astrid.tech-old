@@ -70,7 +70,8 @@ insertProject ld = do
       (extra ^. projectTitle)
       (extra ^. projectTagline)
       (extra ^. projectSlug)
-      (zonedTimeToUTC $ extra ^. projectStart)
+      (extra ^. projectStart)
+      (extra ^. projectEnd)
       docObj
       tagObj
   where

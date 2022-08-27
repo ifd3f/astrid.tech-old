@@ -47,6 +47,7 @@ loadDocs path = do
           (\case
              (Right d, _) -> Just (Right d)
              (Left (UnsupportedDocumentExtension _), _) -> Nothing
+             (Left (NoDocument _ _), _) -> Nothing
              (Left err, p) -> Just (Left (WithPath p err)))
           (zip loadResults files)
   pure $

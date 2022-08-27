@@ -5,7 +5,7 @@ module Seams.Importing.LoadSpec where
 
 import Control.Lens
 import Control.Monad.Except
-import Data.List (intercalate)
+import Data.List (intercalate, sort)
 import Data.Validation
 import Seams.Importing.FileSchema
 import Seams.Importing.Load
@@ -28,12 +28,12 @@ spec = do
                 case v of
                   Failure x -> error $ intercalate "\n" $ map show x
                   Success y -> y
-      length (dat ^. lcPosts) `shouldBe` 3
+      length (dat ^. lcPosts) `shouldBe` 6
   describe "loadDocs" $ do
     it "loads example folder blog correctly" $ do
       result <-
         runExceptT $ runReadFileT (loadDocs (exampleDir </> "blog")) ioReadFile
-      let dat :: [LoadedDoc PostMeta] =
+      let dat :: [LoadedDoc PostMeta] = sort $
             case result of
               Left x -> error $ show x
               Right v ->

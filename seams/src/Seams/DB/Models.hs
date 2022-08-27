@@ -77,7 +77,8 @@ Project
   tagline Text 
   slug Text 
 
-  started UTCTime
+  started Day
+  ended Day Maybe
 
   doc DocId 
   tagObj TagObjId 

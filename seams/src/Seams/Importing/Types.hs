@@ -4,6 +4,7 @@
 
 module Seams.Importing.Types where
 
+import Control.Lens
 import Control.Lens.TH
 import Data.ByteString
 import Data.Yaml
@@ -31,14 +32,14 @@ data Content =
     , _contentType :: ContentType
     , _contentBody :: ByteString
     }
-  deriving (Show, Eq)
+  deriving (Show, Eq, Ord)
 
 data WithPath a =
   WithPath
     { _rPath :: FilePath
     , _rResult :: a
     }
-  deriving (Show, Eq, Functor)
+  deriving (Show, Eq, Ord, Functor)
 
 data LoadError
   = BadYaml String
@@ -58,3 +59,9 @@ makeLenses ''LoadedContent
 makeLenses ''LoadedDoc
 
 makeLenses ''Content
+
+instance Eq (LoadedDoc m) where
+  a == b = (a ^. ldPath) == (b ^. ldPath)
+
+instance Ord (LoadedDoc m) where
+  a `compare` b = (a ^. ldPath) `compare` (b ^. ldPath)

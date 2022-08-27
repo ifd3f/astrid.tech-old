@@ -1,7 +1,6 @@
 uuid: 6bfa8b68-bafa-4f82-8db2-ff1a61b9da4b
-time:
-  created: 2014-09-24T18:31:40.328-07:00
-  published: 2015-08-10T18:31:40.328-07:00
+createdDate: 2014-09-24T18:31:40.328-07:00
+publishedDate: 2015-08-10T18:31:40.328-07:00
 title: A detached-metadata markdown file
 slug: [2021, 9, 24, 1]
 tags: []

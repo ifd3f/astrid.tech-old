@@ -8,6 +8,7 @@
 -- | This module defines the input schema and some parsing stuff.
 module Seams.Importing.FileSchema where
 
+import Control.Lens ((^.))
 import Control.Lens.TH
 import Data.Aeson
 import qualified Data.Aeson as A
@@ -38,13 +39,13 @@ data Doc extra =
   -- | HTML preview description.
     , _docPreview :: Maybe Text
     }
-  deriving (Show, Functor)
+  deriving (Show, Functor, Eq, Ord)
 
 -- | A field that refers to another content object.
 data ContentField
   = FileRef FilePath
   | EmbeddedPlaintext ByteString
-  deriving (Show, Eq)
+  deriving (Show, Eq, Ord)
 
 instance ToJSON ContentField where
   toJSON (FileRef path) = object ["path" .= path]
@@ -71,6 +72,16 @@ data Timestamps =
     }
   deriving (Show)
 
+instance Eq Timestamps where
+  Timestamps a b c == Timestamps x y z =
+    map (fmap zonedTimeToUTC) [Just a, b, c] ==
+    map (fmap zonedTimeToUTC) [Just x, y, z]
+
+instance Ord Timestamps where
+  Timestamps a b c `compare` Timestamps x y z =
+    map (fmap zonedTimeToUTC) [Just a, b, c] `compare`
+    map (fmap zonedTimeToUTC) [Just x, y, z]
+
 $(deriveJSON
     defaultOptions {fieldLabelModifier = map toLower . drop 3}
     ''Timestamps)
@@ -85,7 +96,7 @@ data PostSlug =
     , _slugOrdinal :: Int
     , _slugName :: Maybe Text
     }
-  deriving (Show, Eq)
+  deriving (Show, Eq, Ord)
 
 -- | A PostSlug is an array like so:
 -- | [2020, 3, 20, 2] 
@@ -110,11 +121,11 @@ instance ToJSON PostSlug where
     (Number . fromIntegral <$> [y, m, d, o]) ++ (String <$> maybeToList n)
 
 data RSVP
-  = RSVPYes
-  | RSVPNo
+  = RSVPNo
   | RSVPMaybe
   | RSVPInterested
-  deriving (Show, Eq)
+  | RSVPYes
+  deriving (Show, Eq, Ord)
 
 instance FromJSON RSVP where
   parseJSON (Bool True) = pure RSVPYes
@@ -134,13 +145,13 @@ instance ToJSON RSVP where
 -- | Metadata associated with a blog post.
 data PostMeta =
   PostMeta
-    { _postTitle :: Maybe Text
-    , _postSlug :: PostSlug
+    { _postSlug :: PostSlug
+    , _postTitle :: Maybe Text
     , _postTagline :: Maybe Text
     , _postRSVP :: Maybe RSVP
     , _postTags :: [Text]
     }
-  deriving (Show, Eq)
+  deriving (Show, Eq, Ord)
 
 $(deriveJSON
     defaultOptions {fieldLabelModifier = map toLower . drop 5}
@@ -153,16 +164,16 @@ data ProjectMeta =
     , _projectTagline :: Text
     , _projectSlug :: Text
     , _projectTags :: [Text]
-    , _projectStart :: ZonedTime
+    , _projectStart :: Day
     , _projectSource :: Maybe String
     , _projectURI :: Maybe String
     , _projectTile :: Maybe FilePath
-    , _projectEnd :: Maybe ZonedTime
+    , _projectEnd :: Maybe Day
     }
   deriving (Show)
 
 $(deriveJSON
-    defaultOptions {fieldLabelModifier = map toLower . drop 7}
+    defaultOptions {fieldLabelModifier = map toLower . drop 8}
     ''ProjectMeta)
 
 data TagColorSheet =
@@ -223,3 +234,9 @@ instance FromJSON meta => FromJSON (Doc meta) where
       o .:? "content" <*>
       o .:? "thumbnail" <*>
       o .:? "preview"
+
+instance Eq ProjectMeta where
+  p1 == p2 = (p1 ^. projectSlug) == (p2 ^. projectSlug)
+
+instance Ord ProjectMeta where
+  p1 `compare` p2 = (p1 ^. projectSlug) `compare` (p2 ^. projectSlug)

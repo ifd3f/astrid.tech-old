@@ -21,7 +21,7 @@ import Database.Persist.Postgresql
 data DocumentType
   = FrontmatterMarkdown
   | YAML
-  deriving (Show, Eq)
+  deriving (Show, Eq, Ord)
 
 extensionToDocumentType :: String -> Maybe DocumentType
 extensionToDocumentType ext
@@ -37,7 +37,7 @@ data ContentType
   | HTML
   | Plaintext
   | Jupyter
-  deriving (Show, Eq)
+  deriving (Show, Eq, Ord)
 
 contentTypeToExtension :: ContentType -> String
 contentTypeToExtension =
