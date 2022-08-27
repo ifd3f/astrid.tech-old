@@ -12,18 +12,18 @@ import Control.Lens.TH
 import Data.Aeson
 import qualified Data.Aeson as A
 import Data.Aeson.TH
+import Data.ByteString (ByteString)
 import Data.Char
 import Data.Map (Map)
 import qualified Data.Map as M
 import Data.Maybe (maybeToList)
 import Data.Text (Text)
+import qualified Data.Text.Encoding as BSE
 import Data.Time
 import Data.UUID
 import Data.Vector ((!), (!?))
 import qualified Data.Vector as V
 import Seams.Types
-import Data.ByteString (ByteString)
-import qualified Data.Text.Encoding as BSE
 
 -- | JSON of a document's metadata.
 data Doc extra =
@@ -59,9 +59,8 @@ instance FromJSON ContentField where
 
 data Timestamps =
   Timestamps
-    {
   -- | When this content was published on the website.
-      _tsPublished :: ZonedTime
+    { _tsPublished :: ZonedTime
   -- | When this content was created. Semantically, the content itself, not
   -- | the document holding the content.
   -- | If Nothing, then it is the same as published.
@@ -218,11 +217,9 @@ makeLenses ''Timestamps
 instance FromJSON meta => FromJSON (Doc meta) where
   parseJSON =
     withObject "Doc" $ \o ->
-      Doc <$> o .: "uuid" <*>
-      parseJSON (Object o) <*> -- meta's fields are flattened
+      Doc <$> o .: "uuid" <*> parseJSON (Object o) <*> -- meta's fields are flattened
       o .: "time" <*>
       o .:? "colophon" <*>
       o .:? "content" <*>
       o .:? "thumbnail" <*>
       o .:? "preview"
-

@@ -28,7 +28,8 @@ extensionToDocumentType ext
   | s' `elem` ["md", "markdown"] = Just FrontmatterMarkdown
   | s' `elem` ["json", "yml", "yaml"] = Just YAML
   | otherwise = Nothing
-  where s' = normalizeExtension ext
+  where
+    s' = normalizeExtension ext
 
 -- | Supported formats for the body of documents.
 data ContentType
@@ -39,7 +40,8 @@ data ContentType
   deriving (Show, Eq)
 
 contentTypeToExtension :: ContentType -> String
-contentTypeToExtension = \case
+contentTypeToExtension =
+  \case
     Markdown -> "md"
     HTML -> "html"
     Plaintext -> "txt"
@@ -52,17 +54,19 @@ extensionToContentType ext
   | s' `elem` ["md", "markdown"] = Just Markdown
   | s' == "txt" = Just Plaintext
   | otherwise = Nothing
-  where s' = normalizeExtension ext
+  where
+    s' = normalizeExtension ext
 
 normalizeExtension :: String -> String
 normalizeExtension ext = fromMaybe l $ stripPrefix "." l
-  where l = map toLower ext
+  where
+    l = map toLower ext
 
 instance PersistFieldSql ContentType where
   sqlType _ = SqlString
 
 instance PersistField ContentType where
-  toPersistValue = PersistText . T.pack . contentTypeToExtension 
+  toPersistValue = PersistText . T.pack . contentTypeToExtension
   fromPersistValue (PersistText v) =
     maybeToEither ("Invalid text " `T.append` v) $
     extensionToContentType $ T.unpack v

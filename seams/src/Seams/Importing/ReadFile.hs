@@ -1,3 +1,5 @@
+{-# LANGUAGE DeriveFunctor #-}
+
 module Seams.Importing.ReadFile where
 
 import Control.Exception
@@ -26,8 +28,6 @@ newtype ReadFileT f m a =
   ReadFileT
     { runReadFileT :: (FilePath -> m (ReadResult f)) -> m a
     }
-
-type ReadFileT' = ReadFileT ByteString
 
 envRead :: FilePath -> ReadFileT f m (ReadResult f)
 envRead path = ReadFileT $ \rf -> rf path

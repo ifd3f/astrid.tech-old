@@ -47,6 +47,7 @@ data LoadError
   | IncompleteFrontmatter
   | NoContent FilePath
   | NoDocument DocumentType FilePath
+  | UnsupportedDocumentExtension String
   | UnsupportedContentExtension String
   deriving (Show)
 

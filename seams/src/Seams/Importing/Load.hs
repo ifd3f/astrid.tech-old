@@ -1,28 +1,29 @@
 {-# LANGUAGE ScopedTypeVariables #-}
+{-# LANGUAGE LambdaCase #-}
 {-# LANGUAGE FlexibleContexts #-}
 
 module Seams.Importing.Load where
 
+import Control.Lens
 import Control.Monad.Except
-import Data.Aeson
+import Data.Aeson (FromJSON)
 import Data.ByteString (ByteString)
+import Data.Either (partitionEithers)
 import Data.Either.Combinators
 import Data.Either.Utils (maybeToEither)
 import Data.Frontmatter
 import Data.Maybe
-import Data.Validation
+import Data.Validation (Validation(..), fromEither)
 import Data.Yaml.Aeson (decodeEither')
+import Seams.Importing.FileSchema
 import Seams.Importing.ReadFile
 import Seams.Importing.Types
 import Seams.Types
 import System.FilePath
-import Control.Lens
-import Seams.Importing.FileSchema
-import Control.Monad.Trans.Maybe
 
-type ContentLoaderT m a = ReadFileT' m a
+type ContentLoaderT m a = ReadFileT ByteString m a
 
-type DocLoaderT m a = ExceptT LoadError (ReadFileT' m) a
+type DocLoaderT m a = ExceptT LoadError (ReadFileT ByteString m) a
 
 loadContentFolder ::
      Monad m
@@ -40,9 +41,18 @@ loadDocs ::
   -> ContentLoaderT m (Validation [WithPath LoadError] [LoadedDoc d])
 loadDocs path = do
   files <- envWalkFiles path
-  let loadable = mapMaybe loadDocument' files
-  results <- sequenceA loadable
-  pure $ sequenceA results
+  loadResults <- traverse (runExceptT . loadDocument) files
+  let documents =
+        mapMaybe
+          (\case
+             (Right d, _) -> Just (Right d)
+             (Left (UnsupportedDocumentExtension _), _) -> Nothing
+             (Left err, p) -> Just (Left (WithPath p err)))
+          (zip loadResults files)
+  pure $
+    case partitionEithers documents of
+      ([], vals) -> Success vals
+      (errs, _) -> Failure errs
 
 loadMergeableDir ::
      (Monad m, FromJSON a, Monoid a)
@@ -58,38 +68,40 @@ loadMergeableDir path = do
       files
   return $ mconcat <$> sequenceA results
 
-loadDocument' ::
-     (Monad m, FromJSON d)
-  => FilePath
-  -> ReadFileT' m (Validation [WithPath LoadError] (Maybe (LoadedDoc d)))
-loadDocument' path =
-  runExceptT . runMaybeT $ do
-          dType <- MaybeT . pure . extensionToDocumentType $ takeExtension path
-          lift $ fromEither $ mapLeft (\e -> [WithPath path e]) result
+-- | Load a document at the path, detecting its content.
+loadDocument :: (Monad m, FromJSON d) => FilePath -> DocLoaderT m (LoadedDoc d)
+loadDocument path = do
+  dType <-
+    case extensionToDocumentType ext of
+      Nothing -> throwError $ UnsupportedDocumentExtension ext
+      Just t -> pure t
+  loadDocAsType dType path
+  where
+    ext = takeExtension path
 
+-- | Load a document at the path with the given type, plus its content.
 loadDocAsType ::
      (FromJSON d, Monad m)
   => DocumentType
   -> FilePath
-  -> DocLoaderT m (Maybe (LoadedDoc d))
+  -> DocLoaderT m (LoadedDoc d)
 loadDocAsType FrontmatterMarkdown path = do
   dContent <- performEnvRead (asFile $ NoDocument FrontmatterMarkdown path) path
-  liftEither $
-    case parseYamlFrontmatter dContent of
-      Fail _ _ "string" -> Right Nothing
-      Fail _ _ err -> Left $ BadYaml err
-      Partial _ -> Left IncompleteFrontmatter
-      Done rest fm -> Right . Just $ LoadedDoc path fm (Content path Markdown rest)
+  case parseYamlFrontmatter dContent of
+    Fail _ _ "string" -> throwError $ NoDocument FrontmatterMarkdown path
+    Fail _ _ err -> throwError $ BadYaml err
+    Partial _ -> throwError IncompleteFrontmatter
+    Done rest fm -> pure $ LoadedDoc path fm (Content path Markdown rest)
 loadDocAsType YAML path = do
   yaml :: Doc d <- performEnvRead (asYaml $ NoDocument YAML path) path
-  content <- case yaml^.docContent of
-    Just (EmbeddedPlaintext x) -> pure $ Content path Plaintext x
-    Just (FileRef ref) -> contentAt ref
-    Nothing -> contentAt $ dropExtension path
-  return . Just $ LoadedDoc path yaml content
-  where
-    contentAt cPath = loadContent cPath
+  content <-
+    case yaml ^. docContent of
+      Just (EmbeddedPlaintext x) -> pure $ Content path Plaintext x
+      Just (FileRef ref) -> loadContent ref
+      Nothing -> loadContent $ dropExtension path
+  pure $ LoadedDoc path yaml content
 
+-- | Load a content object from the given path.
 loadContent :: Monad m => FilePath -> DocLoaderT m Content
 loadContent path = Content path <$> cType <*> fileContent
   where
