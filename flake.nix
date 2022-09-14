@@ -14,17 +14,7 @@
         at-upload-cli' = final.haskell-nix.project' {
           src = ./upload-cli;
           compiler-nix-name = "ghc924";
-          shell.tools = {
-            cabal = { };
-            hpack = { };
-            hlint = { };
-            haskell-language-server = { };
-          };
-          # Non-Haskell shell tools go here
-          shell.buildInputs = with final; [ nixpkgs-fmt ];
         };
-
-        at-upload-cli = (final.at-upload-cli'.flake {}).packages."upload-cli:exe:upload-cli-app";
       });
     } // (flake-utils.lib.eachSystem [
       "x86_64-linux"
@@ -67,6 +57,8 @@
             haskell-language-server = "latest";
             hpack = "latest";
           };
+
+          buildInputs = with pkgs; [ nixpkgs-fmt nodePackages.prettier ];
 
           LD_LIBRARY_PATH = lib.makeLibraryPath [ pkgs.zlib ];
         };

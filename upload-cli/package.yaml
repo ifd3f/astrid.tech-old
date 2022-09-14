@@ -1,14 +1,15 @@
 name: upload-cli
 dependencies:
-  - base64
-  - filepath
+  - MissingH
   - base
-  - text
+  - base16-bytestring
   - bytestring
   - cryptohash-sha256
+  - filepath
   - hip
   - minio-hs
   - optparse-applicative
+  - text
 ghc-options:
   - -Wall
   - -Wcompat
@@ -29,4 +30,3 @@ tests:
       - upload-cli
 library:
   source-dirs: src
-

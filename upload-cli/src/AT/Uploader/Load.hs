@@ -3,14 +3,14 @@
 module AT.Uploader.Load where
 
 import Crypto.Hash.SHA256 (hashlazy)
-import Data.ByteString.Base64 (encodeBase64)
+import qualified Data.ByteString.Base16 as B16
 import qualified Data.ByteString.Lazy as BL
-import Data.Text (Text)
 import qualified Data.Text as T
+import qualified Data.Text.Encoding as T
 
 getHash :: FilePath -> IO String
 getHash path = do
   fileData <- BL.readFile path
   let hash = hashlazy fileData
-  let b64 :: Text = encodeBase64 hash
-  pure $ T.unpack b64
+  let ascii = B16.encode hash
+  pure $ T.unpack $ T.decodeUtf8 $ ascii

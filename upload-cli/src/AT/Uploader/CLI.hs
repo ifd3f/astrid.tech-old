@@ -23,4 +23,5 @@ data Env =
 getEnvs :: IO Env
 getEnvs =
   Env <$> (pack <$> getEnv "UPLOAD_BUCKET_NAME") <*>
-    (Credentials <$> (pack <$> getEnv "AWS_ACCESS_KEY_ID") <*> (pack <$> getEnv "AWS_SECRET_ACCESS_KEY"))
+  (Credentials <$> (pack <$> getEnv "AWS_ACCESS_KEY_ID") <*>
+   (pack <$> getEnv "AWS_SECRET_ACCESS_KEY"))
