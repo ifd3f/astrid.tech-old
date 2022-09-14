@@ -38,8 +38,7 @@ uploadFile :: Bucket -> FilePath -> Minio ()
 uploadFile bucket p = do
   bucketDest <- liftIO $ getBucketDest p
   fPutObject bucket (T.pack bucketDest) p defaultPutObjectOptions
-  let url =
-        "https://s3.us-west-000.backblaze/" ++ T.unpack bucket </> bucketDest
+  let url = "https://" ++ T.unpack bucket ++ ".s3.us-west-000.backblazeb2.com/" </> bucketDest
   liftIO $ putStrLn ("![](" ++ url ++ ")")
   pure ()
 

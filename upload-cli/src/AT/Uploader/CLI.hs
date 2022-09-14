@@ -23,6 +23,4 @@ data Env =
 getEnvs :: IO Env
 getEnvs =
   Env <$> (pack <$> getEnv "UPLOAD_BUCKET_NAME") <*>
-  (fromMaybe <$> (ioError $ userError "Couldn't find credentials") <*>
-   (findFirst [fromAWSEnv, fromAWSConfigFile]))
-
+    (Credentials <$> (pack <$> getEnv "AWS_ACCESS_KEY_ID") <*> (pack <$> getEnv "AWS_SECRET_ACCESS_KEY"))
