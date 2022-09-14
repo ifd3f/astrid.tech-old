@@ -1,6 +1,32 @@
+name: upload-cli
 dependencies:
-  - base == 4.*
-  - haskell-say
+  - base64
+  - filepath
+  - base
+  - text
+  - bytestring
+  - cryptohash-sha256
+  - hip
+  - minio-hs
+  - optparse-applicative
+ghc-options:
+  - -Wall
+  - -Wcompat
+  - -Wincomplete-record-updates
+  - -Wincomplete-uni-patterns
+  - -Wredundant-constraints
 executables:
-  haskell-hello:
+  upload-cli-app:
     main: Main.hs
+    source-dirs: app
+    dependencies:
+      - upload-cli
+tests:
+  upload-cli-tests:
+    main: Spec.hs
+    source-dirs: test
+    dependencies:
+      - upload-cli
+library:
+  source-dirs: src
+

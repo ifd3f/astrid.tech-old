@@ -3,24 +3,40 @@
 
   inputs = {
     flake-utils.url = "github:numtide/flake-utils";
-    nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
+    #nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
+    nixpkgs.follows = "haskellNix/nixpkgs-unstable";
+    haskellNix.url = "github:input-output-hk/haskell.nix";
   };
 
-  outputs = { self, flake-utils, nixpkgs, ... }@inputs:
+  outputs = { self, flake-utils, nixpkgs, haskellNix, ... }@inputs:
     {
       overlay = (final: prev: {
-        at-upload-cli =
-          final.haskellPackages.callCabal2nix "at-upload-cli" ./upload-cli { };
+        at-upload-cli' = final.haskell-nix.project' {
+          src = ./upload-cli;
+          compiler-nix-name = "ghc924";
+          shell.tools = {
+            cabal = { };
+            hpack = { };
+            hlint = { };
+            haskell-language-server = { };
+          };
+          # Non-Haskell shell tools go here
+          shell.buildInputs = with final; [ nixpkgs-fmt ];
+        };
+
+        at-upload-cli = (final.at-upload-cli'.flake {}).packages."upload-cli:exe:upload-cli-app";
       });
     } // (flake-utils.lib.eachSystem [
       "x86_64-linux"
       "x86_64-darwin"
       "aarch64-linux"
     ] (system:
-    let pkgs = import nixpkgs {
-      inherit system;
-      overlays = [self.overlay];
-    };
+      let
+        pkgs = import nixpkgs {
+          inherit system;
+          overlays = [ haskellNix.overlay self.overlay ];
+        };
+        lib = pkgs.lib;
       in rec {
         packages = { inherit (pkgs) at-upload-cli; };
 
@@ -41,15 +57,18 @@
           ];
         };
 
-        devShells.upload-cli = pkgs.haskellPackages.shellFor {
-          packages = p: [ pkgs.at-upload-cli ];
+        devShells.upload-cli = pkgs.at-upload-cli'.shellFor {
           withHoogle = true;
-          buildInputs = with pkgs.haskellPackages; [
-            haskell-language-server
-            hpack
-            ghcid
-            cabal-install
-          ];
+          
+          tools = {
+            cabal = "latest";
+            hlint = "latest"; # Selects the latest version in the hackage.nix snapshot
+            hindent = "latest";
+            haskell-language-server = "latest";
+            hpack = "latest";
+          };
+
+          LD_LIBRARY_PATH = lib.makeLibraryPath [ pkgs.zlib ];
         };
       }));
 }
