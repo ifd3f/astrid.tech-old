@@ -15,6 +15,9 @@
           src = ./upload-cli;
           compiler-nix-name = "ghc924";
         };
+
+        at-upload-cli = (final.at-upload-cli'.flake {}).packages."upload-cli:exe:upload-cli-app";
+
       });
     } // (flake-utils.lib.eachSystem [
       "x86_64-linux"
@@ -47,6 +50,13 @@
           ];
         };
 
+        devShells.content = pkgs.mkShell {
+          nativeBuildInputs = with pkgs; [
+            at-upload-cli
+            nodePackages.prettier
+          ];
+        };
+
         devShells.upload-cli = pkgs.at-upload-cli'.shellFor {
           withHoogle = true;
           
@@ -58,7 +68,7 @@
             hpack = "latest";
           };
 
-          buildInputs = with pkgs; [ nixpkgs-fmt nodePackages.prettier ];
+          buildInputs = with pkgs; [ nodePackages.prettier ];
 
           LD_LIBRARY_PATH = lib.makeLibraryPath [ pkgs.zlib ];
         };
