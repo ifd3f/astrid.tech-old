@@ -8,20 +8,14 @@
     #nixpkgs.url = "github:NixOS/nixpkgs/nixos-unstable";
     haskellNix.url = "github:input-output-hk/haskell.nix";
     naersk.url = "github:nix-community/naersk/master";
-    nixpkgs-mozilla.url = "github:mozilla/nixpkgs-mozilla";
+    rust-overlay.url = "github:oxalica/rust-overlay";
   };
 
-  outputs = { self, flake-utils, nixpkgs, haskellNix, naersk, nixpkgs-mozilla
+  outputs = { self, flake-utils, nixpkgs, haskellNix, naersk, rust-overlay
     , ... }@inputs:
     {
       overlay = (final: prev:
-        let
-          nightlyRust = (final.rustChannelOf {
-            date = "2022-09-14";
-            channel = "nightly";
-            sha256 = "sha256-IHFlsy4Dzr1HvQyKCL9SQZ01FC0Syf/NCrHkf/ryOqo=";
-          }).rust;
-        in {
+        {
           at-upload-cli' = final.haskell-nix.project' {
             src = ./upload-cli;
             compiler-nix-name = "ghc924";
@@ -29,9 +23,6 @@
 
           at-upload-cli = (final.at-upload-cli'.flake
             { }).packages."upload-cli:exe:upload-cli-app";
-
-          cargo = nightlyRust;
-          rustc = nightlyRust;
 
           at-cms = final.naersk.buildPackage { src = ./.; };
         });
@@ -44,8 +35,9 @@
         pkgs = import nixpkgs {
           inherit system;
           overlays =
-            [ haskellNix.overlay nixpkgs-mozilla.overlays.rust self.overlay ];
+            [ haskellNix.overlay rust-overlay.overlays.default self.overlay ];
         };
+        rust-toolchain = pkgs.rust-bin.nightly."2022-09-15";
         lib = pkgs.lib;
       in rec {
         packages = { inherit (pkgs) at-upload-cli at-cms; };
@@ -54,18 +46,22 @@
 
         devShells.legacy = pkgs.mkShell {
           nativeBuildInputs = with pkgs; [
-            cargo
-            curl
             openssl
             docker
             pkg-config
             docker-compose
             git
             nodejs
+            nodePackages.prettier
             pipenv
             python310
-            rustc
             yarn
+
+            (rust-toolchain.rust.override {
+              extensions = ["rust-src"];
+            })
+            cargo-edit
+            diesel-cli
           ];
         };
 
