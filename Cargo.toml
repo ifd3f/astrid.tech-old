@@ -2,7 +2,7 @@
 
 members = [
     "aay_tw_shortener",
-    "astrid_tech_cms",
+    "cms",
     "simple_git_utils_rs",
     "wm-receiver",
 ]
