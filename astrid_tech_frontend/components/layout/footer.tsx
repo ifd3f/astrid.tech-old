@@ -1,7 +1,9 @@
 import Link from "next/link";
-import React, { FC, ReactNode } from "react";
+import { FC, PropsWithChildren, ReactNode } from "react";
 import { Col, Container, Row } from "reactstrap";
 import style from "./footer.module.scss";
+import packageJson from "../../package.json";
+import { useNSFW } from "components/nsfw";
 
 export const Tea = () => {
   return (
@@ -24,8 +26,9 @@ const ContentLicense = () => (
     <a rel="license" href="http://creativecommons.org/licenses/by-nc-sa/4.0/">
       <img
         alt="Creative Commons License"
-        style={{ borderWidth: 0 }}
-        src="https://i.creativecommons.org/l/by-nc-sa/4.0/88x31.png"
+        src="/cc-by-nc-sa-4.0.png"
+        width={88}
+        height={31}
       />
     </a>
     <br />
@@ -38,7 +41,7 @@ const ContentLicense = () => (
     by{" "}
     <a
       {...{ "xmlns:cc": "http://creativecommons.org/ns#" }}
-      href="https://astrid.tech"
+      href={process.env.publicRoot}
       property="cc:attributionName"
       rel="cc:attributionURL"
     >
@@ -56,16 +59,16 @@ const ContentLicense = () => (
 const AGPL: FC = () => {
   return (
     <>
-      <a href="https://www.gnu.org/licenses/agpl-3.0.en.html">
+      <a rel="license" href="https://www.gnu.org/licenses/agpl-3.0.en.html">
         <img
           alt="GNU Affero General Public License"
           width={100}
           height={40}
-          src={require("public/agpl.png")}
+          src="/agpl.png"
         />
       </a>
       <p>
-        <a href="https://github.com/astralbijection/astrid.tech">
+        <a href="https://github.com/astridyu/astrid.tech">
           The source code of astrid.tech
         </a>{" "}
         is licensed under the{" "}
@@ -73,6 +76,80 @@ const AGPL: FC = () => {
         .{" "}
       </p>
     </>
+  );
+};
+
+const HumansTXT = () => (
+  <p>
+    <a href="/humans.txt">
+      <img alt="Humans.txt" width={100} height={40} src="/humanstxt.gif" />
+    </a>
+  </p>
+);
+
+/**
+ * Links for an IndieWebRing. For more info, see https://xn--sr8hvo.ws/dashboard
+ * @returns links :)
+ */
+const IndieWebRing: FC = () => {
+  return (
+    <WebRing
+      prev="https://xn--sr8hvo.ws/%F0%9F%9A%AF%F0%9F%90%9E%F0%9F%8C%8A/previous"
+      next="https://xn--sr8hvo.ws/%F0%9F%9A%AF%F0%9F%90%9E%F0%9F%8C%8A/next"
+    >
+      <span title="An IndieWeb Webring">🕸💍</span>
+    </WebRing>
+  );
+};
+
+const XXIIVVWebring: FC = () => {
+  // TODO update when I get someone after me
+  return (
+    <WebRing
+      prev="https://webring.xxiivv.com/#yhnck"
+      next="https://webring.xxiivv.com/#xxiivv"
+    >
+      <img
+        src="https://webring.xxiivv.com/icon.white.svg"
+        style={{ height: "1em" }}
+        title="XXIIVV's Webring"
+      />
+    </WebRing>
+  );
+};
+
+const NSFWToggle = () => {
+  const { enabled, setEnabled } = useNSFW();
+
+  return (
+    <p>
+      <input
+        type="checkbox"
+        checked={enabled}
+        onChange={() => setEnabled(!enabled)}
+      />{" "}
+      I am over the age of 18 and I am willing to see Not Safe For Work (NSFW)
+      content.
+    </p>
+  );
+};
+
+type WebRingProps = PropsWithChildren<{
+  next: string;
+  prev: string;
+}>;
+
+const WebRing: FC<WebRingProps> = ({ next, prev, children }) => {
+  return (
+    <p style={{ fontSize: 20, marginBottom: 0 }}>
+      <a href={prev} rel="prev">
+        &larr;
+      </a>{" "}
+      {children}{" "}
+      <a href={next} rel="next">
+        &rarr;
+      </a>
+    </p>
   );
 };
 
@@ -87,39 +164,61 @@ const SiteLink: FC<SiteLinkProps> = ({ href, children }) => (
   </Col>
 );
 
+type MiniAboutProps = { version: string };
+
+const MiniAbout: FC<MiniAboutProps> = ({ version }) => {
+  return (
+    <p>
+      astrid.tech v{version} was created by Astrid Yu with a generous helping of{" "}
+      <Tea /> and <Witch />. Read the{" "}
+      <Link href="/projects/astrid-tech">self-referential project page</Link> or
+      see the code yourself on{" "}
+      <a href="https://github.com/astridyu/astrid.tech">GitHub</a>.
+    </p>
+  );
+};
+
 const FooterSection = () => {
-  const version = "1";
+  const version = packageJson.version;
 
   return (
     <footer className={style.footer}>
-      <Container className="text-light small">
-        <Col>
-          <Row tag="nav">
-            <SiteLink href="/privacy">Privacy Policy</SiteLink>
-            <SiteLink href="/licenses">Open Source Licenses</SiteLink>
-            <SiteLink href="/about">About/Contact</SiteLink>
-          </Row>
-        </Col>
-        <Col>
-          <p>
-            astrid.tech v{version} was created by Astrid Yu with a generous
-            helping of <Tea /> and <Witch />. See the{" "}
-            <Link href="/projects/astrid-tech">
-              self-referential project page
-            </Link>{" "}
-            or see the code yourself on{" "}
-            <a href="https://github.com/astralbijection/astrid.tech">GitHub</a>.
-          </p>
-        </Col>
+      <Container className="text-light">
         <Row>
-          <Col></Col>
-        </Row>
-        <Row>
-          <Col className="text-center">
-            <AGPL />
+          <Col tag="nav" className="text-center" sm="3">
+            <h6>Webrings</h6>
+            <IndieWebRing />
+            <XXIIVVWebring />
+            <hr />
+            <h6>Other things</h6>
+            <HumansTXT />
           </Col>
-          <Col className="text-center">
-            <ContentLicense />
+
+          <Col sm="9">
+            <Row tag="nav">
+              <SiteLink href="/privacy">Privacy Policy</SiteLink>
+              <SiteLink href="/licenses">Open Source Licenses</SiteLink>
+              <SiteLink href="/about">About/Contact</SiteLink>
+            </Row>
+
+            <Row className="small">
+              <MiniAbout version={version} />
+            </Row>
+
+            <Row className="small">
+              <Row>
+                <Col className="text-center">
+                  <AGPL />
+                </Col>
+                <Col className="text-center">
+                  <ContentLicense />
+                </Col>
+              </Row>
+            </Row>
+
+            <Row className="small">
+              <NSFWToggle />
+            </Row>
           </Col>
         </Row>
       </Container>

@@ -1,6 +1,6 @@
 import { format } from "date-fns";
 import Link from "next/link";
-import React, { FC } from "react";
+import { FC } from "react";
 import Masonry from "react-masonry-component";
 import {
   Badge,
@@ -11,11 +11,7 @@ import {
   Col,
   Container,
 } from "reactstrap";
-import {
-  blogSlugToString,
-  formatDateInterval,
-  getBlogSlug,
-} from "../../lib/util";
+import { blogSlugToString, getBlogSlug } from "../../lib/util";
 import {
   BlogPostMeta,
   convertBlogPostToObjectDate,
@@ -23,29 +19,32 @@ import {
   ProjectMeta,
   SiteObject,
 } from "../../types/types";
+import { DateInterval, SemanticDate } from "../util/date-displays";
 import Layout from "../layout/layout";
 import SEO from "../seo";
-import { ALink } from "../util/boilerplate";
 import { TagBadge, TagList } from "./tag";
 import style from "./tag.module.scss";
 import { useTagTable } from "./TagTableProvider";
 
 const dateClassName = `text-muted ${style.date}`;
 
-const BlogPostDisplay: FC<{ post: BlogPostMeta<string> }> = ({
-  post: _post,
-}) => {
+type BlogPostDisplayProps = { post: BlogPostMeta<string> };
+
+const BlogPostDisplay: FC<BlogPostDisplayProps> = ({ post: _post }) => {
   const post = convertBlogPostToObjectDate(_post);
   const slug = blogSlugToString(getBlogSlug(post));
   return (
-    <Card>
-      <Link href={slug}>
-        <a className={style.cardLink} href={slug}>
+    <Card className="h-entry">
+      <Link href={slug} passHref>
+        <a className={style.cardLink}>
           <CardHeader>
             <h5>
-              {post.title} <Badge color="success">Blog</Badge>
+              <span className="p-name">{post.title}</span>{" "}
+              <Badge color="success">Blog</Badge>
             </h5>
-            <p className={dateClassName}>{format(post.date, "d MMM yyyy")}</p>
+            <p className={dateClassName}>
+              <SemanticDate date={post.date} formatStyle="d MMM yyyy" />
+            </p>
           </CardHeader>
           <CardBody>
             <div className="lead">{post.description}</div>
@@ -60,25 +59,33 @@ const BlogPostDisplay: FC<{ post: BlogPostMeta<string> }> = ({
   );
 };
 
-const ProjectDisplay: FC<{ project: ProjectMeta<string> }> = ({ project }) => {
+type ProjectDisplayProps = { project: ProjectMeta<string> };
+
+const ProjectDisplay: FC<ProjectDisplayProps> = ({ project }) => {
   const startDate = new Date(project.startDate);
   const endDate = project.endDate ? new Date(project.endDate) : undefined;
   return (
     <Card>
-      <ALink className={style.cardLink} href={project.slug}>
-        <CardHeader>
-          <h5>
-            {project.title} <Badge color="primary">Project</Badge>
-          </h5>
-          <p className={dateClassName}>
-            {formatDateInterval("d MMM yyyy", startDate, endDate)}
-          </p>
-        </CardHeader>
-        <CardBody>
-          <p className="lead">{project.description} </p>
-          <small className="text-muted">{project.excerpt!!}</small>
-        </CardBody>
-      </ALink>
+      <Link href={"/projects/" + project.slug} passHref>
+        <a className={style.cardLink}>
+          <CardHeader>
+            <h5>
+              {project.title} <Badge color="primary">Project</Badge>
+            </h5>
+            <p className={dateClassName}>
+              <DateInterval
+                formatStyle="d MMM yyyy"
+                startDate={startDate}
+                endDate={endDate}
+              />
+            </p>
+          </CardHeader>
+          <CardBody>
+            <p className="lead">{project.description} </p>
+            <small className="text-muted">{project.excerpt!!}</small>
+          </CardBody>
+        </a>
+      </Link>
       <CardFooter>
         <TagList tags={project.tags} limit={7} link />
       </CardFooter>
@@ -118,6 +125,7 @@ export type TagPageProps = {
 
 const TagDetailTemplate: FC<TagPageProps> = ({ slug, related, objects }) => {
   const tag = useTagTable().get(slug);
+
   return (
     <Layout>
       <SEO title={tag.name!} description={`Items related to ${tag.name}`} />
@@ -127,12 +135,15 @@ const TagDetailTemplate: FC<TagPageProps> = ({ slug, related, objects }) => {
             Items related to <TagBadge tag={tag} />
           </h1>
         </header>
-        <section>
-          <h4>Similar Tags</h4>
-          <p>
-            <TagList tags={related} link />
-          </p>
-        </section>
+
+        {related.length > 0 ? (
+          <section>
+            <h4>Similar Tags</h4>
+            <p>
+              <TagList tags={related} link />
+            </p>
+          </section>
+        ) : null}
 
         <section style={{ paddingBottom: 30 }}>
           <Masonry

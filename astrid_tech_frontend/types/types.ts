@@ -36,7 +36,7 @@ export type ProjectMeta<DateType = Date> = Tagged<"p"> & {
   url: string;
   source: string[];
   thumbnail: string;
-  description: null | string;
+  description: string | null;
 };
 
 export type Project<DateType = Date> = ProjectMeta<DateType> & {
@@ -64,10 +64,11 @@ export function convertProjectToStringDate<T>(
 }
 
 export type BlogPostMeta<DateType = Date> = Tagged<"b"> & {
-  title: string;
+  title?: string;
   assetRoot: string;
   description: string;
   date: DateType;
+  ordinal: number;
   slug: string;
   thumbnail: string | null;
   excerpt?: string;

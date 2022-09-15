@@ -1,13 +1,16 @@
-import { Feed } from "feed";
+import { Feed, Item } from "feed";
 import { promises as fs } from "fs";
 import { getBlogPosts } from "../lib/cache";
 import path from "path";
 import { BlogPost } from "../types/types";
 import { blogSlugToString, getBlogSlug } from "../lib/util";
 import { convertBlogPostToObjectDate } from "../types/types";
-import { excerptify } from "../lib/markdown";
+import { renderMarkdown } from "../lib/markdown";
 
-async function createRSSFeed(hostname: string, posts: BlogPost[]) {
+async function createRSSFeed(
+  hostname: string,
+  posts: BlogPost[]
+): Promise<Feed> {
   const root = `https://${hostname}`;
   const author = {
     name: "Astrid Yu",
@@ -32,22 +35,26 @@ async function createRSSFeed(hostname: string, posts: BlogPost[]) {
   });
 
   feed.addCategory("Technology");
-
-  (await Promise.all(posts.slice(0, 10).map(excerptify(300)))).map(
-    async (post) => {
+  const generatedItems = await Promise.all(
+    posts.map(async (post) => {
       const url = root + blogSlugToString(getBlogSlug(post));
-      feed.addItem({
-        title: post.title,
+      const content = await renderMarkdown(post.content, post.assetRoot);
+      const category = post.tags.map((t) => ({ name: t }));
+
+      return {
+        title: post.title ? post.title : post.slug,
         id: url,
         link: url,
         date: post.date,
         description: post.description,
-        content: post.excerpt,
+        content,
         author: [author],
-        category: post.tags.map((t) => ({ name: t })),
-      });
-    }
+        category,
+      } as Item;
+    })
   );
+
+  generatedItems.forEach(feed.addItem);
 
   return feed;
 }

@@ -1,22 +1,31 @@
 import Fuse from "fuse.js";
 import { InferGetStaticPropsType } from "next";
 import { useRouter } from "next/router";
-import React, { FC, useEffect, useState } from "react";
+import { FC, useEffect, useState } from "react";
 import { Container } from "reactstrap";
 import Layout from "../components/layout";
 import SEO from "../components/seo";
 import { getStaticPaths as projectPaths } from "./projects/[slug]";
 import { getStaticPaths as tagPaths } from "./t/[slug]";
-import { getStaticPaths as blogPaths } from "./[year]/[month]/[day]/[...slug]";
+import { getStaticPaths as blogPaths } from "./[year]/[month]/[day]/[ordinal]/[slug]";
 
 async function getAllPaths() {
-  return (
-    await Promise.all(
-      [blogPaths, tagPaths, projectPaths].map((x) => x.getStringPaths!())
+  function uniques(arr: string[]) {
+    var a = [];
+    for (var i = 0, l = arr.length; i < l; i++)
+      if (a.indexOf(arr[i]) === -1 && arr[i] !== "") a.push(arr[i]);
+    return a;
+  }
+
+  return uniques(
+    (
+      await Promise.all(
+        [blogPaths, tagPaths, projectPaths].map((x) => x.getStringPaths!())
+      )
     )
-  )
-    .flat()
-    .concat(["/projects", "/about", "/", "/latest", "/licenses", "/privacy"]);
+      .flat()
+      .concat(["/projects", "/about", "/", "/latest", "/licenses", "/privacy"])
+  );
 }
 
 export const getStaticProps = async () => {
@@ -26,7 +35,12 @@ export const getStaticProps = async () => {
   return { props: { paths, index } };
 };
 
-const NotFoundPageContents: FC<{ suggestions: string[]; bugsURL: string }> = ({
+type NotFoundPageContentsProps = {
+  suggestions: string[];
+  bugsURL: string;
+};
+
+const NotFoundPageContents: FC<NotFoundPageContentsProps> = ({
   suggestions,
   bugsURL,
 }) => {
@@ -93,7 +107,7 @@ const NotFoundPage: FC<InferGetStaticPropsType<typeof getStaticProps>> = ({
         {suggestions ? (
           <NotFoundPageContents
             suggestions={suggestions}
-            bugsURL="https://github.com/astralbijection/astrid.tech/issues"
+            bugsURL="https://github.com/astridyu/astrid.tech/issues"
           />
         ) : null}
       </Container>

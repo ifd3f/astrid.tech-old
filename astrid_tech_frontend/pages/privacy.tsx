@@ -1,8 +1,14 @@
-import React from "react";
 import { Container } from "reactstrap";
 import Layout from "../components/layout";
 import { PageHeading } from "../components/layout/page-heading";
 import SEO from "../components/seo";
+
+/**
+ * Force this page to get exported
+ */
+export async function getStaticProps() {
+  return { props: {} };
+}
 
 const Page = () => {
   return (

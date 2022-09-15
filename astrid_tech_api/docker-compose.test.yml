@@ -9,7 +9,7 @@ services:
       - 5432:5432
 
   sut:
-    image: astridyu/astrid_tech_api
+    image: astridyu/astrid_tech_api_ci
     depends_on:
       - db
     env_file:
@@ -22,8 +22,11 @@ services:
       - 18001:18001
     build:
       context: .
+      dockerfile: Dockerfile-ci
+      args:
+        - INSTALL_DEV_DEPENDENCIES=1
     command: >
       bash -c "
-        python3 manage.py migrate &&
-        python3 manage.py test --keepdb
+        pipenv run python3 manage.py migrate &&
+        pipenv run python3 manage.py test --keepdb
       "

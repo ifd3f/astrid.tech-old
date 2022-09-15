@@ -1,6 +1,4 @@
-import SEO from "components/seo";
-import path from "path";
-import React, { FC, PropsWithChildren, ReactNode } from "react";
+import { FC, PropsWithChildren, ReactNode } from "react";
 import { MdComment } from "react-icons/md";
 import { Col, Container, Row } from "reactstrap";
 import { TagList } from "../tags/tag";
@@ -8,7 +6,7 @@ import style from "./longform-layout.module.scss";
 import { PageHeading } from "./page-heading";
 
 type LongformLayoutProps = {
-  title: string;
+  title?: string;
   description: ReactNode;
   descriptionRaw: string;
   headingColor: string;
@@ -21,7 +19,7 @@ type LongformLayoutProps = {
 
 export const LongformLayout: FC<LongformLayoutProps> = ({
   title,
-  description, 
+  description,
   descriptionRaw,
   headingColor,
   above,
@@ -32,12 +30,6 @@ export const LongformLayout: FC<LongformLayoutProps> = ({
 }) => {
   return (
     <>
-      <SEO
-        canonicalUrl={url}
-        title={title!}
-        description={descriptionRaw}
-        image={thumbnail}
-      />
       <PageHeading
         above={above}
         title={title}
@@ -105,7 +97,7 @@ export const TagsGroup: FC<TagsGroupProps> = ({ tags }) => {
   return (
     <SidebarGroup>
       <h2>Tags</h2>
-      <TagList tags={tags} link />
+      <TagList tags={tags} link relTag />
     </SidebarGroup>
   );
 };

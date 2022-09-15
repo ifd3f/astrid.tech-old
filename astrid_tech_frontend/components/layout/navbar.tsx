@@ -1,11 +1,17 @@
 import classNames from "classnames";
 import Link from "next/link";
-import React, { FC, ReactNode, useState } from "react";
+import { FC, ReactNode, useState } from "react";
 import { BsArrowsCollapse } from "react-icons/bs";
 import { GiHamburger } from "react-icons/gi";
 import { Collapse, Navbar, NavbarBrand, NavbarToggler } from "reactstrap";
 
-export type NavBarLinks = "brand" | "projects" | "blog" | "about";
+export type NavBarLinks =
+  | "home"
+  | "projects"
+  | "blog"
+  | "resume"
+  | "now"
+  | "about";
 
 type NavLinkProps = {
   to: string;
@@ -15,11 +21,13 @@ type NavLinkProps = {
 
 const GNavLink: FC<NavLinkProps> = ({ to, children, active }) => {
   return (
-    <Link href={to}>
-      <a className={classNames("nav-link", active ? "active" : null)}>
-        {children}
-      </a>
-    </Link>
+    <li>
+      <Link href={to} passHref>
+        <a className={classNames("nav-link", active ? "active" : null)}>
+          {children}
+        </a>
+      </Link>
+    </li>
   );
 };
 
@@ -37,17 +45,18 @@ const MainNavbar: FC<MainNavbarProps> = ({ currentLocation, fixed }) => {
   return (
     <Navbar
       className="main-navbar"
+      style={{ paddingLeft: 10, paddingRight: 10 }}
       fixed={fixed ? "top" : undefined}
       expand="md"
     >
-      <Link href="/">
+      <Link href="/" passHref>
         <NavbarBrand
           tag="a"
-          href="/"
           className={classNames(
             "nav-link",
-            currentLocation == "brand" ? "active" : null
+            currentLocation == "home" ? "active" : null
           )}
+          rel="home"
         >
           astrid.tech
         </NavbarBrand>
@@ -55,14 +64,32 @@ const MainNavbar: FC<MainNavbarProps> = ({ currentLocation, fixed }) => {
       <NavbarToggler onClick={toggleIsOpen}>
         {isOpen ? <BsArrowsCollapse /> : <GiHamburger />}
       </NavbarToggler>
-      <Collapse isOpen={isOpen} navbar>
+      <Collapse
+        isOpen={isOpen}
+        navbar
+        tag="ul"
+        style={{
+          marginBottom: 0,
+          marginLeft: 0,
+          paddingLeft: 0,
+          listStyleType: "none",
+        }}
+      >
+        <GNavLink to="/blog" active={currentLocation == "blog"}>
+          Blog
+        </GNavLink>
         <GNavLink to="/projects" active={currentLocation == "projects"}>
           Projects
         </GNavLink>
-        <GNavLink to="/latest" active={currentLocation == "blog"}>
-          Blog
-        </GNavLink>
+
         <NavbarSeparator />
+
+        <GNavLink to="/resume" active={currentLocation == "resume"}>
+          Resume
+        </GNavLink>
+        <GNavLink to="/now" active={currentLocation == "now"}>
+          Now
+        </GNavLink>
         <GNavLink to="/about" active={currentLocation == "about"}>
           About
         </GNavLink>

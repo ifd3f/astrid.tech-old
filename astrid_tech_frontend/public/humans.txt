@@ -1,0 +1,5 @@
+/* TEAM */
+	Your title: Astrid Yu
+	Site: astrid@astrid.tech
+	Twitter: @astralbijection
+	Location: California, USA

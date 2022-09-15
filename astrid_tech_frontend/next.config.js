@@ -1,30 +1,30 @@
-const { getEnv } = require("./lib/jsenvutil");
 const withPlugins = require("next-compose-plugins");
-const optimizedImages = require("next-optimized-images");
 
+if (!process.env.ASTRID_TECH_API_ROOT) {
+  throw new Error("Please specify ASTRID_TECH_API_ROOT");
+}
 
-module.exports = withPlugins(
-  [
-    [
-      optimizedImages,
-      {
-        responsive: {
-          adapter: require('responsive-loader/sharp')
-        },
-        handleImages: ["jpeg", "jpg", "JPG", "png", "svg", "webp", "gif"],
-      },
-    ],
-  ],
-  {
-    trailingSlash: true,
-    env: {
-      publicRoot: "https://astrid.tech/",
-      apiRoot: getEnv("ASTRID_TECH_API_ROOT", "http://localhost:8001"),
-    },
-    exportPathMap() {
-      return {
-        "/404": { page: "/404" }
-      }
-    },
-  }
-);
+if (!process.env.SITE_ROOT) {
+  throw new Error("Please specify SITE_ROOT");
+}
+
+if (!process.env.SHORT_ROOT) {
+  throw new Error("Please specify SHORT_ROOT");
+}
+
+module.exports = withPlugins([], {
+  trailingSlash: true,
+  eslint: {
+    ignoreDuringBuilds: false,
+  },
+  env: {
+    publicRoot: process.env.SITE_ROOT,
+    apiRoot: process.env.ASTRID_TECH_API_ROOT,
+    shortRoot: process.env.SHORT_ROOT,
+  },
+  exportPathMap() {
+    return {
+      "/404": { page: "/404" },
+    };
+  },
+});

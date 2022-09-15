@@ -1,8 +1,8 @@
 import crypto from "crypto";
-import { format } from "date-fns";
 import hslToHex from "hsl-to-hex";
 import seedrandom from "seedrandom";
-import { Path } from "./cache";
+import { FQPath } from "./cache";
+import { DateToSxg, IntToSxg } from "./newbase60";
 
 export function getContrastingTextColor(backgroundColor: string): string {
   const [, r, g, b] = backgroundColor
@@ -28,7 +28,7 @@ export function hashString(str: string) {
   return hash;
 }
 
-export function groupBy<T>(xs: T[], key: (x: T) => string) {
+export function groupBy<T>(xs: T[], key: (_: T) => string) {
   const out = new Map<string, T[]>();
   for (const x of xs) {
     const k = key(x);
@@ -76,40 +76,55 @@ export function getHSLString([h, s, l]: number[]) {
   return hslToHex(h, s, l) as string;
 }
 
-export function formatDateInterval(
-  formatStyle: string,
-  startDate: Date,
-  endDate?: Date | null
-) {
-  const startStr = format(startDate, formatStyle);
-  if (startDate == endDate) {
-    return startStr;
-  }
-  return endDate
-    ? `${startStr} to ${format(endDate, formatStyle)}`
-    : `${startStr} to now`;
-}
-
-export function getBlogSlug({ date, slug }: { date: Date; slug: string }) {
+export function getBlogSlug({
+  date,
+  ordinal,
+  slug,
+}: {
+  date: Date;
+  ordinal: number;
+  slug: string;
+}) {
   return {
     year: date.getUTCFullYear().toString(),
     month: (date.getUTCMonth() + 1).toString().padStart(2, "0"),
     day: date.getUTCDate().toString().padStart(2, "0"),
-    slug: [slug],
+    ordinal: ordinal.toString(),
+    slug: slug,
   };
 }
 
-export function blogSlugToString(path: Path) {
-  return `/${path.year}/${path.month}/${path.day}/${path.slug}`;
+export function blogSlugToString(path: FQPath) {
+  return `/${path.year}/${path.month}/${path.day}/${path.ordinal}/${path.slug}`;
 }
 
-export function truncateKeepWords(text: string, maxChars: number) {
-  if (text.length < maxChars) return "";
+type TruncationResult = {
+  truncated: string;
+  neededTruncation: boolean;
+};
+
+export function truncateKeepWords(
+  text: string,
+  maxChars: number
+): TruncationResult {
+  if (text.length < maxChars)
+    return { truncated: text, neededTruncation: false };
 
   for (let cutoff = maxChars; cutoff > 0; cutoff--) {
     if (text.charAt(cutoff) == " ") {
-      return text.substr(0, cutoff);
+      return { truncated: text.substr(0, cutoff), neededTruncation: true };
     }
   }
-  return "";
+
+  return { truncated: text.substr(0, maxChars), neededTruncation: true };
+}
+
+export function getBlogShortLinkCode({
+  date,
+  ordinal = 0,
+}: {
+  date: Date;
+  ordinal?: number;
+}) {
+  return "e" + DateToSxg(date) + IntToSxg(ordinal);
 }

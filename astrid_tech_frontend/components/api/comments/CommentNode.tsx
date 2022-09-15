@@ -1,6 +1,6 @@
 import { format } from "date-fns";
 import { useRouter } from "next/router";
-import React, { FC, ReactNode, useState } from "react";
+import { FC, ReactNode, useState } from "react";
 import { FaFlag, FaLink, FaReply } from "react-icons/fa";
 import { Button } from "reactstrap";
 import { Comment, CommentAuthor } from "../../../lib/astrid-tech-api";
@@ -16,7 +16,9 @@ type CommentNodeProps = {
 
 type CommentState = "reply" | "report" | null;
 
-const AuthorDisplay: FC<{ author: CommentAuthor }> = ({ author }) => {
+type AuthorDisplayProps = { author: CommentAuthor };
+
+const AuthorDisplay: FC<AuthorDisplayProps> = ({ author }) => {
   const user = <strong>{author.name ?? "[anonymous]"}</strong>;
   return (
     <>

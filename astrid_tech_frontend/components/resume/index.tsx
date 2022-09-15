@@ -1,4 +1,4 @@
-import React from "react";
+import { useEffect } from "react";
 import { BsEnvelope } from "react-icons/bs";
 import { FaLinkedin } from "react-icons/fa";
 import { GiPhone } from "react-icons/gi";
@@ -13,12 +13,15 @@ import styles from "./style.module.scss";
 import { HomepageSection } from "./_layout";
 
 export const Page = ({}) => {
+  useEffect(() => {
+    console.log(
+      "Do you like to use inspect element? Well, I do too! Please hire me :)"
+    );
+  }, []);
+
   return (
-    <Layout currentLocation="brand">
-      <SEO
-        title="Astrid Yu"
-        description="My name is Astrid Yu and I create software and other cool things. Welcome to my website!"
-      />
+    <Layout currentLocation="resume">
+      <SEO title="Astrid Yu" description="My digital resume" />
       <div className={styles.homepageContainer}>
         <HeadingSection />
         {/*<TestmoninalSection />*/}
@@ -40,12 +43,12 @@ export const Page = ({}) => {
               </a>
             </Col>
             <Col xs="12" md="6" lg="3">
-              <a href="https://github.com/astralbijection" rel="me">
+              <a href="https://github.com/astridyu" rel="me">
                 <GoMarkGithub title="GitHub" /> Follow me on GitHub
               </a>
             </Col>
             <Col xs="12" md="6" lg="3">
-              <a href="https://linkedin.com/in/astrid-yu">
+              <a href="https://linkedin.com/in/astrid-yu" rel="me">
                 <FaLinkedin title="LinkedIn" /> Connect on LinkedIn
               </a>
             </Col>

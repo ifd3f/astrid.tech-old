@@ -21,7 +21,7 @@ const slug = require("remark-slug");
 const gfm = require("remark-gfm");
 const urls = require("rehype-urls");
 const excerpt = require("remark-excerpt");
-const strip = require("strip-markdown");
+const toPlainText = require("remark-plain-text");
 const emoji = require("remark-emoji");
 
 const publicRoot = join(process.cwd(), "public");
@@ -70,9 +70,13 @@ export async function renderMarkdown(md: string, assetRoot: string) {
 
 export async function getMarkdownExcerpt(md: string, maxChars: number) {
   const text = (
-    await remark().use(excerpt).use(strip).process(md)
+    await remark().use(excerpt).use(toPlainText).process(md)
   ).toString() as string;
-  return truncateKeepWords(text, maxChars) + "\u2026";  // ellipsis
+  const result = truncateKeepWords(text, maxChars);
+  if (result.neededTruncation) {
+    return result.truncated + "\u2026"; // ellipsis
+  }
+  return result.truncated;
 }
 
 export function withoutContent<T>(object: { content: string } & T) {
@@ -83,10 +87,12 @@ export function withoutContent<T>(object: { content: string } & T) {
   return out as { content: never } & T;
 }
 
-export const excerptify = (maxChars: number) => async <T>(
-  object: { content: string } & T
-): Promise<{ excerpt?: string } & T> =>
-  withoutContent({
-    ...object,
-    excerpt: await getMarkdownExcerpt(object.content, maxChars),
-  });
+export const excerptify =
+  (maxChars: number) =>
+  async <T>(
+    object: { content: string } & T
+  ): Promise<{ excerpt?: string } & T> =>
+    withoutContent({
+      ...object,
+      excerpt: await getMarkdownExcerpt(object.content, maxChars),
+    });

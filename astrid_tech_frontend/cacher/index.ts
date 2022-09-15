@@ -14,9 +14,10 @@ import { generateLicenses } from "./licenses";
 import { getProjects } from "./projects";
 import { buildRSSFeed } from "./rss";
 import { getLanguageTags, getUserTagOverrides } from "./tags";
+import { buildTWTXT } from "./twtxt";
 import { serializeJS } from "./util";
 
-const contentDir = path.join(process.cwd(), "content");
+const contentDir = path.join(process.cwd(), "../content");
 const TAGS_D_TS = `import { Tag } from "../lib/cache";
 declare const tags: Tag[];
 export default tags;`;
@@ -50,16 +51,16 @@ async function buildBlogPostCache(db: Database) {
   const blogPosts = await Promise.all(await getBlogPosts(contentDir));
   const ids = db
     .transaction(() =>
-      blogPosts.map((post) =>
-        insertPost.run({
+      blogPosts.map((post) => {
+        return insertPost.run({
           ...post,
           date: post.date.toISOString(),
           year: post.date.getUTCFullYear(),
           month: post.date.getUTCMonth() + 1,
           day: post.date.getUTCDate(),
-          ordinal: 0,
-        })
-      )
+          ordinal: post.ordinal,
+        });
+      })
     )()
     .map((result, i) => ({
       id: result.lastInsertRowid,
@@ -236,6 +237,7 @@ async function main(dbUrl: string) {
     exportTagOverrideData(db, path.join(dataDir, "tags.js")),
     generateLicenses(path.join(dataDir, "licenses.json")),
     buildRSSFeed(path.join(__dirname, "../public")),
+    buildTWTXT(path.join(__dirname, "../public")),
   ]);
 }
 

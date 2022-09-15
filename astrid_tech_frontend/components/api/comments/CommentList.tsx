@@ -1,4 +1,4 @@
-import React, { FC } from "react";
+import { FC } from "react";
 import { Comment } from "../../../lib/astrid-tech-api";
 import { CommentNode } from "./CommentNode";
 

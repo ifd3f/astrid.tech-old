@@ -1,0 +1,17 @@
+BEGIN:VCARD
+VERSION:3.0
+FN;CHARSET=UTF-8:Astrid Yu
+N;CHARSET=UTF-8:Yu;Astrid;;;
+GENDER:F
+UID;CHARSET=UTF-8:611bc97a-1b76-5581-8aa9-957b00976009
+BDAY:20001208
+EMAIL;CHARSET=UTF-8;type=HOME,INTERNET:astrid@astrid.tech
+PHOTO;TYPE=PNG;VALUE=URI:https://astrid.tech/astridyu.png
+TEL;TYPE=CELL:+18052705368‬
+TITLE;CHARSET=UTF-8:Software Engineer
+ROLE;CHARSET=UTF-8:Student
+URL;CHARSET=UTF-8:https://astrid.tech
+X-SOCIALPROFILE;TYPE=twitter:https://twitter.com/astralbijection
+X-SOCIALPROFILE;TYPE=linkedin:https://www.linkedin.com/in/astrid-yu/
+REV:2021-10-28T01:49:28-07:00
+END:VCARD

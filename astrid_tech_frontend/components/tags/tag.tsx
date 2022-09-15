@@ -1,9 +1,9 @@
 import classNames from "classnames";
+import Link from "next/link";
 import React, { FC, ReactNode, useState } from "react";
 import { BsCaretLeftFill } from "react-icons/bs";
 import { Badge } from "reactstrap";
 import { Tag } from "../../types/types";
-import { ALink } from "../util/boilerplate";
 import style from "./tag.module.scss";
 import { useTagTable } from "./TagTableProvider";
 
@@ -11,21 +11,25 @@ type TagBadgeProps = {
   tag: Tag | string;
   link?: boolean;
   children?: ReactNode;
+  relTag?: boolean;
 };
 
 export const TagBadge: FC<TagBadgeProps> = ({
   tag,
   link = false,
   children,
+  relTag = false,
 }) => {
   if (typeof tag == "string") {
     const table = useTagTable();
     tag = table.get(tag);
   }
-  const linkTo = tag.slug[0] == "/" ? tag.slug : "/t/" + tag.slug;
+  const getLinkTo = (slug: string) =>
+    process.env.publicRoot + (slug[0] == "/" ? slug : "/t/" + slug);
 
   const badge = (
     <Badge
+      rel={relTag ? "tag" : undefined}
       className={classNames(style.tag, "p-category")}
       style={{
         backgroundColor: tag.backgroundColor,
@@ -38,7 +42,13 @@ export const TagBadge: FC<TagBadgeProps> = ({
     </Badge>
   );
 
-  return link ? <ALink href={linkTo}>{badge}</ALink> : badge;
+  return link ? (
+    <Link href={getLinkTo(tag.slug)} passHref>
+      {badge}
+    </Link>
+  ) : (
+    badge
+  );
 };
 
 type TagListProps = {
@@ -46,6 +56,7 @@ type TagListProps = {
   limit?: number;
   link?: boolean;
   className?: string;
+  relTag?: boolean;
 };
 
 export const TagList: FC<TagListProps> = ({
@@ -53,6 +64,7 @@ export const TagList: FC<TagListProps> = ({
   link = false,
   limit = Number.MAX_SAFE_INTEGER,
   className,
+  relTag,
 }) => {
   const [isOpened, setOpened] = useState(false);
 
@@ -75,22 +87,17 @@ export const TagList: FC<TagListProps> = ({
   );
 
   return (
-    <div className={className}>
-      <p
-        style={{
-          fontSize: "12pt",
-          marginBottom: 3,
-        }}
-      >
-        {shownTags.map((tag) => (
-          <TagBadge key={tag} tag={tag} link={link} />
-        ))}{" "}
-        {excluded.length > 0 ? (
-          <Badge title={alt} onClick={onClick} style={{ cursor: "pointer" }}>
-            {openBadgeText}
-          </Badge>
-        ) : null}
-      </p>
-    </div>
+    <span>
+      {shownTags.map((tag) => (
+        <React.Fragment key={tag}>
+          <TagBadge tag={tag} link={link} relTag={relTag} />{" "}
+        </React.Fragment>
+      ))}
+      {excluded.length > 0 ? (
+        <Badge title={alt} onClick={onClick} style={{ cursor: "pointer" }}>
+          {openBadgeText}
+        </Badge>
+      ) : null}
+    </span>
   );
 };

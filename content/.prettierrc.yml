@@ -1,0 +1,4 @@
+tabWidth: 2
+proseWrap: always
+printWidth: 80
+singleQuote: false

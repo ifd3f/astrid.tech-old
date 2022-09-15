@@ -1,6 +1,7 @@
 import Link from "next/link";
-import React, { FC, ReactNode } from "react";
+import { FC, ReactNode } from "react";
 import homepageStyles from "./heading.module.scss";
+import Image from "next/image";
 
 const APPX_BEGAN_PROGRAMMING = new Date("2013-02-01");
 const APPX_BEGAN_HARDWARE = new Date("2015-12-15");
@@ -34,38 +35,24 @@ const HardwareYears = () => {
   return <YearsSince date={APPX_BEGAN_HARDWARE} />;
 };
 
-interface IconInfoDisplayProps {
-  imageSrc: string;
-  icon: ReactNode;
-  children: ReactNode;
-}
-
-const ImageOfMyself = () => (
-  <div className={homepageStyles.imageSelf + " u-photo"}>
-    <img
-      src={require("public/avatar.jpg?resize&sizes[]=300")}
-      alt="Astrid Yu"
-    />
-  </div>
-);
-
 export function HeadingSection() {
   return (
     <header className="homepage-header homepage-section">
       <div className={homepageStyles.nameWrapper + " h-card"}>
         <div className={homepageStyles.introductionGroup}>
-          <p className={homepageStyles.preTitle}>Hello, my name is</p>
+          <p className={homepageStyles.preTitle}>
+            <strong>Hello</strong>, my name is
+          </p>
           <h1 className={homepageStyles.name + " p-name"}>Astrid Yu</h1>
-          <p className={homepageStyles.postTitle}>Software Developer</p>
+          <p className={homepageStyles.postTitle}>
+            and I develop <strong>software</strong>
+          </p>
         </div>
-        <ImageOfMyself />
       </div>
       <p className={homepageStyles.skillBrag}>
         Made using{" "}
         <Link href="/projects/astrid-tech">
-          <a href="/projects/astrid-tech">
-            Next.js, Django, and several other technologies
-          </a>
+          Next.js, Django, and several other technologies
         </Link>
       </p>
     </header>

@@ -1,8 +1,8 @@
-import SEO from "components/seo";
 import Link from "next/link";
 import { join } from "path";
-import React, { createContext, FC, useContext } from "react";
+import { createContext, FC, useContext } from "react";
 import path from "path";
+import SEO from "../seo";
 import {
   BsArrowLeft,
   BsCodeSlash,
@@ -12,14 +12,12 @@ import {
 import { FaCalendar, FaEnvelope, FaGithub } from "react-icons/fa";
 import { Container } from "reactstrap";
 import { ProjectLink } from "../../lib/cache";
-import {
-  formatDateInterval,
-  getHSLString,
-  getPersistentColor,
-} from "../../lib/util";
+import { DateInterval } from "../util/date-displays";
+import { getHSLString, getPersistentColor } from "../../lib/util";
 import { Project } from "../../types/types";
 import { CommentSection } from "../api/comments/CommentSection";
 import { ContentDisplay } from "../content/ContentDisplay";
+import ConstructionBanner from "components/util/construction";
 import {
   InfoRow,
   Layout,
@@ -59,8 +57,12 @@ const ProjectStatusGroup = () => {
   const { project } = useContext(ProjectContext);
   return (
     <StatusGroup>
-      <InfoRow name="Date" icon={<FaCalendar />}>
-        {formatDateInterval("d MMM yyyy", project.startDate, project.endDate)}
+      <InfoRow name="Dates" icon={<FaCalendar />}>
+        <DateInterval
+          formatStyle="d MMM yyyy"
+          startDate={project.startDate}
+          endDate={project.endDate}
+        />
       </InfoRow>
       {project.url ? (
         <InfoRow name="URL" icon={<BsLink />}>
@@ -69,7 +71,7 @@ const ProjectStatusGroup = () => {
       ) : null}
       <InfoRow name="Source" icon={<BsCodeSlash />}>
         {project.source.map((url) => (
-          <p>
+          <p key={url}>
             <SourceCodeURLDisplay url={url} />
           </p>
         ))}
@@ -110,14 +112,14 @@ const BlogPostsGroup = () => {
 };
 */
 
-const RelatedProjectsGroup: FC<{ similar: ProjectLink[] }> = ({ similar }) => {
+type RelatedProjectsGroupProps = { similar: ProjectLink[] };
+
+const RelatedProjectsGroup: FC<RelatedProjectsGroupProps> = ({ similar }) => {
   const list = (
     <ul>
       {similar.map(({ slug, title }) => (
         <li key={slug}>
-          <Link href={slug}>
-            <a href={title}>{title}</a>
-          </Link>
+          <Link href={slug}>{title}</Link>
         </li>
       ))}
     </ul>
@@ -143,30 +145,57 @@ export type ProjectDetailProps = UsesProject & {
   similar: ProjectLink[];
 };
 
+const ConstructionDisclaimer: FC = () => {
+  return (
+    <>
+      <section className="text-center">
+        <h4>
+          <strong>NOTE:</strong> This section is under construction!
+        </h4>
+        <ConstructionBanner />
+        <p>
+          <em>
+            The contents of this page are incomplete and subject to change.
+            Check back later for a more complete version!
+          </em>
+        </p>
+      </section>
+      <hr />
+    </>
+  );
+};
+
 const ProjectDetailPage: FC<ProjectDetailProps> = ({ project, similar }) => {
   const slug = join("projects", project.slug);
   const url = join(process.env.publicRoot!, slug);
   const thumbnail = project.thumbnail
     ? path.join(
-        "https://astrid.tech",
+        process.env.publicRoot!!,
         resolveAssetURL(project.assetRoot, project.thumbnail)
       )
     : undefined;
 
-  console.log("pdp thumb=", thumbnail);
+  const descriptionRaw = project.description ?? "A project made by Astrid Yu";
+  const underConstruction = project.tags.includes("under-construction");
 
   return (
     <ProjectContext.Provider value={{ project }}>
+      <SEO
+        canonicalUrl={url}
+        title={project.title!}
+        description={descriptionRaw}
+        image={thumbnail}
+      />
       <Layout currentLocation="projects">
         <LongformLayout
           title={project.title}
           description={project.description}
           thumbnail={thumbnail}
-          descriptionRaw={project.description ?? "A project made by Astrid Yu"}
+          descriptionRaw={descriptionRaw}
           headingColor={getHSLString(getPersistentColor(slug))}
           above={
-            <Link href="/projects/">
-              <a className={style.backToProjects}>
+            <Link href="/projects/" passHref>
+              <a className={style.backToProjects} rel="directory">
                 <BsArrowLeft /> Back to Projects
               </a>
             </Link>
@@ -181,6 +210,7 @@ const ProjectDetailPage: FC<ProjectDetailProps> = ({ project, similar }) => {
             </>
           }
         >
+          {underConstruction ? <ConstructionDisclaimer /> : null}
           <ContentDisplay>{project.content}</ContentDisplay>
         </LongformLayout>
         <Container>

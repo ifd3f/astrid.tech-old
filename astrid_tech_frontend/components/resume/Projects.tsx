@@ -1,4 +1,3 @@
-import React from "react";
 import {
   Button,
   Card,
@@ -8,9 +7,9 @@ import {
   CardTitle,
   Col,
   Container,
-  Row
+  Row,
 } from "reactstrap";
-import { ALink } from "../util/boilerplate";
+import Link from "next/link";
 import { HomepageSection } from "./util";
 
 const ProjectCard = () => {
@@ -39,7 +38,7 @@ export function ProjectsSection() {
           </Col>
         </Row>
       </Container>
-      <ALink href="/projects">See more</ALink>
+      <Link href="/projects">See more</Link>
     </HomepageSection>
   );
 }

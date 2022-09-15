@@ -1,13 +1,20 @@
-import React, { CSSProperties, FC, ReactNode } from "react";
+import { createElement, CSSProperties, FC, ReactNode } from "react";
 import { Col, Container, Row } from "reactstrap";
 
-export const HomepageSection: FC<{
+type HomepageSectionProps = {
   children: ReactNode;
   tag?: string;
   className?: string;
   style?: CSSProperties;
-}> = ({ children, tag = "section", style, className = "" }) => {
-  return React.createElement(
+};
+
+export const HomepageSection: FC<HomepageSectionProps> = ({
+  children,
+  tag = "section",
+  style,
+  className = "",
+}) => {
+  return createElement(
     tag,
     {
       className,

@@ -1,4 +1,4 @@
-import React, { FC } from "react";
+import { FC } from "react";
 import { CommentDataProvider, useCommentData } from "./CommentDataProvider";
 import { CommentingForm } from "./CommentingForm";
 import { CommentList } from "./CommentList";

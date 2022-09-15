@@ -16,21 +16,22 @@ jobs:
           lfs: false
           submodules: false
 
-      - name: Run yarn-upgrade-all
-        run: npx yarn-upgrade-all
+      - name: Run yarn upgrade
+        run: yarn upgrade
         working-directory: astrid_tech_frontend
 
       - name: Push changes
         uses: actions-js/push@master
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
-          message: "chore: Automatic NPM upgrades for ${date}"
+          message: "chore: Automatic npm upgrades for ${{date}}"
           branch: auto-upgrade/npm
           force: true
 
       - name: Create Pull Request
         uses: peter-evans/create-pull-request@v3
         with:
+          title: Upgrade npm packages
           branch: auto-upgrade/npm
           base: main
 
@@ -47,7 +48,7 @@ jobs:
       - name: Setup Python
         uses: actions/setup-python@v2
         with:
-          python-version: "3.7"
+          python-version: "3.9"
 
       - name: Install pipenv
         run: |
@@ -57,20 +58,17 @@ jobs:
         run: python -m pipenv update
         working-directory: astrid_tech_backend
 
-      - name: Write to requirements.txt
-        run: python -m pipenv lock --requirements > requirements.txt
-        working-directory: astrid_tech_backend
-
       - name: Push changes
         uses: actions-js/push@master
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
-          message: "chore: Automatic pip upgrades for ${date}"
+          message: "chore: Automatic pip upgrades for ${{date}}"
           branch: auto-upgrade/pip
           force: true
 
       - name: Create Pull Request
         uses: peter-evans/create-pull-request@v3
         with:
+          title: Upgrade pip packages
           branch: auto-upgrade/pip
           base: main

@@ -1,0 +1,21 @@
+slug: facebook-2021
+organization: Facebook Inc.
+position: Production Engineering Intern
+location: Menlo Park, CA, USA
+website: https://facebook.com
+summary: Social media company with billions of users
+startDate: 2021-06-21
+endDate: 2021-09-12
+highlights:
+  - Created a tool allowing engineers to easily canary-test pull requests for a
+    live video streaming service.
+  - Coordinated between multiple engineering teams to add new features onto
+    various microservices.
+  - Reduced application build time by 50% by scheduling parallel package builds.
+tags:
+  - python
+  - devops
+  - qa
+  - php
+  - react-js
+  - javascript

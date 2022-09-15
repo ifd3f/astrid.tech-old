@@ -1,5 +1,5 @@
 import Head from "next/head";
-import React, { FC } from "react";
+import { FC } from "react";
 
 interface SEOProps {
   description?: string | null;
@@ -15,21 +15,14 @@ const SEO: FC<SEOProps> = ({
   description,
   lang = "en",
   meta = [],
-  origin = "https://astrid.tech",
   canonicalUrl,
   image,
   title,
 }) => {
-  const metaDescription = description ?? "Astrid Yu's Website";
-
   const metas = [
     {
       name: "viewport",
       content: "width=device-width,initial-scale=1.0",
-    },
-    {
-      name: `description`,
-      content: metaDescription,
     },
     {
       name: `twitter:card`,
@@ -44,16 +37,8 @@ const SEO: FC<SEOProps> = ({
       content: title,
     },
     {
-      name: `twitter:description`,
-      content: metaDescription,
-    },
-    {
       property: `og:title`,
       content: title,
-    },
-    {
-      property: `og:description`,
-      content: metaDescription,
     },
     {
       property: `og:type`,
@@ -64,6 +49,13 @@ const SEO: FC<SEOProps> = ({
       content: "follow,index",
     },
   ].concat(meta);
+
+  if (description) {
+    ["description", "twitter:description", "og:description"].forEach((name) => {
+      metas.push({ name, content: description });
+    });
+  }
+
   if (image) {
     metas.push({ property: "og:image", content: image });
     metas.push({ property: "twitter:image", content: image });
@@ -86,24 +78,32 @@ const SEO: FC<SEOProps> = ({
         title="astrid.tech RSS"
         rel="alternate"
         type="application/rss+xml"
-        href="https://astrid.tech/rss.xml"
+        href={`${process.env.publicRoot}/rss.xml`}
       />
       <link
         title="astrid.tech Atom"
         rel="alternate"
         type="application/atom+xml"
-        href="https://astrid.tech/atom.xml"
+        href={`${process.env.publicRoot}/atom.xml`}
       />
       <link
         title="astrid.tech JSON feed"
         rel="alternate"
         type="application/feed+json"
-        href="https://astrid.tech/feed.json"
+        href={`${process.env.publicRoot}/feed.json`}
       />
 
-      {/* Web login */}
-      <link href="https://github.com/astralbijection" rel="me authn" />
-      <link href="mailto:astrid@astrid.tech" rel="me" />
+      <link rel="author" href="/humans.txt" />
+
+      {/* IndieAuth */}
+      <link rel="authorization_endpoint" href="https://indieauth.com/auth" />
+      <link rel="token_endpoint" href="https://tokens.indieauth.com/token" />
+
+      {/* Webmention */}
+      <link rel="webmention" href="https://api.astrid.tech/api/webmention" />
+
+      {/* Micropub */}
+      <link rel="micropub" href="https://api.astrid.tech/api/micropub" />
     </Head>
   );
 };

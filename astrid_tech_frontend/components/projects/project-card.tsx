@@ -1,7 +1,7 @@
 import classNames from "classnames";
 import { resolveAssetURL } from "lib/cache/assets";
 import Link from "next/link";
-import React, { CSSProperties, FC, useRef } from "react";
+import { CSSProperties, FC, useRef } from "react";
 import {
   Badge,
   CardBody,
@@ -85,22 +85,22 @@ export const ProjectCard: FC<ProjectCardProps> = ({
       )}
     >
       <div className={classNames(styles.upper, "h-entry")}>
-        <Link href={`/projects/${project.slug}`}>
-          <a style={{ color: "black" }}>
-            <CardTitle>
+        <CardTitle>
+          <Link href={`/projects/${project.slug}`} passHref>
+            <a style={{ color: "black" }}>
               <h3 className={classNames(styles.title, "p-name")}>
                 {project.title}
               </h3>
-            </CardTitle>
-            <CardText>
-              <p className={classNames(styles.subtitle, "p-summary")}>
-                {project.description}
-              </p>
-            </CardText>
-          </a>
-        </Link>
+            </a>
+          </Link>
+        </CardTitle>
+        <CardText>
+          <p className={classNames(styles.subtitle, "p-summary")}>
+            {project.description}
+          </p>
+        </CardText>
       </div>
-      <div className={styles.lower}>
+      <div className={classNames(styles.lower, "e-content")}>
         <TagList tags={project.tags} limit={5} className={styles.tags} link />
       </div>
     </CardBody>

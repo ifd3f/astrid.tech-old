@@ -40,7 +40,7 @@ public/_/*
 public/rss.xml
 public/atom.xml
 public/feed.json
+public/tw.txt
 
 /out
-
 /data

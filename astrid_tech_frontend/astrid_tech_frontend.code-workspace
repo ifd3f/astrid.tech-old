@@ -13,6 +13,15 @@
         "name": "Assets"
       }
     ],
-    "sqltools.useNodeRuntime": true
+    "sqltools.useNodeRuntime": true,
+
+    // I hope this makes things faster https://www.reddit.com/r/vscode/comments/ndi7fa/typescript_intellisense_is_frustratingly_slow_in/gyb095u?utm_source=share&utm_medium=web2x&context=3
+    "workbench.settings.enableNaturalLanguageSearch": false,
+    "css.validate": false,
+    "less.validate": false,
+    "scss.validate": false,
+    "javascript.validate.enable": false,
+    "javascript.format.enable": false,
+    "typescript.surveys.enabled": false,
   }
 }

@@ -1,0 +1,10 @@
+{
+  "source": "https://webmention.rocks/receive/1/02d58e7042b47d9976eefd731067190b",
+  "target": "https://astrid.tech/2021/09/19/0/spurious-network-error/",
+  "mentionedOn": "2021-09-19T04:26:46.096907500Z",
+  "processedOn": "2021-09-19T04:26:52.091081431Z",
+  "relUrl": {
+    "rels": [],
+    "text": "https://astrid.tech/2021/09/19/0/spurious-network-error/"
+  }
+}

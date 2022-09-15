@@ -1,0 +1,8 @@
+.env
+testdir/
+target/
+*.sqlite3
+.vscode
+.devcontainer
+repo
+resources/test

@@ -319,3 +319,4 @@ fabric.properties
 secrets/
 logs/
 staticfiles/
+*.key

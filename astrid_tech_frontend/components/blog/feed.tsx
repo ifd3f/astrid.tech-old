@@ -1,6 +1,7 @@
-import { format } from "date-fns";
+import classNames from "classnames";
+import { SemanticDate } from "components/util/date-displays";
 import Link from "next/link";
-import React, { FC } from "react";
+import { FC } from "react";
 import { Row } from "reactstrap";
 import { blogSlugToString, getBlogSlug } from "../../lib/util";
 import style from "../../styles/blog.module.scss";
@@ -12,29 +13,46 @@ type PostProps = {
 };
 
 export const PostBrief: FC<PostProps> = ({ post }) => {
-  const dateString = format(post.date, "d MMMM yyyy");
   const url = blogSlugToString(getBlogSlug(post));
 
+  const title = post.title ? <h3 className="p-name">{post.title}</h3> : null;
+  const description = post.description ? (
+    <p className="p-summary">{post.description}</p>
+  ) : null;
+  const body = (
+    <p className={classNames("p-summary", post.title ? "text-muted" : null)}>
+      {post.excerpt} <Link href={url}>read more</Link>
+    </p>
+  );
+  const date = (
+    <p className={classNames("text-muted", style.date)}>
+      <SemanticDate
+        formatStyle="d MMM yyyy"
+        date={post.date}
+        className="dt-published"
+      />
+    </p>
+  );
+  const tags = (
+    <p>
+      <TagList tags={post.tags} link limit={5} />
+    </p>
+  );
+
   return (
-    <Link href={url}>
-      <article className={style.brief}>
-        <Row>
-          <div className="col-12 col-sm-8 col-md-7">
-            <a href={url}>
-              <h3>{post.title}</h3>
-              <p>{post.description}</p>
-              <p className="text-muted">{post.excerpt}</p>
-            </a>
-          </div>
-          <div className="col col-sm-4 col-md-5">
-            <p className={`text-muted ${style.date}`}>{dateString}</p>
-            <p>
-              <TagList tags={post.tags} link limit={5} />
-            </p>
-          </div>
-        </Row>
-      </article>
-    </Link>
+    <article className={classNames(style.brief, "h-entry")}>
+      <Row>
+        <div className="col-12 col-sm-8 col-md-7">
+          {title}
+          {description}
+          {body}
+        </div>
+        <div className="col col-sm-4 col-md-5">
+          {date}
+          {tags}
+        </div>
+      </Row>
+    </article>
   );
 };
 
@@ -44,11 +62,11 @@ export type BlogFeedProps = {
 
 export const BlogFeed: FC<BlogFeedProps> = ({ posts }) => {
   return (
-    <div>
+    <section className="h-feed">
       {posts.map((post) => (
         <PostBrief key={post.slug} post={post} />
       ))}
       <p className="text-center text-muted">(End of posts)</p>
-    </div>
+    </section>
   );
 };

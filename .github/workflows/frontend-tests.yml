@@ -1,0 +1,42 @@
+name: Tests
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+        with:
+          lfs: true
+          submodules: true
+
+      - uses: actions/setup-node@v2
+        with:
+          node-version: "14"
+
+      - name: Yarn install
+        working-directory: astrid_tech_frontend
+        run: yarn install
+
+      - name: Lint
+        uses: actions/checkout@v2
+        run: yarn lint
+
+      - name: Run tests
+        working-directory: astrid_tech_frontend
+        run: yarn test
+
+      - name: Build as a smoke test
+        working-directory: astrid_tech_frontend
+        env:
+          ASTRID_TECH_API_ROOT: https://api.astrid.tech/
+        run: yarn build
+
+      - name: Zip output
+        working-directory: astrid_tech_frontend
+        run: zip -r ../site.zip out

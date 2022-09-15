@@ -1,0 +1,52 @@
+[package]
+authors = ["Astrid Yu <astrid@astrid.tech>"]
+description = "A webmention receiver and processor."
+edition = "2018"
+homepage = "https://astrid.tech/projects/astrid-tech"
+name = "wm-receiver"
+resolver = "1"
+publish = false
+repository = "https://github.com/astridyu/astrid.tech.git"
+version = "0.1.0"
+[[bin]]
+name = "wm-receiver"
+path = "src/main.rs"
+
+[dependencies]
+diesel_migrations = "*"
+dotenv = "*"
+reqwest = "*"
+rocket = "0.5.0-rc.1"
+rocket_codegen = "0.5.0-rc.1"
+sanitize-filename = "*"
+scraper = "*"
+serde = "*"
+serde_json = "*"
+sha256 = "*"
+url = "*"
+
+[dependencies.chrono]
+features = ["serde"]
+version = "*"
+
+[dependencies.diesel]
+default-features = false
+features = ["sqlite", "chrono"]
+version = "*"
+
+[dependencies.microformats_parser]
+git = "https://gitlab.com/maxburon/microformats-parser.git"
+
+[dependencies.simple_git_utils]
+path = "../simple_git_utils_rs"
+
+[dependencies.tokio]
+features = ["sync"]
+version = "*"
+
+[build-dependencies]
+diesel = { version = "1.4.7", features = ["chrono", "sqlite"] }
+
+[dev-dependencies]
+rstest = "0.11.0"
+tempdir = "*"

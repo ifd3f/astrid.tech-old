@@ -1,5 +1,6 @@
 import Link from "next/link";
-import React, { ComponentProps } from "react";
+import { ComponentProps } from "react";
+import * as React from "react";
 import { useCookies } from "react-cookie";
 import { CookieSetOptions } from "universal-cookie";
 
@@ -12,16 +13,8 @@ export function useCookieState(fields: string[], setOptions: CookieSetOptions) {
   ]);
 }
 
-export function changeEventSetter<T>(setter: (value: string) => void) {
+export function changeEventSetter(setter: (value: string) => void) {
   return (ev: React.ChangeEvent<HTMLInputElement>) => {
     setter(ev.target.value);
   };
-}
-
-export function ALink(props: ComponentProps<"a">) {
-  return (
-    <Link href={props.href!!}>
-      <a {...props} />
-    </Link>
-  );
 }

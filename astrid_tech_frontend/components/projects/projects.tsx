@@ -1,5 +1,6 @@
+import { useNSFW } from "components/nsfw";
 import Fuse from "fuse.js";
-import React, { ChangeEventHandler, FC, useContext, useState } from "react";
+import { ChangeEventHandler, FC, useContext, useState } from "react";
 import { BsCaretDown, BsCaretUp, BsX } from "react-icons/bs";
 import { FaInfoCircle } from "react-icons/fa";
 import {
@@ -45,32 +46,32 @@ const CountBadge: FC<CountBadgeProps> = ({ tag, count }) => {
 };
 
 const SelectableTagList: FC = () => {
-  const { selectableTags, tagUsageCounts, addFilterTag } = useContext(
-    SearchContext
-  );
+  const { selectableTags, tagUsageCounts, addFilterTag } =
+    useContext(SearchContext);
 
   return (
     <div className={styles.selectableTagsContainer}>
       {selectableTags.map((tag) => (
-        <span
-          className={styles.selectableTag}
-          onClick={() => addFilterTag(tag)}
-          key={tag}
-        >
-          <TagBadge tag={tag}>
-            {" "}
-            <CountBadge tag={tag} count={tagUsageCounts.get(tag)!} />
-          </TagBadge>
-        </span>
+        <>
+          <span
+            className={styles.selectableTag}
+            onClick={() => addFilterTag(tag)}
+            key={tag}
+          >
+            <TagBadge tag={tag}>
+              {" "}
+              <CountBadge tag={tag} count={tagUsageCounts.get(tag)!} />
+            </TagBadge>
+          </span>{" "}
+        </>
       ))}
     </div>
   );
 };
 
 const CurrentlyUsedTagList: FC = () => {
-  const { filterTags, tagUsageCounts, removeFilterTag } = useContext(
-    SearchContext
-  );
+  const { filterTags, tagUsageCounts, removeFilterTag } =
+    useContext(SearchContext);
   return (
     <div>
       {[...filterTags.values()].map((tag) => (
@@ -155,11 +156,17 @@ const SearchSection: FC = () => {
   );
 };
 
-export const CardGroup: FC<{
+type CardGroupProps = {
   idPrefix: string;
   title?: { text: string; description?: string };
   projects: Project[];
-}> = ({ title, idPrefix, projects }) => {
+};
+
+export const CardGroup: FC<CardGroupProps> = ({
+  title,
+  idPrefix,
+  projects,
+}) => {
   var heading = null;
   if (title) {
     const infoId = `${idPrefix}-section-info`;
@@ -202,29 +209,38 @@ export const CardGroup: FC<{
 };
 
 export const ProjectCardsView: FC = () => {
-  const { isSearching, displayedProjects } = useContext(SearchContext);
+  const { displayedProjects } = useContext(SearchContext);
+  const { enabled: nsfwEnabled } = useNSFW();
+
   return (
     <Row>
-      {displayedProjects.map((project) => (
-        <Col
-          xs="12"
-          md="6"
-          xl="4"
-          key={project.slug}
-          className={styles.projectCardWrapper}
-        >
-          <ProjectCard project={project} />
-        </Col>
-      ))}
+      {displayedProjects
+        .filter((project) => !project.tags.includes("nsfw") || nsfwEnabled)
+        .map((project) => (
+          <Col
+            xs="12"
+            md="6"
+            xl="4"
+            key={project.slug}
+            className={styles.projectCardWrapper}
+          >
+            <ProjectCard project={project} />
+          </Col>
+        ))}
     </Row>
   );
 };
 
-export const ProjectsIndex: FC<{
+type ProjectsIndexProps = {
   projects: ProjectMeta[];
   fuseIndex: any;
   fuseKeys: string[];
-}> = ({ projects, fuseIndex }) => {
+};
+
+export const ProjectsIndex: FC<ProjectsIndexProps> = ({
+  projects,
+  fuseIndex,
+}) => {
   const index = Fuse.parseIndex<ProjectMeta>(fuseIndex);
   const fuse = new Fuse<ProjectMeta>(
     projects,

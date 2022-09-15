@@ -2,14 +2,13 @@ use std::ops::Add;
 
 use chrono::{Datelike, Duration, FixedOffset, NaiveDate, NaiveDateTime};
 
-use crate::mapper::ShortCode::{Blog, Project, Text};
+use crate::mapper::ShortCode::{Entry, Project};
 use crate::mapper::ShortCodeParseError::{EmptyString, SXGError, TooLong, UnsupportedType};
 use crate::newbase60::sxg_to_num;
 
 #[derive(Debug, Clone, PartialEq, Eq)]
 enum ShortCode<'a> {
-    Blog(i32, u32, u32),
-    Text(i32, u32, u32, u32),
+    Entry(i32, u32, u32, u32),
     Project(&'a str),
 }
 
@@ -38,16 +37,7 @@ impl ShortCode<'_> {
         };
 
         match code_type {
-            'b' => {
-                let number = match sxg_to_num(&shortcode[1..]) {
-                    Some(n) => n,
-                    None => return Err(SXGError),
-                };
-
-                let date = days_after_epoch(number as i64);
-                Ok(Blog(date.year(), date.month(), date.day()))
-            }
-            't' => {
+            'e' => {
                 let number = match sxg_to_num(&shortcode[1..]) {
                     Some(n) => n,
                     None => return Err(SXGError),
@@ -56,7 +46,7 @@ impl ShortCode<'_> {
                 let epoch_days = (number / 60) as i64;
                 let ordinal = (number % 60) as u32;
                 let date = days_after_epoch(epoch_days);
-                Ok(Text(date.year(), date.month(), date.day(), ordinal))
+                Ok(Entry(date.year(), date.month(), date.day(), ordinal))
             }
             'p' => Ok(Project(&shortcode[1..])),
             _ => Err(ShortCodeParseError::UnsupportedType),
@@ -65,10 +55,7 @@ impl ShortCode<'_> {
 
     fn expand(&self) -> String {
         match self {
-            Blog(y, m, d) => {
-                format!("{}/{:0>2}/{:0>2}/", y, m, d)
-            }
-            Text(y, m, d, n) => {
+            Entry(y, m, d, n) => {
                 format!("{}/{:0>2}/{:0>2}/{}/", y, m, d, n)
             }
             Project(p) => {
@@ -90,16 +77,16 @@ mod tests {
 
     #[rstest(input, expected)]
     #[case("pfoob", Project("foob"))]
-    #[case("t4MYA", Text(2012, 12, 18, 10))]
-    #[case("b4MY", Blog(2012, 12, 18))]
+    #[case("e4MYA", Entry(2012, 12, 18, 10))]
+    #[case("e4MY0", Entry(2012, 12, 18, 0))]
     fn parses_codes(input: &str, expected: ShortCode) {
         let code = ShortCode::parse(input).unwrap();
         assert_eq!(code, expected)
     }
 
     #[rstest(code, expected)]
-    #[case(Blog(2021, 3, 28), "2021/03/28/")]
-    #[case(Text(2021, 3, 28, 9), "2021/03/28/9/")]
+    #[case(Entry(2020, 11, 28, 3), "2021/11/28/3/")]
+    #[case(Entry(2021, 3, 28, 9), "2021/03/28/9/")]
     #[case(Project("masdf"), "projects/masdf/")]
     fn expands_codes(code: ShortCode, expected: &str) {
         assert_eq!(code.expand(), expected.to_string())

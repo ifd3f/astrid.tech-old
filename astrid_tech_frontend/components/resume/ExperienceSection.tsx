@@ -1,5 +1,5 @@
 import { format } from "date-fns";
-import React, { FC, ReactNode } from "react";
+import { FC, ReactNode } from "react";
 import { FaTrophy } from "react-icons/fa";
 import { Badge } from "reactstrap";
 import { WorkExperience } from "../../types/types";
@@ -93,12 +93,15 @@ const Article: FC<ArticleProps> = ({ experience, tagline: _tagline }) => {
 };
 
 export function ExperienceSection() {
-  const ft = require("../../data/objs/work/fabtime");
+  const fb = require("../../data/objs/work/facebook");
   const mv = require("../../data/objs/work/micro-vu");
+  const ft = require("../../data/objs/work/fabtime");
 
   return (
     <HomepageSection>
       <h2 className={style.sectionHeading}>Work Experience</h2>
+      <hr />
+      <Article experience={fb} />
       <hr />
       <Article experience={mv} />
       <hr />
