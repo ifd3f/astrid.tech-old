@@ -16,7 +16,8 @@
           compiler-nix-name = "ghc924";
         };
 
-        at-upload-cli = (final.at-upload-cli'.flake {}).packages."upload-cli:exe:upload-cli-app";
+        at-upload-cli = (final.at-upload-cli'.flake
+          { }).packages."upload-cli:exe:upload-cli-app";
 
       });
     } // (flake-utils.lib.eachSystem [
@@ -47,6 +48,8 @@
             python310
             rustc
             yarn
+
+            nodePackages.prettier
           ];
         };
 
@@ -59,10 +62,11 @@
 
         devShells.upload-cli = pkgs.at-upload-cli'.shellFor {
           withHoogle = true;
-          
+
           tools = {
             cabal = "latest";
-            hlint = "latest"; # Selects the latest version in the hackage.nix snapshot
+            hlint =
+              "latest"; # Selects the latest version in the hackage.nix snapshot
             hindent = "latest";
             haskell-language-server = "latest";
             hpack = "latest";
