@@ -49,6 +49,7 @@
             rustc
             yarn
 
+            at-upload-cli
             nodePackages.prettier
           ];
         };
