@@ -1,7 +1,7 @@
 use std::convert::TryFrom;
 use std::io::Write;
 
-use chrono::{Datelike, DateTime, FixedOffset};
+use chrono::{DateTime, Datelike, FixedOffset};
 use gray_matter::engine::yaml::YAML;
 use gray_matter::entity::ParsedEntityStruct;
 use gray_matter::matter::Matter;
@@ -10,10 +10,12 @@ use url::Url;
 use uuid::Uuid;
 use vfs::{VfsFileType, VfsPath};
 
-use crate::content::content::{Content, ContentType, find_unique_with_name, FindFilenameError, ReadPostContentError, UnsupportedContentType};
+use crate::content::content::{
+    find_unique_with_name, Content, ContentType, FindFilenameError, ReadPostContentError,
+    UnsupportedContentType,
+};
 use crate::content::post_registry::DateSlug;
 use crate::web::micropub::{Entry, Micropub};
-use std::str::FromStr;
 
 #[derive(Debug)]
 pub enum PostError {
@@ -72,11 +74,6 @@ pub struct MediaEntry {
 }
 
 #[derive(Serialize, Deserialize, Debug, Eq, PartialEq, Clone)]
-pub struct RecipeStep {
-    text: String
-}
-
-#[derive(Serialize, Deserialize, Debug, Eq, PartialEq, Clone)]
 #[serde(tag = "status", rename_all = "camelCase")]
 pub enum Syndication {
     Scheduled {
@@ -90,48 +87,53 @@ pub enum Syndication {
 }
 
 #[derive(Serialize, Deserialize, Debug, Eq, PartialEq, Clone)]
-#[serde(tag = "type")]
-pub enum HType {
-    #[serde(rename = "entry")]
-    Entry,
-    #[serde(rename = "recipe")]
-    Recipe {
-        //duration: Option<Duration>,
-        ingredients: Vec<String>,
-        instructions: Vec<RecipeStep>,
-    },
-}
-
-#[derive(Serialize, Deserialize, Debug, Eq, PartialEq, Clone)]
 #[serde(rename_all = "camelCase")]
-pub struct Meta {
-    #[serde(flatten)]
-    pub h_type: HType,
-
+pub struct PostMeta {
     pub title: Option<String>,
     pub description: Option<String>,
-    pub short_name: Option<String>,
+    pub slug: Option<String>,
     pub uuid: Uuid,
 
-    pub date: DateTime<FixedOffset>,
-    pub published_date: Option<DateTime<FixedOffset>>,
-    pub updated_date: Option<DateTime<FixedOffset>>,
+    pub date: PostDates,
+
     #[serde(default)]
     pub ordinal: u32,
 
     pub reply_to: Option<Url>,
     pub repost_of: Option<Url>,
+    pub rsvp: Option<RSVP>,
+
     #[serde(default)]
     pub tags: Vec<String>,
+
     #[serde(default)]
     pub syndications: Vec<Syndication>,
+
     #[serde(default)]
     pub media: Vec<MediaEntry>,
 }
 
-impl Meta {
-    pub fn get_slug(&self) -> DateSlug {
-        let utc = self.date.naive_utc();
+#[derive(Serialize, Deserialize, Debug, Eq, PartialEq, Clone)]
+#[serde(rename_all = "camelCase")]
+pub enum RSVP {
+    // TODO custom serde
+    Yes,
+    No,
+    Maybe,
+    Interested,
+}
+
+#[derive(Serialize, Deserialize, Debug, Eq, PartialEq, Clone)]
+#[serde(rename_all = "camelCase")]
+pub struct PostDates {
+    pub published: DateTime<FixedOffset>,
+    pub created: Option<DateTime<FixedOffset>>,
+    pub updated: Option<DateTime<FixedOffset>>,
+}
+
+impl PostMeta {
+    pub fn get_full_slug(&self) -> DateSlug {
+        let utc = self.date.published.naive_utc();
         DateSlug {
             year: utc.year(),
             month: utc.month() as u8,
@@ -143,7 +145,7 @@ impl Meta {
 
 #[derive(Eq, PartialEq, Clone, Debug)]
 pub struct Post {
-    pub meta: Meta,
+    pub meta: PostMeta,
     pub content: Content,
 }
 
@@ -156,10 +158,15 @@ impl Post {
             let mut filename = "index.".to_string();
             filename.push_str(extension);
 
+            // Open the file for writing
             let mut file = path.join(filename.as_str())?.create_file()?;
+            
+            // Write the YAML meta
             let meta_yaml = serde_yaml::to_string(&self.meta)?;
             file.write(meta_yaml.as_bytes())?;
             file.write("\n---\n".as_ref())?;
+
+            // Close the file
             file.write(self.content.content.as_bytes())?;
 
             return Ok(());
@@ -171,6 +178,7 @@ impl Post {
             let meta_file = path.join(filename.as_str())?.create_file()?;
             serde_yaml::to_writer(meta_file, &self.meta)?;
         }
+
         {
             let mut content_file = path.join("index.yaml")?.create_file()?;
             content_file.write(self.content.content.as_bytes())?;
@@ -180,46 +188,62 @@ impl Post {
     }
 
     pub fn get_slug(&self) -> DateSlug {
-        self.meta.get_slug()
+        self.meta.get_full_slug()
     }
 
-    pub fn from_micropub_entry(uuid: Uuid, date: DateTime<FixedOffset>, ordinal: u32, entry: Entry) -> Post {
-        let short_name = "".to_string();
+    pub fn from_micropub_entry(
+        uuid: Uuid,
+        date: DateTime<FixedOffset>,
+        ordinal: u32,
+        entry: Entry,
+    ) -> Post {
+        let slug = "".to_string(); // TODO title to slug conversion
 
-        let meta = Meta {
+        let meta = PostMeta {
             title: entry.name,
             description: entry.summary,
-            short_name: Some(short_name),
+            slug: Some(slug),
             uuid,
-            date,
-            published_date: entry.published,
-            updated_date: entry.updated,
+            rsvp: None,
+            date: PostDates {
+                published: entry.published.unwrap_or(date),
+                created: Some(date),
+                updated: entry.updated,
+            },
             ordinal,
             reply_to: entry.in_reply_to,
             repost_of: entry.repost_of,
             tags: entry.category,
-            syndications: entry.mp_syndicate_to.iter()
-                .map(|url| {
-                    Syndication::Scheduled { url: url.clone() }
-                })
+            syndications: entry
+                .mp_syndicate_to
+                .iter()
+                .map(|url| Syndication::Scheduled { url: url.clone() })
                 .collect(),
-            h_type: HType::Entry,
             media: vec![],
         };
 
         let content = Content {
-            content_type: ContentType::Markdown,
+            content_type: ContentType::HTMLFragment,
             content: entry.content.unwrap_or_default(),
         };
 
         Post { meta, content }
     }
 
-    pub fn from_micropub(uuid: Uuid, date: DateTime<FixedOffset>, ordinal: u32, mp: Micropub) -> Post {
+    pub fn from_micropub(
+        uuid: Uuid,
+        date: DateTime<FixedOffset>,
+        ordinal: u32,
+        mp: Micropub,
+    ) -> Post {
         match mp {
             Micropub::Entry(e) => Self::from_micropub_entry(uuid, date, ordinal, e),
-            Micropub::Event(_) => { todo!() }
-            Micropub::Cite(_) => { todo!() }
+            Micropub::Event(_) => {
+                todo!()
+            }
+            Micropub::Cite(_) => {
+                todo!()
+            }
         }
     }
 }
@@ -233,15 +257,17 @@ impl TryFrom<VfsPath> for Post {
             Err(PostError::NotADirectory(path.clone()))?;
         }
 
-        let index_name = find_unique_with_name("index", &path).map_err(PostError::AmbiguousIndex)?;
+        let index_name =
+            find_unique_with_name("index", &path).map_err(PostError::AmbiguousIndex)?;
         let index_path = path.join(index_name.as_str())?;
 
         let ext = index_path.extension().unwrap();
         if ext == "yaml" || ext == "yml" {
             let file = index_path.open_file()?;
-            let meta: Meta = serde_yaml::from_reader(file)?;
+            let meta: PostMeta = serde_yaml::from_reader(file)?;
 
-            let content_filename = find_unique_with_name("content", &path).map_err(PostError::AmbiguousContent)?;
+            let content_filename =
+                find_unique_with_name("content", &path).map_err(PostError::AmbiguousContent)?;
             let content_path = path.join(content_filename.as_str())?;
             let content = Content::try_from(content_path)?;
 
@@ -250,14 +276,19 @@ impl TryFrom<VfsPath> for Post {
 
         let content_type = ContentType::from_ext(ext.as_str())?;
         if !content_type.supports_frontmatter() {
-            Err(PostError::ContentTypeDoesNotSupportFrontmatter(content_type))
+            Err(PostError::ContentTypeDoesNotSupportFrontmatter(
+                content_type,
+            ))
         } else {
             let contents = index_path.read_to_string()?;
             let matter = Matter::<YAML>::new();
-            let parsed: ParsedEntityStruct<Meta> = matter.matter_struct(contents);
+            let parsed: ParsedEntityStruct<PostMeta> = matter.matter_struct(contents);
 
             let content = Content::new(content_type, parsed.content);
-            Ok(Post { meta: parsed.data, content })
+            Ok(Post {
+                meta: parsed.data,
+                content,
+            })
         }
     }
 }
@@ -272,6 +303,7 @@ pub mod test {
     use crate::content::content::ContentType;
     use crate::content::post::Post;
 
+    // Note that these contents must not have indentation.
     const TXT_ARTICLE_YAML: &str = r#"
 date: 2021-06-12 10:51:30 +08:00
 title: Example post with text

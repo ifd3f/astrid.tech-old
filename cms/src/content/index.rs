@@ -123,7 +123,7 @@ impl From<Post> for InsertPost {
 
 impl Into<Post> for InsertPost {
     fn into(self) -> Post {
-        let meta = content::post::Meta {
+        let meta = content::post::PostMeta {
             h_type: serde_json::from_str(self.h_type.as_str()).unwrap(),
             title: self.title,
             description: self.description,
