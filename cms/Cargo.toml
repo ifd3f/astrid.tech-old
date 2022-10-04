@@ -6,19 +6,16 @@ edition = "2018"
 # See more keys and their definitions at https://doc.rust-lang.org/cargo/reference/manifest.html
 
 [dependencies]
-vfs = "0.5"
 chrono = { version = "0.4", features = ["serde"] }
-serde = { version = "1.0", features = ["derive"] }
-serde_yaml = "0.8"
-serde_json = "1.0"
-uuid = { version = "0.8", features = ["serde", "v4", "v5"] }
 gray_matter = "0.1"
-actix-web = "3.3"
 itertools = "0.10"
+rocket = "0.5.0-rc.2"
+serde = { version = "1.0", features = ["derive"] }
+serde_json = "1.0"
+serde_yaml = "0.8"
 url = { version = "2.2", features = ["serde"] }
-barrel = "0.6.5"
-diesel = { version = "1.4", features = ["sqlite", "chrono", "uuid"] }
-actix = "0.12"
+uuid = { version = "0.8", features = ["serde", "v4", "v5"] }
+vfs = "0.5"
 
 [dev-dependencies]
 serde_qs = "0.8.3"

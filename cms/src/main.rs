@@ -1,24 +1,18 @@
-#![feature(in_band_lifetimes)]
 #[macro_use]
-extern crate diesel;
-
-use actix_web::{App, get, HttpServer, Responder};
+extern crate rocket;
 
 use crate::web::posts;
 
-
 mod content;
-mod web;
 mod syndication;
-mod actor;
+mod web;
 
-#[allow(non_snake_case)]
-mod schema;
+#[get("/")]
+fn index() -> &'static str {
+    "Hello, world!"
+}
 
-#[actix_web::main]
-async fn main() -> std::io::Result<()> {
-    HttpServer::new(|| App::new().service(posts::get_posts))
-        .bind("127.0.0.1:8080")?
-        .run()
-        .await
+#[launch]
+fn rocket() -> _ {
+    rocket::build().mount("/", routes![index])
 }

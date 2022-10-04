@@ -25,9 +25,8 @@ struct ContentTypeVisitor;
 
 impl<'de> Visitor<'de> for ContentTypeVisitor {
     type Value = ContentType;
-
-    fn expecting(&self, formatter: &mut Formatter<'a>) -> fmt::Result {
-        formatter.write_str("a mimetype")
+    fn expecting(&self, formatter: &mut fmt::Formatter) -> fmt::Result {
+        write!(formatter, "a mimetype")
     }
 
     fn visit_str<E>(self, v: &str) -> Result<Self::Value, E>
