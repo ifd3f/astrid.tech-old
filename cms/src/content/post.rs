@@ -1,3 +1,5 @@
+pub mod fs;
+
 use std::convert::TryFrom;
 use std::io::Write;
 
@@ -14,7 +16,6 @@ use crate::content::content::{
     find_unique_with_name, Content, ContentType, FindFilenameError, ReadPostContentError,
     UnsupportedContentType,
 };
-use crate::content::post_registry::DateSlug;
 use crate::web::micropub::{Entry, Micropub};
 
 #[derive(Debug)]
@@ -93,11 +94,7 @@ pub struct PostMeta {
     pub description: Option<String>,
     pub slug: Option<String>,
     pub uuid: Uuid,
-
     pub date: PostDates,
-
-    #[serde(default)]
-    pub ordinal: u32,
 
     pub reply_to: Option<Url>,
     pub repost_of: Option<Url>,
@@ -131,21 +128,18 @@ pub struct PostDates {
     pub updated: Option<DateTime<FixedOffset>>,
 }
 
-impl PostMeta {
-    pub fn get_full_slug(&self) -> DateSlug {
-        let utc = self.date.published.naive_utc();
-        DateSlug {
-            year: utc.year(),
-            month: utc.month() as u8,
-            day: utc.day() as u8,
-            ordinal: self.ordinal,
-        }
-    }
+#[derive(Ord, PartialOrd, Eq, PartialEq, Debug, Hash)]
+pub struct DateSlug {
+    pub year: i32,
+    pub month: u8,
+    pub day: u8,
+    pub ordinal: u32,
 }
 
 #[derive(Eq, PartialEq, Clone, Debug)]
 pub struct Post {
     pub meta: PostMeta,
+    pub ordinal: u32,
     pub content: Content,
 }
 
@@ -187,14 +181,9 @@ impl Post {
         Ok(())
     }
 
-    pub fn get_slug(&self) -> DateSlug {
-        self.meta.get_full_slug()
-    }
-
     pub fn from_micropub_entry(
         uuid: Uuid,
         date: DateTime<FixedOffset>,
-        ordinal: u32,
         entry: Entry,
     ) -> Post {
         let slug = "".to_string(); // TODO title to slug conversion
@@ -210,7 +199,6 @@ impl Post {
                 created: Some(date),
                 updated: entry.updated,
             },
-            ordinal,
             reply_to: entry.in_reply_to,
             repost_of: entry.repost_of,
             tags: entry.category,
@@ -251,29 +239,38 @@ impl Post {
 impl TryFrom<VfsPath> for Post {
     type Error = PostError;
 
-    /// Creates a post from a post directory.
+    /// Creates a post from an ordinal directory.
     fn try_from(path: VfsPath) -> Result<Self, Self::Error> {
         if path.metadata()?.file_type != VfsFileType::Directory {
             Err(PostError::NotADirectory(path.clone()))?;
         }
 
+        // It's an ordinal directory, so the ordinal is the number.
+        let ordinal = path.filename().parse();
+
+        // Find the file with name `index`.
         let index_name =
             find_unique_with_name("index", &path).map_err(PostError::AmbiguousIndex)?;
         let index_path = path.join(index_name.as_str())?;
 
+        // Decide what to do with the index file.
         let ext = index_path.extension().unwrap();
+
+        // If it's a YAML then it's a contentless index.
         if ext == "yaml" || ext == "yml" {
             let file = index_path.open_file()?;
             let meta: PostMeta = serde_yaml::from_reader(file)?;
 
+            // The content is located at the file named `content`.
             let content_filename =
                 find_unique_with_name("content", &path).map_err(PostError::AmbiguousContent)?;
             let content_path = path.join(content_filename.as_str())?;
             let content = Content::try_from(content_path)?;
 
-            return Ok(Post { meta, content });
+            return Ok(Post { meta, ordinal, content });
         }
 
+        // Otherwise, the index must be a frontmatter/content style index.
         let content_type = ContentType::from_ext(ext.as_str())?;
         if !content_type.supports_frontmatter() {
             Err(PostError::ContentTypeDoesNotSupportFrontmatter(
@@ -287,6 +284,7 @@ impl TryFrom<VfsPath> for Post {
             let content = Content::new(content_type, parsed.content);
             Ok(Post {
                 meta: parsed.data,
+                ordinal,
                 content,
             })
         }

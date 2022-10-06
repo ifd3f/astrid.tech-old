@@ -1,8 +1,7 @@
-use std::collections::HashMap;
 use std::convert::TryFrom;
 use std::num::ParseIntError;
 
-use chrono::{Datelike, Utc, DateTime};
+use chrono::{DateTime, Datelike, Utc};
 use itertools::Itertools;
 use uuid::Uuid;
 use vfs::{VfsError, VfsPath};
@@ -10,13 +9,7 @@ use vfs::{VfsError, VfsPath};
 use crate::content::post::{Post, PostError};
 use crate::web::micropub::Micropub;
 
-#[derive(Ord, PartialOrd, Eq, PartialEq, Debug, Hash)]
-pub struct DateSlug {
-    pub year: i32,
-    pub month: u8,
-    pub day: u8,
-    pub ordinal: u32,
-}
+use super::DateSlug;
 
 #[derive(Debug)]
 pub enum PostStorageError {
@@ -45,23 +38,28 @@ impl From<ParseIntError> for PostStorageError {
 
 /// Contains all of the website data
 pub struct PostStorage {
-    filesystem: VfsPath
+    filesystem: VfsPath,
 }
 
 fn get_next_ordinal(day_dir: &VfsPath) -> Result<u32, PostStorageError> {
-    let largest_ordinal = day_dir.read_dir()?
+    let largest_ordinal = day_dir
+        .read_dir()?
         .map(|x| x.filename().parse::<u32>())
         .fold_ok(0, u32::max);
     Ok(largest_ordinal? + 1)
 }
 
 impl PostStorage {
-    pub fn create_post(&self, mp: Micropub) -> Result<Post, PostStorageError> {
-        let date = Utc::now();
-        let day_dir = self.filesystem
+    pub fn dir_for_date(&self, date: DateTime<Utc>) -> Result<VfsPath, VfsError> {
+        self.filesystem
             .join(date.year().to_string().as_str())?
             .join(date.month().to_string().as_str())?
-            .join(date.day().to_string().as_str())?;
+            .join(date.day().to_string().as_str())
+    }
+
+    pub fn create_post(&self, mp: Micropub) -> Result<Post, PostStorageError> {
+        let date = Utc::now();
+        let day_dir = self.dir_for_date(date)?;
 
         let ordinal = get_next_ordinal(&day_dir)?;
         let mut ordinal_dir = day_dir.join(ordinal.to_string().as_str())?;
@@ -75,12 +73,13 @@ impl PostStorage {
         Ok(post)
     }
 
-    pub fn iter_posts(&self) -> impl Iterator<Item=Result<Post, PostError>> {
+    pub fn iter_posts(&self) -> impl Iterator<Item = Result<Post, PostError>> {
         self.filesystem
-            .read_dir().unwrap()  // years
-            .flat_map(|d| d.read_dir().unwrap())  // months
-            .flat_map(|d| d.read_dir().unwrap())  // days
-            .flat_map(|d| d.read_dir().unwrap())  // ordinals
+            .read_dir()
+            .unwrap() // years
+            .flat_map(|d| d.read_dir().unwrap()) // months
+            .flat_map(|d| d.read_dir().unwrap()) // days
+            .flat_map(|d| d.read_dir().unwrap()) // ordinals
             .map(|d| Post::try_from(d))
     }
 }
