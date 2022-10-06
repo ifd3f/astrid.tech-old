@@ -119,6 +119,7 @@ name = "astrid_tech_cms"
 version = "0.1.0"
 dependencies = [
  "chrono",
+ "diesel 2.0.0",
  "gray_matter",
  "itertools",
  "rocket 0.5.0-rc.2",
@@ -536,8 +537,17 @@ checksum = "b28135ecf6b7d446b43e27e225622a038cc4e2930a1022f51cdb97ada19b8e4d"
 dependencies = [
  "byteorder",
  "chrono",
- "diesel_derives",
+ "diesel_derives 1.4.1",
  "libsqlite3-sys",
+]
+
+[[package]]
+name = "diesel"
+version = "2.0.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "01e2adfd0a7a81070ed7beec0c62636458926326c16fedb77796d41e447b282d"
+dependencies = [
+ "diesel_derives 2.0.0",
 ]
 
 [[package]]
@@ -546,6 +556,18 @@ version = "1.4.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "45f5098f628d02a7a0f68ddba586fb61e80edec3bdc1be3b921f4ceec60858d3"
 dependencies = [
+ "proc-macro2 1.0.29",
+ "quote 1.0.9",
+ "syn 1.0.76",
+]
+
+[[package]]
+name = "diesel_derives"
+version = "2.0.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "22a7ab9d7967e6a1a247ea38aedf88ab808b4ac0c159576bc71866ab8f9f9250"
+dependencies = [
+ "proc-macro-error",
  "proc-macro2 1.0.29",
  "quote 1.0.9",
  "syn 1.0.76",
@@ -1277,7 +1299,7 @@ version = "1.4.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "2b4fc84e4af020b837029e017966f86a1c2d5e83e64b589963d5047525995860"
 dependencies = [
- "diesel",
+ "diesel 1.4.8",
 ]
 
 [[package]]
@@ -1691,6 +1713,30 @@ name = "precomputed-hash"
 version = "0.1.1"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "925383efa346730478fb4838dbe9137d2a47675ad789c546d150a6e1dd4ab31c"
+
+[[package]]
+name = "proc-macro-error"
+version = "1.0.4"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "da25490ff9892aab3fcf7c36f08cfb902dd3e71ca0f9f9517bea02a73a5ce38c"
+dependencies = [
+ "proc-macro-error-attr",
+ "proc-macro2 1.0.29",
+ "quote 1.0.9",
+ "syn 1.0.76",
+ "version_check 0.9.4",
+]
+
+[[package]]
+name = "proc-macro-error-attr"
+version = "1.0.4"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "a1be40180e52ecc98ad80b184934baf3d0d29f979574e439af5a55274b35f869"
+dependencies = [
+ "proc-macro2 1.0.29",
+ "quote 1.0.9",
+ "version_check 0.9.4",
+]
 
 [[package]]
 name = "proc-macro-hack"
@@ -3262,7 +3308,7 @@ name = "wm-receiver"
 version = "0.1.0"
 dependencies = [
  "chrono",
- "diesel",
+ "diesel 1.4.8",
  "diesel_migrations",
  "dotenv",
  "microformats_parser",

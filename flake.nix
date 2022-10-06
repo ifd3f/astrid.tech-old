@@ -11,21 +11,20 @@
     rust-overlay.url = "github:oxalica/rust-overlay";
   };
 
-  outputs = { self, flake-utils, nixpkgs, haskellNix, naersk, rust-overlay
-    , ... }@inputs:
+  outputs = { self, flake-utils, nixpkgs, haskellNix, naersk, rust-overlay, ...
+    }@inputs:
     {
-      overlay = (final: prev:
-        {
-          at-upload-cli' = final.haskell-nix.project' {
-            src = ./upload-cli;
-            compiler-nix-name = "ghc924";
-          };
+      overlay = (final: prev: {
+        at-upload-cli' = final.haskell-nix.project' {
+          src = ./upload-cli;
+          compiler-nix-name = "ghc924";
+        };
 
-          at-upload-cli = (final.at-upload-cli'.flake
-            { }).packages."upload-cli:exe:upload-cli-app";
+        at-upload-cli = (final.at-upload-cli'.flake
+          { }).packages."upload-cli:exe:upload-cli-app";
 
-          at-cms = final.naersk.buildPackage { src = ./.; };
-        });
+        at-cms = final.naersk.buildPackage { src = ./.; };
+      });
     } // (flake-utils.lib.eachSystem [
       "x86_64-linux"
       "x86_64-darwin"
@@ -57,12 +56,13 @@
             python310
             yarn
 
-            (rust-toolchain.rust.override {
-              extensions = ["rust-src"];
-            })
+            (rust-toolchain.rust.override { extensions = [ "rust-src" ]; })
             cargo-edit
             diesel-cli
           ];
+
+          # The development database
+          DATABASE_URL = "postgres://dev:password@localhost/db";
         };
 
         devShells.content = pkgs.mkShell {

@@ -1,9 +1,11 @@
+# A development database STRICTLY FOR DEVELOPMENT ONLY
 services:
-  keycloak:
-    image: quay.io/keycloak/keycloak:13.0.1
+  db:
+    image: postgres
     environment:
-      - KEYCLOAK_USER=admin
-      - KEYCLOAK_PASSWORD=admin
+      POSTGRES_USER: dev
+      POSTGRES_PASSWORD: password
+      POSTGRES_DB: cms
     ports:
-      - 8080:6000
+      - 5432:5432
 
