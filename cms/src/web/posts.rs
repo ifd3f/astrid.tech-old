@@ -12,7 +12,7 @@ pub async fn get_exact_post(
     todo!();
 }
 
-#[post("/api/micropub")]
-pub async fn micropub_post(post: Form<Micropub>) -> impl Responder {
-    todo!();
-}
+// #[post("/api/micropub")]
+// pub async fn micropub_post(post: Form<Micropub>) -> impl Responder {
+//     todo!();
+// }

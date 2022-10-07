@@ -3,7 +3,6 @@ extern crate rocket;
 
 use crate::web::posts;
 
-mod content;
 mod syndication;
 mod web;
 
