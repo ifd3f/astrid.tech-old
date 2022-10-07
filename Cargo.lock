@@ -131,6 +131,7 @@ dependencies = [
  "diesel 2.0.0",
  "gray_matter",
  "itertools",
+ "maud",
  "rocket 0.5.0-rc.2",
  "serde",
  "serde_json",
@@ -1300,6 +1301,28 @@ name = "matches"
 version = "0.1.9"
 source = "registry+https://github.com/rust-lang/crates.io-index"
 checksum = "a3e378b66a060d48947b590737b30a1be76706c8dd7b8ba0f2fe3989c68a853f"
+
+[[package]]
+name = "maud"
+version = "0.24.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "19aff2cd19eb4b93df29efa602652513b0f731f1d3474f6e377f763fddf61e58"
+dependencies = [
+ "itoa 0.4.8",
+ "maud_macros",
+]
+
+[[package]]
+name = "maud_macros"
+version = "0.24.0"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "e5c114f6f24b08fdd4a25d2fb87a8b140df56b577723247b382e8b04c583f2eb"
+dependencies = [
+ "proc-macro-error",
+ "proc-macro2 1.0.29",
+ "quote 1.0.9",
+ "syn 1.0.76",
+]
 
 [[package]]
 name = "memchr"
