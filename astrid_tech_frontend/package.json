@@ -3,7 +3,7 @@
   "version": "2.0.0",
   "repository": {
     "type": "git",
-    "url": "https://github.com/astridyu/astrid.tech.git",
+    "url": "https://github.com/ifd3f/astrid.tech.git",
     "directory": "astrid_tech_frontend"
   },
   "scripts": {

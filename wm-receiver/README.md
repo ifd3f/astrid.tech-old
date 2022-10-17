@@ -61,5 +61,5 @@ However, in your code, you shouldn't need to calculate these values. You can ins
 | `BASE_BRANCH`          | The branch to base `BRANCH_NAME` off of, if `BRANCH_NAME` does not yet exist. | `main`                                                                                                   |
 | `GIT_NAME`             | The name to commit code with.                                                 | `Astrid Yu`                                                                                              |
 | `GIT_EMAIL`            | The email to commit code with.                                                | `astrid@astrid.tech`                                                                                     |
-| `REMOTE_URL`           | The Git remote to push changes to.                                            | `https://github.com/astridyu/astrid.tech.git` or `git@github.com:astralbijection/astrid.tech.git` |
+| `REMOTE_URL`           | The Git remote to push changes to.                                            | `https://github.com/ifd3f/astrid.tech.git` or `git@github.com:astralbijection/astrid.tech.git` |
 | `WEBMENTION_SUBDIR`    | A subdirectory in your git repo to store the processed webmention data in.    | `content/webmentions`                                                                                    |

@@ -13,7 +13,7 @@ tags:
 url: null
 thumbnail: ./thumbnail.png
 source:
-  - https://github.com/astridyu/572-Planet-Collisions/
+  - https://github.com/ifd3f/572-Planet-Collisions/
 ---
 
 ## Introduction

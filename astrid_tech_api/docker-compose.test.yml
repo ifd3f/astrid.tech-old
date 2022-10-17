@@ -9,7 +9,7 @@ services:
       - 5432:5432
 
   sut:
-    image: astridyu/astrid_tech_api_ci
+    image: ifd3f/astrid_tech_api_ci
     depends_on:
       - db
     env_file:

@@ -4,7 +4,7 @@
 
 This website contains my blog and project portfolio. See the site live at [astrid.tech](https://astrid.tech)!
 
-Additionally, see its sister repo, the [infra repo](https://github.com/astridyu/infrastructure) for the configurations that deploy it.
+Additionally, see its sister repo, the [infra repo](https://github.com/ifd3f/infra) for the configurations that deploy it.
 
 - Read about how it works [here](https://astrid.tech/projects/astrid-tech)
 - Submit a [new issue](https://github.com/plenglin/astrid.tech/issues/new)

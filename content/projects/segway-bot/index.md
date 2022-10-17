@@ -25,7 +25,7 @@ keywords:
   - Circuit Design
   - under-construction
 url: null
-source: [https://github.com/astridyu/segwaybot]
+source: [https://github.com/ifd3f/segwaybot]
 thumbnail: ./thumbnail.png
 ---
 

@@ -30,7 +30,7 @@ const SEO: FC<SEOProps> = ({
     },
     {
       name: `twitter:creator`,
-      content: "astralbijection",
+      content: "ifd3f",
     },
     {
       name: `twitter:title`,

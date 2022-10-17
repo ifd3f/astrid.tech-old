@@ -6,7 +6,7 @@ startDate: 2021-12-15
 endDate: 2022-02-15
 thumbnail: ./unlocked.jpg
 source:
-  - https://github.com/astridyu/skeleton_stick
+  - https://github.com/ifd3f/skeleton_stick
 tags:
   - cybersecurity
   - raspberry-pi

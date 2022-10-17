@@ -23,7 +23,7 @@ tags:
   - gatsby-js
 url: https://astrid.tech
 source:
-  - https://github.com/astridyu/astrid.tech
+  - https://github.com/ifd3f/astrid.tech
 thumbnail: ./thumbnail.png
 ---
 
@@ -77,15 +77,15 @@ made to solve that issue.
 I use Next.js to statically generate the website.
 
 The static site is hosted via
-[Github Pages](https://github.com/astridyu/astrid.tech) to statically
+[Github Pages](https://github.com/ifd3f/astrid.tech) to statically
 host the website.
 
 There is a
-[Github Actions](https://github.com/astridyu/astrid.tech/actions)
+[Github Actions](https://github.com/ifd3f/astrid.tech/actions)
 workflow that automatically builds on every push to verify that my code
 compiles. Additionally, if there was a push to the `main` branch, it will
 publish the build output to the
-[astridyu.github.io](https://github.com/astridyu/astridyu.github.io)
+[ifd3f.github.io](https://github.com/ifd3f/ifd3f.github.io)
 repo.
 
 #### UX design methodology
@@ -105,7 +105,7 @@ Currently, the backend's only functionality is to serve and receive possibly
 anonymous comments.
 
 I have pointed
-[Docker Hub](https://hub.docker.com/repository/docker/astridyu/astrid_tech_api)
+[Docker Hub](https://hub.docker.com/repository/docker/ifd3f/astrid_tech_api)
 at my repo to build, test, and release a new `:latest` image on every push to
 main. It is manually deployed as a Docker container on a
 [free Oracle Cloud Infrastructure](https://www.oracle.com/cloud/free/) VPS.
@@ -113,7 +113,7 @@ main. It is manually deployed as a Docker container on a
 ### Content
 
 The content is in its own
-[Git submodule](https://github.com/astridyu/astrid.tech-content) as a set
+[Git submodule](https://github.com/ifd3f/astrid.tech-content) as a set
 of raw files that get aggregated and compiled on each frontend build. It is
 written in the following file formats:
 
@@ -195,13 +195,13 @@ transformed those notebooks to Markdown.
 #### CI/CD Pipeline
 
 There was a
-[Github Actions](https://github.com/astridyu/astrid.tech/actions)
+[Github Actions](https://github.com/ifd3f/astrid.tech/actions)
 workflow that automatically built my website on every push to verify that my
 code compiles. If the push went to the `main` branch, it would additionally
 publish the build output to the
-[astridyu.github.io](https://github.com/astridyu/astridyu.github.io)
+[ifd3f.github.io](https://github.com/ifd3f/ifd3f.github.io)
 repo, so that Github Pages could statically host it.
-[astridyu.github.io](https://astridyu.github.io) used to take you
+[ifd3f.github.io](https://ifd3f.github.io) used to take you
 to [astrid.tech](https://astrid.tech) in this way! However, now it does not.
 
 ### Personal Branding

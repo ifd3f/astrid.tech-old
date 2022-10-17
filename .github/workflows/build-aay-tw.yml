@@ -11,7 +11,7 @@ on:
 
 env:
   REGISTRY: ghcr.io
-  IMAGE_NAME: astridyu/aay-tw-shortener
+  IMAGE_NAME: ifd3f/aay-tw-shortener
 
 jobs:
   build:

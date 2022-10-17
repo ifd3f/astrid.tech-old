@@ -12,7 +12,7 @@ tags:
   - math
   - metamathematics
   - under-construction
-source: [https://github.com/astridyu/HasCAS]
+source: [https://github.com/ifd3f/HasCAS]
 thumbnail: ./thumbnail.png
 ---
 

@@ -109,11 +109,11 @@ I attended, someone suggested to me that I could somehow have a live feed of my
 connection, I can take a picture every few minutes and upload it to my server.
 
 So, I added a new endpoint to my API server, then wrote a
-[small script](https://github.com/astridyu/printer_image_snapper) that
+[small script](https://github.com/ifd3f/printer_image_snapper) that
 does exactly that. It scrapes data from my OctoPrint instance's API, snaps a
 picture from the exposed MJPG-streamer endpoint, and sends a PATCH request to my
 API server with all the information. I
-[Dockerized it](https://hub.docker.com/repository/docker/astridyu/printer_image_snapper)
+[Dockerized it](https://hub.docker.com/repository/docker/ifd3f/printer_image_snapper)
 using `python3.9-alpine` for minimum image size, and created a CronJob for my
 cluster that runs the script every 10 minutes:[^1]
 
@@ -148,7 +148,7 @@ spec:
                         values: [amd64]
           containers:
             - name: printer-image-snapper
-              image: astridyu/printer_image_snapper:latest
+              image: ifd3f/printer_image_snapper:latest
               imagePullPolicy: Always
               env:
                 - name: SNAPSHOT_URL
@@ -192,7 +192,7 @@ I continued debugging my script that afternoon, checking for, well, honestly, I
 don't know what would be causing it. In a stroke of bad luck, Docker Hub
 happened to be freaking out on that day/week and taking extremely long on my
 builds, and not because I wrote inefficient code. Here's an image from my
-[API server's repository](https://hub.docker.com/repository/docker/astridyu/astrid_tech_api).
+[API server's repository](https://hub.docker.com/repository/docker/ifd3f/astrid_tech_api).
 Yes, those are 177-minute queue times and 252-minute build times. But that had
 nothing to do with my problem, it only made debugging and testing cycles harder.
 

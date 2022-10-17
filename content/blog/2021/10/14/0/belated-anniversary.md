@@ -8,9 +8,9 @@ tags:
 ---
 
 It's been a year (and 4 months) since I first brought
-[v0.1.0](https://github.com/astridyu/astrid.tech/tree/v0.1.0) of
+[v0.1.0](https://github.com/ifd3f/astrid.tech/tree/v0.1.0) of
 astrid.tech online! Additionally, it's been just over a year since I published
-[v1.0.0](https://github.com/astridyu/astrid.tech/tree/v1.0.0), which I
+[v1.0.0](https://github.com/ifd3f/astrid.tech/tree/v1.0.0), which I
 considered the first "complete" version of my site! (spoiler alert: the site is
 _never_ complete)
 

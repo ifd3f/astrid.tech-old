@@ -85,7 +85,7 @@ digraph "The server infrastructure end up looking something like this." {
         label = "Github"
         labeljust = l
         rank = 2
-        ghpages[label = "astridyu.github.io" shape=component]
+        ghpages[label = "ifd3f.github.io" shape=component]
     }
 
     {

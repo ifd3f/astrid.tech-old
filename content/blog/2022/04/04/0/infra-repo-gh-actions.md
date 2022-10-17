@@ -17,14 +17,14 @@ sucks, but hey, it's free. That's why I use it to build the configs for
 
 I had some decent CI pipelines set up for it, but unfortunately they weren't very reliable. So I spent the weekend trying to improve it. Here is a summary of all
 the horrible hacks I ended up using along the way.
-[For reference, here is a permalink to my workflows directory at the time of writing.](https://github.com/astridyu/infra/tree/ccc968dc1d8e494b64b6f2a3827d712f2a259812/.github/workflows)
+[For reference, here is a permalink to my workflows directory at the time of writing.](https://github.com/ifd3f/infra/tree/ccc968dc1d8e494b64b6f2a3827d712f2a259812/.github/workflows)
 
 ## 1. Dynamic job matrices for dynamic amounts of fun
 
 ![MATRIX (decompositions) such as QR, Jordan, SVD, Eigen, and Cholesky. Meme by @kareem_carr](./matrix.jpg)
 
 Here is a job spec from my
-[original pipeline](https://github.com/astridyu/infra/blob/70007f6d9b67f817dfa36249fdd53333ed5dd819/.github/workflows/nix-flake-check.yml):
+[original pipeline](https://github.com/ifd3f/infra/blob/70007f6d9b67f817dfa36249fdd53333ed5dd819/.github/workflows/nix-flake-check.yml):
 
 ```yaml
 nixos-build:
@@ -183,7 +183,7 @@ built at once. That makes my pipeline look like this.
 ### The actual matrix generation code
 
 I generate the `matrix.json` using
-[the Nix derivation shown here](https://github.com/astridyu/infra/blob/ccc968dc1d8e494b64b6f2a3827d712f2a259812/pkgs/gh-ci-matrix/default.nix).
+[the Nix derivation shown here](https://github.com/ifd3f/infra/blob/ccc968dc1d8e494b64b6f2a3827d712f2a259812/pkgs/gh-ci-matrix/default.nix).
 The reason why I chose to generate it in Nix rather than with some convoluted
 CLI command involving `nix flake show --json` and `jq` is because it's obviously
 a lot easier to test.
@@ -381,7 +381,7 @@ trigger-checks:
     sha: ${{ needs.version-bump.outputs.sha }}
 ```
 
-[Here is the flake bump workflow after all these changes.](https://github.com/astridyu/infra/blob/01ac0240072e3e40515f0b2882aa6ffc273ebbe2/.github/workflows/periodic-bump.yml)
+[Here is the flake bump workflow after all these changes.](https://github.com/ifd3f/infra/blob/01ac0240072e3e40515f0b2882aa6ffc273ebbe2/.github/workflows/periodic-bump.yml)
 
 ![The bump versions pipeline.](./bump-workflow-call.png)
 

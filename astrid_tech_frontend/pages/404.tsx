@@ -107,7 +107,7 @@ const NotFoundPage: FC<InferGetStaticPropsType<typeof getStaticProps>> = ({
         {suggestions ? (
           <NotFoundPageContents
             suggestions={suggestions}
-            bugsURL="https://github.com/astridyu/astrid.tech/issues"
+            bugsURL="https://github.com/ifd3f/astrid.tech/issues"
           />
         ) : null}
       </Container>

@@ -52,7 +52,7 @@ will improve on some of the user-facing website features as well.
 
 - And finally, as always, bugfixes when I find them. Or, when _you_ find them
   and report them to
-  [the issues page](https://github.com/astridyu/astrid.tech/issues).
+  [the issues page](https://github.com/ifd3f/astrid.tech/issues).
 
 ## Conclusion
 

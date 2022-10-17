@@ -169,8 +169,8 @@ export const github: HCardProperty = {
     </>
   ),
   children: (
-    <a className="u-url" rel="me" href="https://github.com/astridyu">
-      astridyu
+    <a className="u-url" rel="me" href="https://github.com/ifd3f">
+      ifd3f
     </a>
   ),
 };
@@ -269,8 +269,8 @@ export const twitter: HCardProperty = {
     </>
   ),
   children: (
-    <a className="u-url" rel="me" href="https://twitter.com/astralbijection">
-      @astralbijection
+    <a className="u-url" rel="me" href="https://twitter.com/ifd3f">
+      @ifd3f
     </a>
   ),
 };

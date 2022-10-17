@@ -112,8 +112,8 @@ Then, I made a quick-and-dirty test webapp by essentially taking
 adding some custom GLTF models downloaded from
 [Sketchfab](https://sketchfab.com), then modifying the code to point to those
 models.
-[My code is located here](https://github.com/astridyu/ar-experiment), and
-[the webapp is located here](https://astridyu.github.io/ar-experiment/).
+[My code is located here](https://github.com/ifd3f/ar-experiment), and
+[the webapp is located here](https://ifd3f.github.io/ar-experiment/).
 
 ![The result of my own AR webapp. I have become the steampunk mage GF I always wanted to be.](./custom-gltfs.png)
 

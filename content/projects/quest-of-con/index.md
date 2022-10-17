@@ -15,7 +15,7 @@ tags:
   - game-design
   - under-construction # TODO add info about terrain generator
 url: null
-source: [https://github.com/astridyu/Quest-Of-Con]
+source: [https://github.com/ifd3f/Quest-Of-Con]
 thumbnail: ./game-screenshot.png
 ---
 

@@ -10,7 +10,7 @@ tags:
   - biohacking
   - augmented-reality
 source:
-  - https://github.com/astridyu/armqr
+  - https://github.com/ifd3f/armqr
 thumbnail: ./thumbnail.jpg
 ---
 

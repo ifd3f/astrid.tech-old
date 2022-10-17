@@ -12,7 +12,7 @@ tags:
   - css
   - website
   - under-construction
-url: https://astridyu.github.io/Interactive-PID/
-source: [https://github.com/astridyu/Interactive-PID]
+url: https://ifd3f.github.io/Interactive-PID/
+source: [https://github.com/ifd3f/Interactive-PID]
 thumbnail: ./chart.png
 ---
