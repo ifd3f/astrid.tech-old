@@ -46,7 +46,6 @@ made to solve that issue.
 - Blog, translated from Markdown
 - Comments on blog and project pages
 - Pie chart of open source licenses
-- A resume
 
 ## Design Details
 

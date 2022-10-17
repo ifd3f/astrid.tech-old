@@ -41,9 +41,7 @@ const about = [
   vs.chinese,
   vs.pronouns,
   vs.hobbies,
-  vs.occupation,
   vs.timezone,
-  vs.phone,
   vs.email,
   vs.birthday,
   vs.linux,
@@ -52,15 +50,11 @@ const about = [
 
 const identities = [
   vs.website,
-  vs.facebook,
   vs.instagram,
   vs.github,
   vs.hackaday,
-  vs.linkedin,
-  vs.mastodon,
   vs.matrix,
   vs.twitter,
-  vs.indieweb,
   vs.thingiverse,
   vs.reddit,
 ];

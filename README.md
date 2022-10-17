@@ -2,7 +2,7 @@
 
 ![Deployment status](https://github.com/Plenglin/astrid.tech/workflows/Deploy/badge.svg?branch=main)
 
-This website contains my blog, resume, and project portfolio. See the site live at [astrid.tech](https://astrid.tech)!
+This website contains my blog and project portfolio. See the site live at [astrid.tech](https://astrid.tech)!
 
 Additionally, see its sister repo, the [infra repo](https://github.com/astridyu/infrastructure) for the configurations that deploy it.
 

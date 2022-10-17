@@ -34,10 +34,9 @@
       in rec {
         packages = { inherit (pkgs) at-upload-cli; };
 
-        devShells.default = devShells.legacy;
-
-        devShells.legacy = pkgs.mkShell {
-          nativeBuildInputs = with pkgs; [
+        devShells.default = with pkgs; mkShell {
+          nativeBuildInputs = [
+            autoreconfHook
             cargo
             curl
             docker
@@ -52,6 +51,8 @@
             at-upload-cli
             nodePackages.prettier
           ];
+
+          LD_LIBRARY_PATH = lib.makeLibraryPath [ libpng glibc mlib zlib ];
         };
 
         devShells.content = pkgs.mkShell {

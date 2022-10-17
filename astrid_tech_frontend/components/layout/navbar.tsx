@@ -9,7 +9,6 @@ export type NavBarLinks =
   | "home"
   | "projects"
   | "blog"
-  | "resume"
   | "now"
   | "about";
 
@@ -84,9 +83,6 @@ const MainNavbar: FC<MainNavbarProps> = ({ currentLocation, fixed }) => {
 
         <NavbarSeparator />
 
-        <GNavLink to="/resume" active={currentLocation == "resume"}>
-          Resume
-        </GNavLink>
         <GNavLink to="/now" active={currentLocation == "now"}>
           Now
         </GNavLink>

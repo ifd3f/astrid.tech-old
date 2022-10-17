@@ -5,18 +5,15 @@ import {
   FaBirthdayCake,
   FaCubes,
   FaDice,
-  FaFacebook,
   FaGlobe,
   FaInstagram,
   FaLinkedin,
-  FaMastodon,
   FaReddit,
   FaTwitter,
 } from "react-icons/fa";
 import { FiDisc } from "react-icons/fi";
-import { GiPhone } from "react-icons/gi";
-import { GoMarkGithub, GoOrganization } from "react-icons/go";
-import { SiArchlinux, SiHackaday, SiMatrix, SiNixos } from "react-icons/si";
+import { GoMarkGithub } from "react-icons/go";
+import { SiHackaday, SiMatrix, SiNixos } from "react-icons/si";
 
 export type HCardProperty = {
   key: string;
@@ -42,20 +39,6 @@ export const chinese: HCardProperty = {
     <span lang="zh" className="p-name">
       余茂琦
     </span>
-  ),
-};
-
-export const occupation: HCardProperty = {
-  key: "occupation",
-  title: (
-    <>
-      <GoOrganization /> Occupation
-    </>
-  ),
-  children: (
-    <>
-      CS Student @ <a href="https://calpoly.edu">Cal Poly</a>
-    </>
   ),
 };
 
@@ -122,20 +105,6 @@ export const email: HCardProperty = {
   ),
 };
 
-export const phone: HCardProperty = {
-  key: "phone",
-  title: (
-    <>
-      <GiPhone title="Phone" /> Phone
-    </>
-  ),
-  children: (
-    <a className="u-phone" href="tel:+18052705368">
-      +1 ‪(805) 270-5368‬
-    </a>
-  ),
-};
-
 export const linux: HCardProperty = {
   key: "operating-system",
   title: (
@@ -145,16 +114,11 @@ export const linux: HCardProperty = {
   ),
   children: (
     <>
-      <a className="u-os" href="https://archlinux.org">
-        <SiArchlinux title="A" />
-        <span style={{ fontSize: 0 }}>A</span>rch btw
-      </a>{" "}
-      and{" "}
       <a className="u-os" href="https://nixos.org">
         Nix
         <SiNixos title="O" />
         <span style={{ fontSize: 0 }}>O</span>S
-      </a>
+      </a> btw
     </>
   ),
 };
@@ -193,24 +157,6 @@ export const website: HCardProperty = {
   children: (
     <a href="https://astrid.tech" rel="me" className="u-url">
       astrid.tech
-    </a>
-  ),
-};
-
-export const facebook: HCardProperty = {
-  key: "facebook",
-  title: (
-    <>
-      <FaFacebook title="Facebook" /> Facebook
-    </>
-  ),
-  children: (
-    <a
-      className="u-url"
-      rel="me"
-      href="https://www.facebook.com/astral.bijection"
-    >
-      Astrid Yu
     </a>
   ),
 };
@@ -256,35 +202,7 @@ export const instagram: HCardProperty = {
       rel="me"
       href="https://www.instagram.com/astral.bijection"
     >
-      Astrid Yu
-    </a>
-  ),
-};
-
-export const linkedin: HCardProperty = {
-  key: "linkedin",
-  title: (
-    <>
-      <FaLinkedin title="LinkedIn" /> LinkedIn
-    </>
-  ),
-  children: (
-    <a className="u-url" rel="me" href="https://linkedin.com/in/astrid-yu">
-      astrid-yu
-    </a>
-  ),
-};
-
-export const mastodon: HCardProperty = {
-  key: "mastodon",
-  title: (
-    <>
-      <FaMastodon title="Mastodon" /> Mastodon
-    </>
-  ),
-  children: (
-    <a className="u-url" rel="me" href="https://tech.lgbt/@astralbijection">
-      @astralbijection@tech.lgbt
+      astral.bijection
     </a>
   ),
 };
@@ -303,20 +221,6 @@ export const matrix: HCardProperty = {
       href="https://matrix.to/#/@astralbijection:matrix.org"
     >
       @astralbijection:matrix.org
-    </a>
-  ),
-};
-
-export const indieweb: HCardProperty = {
-  key: "indieweb",
-  title: (
-    <>
-      <FaGlobe title="IndieWeb" /> IndieWeb
-    </>
-  ),
-  children: (
-    <a className="u-url" rel="me" href="https://indieweb.org/User:Astrid.tech">
-      astrid.tech
     </a>
   ),
 };

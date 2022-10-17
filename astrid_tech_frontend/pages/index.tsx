@@ -27,7 +27,6 @@ const hCardValues = [
   vs.name,
   vs.pronouns,
   vs.hobbies,
-  vs.occupation,
   vs.email,
   vs.linux,
   vs.website,
