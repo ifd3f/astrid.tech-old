@@ -88,12 +88,6 @@ export const BlogPostPage: FC<BlogPostPageProps> = ({ post }) => {
         >
           <ContentDisplay>{post.content}</ContentDisplay>
         </LongformLayout>
-        <Container>
-          <section id="comments">
-            <h2>Comments</h2>
-            <CommentSection slug={slug} />
-          </section>
-        </Container>
       </Layout>
     </ProjectContext.Provider>
   );
