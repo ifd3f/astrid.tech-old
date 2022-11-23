@@ -16,7 +16,7 @@ to save the day.
 
 <!-- excerpt -->
 
-![What my Grafana dashboard currently looks like. Resist... the... urge... to... make... "Look at this graph"... references...](./everything-dashboard.png)
+![What my Grafana dashboard currently looks like. Resist... the... urge... to... make... "Look at this graph"... references...](https://s3.us-west-000.backblazeb2.com/nyaabucket/d0e58a4862af807e76fcbc62f089302114c56ea0eafa7af9e340d0fb74042033/everything-dashboard.png)
 
 ## Deploying my monitoring and redeploying my logging
 
@@ -109,10 +109,10 @@ I attended, someone suggested to me that I could somehow have a live feed of my
 connection, I can take a picture every few minutes and upload it to my server.
 
 So, I added a new endpoint to my API server, then wrote a
-[small script](https://github.com/ifd3f/printer_image_snapper) that
-does exactly that. It scrapes data from my OctoPrint instance's API, snaps a
-picture from the exposed MJPG-streamer endpoint, and sends a PATCH request to my
-API server with all the information. I
+[small script](https://github.com/ifd3f/printer_image_snapper) that does exactly
+that. It scrapes data from my OctoPrint instance's API, snaps a picture from the
+exposed MJPG-streamer endpoint, and sends a PATCH request to my API server with
+all the information. I
 [Dockerized it](https://hub.docker.com/repository/docker/ifd3f/printer_image_snapper)
 using `python3.9-alpine` for minimum image size, and created a CronJob for my
 cluster that runs the script every 10 minutes:[^1]
@@ -171,12 +171,12 @@ just went to bed.
 When I woke up the next morning on Wednesday, I saw the weirdest thing happen on
 Grafana.
 
-![What's with these spikes?](repeated-spikes.png)
+![What's with these spikes?](https://s3.us-west-000.backblazeb2.com/nyaabucket/fb4dcb5408d74846e88a066a9422ac097c27e79869df0d9750738373cc8c1d5e/repeated-spikes.png)
 
 There were these strange, very noticeable spikes in memory consumption every few
 minutes. Worse, they seemed to be 1 GB tall!
 
-![One jiggabyte tall!](1gb-spikes.png)
+![One jiggabyte tall!](https://s3.us-west-000.backblazeb2.com/nyaabucket/abe15069b54f451b8ea2dbd588c301d8440b7d1e3a9117902c49e693ff7951ae/1gb-spikes.png)
 
 How bad could my Docker image be? It runs Python, which isn't exactly a
 lightweight runtime, but it wouldn't be 1 GB either. It stores a very low-res
@@ -186,7 +186,7 @@ extra data.
 My mom's old laptop was also running at 18 load (it has 4 cores, mind you)
 because Elasticsearch got assigned to it, but I didn't pay it much mind.
 
-![what the fuck](massive-load.png)
+![what the fuck](https://s3.us-west-000.backblazeb2.com/nyaabucket/90870aaeb82f96aa905151060c754d5ee5a56d2bb320f9ef6c3aa846e7f16621/massive-load.png)
 
 I continued debugging my script that afternoon, checking for, well, honestly, I
 don't know what would be causing it. In a stroke of bad luck, Docker Hub
@@ -196,7 +196,7 @@ builds, and not because I wrote inefficient code. Here's an image from my
 Yes, those are 177-minute queue times and 252-minute build times. But that had
 nothing to do with my problem, it only made debugging and testing cycles harder.
 
-![what the actual fuck](long-build-times.png)
+![what the actual fuck](https://s3.us-west-000.backblazeb2.com/nyaabucket/72d870b2b901b20580efadf216e6fde4a3ace80080762b0ba4f56e3aa141e210/long-build-times.png)
 
 I did eventually get the script working (see the second image
 [here](https://astrid.tech/projects/quadfrost-leds/) for now, but I will make a
@@ -208,12 +208,12 @@ OOM on my mom's old laptop, wasn't it? So, I added a new graph to my dashboard
 called "Poorly-Terminated Containers." It's a heatmap of container terminations
 that aren't because of `Completed`.
 
-![It's like a shitty spectrogram!](poorly-terminated-containers.png)
+![It's like a shitty spectrogram!](https://s3.us-west-000.backblazeb2.com/nyaabucket/3e7a7567415db2024c84ce9ac5712660f6c165a4aa5449d6cc838e4b3a0035ec/poorly-terminated-containers.png)
 
 According to this graph, my printer paparazza stopped crashing halfway through
 the afternoon when I fixed it, but my logging namespace continued doing so.
 
-![It's a crash spectrogram!](correlation-time.png)
+![It's a crash spectrogram!](https://s3.us-west-000.backblazeb2.com/nyaabucket/09332dffe3df078058e9f703ebab9e19226e904e6d3d542c3997583abd033bdb/correlation-time.png)
 
 And sure enough, every one of these crashes seems to correspond with that 1GB
 drop in memory usage.

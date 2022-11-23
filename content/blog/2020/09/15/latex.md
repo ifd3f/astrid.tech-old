@@ -2,7 +2,7 @@
 title: The possibility of using LaTeX to take notes for Physics class
 date: 2020-09-15
 description: When LaTeX is your hammer...
-thumbnail: ./svg-in-latex.png
+thumbnail: https://s3.us-west-000.backblazeb2.com/nyaabucket/960aed3807b3a827195d2cc04456ceca6c8c9b7aed20d484da65f87660a1e593/svg-in-latex.png
 tags:
   - notes
   - note-taking
@@ -133,13 +133,13 @@ and inside `week1.tex`, declare a
 
 and voila!
 
-![A crudely-drawn free-body diagram of a spring inside of a LaTeX book.](./svg-in-latex.png)
+![A crudely-drawn free-body diagram of a spring inside of a LaTeX book.](https://s3.us-west-000.backblazeb2.com/nyaabucket/960aed3807b3a827195d2cc04456ceca6c8c9b7aed20d484da65f87660a1e593/svg-in-latex.png)
 
 You might notice that the image text exactly matches with the $\LaTeX$ font!
 This is because the `svg` package actually treats that text as $\LaTeX$ code.
 Here's how it looks in Inkscape:
 
-![The same diagram, but inside Inkscape. There are dollar signs around the words to tell LaTeX to compile them into equations.](./inkscape-dollar.png)
+![The same diagram, but inside Inkscape. There are dollar signs around the words to tell LaTeX to compile them into equations.](https://s3.us-west-000.backblazeb2.com/nyaabucket/8770e96eaa911f18f55c72b8392462b53c86d60d87cd2df7066d1afe9abba852/inkscape-dollar.png)
 
 A very very small thing with it is that it generates even more intermediate
 files, so you just have to add to your `.gitignore`:
@@ -154,7 +154,7 @@ files, so you just have to add to your `.gitignore`:
 With this, we now have ourselves a fully set-up workflow for taking lecture
 notes in $\LaTeX$ and Inkscape!
 
-![How the result looks](./notes-joined.png)
+![How the result looks](https://s3.us-west-000.backblazeb2.com/nyaabucket/f1acbceea2c3c42f912ecb0d499f1ba9deef624996fbcfb027ce49c13a5fc9ab/notes-joined.png)
 
 I have to admit, since $\LaTeX$ is somewhat verbose, this is a bit of a slow
 method of note-taking. You won't be able to get as much down as, say, Markdown.

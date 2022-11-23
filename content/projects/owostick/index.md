@@ -84,7 +84,7 @@ into it. As such, the motor tends to warm up when input power is maximized.
 The Android app has a very simple interface: select device, possibly select
 server, and control wand intensity. It is written in Kotlin.
 
-![The android app.](./android-app.png)
+![The android app.](https://s3.us-west-000.backblazeb2.com/nyaabucket/1f8d053e051ef8d176fd5e760627c2c533e7b3ebd34cdf4ad3c3ed6da8ae68f3/android-app.png)
 
 ### Command Relay
 

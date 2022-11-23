@@ -21,7 +21,7 @@ keywords:
 url: null
 featured: true
 source: [https://github.com/ifd3f/Hair-Net]
-thumbnail: ./thumbnail.png
+thumbnail: https://s3.us-west-000.backblazeb2.com/nyaabucket/8f851ed6c76b414420e5f088b13081fe378bdc5640e749e10e622e280c293f21/thumbnail.png
 highlights:
   - Designed and trained a convolutional neural network using Python and
     Tensorflow.
@@ -32,7 +32,7 @@ highlights:
     webcam.
 ---
 
-![Results of the CNN on a single image](./thumbnail.png)
+![Results of the CNN on a single image](https://s3.us-west-000.backblazeb2.com/nyaabucket/8f851ed6c76b414420e5f088b13081fe378bdc5640e749e10e622e280c293f21/thumbnail.png)
 
 A convolutional neural network (CNN) that can detect a person's face and
 distinguish between their face and their hair. It was successfully able to
@@ -63,7 +63,7 @@ size using convolutional and pooling layers. When it's very small (7x7) it
 performs scoring with the center layers. In the final layers, it rescales the
 scores back to original size by adding data gathered from the shrinking.
 
-![From "Supervised Classification of Multisensor Remotely Sensed Images Using a Deep Learning Framework."](./fcn.png)
+![From "Supervised Classification of Multisensor Remotely Sensed Images Using a Deep Learning Framework."](https://s3.us-west-000.backblazeb2.com/nyaabucket/db3da3d0605634de3fc26de77fec34837ec8aa2b780bcbb02eefc60384ff3b59/fcn.png)
 
 [^cite1]:
     "Fully convolutional neural network architecture (FCN-8)" by Piramanayagam
@@ -75,8 +75,8 @@ scores back to original size by adding data gathered from the shrinking.
 There were many issues encountered in some of the earlier trained networks, but
 they were easily solved by training on a synthetic dataset generated from my
 training data.
-[`util.py`](https://github.com/ifd3f/Hair-Net/blob/master/util.py)
-contains most of the code used to do this.
+[`util.py`](https://github.com/ifd3f/Hair-Net/blob/master/util.py) contains most
+of the code used to do this.
 
 - **Sometimes the neural network would detect a person in an image of a wall, a
   _false positive_** - I took some random images without people's faces in them

@@ -12,7 +12,7 @@ tags:
 Look at all of these single-board computers lying around. What are they even
 doing? _Literally nothing._ Let's put them to good use.
 
-![Two Pi 3's, one Pi 2, and one Orange Pi one](./raw-pis.jpeg)
+![Two Pi 3's, one Pi 2, and one Orange Pi one](https://s3.us-west-000.backblazeb2.com/nyaabucket/3f721847d68f2bcd04e7e8c99cf73a05bcef9507939ca47b5b85a4f174fcbf22/raw-pis.jpeg)
 
 ## Raspberry Pi SD Cards
 
@@ -103,7 +103,7 @@ k3os-3502    Ready      <none>   3h13m   v1.19.5+k3s2
 
 Please ignore the inconsistent dashing scheme on the zerg\* series.
 
-![Look at these SBC's!](./nodezzz.jpeg)
+![Look at these SBC's!](https://s3.us-west-000.backblazeb2.com/nyaabucket/b24d80f4eef5f97144127493e2761625a1a8f18f26ec012a99ca3ca0b7fef972/nodezzz.jpeg)
 
 Now what are they running? ...unfortunately, still, absolutely nothing. Once
 again, my k3s cluster is a solution looking for a problem.

@@ -15,14 +15,14 @@ tags:
   - under-construction
 url: null
 source: [https://github.com/ifd3f/Articulated-Tassel]
-thumbnail: ./td-thumb.jpg
+thumbnail: https://s3.us-west-000.backblazeb2.com/nyaabucket/f8fe7761c204048a2d9949d7073e5008b9b2e226e9bc2e7f9ff881b25b8b1618/td-thumb.jpg
 ---
 
 This project was a joke that went too far.
 
 Please don't mind that horrible haircut, I had a tomboy phase back then.
 
-![A closeup of the robotic tassel spinner.](./td.jpg)
+![A closeup of the robotic tassel spinner.](https://s3.us-west-000.backblazeb2.com/nyaabucket/92090aaaaec1c8549725afbc5a2b6db4fce53decfbbc1cb34563cfcc95003b98/td.jpg)
 
 ## Motivation
 

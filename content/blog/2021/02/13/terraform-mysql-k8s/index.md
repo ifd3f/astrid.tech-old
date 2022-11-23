@@ -24,9 +24,9 @@ backend.
 Firefly uses MySQL as its database backend, so I've spun up an LXC container
 built from TurnKeyLinux's excellent MySQL container image through Proxmox.
 
-![The downloadable TurnKeyLinux MySQL LXC image](./turnkey-mysql.png)
+![The downloadable TurnKeyLinux MySQL LXC image](https://s3.us-west-000.backblazeb2.com/nyaabucket/c006194c13cd7b9df4913e00a3c5ebe10ff01137666db05afede38e84a3932a8/turnkey-mysql.png)
 
-![The LXC container running.](./proxmox-container.png)
+![The LXC container running.](https://s3.us-west-000.backblazeb2.com/nyaabucket/5652db4a4475cd266ad8e9eeac08d3ec47e4ade188e59f8093a7eadcb1dbfa09/proxmox-container.png)
 
 Unfortunately, I didn't automate this step; I just manually provisioned it
 through the web UI like a pleb. However, I will try to automate it using
@@ -346,7 +346,7 @@ our secrets into its environment variables with a `envFrom[].secretRef` like so:
 After applying this manifest and its associated service and ingress, everything
 seems to work!
 
-![It't aliiiiiive!](./firefly-works.png)
+![It't aliiiiiive!](https://s3.us-west-000.backblazeb2.com/nyaabucket/2f0bfcac87a2ece05f4a66c8297d6de82bc52ee6150e6a61b035168a37fb7391/firefly-works.png)
 
 ## What next?
 

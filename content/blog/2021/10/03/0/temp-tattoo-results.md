@@ -10,7 +10,7 @@ Continuing from my
 [last post about the QR code tattoos](/2021/09/22/0/qr-tattoo), my package of
 temporary tattoos arrived from StickerYou on Thursday:
 
-![The package, opened and displayed on my table.](./the-package.jpg)
+![The package, opened and displayed on my table.](https://s3.us-west-000.backblazeb2.com/nyaabucket/6ea74dcfe3744780821cd21e62a0f1d894798eb7e033cc5e12c6b241d586af99/the-package.jpg)
 
 So, I eagerly I cut out the tattoos and pasted them onto my skin.
 
@@ -29,25 +29,25 @@ where u/bgrnbrg placed his. Unfortunately, as you might be able to see from the
 image, it was way too big. It ended up wrapping around my skin somewhat, and was
 therefore unable to be scanned.
 
-![The 2.75" tattoo on my right forearm.](./attempt-1.jpg)
+![The 2.75" tattoo on my right forearm.](https://s3.us-west-000.backblazeb2.com/nyaabucket/f9d5745d8e50396152b5731d18f66d56d6d4af594ed79363b707bea19bda4d6c/attempt-1.jpg)
 
 I removed it (I did not need baby oil, actually, I could just peel and rub it
 off), then tried on the 2" one. That fit quite well, and was able to scan.
 
-![The 2" tattoo on my right forearm, alongside a 1" AR marker.](./attempt-2-ar.jpg)
+![The 2" tattoo on my right forearm, alongside a 1" AR marker.](https://s3.us-west-000.backblazeb2.com/nyaabucket/602be674ea145fbe3aa6a806692ce24d4ad790e541a3392e9fad73271c2472f0/attempt-2-ar.jpg)
 
-![A closeup of the tattoos.](./attempt-2-close.jpg)
+![A closeup of the tattoos.](https://s3.us-west-000.backblazeb2.com/nyaabucket/15493e851c3023bb235bfa4fa926e567ab1533bb5f458a8416be14030f9983b3/attempt-2-close.jpg)
 
 I also applied an AR marker to my skin, as you can see. On the
 [AR playground](https://nicolocarpignoli.github.io/ar-playground/index.html), it
 worked quite well!
 
-![A screenshot of the AR marker tattoo in the example AR playground.](./ar-works.png)
+![A screenshot of the AR marker tattoo in the example AR playground.](https://s3.us-west-000.backblazeb2.com/nyaabucket/055672f04b282fe6edcfc0ff02b4341fad06ad6b33d222d732d187f518ec827b/ar-works.png)
 
 As a last test, I tried on the 1.75" tattoo at the center of my left forearm,
 approximately where u/Odd-Care placed his:
 
-![The 1.75" tattoo on my left forearm.](./attempt-3.jpg)
+![The 1.75" tattoo on my left forearm.](https://s3.us-west-000.backblazeb2.com/nyaabucket/ac398edbdb422f0ee8bdfd8c77c9ecae93a08bafa1385254fc09d89d6386f838/attempt-3.jpg)
 
 Again, this was able to scan perfectly fine.
 
@@ -105,17 +105,16 @@ arm, too!
 The AR playground was not enough, so I went further. Last night, added more AR
 markers, but to my hands this time.
 
-![AR markers arranged around my hands.](./more-markers.jpg)
+![AR markers arranged around my hands.](https://s3.us-west-000.backblazeb2.com/nyaabucket/55836d778e015cb4db783426c8a67649e46ed2c25b99cd084677b8609aed29bd/more-markers.jpg)
 
 Then, I made a quick-and-dirty test webapp by essentially taking
 [Nicolo Carpignoli's code](https://github.com/nicolocarpignoli/nicolocarpignoli.github.io/tree/master/ar-playground),
 adding some custom GLTF models downloaded from
 [Sketchfab](https://sketchfab.com), then modifying the code to point to those
-models.
-[My code is located here](https://github.com/ifd3f/ar-experiment), and
+models. [My code is located here](https://github.com/ifd3f/ar-experiment), and
 [the webapp is located here](https://ifd3f.github.io/ar-experiment/).
 
-![The result of my own AR webapp. I have become the steampunk mage GF I always wanted to be.](./custom-gltfs.png)
+![The result of my own AR webapp. I have become the steampunk mage GF I always wanted to be.](https://s3.us-west-000.backblazeb2.com/nyaabucket/1507f82e959d913a349034f8e86fb651428e1c4761c32fe1e0104fe6155f7dba/custom-gltfs.png)
 
 ## Wearing off
 

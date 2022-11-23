@@ -129,7 +129,7 @@ plt.colorbar(ax=axs)
 plt.show()
 ```
 
-![png](output_3_0.png)
+![png](https://s3.us-west-000.backblazeb2.com/nyaabucket/4ac3dfc78fc75870acb3c0a809e00594b6cb47c6b3c66323d64756e542376adb/output_3_0.png)
 
 A couple of big things stand out right here:
 
@@ -161,7 +161,7 @@ plt.colorbar()
 plt.show()
 ```
 
-![png](output_5_0.png)
+![png](https://s3.us-west-000.backblazeb2.com/nyaabucket/2afd4cd8562f46674900bfe706c154de43978b68bd6227e37233ca101f1f1b78/output_5_0.png)
 
 Between New1 and New2, all of the data looks identical except for a tiny sliver
 at the end. Let's confirm this by listing all the differing bytes.
@@ -248,7 +248,7 @@ plt.colorbar(ax=axs)
 plt.show()
 ```
 
-![png](output_9_0.png)
+![png](https://s3.us-west-000.backblazeb2.com/nyaabucket/b2b3fa3a213fc678c9b7a12a3785dbb2e57b4a39aca3072363da66a9fb4952b2/output_9_0.png)
 
 Interestingly, the entire first half of the ROM looks the same! That would
 confirm the A/B software update hypothesis. Admittedly, I didn't update the
@@ -293,7 +293,7 @@ plt.colorbar(ax=axs)
 plt.show()
 ```
 
-![png](output_13_0.png)
+![png](https://s3.us-west-000.backblazeb2.com/nyaabucket/cfc34782f0ec451fc4f21a9276863eadee0f99c7fd3a076db23f140099532483/output_13_0.png)
 
 There appears to be some fascinating structure to the images, but it might not
 be captured by a visualization; let's actually look at the bytes themselves.
@@ -440,7 +440,7 @@ plt.show()
     BUND A length = 891468 = 0xd9a4c
     BUND B length = 873952 = 0xd55e0
 
-![png](output_24_1.png)
+![png](https://s3.us-west-000.backblazeb2.com/nyaabucket/d4d5e1abdd01d224dd934b2f927352ab7baacf0d0c0902fa4ba1d59a637a1855/output_24_1.png)
 
 We now have our two carved BUNDs! If we wanted to, we could dump them to a file
 like so.
@@ -508,7 +508,7 @@ plt.show()
     Same bytes: 22641
     97.4603% difference
 
-![png](output_26_1.png)
+![png](https://s3.us-west-000.backblazeb2.com/nyaabucket/d491b24aae5032faca86099573558288044889ff4f0de3156704224ced24766c/output_26_1.png)
 
 ### OSINT of what the hell BUND means
 

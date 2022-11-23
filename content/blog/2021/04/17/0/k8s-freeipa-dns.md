@@ -80,7 +80,7 @@ This step can be done via UI or CLI, but I did it via UI.
 
 First, navigate to your DNS zone's settings page.
 
-![How the top of your UI should look](./dns-settings.png)
+![How the top of your UI should look](https://s3.us-west-000.backblazeb2.com/nyaabucket/cce4cf3719a35c65091276c247c2cb32bf57e77646b88579df79ba5dd7f2356f/dns-settings.png)
 
 Scroll down to where it says "Dynamic update" and set that to True.
 Additionally, add the following line[^guide-dev-1] to "BIND update policy,"
@@ -100,7 +100,7 @@ grant keyname subdomain s.astrid.tech ANY;
 
 Now, your UI should look something like this:
 
-![How your UI should look after making these changes](./ddns-and-bind-update-policy.png)
+![How your UI should look after making these changes](https://s3.us-west-000.backblazeb2.com/nyaabucket/eb5168deb67e3469bc120907fc3b0260158fb62724308b7e6dff2a96aeac8ad9/ddns-and-bind-update-policy.png)
 
 Save your changes, and anyone with that secret key can add anything to that
 subdomain.
@@ -152,7 +152,7 @@ stringData:
 
 And that's it! You should soon see DNS records show up in FreeIPA automatically.
 
-![FreeIPA DNS, but with automatically updated DNS settings](./dns-complete.png)
+![FreeIPA DNS, but with automatically updated DNS settings](https://s3.us-west-000.backblazeb2.com/nyaabucket/15c81a3072619a66764614ebe4e09843a42a0874a6994163f3456e9225771c7a/dns-complete.png)
 
 For debugging, you may want to check external DNS's logs using
 `kubectl logs [podname]`.

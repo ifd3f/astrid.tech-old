@@ -108,9 +108,9 @@ In the spirit of always improving oneself, I need a new project to waste my
 spare time on! I've thought up of some potential ideas.
 
 - I still have ideas for various improvements to this website collecting dust on
-  my [Kanban board](https://github.com/ifd3f/astrid.tech/projects/1).
-  However, I kinda want to take a bit of a break from developing this website
-  and do some other stuff first.
+  my [Kanban board](https://github.com/ifd3f/astrid.tech/projects/1). However, I
+  kinda want to take a bit of a break from developing this website and do some
+  other stuff first.
 - Now that I'm quarantined at home rather than at school, I have a 3D printer
   and electronics components at my disposal. I kinda want to do that stuff
   again...

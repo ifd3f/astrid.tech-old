@@ -34,12 +34,14 @@ provide the inspiration for mine.
 - [u/bgrnbrg](https://www.reddit.com/user/bgrnbrg/) made a
   [5-year update post on his tattoo](https://www.reddit.com/r/tattoofade/comments/7cyk6f/a_5_year_update_on_my_qr_tattoo/)
   about 4 years ago. It seems to still hold up, and it's certainly still
-  scannable from the images he provided. ![u/bgrnbrg's tattoo](./bgrnbrg.jpg)
+  scannable from the images he provided.
+  ![u/bgrnbrg's tattoo](https://s3.us-west-000.backblazeb2.com/nyaabucket/4d37bec5f52d08760234b341d3088c9cd1f868d35b1be732620310f023a60f7f/bgrnbrg.jpg)
 
 - [u/Odd-Care](https://www.reddit.com/user/Odd-Care/) got
   [this tattoo](https://www.reddit.com/r/tattoos/comments/g1jnbw/qr_code_tattoo_healed_done_a_couple_months_ago_by/),
   which also links to his own page, which then links to the NBA Raptors vs
-  Warriors video on YouTube. ![u/Odd-Care's tattoo](./Odd-Care.jpg)
+  Warriors video on YouTube.
+  ![u/Odd-Care's tattoo](https://s3.us-west-000.backblazeb2.com/nyaabucket/2bd6c8567350d106064691258d46797a58ae47bf825e1a4e98162046d324f8e5/Odd-Care.jpg)
 
 u/bgrnbrg suggests a couple of things to make the tattoo more resillient:
 
@@ -127,7 +129,7 @@ The method described by Carpignoli's article involves putting the AR marker over
 the QR code, but since my QR code is too small, I'll simply put it to the side,
 something like this:
 
-![A large QR code next to a small AR marker](./qr-ar.png)
+![A large QR code next to a small AR marker](https://s3.us-west-000.backblazeb2.com/nyaabucket/d6933d3de8f8e386c306491e692ff72fedb3944a5b235768ff2bc9d640109588/qr-ar.png)
 
 Technically, that makes it off-center now, but it wouldn't be too hard to adjust
 the marker's its offset in the AR library.
@@ -158,7 +160,7 @@ of tattoos I want to test, they seemed to be the best deal around for what I
 want to do. Their UI was extremely laggy, buggy, and hard to use, and it took
 forever to make my tattoo sheet, but I did end up creating it:
 
-![The tattoo sheet I made.](./temporary-tattoo-sheet.png)
+![The tattoo sheet I made.](https://s3.us-west-000.backblazeb2.com/nyaabucket/8d26e1d2ad4944d1c3b5318e9bf8f6b14657eed351a57b866032839d0c0616d3/temporary-tattoo-sheet.png)
 
 It has the following objects on it:
 

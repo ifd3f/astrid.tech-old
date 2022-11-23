@@ -109,7 +109,7 @@ plt.show()
 
     Bin size: 48.828 kHz
 
-![png](freq-shift_files/freq-shift_1_1.png)
+![png](https://s3.us-west-000.backblazeb2.com/nyaabucket/f0cdd5332cca1765d334bf4082ea25a389b4e8ec824bcc6519daafe6ce8adad8/freq-shift_1_1.png)
 
 Once again, we only care about the 125-175MHz range! We don't care about
 anything outside of that! So, all those wonky sine waves I added in are
@@ -149,7 +149,7 @@ plt.xlabel('frequency (MHz)')
 plt.show()
 ```
 
-![png](freq-shift_files/freq-shift_3_0.png)
+![png](https://s3.us-west-000.backblazeb2.com/nyaabucket/ca59f95a1bea4e4c86188efe0b369578d8056f2dc061b1d84f7da6382a8cdf5a/freq-shift_3_0.png)
 
 ```python
 bp_sig = signal.sosfilt(bp_filter, received_signal)
@@ -160,7 +160,7 @@ plt.xlabel('time (us)')
 plt.show()
 ```
 
-![png](freq-shift_files/freq-shift_4_0.png)
+![png](https://s3.us-west-000.backblazeb2.com/nyaabucket/e86c6afd1645cdca75614ae8966da26598683b0b8d142d3ab8e2cf8f6e0d5985/freq-shift_4_0.png)
 
 ### Mixing for Shifting
 
@@ -178,7 +178,7 @@ plt.xlabel('time (us)')
 plt.show()
 ```
 
-![png](freq-shift_files/freq-shift_6_0.png)
+![png](https://s3.us-west-000.backblazeb2.com/nyaabucket/892287359b2a7d2aef4f797fe17fff6bee88e0744469857477f6da6a24aa41eb/freq-shift_6_0.png)
 
 ### Lowpass
 
@@ -201,7 +201,7 @@ plt.xlabel('frequency (MHz)')
 plt.show()
 ```
 
-![png](freq-shift_files/freq-shift_8_0.png)
+![png](https://s3.us-west-000.backblazeb2.com/nyaabucket/00c25406f5cdf7b207a902e9b8b5e14205e6f6f6d77f0157c43a3958829a8d15/freq-shift_8_0.png)
 
 ```python
 lp_sig = signal.sosfilt(lp_filter, mixed)
@@ -212,7 +212,7 @@ plt.xlabel('time (us)')
 plt.show()
 ```
 
-![png](freq-shift_files/freq-shift_9_0.png)
+![png](https://s3.us-west-000.backblazeb2.com/nyaabucket/02973cd9877c6f3bdecdc0a94608a7861cded122c4b78aca5de02ae15783776b/freq-shift_9_0.png)
 
 ### Decimation
 
@@ -235,7 +235,7 @@ print(f'Bin size (no pre-processing): {bin_size_0} kHz')
 print(f'Bin size (with pre-processing): {bin_size_1:02.3f} kHz')
 ```
 
-![png](freq-shift_files/freq-shift_11_0.png)
+![png](https://s3.us-west-000.backblazeb2.com/nyaabucket/309db810cf01e6f10582dec83a5a415ab969afc65cb1b9b5541fd3b0e92a7875/freq-shift_11_0.png)
 
     Bin size (no pre-processing): 48.828125 kHz
     Bin size (with pre-processing): 16.276 kHz
@@ -257,7 +257,7 @@ plt.xlabel('time (us)')
 plt.show()
 ```
 
-![png](freq-shift_files/freq-shift_13_0.png)
+![png](https://s3.us-west-000.backblazeb2.com/nyaabucket/f72cf3c2648d3c25e3c217e36733f6447fa08a9c0d27caa26f266d03ae09bf78/freq-shift_13_0.png)
 
 ## Conclusion
 

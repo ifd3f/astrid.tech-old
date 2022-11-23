@@ -14,14 +14,14 @@ tags:
 
 In [my last post](/2021/01/18/0/selfhost/) had 7 things I wanted to do. Well,
 here's a summary of everything I did so far. The
-[IaC repo is here](https://github.com/ifd3f/infra) and the last commit
-before I published this article was
+[IaC repo is here](https://github.com/ifd3f/infra) and the last commit before I
+published this article was
 [d18736](https://github.com/ifd3f/infra/tree/d18736ae4cf926c177488a07565521328ba09aee).
 
 EDIT: It has come to my attention that I'm missing a picture. Anyways, here's
 what the cluster looks like.
 
-![Hello from CyberCthulu](./cluster.jpeg)
+![Hello from CyberCthulu](https://s3.us-west-000.backblazeb2.com/nyaabucket/e708631bcc95971a830507a4224a9bf13407dfd72c6c07081e3ffadb90c3a9f2/cluster.jpeg)
 
 ## Monday 1/18: Setting up k8s and an Elastic stack
 
@@ -69,7 +69,7 @@ The next morning, I woke up at 8 AM in pain because I did have class that day.
 Before class started at 9 AM, I set up Kibana to make cool graphs from the
 MetricBeat data collected overnight.
 
-![Cool and squiggly graphs that might have meanings](./kibana.png)
+![Cool and squiggly graphs that might have meanings](https://s3.us-west-000.backblazeb2.com/nyaabucket/4ec8c43ebb7ca2bf9bfdcbcc413cd3c3027b608dc0f2dc1e6489353fcbde40ca/kibana.png)
 
 After class, I went on the the second order of business, which was setting up
 those private apps like Firefly III on Kubernetes. I successfully migrated the

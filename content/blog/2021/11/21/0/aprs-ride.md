@@ -15,7 +15,7 @@ got picked up by the W6DXW-1 digipeater in King City, KI6ETL-10 in San Jose, and
 WA6TOW-2 in Pacifica while I was in San Mateo, which is extremely puzzling.
 Perhaps just due to sheer luck.
 
-![The static map of my trip from aprs.fi](./staticmap.png)
+![The static map of my trip from aprs.fi](https://s3.us-west-000.backblazeb2.com/nyaabucket/7782ad3f22a6f0bce3bf7034792fd6c2bc5ca2e235dece3da40e2f5bd10844c4/staticmap.png)
 
 ## What happened?
 
@@ -39,7 +39,7 @@ Additionally, when I slot it in my backpack, it fits perfectly and looks
 extremely tactical, for the extra assertion of dominance. There is little reason
 to _not_ use it.
 
-![Yeah, I'm tacticool. 😎](./backpack-antenna.jpg)
+![Yeah, I'm tacticool. 😎](https://s3.us-west-000.backblazeb2.com/nyaabucket/2d51f2bffe99ac8ebf68768182e7c213403f2b2664444c137697bcf72830d409/backpack-antenna.jpg)
 
 Well, we'll see how it goes on the ride back. Perhaps I might perform some tests
 around the neighborhood with the antennas beforehand, and hope I don't get the
