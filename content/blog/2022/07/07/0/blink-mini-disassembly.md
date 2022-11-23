@@ -37,14 +37,14 @@ talk about the ▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇▇�
 three years though, the NDA will expire, so stay tuned for June 26, 2025, when
 you can read all about it, assuming I'm still blogging around then!
 
-![Look ma, I'm hacking!](./me-hacking.jpg)
+![Look ma, I'm hacking!](https://s3.us-west-000.backblazeb2.com/nyaabucket/eee41023e2b78af8e19c99736edcbdfb6d0d3e80835d5a6ab418aacf10be8d69/me-hacking.jpg)
 
 Anyways, with what I gleaned from the 20 hours of instruction and 20 hours of
 hacking, I decided that I should apply what I learned to a real device! These
 \$20 Blink Mini cameras that I bought a few months ago seemed like perfect
 victims to fuck around with!
 
-![Blink Mini camera from Amazon.](./blink-mini.jpg)
+![Blink Mini camera from Amazon.](https://s3.us-west-000.backblazeb2.com/nyaabucket/54b1f995f2ec9ed5d304f1df1ee52544152071219ea63fd05f6951d77f0eed8d/blink-mini.jpg)
 
 ## About the Blink cameras
 
@@ -80,7 +80,7 @@ I have 3 of these guys, and they're relatively cheap anyways, so I didn't mind
 having one sacrificial lamb. I basically just started savagely pulling it apart
 and cutting things up and hoping that I could reach the PCB.
 
-![Uh, maybe this isn't the best way to do this](./opening-attempt-1.jpg)
+![Uh, maybe this isn't the best way to do this](https://s3.us-west-000.backblazeb2.com/nyaabucket/b9ca0d79b82ac5e089639ead7b8c20ce1889d23ace8e51d123ce532c641e3f8e/opening-attempt-1.jpg)
 
 But then I realized that maybe, this isn't the correct way of opening it up.
 Perhaps, someone else has done a teardown of it. In fact, I found this YouTube
@@ -90,7 +90,7 @@ https://youtu.be/U5VEM2ZKYfI?t=342
 
 Wow, that was so much easier than I thought it was!
 
-![The exposed board!](./opening-attempt-2.jpg)
+![The exposed board!](https://s3.us-west-000.backblazeb2.com/nyaabucket/8aa4f0ba191c6aa85990b57d6da532fe6f51b093dcd6cc85b27226559d68958a/opening-attempt-2.jpg)
 
 ## Staring at the circuit board
 
@@ -98,20 +98,20 @@ There are actually two PCBs here, with a 26-pin header for talking between the
 two boards. One is the wifi/antenna board, and the other seems to have
 everything else.
 
-![The main board with the camera on top.](./camera-on-top.jpg)
+![The main board with the camera on top.](https://s3.us-west-000.backblazeb2.com/nyaabucket/8870d39b3912124752e31baecfd99c38d10984cfb56da46b39aa618fdb1d675d/camera-on-top.jpg)
 
-![The main board with the light sensor exposed.](./light-sensor.jpg)
+![The main board with the light sensor exposed.](https://s3.us-west-000.backblazeb2.com/nyaabucket/744261c9db747a02025d4e47f24935f91a977f6950cd0d3799c9d52e64c2be9c/light-sensor.jpg)
 
-![Antenna PCB, front.](./antenna-front.jpg)
+![Antenna PCB, front.](https://s3.us-west-000.backblazeb2.com/nyaabucket/2abeb7524e8e9b88bb13a92973847ff5a20865db2983810865f41f4e82cffede/antenna-front.jpg)
 
-![Antenna PCB, back.](./antenna-back.jpg)
+![Antenna PCB, back.](https://s3.us-west-000.backblazeb2.com/nyaabucket/9df465449695beb5ecaa4b6b8896c289413975c072c1d8929752e383e4f5c978/antenna-back.jpg)
 
 I looked around the two boards for some ICs with markings. Here are some
 interesting things I found.
 
 ### Immedia Semi(conductor)
 
-![The marking on the antenna front that says "IMMEDIA SEMI 1660 WIFI REV C3"](./immedia-semi.jpg)
+![The marking on the antenna front that says "IMMEDIA SEMI 1660 WIFI REV C3"](https://s3.us-west-000.backblazeb2.com/nyaabucket/16886e3c8482f36b8c58312afe1686ba6b97b94b7abb8896a1c81c6ea2026639/immedia-semi.jpg)
 
 [Their LinkedIn](https://www.linkedin.com/company/immedia-semiconductor/) says
 that they are "a leading provider of video and image processing chips for
@@ -128,7 +128,7 @@ integration, of course.
 
 ### AC1002B2... microcontroller? microprocessor?
 
-![Picture of the main board, focused in on the CPU.](./focus-cpu.jpg)
+![Picture of the main board, focused in on the CPU.](https://s3.us-west-000.backblazeb2.com/nyaabucket/b29c6a371504c67a4e49e8f0c4ea363741fca8b2b2b4555220097e2380259b40/focus-cpu.jpg)
 
 Underneath this shield is this interesting little BGA chip. The markings say:
 
@@ -142,7 +142,7 @@ Searching for AC1002B2-FB, I found a bunch of weird international sites with
 [ordering pages](https://www.ariat-tech.com/parts/Broadcom%20Corporation./AC1002B2-FB)
 for the chip. They imply that Broadcom makes these?
 
-![Search results for AC1002B2-FB](./ac1002b2-fb.png)
+![Search results for AC1002B2-FB](https://s3.us-west-000.backblazeb2.com/nyaabucket/e07281fd94c38885bfa919543ef85e37c97e567b15685259b3793578c3dd36f5/ac1002b2-fb.png)
 
 Dropping a few letters off the end, though, I found a couple of results for
 **AC1002B**, but they are mostly just
@@ -154,11 +154,11 @@ cores and 200MHz, which means it packs some serious power for what it is!
 
 Searching for NP6T9 gives, uh...
 
-![Search results for NP6T9. The first result is an Amazon link saying "Find helpful customer reviews and review ratings for Door Sex Swing - NaEnsen Sex Toys Slave Bondage Love Slings SM Game BDSM for Couples with Adjustable ..."](./np6t9.png)
+![Search results for NP6T9. The first result is an Amazon link saying "Find helpful customer reviews and review ratings for Door Sex Swing - NaEnsen Sex Toys Slave Bondage Love Slings SM Game BDSM for Couples with Adjustable ..."](https://s3.us-west-000.backblazeb2.com/nyaabucket/9e32fa6426fb583283e6648b59d12cc4a0047504b1856e5d84a579577ad182dd/np6t9.png)
 
 And searching for J-2104 yields nothing either.
 
-![Search results for J-2104. Nothing useful.](./J-2104.png)
+![Search results for J-2104. Nothing useful.](https://s3.us-west-000.backblazeb2.com/nyaabucket/1cdf7c2d60771fb6e9e0a123f21797763a686e77ab6bae7f97a236acc6b9b145/J-2104.png)
 
 #### The quest for AC1002B2-FB
 
@@ -170,7 +170,7 @@ just email those sketchy sites to see if they'll give me anything.
 
 ### W25Q32JW NOR Flash
 
-![Picture of the main board, focused in on the ROM.](./focus-rom.jpg)
+![Picture of the main board, focused in on the ROM.](https://s3.us-west-000.backblazeb2.com/nyaabucket/ba7f5ebdca7b395535386e7946303fbd193a306d44ae7f9718d494f6ab8f26ba/focus-rom.jpg)
 
 This is the juiciest part that I found. The markings say:
 
@@ -186,12 +186,12 @@ The chip says WinBond 25Q32JWIQ. Looking it up, I found
 flash ROMs, with a table that says that 25Q32JWIQ is the WSON-8 package version
 of it.
 
-![The available IC packages listed in the datasheet.](./rom-table.png)
+![The available IC packages listed in the datasheet.](https://s3.us-west-000.backblazeb2.com/nyaabucket/11a5336fed5c38f1be33feeb1abd91da845e65ff4084e245dfbad94c0c840686/rom-table.png)
 
 There seem to be traces leading from the ROM to the CPU, which further supports
 my hypothesis that this ROM contains the firmware that we want.
 
-![Traces leading from ROM to under the CPU.](./bga-traces.jpg)
+![Traces leading from ROM to under the CPU.](https://s3.us-west-000.backblazeb2.com/nyaabucket/162540a17570f416c064cd44ac56ac8ea10218970e2ea84a1911da364d012c7d/bga-traces.jpg)
 
 The W25Q32JW datasheet says that it is a 1.8V 4MiB SPI NOR-flash chip.
 Unfortunately, it also says that it is possible for you to make some blocks of
@@ -212,7 +212,7 @@ would probably tolerate being dumped in-circuit with a test clip.
     I figured this out by googling a random other flash chip and seeing that
     they're extremely similar to each other.
 
-    ![](./spi-comparison.png)
+    ![](https://s3.us-west-000.backblazeb2.com/nyaabucket/e6f04ff5e00b385c6375ac563a65c70c6b29579cf39146b044a41d89d14f90e9/spi-comparison.png)
 
 Thankfully, there's a million cheap SOIC-8 kits on Amazon that come with
 everything I'd need: SOIC-8 clip[^2], USB programmer, and a bunch of other
@@ -227,7 +227,7 @@ adapter worked, making me a bit more confident that I was buying the right tool.
     WSON-8, I found [this video](https://www.youtube.com/watch?v=jbJCxQUr2FQ)
     from some guy in Tembisa, South Africa demonstrating that it works!
 
-    ![](./flashwson8.png)
+    ![](https://s3.us-west-000.backblazeb2.com/nyaabucket/7600b6961981abe0947ea25293915114b78814c6df9dd01d84062b9238bc388e/flashwson8.png)
 
 ## Hypotheses now, as I wait for the programmer to arrive
 

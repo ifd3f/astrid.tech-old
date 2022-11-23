@@ -4,7 +4,7 @@ status: complete
 description: A hardware password manager
 startDate: 2021-12-15
 endDate: 2022-02-15
-thumbnail: ./unlocked.jpg
+thumbnail: https://s3.us-west-000.backblazeb2.com/nyaabucket/6f0dcf14c7061aa645a3593d611686a733160e15e3dc973145429ac382111d82/unlocked.jpg
 source:
   - https://github.com/ifd3f/skeleton_stick
 tags:

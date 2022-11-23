@@ -16,14 +16,14 @@ tags:
 url: null
 source:
   - https://github.com/ifd3f/Basys3-1D-Cellular-Automata
-thumbnail: "./basys3.jpeg"
+thumbnail: "https://s3.us-west-000.backblazeb2.com/nyaabucket/a9416a86daceeed54ffba9aa550a9464c8a6caea9b201408ea1ec31c8e01bc93/basys3.jpeg"
 ---
 
 This is the report I submitted for the final project, transcribed into Markdown
 by hand, transformed into HTML by the static site generator, and rendered into
 pixels by your browser for your eyes to see.
 
-![A Basys 3 running the program](./basys3.jpeg)
+![A Basys 3 running the program](https://s3.us-west-000.backblazeb2.com/nyaabucket/a9416a86daceeed54ffba9aa550a9464c8a6caea9b201408ea1ec31c8e01bc93/basys3.jpeg)
 
 ## Description
 
@@ -59,11 +59,11 @@ rule and adjust the simulation rate through the 7-segment display.
 
 ## Top-Level Black Box
 
-![A schematic black box named top. Inputs: CLK, dec, dig_next, dig_prev, inc, reset, sw_IBUF[15:0], and toggle_BUFG. Outputs: an_OBUF[3:0], dp_OBUF, led_OBUF[15:0], seg_OBUF[6:0], and toggle_reg.](blackbox.png)
+![A schematic black box named top. Inputs: CLK, dec, dig_next, dig_prev, inc, reset, sw_IBUF[15:0], and toggle_BUFG. Outputs: an_OBUF[3:0], dp_OBUF, led_OBUF[15:0], seg_OBUF[6:0], and toggle_reg.](https://s3.us-west-000.backblazeb2.com/nyaabucket/0f2b461cbe0cea0d7b6082ab55a0ba1a18b004ce3dd1c6b1677fc3506b2d060b/blackbox.png)
 
 ## Top-Level Structural Diagram
 
-![The structural diagram.](./structural.jpg)
+![The structural diagram.](https://s3.us-west-000.backblazeb2.com/nyaabucket/625915d51afc0ce44ae1a58281dbb2cdae9a15b3ea3185c1200cf62c3f233a89/structural.jpg)
 
 ### Notes
 
@@ -74,7 +74,7 @@ rule and adjust the simulation rate through the 7-segment display.
 
 ## Simulation Results
 
-![Xilinx Vivado simulation results.](simulation.png)
+![Xilinx Vivado simulation results.](https://s3.us-west-000.backblazeb2.com/nyaabucket/5e94fe90a24be98eaa7bf0322ecb03c7e27e14aa0e6d260a2a072f1576d4b4da/simulation.png)
 
 What this simulation does is:
 

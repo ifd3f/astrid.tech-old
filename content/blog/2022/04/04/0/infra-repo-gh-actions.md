@@ -21,7 +21,7 @@ the horrible hacks I ended up using along the way.
 
 ## 1. Dynamic job matrices for dynamic amounts of fun
 
-![MATRIX (decompositions) such as QR, Jordan, SVD, Eigen, and Cholesky. Meme by @kareem_carr](./matrix.jpg)
+![MATRIX (decompositions) such as QR, Jordan, SVD, Eigen, and Cholesky. Meme by @kareem_carr](https://s3.us-west-000.backblazeb2.com/nyaabucket/9b888db194d9ce1dae02ecc4fe4a744f4f56ea99e18d2d9da428016e403ce154/matrix.jpg)
 
 Here is a job spec from my
 [original pipeline](https://github.com/ifd3f/infra/blob/70007f6d9b67f817dfa36249fdd53333ed5dd819/.github/workflows/nix-flake-check.yml):
@@ -178,7 +178,7 @@ Each individual target ends up running in parallel, and it's super cool and
 good. Paired with Cachix, all of my NixOS configurations and packages can be
 built at once. That makes my pipeline look like this.
 
-![The pipeline, with dynamic matrix generation.](./dynamic-matrix.png)
+![The pipeline, with dynamic matrix generation.](https://s3.us-west-000.backblazeb2.com/nyaabucket/2c9c5fc18cdac26c75b4bb8f7e9e6ede2c6695904f2a2e1f2a34111e9a6f1de2/dynamic-matrix.png)
 
 ### The actual matrix generation code
 
@@ -301,7 +301,7 @@ Filesystem      Size  Used Avail Use% Mounted on
 
 and with this whopping **35G** of extra space, it works!
 
-![Shai-hulud successfully building after compiling a crapton of Kernel patches.](./successful-shai-build.png)
+![Shai-hulud successfully building after compiling a crapton of Kernel patches.](https://s3.us-west-000.backblazeb2.com/nyaabucket/172730de46467a5619c94163074b3e85b37ea33af1b68ac86584fa8e50c329ab/successful-shai-build.png)
 
 Don't worry, it doesn't always take 2 hours to build; once the Linux kernel is
 stored in Cachix, it only takes 15 minutes.
@@ -318,14 +318,14 @@ I had a very simple automated version bump action that ran every Tuesday at
 
 Here's an example of a PR it made:
 
-![Periodic flake bump 29, with a green checkmark.](./original-pr.png)
+![Periodic flake bump 29, with a green checkmark.](https://s3.us-west-000.backblazeb2.com/nyaabucket/239ad759468457c0ef58853a032b3ed94c14b11f47bb7c3399af048782333565/original-pr.png)
 
 Look at this cute little PR here with a cute green checkmark next to it. Isn't
 it just begging to be merged in? The green checkmark means that my battery of
 tests that I wrote above that went through successfully, and that it's safe to
 deploy on my machines!
 
-![Only 1 check passed, and it was only Terraform!](./nope-just-terraform.png)
+![Only 1 check passed, and it was only Terraform!](https://s3.us-west-000.backblazeb2.com/nyaabucket/815dacfab8a310fb3d8d11354b12c6c9cad4365e803fcb784348959220c6ccfb/nope-just-terraform.png)
 
 Nope! Just Terraform. None of my automated tests. That green checkmark was
 _lying_ to you.
@@ -383,18 +383,18 @@ trigger-checks:
 
 [Here is the flake bump workflow after all these changes.](https://github.com/ifd3f/infra/blob/01ac0240072e3e40515f0b2882aa6ffc273ebbe2/.github/workflows/periodic-bump.yml)
 
-![The bump versions pipeline.](./bump-workflow-call.png)
+![The bump versions pipeline.](https://s3.us-west-000.backblazeb2.com/nyaabucket/000848905f9e6538d3fe0cf2c21b6915c25f3ea3cf0154dc2b60f80aced9ca03/bump-workflow-call.png)
 
 ## 4. Using the Checks API to display things that frankly _should_ be there but aren't
 
 You'd think that after _all this trouble_, with building on the specific sha and
 all, the checkmark on the PR would finally be correct, yes?
 
-![A new PR, with a green check.](./still-misleading-check.png)
+![A new PR, with a green check.](https://s3.us-west-000.backblazeb2.com/nyaabucket/92f55f0a511c24c5399e8725ffe1ee58c414ab13716e6a5fb0ab9c8ec5b1036d/still-misleading-check.png)
 
 Well turns out, although the build is *running* now, it's still not *showing up* in the PR.
 
-![It's still just green because of only Terraform!](./still-just-terraform.png)
+![It's still just green because of only Terraform!](https://s3.us-west-000.backblazeb2.com/nyaabucket/c358d61b36b5810757008a5757356f965c82275ac3ee06f48b629b9569e3f8dc/still-just-terraform.png)
 
 Thankfully, I can manually add the check to that sha with another action:
 
@@ -450,7 +450,7 @@ set-check-result:
 
 With this, the check shows up on my workflow:
 
-![The PR now shows the full check suite's results!](./after-check-api.png)
+![The PR now shows the full check suite's results!](https://s3.us-west-000.backblazeb2.com/nyaabucket/4263cfa35637289ba7562585e1d15cc04debd691c400a96da3f39b14cd96d335/after-check-api.png)
 
 ## Conclusion
 
@@ -461,5 +461,5 @@ anything better I can use.
 I suppose on the bright side, my CI pipeline looks extremely complicated and
 intimidating now, which is always a good thing.
 
-![The full version bump pipeline with 4 different layers.](./full-pipeline.png)
+![The full version bump pipeline with 4 different layers.](https://s3.us-west-000.backblazeb2.com/nyaabucket/f9384e74282d24397489e9957808cd8ef55e00bd82310437c4b32e9898514a29/full-pipeline.png)
 

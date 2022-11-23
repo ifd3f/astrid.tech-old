@@ -16,7 +16,7 @@ but it's something!
 
 <!-- excerpt -->
 
-![The definitely-not-shabby setup.](./the-igate.jpg)
+![The definitely-not-shabby setup.](https://s3.us-west-000.backblazeb2.com/nyaabucket/397e593da623c261f8969ce97728d0debb31b6040f3475d49885bb026ee1f13e/the-igate.jpg)
 
 It is powered by [Dire Wolf](https://github.com/wb2osz/direwolf), which runs
 inside a Docker container

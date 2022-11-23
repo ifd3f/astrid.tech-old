@@ -24,7 +24,7 @@ tags:
 url: https://astrid.tech
 source:
   - https://github.com/ifd3f/astrid.tech
-thumbnail: ./thumbnail.png
+thumbnail: https://s3.us-west-000.backblazeb2.com/nyaabucket/6935bab212a64f4f8e4aec285c910dac9b9775208dabc9fb6b8966ae80a97fe4/thumbnail.png
 ---
 
 After having made a lot of personal projects, I realized that I had forgotten a

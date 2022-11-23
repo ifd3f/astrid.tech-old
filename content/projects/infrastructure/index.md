@@ -63,13 +63,13 @@ This is a setup I use whenever I have roommates. We have a router for the rest
 of the house, and I have a router specifically for my room. Just like Texas with
 ERCOT!
 
-![The Texas power grid compared to the rest of US/Canada.](./ercot.jpg)
+![The Texas power grid compared to the rest of US/Canada.](https://s3.us-west-000.backblazeb2.com/nyaabucket/85c9534d527f670a3a319847c9f1626a9adbd524b61fcab9e7e40eadd4c8be41/ercot.jpg)
 
 The reason I do this is so that I don't accidentally break the rest of the LAN
 with my shenanigans. In other words, I expect that I'll end up like Texas, but
 I'm trying to prevent the problems from reaching everyone else.
 
-![Pictured: my network segment when I accidentally knock down the DNS.](./texas-snowstorm.jpg)
+![Pictured: my network segment when I accidentally knock down the DNS.](https://s3.us-west-000.backblazeb2.com/nyaabucket/1c097d4ce80fd999e803da03a28893ac9c80e6bdd4ef06e1f617b6174ba46602/texas-snowstorm.jpg)
 
 Now, this does make setup slightly more of a hassle, especially with the problem
 of port forwarding, but that's acceptable.
@@ -404,7 +404,7 @@ digraph {
 | Prometheus | Metrics       | Stores and indexes metrics             | k3s                 |
 | Grafana    | Visualization | Graphs and visualizes everything!      | k3s                 |
 
-![Look at this graaaaaaaph, every time I look it makes me laugh](./grafana.png)
+![Look at this graaaaaaaph, every time I look it makes me laugh](https://s3.us-west-000.backblazeb2.com/nyaabucket/b167562aa0be8ac3f1c5de3a1958eafc29dfa56c8ea9c78e10a2916dc8da1c30/grafana.png)
 
 #### Reflection
 

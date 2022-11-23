@@ -11,7 +11,7 @@ tags:
   - simulation
   - school:cal-poly=csc-572
 url: null
-thumbnail: ./thumbnail.png
+thumbnail: https://s3.us-west-000.backblazeb2.com/nyaabucket/02f10bea6c68ea9229e6ec6a45170d4065b49c73098d4f6436aabae9ccb8c3e7/thumbnail.png
 source:
   - https://github.com/ifd3f/572-Planet-Collisions/
 ---

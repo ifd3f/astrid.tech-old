@@ -20,7 +20,7 @@ development. Please feel free to look at those as well.
 
 My release versions are on a semantic versioning system.
 
-![Semantic versioning takes the form of major.minor.patch](./semver.png)
+![Semantic versioning takes the form of major.minor.patch](https://s3.us-west-000.backblazeb2.com/nyaabucket/acc0ebd64e7859347db7cd1f15da06668c7a79bad33851febcfc744b35507128/semver.png)
 
 We are currently in major version `0`, which I will consider the "beta" phase.
 The website doesn't have all the bells and whistles that I want it to have, but

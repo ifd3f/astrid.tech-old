@@ -15,7 +15,7 @@ Following up from [my last post about temporary tattoos](https://astrid.tech/202
 
 And yes, *it can be scanned.*
 
-![The permanent tattoo, a day after it was drawn](./fewdays.jpg)
+![The permanent tattoo, a day after it was drawn](https://s3.us-west-000.backblazeb2.com/nyaabucket/9c7da7d349dc425c9c5ea93f7f181a0817997b68d277f7f312a273298d8c29e8/fewdays.jpg)
 
 ## My tattooing experience
 
@@ -35,15 +35,15 @@ Kelsey had a specialized stencil printer, but it didn't behave too well with pla
 
 First, I tried selecting the black regions using the **Select By Color** tool, then and using **Select > Border**. However, I realized that this method made the outline go outside of the QR code's black sections. This isn't be very desirable.
 
-![The naive stencil I first generated, modified to demonstrate where it is relative to the shaded QR code.](./naive-border.png)
+![The naive stencil I first generated, modified to demonstrate where it is relative to the shaded QR code.](https://s3.us-west-000.backblazeb2.com/nyaabucket/c73b9e14f740a229d0a1511edcdb1c3f7e03343b36a62b06587461a8ab2ec492/naive-border.png)
 
 To get the border to be on the *inside* of the shaded regions, I selected all white pixels, also using **Select by Color**. I used **Select > Grow** by 4 pixels to include the outermost black pixels. Finally, I subtracted all the white pixels, and created a useful result.
 
-![The new stencil I generated, modified to demonstrate where it is relative to the shaded QR code.](./inside-border.png)
+![The new stencil I generated, modified to demonstrate where it is relative to the shaded QR code.](https://s3.us-west-000.backblazeb2.com/nyaabucket/ed62770dd2a2f1ca75d139c08e0983da94d66da9ba77ec7f6242c3b327f0c21a/inside-border.png)
 
 So, we printed out this result and the printer was happy with it.
 
-![The traced outline of the tattoo.](./traced.jpg)
+![The traced outline of the tattoo.](https://s3.us-west-000.backblazeb2.com/nyaabucket/a5745496281d48ffef30173b1eecb9d7344eda77a346eed0e83d6d6364fdb0a3/traced.jpg)
 
 ### Actually tattooing!
 
@@ -51,11 +51,11 @@ The stencil was actually applied in a very similar way as [the temporary tattoos
 
 Then, Kelsey started drawing the outline. Holy crap, it *hurt*. People were *not* lying about how much it hurt.
 
-![Partially outlined tattoo.](./outlining.jpg)
+![Partially outlined tattoo.](https://s3.us-west-000.backblazeb2.com/nyaabucket/7b000c9de94e70033cbf8147e30416a2d892d8cc6cbcbc01e44066f2e28e1870/outlining.jpg)
 
 Once the outline was done, she shaded it in.
 
-![The tattoo right after Kelsey finished drawing it.](./complete.jpg)
+![The tattoo right after Kelsey finished drawing it.](https://s3.us-west-000.backblazeb2.com/nyaabucket/2c15a4b9515523f570ae5f9eadebac61076c6b5b2dac14e460071c612b6460a0/complete.jpg)
 
 After two hours, the tattoo was complete! I gave it a quick scan, just to confirm, and it scanned!
 
@@ -80,7 +80,7 @@ I've been using Dial Gold soap and Aquaphor. I re-apply the Aquaphor during brea
 
 It is Day 4 after tattooing and it still scans. The skin is peeling, but that's expected during the healing process.
 
-![The peeling tattoo.](./peeling.jpg)
+![The peeling tattoo.](https://s3.us-west-000.backblazeb2.com/nyaabucket/1113110c025e124cf70114660df7411c7e923b7d9cbe482c9de67426591d78df/peeling.jpg)
 
 ## Tattoo Controller Server
 

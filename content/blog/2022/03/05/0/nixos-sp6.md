@@ -40,11 +40,11 @@ I did some digging around, and I found [a user who had gotten NixOS on their sur
 
 Unfortunately, when I imported that into my system definition, I had to essentially compile the entire Linux kernel, patches and all, on that machine. That took about 4 hours. But once I got that done, everything pretty much just... worked. Like, everything. Tablet rotation didn't work, but once I switched over to Wayland, it did. I comfortably used it for a while, and everything was good. The screen is even pressure-sensitive!
 
-![An excerpt of my OS notes, shitty handwriting and all.](./os-notes.png)
+![An excerpt of my OS notes, shitty handwriting and all.](https://s3.us-west-000.backblazeb2.com/nyaabucket/49606bd0bd6e8aff9a403e2c6badd7cfd00cd475024257717bcd758e09406b85/os-notes.png)
 
 I was able to use it for a good amount of time without issue. I even replaced the GRUB background with something more fitting:
 
-![shai-hulud when booting.](./grub-bg.jpg)
+![shai-hulud when booting.](https://s3.us-west-000.backblazeb2.com/nyaabucket/e798c4a2fbea09b4c322326a9924a30c941eb504745888cadbe69047db6e8b7a/grub-bg.jpg)
 
 ## 32-core compilation go brrrrr
 

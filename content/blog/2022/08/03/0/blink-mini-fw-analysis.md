@@ -127,7 +127,7 @@ where the `ldr`s point to with where the strings are physically located relative
 to each other, then that might just be the jackpot. So I began writing a Jupyter
 notebook that does just that.
 
-![Attempting to find the data segment in a Jupyter notebook.](./finding-data-segment.png)
+![Attempting to find the data segment in a Jupyter notebook.](https://s3.us-west-000.backblazeb2.com/nyaabucket/68f4d929c81e17df8d8946b651baa680b5909562f2804064abe068860b88617b/finding-data-segment.png)
 
 And then, Erin showed me a tool called
 [rbasefind](https://github.com/sgayou/rbasefind) that does, well, pretty much
@@ -345,7 +345,7 @@ code, but it will come eventually.
 The next day, on Monday 7/11, I began to notice something strange about the
 image.
 
-![All these strings are duplicated!](./dup-strings.png)
+![All these strings are duplicated!](https://s3.us-west-000.backblazeb2.com/nyaabucket/acc0a9931c69eec6bdf958b1752ebf0a74689d95687986cccfd99c2cf026e4e3/dup-strings.png)
 
 A lot of strings were duplicated. Their distances to each other seemed to be
 around `0xd52ba` on average. In fact, if you'll notice from the scrollbar
@@ -360,7 +360,7 @@ Although I've identified that there _are_ 2 firmwares, I didn't know where their
 border lay. I tried my best to figure _something_ out, but I honestly have no
 idea what I was thinking.
 
-![I was trying to find the border of the 2 firmwares in a Jupyter notebook but failing.](./finding-offset.png)
+![I was trying to find the border of the 2 firmwares in a Jupyter notebook but failing.](https://s3.us-west-000.backblazeb2.com/nyaabucket/95f84fd02ed2b5f3d372d7bd97d512dc610ddd854f3e420a393bf9ec809ede84/finding-offset.png)
 
 Sadly, it was at this point that I realized that a million school deadlines were
 coming up on me, and I had to put my project on hiatus.
@@ -376,11 +376,11 @@ work on the project again. My AliExpress packages coincidentally arrived. This
 included the pogo probe that I had been waiting for, so I used that probe to
 lift the ROMs from those new ones.
 
-![The WSON pogo probes I got.](./wson8probes.jpg)
+![The WSON pogo probes I got.](https://s3.us-west-000.backblazeb2.com/nyaabucket/dabd4ab216966194958e786e5cbf7d52affd1497536657d3960861abe57b3570/wson8probes.jpg)
 
-![Trying to download the firmware from a fresh camera using those probes.](./cd1.jpg)
+![Trying to download the firmware from a fresh camera using those probes.](https://s3.us-west-000.backblazeb2.com/nyaabucket/2a0f2106c761e6cb6c73a3ece4e548288d82b2f811dc08f4eab5578dd6f6f9c5/cd1.jpg)
 
-![Closeup of holding the probe in place.](./cd2.jpg)
+![Closeup of holding the probe in place.](https://s3.us-west-000.backblazeb2.com/nyaabucket/dc8cf399e1a043d83fcc0709577b947c68aac316e117b3a60b600a850a5bdd96/cd2.jpg)
 
 It was a bit finnicky, but I got it, and I ended up with 2 fresh images,
 straight out of the factory, triple-checked to have been read correctly! That
@@ -432,4 +432,4 @@ Despite not having that much information on the chip, I've been able to learn a
 lot about the firmware image! Next post, I'll talk about more things I learned,
 and present some pretty graphs. Here's a sneak peek :)
 
-![A visualization of some segments of the firmware!](./bunds.png)
+![A visualization of some segments of the firmware!](https://s3.us-west-000.backblazeb2.com/nyaabucket/9f7239e8e09fe09254c3bc21ad3d755cc0ee4c5cae017fad78f5ee968388750c/bunds.png)

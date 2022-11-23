@@ -20,7 +20,7 @@ Skip this part if you don't care about me.
 
 I finally installed NixOS on my (formerly) Arch Linux laptop. Doing so presented a couple of challenges.
 
-![Neofetch for my fresh new install.](./banana-neofetch.png)
+![Neofetch for my fresh new install.](https://s3.us-west-000.backblazeb2.com/nyaabucket/ab5779d7b3ac85550ada12a8e93ff8a64a39446c7b1db8d5adc1efd1e21ebae1/banana-neofetch.png)
 
 The biggest one was the fact that it had an interesting combination of drives that I wanted to install ZFS on:
 

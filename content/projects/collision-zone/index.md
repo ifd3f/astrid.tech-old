@@ -30,7 +30,7 @@ keywords:
 url: https://collision.zone
 source:
   - https://github.com/ifd3f/collision-zone
-thumbnail: ./thumbnail.gif
+thumbnail: https://s3.us-west-000.backblazeb2.com/nyaabucket/ad72604434e53b51fb3eedc2398fb395d1475e8a103d87a1b13ea9a4f5d58f34/thumbnail.gif
 highlights:
   - Built an efficient, single-instance game server in C++ and a matchmaking
     server in Node.js to ensure the app is scalable.

@@ -147,9 +147,9 @@ several custom plugins. Most of the runtime seems to be in generating images,
 but it might not be doing it very optimally; when it generates images, my CPU
 isn't being 100% used.
 
-![Wow, these are very long build times, I wonder what could be causing it?](./gatsby-build-ci.png)
+![Wow, these are very long build times, I wonder what could be causing it?](https://s3.us-west-000.backblazeb2.com/nyaabucket/7b4a0d2627a4c29166edfcf5ed7b7d225f9438488f8d7f0bcb4ee244bb72cbba/gatsby-build-ci.png)
 
-![Image generation. It's all image generation.](./gatsby-build.png)
+![Image generation. It's all image generation.](https://s3.us-west-000.backblazeb2.com/nyaabucket/ed3f4dc9ddb12f4f7a149332d4daf5ba252c510631cb36b92be9d3dd80077015/gatsby-build.png)
 
 I wrote the following script to limit the size of every image in my repository
 to 1600x1600, but that only reduced build time by 30 seconds.

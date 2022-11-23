@@ -20,7 +20,7 @@ tags:
   - javascript
   - under-construction
 source: [https://github.com/ifd3f/tanksberry-pi]
-thumbnail: ./thumbnail.jpg
+thumbnail: https://s3.us-west-000.backblazeb2.com/nyaabucket/404bfbcc0cccbe92d8493b0a6f2e29b7948b8717f681b0bffecd148a362b18dd/thumbnail.jpg
 ---
 
 This is a tank with a functional fully 3d-printed autoloading airsoft pellet
