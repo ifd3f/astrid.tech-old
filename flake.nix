@@ -36,6 +36,8 @@
               rustc
               yarn
 
+              python3Packages.poetry
+
               nodePackages.prettier
             ];
 
