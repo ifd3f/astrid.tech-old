@@ -56,7 +56,8 @@ screen and interact with it via the resistive touch sensor.
 
 I then proceeded to measure the power consumption of the Pi.
 
-Desktop just loaded: 4.82V, 0.76A, 13mAh ![](https://s3.us-west-000.backblazeb2.com/nyaabucket/3a19b3b2bbd484f96d90cd0c6f149a003d030506d1eb3774d82c2eaeefb6fc82/desktop-just-loaded.jpg)
+Desktop just loaded: 4.82V, 0.76A, 13mAh
+![](https://s3.us-west-000.backblazeb2.com/nyaabucket/3a19b3b2bbd484f96d90cd0c6f149a003d030506d1eb3774d82c2eaeefb6fc82/desktop-just-loaded.jpg)
 
 Desktop finished loading: 4.90V, 0.58A, 15mAh
 ![](https://s3.us-west-000.backblazeb2.com/nyaabucket/bc8ef1aa50bb65355d35f3f516d5fdad8b4620ea546c3fbc638217c498842ee7/desktop-finished-loading.jpg)

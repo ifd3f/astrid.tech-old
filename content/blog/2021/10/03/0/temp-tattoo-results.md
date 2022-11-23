@@ -111,8 +111,7 @@ Then, I made a quick-and-dirty test webapp by essentially taking
 [Nicolo Carpignoli's code](https://github.com/nicolocarpignoli/nicolocarpignoli.github.io/tree/master/ar-playground),
 adding some custom GLTF models downloaded from
 [Sketchfab](https://sketchfab.com), then modifying the code to point to those
-models.
-[My code is located here](https://github.com/ifd3f/ar-experiment), and
+models. [My code is located here](https://github.com/ifd3f/ar-experiment), and
 [the webapp is located here](https://ifd3f.github.io/ar-experiment/).
 
 ![The result of my own AR webapp. I have become the steampunk mage GF I always wanted to be.](https://s3.us-west-000.backblazeb2.com/nyaabucket/1507f82e959d913a349034f8e86fb651428e1c4761c32fe1e0104fe6155f7dba/custom-gltfs.png)

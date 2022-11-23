@@ -110,10 +110,10 @@ for its specification.
 ## Fun facts!
 
 - The initial prototype was created during
-  [HSHacks III](https://github.com/ifd3f/HSHacks-III) back in 2017
-  under the name of "High Octane Elastic Snowploughs." The backend was a Flask
-  site serving a Socket.IO connection, and the frontend drew everything using a
-  basic Canvas API,
+  [HSHacks III](https://github.com/ifd3f/HSHacks-III) back in 2017 under the
+  name of "High Octane Elastic Snowploughs." The backend was a Flask site
+  serving a Socket.IO connection, and the frontend drew everything using a basic
+  Canvas API,
 - After the hackathon, there were many incomplete rewrites of the project in
   various languages, including Java and more Python, until eventually I did it
   again in 2019 using this current stack.

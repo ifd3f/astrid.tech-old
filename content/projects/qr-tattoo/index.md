@@ -27,5 +27,3 @@ Here are some blog posts associated with this project:
 ## Tattoo Controller Server
 
 ![A screenshot of the admin panel.](https://s3.us-west-000.backblazeb2.com/nyaabucket/0f6b1f1d5014891a6f64577686f5f80f04e423125d877be2d6c2123398422fa8/admin.jpg)
-
-

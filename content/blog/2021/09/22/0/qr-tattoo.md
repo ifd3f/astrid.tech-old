@@ -34,12 +34,14 @@ provide the inspiration for mine.
 - [u/bgrnbrg](https://www.reddit.com/user/bgrnbrg/) made a
   [5-year update post on his tattoo](https://www.reddit.com/r/tattoofade/comments/7cyk6f/a_5_year_update_on_my_qr_tattoo/)
   about 4 years ago. It seems to still hold up, and it's certainly still
-  scannable from the images he provided. ![u/bgrnbrg's tattoo](https://s3.us-west-000.backblazeb2.com/nyaabucket/4d37bec5f52d08760234b341d3088c9cd1f868d35b1be732620310f023a60f7f/bgrnbrg.jpg)
+  scannable from the images he provided.
+  ![u/bgrnbrg's tattoo](https://s3.us-west-000.backblazeb2.com/nyaabucket/4d37bec5f52d08760234b341d3088c9cd1f868d35b1be732620310f023a60f7f/bgrnbrg.jpg)
 
 - [u/Odd-Care](https://www.reddit.com/user/Odd-Care/) got
   [this tattoo](https://www.reddit.com/r/tattoos/comments/g1jnbw/qr_code_tattoo_healed_done_a_couple_months_ago_by/),
   which also links to his own page, which then links to the NBA Raptors vs
-  Warriors video on YouTube. ![u/Odd-Care's tattoo](https://s3.us-west-000.backblazeb2.com/nyaabucket/2bd6c8567350d106064691258d46797a58ae47bf825e1a4e98162046d324f8e5/Odd-Care.jpg)
+  Warriors video on YouTube.
+  ![u/Odd-Care's tattoo](https://s3.us-west-000.backblazeb2.com/nyaabucket/2bd6c8567350d106064691258d46797a58ae47bf825e1a4e98162046d324f8e5/Odd-Care.jpg)
 
 u/bgrnbrg suggests a couple of things to make the tattoo more resillient:
 

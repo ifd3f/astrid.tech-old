@@ -15,8 +15,8 @@ Monorepos are great, and here's why like to use them for my personal projects.
 If you have a project with multiple services, like a frontend and backend, you
 can either put them in separate Git repos, or put them in the same repo but in
 different folders.
-[The source code for my website](https://github.com/ifd3f/astrid.tech)
-is an example of a monorepo with 6 subprojects (specifically, aay_tw_shortener/,
+[The source code for my website](https://github.com/ifd3f/astrid.tech) is an
+example of a monorepo with 6 subprojects (specifically, aay_tw_shortener/,
 astrid_tech_api/, astrid_tech_frontend/, content/, wm-receiver/, and scripts/)
 
 ```
@@ -50,14 +50,14 @@ currently.
 
 ### Less-cluttered Github account
 
-At time of writing, [my Github account](https://github.com/ifd3f) has
-75 repos of varying sizes. Using monorepos reduces the administrative overhead,
-and helps group related items together.
+At time of writing, [my Github account](https://github.com/ifd3f) has 75 repos
+of varying sizes. Using monorepos reduces the administrative overhead, and helps
+group related items together.
 
 As an example, I have a monorepo called
-[coursework](https://github.com/ifd3f/coursework), which contains
-(almost) all my coursework and notes since 2018. It's private, so you can't see
-it, but every class I've taken gets its own folder:
+[coursework](https://github.com/ifd3f/coursework), which contains (almost) all
+my coursework and notes since 2018. It's private, so you can't see it, but every
+class I've taken gets its own folder:
 
 ```
 ❯ tree -aFL 1 coursework
@@ -103,8 +103,8 @@ backend service...) there's no getting around the fact that the backend and the
 frontend depend on each other a lot.
 
 In the past, when I wrote
-[Collision Zone](https://github.com/ifd3f/collision-zone.git), I had
-never written a project that used multiple programming languages or had multiple
+[Collision Zone](https://github.com/ifd3f/collision-zone.git), I had never
+written a project that used multiple programming languages or had multiple
 webservices.[^1] So, my first instinct was to use a polyrepo setup, where
 Node.js/TypeScript goes in one repo containing matchmaking code and frontend,
 and the C++ game server code goes in the other. However, what often ended up
@@ -115,10 +115,9 @@ code would have also been at risk of becoming out-of-sync in terms of commits
 while deploying it. This was not something I actually encountered, but at some
 point it would have been likely to happen.
 
-On the other hand,
-[astrid.tech](https://github.com/ifd3f/astrid.tech), the source code
-for this website, is a monorepo setup. If I decide I want to change my API, I
-change the backend and frontend in a single commit.
+On the other hand, [astrid.tech](https://github.com/ifd3f/astrid.tech), the
+source code for this website, is a monorepo setup. If I decide I want to change
+my API, I change the backend and frontend in a single commit.
 
 Additionally, with the coursework repo, there's less copy-pasting of .gitignore
 and .gitattributes files. I can use the same ignores and LFS configs across all
@@ -126,8 +125,7 @@ my classes.
 
 ### When similar projects are too small to deserve their own repo
 
-I have a [memes](https://github.com/ifd3f/memes) repo, for my
-open-source memes:
+I have a [memes](https://github.com/ifd3f/memes) repo, for my open-source memes:
 
 ```
 ❯ tree -aFL 1 memes
@@ -149,8 +147,8 @@ memes
 Each meme is too small to deserve its own repo.
 
 Slightly more useful, I have a
-[Minecraft-Computers](https://github.com/ifd3f/Minecraft-Computers)
-repo containing code for programming in-game ComputerCraft and OpenComputers
+[Minecraft-Computers](https://github.com/ifd3f/Minecraft-Computers) repo
+containing code for programming in-game ComputerCraft and OpenComputers
 computers:
 
 ```
@@ -177,10 +175,10 @@ That's because before, they weren't checked into Git, and I thought "yeah it's
 too small for its own repo" and I ended up not versioning those files.
 
 Okay, maybe both of those projects are kinda silly or not useful. This is my
-[infra](https://github.com/ifd3f/infra) repo, which is essentially a
-big repo for any kind of configuration under the sun. It deploys this website as
-well as other services, and I'm even in the middle of merging my dotfiles into
-this repo, too.
+[infra](https://github.com/ifd3f/infra) repo, which is essentially a big repo
+for any kind of configuration under the sun. It deploys this website as well as
+other services, and I'm even in the middle of merging my dotfiles into this
+repo, too.
 
 ```
 ❯ tree -FL 1 infra

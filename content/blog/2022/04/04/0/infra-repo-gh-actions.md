@@ -15,8 +15,9 @@ Github Actions is like the free cup of beer you get at chemistry conferences; it
 sucks, but hey, it's free. That's why I use it to build the configs for
 [my homelab](/projects/infrastructure).
 
-I had some decent CI pipelines set up for it, but unfortunately they weren't very reliable. So I spent the weekend trying to improve it. Here is a summary of all
-the horrible hacks I ended up using along the way.
+I had some decent CI pipelines set up for it, but unfortunately they weren't
+very reliable. So I spent the weekend trying to improve it. Here is a summary of
+all the horrible hacks I ended up using along the way.
 [For reference, here is a permalink to my workflows directory at the time of writing.](https://github.com/ifd3f/infra/tree/ccc968dc1d8e494b64b6f2a3827d712f2a259812/.github/workflows)
 
 ## 1. Dynamic job matrices for dynamic amounts of fun
@@ -392,7 +393,8 @@ all, the checkmark on the PR would finally be correct, yes?
 
 ![A new PR, with a green check.](https://s3.us-west-000.backblazeb2.com/nyaabucket/92f55f0a511c24c5399e8725ffe1ee58c414ab13716e6a5fb0ab9c8ec5b1036d/still-misleading-check.png)
 
-Well turns out, although the build is *running* now, it's still not *showing up* in the PR.
+Well turns out, although the build is _running_ now, it's still not _showing up_
+in the PR.
 
 ![It's still just green because of only Terraform!](https://s3.us-west-000.backblazeb2.com/nyaabucket/c358d61b36b5810757008a5757356f965c82275ac3ee06f48b629b9569e3f8dc/still-just-terraform.png)
 
@@ -462,4 +464,3 @@ I suppose on the bright side, my CI pipeline looks extremely complicated and
 intimidating now, which is always a good thing.
 
 ![The full version bump pipeline with 4 different layers.](https://s3.us-west-000.backblazeb2.com/nyaabucket/f9384e74282d24397489e9957808cd8ef55e00bd82310437c4b32e9898514a29/full-pipeline.png)
-

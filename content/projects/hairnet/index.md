@@ -75,8 +75,8 @@ scores back to original size by adding data gathered from the shrinking.
 There were many issues encountered in some of the earlier trained networks, but
 they were easily solved by training on a synthetic dataset generated from my
 training data.
-[`util.py`](https://github.com/ifd3f/Hair-Net/blob/master/util.py)
-contains most of the code used to do this.
+[`util.py`](https://github.com/ifd3f/Hair-Net/blob/master/util.py) contains most
+of the code used to do this.
 
 - **Sometimes the neural network would detect a person in an image of a wall, a
   _false positive_** - I took some random images without people's faces in them

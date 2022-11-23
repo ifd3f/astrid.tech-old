@@ -1,6 +1,7 @@
 ---
 title: A GPU Passthrough Setup for NixOS (with VR passthrough too!)
-description: I'm doing VR on Windows on QEMU on NixOS because kernel anti-cheat is poison
+description:
+  I'm doing VR on Windows on QEMU on NixOS because kernel anti-cheat is poison
 date: 2022-09-22 15:15:17-07:00
 ordinal: 0
 tags:

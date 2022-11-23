@@ -14,8 +14,8 @@ tags:
 
 In [my last post](/2021/01/18/0/selfhost/) had 7 things I wanted to do. Well,
 here's a summary of everything I did so far. The
-[IaC repo is here](https://github.com/ifd3f/infra) and the last commit
-before I published this article was
+[IaC repo is here](https://github.com/ifd3f/infra) and the last commit before I
+published this article was
 [d18736](https://github.com/ifd3f/infra/tree/d18736ae4cf926c177488a07565521328ba09aee).
 
 EDIT: It has come to my attention that I'm missing a picture. Anyways, here's
