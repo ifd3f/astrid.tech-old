@@ -29,6 +29,7 @@
           mkShell {
             nativeBuildInputs = [
               autoreconfHook
+              backblaze-b2
               cargo
               curl
               docker
